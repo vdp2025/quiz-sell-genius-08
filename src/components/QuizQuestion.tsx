@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
@@ -18,7 +17,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = true,
 }) => {
-  // Preload images
   useEffect(() => {
     if (question.type !== 'text') {
       question.options.forEach(opt => {
@@ -49,7 +47,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     });
   };
 
-  // Questions with vertical image layout
   const verticalLayoutQuestions = ['1', '3', '8', '10'];
 
   return (
@@ -64,8 +61,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           question.type === 'text' 
             ? "grid-cols-1" // Single column for text-only questions
             : verticalLayoutQuestions.includes(question.id)
-              ? "grid-cols-2 md:grid-cols-4" // Vertical layout for specific questions with images
-              : "grid-cols-1 md:grid-cols-2" // Two columns for questions with images
+              ? "grid-cols-2" // Vertical layout (2 columns) for specific questions with images
+              : "grid-cols-2 md:grid-cols-4" // Horizontal layout (4 columns) for other image questions
         )}>
           {question.options.map((option) => (
             <div 
@@ -88,8 +85,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                         className={cn(
                           "mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10",
                           verticalLayoutQuestions.includes(question.id)
-                            ? "aspect-[3/4] h-72" // Vertical aspect ratio for specific questions
-                            : "aspect-square" // Default square aspect ratio
+                            ? "aspect-[3/4] h-72" // Vertical aspect ratio
+                            : "aspect-square" // Square aspect ratio for horizontal layout
                         )}
                       >
                         <img
@@ -125,4 +122,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-
