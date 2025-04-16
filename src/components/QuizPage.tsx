@@ -8,6 +8,7 @@ import { UserResponse } from '../types/quiz';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useNavigate } from 'react-router-dom';
 import { Progress } from './ui/progress';
+import { AnimatedWrapper } from './ui/animated-wrapper';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -41,18 +42,18 @@ const QuizPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-4">
+        <AnimatedWrapper className="mb-4">
           <Progress value={progressPercentage} className="w-full h-2 bg-[#B89B7A]/20" />
-        </div>
+        </AnimatedWrapper>
         
-        <div className="flex justify-between items-center mb-8">
+        <AnimatedWrapper className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-playfair text-[#432818]">
             Olá, {user?.userName || 'Visitante'}!
           </h1>
           <div className="text-sm text-[#1A1818]/60">
             Questão {currentQuestionIndex + 1} de {totalQuestions}
           </div>
-        </div>
+        </AnimatedWrapper>
 
         <QuizQuestion
           question={currentQuestion}
@@ -60,12 +61,12 @@ const QuizPage: React.FC = () => {
           currentAnswers={currentAnswers}
         />
 
-        <div className="flex justify-between mt-8">
+        <AnimatedWrapper className="flex justify-between mt-8">
           <Button
             onClick={handlePrevious}
             disabled={currentQuestionIndex === 0}
             variant="outline"
-            className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818]"
+            className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
           >
             <ArrowLeft className="w-4 h-4" />
             Anterior
@@ -74,12 +75,12 @@ const QuizPage: React.FC = () => {
           <Button
             onClick={handleNextClick}
             disabled={!canProceed}
-            className="flex items-center gap-2 bg-[#B89B7A] hover:bg-[#B89B7A]/90"
+            className="flex items-center gap-2 bg-[#B89B7A] hover:bg-[#B89B7A]/90 transition-all duration-200"
           >
             {isLastQuestion ? 'Ver Resultado' : 'Próxima'}
             <ArrowRight className="w-4 h-4" />
           </Button>
-        </div>
+        </AnimatedWrapper>
       </div>
     </div>
   );
