@@ -22,7 +22,7 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] p-4">
-      <Card className="w-full max-w-2xl p-8 space-y-6">
+      <Card className="w-full max-w-2xl p-8 space-y-6 bg-white shadow-md">
         <div className="text-center space-y-4">
           <img
             src="/lovable-uploads/ce883c46-80e0-4171-9c2d-9288f44f88eb.png"
@@ -41,7 +41,7 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
             placeholder="Digite seu nome"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full text-lg p-4"
+            className="w-full text-lg p-4 bg-white border-[#B89B7A]/30"
           />
           <Button
             onClick={handleStart}

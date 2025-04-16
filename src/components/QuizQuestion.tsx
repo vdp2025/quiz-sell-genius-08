@@ -16,7 +16,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onAnswer,
   currentAnswers,
 }) => {
-  // Log any image URLs to check their format
   useEffect(() => {
     if (question.type !== 'text') {
       console.log('Question with images:', question.title);
@@ -48,7 +47,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto p-8">
+    <Card className="w-full max-w-4xl mx-auto p-8 bg-white shadow-md">
       <h2 className="text-2xl font-playfair text-center mb-8 text-[#432818]">
         {question.title}
       </h2>
@@ -60,10 +59,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               id={option.id}
               checked={currentAnswers.includes(option.id)}
               onCheckedChange={() => handleOptionSelect(option.id)}
+              className="border-[#B89B7A] data-[state=checked]:bg-[#B89B7A] data-[state=checked]:border-[#B89B7A]"
             />
             <div className="flex-1">
               {question.type !== 'text' && option.imageUrl && (
-                <div className="mb-4 aspect-square relative overflow-hidden rounded-lg">
+                <div className="mb-4 aspect-square relative overflow-hidden rounded-lg border border-[#B89B7A]/10">
                   <img
                     src={option.imageUrl}
                     alt={option.text}
@@ -77,7 +77,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               )}
               <Label
                 htmlFor={option.id}
-                className="text-sm leading-relaxed cursor-pointer"
+                className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80"
               >
                 {option.text}
               </Label>
@@ -86,7 +86,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         ))}
       </div>
       
-      <p className="text-sm text-muted-foreground mt-6 text-center">
+      <p className="text-sm text-[#1A1818]/60 mt-6 text-center">
         Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
       </p>
     </Card>

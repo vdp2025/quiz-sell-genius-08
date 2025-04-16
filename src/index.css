@@ -96,6 +96,10 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#FAF9F7];
+  }
+
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
   }
 }

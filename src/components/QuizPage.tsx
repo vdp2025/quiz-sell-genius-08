@@ -36,13 +36,13 @@ const QuizPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
+    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-playfair text-[#432818]">
             Olá, {user?.userName || 'Visitante'}!
           </h1>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-[#1A1818]/60">
             Questão {currentQuestionIndex + 1} de {totalQuestions}
           </div>
         </div>
@@ -58,7 +58,7 @@ const QuizPage: React.FC = () => {
             onClick={handlePrevious}
             disabled={currentQuestionIndex === 0}
             variant="outline"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818]"
           >
             <ArrowLeft className="w-4 h-4" />
             Anterior
