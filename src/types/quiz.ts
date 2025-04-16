@@ -10,18 +10,8 @@ export interface QuizQuestion {
   id: string;
   title: string;
   type: 'text' | 'image' | 'both';
-  multiSelect?: number;
+  multiSelect: number;
   options: QuizOption[];
-}
-
-export interface QuizResult {
-  primaryStyle: string;
-  percentage: number;
-  description: string;
-  complementaryStyles: Array<{
-    style: string;
-    percentage: number;
-  }>;
 }
 
 export interface UserResponse {
