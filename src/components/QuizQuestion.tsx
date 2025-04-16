@@ -3,15 +3,15 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
-import type { QuizQuestion, UserResponse } from '../types/quiz';
+import type { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
 
 interface QuizQuestionProps {
-  question: QuizQuestion;
+  question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
 }
 
-export const QuizQuestion: React.FC<QuizQuestionProps> = ({
+const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
   currentAnswers,
@@ -77,3 +77,5 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
     </Card>
   );
 };
+
+export { QuizQuestion };
