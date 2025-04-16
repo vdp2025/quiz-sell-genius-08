@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { saveParticipant, saveAnswers, saveResults } from '@/services/quizService';
 import { QuizResult } from '@/types/quiz';
@@ -8,7 +7,8 @@ import { QuizResult } from '@/types/quiz';
 export const useQuiz = () => {
   const [participantId, setParticipantId] = useState<string | null>(null);
   const { toast } = useToast();
-  const navigate = useNavigate();
+  
+  // Remove useNavigate() dependency
 
   const startQuiz = async (name: string, email: string, quizId: string) => {
     try {
@@ -51,7 +51,8 @@ export const useQuiz = () => {
 
     try {
       await saveResults(participantId, [results.primaryStyle, ...results.secondaryStyles]);
-      navigate('/resultado');
+      // Instead of navigating with useNavigate hook:
+      window.location.href = '/resultado';
     } catch (error) {
       toast({
         title: "Erro ao salvar resultados",
