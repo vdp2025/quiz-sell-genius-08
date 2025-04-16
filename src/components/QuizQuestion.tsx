@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
@@ -70,7 +71,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 className={cn(
                   "transition-all duration-200 rounded-lg p-4 cursor-pointer flex flex-col items-center",
                   currentAnswers.includes(option.id) 
-                    ? "border-[#B89B7A] border-2 shadow-md shadow-[#B89B7A]/20 transform scale-[1.01]" 
+                    ? "border-[#B89B7A] border-2 shadow-md shadow-[#0000001a] dark:shadow-[#0006] transform scale-[1.01]" 
                     : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
                 )}
               >
@@ -107,3 +108,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
