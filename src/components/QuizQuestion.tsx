@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
@@ -48,9 +47,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     });
   };
 
-  const verticalLayoutQuestions = ['1', '3', '8', '10'];
-  const isVerticalLayout = verticalLayoutQuestions.includes(question.id);
-
   return (
     <AnimatedWrapper>
       <Card className="w-full max-w-4xl mx-auto p-8 bg-white shadow-md" id={`question-${question.id}`}>
@@ -62,9 +58,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           "grid gap-6",
           question.type === 'text' 
             ? "grid-cols-1" // Single column for text-only questions
-            : isVerticalLayout
-              ? "grid-cols-1 sm:grid-cols-2" // Vertical layout (2 columns) for specific questions with images
-              : "grid-cols-2 md:grid-cols-4" // Horizontal layout (4 columns) for other image questions
+            : "grid-cols-1 md:grid-cols-2" // Two columns for questions with images
         )}>
           {question.options.map((option) => (
             <div 
@@ -81,14 +75,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div 
-                    className={cn(
-                      "mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full",
-                      isVerticalLayout
-                        ? "aspect-[3/4] h-72 max-w-[240px] mx-auto" // Vertical aspect ratio with width constraint
-                        : "aspect-square max-w-full" // Square aspect ratio for horizontal layout
-                    )}
-                  >
+                  <div className="mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[320px] mx-auto">
                     <img
                       src={option.imageUrl}
                       alt={option.text}
@@ -103,7 +90,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                     />
                   </div>
                 )}
-                <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80 text-center max-w-[240px] mx-auto">
+                <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80 text-center max-w-[280px] mx-auto">
                   {option.text}
                 </p>
               </div>
