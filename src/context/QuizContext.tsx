@@ -25,3 +25,6 @@ export const useQuizContext = () => {
   }
   return context;
 };
+
+// Export useQuiz hook so it can be used in Index.tsx
+export { useQuiz } from '../hooks/useQuiz';
