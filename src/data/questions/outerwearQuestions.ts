@@ -11,50 +11,58 @@ export const outerwearQuestions: QuizQuestion[] = [
       {
         id: '6a',
         text: 'Cardigã bege confortável e casual.',
-        imageUrl: 'lovable-uploads/1ac66423-7712-4c33-9c28-13e8b6fe3170.png',
-        styleCategory: 'Natural'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp',
+        styleCategory: 'Natural',
+        points: 1
       },
       {
         id: '6b',
         text: 'Blazer verde estruturado.',
-        imageUrl: 'lovable-uploads/169fe8d0-8afd-4447-a9cc-79d917967e64.png',
-        styleCategory: 'Clássico'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp',
+        styleCategory: 'Clássico',
+        points: 1
       },
       {
         id: '6c',
         text: 'Trench coat bege tradicional.',
-        imageUrl: 'lovable-uploads/0530ff81-b41d-45eb-8b47-ef88f75f7d93.png',
-        styleCategory: 'Contemporâneo'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp',
+        styleCategory: 'Contemporâneo',
+        points: 1
       },
       {
         id: '6d',
         text: 'Blazer branco refinado.',
-        imageUrl: 'lovable-uploads/d9da05d3-6fdd-46d0-afea-42417af058c5.png',
-        styleCategory: 'Elegante'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp',
+        styleCategory: 'Elegante',
+        points: 1
       },
       {
         id: '6e',
         text: 'Casaco pink vibrante e moderno.',
-        imageUrl: 'lovable-uploads/5b819e5d-ca43-465a-906e-353764bdb2ec.png',
-        styleCategory: 'Romântico'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp',
+        styleCategory: 'Romântico',
+        points: 1
       },
       {
         id: '6f',
         text: 'Jaqueta vinho de couro estilosa.',
-        imageUrl: 'lovable-uploads/54671bc8-ed46-4e5d-a347-5c8e8fe45f8b.png',
-        styleCategory: 'Sexy'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp',
+        styleCategory: 'Sexy',
+        points: 1
       },
       {
         id: '6g',
         text: 'Jaqueta preta estilo rocker.',
-        imageUrl: 'lovable-uploads/e30cb887-b027-40ab-b112-fe8c2244d789.png',
-        styleCategory: 'Dramático'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp',
+        styleCategory: 'Dramático',
+        points: 1
       },
       {
         id: '6h',
         text: 'Casaco estampado criativo e colorido.',
-        imageUrl: 'lovable-uploads/fc8f4066-6f40-4ff8-bc55-460da133b6c2.png',
-        styleCategory: 'Criativo'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp',
+        styleCategory: 'Criativo',
+        points: 1
       }
     ]
   },
@@ -67,50 +75,58 @@ export const outerwearQuestions: QuizQuestion[] = [
       {
         id: '7a',
         text: 'Calça fluida acetinada bege.',
-        imageUrl: 'lovable-uploads/86053444-8589-43e6-af61-02764cf80510.png',
-        styleCategory: 'Natural'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp',
+        styleCategory: 'Natural',
+        points: 1
       },
       {
         id: '7b',
         text: 'Calça de alfaiataria cinza.',
-        imageUrl: 'lovable-uploads/e2627b2e-8e68-48e0-a678-c685c5631515.png',
-        styleCategory: 'Clássico'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp',
+        styleCategory: 'Clássico',
+        points: 1
       },
       {
         id: '7c',
         text: 'Jeans reto e básico.',
-        imageUrl: 'lovable-uploads/ea329cbe-6455-4aca-8fa4-cf73031ca26e.png',
-        styleCategory: 'Contemporâneo'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp',
+        styleCategory: 'Contemporâneo',
+        points: 1
       },
       {
         id: '7d',
         text: 'Calça reta bege de tecido.',
-        imageUrl: 'lovable-uploads/54a9ca5f-9b1f-48a3-9fd8-0aa9a240b8ae.png',
-        styleCategory: 'Elegante'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp',
+        styleCategory: 'Elegante',
+        points: 1
       },
       {
         id: '7e',
         text: 'Calça ampla rosa alfaiatada.',
-        imageUrl: 'lovable-uploads/061e6932-2ddc-4100-ad82-def9909cfcdc.png',
-        styleCategory: 'Romântico'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp',
+        styleCategory: 'Romântico',
+        points: 1
       },
       {
         id: '7f',
         text: 'Legging preta de couro.',
-        imageUrl: 'lovable-uploads/027348ed-9275-43b2-ba49-d49d5baca56a.png',
-        styleCategory: 'Sexy'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp',
+        styleCategory: 'Sexy',
+        points: 1
       },
       {
         id: '7g',
         text: 'Calça reta preta de couro.',
-        imageUrl: 'lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png',
-        styleCategory: 'Dramático'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp',
+        styleCategory: 'Dramático',
+        points: 1
       },
       {
         id: '7h',
         text: 'Calça estampada floral leve e ampla.',
-        imageUrl: 'lovable-uploads/d633e490-d0f2-4429-998e-bceeeda790f8.png',
-        styleCategory: 'Criativo'
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp',
+        styleCategory: 'Criativo',
+        points: 1
       }
     ]
   }

@@ -11,42 +11,50 @@ export const personalityQuestions: QuizQuestion[] = [
       {
         id: '2a',
         text: 'Informal, espontânea, alegre, essencialista.',
-        styleCategory: 'Natural'
+        styleCategory: 'Natural',
+        points: 1
       },
       {
         id: '2b',
         text: 'Conservadora, séria, organizada.',
-        styleCategory: 'Clássico'
+        styleCategory: 'Clássico',
+        points: 1
       },
       {
         id: '2c',
         text: 'Informada, ativa, prática.',
-        styleCategory: 'Contemporâneo'
+        styleCategory: 'Contemporâneo',
+        points: 1
       },
       {
         id: '2d',
         text: 'Exigente, sofisticada, seletiva.',
-        styleCategory: 'Elegante'
+        styleCategory: 'Elegante',
+        points: 1
       },
       {
         id: '2e',
         text: 'Feminina, meiga, delicada, sensível.',
-        styleCategory: 'Romântico'
+        styleCategory: 'Romântico',
+        points: 1
       },
       {
         id: '2f',
         text: 'Glamorosa, vaidosa, sensual.',
-        styleCategory: 'Sexy'
+        styleCategory: 'Sexy',
+        points: 1
       },
       {
         id: '2g',
         text: 'Sou cosmopolita, moderna e audaciosa.',
-        styleCategory: 'Dramático'
+        styleCategory: 'Dramático',
+        points: 1
       },
       {
         id: '2h',
         text: 'Exótica, aventureira, livre.',
-        styleCategory: 'Criativo'
+        styleCategory: 'Criativo',
+        points: 1
       }
     ]
   },
@@ -59,42 +67,50 @@ export const personalityQuestions: QuizQuestion[] = [
       {
         id: '4a',
         text: 'Poucos detalhes, básico e prático.',
-        styleCategory: 'Natural'
+        styleCategory: 'Natural',
+        points: 1
       },
       {
         id: '4b',
         text: 'Bem discretos e sutis, clean e clássico.',
-        styleCategory: 'Clássico'
+        styleCategory: 'Clássico',
+        points: 1
       },
       {
         id: '4c',
         text: 'Básico, mas com um toque de estilo.',
-        styleCategory: 'Contemporâneo'
+        styleCategory: 'Contemporâneo',
+        points: 1
       },
       {
         id: '4d',
         text: 'Detalhes refinados, chic e que deem status.',
-        styleCategory: 'Elegante'
+        styleCategory: 'Elegante',
+        points: 1
       },
       {
         id: '4e',
         text: 'Detalhes delicados, laços, babados.',
-        styleCategory: 'Romântico'
+        styleCategory: 'Romântico',
+        points: 1
       },
       {
         id: '4f',
         text: 'Roupas que valorizem meu corpo: couro, zíper, fendas.',
-        styleCategory: 'Sexy'
+        styleCategory: 'Sexy',
+        points: 1
       },
       {
         id: '4g',
         text: 'Detalhes marcantes, firmeza e peso.',
-        styleCategory: 'Dramático'
+        styleCategory: 'Dramático',
+        points: 1
       },
       {
         id: '4h',
         text: 'Detalhes diferentes do convencional, produções ousadas.',
-        styleCategory: 'Criativo'
+        styleCategory: 'Criativo',
+        points: 1
       }
     ]
   }
