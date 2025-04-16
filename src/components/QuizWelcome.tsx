@@ -3,13 +3,22 @@ import { useState } from 'react';
 import { Card } from './ui/card';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { useAuth } from '../context/AuthContext';
 
 interface QuizWelcomeProps {
-  onStart: (name: string) => void;
+  onStart: () => void;
 }
 
 export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const [name, setName] = useState('');
+  const { login } = useAuth();
+
+  const handleStart = () => {
+    if (name.trim()) {
+      login(name.trim());
+      onStart();
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] p-4">
@@ -35,7 +44,7 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
             className="w-full text-lg p-4"
           />
           <Button
-            onClick={() => name.trim() && onStart(name)}
+            onClick={handleStart}
             disabled={!name.trim()}
             className="w-full bg-[#B89B7A] hover:bg-[#B89B7A]/90 text-white py-6 text-lg rounded-full"
           >

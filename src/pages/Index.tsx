@@ -1,24 +1,26 @@
 
 import { useState } from 'react';
 import { QuizWelcome } from '../components/QuizWelcome';
+import { AuthProvider } from '../context/AuthContext';
+import QuizPage from '../components/QuizPage';
 
 const Index = () => {
-  const [userName, setUserName] = useState('');
   const [started, setStarted] = useState(false);
 
-  const handleStart = (name: string) => {
-    setUserName(name);
+  const handleStart = () => {
     setStarted(true);
   };
 
-  if (!started) {
-    return <QuizWelcome onStart={handleStart} />;
-  }
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Quiz content will be implemented in the next step */}
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen bg-background">
+        {!started ? (
+          <QuizWelcome onStart={handleStart} />
+        ) : (
+          <QuizPage />
+        )}
+      </div>
+    </AuthProvider>
   );
 };
 
