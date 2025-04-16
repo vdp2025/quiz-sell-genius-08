@@ -74,7 +74,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 <div className="relative flex items-start space-x-3">
                   <div className="flex-1">
                     {question.type !== 'text' && option.imageUrl && (
-                      <div className="mb-4 aspect-square relative overflow-hidden rounded-lg border border-[#B89B7A]/10">
+                      <div 
+                        className={cn(
+                          "mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10",
+                          question.id === '1' || question.id === '3' || question.id === '8' 
+                            ? "aspect-[4/3] h-64" // Taller images for specific questions
+                            : "aspect-square" // Default square aspect ratio
+                        )}
+                      >
                         <img
                           src={option.imageUrl}
                           alt={option.text}
@@ -108,4 +115,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-
