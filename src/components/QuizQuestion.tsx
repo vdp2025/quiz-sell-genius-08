@@ -60,10 +60,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         </h2>
         
         <div className={cn(
-          "grid gap-6", 
-          verticalLayoutQuestions.includes(question.id) 
-            ? "grid-cols-2 md:grid-cols-4" // Vertical layout
-            : "grid-cols-1 md:grid-cols-2" // Default layout
+          "grid gap-6",
+          question.type === 'text' 
+            ? "grid-cols-1" // Single column for text-only questions
+            : verticalLayoutQuestions.includes(question.id)
+              ? "grid-cols-2 md:grid-cols-4" // Vertical layout for specific questions with images
+              : "grid-cols-1 md:grid-cols-2" // Two columns for questions with images
         )}>
           {question.options.map((option) => (
             <div 
