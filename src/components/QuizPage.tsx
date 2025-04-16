@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { UserResponse } from '../types/quiz';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useNavigate } from 'react-router-dom';
+import { Progress } from './ui/progress';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -35,9 +36,15 @@ const QuizPage: React.FC = () => {
     }
   };
 
+  const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-4xl mx-auto">
+        <div className="mb-4">
+          <Progress value={progressPercentage} className="w-full h-2 bg-[#B89B7A]/20" />
+        </div>
+        
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-playfair text-[#432818]">
             Olá, {user?.userName || 'Visitante'}!
