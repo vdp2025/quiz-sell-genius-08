@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { QuizWelcome } from '../components/QuizWelcome';
 import { AuthProvider } from '../context/AuthContext';
 import QuizPage from '../components/QuizPage';
-import { useQuiz } from '../context/QuizContext';
+import { useQuizContext } from '../context/QuizContext';
 
 const Index = () => {
   const [started, setStarted] = useState(false);
-  const { quizCompleted } = useQuiz();
+  const { quizCompleted } = useQuizContext();
 
   const handleStart = () => {
     setStarted(true);

@@ -1,15 +1,15 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { useQuiz } from '../hooks/useQuiz';
+import { useQuiz as useQuizHook } from '../hooks/useQuiz';
 
-type QuizContextType = ReturnType<typeof useQuizLogic> & ReturnType<typeof useQuiz>;
+type QuizContextType = ReturnType<typeof useQuizLogic> & ReturnType<typeof useQuizHook>;
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
 export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const quizLogic = useQuizLogic();
-  const quizActions = useQuiz();
+  const quizActions = useQuizHook();
   
   return (
     <QuizContext.Provider value={{ ...quizLogic, ...quizActions }}>
@@ -26,5 +26,5 @@ export const useQuizContext = () => {
   return context;
 };
 
-// Export useQuiz hook so it can be used in Index.tsx
-export { useQuiz } from '../hooks/useQuiz';
+// Export the useQuiz hook directly
+export { useQuiz as useQuiz } from '../hooks/useQuiz';
