@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
@@ -58,8 +57,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <div className={cn(
           "grid gap-6",
           question.type === 'text' 
-            ? "grid-cols-1" // Single column for text-only questions
-            : "grid-cols-1 md:grid-cols-2" // Two columns for questions with images
+            ? "grid-cols-1" 
+            : "grid-cols-1 md:grid-cols-2"
         )}>
           {question.options.map((option) => (
             <div 
@@ -71,7 +70,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 className={cn(
                   "transition-all duration-200 rounded-lg p-4 cursor-pointer flex flex-col items-center",
                   currentAnswers.includes(option.id) 
-                    ? "border-[#B89B7A] border-2 shadow-md shadow-[#0000001a] dark:shadow-[#0006] transform scale-[1.01]" 
+                    ? "border-[#B89B7A] border-[1px] shadow-lg shadow-[#0000003a] dark:shadow-[#0006] transform scale-[1.01]" 
                     : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
                 )}
               >
@@ -108,4 +107,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-
