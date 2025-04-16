@@ -4,6 +4,7 @@ export interface QuizOption {
   text: string;
   imageUrl?: string;
   styleCategory: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
+  points: number;
 }
 
 export interface QuizQuestion {
