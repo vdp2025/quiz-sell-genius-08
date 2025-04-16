@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
@@ -48,6 +49,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
 
   const verticalLayoutQuestions = ['1', '3', '8', '10'];
+  const isVerticalLayout = verticalLayoutQuestions.includes(question.id);
 
   return (
     <AnimatedWrapper>
@@ -60,8 +62,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           "grid gap-6",
           question.type === 'text' 
             ? "grid-cols-1" // Single column for text-only questions
-            : verticalLayoutQuestions.includes(question.id)
-              ? "grid-cols-2" // Vertical layout (2 columns) for specific questions with images
+            : isVerticalLayout
+              ? "grid-cols-1 sm:grid-cols-2" // Vertical layout (2 columns) for specific questions with images
               : "grid-cols-2 md:grid-cols-4" // Horizontal layout (4 columns) for other image questions
         )}>
           {question.options.map((option) => (
@@ -72,42 +74,38 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             >
               <div 
                 className={cn(
-                  "transition-all duration-200 rounded-lg p-4 cursor-pointer",
+                  "transition-all duration-200 rounded-lg p-4 cursor-pointer flex flex-col items-center",
                   currentAnswers.includes(option.id) 
                     ? "border-[#B89B7A] border-2 shadow-md shadow-[#B89B7A]/20 transform scale-[1.01]" 
                     : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
                 )}
               >
-                <div className="relative flex items-start space-x-3">
-                  <div className="flex-1">
-                    {question.type !== 'text' && option.imageUrl && (
-                      <div 
-                        className={cn(
-                          "mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10",
-                          verticalLayoutQuestions.includes(question.id)
-                            ? "aspect-[3/4] h-72" // Vertical aspect ratio
-                            : "aspect-square" // Square aspect ratio for horizontal layout
-                        )}
-                      >
-                        <img
-                          src={option.imageUrl}
-                          alt={option.text}
-                          className={cn(
-                            "object-cover w-full h-full transition-transform duration-300",
-                            currentAnswers.includes(option.id) ? "scale-105" : "group-hover:scale-105"
-                          )}
-                          onError={(e) => {
-                            console.error(`Failed to load image: ${option.imageUrl}`);
-                            e.currentTarget.src = 'https://via.placeholder.com/400?text=Image+Not+Found';
-                          }}
-                        />
-                      </div>
+                {question.type !== 'text' && option.imageUrl && (
+                  <div 
+                    className={cn(
+                      "mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full",
+                      isVerticalLayout
+                        ? "aspect-[3/4] h-72 max-w-[240px] mx-auto" // Vertical aspect ratio with width constraint
+                        : "aspect-square max-w-full" // Square aspect ratio for horizontal layout
                     )}
-                    <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80 text-center">
-                      {option.text}
-                    </p>
+                  >
+                    <img
+                      src={option.imageUrl}
+                      alt={option.text}
+                      className={cn(
+                        "object-cover w-full h-full transition-transform duration-300",
+                        currentAnswers.includes(option.id) ? "scale-105" : "group-hover:scale-105"
+                      )}
+                      onError={(e) => {
+                        console.error(`Failed to load image: ${option.imageUrl}`);
+                        e.currentTarget.src = 'https://via.placeholder.com/400?text=Image+Not+Found';
+                      }}
+                    />
                   </div>
-                </div>
+                )}
+                <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80 text-center max-w-[240px] mx-auto">
+                  {option.text}
+                </p>
               </div>
             </div>
           ))}
