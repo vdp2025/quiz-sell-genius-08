@@ -67,9 +67,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 className={cn(
                   "transition-all duration-200 rounded-lg p-4 cursor-pointer",
                   currentAnswers.includes(option.id) 
-                    ? "bg-[#B89B7A]/30 border-[#B89B7A] shadow-md transform scale-[1.02]" 
-                    : "hover:bg-[#B89B7A]/5 hover:shadow-sm border-transparent hover:scale-[1.01]",
-                  "border"
+                    ? "border-[#B89B7A] border-2 shadow-md shadow-[#B89B7A]/20 transform scale-[1.01]" 
+                    : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
                 )}
               >
                 <div className="relative flex items-start space-x-3">
@@ -109,3 +108,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
