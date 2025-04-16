@@ -7,8 +7,6 @@ import { QuizResult } from '@/types/quiz';
 export const useQuiz = () => {
   const [participantId, setParticipantId] = useState<string | null>(null);
   const { toast } = useToast();
-  
-  // Remove useNavigate() dependency
 
   const startQuiz = async (name: string, email: string, quizId: string) => {
     try {
@@ -51,7 +49,6 @@ export const useQuiz = () => {
 
     try {
       await saveResults(participantId, [results.primaryStyle, ...results.secondaryStyles]);
-      // Instead of navigating with useNavigate hook:
       window.location.href = '/resultado';
     } catch (error) {
       toast({

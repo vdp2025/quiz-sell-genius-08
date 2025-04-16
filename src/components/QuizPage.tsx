@@ -1,18 +1,16 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
 import { Button } from './ui/button';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { UserResponse } from '../types/quiz';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { useNavigate } from 'react-router-dom';
 import { Progress } from './ui/progress';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const {
     currentQuestion,
     currentQuestionIndex,
@@ -22,25 +20,71 @@ const QuizPage: React.FC = () => {
     handleAnswer,
     handleNext,
     handlePrevious,
-    totalQuestions
+    totalQuestions,
+    quizResult,
+    submitQuizIfComplete
   } = useQuizLogic();
 
+  // Reference to the quiz container for scrolling
+  const quizContainerRef = useRef<HTMLDivElement>(null);
+
+  // Handle answer submission and auto-advance
   const handleAnswerSubmit = (response: UserResponse) => {
     handleAnswer(response.questionId, response.selectedOptions);
-  };
-
-  const handleNextClick = () => {
-    if (isLastQuestion) {
-      navigate('/resultado');
-    } else {
-      handleNext();
+    
+    // Auto-advance to next question if exactly 3 options are selected
+    if (response.selectedOptions.length === currentQuestion.multiSelect && !isLastQuestion) {
+      setTimeout(() => {
+        handleNext();
+      }, 500); // Small delay for visual feedback
+    } else if (response.selectedOptions.length === currentQuestion.multiSelect && isLastQuestion) {
+      // Auto-submit the quiz on the last question
+      setTimeout(() => {
+        submitQuizIfComplete();
+      }, 800); // Slightly longer delay for the final question
     }
   };
+
+  // Smooth scroll to the current question when it changes
+  useEffect(() => {
+    if (quizContainerRef.current) {
+      const questionElement = document.getElementById(`question-${currentQuestion.id}`);
+      if (questionElement) {
+        questionElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+    }
+  }, [currentQuestionIndex, currentQuestion.id]);
+
+  // Make sure images are pre-loaded for all questions
+  useEffect(() => {
+    // Function to preload an image
+    const preloadImage = (src: string) => {
+      const img = new Image();
+      img.src = src;
+    };
+
+    // Get all questions with images and preload them
+    import('../data/quizQuestions').then(module => {
+      const questions = module.quizQuestions;
+      questions.forEach(question => {
+        if (question.type !== 'text') {
+          question.options.forEach(option => {
+            if (option.imageUrl) {
+              preloadImage(option.imageUrl);
+            }
+          });
+        }
+      });
+    });
+  }, []);
 
   const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
+    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
         <AnimatedWrapper className="mb-4">
           <Progress value={progressPercentage} className="w-full h-2 bg-[#B89B7A]/20" />
@@ -61,26 +105,18 @@ const QuizPage: React.FC = () => {
           currentAnswers={currentAnswers}
         />
 
-        <AnimatedWrapper className="flex justify-between mt-8">
-          <Button
-            onClick={handlePrevious}
-            disabled={currentQuestionIndex === 0}
-            variant="outline"
-            className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Anterior
-          </Button>
-
-          <Button
-            onClick={handleNextClick}
-            disabled={!canProceed}
-            className="flex items-center gap-2 bg-[#B89B7A] hover:bg-[#B89B7A]/90 transition-all duration-200"
-          >
-            {isLastQuestion ? 'Ver Resultado' : 'Próxima'}
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </AnimatedWrapper>
+        {currentQuestionIndex > 0 && (
+          <AnimatedWrapper className="flex justify-start mt-8">
+            <Button
+              onClick={handlePrevious}
+              variant="outline"
+              className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Voltar para pergunta anterior
+            </Button>
+          </AnimatedWrapper>
+        )}
       </div>
     </div>
   );
