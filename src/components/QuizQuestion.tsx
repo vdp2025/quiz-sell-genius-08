@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
@@ -16,6 +16,18 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onAnswer,
   currentAnswers,
 }) => {
+  // Log any image URLs to check their format
+  useEffect(() => {
+    if (question.type !== 'text') {
+      console.log('Question with images:', question.title);
+      question.options.forEach(opt => {
+        if (opt.imageUrl) {
+          console.log('Image URL:', opt.imageUrl);
+        }
+      });
+    }
+  }, [question]);
+
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     
@@ -56,6 +68,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                     src={option.imageUrl}
                     alt={option.text}
                     className="object-cover w-full h-full"
+                    onError={(e) => {
+                      console.error(`Failed to load image: ${option.imageUrl}`);
+                      e.currentTarget.src = 'https://via.placeholder.com/400?text=Image+Not+Found';
+                    }}
                   />
                 </div>
               )}
