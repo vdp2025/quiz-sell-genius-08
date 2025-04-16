@@ -4,6 +4,7 @@ import { Card } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { AnimatedWrapper } from './ui/animated-wrapper';
+import { cn } from '../lib/utils';
 import type { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
 
 interface QuizQuestionProps {
