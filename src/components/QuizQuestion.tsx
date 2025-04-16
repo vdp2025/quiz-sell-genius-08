@@ -49,6 +49,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     });
   };
 
+  // Questions with vertical image layout
+  const verticalLayoutQuestions = ['1', '3', '8', '10'];
+
   return (
     <AnimatedWrapper>
       <Card className="w-full max-w-4xl mx-auto p-8 bg-white shadow-md" id={`question-${question.id}`}>
@@ -56,7 +59,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           {question.title}
         </h2>
         
-        <div className={`grid gap-6 ${question.type === 'text' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2'}`}>
+        <div className={cn(
+          "grid gap-6", 
+          verticalLayoutQuestions.includes(question.id) 
+            ? "grid-cols-2 md:grid-cols-4" // Vertical layout
+            : "grid-cols-1 md:grid-cols-2" // Default layout
+        )}>
           {question.options.map((option) => (
             <div 
               key={option.id} 
@@ -77,8 +85,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                       <div 
                         className={cn(
                           "mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10",
-                          question.id === '1' || question.id === '3' || question.id === '8' 
-                            ? "aspect-[4/3] h-64" // Taller images for specific questions
+                          verticalLayoutQuestions.includes(question.id)
+                            ? "aspect-[3/4] h-72" // Vertical aspect ratio for specific questions
                             : "aspect-square" // Default square aspect ratio
                         )}
                       >
@@ -96,7 +104,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                         />
                       </div>
                     )}
-                    <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80">
+                    <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80 text-center">
                       {option.text}
                     </p>
                   </div>
@@ -115,3 +123,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
