@@ -41,25 +41,24 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         {question.title}
       </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className={`grid gap-6 ${question.type === 'text' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
         {question.options.map((option) => (
-          <div key={option.id} className="relative">
-            {question.type !== 'text' && option.imageUrl && (
-              <div className="mb-4 aspect-square relative overflow-hidden rounded-lg">
-                <img
-                  src={option.imageUrl}
-                  alt={option.text}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            )}
-            
-            <div className="flex items-start space-x-3">
-              <Checkbox
-                id={option.id}
-                checked={currentAnswers.includes(option.id)}
-                onCheckedChange={() => handleOptionSelect(option.id)}
-              />
+          <div key={option.id} className="relative flex items-start space-x-3">
+            <Checkbox
+              id={option.id}
+              checked={currentAnswers.includes(option.id)}
+              onCheckedChange={() => handleOptionSelect(option.id)}
+            />
+            <div className="flex-1">
+              {question.type !== 'text' && option.imageUrl && (
+                <div className="mb-4 aspect-square relative overflow-hidden rounded-lg">
+                  <img
+                    src={option.imageUrl}
+                    alt={option.text}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              )}
               <Label
                 htmlFor={option.id}
                 className="text-sm leading-relaxed cursor-pointer"
