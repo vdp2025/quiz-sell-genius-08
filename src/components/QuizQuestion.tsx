@@ -47,22 +47,23 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   const getGridColumns = () => {
     if (question.type === 'text') {
-      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
+      return isMobile ? "grid-cols-1 gap-4 px-3" : "grid-cols-1 gap-4 px-4";
     }
     
-    return isMobile ? "grid-cols-2 gap-2 px-2" : "grid-cols-2 gap-3 px-2";
+    return isMobile ? "grid-cols-2 gap-3 px-2" : "grid-cols-2 gap-3 px-2";
   };
 
   return (
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-6xl mx-auto pb-6" // Added bottom padding
+          "w-full max-w-6xl mx-auto pb-8", // Increased bottom padding
+          isMobile && "px-1" // Additional padding control for mobile
         )} 
         id={`question-${question.id}`}
       >
         <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-6 px-2 pt-2 text-brand-coffee font-semibold tracking-normal", // Increased margin-bottom
+          "text-base sm:text-xl font-playfair text-center mb-6 px-3 pt-3 text-brand-coffee font-semibold tracking-normal", 
           isStrategicQuestion && "text-brand-coffee tracking-normal inline-block"
         )}>
           {highlightStrategicWords(question.title)}
@@ -71,7 +72,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <div className={cn(
           "grid h-full",
           getGridColumns(),
-          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3",
+          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-4", // Increased gap
           hasImageOptions && "mb-6 relative"
         )}>
           {question.options.map((option) => (
@@ -86,7 +87,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         </div>
         
         {!autoAdvance && (
-          <p className="text-2xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-6 text-center">
+          <p className="text-2xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mt-6 text-center font-medium"> {/* Improved visibility */}
             Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
           </p>
         )}

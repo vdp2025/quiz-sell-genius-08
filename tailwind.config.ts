@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -118,6 +119,9 @@ export default {
       },
       transform: {
         'gpu': 'translate3d(0,0,0)',
+      },
+      scale: {
+        '115': '1.15',
       }
     }
   },

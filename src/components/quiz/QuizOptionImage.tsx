@@ -86,9 +86,13 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     );
   }
 
+  // Calculate zoom scale based on device type
+  const zoomScale = isMobile ? 1.5 : 1.3;
+  const marginTopValue = isMobile ? -8 : -6;
+
   return (
     <div className={cn(
-      "w-full relative flex-grow overflow-hidden", // Changed to overflow-hidden to prevent content from spilling
+      "w-full relative flex-grow overflow-hidden",
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -106,19 +110,19 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             alt={altText}
             className={cn(
               "object-contain px-2 pt-2 absolute inset-0",
-              "transition-all duration-500 ease-in-out", // Increased duration for smoother transition
+              "transition-all duration-700 ease-in-out", // Increased duration for smoother transition
               isSelected && processedImageUrl 
-                ? "scale-[1.3] -mt-6 z-50" // Increased scale and margin-top for more dramatic effect
+                ? `scale-[${zoomScale}] mt-${marginTopValue} z-50` // Dynamic scale and margin based on device
                 : "scale-100 z-10",
               isHovered && !isSelected
-                ? "scale-110" // Applied hover effect regardless of device
+                ? isMobile ? "scale-115" : "scale-110" // Larger hover scale on mobile
                 : "",
               "w-full h-full"
             )}
             onError={() => setImageError(true)}
             style={{
-              willChange: 'transform', // Optimize for animations
-              transformOrigin: 'center center',
+              willChange: 'transform, opacity', // Optimize for animations
+              transformOrigin: 'center 40%', // Move origin point for more natural zoom
             }}
           />
         </div>
