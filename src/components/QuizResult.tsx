@@ -65,11 +65,11 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                     ></div>
                   </div>
                 </div>
-                <div className="w-32 flex-shrink-0">
+                <div className="w-40 flex-shrink-0">
                   <img
                     src={styleConfig[primaryStyle.category].image}
                     alt={`Estilo ${primaryStyle.category}`}
-                    className="w-full h-32 object-contain scale-90 rounded-lg shadow-sm"
+                    className="w-full h-40 object-contain scale-90 rounded-lg shadow-sm"
                   />
                 </div>
               </div>
@@ -113,11 +113,13 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
             <div className="grid grid-cols-1 gap-3">
               {secondaryStyles.slice(0, 2).map((style, index) => (
                 <div key={style.category} className="flex gap-3 items-start bg-gray-50 p-2 md:p-3 rounded-lg">
-                  <img
-                    src={styleConfig[style.category].image}
-                    alt={`Estilo ${style.category}`}
-                    className="w-14 md:w-16 h-14 md:h-16 object-contain scale-90 rounded"
-                  />
+                  {!isMobile && (
+                    <img
+                      src={styleConfig[style.category].image}
+                      alt={`Estilo ${style.category}`}
+                      className="w-14 md:w-16 h-14 md:h-16 object-contain scale-90 rounded"
+                    />
+                  )}
                   <div className="flex-1">
                     <div className="flex justify-between items-center mb-1">
                       <h4 className="font-playfair text-sm md:text-base text-[#432818]">{style.category}</h4>
