@@ -29,7 +29,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   useEffect(() => {
     const processImage = async () => {
-      if (isSelected && !processedImageUrl && !isProcessing && !processingFailed) {
+      // Always process images on mobile devices, only when selected on desktop
+      if ((isMobile || isSelected) && !processedImageUrl && !isProcessing && !processingFailed) {
         try {
           setIsProcessing(true);
           
@@ -71,9 +72,13 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
         URL.revokeObjectURL(processedImageUrl);
       }
     };
-  }, [isSelected, imageUrl, processedImageUrl, isProcessing, processingFailed]);
+  }, [isSelected, imageUrl, processedImageUrl, isProcessing, processingFailed, isMobile]);
 
-  const displayImageUrl = isSelected && processedImageUrl ? processedImageUrl : imageUrl;
+  // Use processed image for mobile regardless of selection state
+  // For desktop, only use it when selected
+  const displayImageUrl = (isMobile || isSelected) && processedImageUrl 
+    ? processedImageUrl 
+    : imageUrl;
 
   if (imageError) {
     return (
