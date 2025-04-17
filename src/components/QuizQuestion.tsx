@@ -99,7 +99,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   return (
     <AnimatedWrapper>
       <div className="w-full max-w-4xl mx-auto" id={`question-${question.id}`}>
-        <h2 className="text-xl sm:text-2xl font-playfair text-center mb-2 px-2 pt-2 text-[#432818]">
+        <h2 className="text-lg sm:text-xl font-playfair text-center mb-2 px-2 pt-2 text-[#432818]">
           {question.title}
         </h2>
         
@@ -107,7 +107,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           "grid",
           question.type === 'text' 
             ? "grid-cols-1 gap-3 px-4" 
-            : isMobile ? "grid-cols-2 gap-0.5 px-0.5" : "grid-cols-2 gap-6 px-4"
+            : isMobile ? "grid-cols-2 gap-1 px-1" : "grid-cols-2 gap-6 px-4"
         )}>
           {question.options.map((option) => (
             <div 
@@ -118,23 +118,30 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               <div 
                 className={cn(
                   "transition-all duration-200 cursor-pointer flex flex-col items-center",
-                  question.type === 'text' && "p-3 hover:bg-gray-50 rounded-lg",
+                  question.type === 'text' && "p-3 hover:bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200",
+                  currentAnswers.includes(option.id) && question.type === 'text' && "bg-gray-50 border-gray-200",
                   currentAnswers.includes(option.id) && question.type !== 'text'
                     ? "border-[#B89B7A] border-[0.5px] shadow-sm" 
-                    : "border-0",
+                    : question.type !== 'text' && "border-transparent border-[0.5px]",
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div className="overflow-hidden w-full aspect-square">
+                  <div className={cn(
+                    "overflow-hidden w-full",
+                    option.imageUrl.includes('sapatos') || option.imageUrl.includes('roupa') 
+                      ? "aspect-square" 
+                      : "aspect-[3/4]"
+                  )}>
                     <img
                       src={option.imageUrl}
                       alt={option.text}
                       className={cn(
-                        "object-cover w-full h-full transition-transform duration-300 scale-100",
+                        "object-cover w-full h-full transition-transform duration-300",
                         currentAnswers.includes(option.id) ? "scale-110" : "group-hover:scale-105"
                       )}
                       style={{ 
                         transformOrigin: 'center center',
+                        objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover'
                       }}
                       onError={(e) => {
                         console.error(`Failed to load image: ${option.imageUrl}`);
@@ -147,8 +154,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   "cursor-pointer text-[#1A1818]/80 text-center w-full",
                   question.type !== 'text' 
                     ? isMobile 
-                      ? "text-[0.35rem] leading-[0.4rem] bg-white/80 px-0.5 py-0.5" 
-                      : "text-2xs leading-none p-2"
+                      ? "text-[0.45rem] leading-[0.5rem] bg-white/90 px-1 py-1" 
+                      : "text-xs leading-tight p-2"
                     : isMobile 
                       ? "text-sm leading-tight" 
                       : "text-base leading-tight"
