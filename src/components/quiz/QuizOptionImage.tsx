@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -86,7 +87,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   return (
     <div className={cn(
-      "w-full relative flex-grow overflow-hidden",
+      "w-full relative flex-grow overflow-visible",
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -95,7 +96,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
       >
         <div className="w-full h-full flex items-center justify-center relative">
           {isProcessing && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/30 z-10">
+            <div className="absolute inset-0 flex items-center justify-center bg-white/30 z-20">
               <div className="w-5 h-5 border-2 border-brand-coffee border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
@@ -106,10 +107,10 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
               "object-contain px-2 pt-2 absolute inset-0",
               "transition-transform duration-700 ease-in-out", 
               isSelected ? isMobile 
-                ? "scale-[1.2]" 
-                : "scale-[1.3]"
+                ? "scale-[1.2] relative z-10" 
+                : "scale-[1.3] relative z-10"
                 : "scale-100",
-              "z-10 w-full h-full"
+              "w-full h-full"
             )}
             onError={() => setImageError(true)}
             style={{
