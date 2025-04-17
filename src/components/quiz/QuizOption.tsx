@@ -117,7 +117,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         )}
         
         <p className={cn(
-          "cursor-pointer transition-colors duration-300 text-brand-coffee", 
+          "cursor-pointer transition-colors duration-300 text-brand-coffee",
           type !== 'text' 
             ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium" 
             : isMobile 
