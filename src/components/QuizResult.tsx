@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -25,7 +24,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
             alt="Logo Gisele Galvão"
             className="h-16 mx-auto"
           />
-          <h1 className="font-playfair text-3xl md:text-4xl font-semibold text-[#432818]">
+          <h1 className="font-playfair text-2xl md:text-4xl font-semibold text-[#432818]">
             Olá, {userName}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
           </h1>
         </div>
@@ -37,7 +36,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                 <img
                   src={styleConfig[primaryStyle.category].image}
                   alt={`Estilo ${primaryStyle.category}`}
-                  className="w-full h-[200px] md:h-[300px] object-cover rounded-lg shadow-sm"
+                  className="w-full h-[200px] md:h-[300px] object-contain rounded-lg shadow-sm"
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
@@ -64,7 +63,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                         <img
                           src={styleConfig[style.category].image}
                           alt={`Estilo ${style.category}`}
-                          className="w-16 h-16 object-cover rounded"
+                          className="w-16 h-16 object-contain rounded"
                         />
                         <div className="flex-1">
                           <div className="flex justify-between items-center mb-1">
