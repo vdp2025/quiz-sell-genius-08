@@ -140,7 +140,11 @@ const QuizPage: React.FC = () => {
         </div>
 
         <AnimatedWrapper className="mb-4">
-          <Progress value={progressPercentage} className="w-full h-2 bg-[#B89B7A]/20" />
+          <Progress 
+            value={progressPercentage} 
+            className="w-full h-2 bg-[#B89B7A]/20" 
+            indicatorClassName="bg-[#B89B7A]" 
+          />
         </AnimatedWrapper>
         
         <AnimatedWrapper className="flex justify-between items-center mb-8">
