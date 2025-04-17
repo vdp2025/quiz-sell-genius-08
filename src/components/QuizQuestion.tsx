@@ -43,19 +43,17 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     });
   };
 
-  // Determine the grid columns based on question type and content
   const getGridColumns = () => {
     if (question.type === 'text') return "grid-cols-1 gap-4 px-4";
     
-    // For images - use 2 columns with reduced gap
-    return "grid-cols-2 gap-2 px-2";
+    return "grid-cols-2 gap-1 px-1";
   };
 
   return (
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-5xl mx-auto"
+          "w-full max-w-6xl mx-auto"
         )} 
         id={`question-${question.id}`}
       >

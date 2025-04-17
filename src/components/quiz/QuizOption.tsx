@@ -53,7 +53,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group transition-all duration-300 ease-out transform perspective-1000",
-        (isHovered || isSelected) && "scale-[1.02]"
+        (isHovered || isSelected) && "scale-[1.03]"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -107,14 +107,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   alt={option.text}
                   className={cn(
                     "object-cover w-full h-full transition-all duration-300 ease-out",
-                    (isSelected || isHovered) ? "scale-125" : "scale-105"
+                    (isSelected || isHovered) ? "scale-150" : "scale-125"
                   )}
                   style={{ 
                     transformOrigin: 'center center',
                     objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover',
-                    margin: '-2%',
-                    width: '104%',
-                    height: '104%'
+                    margin: '-5%',
+                    width: '110%',
+                    height: '110%'
                   }}
                   onError={() => setImageError(true)}
                 />
@@ -127,9 +127,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "text-[0.7rem] sm:text-[0.85rem] leading-tight font-medium",
+                "text-[0.75rem] sm:text-sm leading-tight font-medium",
                 "relative bottom-0 left-0 right-0 z-10",
-                "bg-white/95 p-2",
+                "bg-white/90 p-1.5",
                 "text-brand-coffee"
               )
             : isMobile 
