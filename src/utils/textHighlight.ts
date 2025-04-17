@@ -3,16 +3,12 @@ import React from 'react';
 
 export const highlightStrategicWords = (text: string): React.ReactNode => {
   const strategicWords = [
-    'confortáveis', 'soltos', 'práticos', 'discretas', 'clássico', 'despercebidas',
-    'refinados', 'perfeito', 'atual', 'delicadas', 'suaves', 'fluídas',
-    'marquem', 'decotes', 'fendas', 'estruturadas', 'assimétricas', 'modernas',
-    'marcantes', 'mix', 'informal', 'espontânea', 'essencialista', 'conservadora',
-    'exigente', 'sofisticada', 'feminina', 'meiga', 'sensível', 'glamorosa',
-    'sensual', 'cosmopolita', 'audaciosa', 'exótica', 'aventureira', 'leve',
-    'tradicional', 'casual', 'imponente', 'romântico', 'urbano', 'criativo',
-    'colorido', 'ousado', 'discretos', 'sutis', 'clean', 'status', 'laços',
-    'babados', 'couro', 'zíper', 'firmeza', 'peso', 'exclusivos', 'identidade',
-    'flamingo', 'cores', 'marcado', 'definido'
+    // Previous words...
+    'desconectada', 'dúvidas', 'segura', 'evoluir', 
+    'combiná-las', 'impulso', 'arrependo', 'percebida', 
+    'autenticidade', 'leveza', 'confiante', 'presença', 
+    'elegância', 'autoridade', 'admirada', 'consciência', 
+    'estilosa', 'facilidade', 'propósito', 'transformar'
   ];
 
   const pattern = new RegExp(`(${strategicWords.join('|')})`, 'gi');
@@ -21,7 +17,7 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
   
   return parts.map((part, index) => {
     if (strategicWords.some(word => part.toLowerCase() === word.toLowerCase())) {
-      return React.createElement('strong', { key: index }, part);
+      return React.createElement('strong', { key: index, className: 'text-primary/80' }, part);
     }
     return part;
   });

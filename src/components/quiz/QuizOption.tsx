@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -69,7 +70,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         className={cn(
           "transition-all duration-300 ease-out cursor-pointer",
-          type === 'text' && "p-3 rounded-lg border border-[#B89B7A]/20",
+          type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20", // Increased padding
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
@@ -115,12 +116,12 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer transition-colors duration-300",
           type !== 'text' 
             ? isMobile 
-              ? "text-2xs leading-[0.7rem] bg-white/90 px-1 py-1"
-              : "text-base leading-tight p-2"
+              ? "text-2xs leading-[0.9rem] bg-white/90 px-1 py-2" // Increased line height
+              : "text-base leading-relaxed p-2"
             : isMobile 
-              ? "text-xs leading-relaxed"
+              ? "text-xs leading-relaxed" 
               : "text-lg leading-relaxed",
-          isSelected ? "text-[#432818]" : "text-[#1A1818]/80"
+          isSelected ? "text-[#432818] font-medium" : "text-[#1A1818]/80"
         )}>
           {highlightStrategicWords(option.text)}
         </p>
