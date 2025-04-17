@@ -22,6 +22,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+  const isQuestionOneOrTwo = ['1', '2'].includes(option.id.charAt(0));
 
   return (
     <div 
@@ -44,8 +45,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-[#B89B7A]/80 bg-[#B89B7A]/10 shadow-2xl" // Aumentei a sombra para 2xl
-              : "border-[#B89B7A]/80 shadow-2xl" // Aumentei a sombra para 2xl para imagens
+              ? "border-[#B89B7A]/80 bg-[#B89B7A]/10 shadow-2xl"
+              : "border-[#B89B7A]/80 shadow-2xl"
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
               : "hover:border-[#B89B7A]/50",
@@ -65,7 +66,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "text-[0.7rem] sm:text-xs leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee z-20 relative", 
+                "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee z-20 relative", 
+                isQuestionOneOrTwo 
+                  ? "text-[0.55rem] sm:text-[0.65rem]" // Smaller font for questions 1 and 2
+                  : "text-[0.7rem] sm:text-xs", // Original font size for other questions
                 isSelected && "font-semibold"
               )
             : "text-xs sm:text-lg leading-relaxed"
