@@ -50,8 +50,8 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
         <Card className="p-3 md:p-6 bg-white shadow-md">
           {isMobile ? (
             <div className="flex flex-col gap-4">
-              <div className="flex gap-4">
-                <div className="flex-1">
+              <div className="flex flex-col gap-3">
+                <div>
                   <div className="flex items-center justify-between">
                     <h2 className="text-xl font-playfair text-[#B89B7A]">
                       {primaryStyle.category}
@@ -64,18 +64,18 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                       style={{ width: `${primaryStyle.percentage}%` }}
                     ></div>
                   </div>
+                  <p className="text-[#1A1818]/80 text-sm mt-2">
+                    {styleConfig[primaryStyle.category].description}
+                  </p>
                 </div>
-                <div className="w-40 flex-shrink-0">
+                <div className="w-48 mx-auto">
                   <img
                     src={styleConfig[primaryStyle.category].image}
                     alt={`Estilo ${primaryStyle.category}`}
-                    className="w-full h-40 object-contain scale-90 rounded-lg shadow-sm"
+                    className="w-full h-48 object-contain scale-90 rounded-lg shadow-sm"
                   />
                 </div>
               </div>
-              <p className="text-[#1A1818]/80 text-sm">
-                {styleConfig[primaryStyle.category].description}
-              </p>
             </div>
           ) : (
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
