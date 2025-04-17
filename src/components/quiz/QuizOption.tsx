@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -53,7 +54,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group transition-all duration-300 ease-out transform perspective-1000",
-        (isHovered || isSelected) && "scale-[1.03] z-10"
+        (isHovered || isSelected) && "scale-[1.02] z-10"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -107,14 +108,16 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   alt={option.text}
                   className={cn(
                     "object-cover w-full h-full transition-all duration-300 ease-out",
-                    (isSelected || isHovered) ? "scale-[1.6]" : "scale-[1.3]"
+                    isMobile 
+                      ? (isSelected || isHovered) ? "scale-[1.6]" : "scale-[1.3]"
+                      : (isSelected || isHovered) ? "scale-[1.4]" : "scale-[1.1]"
                   )}
                   style={{ 
                     transformOrigin: 'center center',
                     objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover',
-                    margin: '-10%',
-                    width: '120%',
-                    height: '120%'
+                    margin: isMobile ? '-10%' : '-5%',
+                    width: isMobile ? '120%' : '110%',
+                    height: isMobile ? '120%' : '110%'
                   }}
                   onError={() => setImageError(true)}
                 />
