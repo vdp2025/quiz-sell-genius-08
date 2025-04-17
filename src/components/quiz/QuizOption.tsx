@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -54,7 +53,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
 
-  // Process image when selected
   useEffect(() => {
     const processImage = async () => {
       if (isSelected && option.imageUrl && !processedImageUrl && !isProcessing && !processingFailed) {
@@ -62,13 +60,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           setIsProcessing(true);
           console.log('Processing image for option:', option.id);
           
-          // Create a new image element from the URL
           const img = new Image();
-          img.crossOrigin = "anonymous"; // Handle CORS issues
+          img.crossOrigin = "anonymous";
           
           img.onload = async () => {
             try {
-              // Process the image to remove background
               const processedBlob = await removeBackground(img);
               const processedUrl = URL.createObjectURL(processedBlob);
               setProcessedImageUrl(processedUrl);
@@ -98,7 +94,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
     processImage();
     
-    // Cleanup function to revoke object URLs
     return () => {
       if (processedImageUrl) {
         URL.revokeObjectURL(processedImageUrl);
@@ -106,15 +101,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     };
   }, [isSelected, option.imageUrl, processedImageUrl, isProcessing, processingFailed, option.id]);
 
-  // Determine which image URL to use
   const displayImageUrl = isSelected && processedImageUrl ? processedImageUrl : option.imageUrl;
 
   return (
     <div 
       className={cn(
-        "relative group transition-all duration-300 ease-out transform perspective-1000 h-full",
-        !isMobile && (isHovered || isSelected) && "scale-[1.02] z-10",
-        isMobile && isSelected && "scale-[1.02] z-10"
+        "relative group h-full",
+        "transition-colors duration-300 ease-out"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -132,26 +125,23 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
       <div 
         className={cn(
-          "relative transition-all duration-300 ease-out cursor-pointer overflow-hidden h-full flex flex-col",
+          "relative h-full flex flex-col",
+          "transition-colors duration-300 ease-out",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer",
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
               : "border-[#B89B7A]/70"
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
-              : "hover:border-[#B89B7A]/50",
-          isMobile && isSelected && "shadow-xl",
-          !isMobile && (isHovered || isSelected) && "shadow-xl"
+              : "hover:border-[#B89B7A]/50"
         )}
       >
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
-            "w-full relative flex-grow",
-            is3DQuestion && "transform-gpu transition-transform duration-300",
-            !isMobile && is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12",
-            isMobile && is3DQuestion && isSelected && "rotate-y-12 rotate-x-12"
+            "w-full relative flex-grow overflow-visible",
+            is3DQuestion && "transform-gpu"
           )}>
             <AspectRatio 
               ratio={option.imageUrl.includes('sapatos') ? 1 : 3/4} 
@@ -167,7 +157,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               ) : (
                 <div className={cn(
                   "w-full h-full flex items-center justify-center",
-                  isSelected && "relative"
+                  "relative"
                 )}>
                   {isProcessing && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/30 z-10">
@@ -178,13 +168,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                     src={displayImageUrl}
                     alt={option.text}
                     className={cn(
-                      "object-contain transition-all duration-300 ease-out px-2 pt-2",
-                      isSelected && processedImageUrl ? "scale-[1.15] -mt-3" : "w-full h-full",
-                      !isSelected && (
-                        isMobile 
-                          ? isSelected ? "scale-110" : "scale-100"
-                          : (isSelected || isHovered) ? "scale-110" : "scale-100"
-                      )
+                      "object-contain px-2 pt-2",
+                      "transition-all duration-300 ease-out",
+                      isSelected && processedImageUrl 
+                        ? "scale-[1.15] -mt-3 z-10" 
+                        : "scale-100",
+                      !isMobile && !isSelected && isHovered && "scale-105"
                     )}
                     onError={() => setImageError(true)}
                   />
@@ -195,13 +184,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         )}
         
         <p className={cn(
-          "cursor-pointer transition-all duration-300",
+          "transition-colors duration-300",
           type !== 'text' 
             ? cn(
                 "text-[0.65rem] sm:text-xs leading-tight font-medium",
                 "bg-white/90 py-1 px-1.5 mt-auto",
-                "text-brand-coffee",
-                isSelected && processedImageUrl && "bg-transparent"
+                "text-brand-coffee z-20 relative"
               )
             : isMobile 
               ? "text-xs leading-relaxed" 
