@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -51,12 +51,26 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   autoAdvance = true,
 }) => {
   const isMobile = useIsMobile();
+  const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
 
+  // Preload images immediately when the component mounts
   useEffect(() => {
     if (question.type !== 'text') {
+      const newImagesLoaded: Record<string, boolean> = {};
+      
       question.options.forEach(opt => {
         if (opt.imageUrl) {
+          newImagesLoaded[opt.id] = false;
           const img = new Image();
+          img.onload = () => {
+            setImagesLoaded(prev => ({
+              ...prev,
+              [opt.id]: true
+            }));
+          };
+          img.onerror = (e) => {
+            console.error(`Failed to load image: ${opt.imageUrl}`, e);
+          };
           img.src = opt.imageUrl;
         }
       });
@@ -84,13 +98,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   return (
     <AnimatedWrapper>
-      <Card className="w-full max-w-4xl mx-auto p-3 sm:p-8 bg-white shadow-md" id={`question-${question.id}`}>
-        <h2 className="text-xl sm:text-2xl font-playfair text-center mb-3 sm:mb-8 text-[#432818]">
+      <Card className="w-full max-w-4xl mx-auto p-2 sm:p-8 bg-white shadow-md" id={`question-${question.id}`}>
+        <h2 className="text-xl sm:text-2xl font-playfair text-center mb-2 sm:mb-8 text-[#432818]">
           {question.title}
         </h2>
         
         <div className={cn(
-          "grid gap-2 sm:gap-6",
+          "grid gap-1 sm:gap-6",
           question.type === 'text' 
             ? "grid-cols-1" 
             : isMobile ? "grid-cols-2" : "grid-cols-2"
@@ -103,14 +117,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             >
               <div 
                 className={cn(
-                  "transition-all duration-200 rounded-lg p-1 sm:p-4 cursor-pointer flex flex-col items-center",
+                  "transition-all duration-200 rounded-lg p-0.5 sm:p-4 cursor-pointer flex flex-col items-center",
                   currentAnswers.includes(option.id) 
                     ? "border-[#B89B7A] border-[0.5px] shadow-lg shadow-[#00000050] dark:shadow-[#000a]" 
                     : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div className="mb-1 sm:mb-2 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[1000px] mx-auto">
+                  <div className="mb-0.5 sm:mb-2 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-full mx-auto">
                     <img
                       src={option.imageUrl}
                       alt={option.text}
@@ -126,10 +140,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   </div>
                 )}
                 <p className={cn(
-                  "cursor-pointer text-[#1A1818]/80 text-center max-w-[230px] sm:max-w-[280px] mx-auto",
+                  "cursor-pointer text-[#1A1818]/80 text-center max-w-[200px] sm:max-w-[280px] mx-auto",
                   question.type !== 'text' 
                     ? isMobile 
-                      ? "text-[0.45rem] leading-[0.6rem]" 
+                      ? "text-[0.4rem] leading-[0.5rem] mt-0.5" 
                       : "text-2xs leading-none"
                     : isMobile 
                       ? "text-xs leading-tight" 
@@ -142,7 +156,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <p className="text-xs sm:text-sm text-[#1A1818]/60 mt-3 sm:mt-6 text-center">
+        <p className="text-xs sm:text-sm text-[#1A1818]/60 mt-2 sm:mt-6 text-center">
           Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
         </p>
       </Card>
