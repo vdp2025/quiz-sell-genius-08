@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -11,7 +10,6 @@ interface QuizOptionImageProps {
   altText: string;
   styleCategory: string;
   isSelected: boolean;
-  isHovered: boolean;
   is3DQuestion: boolean;
 }
 
@@ -20,7 +18,6 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   altText,
   styleCategory,
   isSelected,
-  isHovered,
   is3DQuestion,
 }) => {
   const isMobile = useIsMobile();
@@ -87,7 +84,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   return (
     <div className={cn(
-      "w-full relative flex-grow overflow-visible",
+      "w-full relative flex-grow overflow-visible z-10",
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -107,8 +104,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
               "object-contain px-2 pt-2 absolute inset-0",
               "transition-transform duration-700 ease-in-out", 
               isSelected ? isMobile 
-                ? "scale-[1.2] relative z-10" 
-                : "scale-[1.3] relative z-10"
+                ? "scale-[1.2] absolute top-0 left-0 w-full h-full z-20" 
+                : "scale-[1.3] absolute top-0 left-0 w-full h-full z-20"
                 : "scale-100",
               "w-full h-full"
             )}
