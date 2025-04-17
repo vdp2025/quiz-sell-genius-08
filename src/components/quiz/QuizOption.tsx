@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -73,23 +72,23 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
       <div 
         className={cn(
-          "transition-all duration-300 ease-out cursor-pointer overflow-hidden",
+          "transition-all duration-300 ease-out cursor-pointer",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#9F9EA1]/30 rounded-lg",
+          type !== 'text' && "border-2 border-[#B89B7A]/40 rounded-lg",
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
               : "border-[#B89B7A]/70"
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
-              : "border-[#9F9EA1]/30 hover:border-[#B89B7A]/40",
+              : "hover:border-[#B89B7A]/60",
           isMobile && isSelected && "shadow-xl",
           !isMobile && (isHovered || isSelected) && "shadow-xl"
         )}
       >
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
-            "w-full overflow-hidden relative",
+            "w-full relative",
             is3DQuestion && "transform-gpu transition-transform duration-300",
             !isMobile && is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12",
             isMobile && is3DQuestion && isSelected && "rotate-y-12 rotate-x-12"
@@ -110,17 +109,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   src={option.imageUrl}
                   alt={option.text}
                   className={cn(
-                    "object-cover w-full h-full transition-all duration-300 ease-out",
+                    "object-contain w-full h-full transition-all duration-300 ease-out p-2",
                     isMobile 
-                      ? isSelected ? "scale-[1.3]" : "scale-[1.0]"
-                      : (isSelected || isHovered) ? "scale-[1.4]" : "scale-[1.1]"
+                      ? isSelected ? "scale-110" : "scale-100"
+                      : (isSelected || isHovered) ? "scale-110" : "scale-100"
                   )}
                   style={{ 
                     transformOrigin: 'center center',
-                    objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover',
-                    margin: isMobile ? '0' : '-5%',
-                    width: isMobile ? '100%' : '110%',
-                    height: isMobile ? '100%' : '110%'
                   }}
                   onError={() => setImageError(true)}
                 />
