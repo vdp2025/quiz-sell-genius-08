@@ -17,17 +17,9 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
-            alt="Logo Gisele Galvão"
-            className="h-16 mx-auto mb-6"
-          />
-        </div>
-
         <AnimatedWrapper>
           <Card className="p-8 space-y-8 bg-white shadow-md mb-8">
-            <h2 className="text-xl font-playfair text-[#432818] text-center tracking-tighter">
+            <h2 className="text-xl font-playfair text-[#432818] text-center tracking-normal">
               Enquanto calculamos o seu resultado...
             </h2>
             

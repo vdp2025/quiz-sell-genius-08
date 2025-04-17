@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -44,13 +45,14 @@ const QuizPage: React.FC = () => {
       [response.questionId]: response.selectedOptions
     }));
     
-    if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
-      setTimeout(() => {
+    // Add a slight delay before moving to the next strategic question
+    setTimeout(() => {
+      if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
         setCurrentStrategicQuestionIndex(prev => prev + 1);
-      }, 500);
-    } else {
-      setShowingFinalTransition(true);
-    }
+      } else {
+        setShowingFinalTransition(true);
+      }
+    }, 500);
   };
 
   const handleAnswerSubmit = (response: UserResponse) => {
@@ -145,6 +147,7 @@ const QuizPage: React.FC = () => {
             question={strategicQuestions[currentStrategicQuestionIndex]}
             onAnswer={handleStrategicAnswer}
             currentAnswers={strategicAnswers[strategicQuestions[currentStrategicQuestionIndex].id] || []}
+            autoAdvance={true}
           />
         ) : (
           <QuizQuestion
