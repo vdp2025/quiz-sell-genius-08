@@ -34,7 +34,6 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
       if (isSelected && !processedImageUrl && !isProcessing && !processingFailed) {
         try {
           setIsProcessing(true);
-          console.log('Processing image...');
           
           const img = new Image();
           img.crossOrigin = "anonymous";
@@ -86,10 +85,6 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     );
   }
 
-  // Calculate zoom scale based on device type
-  const zoomScale = isMobile ? 1.5 : 1.3;
-  const marginTopValue = isMobile ? -8 : -6;
-
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
@@ -110,19 +105,22 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             alt={altText}
             className={cn(
               "object-contain px-2 pt-2 absolute inset-0",
-              "transition-all duration-700 ease-in-out", // Increased duration for smoother transition
-              isSelected && processedImageUrl 
-                ? `scale-[${zoomScale}] mt-${marginTopValue} z-50` // Dynamic scale and margin based on device
-                : "scale-100 z-10",
+              "transition-all duration-700 ease-in-out", 
+              isSelected && isMobile 
+                ? "scale-[1.2] z-50" // 20% zoom on mobile when selected
+                : isSelected
+                  ? "scale-[1.3] z-50" // Existing desktop zoom
+                  : "scale-100 z-10",
               isHovered && !isSelected
-                ? isMobile ? "scale-115" : "scale-110" // Larger hover scale on mobile
-                : "",
+                ? isMobile 
+                  ? "scale-105" // Slight hover effect on mobile 
+                  : "scale-110", // Existing desktop hover
               "w-full h-full"
             )}
             onError={() => setImageError(true)}
             style={{
-              willChange: 'transform, opacity', // Optimize for animations
-              transformOrigin: 'center 40%', // Move origin point for more natural zoom
+              willChange: 'transform, opacity',
+              transformOrigin: 'center 40%',
             }}
           />
         </div>
