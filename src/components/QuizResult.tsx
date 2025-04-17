@@ -14,7 +14,7 @@ interface QuizResultProps {
 
 const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }) => {
   const { user } = useAuth();
-  const topThreeStyles = [primaryStyle, ...secondaryStyles.slice(0, 2)];
+  const userName = user?.userName || 'Visitante';
 
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
@@ -25,23 +25,23 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
             alt="Logo Gisele Galvão"
             className="h-16 mx-auto"
           />
-          <h1 className="font-playfair text-4xl font-semibold text-[#432818]">
-            Olá, {user?.userName || 'Visitante'}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
+          <h1 className="font-playfair text-3xl md:text-4xl font-semibold text-[#432818]">
+            Olá, {userName}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
           </h1>
         </div>
 
-        <Card className="p-8 bg-white shadow-md">
+        <Card className="p-6 md:p-8 bg-white shadow-md">
           <div className="space-y-8">
             <div className="flex flex-col md:flex-row items-start gap-8">
               <div className="w-full md:w-1/3">
                 <img
                   src={styleConfig[primaryStyle.category].image}
                   alt={`Estilo ${primaryStyle.category}`}
-                  className="w-full rounded-lg shadow-sm"
+                  className="w-full h-[200px] md:h-[300px] object-cover rounded-lg shadow-sm"
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
-                <h2 className="text-3xl font-playfair text-[#432818]">
+                <h2 className="text-2xl md:text-3xl font-playfair text-[#432818]">
                   {primaryStyle.category}
                 </h2>
                 <div className="w-full bg-gray-200 rounded-full h-4">
@@ -50,34 +50,34 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                     style={{ width: `${primaryStyle.percentage}%` }}
                   ></div>
                 </div>
-                <p className="text-[#1A1818]/80 text-lg">
+                <p className="text-[#1A1818]/80 text-base md:text-lg">
                   {styleConfig[primaryStyle.category].description}
                 </p>
 
-                <div className="mt-8 space-y-6 border-t pt-6">
-                  <h3 className="text-xl font-playfair text-[#432818]">
+                <div className="mt-6 space-y-4">
+                  <h3 className="text-lg md:text-xl font-playfair text-[#432818]">
                     Seus Estilos Complementares
                   </h3>
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {secondaryStyles.slice(0, 2).map((style, index) => (
-                      <div key={style.category} className="flex gap-4 items-center bg-gray-50 p-4 rounded-lg">
+                      <div key={style.category} className="flex gap-3 items-start bg-gray-50 p-3 rounded-lg">
                         <img
                           src={styleConfig[style.category].image}
                           alt={`Estilo ${style.category}`}
-                          className="w-20 h-20 object-cover rounded"
+                          className="w-16 h-16 object-cover rounded"
                         />
                         <div className="flex-1">
-                          <div className="flex justify-between items-center mb-2">
-                            <h4 className="font-playfair text-lg text-[#432818]">{style.category}</h4>
+                          <div className="flex justify-between items-center mb-1">
+                            <h4 className="font-playfair text-base text-[#432818]">{style.category}</h4>
                             <span className="text-sm font-medium">{style.percentage}%</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
                             <div 
                               className="bg-[#B89B7A]/70 h-2 rounded-full" 
                               style={{ width: `${style.percentage}%` }}
                             ></div>
                           </div>
-                          <p className="text-sm text-[#1A1818]/70">
+                          <p className="text-xs md:text-sm text-[#1A1818]/70 line-clamp-2">
                             {styleConfig[style.category].description}
                           </p>
                         </div>
