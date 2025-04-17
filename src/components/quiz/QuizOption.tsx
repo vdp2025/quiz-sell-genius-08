@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
+import { Check } from 'lucide-react';
 
 interface QuizOptionProps {
   option: QuizOptionType;
@@ -43,21 +45,38 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const [imageError, setImageError] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
 
   return (
     <div 
-      className="relative group"
+      className={cn(
+        "relative group transition-all duration-300 ease-out transform",
+        (isHovered || isSelected) && "scale-[1.02]"
+      )}
       onClick={() => onSelect(option.id)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Selection indicator */}
+      <div className={cn(
+        "absolute -top-2 -right-2 z-10 w-6 h-6 rounded-full transition-all duration-300",
+        "flex items-center justify-center",
+        isSelected 
+          ? "bg-[#B89B7A] scale-100 opacity-100" 
+          : "bg-transparent scale-50 opacity-0"
+      )}>
+        <Check className="w-4 h-4 text-white" />
+      </div>
+
       <div 
         className={cn(
-          "transition-all duration-200 cursor-pointer flex flex-col items-center",
-          "shadow-sm hover:shadow-md",
-          type === 'text' && "p-3 rounded-lg border border-gray-200 hover:border-[#B89B7A]/50",
-          isSelected && type === 'text' && "bg-gray-50 border-[#B89B7A]/50 shadow-md",
-          isSelected && type !== 'text'
-            ? "border-[#B89B7A] border-[0.5px] shadow-md" 
-            : type !== 'text' && "border-transparent border-[0.5px]",
+          "transition-all duration-300 ease-out cursor-pointer",
+          "border-2",
+          type === 'text' && "p-3 rounded-lg",
+          isSelected 
+            ? "border-[#B89B7A] bg-[#B89B7A]/5" 
+            : "border-transparent hover:border-[#B89B7A]/30",
+          (isHovered || isSelected) && "shadow-lg"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -79,8 +98,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
                 src={option.imageUrl}
                 alt={option.text}
                 className={cn(
-                  "object-cover w-full h-full transition-transform duration-300",
-                  isSelected ? "scale-110" : "group-hover:scale-105"
+                  "object-cover w-full h-full transition-all duration-300 ease-out",
+                  (isSelected || isHovered) ? "scale-110" : "scale-100"
                 )}
                 style={{ 
                   transformOrigin: 'center center',
@@ -92,14 +111,15 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           </div>
         )}
         <p className={cn(
-          "cursor-pointer text-[#1A1818]/80 text-center w-full",
+          "cursor-pointer transition-colors duration-300",
           type !== 'text' 
             ? isMobile 
               ? "text-2xs leading-[0.7rem] bg-white/90 px-1 py-1"
               : "text-base leading-tight p-2"
             : isMobile 
               ? "text-xs leading-relaxed"
-              : "text-lg leading-relaxed"
+              : "text-lg leading-relaxed",
+          isSelected ? "text-[#432818]" : "text-[#1A1818]/80"
         )}>
           {highlightStrategicWords(option.text)}
         </p>
