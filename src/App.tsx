@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import ResultPage from "./pages/ResultPage";
 import NotFound from "./pages/NotFound";
 import { QuizProvider } from "./context/QuizContext";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -16,16 +17,18 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <QuizProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/resultado" element={<ResultPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </QuizProvider>
+      <AuthProvider>
+        <QuizProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/resultado" element={<ResultPage />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </QuizProvider>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

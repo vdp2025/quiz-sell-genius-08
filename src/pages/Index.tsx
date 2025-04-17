@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import { QuizWelcome } from '../components/QuizWelcome';
-import { AuthProvider } from '../context/AuthContext';
 import QuizPage from '../components/QuizPage';
 import { useQuizContext } from '../context/QuizContext';
 
@@ -14,15 +13,13 @@ const Index = () => {
   };
 
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-background">
-        {!started ? (
-          <QuizWelcome onStart={handleStart} />
-        ) : (
-          <QuizPage />
-        )}
-      </div>
-    </AuthProvider>
+    <div className="min-h-screen bg-background">
+      {!started ? (
+        <QuizWelcome onStart={handleStart} />
+      ) : (
+        <QuizPage />
+      )}
+    </div>
   );
 };
 
