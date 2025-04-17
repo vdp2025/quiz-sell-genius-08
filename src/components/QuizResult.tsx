@@ -42,7 +42,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           />
           <h1 className="font-playfair text-lg md:text-3xl font-semibold text-[#432818]">
             Olá, {userName}, seu Estilo Predominante é: <span 
-              style={{ color: `rgba(184, 155, 122, ${primaryStyle.percentage / 100})` }}
+              style={{ color: `rgba(102, 78, 54, ${primaryStyle.percentage / 100})` }}
             >
               {primaryStyle.category}
             </span>
