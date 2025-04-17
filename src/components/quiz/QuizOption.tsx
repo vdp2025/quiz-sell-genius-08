@@ -5,6 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Check } from 'lucide-react';
+import { AspectRatio } from '../ui/aspect-ratio';
 
 interface QuizOptionProps {
   option: QuizOptionType;
@@ -84,39 +85,39 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         )}
       >
         {type !== 'text' && option.imageUrl && (
-          <div className={cn(
-            "overflow-hidden w-full",
-            "sm:scale-100", // Increased scale from scale-90 to scale-100
-            option.imageUrl.includes('sapatos') || option.imageUrl.includes('roupa') 
-              ? "aspect-square" 
-              : "aspect-[4/3]" // Increased from 3/4 to 4/3 for wider images
-          )}>
-            {imageError ? (
-              <div 
-                className="w-full h-full" 
-                style={getFallbackStyle(option.styleCategory)}
-              >
-                <span>{option.styleCategory}</span>
-              </div>
-            ) : (
-              <img
-                src={option.imageUrl}
-                alt={option.text}
-                className={cn(
-                  "object-cover w-full h-full transition-all duration-300 ease-out",
-                  (isSelected || isHovered) ? "scale-110" : "scale-100"
-                )}
-                style={{ 
-                  transformOrigin: 'center center',
-                  objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover'
-                }}
-                onError={() => setImageError(true)}
-              />
-            )}
+          <div className="w-full overflow-hidden">
+            <AspectRatio 
+              ratio={option.imageUrl.includes('sapatos') ? 1 : 3/4} 
+              className="w-full"
+            >
+              {imageError ? (
+                <div 
+                  className="w-full h-full" 
+                  style={getFallbackStyle(option.styleCategory)}
+                >
+                  <span>{option.styleCategory}</span>
+                </div>
+              ) : (
+                <img
+                  src={option.imageUrl}
+                  alt={option.text}
+                  className={cn(
+                    "object-cover w-full h-full transition-all duration-300 ease-out",
+                    (isSelected || isHovered) ? "scale-110" : "scale-100"
+                  )}
+                  style={{ 
+                    transformOrigin: 'center center',
+                    objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover'
+                  }}
+                  onError={() => setImageError(true)}
+                />
+              )}
+            </AspectRatio>
           </div>
         )}
+        
         <p className={cn(
-          "cursor-pointer transition-colors duration-300 text-brand-coffee", // Updated text color
+          "cursor-pointer transition-colors duration-300 text-brand-coffee", 
           type !== 'text' 
             ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium" 
             : isMobile 
