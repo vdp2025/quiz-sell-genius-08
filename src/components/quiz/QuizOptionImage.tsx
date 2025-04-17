@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -105,22 +104,17 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             alt={altText}
             className={cn(
               "object-contain px-2 pt-2 absolute inset-0",
-              "transition-all duration-700 ease-in-out", 
-              isSelected && isMobile 
-                ? "scale-[1.2] z-50" // 20% zoom on mobile when selected
-                : isSelected
-                  ? "scale-[1.3] z-50" // Existing desktop zoom
-                  : "scale-100 z-10",
-              isHovered && !isSelected
-                ? isMobile 
-                  ? "scale-105" // Slight hover effect on mobile 
-                  : "scale-110", // Existing desktop hover
-              "w-full h-full"
+              "transition-transform duration-700 ease-in-out", 
+              isSelected ? isMobile 
+                ? "scale-[1.2]" 
+                : "scale-[1.3]"
+                : "scale-100",
+              "z-10 w-full h-full"
             )}
             onError={() => setImageError(true)}
             style={{
-              willChange: 'transform, opacity',
-              transformOrigin: 'center 40%',
+              willChange: 'transform',
+              transformOrigin: 'center center',
             }}
           />
         </div>
