@@ -74,12 +74,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 className={cn(
                   "transition-all duration-200 rounded-lg p-4 cursor-pointer flex flex-col items-center",
                   currentAnswers.includes(option.id) 
-                    ? "border-[#B89B7A] border-[1px] shadow-lg shadow-[#0000003a] dark:shadow-[#0006] transform scale-[1.01]" 
+                    ? "border-[#B89B7A] border-[0.5px] shadow-lg shadow-[#00000050] dark:shadow-[#000a]" 
                     : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div className="mb-4 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[320px] mx-auto">
+                  <div className="mb-3 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[380px] mx-auto">
                     <img
                       src={option.imageUrl}
                       alt={option.text}
@@ -94,7 +94,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                     />
                   </div>
                 )}
-                <p className="text-sm leading-relaxed cursor-pointer text-[#1A1818]/80 text-center max-w-[280px] mx-auto">
+                <p className="text-xs leading-tight cursor-pointer text-[#1A1818]/80 text-center max-w-[280px] mx-auto">
                   {option.text}
                 </p>
               </div>
