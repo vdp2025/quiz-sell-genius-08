@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -105,17 +104,15 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             src={displayImageUrl}
             alt={altText}
             className={cn(
-              "object-contain px-2 pt-2",
+              "object-contain px-2 pt-2 absolute inset-0",
               "transition-all duration-300 ease-out",
               isSelected && processedImageUrl 
-                ? "scale-[1.15] -mt-3 z-10" 
-                : "scale-100",
+                ? "scale-[1.25] -mt-4 z-50" 
+                : "scale-100 z-10",
               (!isMobile && !isSelected && isHovered) 
                 ? "scale-105" 
                 : "",
-              isMobile && isSelected 
-                ? "scale-[1.25] -mt-4 z-10" 
-                : ""
+              "w-full h-full"
             )}
             onError={() => setImageError(true)}
           />
