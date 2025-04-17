@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -52,7 +53,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   return (
     <div 
       className={cn(
-        "relative group transition-all duration-300 ease-out transform perspective-1000",
+        "relative group transition-all duration-300 ease-out transform perspective-1000 h-full",
         !isMobile && (isHovered || isSelected) && "scale-[1.02] z-10",
         isMobile && isSelected && "scale-[1.02] z-10"
       )}
@@ -72,7 +73,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
       <div 
         className={cn(
-          "relative transition-all duration-300 ease-out cursor-pointer overflow-hidden",
+          "relative transition-all duration-300 ease-out cursor-pointer overflow-hidden h-full flex flex-col",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
           type !== 'text' && "border border-[#B89B7A]/30 rounded-lg",
           isSelected 
@@ -88,14 +89,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       >
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
-            "w-full relative",
+            "w-full relative flex-grow",
             is3DQuestion && "transform-gpu transition-transform duration-300",
             !isMobile && is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12",
             isMobile && is3DQuestion && isSelected && "rotate-y-12 rotate-x-12"
           )}>
             <AspectRatio 
               ratio={option.imageUrl.includes('sapatos') ? 1 : 3/4} 
-              className="w-full"
+              className="w-full h-full"
             >
               {imageError ? (
                 <div 
@@ -126,7 +127,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "text-[0.65rem] sm:text-xs leading-tight font-medium",
-                "bg-white/90 py-1 px-1.5",
+                "bg-white/90 py-1 px-1.5 mt-auto",
                 "text-brand-coffee"
               )
             : isMobile 

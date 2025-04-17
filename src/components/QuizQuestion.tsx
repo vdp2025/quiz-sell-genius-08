@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -44,9 +45,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
 
   const getGridColumns = () => {
-    if (question.type === 'text') return "grid-cols-1 gap-4 px-4";
+    if (question.type === 'text') {
+      return isMobile ? "grid-cols-1 gap-2 px-2" : "grid-cols-1 gap-4 px-4";
+    }
     
-    return "grid-cols-2 gap-1 px-1";
+    return isMobile ? "grid-cols-2 gap-1.5 px-1.5" : "grid-cols-2 gap-1 px-1";
   };
 
   return (
@@ -65,8 +68,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         </h2>
         
         <div className={cn(
-          "grid",
-          getGridColumns()
+          "grid h-full",
+          getGridColumns(),
+          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3"
         )}>
           {question.options.map((option) => (
             <QuizOption
