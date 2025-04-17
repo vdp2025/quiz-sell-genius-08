@@ -54,8 +54,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "transition-all duration-200 cursor-pointer flex flex-col items-center",
           "shadow-sm hover:shadow-md",
-          type === 'text' && "p-3 hover:bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200",
-          isSelected && type === 'text' && "bg-gray-50 border-gray-200",
+          type === 'text' && "p-3 rounded-lg border border-gray-200 hover:border-[#B89B7A]/50",
+          isSelected && type === 'text' && "bg-gray-50 border-[#B89B7A]/50 shadow-md",
           isSelected && type !== 'text'
             ? "border-[#B89B7A] border-[0.5px] shadow-md" 
             : type !== 'text' && "border-transparent border-[0.5px]",

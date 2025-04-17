@@ -41,7 +41,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
             className="h-16 mx-auto"
           />
           <h1 className="font-playfair text-lg md:text-3xl font-semibold text-[#432818]">
-            Olá, {userName}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
+            Olá, {userName}, seu Estilo Predominante é: {primaryStyle.category}
           </h1>
         </div>
 
@@ -62,7 +62,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                   </h2>
                   <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
                 </div>
-                <div className="w-full bg-[#F1F0FB] rounded-full h-2">
+                <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
                     className="bg-[#B89B7A]/70 h-2 rounded-full transition-all duration-300 ease-in-out" 
                     style={{ width: `${primaryStyle.percentage}%` }}
