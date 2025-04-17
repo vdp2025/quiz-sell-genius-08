@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -57,25 +56,27 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Selection indicator - Making the checkmark more subtle */}
       <div className={cn(
-        "absolute -top-2 -right-2 z-10 w-5 h-5 rounded-full transition-all duration-300",
+        "absolute -top-1 -right-1 z-10 w-4 h-4 rounded-full transition-all duration-300",
         "flex items-center justify-center",
         isSelected 
-          ? "bg-[#B89B7A]/80 scale-100 opacity-100" 
+          ? "bg-[#B89B7A]/70 scale-100 opacity-100" 
           : "bg-transparent scale-50 opacity-0"
       )}>
-        <Check className="w-3 h-3 text-white/90" />
+        <Check className="w-2.5 h-2.5 text-white/90" />
       </div>
 
       <div 
         className={cn(
           "transition-all duration-300 ease-out cursor-pointer",
-          "border",
-          type === 'text' && "p-3 rounded-lg",
+          type === 'text' && "p-3 rounded-lg border border-[#B89B7A]/20",
           isSelected 
-            ? "border-[#B89B7A]/70" 
-            : "border-transparent hover:border-[#B89B7A]/30",
+            ? type === 'text' 
+              ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
+              : "border-[#B89B7A]/70"
+            : type === 'text' 
+              ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
+              : "border-transparent hover:border-[#B89B7A]/30",
           (isHovered || isSelected) && "shadow-lg"
         )}
       >
