@@ -27,8 +27,8 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
 
         <AnimatedWrapper>
           <Card className="p-8 space-y-8 bg-white shadow-md mb-8">
-            <h2 className="text-xl font-playfair text-[#432818] text-center">
-              🕐 Enquanto calculamos o seu resultado...
+            <h2 className="text-xl font-playfair text-[#432818] text-center tracking-tighter">
+              Enquanto calculamos o seu resultado...
             </h2>
             
             <p className="text-[#1A1818]/80">
@@ -41,7 +41,7 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
             
             <div className="bg-[#B89B7A]/10 p-6 rounded-lg">
               <p className="text-[#432818] italic text-center">
-                💬 Responda com sinceridade. Isso é só entre você e a sua nova versão.
+                Responda com sinceridade. Isso é só entre você e a sua nova versão.
               </p>
             </div>
           </Card>
@@ -52,6 +52,7 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
             question={strategicQuestions[0]}
             onAnswer={onAnswer}
             currentAnswers={currentAnswers}
+            autoAdvance={true}
           />
         </AnimatedWrapper>
       </div>

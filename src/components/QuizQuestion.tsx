@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -18,9 +17,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
   currentAnswers,
-  autoAdvance = true,
+  autoAdvance = false,
 }) => {
   const isMobile = useIsMobile();
+  const isStrategicQuestion = question.id.startsWith('strategic');
 
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
@@ -28,7 +28,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     if (currentAnswers.includes(optionId)) {
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
-      if (currentAnswers.length >= question.multiSelect) {
+      if (autoAdvance) {
+        newSelectedOptions = [optionId];
+      } else if (currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
         newSelectedOptions = [...currentAnswers, optionId];
@@ -41,8 +43,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     });
   };
 
-  const isStrategicQuestion = question.id.startsWith('strategic');
-
   return (
     <AnimatedWrapper>
       <div 
@@ -52,10 +52,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         id={`question-${question.id}`}
       >
         <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold",
-          isStrategicQuestion && cn(
-            "text-[#432818] tracking-wider inline-block"
-          )
+          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold tracking-tighter",
+          isStrategicQuestion && "text-[#432818] tracking-tighter inline-block"
         )}>
           {highlightStrategicWords(question.title)}
         </h2>
@@ -77,13 +75,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <p className="text-2xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-6 text-center">
-          Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
-        </p>
+        {!autoAdvance && (
+          <p className="text-2xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-6 text-center">
+            Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
+          </p>
+        )}
       </div>
     </AnimatedWrapper>
   );
 };
 
 export { QuizQuestion };
-
