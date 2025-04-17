@@ -109,11 +109,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   alt={option.text}
                   className={cn(
                     "object-cover w-full h-full transition-all duration-300 ease-out",
-                    (isSelected || isHovered) ? "scale-110" : "scale-100"
+                    (isSelected || isHovered) ? "scale-125" : "scale-105"
                   )}
                   style={{ 
                     transformOrigin: 'center center',
-                    objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover'
+                    objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover',
+                    margin: '-2%',
+                    width: '104%',
+                    height: '104%'
                   }}
                   onError={() => setImageError(true)}
                 />
@@ -128,7 +131,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             ? cn(
                 "text-[0.6rem] sm:text-[0.8rem] leading-tight font-medium",
                 "absolute bottom-0 left-0 right-0 z-10",
-                "bg-gradient-to-t from-black/70 to-transparent p-3",
+                "bg-gradient-to-t from-black/70 to-transparent p-2",
                 isSelected || isHovered 
                   ? "text-white transform translate-y-0 opacity-100" 
                   : "text-brand-coffee bg-white/95 transform translate-y-2 opacity-0"
@@ -145,4 +148,3 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
-
