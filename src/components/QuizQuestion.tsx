@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
@@ -13,9 +12,7 @@ interface QuizQuestionProps {
   autoAdvance?: boolean;
 }
 
-// Function to highlight strategic words with bold
 const highlightStrategicWords = (text: string): React.ReactNode => {
-  // List of strategic words to highlight based on style categories
   const strategicWords = [
     'confortáveis', 'soltos', 'práticos', 'discretas', 'clássico', 'despercebidas',
     'refinados', 'perfeito', 'atual', 'delicadas', 'suaves', 'fluídas',
@@ -29,14 +26,11 @@ const highlightStrategicWords = (text: string): React.ReactNode => {
     'flamingo', 'cores', 'marcado', 'definido'
   ];
 
-  // Create a regex pattern from the strategic words
   const pattern = new RegExp(`(${strategicWords.join('|')})`, 'gi');
   
-  // Split the text by the pattern and create an array of normal and bold elements
   const parts = text.split(pattern);
   
   return parts.map((part, index) => {
-    // Check if this part matches any strategic word (case insensitive)
     if (strategicWords.some(word => part.toLowerCase() === word.toLowerCase())) {
       return <strong key={index}>{part}</strong>;
     }
@@ -53,7 +47,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const isMobile = useIsMobile();
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
 
-  // Preload images immediately when the component mounts
   useEffect(() => {
     if (question.type !== 'text') {
       const newImagesLoaded: Record<string, boolean> = {};
@@ -118,7 +111,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               <div 
                 className={cn(
                   "transition-all duration-200 cursor-pointer flex flex-col items-center",
-                  "shadow-sm hover:shadow-md", // Added shadow effect
+                  "shadow-sm hover:shadow-md",
                   question.type === 'text' && "p-3 hover:bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200",
                   currentAnswers.includes(option.id) && question.type === 'text' && "bg-gray-50 border-gray-200",
                   currentAnswers.includes(option.id) && question.type !== 'text'
@@ -155,11 +148,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   "cursor-pointer text-[#1A1818]/80 text-center w-full",
                   question.type !== 'text' 
                     ? isMobile 
-                      ? "text-[0.45rem] leading-[0.5rem] bg-white/90 px-1 py-1" 
-                      : "text-xs leading-tight p-2"
+                      ? "text-[0.6rem] leading-[0.7rem] bg-white/90 px-1 py-1"
+                      : "text-sm leading-tight p-2"
                     : isMobile 
-                      ? "text-sm leading-tight" 
-                      : "text-base leading-tight"
+                      ? "text-sm leading-relaxed"
+                      : "text-base leading-relaxed"
                 )}>
                   {highlightStrategicWords(option.text)}
                 </p>
