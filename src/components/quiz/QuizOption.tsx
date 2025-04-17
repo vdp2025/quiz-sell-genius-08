@@ -96,10 +96,10 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer text-[#1A1818]/80 text-center w-full",
           type !== 'text' 
             ? isMobile 
-              ? "text-[0.6rem] leading-[0.7rem] bg-white/90 px-1 py-1"
+              ? "text-2xs leading-[0.7rem] bg-white/90 px-1 py-1"
               : "text-sm leading-tight p-2"
             : isMobile 
-              ? "text-sm leading-relaxed"
+              ? "text-xs leading-relaxed"
               : "text-base leading-relaxed"
         )}>
           {highlightStrategicWords(option.text)}

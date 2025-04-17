@@ -43,7 +43,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   return (
     <AnimatedWrapper>
       <div className="w-full max-w-4xl mx-auto" id={`question-${question.id}`}>
-        <h2 className="text-lg sm:text-xl font-playfair text-center mb-2 px-2 pt-2 text-[#432818]">
+        <h2 className="text-base sm:text-xl font-playfair text-center mb-2 px-2 pt-2 text-[#432818]">
           {question.title}
         </h2>
         
@@ -64,7 +64,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <p className="text-xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-2 text-center">
+        <p className="text-2xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-2 text-center">
           Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
         </p>
       </div>

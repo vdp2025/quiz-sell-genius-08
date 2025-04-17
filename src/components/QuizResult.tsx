@@ -56,12 +56,15 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
-                <h2 className="text-2xl md:text-3xl font-playfair text-[#432818]">
-                  {primaryStyle.category}
-                </h2>
-                <div className="w-full bg-[#F1F0FB] rounded-full h-3">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl md:text-3xl font-playfair text-[#432818]">
+                    {primaryStyle.category}
+                  </h2>
+                  <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
+                </div>
+                <div className="w-full bg-[#F1F0FB] rounded-full h-2">
                   <div 
-                    className="bg-[#8E9196] h-3 rounded-full transition-all duration-300 ease-in-out" 
+                    className="bg-[#B89B7A]/70 h-2 rounded-full transition-all duration-300 ease-in-out" 
                     style={{ width: `${primaryStyle.percentage}%` }}
                   ></div>
                 </div>
