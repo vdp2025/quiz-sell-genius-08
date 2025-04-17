@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -71,21 +70,21 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "transition-all duration-300 ease-out cursor-pointer",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#9F9EA1]/30 rounded-lg", // New thin border for image options
+          type !== 'text' && "border border-[#9F9EA1]/30 rounded-lg",
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
               : "border-[#B89B7A]/70"
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
-              : "border-[#9F9EA1]/30 hover:border-[#B89B7A]/40", // Thin border hover effect
+              : "border-[#9F9EA1]/30 hover:border-[#B89B7A]/40",
           (isHovered || isSelected) && "shadow-lg"
         )}
       >
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
             "overflow-hidden w-full",
-            "sm:scale-90", // Reduce image size on desktop
+            "sm:scale-90",
             option.imageUrl.includes('sapatos') || option.imageUrl.includes('roupa') 
               ? "aspect-square" 
               : "aspect-[3/4]"
@@ -117,7 +116,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           "cursor-pointer transition-colors duration-300",
           type !== 'text' 
-            ? "text-[0.7rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-gray-800" 
+            ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-gray-800" 
             : isMobile 
               ? "text-xs leading-relaxed" 
               : "text-lg leading-relaxed",
@@ -135,4 +134,3 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
-
