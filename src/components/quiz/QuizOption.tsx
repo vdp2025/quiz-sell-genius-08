@@ -68,7 +68,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             altText={option.text}
             styleCategory={option.styleCategory}
             isSelected={isSelected}
-            isHovered={isHovered}
             is3DQuestion={is3DQuestion}
           />
         )}
