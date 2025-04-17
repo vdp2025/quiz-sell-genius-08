@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -37,7 +36,6 @@ const QuizPage: React.FC = () => {
     calculateResults
   } = useQuizLogic();
 
-  // Reference to the quiz container for scrolling
   const quizContainerRef = useRef<HTMLDivElement>(null);
 
   const handleStrategicAnswer = (response: UserResponse) => {
@@ -55,7 +53,6 @@ const QuizPage: React.FC = () => {
     }
   };
 
-  // Handle answer submission and auto-advance
   const handleAnswerSubmit = (response: UserResponse) => {
     handleAnswer(response.questionId, response.selectedOptions);
     
@@ -71,7 +68,6 @@ const QuizPage: React.FC = () => {
     }
   };
 
-  // Smooth scroll to the current question when it changes
   useEffect(() => {
     if (quizContainerRef.current) {
       const questionElement = document.getElementById(
@@ -88,21 +84,24 @@ const QuizPage: React.FC = () => {
     }
   }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions]);
 
-  // Handle transition to strategic questions
   const handleTransitionContinue = () => {
     setShowingTransition(false);
     setShowingStrategicQuestions(true);
   };
 
-  // Handle showing final results
   const handleShowResult = () => {
-    // Save strategic answers if needed
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     navigate('/resultado');
   };
 
   if (showingTransition) {
-    return <QuizTransition onContinue={handleTransitionContinue} />;
+    return (
+      <QuizTransition 
+        onContinue={handleTransitionContinue} 
+        onAnswer={handleStrategicAnswer}
+        currentAnswers={strategicAnswers[strategicQuestions[0].id] || []}
+      />
+    );
   }
 
   if (showingFinalTransition) {
