@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -74,14 +75,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "transition-all duration-300 ease-out cursor-pointer",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border-2 border-[#B89B7A]/40 rounded-lg",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg", // Thinner border
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
               : "border-[#B89B7A]/70"
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
-              : "hover:border-[#B89B7A]/60",
+              : "hover:border-[#B89B7A]/50",
           isMobile && isSelected && "shadow-xl",
           !isMobile && (isHovered || isSelected) && "shadow-xl"
         )}
@@ -128,7 +129,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "text-[0.75rem] sm:text-sm leading-tight font-medium",
+                "text-[0.65rem] sm:text-xs leading-tight font-medium", // Smaller text
                 "relative bottom-0 left-0 right-0 z-20",
                 "bg-white/90 p-1.5",
                 "text-brand-coffee"
@@ -145,3 +146,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
