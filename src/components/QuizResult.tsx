@@ -36,11 +36,11 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
       <div className="max-w-4xl mx-auto space-y-10">
         <div className="text-center space-y-4">
           <img
-            src="/lovable-uploads/ce883c46-80e0-4171-9c2d-9288f44f88eb.png"
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
             alt="Logo Gisele Galvão"
             className="h-16 mx-auto"
           />
-          <h1 className="font-playfair text-xl md:text-4xl font-semibold text-[#432818]">
+          <h1 className="font-playfair text-lg md:text-3xl font-semibold text-[#432818]">
             Olá, {userName}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
           </h1>
         </div>
@@ -59,9 +59,9 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                 <h2 className="text-2xl md:text-3xl font-playfair text-[#432818]">
                   {primaryStyle.category}
                 </h2>
-                <div className="w-full bg-gray-200 rounded-full h-4">
+                <div className="w-full bg-[#F1F0FB] rounded-full h-3">
                   <div 
-                    className="bg-[#B89B7A] h-4 rounded-full" 
+                    className="bg-[#8E9196] h-3 rounded-full transition-all duration-300 ease-in-out" 
                     style={{ width: `${primaryStyle.percentage}%` }}
                   ></div>
                 </div>

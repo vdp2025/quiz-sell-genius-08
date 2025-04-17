@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from './ui/card';
 import { Input } from './ui/input';
@@ -15,7 +14,6 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
 
   const handleStart = () => {
     if (name.trim()) {
-      // Save to both context and localStorage for redundancy
       login(name.trim());
       localStorage.setItem('userName', name.trim());
       console.log('User name saved:', name.trim());
@@ -28,7 +26,7 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
       <Card className="w-full max-w-2xl p-8 space-y-6 bg-white shadow-md">
         <div className="text-center space-y-4">
           <img
-            src="/lovable-uploads/ce883c46-80e0-4171-9c2d-9288f44f88eb.png"
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
             alt="Logo Gisele Galvão"
             className="h-16 mx-auto mb-8"
           />
