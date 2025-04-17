@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AspectRatio } from '../ui/aspect-ratio';
@@ -54,8 +54,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
                   ? "scale-110 shadow-lg z-10" // Gentler scale on mobile
                   : "shadow-lg border-2 border-brand-coffee/40 z-10" // No scale on desktop, just elevation
               ) : "scale-100 hover:shadow-md",
-              // Increase zoom by 10% for questions 1 and 2 on mobile
-              isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.1]",
+              // Increase zoom by 15% ONLY for questions 1 and 2 on mobile
+              isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.15]",
               "w-full h-full"
             )}
             onError={() => setImageError(true)}
