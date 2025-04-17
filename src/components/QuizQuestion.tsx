@@ -118,10 +118,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               <div 
                 className={cn(
                   "transition-all duration-200 cursor-pointer flex flex-col items-center",
+                  "shadow-sm hover:shadow-md", // Added shadow effect
                   question.type === 'text' && "p-3 hover:bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200",
                   currentAnswers.includes(option.id) && question.type === 'text' && "bg-gray-50 border-gray-200",
                   currentAnswers.includes(option.id) && question.type !== 'text'
-                    ? "border-[#B89B7A] border-[0.5px] shadow-sm" 
+                    ? "border-[#B89B7A] border-[0.5px] shadow-md" 
                     : question.type !== 'text' && "border-transparent border-[0.5px]",
                 )}
               >
