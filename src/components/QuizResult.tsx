@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -17,12 +16,10 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
   const [userName, setUserName] = useState<string>('Visitante');
   
   useEffect(() => {
-    // Try to get name from context first
     if (user && user.userName) {
       setUserName(user.userName);
       console.log("Setting name from auth context:", user.userName);
     } else {
-      // Fall back to localStorage
       const storedName = localStorage.getItem('userName');
       if (storedName) {
         setUserName(storedName);
@@ -38,9 +35,9 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           <img
             src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
             alt="Logo Gisele Galvão"
-            className="h-16 mx-auto"
+            className="h-12 md:h-16 mx-auto"
           />
-          <h1 className="font-playfair text-lg md:text-3xl font-semibold text-[#432818]">
+          <h1 className="font-playfair text-2xl md:text-3xl font-semibold text-[#432818] px-2">
             Olá, {userName}, seu Estilo Predominante é: <span 
               style={{ color: `rgba(102, 78, 54, ${primaryStyle.percentage / 100})` }}
             >
@@ -49,14 +46,14 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           </h1>
         </div>
 
-        <Card className="p-6 md:p-8 bg-white shadow-md">
-          <div className="space-y-8">
-            <div className="flex flex-col md:flex-row items-start gap-8">
+        <Card className="p-4 md:p-8 bg-white shadow-md">
+          <div className="space-y-6 md:space-y-8">
+            <div className="flex flex-col md:flex-row items-start gap-6 md:gap-8">
               <div className="w-full md:w-1/3">
                 <img
                   src={styleConfig[primaryStyle.category].image}
                   alt={`Estilo ${primaryStyle.category}`}
-                  className="w-full h-[200px] md:h-[300px] object-contain scale-90 rounded-lg shadow-sm"
+                  className="w-full h-[250px] md:h-[300px] object-contain scale-90 rounded-lg shadow-sm mx-auto"
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
@@ -77,29 +74,29 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                 </p>
 
                 <div className="mt-6 space-y-4">
-                  <h3 className="text-lg md:text-xl font-playfair text-[#432818]">
+                  <h3 className="text-xl md:text-xl font-playfair text-[#432818]">
                     Seus Estilos Complementares
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     {secondaryStyles.slice(0, 2).map((style, index) => (
-                      <div key={style.category} className="flex gap-3 items-start bg-gray-50 p-3 rounded-lg">
+                      <div key={style.category} className="flex gap-4 items-start bg-gray-50 p-4 rounded-lg">
                         <img
                           src={styleConfig[style.category].image}
                           alt={`Estilo ${style.category}`}
-                          className="w-16 h-16 object-contain scale-90 rounded"
+                          className="w-20 h-20 object-contain scale-90 rounded"
                         />
                         <div className="flex-1">
-                          <div className="flex justify-between items-center mb-1">
-                            <h4 className="font-playfair text-base text-[#432818]">{style.category}</h4>
+                          <div className="flex justify-between items-center mb-2">
+                            <h4 className="font-playfair text-lg text-[#432818]">{style.category}</h4>
                             <span className="text-sm font-medium">{style.percentage}%</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
+                          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                             <div 
                               className="bg-[#B89B7A]/70 h-2 rounded-full" 
                               style={{ width: `${style.percentage}%` }}
                             ></div>
                           </div>
-                          <p className="text-xs md:text-sm text-[#1A1818]/70 line-clamp-2">
+                          <p className="text-sm md:text-base text-[#1A1818]/70">
                             {styleConfig[style.category].description}
                           </p>
                         </div>
@@ -112,16 +109,16 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           </div>
         </Card>
 
-        <Card className="p-8 border-2 border-[#B89B7A] bg-white">
-          <div className="flex flex-col md:flex-row gap-8 items-center">
+        <Card className="p-6 md:p-8 border-2 border-[#B89B7A] bg-white">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
             <div className="w-full md:w-1/3">
               <div className="bg-[#B89B7A]/10 rounded-lg p-6 flex justify-center">
-                <GiftIcon className="w-24 h-24 text-[#B89B7A]" />
+                <GiftIcon className="w-20 h-20 md:w-24 md:h-24 text-[#B89B7A]" />
               </div>
             </div>
             <div className="w-full md:w-2/3 space-y-4">
-              <h3 className="text-2xl font-playfair text-[#432818]">Guia Completo do Estilo {primaryStyle.category}</h3>
-              <ul className="space-y-2">
+              <h3 className="text-xl md:text-2xl font-playfair text-[#432818]">Guia Completo do Estilo {primaryStyle.category}</h3>
+              <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <span className="text-[#B89B7A] font-bold">✓</span>
                   <span>Melhores cores para seu subtom de pele</span>
@@ -169,4 +166,3 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
 };
 
 export default QuizResult;
-
