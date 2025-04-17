@@ -54,7 +54,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       >
         <h2 className={cn(
           "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold",
-          isStrategicQuestion && "text-[#432818] tracking-wider"
+          isStrategicQuestion && cn(
+            "text-[#432818] tracking-wider",
+            "bg-[#FDE1D3]/30 rounded px-4 py-2 inline-block"
+          )
         )}>
           {highlightStrategicWords(question.title)}
         </h2>
@@ -85,3 +88,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
