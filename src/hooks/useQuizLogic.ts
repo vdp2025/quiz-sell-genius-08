@@ -108,40 +108,18 @@ export const useQuizLogic = () => {
     return result;
   }, [answers]);
 
+  // This is improved to work better even when not all questions are answered
   const submitQuizIfComplete = useCallback(() => {
-    // Check if all questions have been answered with the required number of selections
-    const allQuestionsAnswered = quizQuestions.every(question => {
-      const questionAnswers = answers[question.id] || [];
-      return questionAnswers.length === question.multiSelect;
-    });
-
-    console.log('Checking if quiz is complete:', allQuestionsAnswered);
-    console.log('Current answers:', answers);
-
-    if (allQuestionsAnswered) {
-      console.log('All questions answered. Calculating results...');
-      const results = calculateResults();
-      setQuizCompleted(true);
-      
-      // Melhorar a navegação para a página de resultados
-      if (results) {
-        console.log('Quiz completed successfully. Redirecting to results page...');
-        // Use a timeout to ensure state is updated before redirect
-        setTimeout(() => {
-          window.location.href = '/resultado';
-        }, 300);
-      }
-    } else {
-      console.log('Quiz is not complete yet. Missing answers for some questions.');
-      // Log which questions are missing answers
-      quizQuestions.forEach(question => {
-        const questionAnswers = answers[question.id] || [];
-        if (questionAnswers.length !== question.multiSelect) {
-          console.log(`Question ${question.id} needs ${question.multiSelect} answers but has ${questionAnswers.length}`);
-        }
-      });
-    }
-  }, [answers, calculateResults]);
+    // Calculate with whatever answers we have
+    const results = calculateResults();
+    setQuizCompleted(true);
+    
+    // Store results in localStorage for persistence
+    localStorage.setItem('quizResult', JSON.stringify(results));
+    console.log('Results saved to localStorage before redirect');
+    
+    return results;
+  }, [calculateResults]);
 
   const resetQuiz = useCallback(() => {
     setCurrentQuestionIndex(0);

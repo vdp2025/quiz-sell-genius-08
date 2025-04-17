@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -7,9 +8,12 @@ import { UserResponse } from '../types/quiz';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { Progress } from './ui/progress';
 import { AnimatedWrapper } from './ui/animated-wrapper';
+import { useNavigate } from 'react-router-dom';
+import { toast } from './ui/use-toast';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     currentQuestion,
     currentQuestionIndex,
@@ -42,7 +46,7 @@ const QuizPage: React.FC = () => {
       setTimeout(() => {
         console.log('Triggering submission after delay');
         calculateResults(); // Garantir que os resultados sejam calculados
-        submitQuizIfComplete();
+        handleViewResultClick();
       }, 800); // Slightly longer delay for the final question
     }
   };
@@ -105,7 +109,21 @@ const QuizPage: React.FC = () => {
     console.log('Manual view result button clicked');
     const results = calculateResults();
     console.log('Results calculated:', results);
-    submitQuizIfComplete();
+    
+    // Store results directly in localStorage
+    localStorage.setItem('quizResult', JSON.stringify(results));
+    console.log('Results saved to localStorage');
+    
+    // Use navigate instead of window.location for better SPA behavior
+    navigate('/resultado');
+    
+    // Fallback for navigation issues
+    setTimeout(() => {
+      if (window.location.pathname !== '/resultado') {
+        console.log('Navigation fallback triggered');
+        window.location.href = '/resultado';
+      }
+    }, 500);
   };
 
   const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);

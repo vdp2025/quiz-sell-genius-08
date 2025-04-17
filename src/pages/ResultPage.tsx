@@ -2,15 +2,17 @@
 import React, { useEffect, useState } from 'react';
 import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { QuizResult as QuizResultType } from '../types/quiz';
+import { toast } from '../components/ui/use-toast';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Attempt to load results from state or localStorage
@@ -29,6 +31,11 @@ const ResultPage: React.FC = () => {
           setLocalResult(savedResult);
         } catch (error) {
           console.error('Error parsing saved results:', error);
+          toast({
+            title: "Erro ao carregar resultados",
+            description: "Não foi possível recuperar seus resultados. Por favor, tente o quiz novamente.",
+            variant: "destructive",
+          });
         }
       } else {
         console.log('No saved results found');
@@ -39,7 +46,7 @@ const ResultPage: React.FC = () => {
 
   const handleRetakeQuiz = () => {
     resetQuiz();
-    window.location.href = '/';
+    navigate('/');
   };
 
   // Se ainda estiver carregando, mostra estado de carregamento
@@ -59,13 +66,15 @@ const ResultPage: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
+  const resultData = quizResult || localResult;
+
   return (
     <div>
-      {(quizResult || localResult) ? (
+      {resultData ? (
         <>
           <QuizResult 
-            primaryStyle={(quizResult || localResult)!.primaryStyle} 
-            secondaryStyles={(quizResult || localResult)!.secondaryStyles} 
+            primaryStyle={resultData.primaryStyle} 
+            secondaryStyles={resultData.secondaryStyles} 
           />
           <div className="max-w-4xl mx-auto py-8 px-4">
             <Button 
@@ -88,7 +97,7 @@ const ResultPage: React.FC = () => {
             <Button
               variant="outline"
               className="flex items-center gap-2"
-              onClick={() => window.location.href = '/'}
+              onClick={() => navigate('/')}
             >
               <ArrowLeft className="w-4 h-4" />
               Voltar ao início
