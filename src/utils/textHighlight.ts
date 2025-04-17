@@ -3,7 +3,14 @@ import React from 'react';
 
 export const highlightStrategicWords = (text: string): React.ReactNode => {
   const strategicWords = [
-    // Previous words...
+    'conforto', 'estilo', 'elegante', 'sofisticado', 'moderno',
+    'clássico', 'tradicional', 'casual', 'discreto', 'refinado',
+    'delicado', 'sensual', 'glamorosa', 'ousado', 'criativo',
+    'exclusivo', 'atemporal', 'único', 'autêntico', 'atual',
+    'tendência', 'personalidade', 'identidade', 'estruturado',
+    'fluido', 'clean', 'minimalista', 'versátil', 'despojado',
+    'natural', 'romântico', 'prático', 'contemporâneo', 'dramático',
+    'marcante', 'impacto', 'status', 'presença', 'poder',
     'desconectada', 'dúvidas', 'segura', 'evoluir', 
     'combiná-las', 'impulso', 'arrependo', 'percebida', 
     'autenticidade', 'leveza', 'confiante', 'presença', 
@@ -22,3 +29,4 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
     return part;
   });
 };
+
