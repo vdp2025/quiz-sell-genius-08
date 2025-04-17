@@ -47,22 +47,22 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   const getGridColumns = () => {
     if (question.type === 'text') {
-      return isMobile ? "grid-cols-1 gap-2 px-2" : "grid-cols-1 gap-4 px-4";
+      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
     }
     
-    return isMobile ? "grid-cols-2 gap-1.5 px-1.5" : "grid-cols-2 gap-1 px-1";
+    return isMobile ? "grid-cols-2 gap-2 px-2" : "grid-cols-2 gap-3 px-2";
   };
 
   return (
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-6xl mx-auto"
+          "w-full max-w-6xl mx-auto pb-6" // Added bottom padding
         )} 
         id={`question-${question.id}`}
       >
         <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-brand-coffee font-semibold tracking-normal",
+          "text-base sm:text-xl font-playfair text-center mb-6 px-2 pt-2 text-brand-coffee font-semibold tracking-normal", // Increased margin-bottom
           isStrategicQuestion && "text-brand-coffee tracking-normal inline-block"
         )}>
           {highlightStrategicWords(question.title)}

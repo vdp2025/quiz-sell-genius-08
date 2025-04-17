@@ -24,7 +24,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
   return (
     <div 
-      className="relative group h-full transition-colors duration-300 ease-out"
+      className="relative group h-full transition-all duration-300 ease-in-out" // Added transition-all for smoother overall transitions
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -44,13 +44,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         className={cn(
           "relative h-full flex flex-col",
-          "transition-colors duration-300 ease-out",
+          "transition-all duration-300 ease-in-out", // Changed to transition-all
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-visible",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden", // Changed to overflow-hidden
           isSelected 
             ? type === 'text' 
-              ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
-              : "border-[#B89B7A]/70"
+              ? "border-[#B89B7A]/70 bg-[#B89B7A]/5 shadow-md" // Added shadow for selected state
+              : "border-[#B89B7A]/70 shadow-md" // Added shadow for selected state
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
               : "hover:border-[#B89B7A]/50",
@@ -70,7 +70,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           "transition-colors duration-300",
           type !== 'text' 
-            ? "text-[0.65rem] sm:text-xs leading-tight font-medium bg-white/90 py-1 px-1.5 mt-auto text-brand-coffee z-20 relative"
+            ? "text-[0.65rem] sm:text-xs leading-tight font-medium bg-white/95 py-1.5 px-2 mt-auto text-brand-coffee z-20 relative" // Increased padding and improved contrast
             : "text-xs sm:text-lg leading-relaxed"
         )}>
           {highlightStrategicWords(option.text)}

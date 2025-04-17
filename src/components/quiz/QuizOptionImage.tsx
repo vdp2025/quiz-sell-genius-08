@@ -88,7 +88,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   return (
     <div className={cn(
-      "w-full relative flex-grow overflow-visible",
+      "w-full relative flex-grow overflow-hidden", // Changed to overflow-hidden to prevent content from spilling
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -106,16 +106,20 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             alt={altText}
             className={cn(
               "object-contain px-2 pt-2 absolute inset-0",
-              "transition-all duration-300 ease-out",
+              "transition-all duration-500 ease-in-out", // Increased duration for smoother transition
               isSelected && processedImageUrl 
-                ? "scale-[1.25] -mt-4 z-50" 
+                ? "scale-[1.3] -mt-6 z-50" // Increased scale and margin-top for more dramatic effect
                 : "scale-100 z-10",
-              (!isMobile && !isSelected && isHovered) 
-                ? "scale-105" 
+              isHovered && !isSelected
+                ? "scale-110" // Applied hover effect regardless of device
                 : "",
               "w-full h-full"
             )}
             onError={() => setImageError(true)}
+            style={{
+              willChange: 'transform', // Optimize for animations
+              transformOrigin: 'center center',
+            }}
           />
         </div>
       </AspectRatio>
