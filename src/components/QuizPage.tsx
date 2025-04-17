@@ -104,6 +104,14 @@ const QuizPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
+            alt="Logo Gisele Galvão"
+            className="h-16 mx-auto mb-6"
+          />
+        </div>
+
         <AnimatedWrapper className="mb-4">
           <Progress value={progressPercentage} className="w-full h-2 bg-[#B89B7A]/20" />
         </AnimatedWrapper>
