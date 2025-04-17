@@ -62,7 +62,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           "grid gap-6",
           question.type === 'text' 
             ? "grid-cols-1" 
-            : "grid-cols-2"
+            : isMobile ? "grid-cols-2" : "grid-cols-2"
         )}>
           {question.options.map((option) => (
             <div 
@@ -79,7 +79,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div className="mb-3 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[380px] mx-auto">
+                  <div className="mb-2 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[400px] mx-auto">
                     <img
                       src={option.imageUrl}
                       alt={option.text}
@@ -94,7 +94,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                     />
                   </div>
                 )}
-                <p className="text-xs leading-tight cursor-pointer text-[#1A1818]/80 text-center max-w-[280px] mx-auto">
+                <p className={cn(
+                  "cursor-pointer text-[#1A1818]/80 text-center max-w-[280px] mx-auto",
+                  question.type !== 'text' ? "text-2xs leading-none" : "text-xs leading-tight"
+                )}>
                   {option.text}
                 </p>
               </div>
