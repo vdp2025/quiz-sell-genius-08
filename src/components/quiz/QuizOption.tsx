@@ -53,7 +53,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group transition-all duration-300 ease-out transform perspective-1000",
-        (isHovered || isSelected) && "scale-[1.03]"
+        (isHovered || isSelected) && "scale-[1.03] z-10"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -71,7 +71,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
       <div 
         className={cn(
-          "transition-all duration-300 ease-out cursor-pointer overflow-hidden",
+          "transition-all duration-300 ease-out cursor-pointer overflow-visible",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
           type !== 'text' && "border border-[#9F9EA1]/30 rounded-lg",
           isSelected 
@@ -81,12 +81,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
               : "border-[#9F9EA1]/30 hover:border-[#B89B7A]/40",
-          (isHovered || isSelected) && "shadow-lg"
+          (isHovered || isSelected) && "shadow-xl"
         )}
       >
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
-            "w-full overflow-hidden relative",
+            "w-full overflow-visible relative",
             is3DQuestion && "transform-gpu transition-transform duration-300",
             is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12"
           )}>
@@ -107,14 +107,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   alt={option.text}
                   className={cn(
                     "object-cover w-full h-full transition-all duration-300 ease-out",
-                    (isSelected || isHovered) ? "scale-150" : "scale-125"
+                    (isSelected || isHovered) ? "scale-[1.6]" : "scale-[1.3]"
                   )}
                   style={{ 
                     transformOrigin: 'center center',
                     objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover',
-                    margin: '-5%',
-                    width: '110%',
-                    height: '110%'
+                    margin: '-10%',
+                    width: '120%',
+                    height: '120%'
                   }}
                   onError={() => setImageError(true)}
                 />
@@ -128,7 +128,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "text-[0.75rem] sm:text-sm leading-tight font-medium",
-                "relative bottom-0 left-0 right-0 z-10",
+                "relative bottom-0 left-0 right-0 z-20",
                 "bg-white/90 p-1.5",
                 "text-brand-coffee"
               )
