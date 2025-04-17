@@ -1,4 +1,3 @@
-
 import { pipeline, env } from '@huggingface/transformers';
 
 // Configure transformers.js to always download models
@@ -14,7 +13,6 @@ const getSegmenter = () => {
   if (!segmenterPromise) {
     segmenterPromise = pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
       device: 'cpu', // Using CPU instead of WebGPU to avoid session issues
-      quantized: true, // Use quantized model for better performance
     });
   }
   return segmenterPromise;
