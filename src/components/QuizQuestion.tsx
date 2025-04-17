@@ -47,15 +47,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const getGridColumns = () => {
     if (question.type === 'text') return "grid-cols-1 gap-4 px-4";
     
-    // For images - always use 2 columns regardless of screen size
-    return "grid-cols-2 gap-4 px-4";
+    // For images - use 2 columns with reduced gap
+    return "grid-cols-2 gap-2 px-2";
   };
 
   return (
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-4xl mx-auto"
+          "w-full max-w-5xl mx-auto"
         )} 
         id={`question-${question.id}`}
       >

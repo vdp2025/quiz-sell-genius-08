@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -14,7 +13,6 @@ interface QuizOptionProps {
   type: 'text' | 'image' | 'both';
 }
 
-// Add back the getFallbackStyle function that was removed
 const getFallbackStyle = (styleCategory: string) => {
   const colorMap: Record<string, string> = {
     'Natural': '#D2C1A5',
@@ -129,12 +127,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "text-[0.6rem] sm:text-[0.8rem] leading-tight font-medium",
-                "absolute bottom-0 left-0 right-0 z-10",
-                "bg-gradient-to-t from-black/70 to-transparent p-2",
-                isSelected || isHovered 
-                  ? "text-white transform translate-y-0 opacity-100" 
-                  : "text-brand-coffee bg-white/95 transform translate-y-2 opacity-0"
+                "text-[0.7rem] sm:text-[0.85rem] leading-tight font-medium",
+                "relative bottom-0 left-0 right-0 z-10",
+                "bg-white/95 p-2",
+                "text-brand-coffee"
               )
             : isMobile 
               ? "text-xs leading-relaxed" 
