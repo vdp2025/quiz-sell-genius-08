@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
 import { Button } from './ui/button';
@@ -10,10 +10,19 @@ import { Progress } from './ui/progress';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { toast } from './ui/use-toast';
+import QuizTransition from './QuizTransition';
+import QuizFinalTransition from './QuizFinalTransition';
+import { strategicQuestions } from '../data/strategicQuestions';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
+  const [showingTransition, setShowingTransition] = useState(false);
+  const [showingFinalTransition, setShowingFinalTransition] = useState(false);
+  const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
+  const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>({});
+  
   const {
     currentQuestion,
     currentQuestionIndex,
@@ -31,47 +40,45 @@ const QuizPage: React.FC = () => {
   // Reference to the quiz container for scrolling
   const quizContainerRef = useRef<HTMLDivElement>(null);
 
+  const handleStrategicAnswer = (response: UserResponse) => {
+    setStrategicAnswers(prev => ({
+      ...prev,
+      [response.questionId]: response.selectedOptions
+    }));
+    
+    if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
+      setTimeout(() => {
+        setCurrentStrategicQuestionIndex(prev => prev + 1);
+      }, 500);
+    } else {
+      setShowingFinalTransition(true);
+    }
+  };
+
   // Handle answer submission and auto-advance
   const handleAnswerSubmit = (response: UserResponse) => {
     handleAnswer(response.questionId, response.selectedOptions);
     
-    // Auto-advance to next question if exactly 3 options are selected
     if (response.selectedOptions.length === currentQuestion.multiSelect && !isLastQuestion) {
       setTimeout(() => {
         handleNext();
-      }, 500); // Small delay for visual feedback
+      }, 500);
     } else if (response.selectedOptions.length === currentQuestion.multiSelect && isLastQuestion) {
-      // Auto-submit the quiz on the last question - important fix for mobile
-      console.log('Last question answered, submitting quiz...');
       setTimeout(() => {
-        console.log('Triggering submission after delay');
-        calculateResults(); // Garantir que os resultados sejam calculados
-        handleViewResultClick();
-      }, 800); // Slightly longer delay for the final question
+        calculateResults();
+        setShowingTransition(true);
+      }, 800);
     }
   };
-
-  // Log state on each render for debugging
-  useEffect(() => {
-    console.log('QuizPage rendered:', {
-      currentQuestionIndex,
-      totalQuestions,
-      isLastQuestion,
-      currentAnswers
-    });
-  }, [currentQuestionIndex, totalQuestions, isLastQuestion, currentAnswers]);
-
-  // Add a manual submit button for the last question
-  useEffect(() => {
-    if (isLastQuestion && canProceed) {
-      console.log('Last question can proceed:', canProceed);
-    }
-  }, [isLastQuestion, canProceed]);
 
   // Smooth scroll to the current question when it changes
   useEffect(() => {
     if (quizContainerRef.current) {
-      const questionElement = document.getElementById(`question-${currentQuestion.id}`);
+      const questionElement = document.getElementById(
+        showingStrategicQuestions 
+          ? `question-${strategicQuestions[currentStrategicQuestionIndex].id}`
+          : `question-${currentQuestion.id}`
+      );
       if (questionElement) {
         questionElement.scrollIntoView({ 
           behavior: 'smooth', 
@@ -79,54 +86,32 @@ const QuizPage: React.FC = () => {
         });
       }
     }
-  }, [currentQuestionIndex, currentQuestion.id]);
+  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions]);
 
-  // Make sure images are pre-loaded for all questions
-  useEffect(() => {
-    // Function to preload an image
-    const preloadImage = (src: string) => {
-      const img = new Image();
-      img.src = src;
-    };
-
-    // Get all questions with images and preload them
-    import('../data/quizQuestions').then(module => {
-      const questions = module.quizQuestions;
-      questions.forEach(question => {
-        if (question.type !== 'text') {
-          question.options.forEach(option => {
-            if (option.imageUrl) {
-              preloadImage(option.imageUrl);
-            }
-          });
-        }
-      });
-    });
-  }, []);
-
-  // Handle manual result button click with better mobile support
-  const handleViewResultClick = () => {
-    console.log('Manual view result button clicked');
-    const results = calculateResults();
-    console.log('Results calculated:', results);
-    
-    // Store results directly in localStorage
-    localStorage.setItem('quizResult', JSON.stringify(results));
-    console.log('Results saved to localStorage');
-    
-    // Use navigate instead of window.location for better SPA behavior
-    navigate('/resultado');
-    
-    // Fallback for navigation issues
-    setTimeout(() => {
-      if (window.location.pathname !== '/resultado') {
-        console.log('Navigation fallback triggered');
-        window.location.href = '/resultado';
-      }
-    }, 500);
+  // Handle transition to strategic questions
+  const handleTransitionContinue = () => {
+    setShowingTransition(false);
+    setShowingStrategicQuestions(true);
   };
 
-  const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+  // Handle showing final results
+  const handleShowResult = () => {
+    // Save strategic answers if needed
+    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+    navigate('/resultado');
+  };
+
+  if (showingTransition) {
+    return <QuizTransition onContinue={handleTransitionContinue} />;
+  }
+
+  if (showingFinalTransition) {
+    return <QuizFinalTransition onShowResult={handleShowResult} />;
+  }
+
+  const currentProgress = showingStrategicQuestions
+    ? Math.round(((currentStrategicQuestionIndex + 1) / strategicQuestions.length) * 100)
+    : Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8" ref={quizContainerRef}>
@@ -139,9 +124,9 @@ const QuizPage: React.FC = () => {
           />
         </div>
 
-        <AnimatedWrapper className="mb-4">
+        <AnimatedWrapper>
           <Progress 
-            value={progressPercentage} 
+            value={currentProgress}
             className="w-full h-2 bg-[#B89B7A]/20" 
             indicatorClassName="bg-[#B89B7A]" 
           />
@@ -152,41 +137,40 @@ const QuizPage: React.FC = () => {
             Olá, {user?.userName || 'Visitante'}!
           </h1>
           <div className="text-sm text-[#1A1818]/60">
-            Questão {currentQuestionIndex + 1} de {totalQuestions}
+            Questão {showingStrategicQuestions ? currentStrategicQuestionIndex + 1 : currentQuestionIndex + 1} de {showingStrategicQuestions ? strategicQuestions.length : totalQuestions}
           </div>
         </AnimatedWrapper>
 
-        <QuizQuestion
-          question={currentQuestion}
-          onAnswer={handleAnswerSubmit}
-          currentAnswers={currentAnswers}
-        />
+        {showingStrategicQuestions ? (
+          <QuizQuestion
+            question={strategicQuestions[currentStrategicQuestionIndex]}
+            onAnswer={handleStrategicAnswer}
+            currentAnswers={strategicAnswers[strategicQuestions[currentStrategicQuestionIndex].id] || []}
+          />
+        ) : (
+          <QuizQuestion
+            question={currentQuestion}
+            onAnswer={handleAnswerSubmit}
+            currentAnswers={currentAnswers}
+          />
+        )}
 
-        <div className="flex justify-between mt-8">
-          {currentQuestionIndex > 0 && (
-            <AnimatedWrapper className="flex">
-              <Button
-                onClick={handlePrevious}
-                variant="outline"
-                className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Voltar
-              </Button>
-            </AnimatedWrapper>
-          )}
-          
-          {isLastQuestion && canProceed && (
-            <AnimatedWrapper className="flex ml-auto">
-              <Button
-                onClick={handleViewResultClick}
-                className="bg-[#B89B7A] hover:bg-[#B89B7A]/90 text-white"
-              >
-                Ver Resultado
-              </Button>
-            </AnimatedWrapper>
-          )}
-        </div>
+        {!showingStrategicQuestions && (
+          <div className="flex justify-between mt-8">
+            {currentQuestionIndex > 0 && (
+              <AnimatedWrapper className="flex">
+                <Button
+                  onClick={handlePrevious}
+                  variant="outline"
+                  className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Voltar
+                </Button>
+              </AnimatedWrapper>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -6,9 +5,12 @@ import { QuizResult, StyleResult } from '../types/quiz';
 export const useQuizLogic = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
+  const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>(() => {
+    const savedAnswers = localStorage.getItem('strategicAnswers');
+    return savedAnswers ? JSON.parse(savedAnswers) : {};
+  });
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(() => {
-    // Check if we have results in localStorage
     const savedResult = localStorage.getItem('quizResult');
     return savedResult ? JSON.parse(savedResult) : null;
   });
@@ -18,7 +20,6 @@ export const useQuizLogic = () => {
   const canProceed = currentAnswers.length === currentQuestion?.multiSelect;
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
 
-  // Efeito para salvar resultados no localStorage quando disponíveis
   useEffect(() => {
     if (quizResult) {
       localStorage.setItem('quizResult', JSON.stringify(quizResult));
@@ -33,6 +34,17 @@ export const useQuizLogic = () => {
     }));
     
     console.log(`Question ${questionId} answered with options:`, selectedOptions);
+  }, []);
+
+  const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
+    setStrategicAnswers(prev => {
+      const newAnswers = {
+        ...prev,
+        [questionId]: selectedOptions
+      };
+      localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers));
+      return newAnswers;
+    });
   }, []);
 
   const handleNext = useCallback(() => {
@@ -52,7 +64,6 @@ export const useQuizLogic = () => {
   }, [currentQuestionIndex]);
 
   const calculateResults = useCallback(() => {
-    // Create a counter for each style category
     const styleCounter: Record<string, number> = {
       'Natural': 0,
       'Clássico': 0,
@@ -64,16 +75,12 @@ export const useQuizLogic = () => {
       'Criativo': 0
     };
 
-    // Count total number of selections
     let totalSelections = 0;
 
-    // Loop through all the answers and count each style
     Object.entries(answers).forEach(([questionId, optionIds]) => {
-      // Find the corresponding question
       const question = quizQuestions.find(q => q.id === questionId);
       if (!question) return;
 
-      // For each selected option, increment the counter for its style
       optionIds.forEach(optionId => {
         const option = question.options.find(o => o.id === optionId);
         if (option) {
@@ -83,7 +90,6 @@ export const useQuizLogic = () => {
       });
     });
 
-    // Convert to array and sort by count (descending)
     const styleResults: StyleResult[] = Object.entries(styleCounter)
       .map(([category, score]) => ({
         category: category as StyleResult['category'],
@@ -92,7 +98,6 @@ export const useQuizLogic = () => {
       }))
       .sort((a, b) => b.score - a.score);
 
-    // Get primary style and secondary styles
     const primaryStyle = styleResults[0];
     const secondaryStyles = styleResults.slice(1);
 
@@ -108,13 +113,10 @@ export const useQuizLogic = () => {
     return result;
   }, [answers]);
 
-  // This is improved to work better even when not all questions are answered
   const submitQuizIfComplete = useCallback(() => {
-    // Calculate with whatever answers we have
     const results = calculateResults();
     setQuizCompleted(true);
     
-    // Store results in localStorage for persistence
     localStorage.setItem('quizResult', JSON.stringify(results));
     console.log('Results saved to localStorage before redirect');
     
@@ -127,6 +129,7 @@ export const useQuizLogic = () => {
     setQuizCompleted(false);
     localStorage.removeItem('quizResult');
     setQuizResult(null);
+    localStorage.removeItem('strategicAnswers');
     console.log('Quiz reset');
   }, []);
 
@@ -144,6 +147,8 @@ export const useQuizLogic = () => {
     resetQuiz,
     submitQuizIfComplete,
     calculateResults,
-    totalQuestions: quizQuestions.length
+    totalQuestions: quizQuestions.length,
+    strategicAnswers,
+    handleStrategicAnswer
   };
 };
