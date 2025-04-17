@@ -11,13 +11,15 @@ interface QuizOptionProps {
   isSelected: boolean;
   onSelect: (optionId: string) => void;
   type: 'text' | 'image' | 'both';
+  questionId?: string;
 }
 
 const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
   onSelect,
-  type
+  type,
+  questionId
 }) => {
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
@@ -58,6 +60,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             styleCategory={option.styleCategory}
             isSelected={isSelected}
             is3DQuestion={is3DQuestion}
+            questionId={questionId || ''}
           />
         )}
         
@@ -66,7 +69,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee relative",
-                "text-[0.7rem] sm:text-xs", // Normalized font size for all mobile options
+                "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
             : "text-xs sm:text-lg leading-relaxed"
@@ -79,4 +82,3 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
-

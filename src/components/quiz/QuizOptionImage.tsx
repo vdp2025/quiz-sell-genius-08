@@ -11,6 +11,7 @@ interface QuizOptionImageProps {
   styleCategory: string;
   isSelected: boolean;
   is3DQuestion: boolean;
+  questionId: string;
 }
 
 export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
@@ -19,6 +20,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   styleCategory,
   isSelected,
   is3DQuestion,
+  questionId
 }) => {
   const isMobile = useIsMobile();
   const [imageError, setImageError] = useState(false);
@@ -52,6 +54,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
                   ? "scale-110 shadow-lg z-10" // Gentler scale on mobile
                   : "shadow-lg border-2 border-brand-coffee/40 z-10" // No scale on desktop, just elevation
               ) : "scale-100 hover:shadow-md",
+              // Increase zoom by 10% for questions 1 and 2 on mobile
+              isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.1]",
               "w-full h-full"
             )}
             onError={() => setImageError(true)}
@@ -65,4 +69,3 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     </div>
   );
 };
-
