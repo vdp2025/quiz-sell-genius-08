@@ -21,7 +21,7 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
   
   return parts.map((part, index) => {
     if (strategicWords.some(word => part.toLowerCase() === word.toLowerCase())) {
-      return <strong key={index}>{part}</strong>;
+      return React.createElement('strong', { key: index }, part);
     }
     return part;
   });
