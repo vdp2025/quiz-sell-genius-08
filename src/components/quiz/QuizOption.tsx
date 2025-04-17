@@ -12,30 +12,6 @@ interface QuizOptionProps {
   type: 'text' | 'image' | 'both';
 }
 
-const getFallbackStyle = (styleCategory: string) => {
-  const colorMap: Record<string, string> = {
-    'Natural': '#D2C1A5',
-    'Clássico': '#1F456E',
-    'Contemporâneo': '#7F7F7F',
-    'Elegante': '#AF9F7F',
-    'Romântico': '#F5D0E3',
-    'Sexy': '#A82743',
-    'Dramático': '#222222',
-    'Criativo': '#F79862'
-  };
-  
-  return {
-    backgroundColor: colorMap[styleCategory] || '#f0f0f0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: ['Natural', 'Elegante', 'Romântico', 'Contemporâneo'].includes(styleCategory) ? '#333' : '#fff',
-    fontSize: '1rem',
-    textAlign: 'center' as const,
-    padding: '1rem'
-  };
-};
-
 const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
@@ -116,15 +92,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           "cursor-pointer transition-colors duration-300",
           type !== 'text' 
-            ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-gray-800" 
+            ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-brand-text" 
             : isMobile 
-              ? "text-xs leading-relaxed" 
-              : "text-lg leading-relaxed",
-          isSelected 
-            ? "text-[#333333]"
-            : type !== 'text' 
-              ? "text-[#222222]"
-              : "text-[#1A1818]/80"
+              ? "text-xs leading-relaxed text-brand-text" 
+              : "text-lg leading-relaxed text-brand-text"
         )}>
           {highlightStrategicWords(option.text)}
         </p>

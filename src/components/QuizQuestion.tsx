@@ -53,8 +53,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         id={`question-${question.id}`}
       >
         <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold tracking-normal", // Changed tracking from 'tighter' to 'normal'
-          isStrategicQuestion && "text-[#432818] tracking-normal inline-block"
+          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-brand-text font-semibold tracking-normal", // Changed color to brand-text
+          isStrategicQuestion && "text-brand-text tracking-normal inline-block"
         )}>
           {highlightStrategicWords(question.title)}
         </h2>
