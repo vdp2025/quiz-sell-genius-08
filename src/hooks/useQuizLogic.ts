@@ -40,14 +40,8 @@ export const useQuizLogic = () => {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       console.log('Last question reached, calculating results...');
-      const results = calculateResults();
+      calculateResults();
       setQuizCompleted(true);
-      
-      // Redirect to results page
-      if (results) {
-        console.log('Redirecting to results page...');
-        window.location.href = '/resultado';
-      }
     }
   }, [currentQuestionIndex]);
 
@@ -129,7 +123,7 @@ export const useQuizLogic = () => {
       const results = calculateResults();
       setQuizCompleted(true);
       
-      // Improved navigation to results page - more reliable for mobile
+      // Melhorar a navegação para a página de resultados
       if (results) {
         console.log('Quiz completed successfully. Redirecting to results page...');
         // Use a timeout to ensure state is updated before redirect
@@ -171,6 +165,7 @@ export const useQuizLogic = () => {
     handlePrevious,
     resetQuiz,
     submitQuizIfComplete,
+    calculateResults,
     totalQuestions: quizQuestions.length
   };
 };

@@ -42,7 +42,7 @@ const ResultPage: React.FC = () => {
     window.location.href = '/';
   };
 
-  // If still loading, show loading state
+  // Se ainda estiver carregando, mostra estado de carregamento
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
@@ -53,8 +53,8 @@ const ResultPage: React.FC = () => {
     );
   }
 
-  // If no results found at all, redirect to homepage
-  if (!quizResult && !localResult && !localStorage.getItem('quizResult')) {
+  // Se não houver resultados, redireciona para a página inicial
+  if (!quizResult && !localResult) {
     console.log('No results found, redirecting to home page');
     return <Navigate to="/" replace />;
   }
@@ -81,9 +81,9 @@ const ResultPage: React.FC = () => {
       ) : (
         <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
           <div className="text-center p-8">
-            <h2 className="text-2xl font-playfair text-[#432818] mb-4">Carregando resultados...</h2>
+            <h2 className="text-2xl font-playfair text-[#432818] mb-4">Nenhum resultado encontrado</h2>
             <p className="text-[#1A1818]/80 mb-6">
-              Se os resultados não aparecerem, pode ser que o quiz não tenha sido concluído.
+              Parece que você ainda não completou o quiz.
             </p>
             <Button
               variant="outline"

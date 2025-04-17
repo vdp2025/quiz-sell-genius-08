@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -21,7 +20,8 @@ const QuizPage: React.FC = () => {
     handleNext,
     handlePrevious,
     totalQuestions,
-    submitQuizIfComplete
+    submitQuizIfComplete,
+    calculateResults
   } = useQuizLogic();
 
   // Reference to the quiz container for scrolling
@@ -41,11 +41,8 @@ const QuizPage: React.FC = () => {
       console.log('Last question answered, submitting quiz...');
       setTimeout(() => {
         console.log('Triggering submission after delay');
+        calculateResults(); // Garantir que os resultados sejam calculados
         submitQuizIfComplete();
-        // Force redirect to results page after a delay to ensure everything is processed
-        setTimeout(() => {
-          window.location.href = '/resultado';
-        }, 300);
       }, 800); // Slightly longer delay for the final question
     }
   };
@@ -106,11 +103,9 @@ const QuizPage: React.FC = () => {
   // Handle manual result button click with better mobile support
   const handleViewResultClick = () => {
     console.log('Manual view result button clicked');
+    const results = calculateResults();
+    console.log('Results calculated:', results);
     submitQuizIfComplete();
-    // Force redirect to ensure it works on mobile
-    setTimeout(() => {
-      window.location.href = '/resultado';
-    }, 300);
   };
 
   const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
