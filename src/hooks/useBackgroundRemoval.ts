@@ -1,3 +1,4 @@
+
 import { pipeline, env } from '@huggingface/transformers';
 
 // Configure transformers.js to always download models
@@ -5,6 +6,19 @@ env.allowLocalModels = false;
 env.useBrowserCache = false;
 
 const MAX_IMAGE_DIMENSION = 1024;
+
+// Create a singleton instance of the segmenter
+let segmenterPromise: Promise<any> | null = null;
+
+const getSegmenter = () => {
+  if (!segmenterPromise) {
+    segmenterPromise = pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
+      device: 'cpu', // Using CPU instead of WebGPU to avoid session issues
+      quantized: true, // Use quantized model for better performance
+    });
+  }
+  return segmenterPromise;
+};
 
 function resizeImageIfNeeded(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, image: HTMLImageElement) {
   let width = image.naturalWidth;
@@ -34,9 +48,9 @@ function resizeImageIfNeeded(canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
 export const removeBackground = async (imageElement: HTMLImageElement): Promise<Blob> => {
   try {
     console.log('Starting background removal process...');
-    const segmenter = await pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
-      device: 'webgpu',
-    });
+    
+    // Get singleton segmenter instance
+    const segmenter = await getSegmenter();
     
     // Convert HTMLImageElement to canvas
     const canvas = document.createElement('canvas');

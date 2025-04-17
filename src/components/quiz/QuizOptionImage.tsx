@@ -26,19 +26,33 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingFailed, setProcessingFailed] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const maxAttempts = 2;
 
   useEffect(() => {
     const processImage = async () => {
-      // Always process images on mobile devices, only when selected on desktop
-      if ((isMobile || isSelected) && !processedImageUrl && !isProcessing && !processingFailed) {
+      // Only try to process if:
+      // 1. On mobile OR selected on desktop
+      // 2. No existing processed image
+      // 3. Not currently processing
+      // 4. Processing hasn't permanently failed
+      // 5. Haven't exceeded max attempts
+      if ((isMobile || isSelected) && 
+          !processedImageUrl && 
+          !isProcessing && 
+          !processingFailed && 
+          attempts < maxAttempts) {
         try {
           setIsProcessing(true);
+          setAttempts(prev => prev + 1);
           
           const img = new Image();
           img.crossOrigin = "anonymous";
           
           img.onload = async () => {
             try {
+              // Add a small delay to prevent session conflicts
+              await new Promise(resolve => setTimeout(resolve, 100));
               const processedBlob = await removeBackground(img);
               const processedUrl = URL.createObjectURL(processedBlob);
               setProcessedImageUrl(processedUrl);
@@ -72,11 +86,11 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
         URL.revokeObjectURL(processedImageUrl);
       }
     };
-  }, [isSelected, imageUrl, processedImageUrl, isProcessing, processingFailed, isMobile]);
+  }, [isSelected, imageUrl, processedImageUrl, isProcessing, processingFailed, isMobile, attempts]);
 
   // Use processed image for mobile regardless of selection state
   // For desktop, only use it when selected
-  const displayImageUrl = (isMobile || isSelected) && processedImageUrl 
+  const displayImageUrl = (isMobile || isSelected) && processedImageUrl && !processingFailed
     ? processedImageUrl 
     : imageUrl;
 
