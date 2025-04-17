@@ -21,7 +21,6 @@ const QuizPage: React.FC = () => {
     handleNext,
     handlePrevious,
     totalQuestions,
-    quizResult,
     submitQuizIfComplete
   } = useQuizLogic();
 
@@ -39,11 +38,22 @@ const QuizPage: React.FC = () => {
       }, 500); // Small delay for visual feedback
     } else if (response.selectedOptions.length === currentQuestion.multiSelect && isLastQuestion) {
       // Auto-submit the quiz on the last question
+      console.log('Last question answered, submitting quiz...');
       setTimeout(() => {
         submitQuizIfComplete();
       }, 800); // Slightly longer delay for the final question
     }
   };
+
+  // Log state on each render for debugging
+  useEffect(() => {
+    console.log('QuizPage rendered:', {
+      currentQuestionIndex,
+      totalQuestions,
+      isLastQuestion,
+      currentAnswers
+    });
+  }, [currentQuestionIndex, totalQuestions, isLastQuestion, currentAnswers]);
 
   // Smooth scroll to the current question when it changes
   useEffect(() => {

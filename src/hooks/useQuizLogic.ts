@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
 
@@ -7,12 +7,24 @@ export const useQuizLogic = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [quizCompleted, setQuizCompleted] = useState(false);
-  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(() => {
+    // Check if we have results in localStorage
+    const savedResult = localStorage.getItem('quizResult');
+    return savedResult ? JSON.parse(savedResult) : null;
+  });
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const currentAnswers = answers[currentQuestion?.id] || [];
   const canProceed = currentAnswers.length === currentQuestion?.multiSelect;
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
+
+  // Efeito para salvar resultados no localStorage quando disponíveis
+  useEffect(() => {
+    if (quizResult) {
+      localStorage.setItem('quizResult', JSON.stringify(quizResult));
+      console.log('QuizResult saved to localStorage:', quizResult);
+    }
+  }, [quizResult]);
 
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
     setAnswers(prev => ({
@@ -25,8 +37,9 @@ export const useQuizLogic = () => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      calculateResults();
+      const results = calculateResults();
       setQuizCompleted(true);
+      console.log('Quiz completed. Results:', results);
     }
   }, [currentQuestionIndex]);
 
@@ -81,17 +94,16 @@ export const useQuizLogic = () => {
     const primaryStyle = styleResults[0];
     const secondaryStyles = styleResults.slice(1);
 
-    setQuizResult({
-      primaryStyle,
-      secondaryStyles,
-      totalSelections
-    });
-
-    return {
+    const result = {
       primaryStyle,
       secondaryStyles,
       totalSelections
     };
+
+    setQuizResult(result);
+    console.log('Results calculated:', result);
+
+    return result;
   }, [answers]);
 
   const submitQuizIfComplete = useCallback(() => {
@@ -101,13 +113,18 @@ export const useQuizLogic = () => {
       return questionAnswers.length === question.multiSelect;
     });
 
+    console.log('Checking if quiz is complete:', allQuestionsAnswered);
+
     if (allQuestionsAnswered) {
       const results = calculateResults();
       setQuizCompleted(true);
       
-      // Redirect to results page
+      // Navigate to results page after a short delay to ensure state updates
       if (results) {
-        window.location.href = '/resultado';
+        console.log('All questions answered. Redirecting to results page...');
+        setTimeout(() => {
+          window.location.href = '/resultado';
+        }, 500);
       }
     }
   }, [answers, calculateResults]);
@@ -116,7 +133,9 @@ export const useQuizLogic = () => {
     setCurrentQuestionIndex(0);
     setAnswers({});
     setQuizCompleted(false);
+    localStorage.removeItem('quizResult');
     setQuizResult(null);
+    console.log('Quiz reset');
   }, []);
 
   return {
