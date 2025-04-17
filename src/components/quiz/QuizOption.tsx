@@ -86,10 +86,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
             "overflow-hidden w-full",
-            "sm:scale-90",
+            "sm:scale-100", // Increased scale from scale-90 to scale-100
             option.imageUrl.includes('sapatos') || option.imageUrl.includes('roupa') 
               ? "aspect-square" 
-              : "aspect-[3/4]"
+              : "aspect-[4/3]" // Increased from 3/4 to 4/3 for wider images
           )}>
             {imageError ? (
               <div 
