@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Check } from 'lucide-react';
 import { AspectRatio } from '../ui/aspect-ratio';
+import { removeBackground, loadImage } from '@/hooks/useBackgroundRemoval';
 
 interface QuizOptionProps {
   option: QuizOptionType;
@@ -45,10 +46,68 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   type
 }) => {
   const isMobile = useIsMobile();
-  const [imageError, setImageError] = React.useState(false);
-  const [isHovered, setIsHovered] = React.useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingFailed, setProcessingFailed] = useState(false);
 
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+
+  // Process image when selected
+  useEffect(() => {
+    const processImage = async () => {
+      if (isSelected && option.imageUrl && !processedImageUrl && !isProcessing && !processingFailed) {
+        try {
+          setIsProcessing(true);
+          console.log('Processing image for option:', option.id);
+          
+          // Create a new image element from the URL
+          const img = new Image();
+          img.crossOrigin = "anonymous"; // Handle CORS issues
+          
+          img.onload = async () => {
+            try {
+              // Process the image to remove background
+              const processedBlob = await removeBackground(img);
+              const processedUrl = URL.createObjectURL(processedBlob);
+              setProcessedImageUrl(processedUrl);
+              setIsProcessing(false);
+              console.log('Background removed successfully for option:', option.id);
+            } catch (error) {
+              console.error('Failed to process image:', error);
+              setProcessingFailed(true);
+              setIsProcessing(false);
+            }
+          };
+          
+          img.onerror = () => {
+            console.error('Failed to load image for processing');
+            setProcessingFailed(true);
+            setIsProcessing(false);
+          };
+          
+          img.src = option.imageUrl;
+        } catch (error) {
+          console.error('Error in image processing:', error);
+          setProcessingFailed(true);
+          setIsProcessing(false);
+        }
+      }
+    };
+
+    processImage();
+    
+    // Cleanup function to revoke object URLs
+    return () => {
+      if (processedImageUrl) {
+        URL.revokeObjectURL(processedImageUrl);
+      }
+    };
+  }, [isSelected, option.imageUrl, processedImageUrl, isProcessing, processingFailed, option.id]);
+
+  // Determine which image URL to use
+  const displayImageUrl = isSelected && processedImageUrl ? processedImageUrl : option.imageUrl;
 
   return (
     <div 
@@ -106,17 +165,30 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   <span>{option.styleCategory}</span>
                 </div>
               ) : (
-                <img
-                  src={option.imageUrl}
-                  alt={option.text}
-                  className={cn(
-                    "object-contain w-full h-full transition-all duration-300 ease-out px-2 pt-2",
-                    isMobile 
-                      ? isSelected ? "scale-110" : "scale-100"
-                      : (isSelected || isHovered) ? "scale-110" : "scale-100"
+                <div className={cn(
+                  "w-full h-full flex items-center justify-center",
+                  isSelected && "relative"
+                )}>
+                  {isProcessing && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/30 z-10">
+                      <div className="w-5 h-5 border-2 border-brand-coffee border-t-transparent rounded-full animate-spin"></div>
+                    </div>
                   )}
-                  onError={() => setImageError(true)}
-                />
+                  <img
+                    src={displayImageUrl}
+                    alt={option.text}
+                    className={cn(
+                      "object-contain transition-all duration-300 ease-out px-2 pt-2",
+                      isSelected && processedImageUrl ? "scale-[1.15] -mt-3" : "w-full h-full",
+                      !isSelected && (
+                        isMobile 
+                          ? isSelected ? "scale-110" : "scale-100"
+                          : (isSelected || isHovered) ? "scale-110" : "scale-100"
+                      )
+                    )}
+                    onError={() => setImageError(true)}
+                  />
+                </div>
               )}
             </AspectRatio>
           </div>
@@ -128,7 +200,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             ? cn(
                 "text-[0.65rem] sm:text-xs leading-tight font-medium",
                 "bg-white/90 py-1 px-1.5 mt-auto",
-                "text-brand-coffee"
+                "text-brand-coffee",
+                isSelected && processedImageUrl && "bg-transparent"
               )
             : isMobile 
               ? "text-xs leading-relaxed" 

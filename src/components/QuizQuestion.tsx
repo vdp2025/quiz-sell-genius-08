@@ -22,6 +22,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
+  const hasImageOptions = question.type !== 'text';
 
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
@@ -70,7 +71,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <div className={cn(
           "grid h-full",
           getGridColumns(),
-          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3"
+          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3",
+          hasImageOptions && "mb-6 relative"
         )}>
           {question.options.map((option) => (
             <QuizOption
