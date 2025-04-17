@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -39,7 +40,8 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           />
           <h1 className="font-playfair text-2xl md:text-3xl font-semibold text-[#432818] px-2">
             Olá, {userName}, seu Estilo Predominante é: <span 
-              style={{ color: `rgba(102, 78, 54, ${primaryStyle.percentage / 100})` }}
+              className="text-[#432818]" 
+              style={{ opacity: primaryStyle.percentage / 100 }}
             >
               {primaryStyle.category}
             </span>
