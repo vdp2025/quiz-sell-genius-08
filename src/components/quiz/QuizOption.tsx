@@ -22,7 +22,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
-  const isQuestionOneOrTwo = ['1', '2'].includes(option.id.charAt(0));
 
   return (
     <div 
@@ -67,9 +66,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee relative",
-                isQuestionOneOrTwo && isMobile
-                  ? "text-[0.45rem] sm:text-[0.55rem]" // Reduced font size for mobile on questions 1 and 2
-                  : "text-[0.7rem] sm:text-xs",
+                "text-[0.7rem] sm:text-xs", // Normalized font size for all mobile options
                 isSelected && "font-semibold"
               )
             : "text-xs sm:text-lg leading-relaxed"
@@ -82,3 +79,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
