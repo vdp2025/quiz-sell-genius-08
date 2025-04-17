@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -97,10 +96,10 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? isMobile 
               ? "text-2xs leading-[0.7rem] bg-white/90 px-1 py-1"
-              : "text-sm leading-tight p-2"
+              : "text-base leading-tight p-2"
             : isMobile 
               ? "text-xs leading-relaxed"
-              : "text-base leading-relaxed"
+              : "text-lg leading-relaxed"
         )}>
           {highlightStrategicWords(option.text)}
         </p>
