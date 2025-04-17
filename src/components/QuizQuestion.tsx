@@ -76,7 +76,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <p className="text-2xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-2 text-center">
+        <p className="text-2xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-6 text-center">
           Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
         </p>
       </div>
