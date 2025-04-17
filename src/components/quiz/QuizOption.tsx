@@ -57,24 +57,24 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Selection indicator */}
+      {/* Selection indicator - Making the checkmark more subtle */}
       <div className={cn(
-        "absolute -top-2 -right-2 z-10 w-6 h-6 rounded-full transition-all duration-300",
+        "absolute -top-2 -right-2 z-10 w-5 h-5 rounded-full transition-all duration-300",
         "flex items-center justify-center",
         isSelected 
-          ? "bg-[#B89B7A] scale-100 opacity-100" 
+          ? "bg-[#B89B7A]/80 scale-100 opacity-100" 
           : "bg-transparent scale-50 opacity-0"
       )}>
-        <Check className="w-4 h-4 text-white" />
+        <Check className="w-3 h-3 text-white/90" />
       </div>
 
       <div 
         className={cn(
           "transition-all duration-300 ease-out cursor-pointer",
-          "border-2",
+          "border",
           type === 'text' && "p-3 rounded-lg",
           isSelected 
-            ? "border-[#B89B7A] bg-[#B89B7A]/5" 
+            ? "border-[#B89B7A]/70" 
             : "border-transparent hover:border-[#B89B7A]/30",
           (isHovered || isSelected) && "shadow-lg"
         )}
