@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
-import { Check } from 'lucide-react';
 import { QuizOptionImage } from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -28,8 +27,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group h-full",
-        "transition-all duration-500 ease-in-out", // Longer duration for smoother transitions
-        isMobile && "active:scale-[0.98]" // Subtle feedback on tap for mobile
+        "transition-all duration-500 ease-in-out", 
+        isMobile && "active:scale-[0.98]"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -37,26 +36,16 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
     >
-      <div className={cn(
-        "absolute -top-1 -right-1 z-10 w-5 h-5 rounded-full transition-all duration-500", // Increased size and duration
-        "flex items-center justify-center",
-        isSelected 
-          ? "bg-[#B89B7A]/80 scale-100 opacity-100" // Increased opacity for better visibility
-          : "bg-transparent scale-50 opacity-0"
-      )}>
-        <Check className="w-3 h-3 text-white" /> {/* Increased icon size */}
-      </div>
-
       <div 
         className={cn(
           "relative h-full flex flex-col",
-          "transition-all duration-500 ease-in-out", // Increased duration for smoother transitions
+          "transition-all duration-500 ease-in-out", 
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
           type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-[#B89B7A]/80 bg-[#B89B7A]/10 shadow-md" // Enhanced selected state
-              : "border-[#B89B7A]/80 shadow-lg" // Increased shadow effect
+              ? "border-[#B89B7A]/80 bg-[#B89B7A]/10 shadow-2xl" // Aumentei a sombra para 2xl
+              : "border-[#B89B7A]/80 shadow-2xl" // Aumentei a sombra para 2xl para imagens
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
               : "hover:border-[#B89B7A]/50",
@@ -76,8 +65,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "text-[0.7rem] sm:text-xs leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee z-20 relative", // Increased text size and padding
-                isSelected && "font-semibold" // Bold text when selected
+                "text-[0.7rem] sm:text-xs leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee z-20 relative", 
+                isSelected && "font-semibold"
               )
             : "text-xs sm:text-lg leading-relaxed"
         )}>
@@ -89,3 +78,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
