@@ -110,7 +110,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div className="mb-1 sm:mb-2 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[800px] mx-auto">
+                  <div className="mb-1 sm:mb-2 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-[1000px] mx-auto">
                     <img
                       src={option.imageUrl}
                       alt={option.text}
@@ -129,7 +129,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   "cursor-pointer text-[#1A1818]/80 text-center max-w-[230px] sm:max-w-[280px] mx-auto",
                   question.type !== 'text' 
                     ? isMobile 
-                      ? "text-[0.5rem] leading-[0.7rem]" 
+                      ? "text-[0.45rem] leading-[0.6rem]" 
                       : "text-2xs leading-none"
                     : isMobile 
                       ? "text-xs leading-tight" 
