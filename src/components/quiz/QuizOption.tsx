@@ -116,12 +116,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           </div>
         )}
         <p className={cn(
-          "cursor-pointer transition-colors duration-300",
+          "cursor-pointer transition-colors duration-300 text-brand-coffee", // Updated text color
           type !== 'text' 
-            ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-brand-text" 
+            ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium" 
             : isMobile 
-              ? "text-xs leading-relaxed text-brand-text" 
-              : "text-lg leading-relaxed text-brand-text"
+              ? "text-xs leading-relaxed" 
+              : "text-lg leading-relaxed"
         )}>
           {highlightStrategicWords(option.text)}
         </p>
