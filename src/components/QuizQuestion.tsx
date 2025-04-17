@@ -98,13 +98,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   return (
     <AnimatedWrapper>
-      <Card className="w-full max-w-4xl mx-auto p-2 sm:p-8 bg-white shadow-md" id={`question-${question.id}`}>
-        <h2 className="text-xl sm:text-2xl font-playfair text-center mb-2 sm:mb-8 text-[#432818]">
+      <Card className="w-full max-w-4xl mx-auto p-0 sm:p-8 bg-white shadow-md" id={`question-${question.id}`}>
+        <h2 className="text-xl sm:text-2xl font-playfair text-center mb-1 sm:mb-4 px-2 pt-2 text-[#432818]">
           {question.title}
         </h2>
         
         <div className={cn(
-          "grid gap-1 sm:gap-6",
+          "grid gap-0.5 sm:gap-6",
           question.type === 'text' 
             ? "grid-cols-1" 
             : isMobile ? "grid-cols-2" : "grid-cols-2"
@@ -117,21 +117,24 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             >
               <div 
                 className={cn(
-                  "transition-all duration-200 rounded-lg p-0.5 sm:p-4 cursor-pointer flex flex-col items-center",
+                  "transition-all duration-200 cursor-pointer flex flex-col items-center",
                   currentAnswers.includes(option.id) 
-                    ? "border-[#B89B7A] border-[0.5px] shadow-lg shadow-[#00000050] dark:shadow-[#000a]" 
-                    : "border border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-sm",
+                    ? "border-[#B89B7A] border-[0.5px] shadow-md" 
+                    : "border-0",
                 )}
               >
                 {question.type !== 'text' && option.imageUrl && (
-                  <div className="mb-0.5 sm:mb-2 overflow-hidden rounded-lg border border-[#B89B7A]/10 w-full aspect-[3/4] max-w-full mx-auto">
+                  <div className="overflow-hidden w-full aspect-[3/4]">
                     <img
                       src={option.imageUrl}
                       alt={option.text}
                       className={cn(
-                        "object-cover w-full h-full transition-transform duration-300",
-                        currentAnswers.includes(option.id) ? "scale-105" : "group-hover:scale-105"
+                        "object-cover w-full h-full transition-transform duration-300 scale-110",
+                        currentAnswers.includes(option.id) ? "scale-125" : "group-hover:scale-115"
                       )}
+                      style={{ 
+                        transformOrigin: 'center center',
+                      }}
                       onError={(e) => {
                         console.error(`Failed to load image: ${option.imageUrl}`);
                         e.currentTarget.src = 'https://via.placeholder.com/400?text=Image+Not+Found';
@@ -140,10 +143,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   </div>
                 )}
                 <p className={cn(
-                  "cursor-pointer text-[#1A1818]/80 text-center max-w-[200px] sm:max-w-[280px] mx-auto",
+                  "cursor-pointer text-[#1A1818]/80 text-center w-full px-1 py-0.5",
                   question.type !== 'text' 
                     ? isMobile 
-                      ? "text-[0.4rem] leading-[0.5rem] mt-0.5" 
+                      ? "text-[0.35rem] leading-[0.4rem] bg-white/80" 
                       : "text-2xs leading-none"
                     : isMobile 
                       ? "text-xs leading-tight" 
@@ -156,7 +159,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <p className="text-xs sm:text-sm text-[#1A1818]/60 mt-2 sm:mt-6 text-center">
+        <p className="text-xs sm:text-sm text-[#1A1818]/60 px-2 pb-2 mt-1 sm:mt-6 text-center">
           Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
         </p>
       </Card>
