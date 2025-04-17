@@ -129,7 +129,7 @@ export const useQuizLogic = () => {
       const results = calculateResults();
       setQuizCompleted(true);
       
-      // Navigate to results page immediately
+      // Improved navigation to results page - more reliable for mobile
       if (results) {
         console.log('Quiz completed successfully. Redirecting to results page...');
         // Use a timeout to ensure state is updated before redirect

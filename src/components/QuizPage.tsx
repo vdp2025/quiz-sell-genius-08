@@ -37,11 +37,15 @@ const QuizPage: React.FC = () => {
         handleNext();
       }, 500); // Small delay for visual feedback
     } else if (response.selectedOptions.length === currentQuestion.multiSelect && isLastQuestion) {
-      // Auto-submit the quiz on the last question
+      // Auto-submit the quiz on the last question - important fix for mobile
       console.log('Last question answered, submitting quiz...');
       setTimeout(() => {
         console.log('Triggering submission after delay');
         submitQuizIfComplete();
+        // Force redirect to results page after a delay to ensure everything is processed
+        setTimeout(() => {
+          window.location.href = '/resultado';
+        }, 300);
       }, 800); // Slightly longer delay for the final question
     }
   };
@@ -99,6 +103,16 @@ const QuizPage: React.FC = () => {
     });
   }, []);
 
+  // Handle manual result button click with better mobile support
+  const handleViewResultClick = () => {
+    console.log('Manual view result button clicked');
+    submitQuizIfComplete();
+    // Force redirect to ensure it works on mobile
+    setTimeout(() => {
+      window.location.href = '/resultado';
+    }, 300);
+  };
+
   const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
   return (
@@ -148,7 +162,7 @@ const QuizPage: React.FC = () => {
           {isLastQuestion && canProceed && (
             <AnimatedWrapper className="flex ml-auto">
               <Button
-                onClick={() => submitQuizIfComplete()}
+                onClick={handleViewResultClick}
                 className="bg-[#B89B7A] hover:bg-[#B89B7A]/90 text-white"
               >
                 Ver Resultado
