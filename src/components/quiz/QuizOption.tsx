@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -42,7 +41,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col",
           "transition-all duration-500 ease-in-out", 
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-visible",
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/80 bg-[#B89B7A]/10 shadow-2xl"
@@ -66,10 +65,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee z-20 relative", 
+                "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee relative",
                 isQuestionOneOrTwo 
-                  ? "text-[0.55rem] sm:text-[0.65rem]" // Smaller font for questions 1 and 2
-                  : "text-[0.7rem] sm:text-xs", // Original font size for other questions
+                  ? "text-[0.55rem] sm:text-[0.65rem]"
+                  : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
             : "text-xs sm:text-lg leading-relaxed"
@@ -82,4 +81,3 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
-

@@ -85,7 +85,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   return (
     <div className={cn(
-      "w-full relative flex-grow overflow-hidden z-10",
+      "w-full relative flex-grow overflow-visible z-10", // Changed overflow to visible
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -102,11 +102,11 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             src={displayImageUrl}
             alt={altText}
             className={cn(
-              "object-contain absolute inset-0 px-1 pt-1", // Reduced padding to fill more space
+              "object-contain absolute inset-0 px-1 pt-1",
               "transition-transform duration-700 ease-in-out",
               isSelected ? isMobile 
-                ? "scale-[1.35] z-20" // Increased scale for mobile
-                : "scale-[1.45] z-20" // Increased scale for desktop
+                ? "scale-[1.45] z-50" // Increased z-index and scale for mobile
+                : "scale-[1.55] z-50" // Increased z-index and scale for desktop
                 : "scale-100",
               "w-full h-full"
             )}
