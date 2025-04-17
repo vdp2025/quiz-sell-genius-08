@@ -36,7 +36,7 @@ const getFallbackStyle = (styleCategory: string) => {
   };
 };
 
-export const QuizOption: React.FC<QuizOptionProps> = ({
+const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
   onSelect,
@@ -115,12 +115,16 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer transition-colors duration-300",
           type !== 'text' 
             ? isMobile 
-              ? "text-2xs leading-[0.9rem] bg-white/90 px-1 py-2"
+              ? "text-xs leading-tight bg-white/95 px-2 py-2.5 font-medium"
               : "text-base leading-relaxed p-2"
             : isMobile 
               ? "text-xs leading-relaxed" 
               : "text-lg leading-relaxed",
-          isSelected ? "text-[#432818]" : "text-[#1A1818]/80"
+          isSelected 
+            ? "text-[#333333]"
+            : type !== 'text' 
+              ? "text-[#222222]"
+              : "text-[#1A1818]/80"
         )}>
           {highlightStrategicWords(option.text)}
         </p>
@@ -128,3 +132,5 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     </div>
   );
 };
+
+export { QuizOption };
