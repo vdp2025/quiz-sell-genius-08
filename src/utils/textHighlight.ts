@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 export const highlightStrategicWords = (text: string): React.ReactNode => {
   const strategicWords = [
     'confortáveis', 'soltos', 'práticos', 'discretas', 'clássico', 'despercebidas',
