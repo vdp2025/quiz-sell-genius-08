@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, ShoppingCart } from 'lucide-react';
+import { ArrowRight, ShoppingCart, Gift as GiftIcon } from 'lucide-react';
 import { styleConfig } from '../config/styleConfig';
 
 interface QuizResultProps {
@@ -93,7 +94,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           <div className="flex flex-col md:flex-row gap-8 items-center">
             <div className="w-full md:w-1/3">
               <div className="bg-[#B89B7A]/10 rounded-lg p-6 flex justify-center">
-                <Gift className="w-24 h-24 text-[#B89B7A]" />
+                <GiftIcon className="w-24 h-24 text-[#B89B7A]" />
               </div>
             </div>
             <div className="w-full md:w-2/3 space-y-4">
