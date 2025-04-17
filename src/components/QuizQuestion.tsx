@@ -47,16 +47,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-4xl mx-auto", 
-          isStrategicQuestion && "bg-[#FDE1D3]/20 rounded-xl p-6 shadow-sm"
+          "w-full max-w-4xl mx-auto"
         )} 
         id={`question-${question.id}`}
       >
         <h2 className={cn(
           "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold",
           isStrategicQuestion && cn(
-            "text-[#432818] tracking-wider",
-            "bg-[#FDE1D3]/30 rounded px-4 py-2 inline-block"
+            "text-[#432818] tracking-wider inline-block"
           )
         )}>
           {highlightStrategicWords(question.title)}

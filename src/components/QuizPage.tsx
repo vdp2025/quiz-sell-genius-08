@@ -113,7 +113,7 @@ const QuizPage: React.FC = () => {
     : Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8" ref={quizContainerRef}>
+    <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <img
