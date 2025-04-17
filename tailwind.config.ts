@@ -105,6 +105,19 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'
+      },
+      perspective: {
+        '1000': '1000px',
+      },
+      rotate: {
+        'y-12': 'rotateY(12deg)',
+        'x-12': 'rotateX(12deg)',
+      },
+      transformOrigin: {
+        'center': 'center center',
+      },
+      transform: {
+        'gpu': 'translate3d(0,0,0)',
       }
     }
   },

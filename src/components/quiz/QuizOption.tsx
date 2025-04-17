@@ -49,10 +49,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   const [imageError, setImageError] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
 
+  const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+
   return (
     <div 
       className={cn(
-        "relative group transition-all duration-300 ease-out transform",
+        "relative group transition-all duration-300 ease-out transform perspective-1000",
         (isHovered || isSelected) && "scale-[1.02]"
       )}
       onClick={() => onSelect(option.id)}
@@ -71,7 +73,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
       <div 
         className={cn(
-          "transition-all duration-300 ease-out cursor-pointer",
+          "transition-all duration-300 ease-out cursor-pointer overflow-hidden",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
           type !== 'text' && "border border-[#9F9EA1]/30 rounded-lg",
           isSelected 
@@ -85,7 +87,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         )}
       >
         {type !== 'text' && option.imageUrl && (
-          <div className="w-full overflow-hidden">
+          <div className={cn(
+            "w-full overflow-hidden relative",
+            is3DQuestion && "transform-gpu transition-transform duration-300",
+            is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12"
+          )}>
             <AspectRatio 
               ratio={option.imageUrl.includes('sapatos') ? 1 : 3/4} 
               className="w-full"
@@ -117,9 +123,16 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         )}
         
         <p className={cn(
-          "cursor-pointer transition-colors duration-300 text-brand-coffee",
+          "cursor-pointer transition-all duration-300",
           type !== 'text' 
-            ? "text-[0.6rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium" 
+            ? cn(
+                "text-[0.6rem] sm:text-[0.8rem] leading-tight font-medium",
+                "absolute bottom-0 left-0 right-0 z-10",
+                "bg-gradient-to-t from-black/70 to-transparent p-3",
+                isSelected || isHovered 
+                  ? "text-white transform translate-y-0 opacity-100" 
+                  : "text-brand-coffee bg-white/95 transform translate-y-2 opacity-0"
+              )
             : isMobile 
               ? "text-xs leading-relaxed" 
               : "text-lg leading-relaxed"
@@ -132,3 +145,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
