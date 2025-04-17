@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
-import type { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
+import type { QuizQuestion as QuizQuestionType, QuizOption, UserResponse } from '../types/quiz';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface QuizQuestionProps {
@@ -12,6 +12,37 @@ interface QuizQuestionProps {
   currentAnswers: string[];
   autoAdvance?: boolean;
 }
+
+// Function to highlight strategic words with bold
+const highlightStrategicWords = (text: string): React.ReactNode => {
+  // List of strategic words to highlight based on style categories
+  const strategicWords = [
+    'confortáveis', 'soltos', 'práticos', 'discretas', 'clássico', 'despercebidas',
+    'refinados', 'perfeito', 'atual', 'delicadas', 'suaves', 'fluídas',
+    'marquem', 'decotes', 'fendas', 'estruturadas', 'assimétricas', 'modernas',
+    'marcantes', 'mix', 'informal', 'espontânea', 'essencialista', 'conservadora',
+    'exigente', 'sofisticada', 'feminina', 'meiga', 'sensível', 'glamorosa',
+    'sensual', 'cosmopolita', 'audaciosa', 'exótica', 'aventureira', 'leve',
+    'tradicional', 'casual', 'imponente', 'romântico', 'urbano', 'criativo',
+    'colorido', 'ousado', 'discretos', 'sutis', 'clean', 'status', 'laços',
+    'babados', 'couro', 'zíper', 'firmeza', 'peso', 'exclusivos', 'identidade',
+    'flamingo', 'cores', 'marcado', 'definido'
+  ];
+
+  // Create a regex pattern from the strategic words
+  const pattern = new RegExp(`(${strategicWords.join('|')})`, 'gi');
+  
+  // Split the text by the pattern and create an array of normal and bold elements
+  const parts = text.split(pattern);
+  
+  return parts.map((part, index) => {
+    // Check if this part matches any strategic word (case insensitive)
+    if (strategicWords.some(word => part.toLowerCase() === word.toLowerCase())) {
+      return <strong key={index}>{part}</strong>;
+    }
+    return part;
+  });
+};
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
@@ -98,7 +129,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   "cursor-pointer text-[#1A1818]/80 text-center max-w-[280px] mx-auto",
                   question.type !== 'text' ? "text-2xs leading-none" : "text-xs leading-tight"
                 )}>
-                  {option.text}
+                  {highlightStrategicWords(option.text)}
                 </p>
               </div>
             </div>
