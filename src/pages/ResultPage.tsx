@@ -1,45 +1,57 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { Navigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { QuizResult as QuizResultType } from '../types/quiz';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
+  const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
 
   useEffect(() => {
-    // Log para depuração
-    console.log('ResultPage - quizResult:', quizResult);
-  }, [quizResult]);
-
-  // Se não houver resultado, tente buscar do localStorage
-  if (!quizResult) {
-    console.log('No quizResult in state, checking localStorage...');
-    const savedResult = localStorage.getItem('quizResult');
-    
-    if (!savedResult) {
-      console.log('No saved results found, redirecting to home page');
-      return <Navigate to="/" replace />;
+    // Attempt to load results from state or localStorage
+    if (quizResult) {
+      console.log('Using quizResult from state:', quizResult);
+      setLocalResult(quizResult);
+    } else {
+      console.log('No quizResult in state, checking localStorage...');
+      const savedResultStr = localStorage.getItem('quizResult');
+      
+      if (savedResultStr) {
+        try {
+          const savedResult = JSON.parse(savedResultStr);
+          console.log('Found saved results in localStorage:', savedResult);
+          setLocalResult(savedResult);
+        } catch (error) {
+          console.error('Error parsing saved results:', error);
+        }
+      } else {
+        console.log('No saved results found');
+      }
     }
-    
-    // Se encontrar no localStorage, continue com a renderização
-    console.log('Found saved results in localStorage');
-  }
+  }, [quizResult]);
 
   const handleRetakeQuiz = () => {
     resetQuiz();
     window.location.href = '/';
   };
 
+  // If no results found at all, redirect to homepage
+  if (!quizResult && !localResult && !localStorage.getItem('quizResult')) {
+    console.log('No results found, redirecting to home page');
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <div>
-      {quizResult ? (
+      {(quizResult || localResult) ? (
         <>
           <QuizResult 
-            primaryStyle={quizResult.primaryStyle} 
-            secondaryStyles={quizResult.secondaryStyles} 
+            primaryStyle={(quizResult || localResult)!.primaryStyle} 
+            secondaryStyles={(quizResult || localResult)!.secondaryStyles} 
           />
           <div className="max-w-4xl mx-auto py-8 px-4">
             <Button 

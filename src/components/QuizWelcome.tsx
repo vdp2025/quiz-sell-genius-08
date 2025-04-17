@@ -15,7 +15,10 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
 
   const handleStart = () => {
     if (name.trim()) {
+      // Save to both context and localStorage for redundancy
       login(name.trim());
+      localStorage.setItem('userName', name.trim());
+      console.log('User name saved:', name.trim());
       onStart();
     }
   };

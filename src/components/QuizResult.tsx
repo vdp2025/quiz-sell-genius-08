@@ -1,9 +1,10 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, ShoppingCart, Gift as GiftIcon } from 'lucide-react';
+import { ArrowRight, ShoppingCart, GiftIcon } from 'lucide-react';
 import { styleConfig } from '../config/styleConfig';
 
 interface QuizResultProps {
@@ -13,7 +14,22 @@ interface QuizResultProps {
 
 const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }) => {
   const { user } = useAuth();
-  const userName = user?.userName || 'Visitante';
+  const [userName, setUserName] = useState<string>('Visitante');
+  
+  useEffect(() => {
+    // Try to get name from context first
+    if (user && user.userName) {
+      setUserName(user.userName);
+      console.log("Setting name from auth context:", user.userName);
+    } else {
+      // Fall back to localStorage
+      const storedName = localStorage.getItem('userName');
+      if (storedName) {
+        setUserName(storedName);
+        console.log("Setting name from localStorage:", storedName);
+      }
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
@@ -24,7 +40,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
             alt="Logo Gisele Galvão"
             className="h-16 mx-auto"
           />
-          <h1 className="font-playfair text-2xl md:text-4xl font-semibold text-[#432818]">
+          <h1 className="font-playfair text-xl md:text-4xl font-semibold text-[#432818]">
             Olá, {userName}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
           </h1>
         </div>
@@ -36,7 +52,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                 <img
                   src={styleConfig[primaryStyle.category].image}
                   alt={`Estilo ${primaryStyle.category}`}
-                  className="w-full h-[200px] md:h-[300px] object-contain rounded-lg shadow-sm"
+                  className="w-full h-[200px] md:h-[300px] object-contain scale-90 rounded-lg shadow-sm"
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
@@ -63,7 +79,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                         <img
                           src={styleConfig[style.category].image}
                           alt={`Estilo ${style.category}`}
-                          className="w-16 h-16 object-contain rounded"
+                          className="w-16 h-16 object-contain scale-90 rounded"
                         />
                         <div className="flex-1">
                           <div className="flex justify-between items-center mb-1">
