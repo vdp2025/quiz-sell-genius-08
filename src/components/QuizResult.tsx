@@ -1,58 +1,11 @@
-
 import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Award, Gift, ShoppingCart } from 'lucide-react';
-
-interface StyleDescriptionProps {
-  styleCategory: StyleResult['category'];
-}
-
-const StyleDescription: React.FC<StyleDescriptionProps> = ({ styleCategory }) => {
-  const descriptions: Record<StyleResult['category'], { title: string; description: string }> = {
-    'Natural': {
-      title: 'Estilo Natural',
-      description: 'Você valoriza o conforto, praticidade e autenticidade. Suas escolhas de vestuário refletem uma personalidade descomplicada e uma abordagem relaxada à moda.'
-    },
-    'Clássico': {
-      title: 'Estilo Clássico',
-      description: 'Você aprecia peças atemporais, elegância discreta e qualidade. Sua abordagem à moda é refinada, organizada e foca em investimentos duradouros.'
-    },
-    'Contemporâneo': {
-      title: 'Estilo Contemporâneo',
-      description: 'Você busca o equilíbrio entre o clássico e o moderno, valorizando peças atuais mas com praticidade e versatilidade no dia a dia.'
-    },
-    'Elegante': {
-      title: 'Estilo Elegante',
-      description: 'Você preza pela sofisticação, requinte e apresentação impecável. Sua imagem transmite status, excelência e um gosto refinado.'
-    },
-    'Romântico': {
-      title: 'Estilo Romântico',
-      description: 'Você valoriza a delicadeza, feminilidade e os detalhes suaves. Sua aparência expressa sensibilidade e uma natureza sonhadora.'
-    },
-    'Sexy': {
-      title: 'Estilo Sexy',
-      description: 'Você gosta de valorizar suas curvas e atrair olhares. Sua imagem transmite confiança, sensualidade e uma personalidade marcante.'
-    },
-    'Dramático': {
-      title: 'Estilo Dramático',
-      description: 'Você aprecia peças com impacto visual, estrutura e modernidade. Sua imagem comunica ousadia, autoridade e uma mentalidade vanguardista.'
-    },
-    'Criativo': {
-      title: 'Estilo Criativo',
-      description: 'Você gosta de experimentar, misturar e expressar sua individualidade. Sua imagem reflete originalidade, liberdade e uma personalidade artística.'
-    }
-  };
-
-  return (
-    <div className="space-y-2">
-      <h3 className="text-xl font-playfair text-[#432818]">{descriptions[styleCategory].title}</h3>
-      <p className="text-[#1A1818]/80">{descriptions[styleCategory].description}</p>
-    </div>
-  );
-};
+import { styleConfig } from '../config/styleConfig';
+import { cn } from '@/lib/utils';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -73,24 +26,22 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
             className="h-16 mx-auto"
           />
           <h1 className="font-playfair text-4xl font-semibold text-[#432818]">
-            Seu Resultado, {user?.userName || 'Visitante'}!
+            Olá, {user?.userName || 'Visitante'}, seu Estilo Predominante é: {primaryStyle.category} ({primaryStyle.percentage}%)
           </h1>
-          <p className="text-lg text-[#1A1818]/80 max-w-2xl mx-auto">
-            Com base nas suas respostas, identificamos seu estilo predominante e estilos complementares.
-            Use essas informações para construir um guarda-roupa que realmente combine com sua personalidade!
-          </p>
         </div>
 
         <Card className="p-8 bg-white shadow-md">
-          <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
-            <div className="w-full md:w-1/3 flex justify-center">
-              <div className="rounded-full bg-[#B89B7A]/20 p-6 inline-block">
-                <Award className="w-24 h-24 text-[#B89B7A]" />
-              </div>
+          <div className="flex flex-col md:flex-row items-start gap-8">
+            <div className="w-full md:w-1/3">
+              <img
+                src={styleConfig[primaryStyle.category].image}
+                alt={`Estilo ${primaryStyle.category}`}
+                className="w-full rounded-lg shadow-sm"
+              />
             </div>
             <div className="w-full md:w-2/3 space-y-4">
               <h2 className="text-3xl font-playfair text-[#432818]">
-                Seu estilo predominante é: <span className="font-semibold">{primaryStyle.category}</span>
+                {primaryStyle.category}
               </h2>
               <div className="w-full bg-gray-200 rounded-full h-4">
                 <div 
@@ -98,29 +49,45 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                   style={{ width: `${primaryStyle.percentage}%` }}
                 ></div>
               </div>
-              <p className="text-sm text-end">{primaryStyle.percentage}%</p>
-              <StyleDescription styleCategory={primaryStyle.category} />
+              <p className="text-[#1A1818]/80 text-lg">
+                {styleConfig[primaryStyle.category].description}
+              </p>
             </div>
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {topThreeStyles.map((style, index) => (
-            <Card key={style.category} className="p-6 bg-white shadow-sm">
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-playfair text-xl text-[#432818]">{style.category}</h3>
-                  <span className="text-sm font-medium">{style.percentage}%</span>
+        <div className="space-y-4">
+          <h3 className="text-2xl font-playfair text-center text-[#432818] mb-6">
+            Seus Estilos Complementares
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {secondaryStyles.slice(0, 2).map((style, index) => (
+              <Card key={style.category} className="p-6 bg-white shadow-sm">
+                <div className="flex gap-4">
+                  <img
+                    src={styleConfig[style.category].image}
+                    alt={`Estilo ${style.category}`}
+                    className="w-24 h-24 object-cover rounded"
+                  />
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="font-playfair text-xl text-[#432818]">{style.category}</h4>
+                      <span className="text-sm font-medium">{style.percentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                      <div 
+                        className="bg-[#B89B7A] h-2 rounded-full" 
+                        style={{ width: `${style.percentage}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-sm text-[#1A1818]/80">
+                      {styleConfig[style.category].description}
+                    </p>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-[#B89B7A] h-2 rounded-full" 
-                    style={{ width: `${style.percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </div>
         </div>
 
         <div className="space-y-6">
