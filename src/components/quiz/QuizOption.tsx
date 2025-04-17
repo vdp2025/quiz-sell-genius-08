@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -66,8 +67,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee relative",
-                isQuestionOneOrTwo 
-                  ? "text-[0.55rem] sm:text-[0.65rem]"
+                isQuestionOneOrTwo && isMobile
+                  ? "text-[0.45rem] sm:text-[0.55rem]" // Reduced font size for mobile on questions 1 and 2
                   : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
