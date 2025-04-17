@@ -1,8 +1,10 @@
+
 import React, { useEffect } from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
 import type { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -17,6 +19,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = true,
 }) => {
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     if (question.type !== 'text') {
       question.options.forEach(opt => {
@@ -58,7 +62,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           "grid gap-6",
           question.type === 'text' 
             ? "grid-cols-1" 
-            : "grid-cols-1 md:grid-cols-2"
+            : "grid-cols-2"
         )}>
           {question.options.map((option) => (
             <div 
