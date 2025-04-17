@@ -31,15 +31,23 @@ export const useQuizLogic = () => {
       ...prev,
       [questionId]: selectedOptions
     }));
+    
+    console.log(`Question ${questionId} answered with options:`, selectedOptions);
   }, []);
 
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
+      console.log('Last question reached, calculating results...');
       const results = calculateResults();
       setQuizCompleted(true);
-      console.log('Quiz completed. Results:', results);
+      
+      // Redirect to results page
+      if (results) {
+        console.log('Redirecting to results page...');
+        window.location.href = '/resultado';
+      }
     }
   }, [currentQuestionIndex]);
 
@@ -114,18 +122,30 @@ export const useQuizLogic = () => {
     });
 
     console.log('Checking if quiz is complete:', allQuestionsAnswered);
+    console.log('Current answers:', answers);
 
     if (allQuestionsAnswered) {
+      console.log('All questions answered. Calculating results...');
       const results = calculateResults();
       setQuizCompleted(true);
       
-      // Navigate to results page after a short delay to ensure state updates
+      // Navigate to results page immediately
       if (results) {
-        console.log('All questions answered. Redirecting to results page...');
+        console.log('Quiz completed successfully. Redirecting to results page...');
+        // Use a timeout to ensure state is updated before redirect
         setTimeout(() => {
           window.location.href = '/resultado';
-        }, 500);
+        }, 300);
       }
+    } else {
+      console.log('Quiz is not complete yet. Missing answers for some questions.');
+      // Log which questions are missing answers
+      quizQuestions.forEach(question => {
+        const questionAnswers = answers[question.id] || [];
+        if (questionAnswers.length !== question.multiSelect) {
+          console.log(`Question ${question.id} needs ${question.multiSelect} answers but has ${questionAnswers.length}`);
+        }
+      });
     }
   }, [answers, calculateResults]);
 

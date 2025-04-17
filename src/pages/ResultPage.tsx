@@ -10,12 +10,14 @@ import { QuizResult as QuizResultType } from '../types/quiz';
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Attempt to load results from state or localStorage
     if (quizResult) {
       console.log('Using quizResult from state:', quizResult);
       setLocalResult(quizResult);
+      setLoading(false);
     } else {
       console.log('No quizResult in state, checking localStorage...');
       const savedResultStr = localStorage.getItem('quizResult');
@@ -31,6 +33,7 @@ const ResultPage: React.FC = () => {
       } else {
         console.log('No saved results found');
       }
+      setLoading(false);
     }
   }, [quizResult]);
 
@@ -38,6 +41,17 @@ const ResultPage: React.FC = () => {
     resetQuiz();
     window.location.href = '/';
   };
+
+  // If still loading, show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
+        <div className="text-center p-8">
+          <h2 className="text-2xl font-playfair text-[#432818] mb-4">Carregando resultados...</h2>
+        </div>
+      </div>
+    );
+  }
 
   // If no results found at all, redirect to homepage
   if (!quizResult && !localResult && !localStorage.getItem('quizResult')) {
