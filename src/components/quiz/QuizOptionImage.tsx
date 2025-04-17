@@ -110,7 +110,10 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
               isSelected && processedImageUrl 
                 ? "scale-[1.15] -mt-3 z-10" 
                 : "scale-100",
-              !isMobile && !isSelected && isHovered && "scale-105"
+              (!isMobile && !isSelected && isHovered) || 
+              (isMobile && isSelected) 
+                ? "scale-105" 
+                : ""
             )}
             onError={() => setImageError(true)}
           />

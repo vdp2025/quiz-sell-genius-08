@@ -28,6 +28,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
     >
       <div className={cn(
         "absolute -top-1 -right-1 z-10 w-4 h-4 rounded-full transition-all duration-300",
@@ -44,14 +46,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col",
           "transition-colors duration-300 ease-out",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-visible",
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/70 bg-[#B89B7A]/5" 
               : "border-[#B89B7A]/70"
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
-              : "hover:border-[#B89B7A]/50"
+              : "hover:border-[#B89B7A]/50",
         )}
       >
         {type !== 'text' && option.imageUrl && (
