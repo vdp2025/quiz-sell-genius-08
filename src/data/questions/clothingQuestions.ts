@@ -67,56 +67,56 @@ export const clothingQuestions: QuizQuestion[] = [
       {
         id: '3a',
         text: 'Visual leve, despojado e natural.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+        imageUrl: '/lovable-uploads/24f7dc2c-ab37-41ba-a154-786b0626ae04.png',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '3b',
         text: 'Visual clássico e tradicional.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp',
+        imageUrl: '/lovable-uploads/0fb54364-9c71-4373-b6e7-500e6f9a2732.png',
         styleCategory: 'Clássico',
         points: 1
       },
       {
         id: '3c',
         text: 'Visual casual com toque atual.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+        imageUrl: '/lovable-uploads/22d18ed7-b1fc-4fb4-9538-f0ab93fe5c75.png',
         styleCategory: 'Contemporâneo',
         points: 1
       },
       {
         id: '3d',
         text: 'Visual refinado e imponente.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
+        imageUrl: '/lovable-uploads/e779494d-0c8d-408d-b034-1964a3b76469.png',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '3e',
         text: 'Visual romântico, feminino e delicado.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+        imageUrl: '/lovable-uploads/94638e1c-0180-4cfd-80be-26db97a1e58f.png',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '3f',
         text: 'Visual sensual, com saia justa e decote.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+        imageUrl: '/lovable-uploads/919b184d-940d-4a4f-b53c-36792cbd6114.png',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '3g',
         text: 'Visual marcante e urbano (jeans + jaqueta).',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+        imageUrl: '/lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '3h',
         text: 'Visual criativo, colorido e ousado.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
+        imageUrl: '/lovable-uploads/d633e490-d0f2-4429-998e-bceeeda790f8.png',
         styleCategory: 'Criativo',
         points: 1
       }
