@@ -5,6 +5,7 @@ import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, ShoppingCart, GiftIcon } from 'lucide-react';
 import { styleConfig } from '../config/styleConfig';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -14,6 +15,7 @@ interface QuizResultProps {
 const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }) => {
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (user && user.userName) {
@@ -46,32 +48,63 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
         </div>
 
         <Card className="p-3 md:p-6 bg-white shadow-md">
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-            <div className="flex flex-col space-y-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl md:text-2xl font-playfair text-[#B89B7A]">
-                  {primaryStyle.category}
-                </h2>
-                <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
+          {isMobile ? (
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-playfair text-[#B89B7A]">
+                      {primaryStyle.category}
+                    </h2>
+                    <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                    <div 
+                      className="bg-[#B89B7A] h-1.5 rounded-full transition-all duration-300 ease-in-out" 
+                      style={{ width: `${primaryStyle.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="w-32 flex-shrink-0">
+                  <img
+                    src={styleConfig[primaryStyle.category].image}
+                    alt={`Estilo ${primaryStyle.category}`}
+                    className="w-full h-32 object-contain scale-90 rounded-lg shadow-sm"
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-1.5">
-                <div 
-                  className="bg-[#B89B7A] h-1.5 rounded-full transition-all duration-300 ease-in-out" 
-                  style={{ width: `${primaryStyle.percentage}%` }}
-                ></div>
-              </div>
-              <p className="text-[#1A1818]/80 text-sm md:text-base">
+              <p className="text-[#1A1818]/80 text-sm">
                 {styleConfig[primaryStyle.category].description}
               </p>
             </div>
-            <div className="w-full md:w-48 lg:w-64 flex-shrink-0">
-              <img
-                src={styleConfig[primaryStyle.category].image}
-                alt={`Estilo ${primaryStyle.category}`}
-                className="w-full h-[200px] md:h-[250px] object-contain scale-90 rounded-lg shadow-sm mx-auto"
-              />
+          ) : (
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl md:text-2xl font-playfair text-[#B89B7A]">
+                    {primaryStyle.category}
+                  </h2>
+                  <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                  <div 
+                    className="bg-[#B89B7A] h-1.5 rounded-full transition-all duration-300 ease-in-out" 
+                    style={{ width: `${primaryStyle.percentage}%` }}
+                  ></div>
+                </div>
+                <p className="text-[#1A1818]/80 text-sm md:text-base">
+                  {styleConfig[primaryStyle.category].description}
+                </p>
+              </div>
+              <div className="w-full md:w-48 lg:w-64 flex-shrink-0">
+                <img
+                  src={styleConfig[primaryStyle.category].image}
+                  alt={`Estilo ${primaryStyle.category}`}
+                  className="w-full h-[200px] md:h-[250px] object-contain scale-90 rounded-lg shadow-sm mx-auto"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mt-4 md:mt-6 space-y-3">
             <h3 className="text-base md:text-lg font-playfair text-[#432818]">
