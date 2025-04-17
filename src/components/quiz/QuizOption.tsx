@@ -54,7 +54,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group transition-all duration-300 ease-out transform perspective-1000",
-        (isHovered || isSelected) && "scale-[1.02] z-10"
+        !isMobile && (isHovered || isSelected) && "scale-[1.02] z-10",
+        isMobile && isSelected && "scale-[1.02] z-10"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -72,7 +73,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
       <div 
         className={cn(
-          "transition-all duration-300 ease-out cursor-pointer overflow-visible",
+          "transition-all duration-300 ease-out cursor-pointer overflow-hidden",
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
           type !== 'text' && "border border-[#9F9EA1]/30 rounded-lg",
           isSelected 
@@ -82,14 +83,16 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             : type === 'text' 
               ? "hover:border-[#B89B7A]/40 hover:bg-[#B89B7A]/5" 
               : "border-[#9F9EA1]/30 hover:border-[#B89B7A]/40",
-          (isHovered || isSelected) && "shadow-xl"
+          isMobile && isSelected && "shadow-xl",
+          !isMobile && (isHovered || isSelected) && "shadow-xl"
         )}
       >
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
-            "w-full overflow-visible relative",
+            "w-full overflow-hidden relative",
             is3DQuestion && "transform-gpu transition-transform duration-300",
-            is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12"
+            !isMobile && is3DQuestion && (isHovered || isSelected) && "rotate-y-12 rotate-x-12",
+            isMobile && is3DQuestion && isSelected && "rotate-y-12 rotate-x-12"
           )}>
             <AspectRatio 
               ratio={option.imageUrl.includes('sapatos') ? 1 : 3/4} 
@@ -109,15 +112,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                   className={cn(
                     "object-cover w-full h-full transition-all duration-300 ease-out",
                     isMobile 
-                      ? (isSelected || isHovered) ? "scale-[1.6]" : "scale-[1.3]"
+                      ? isSelected ? "scale-[1.3]" : "scale-[1.0]"
                       : (isSelected || isHovered) ? "scale-[1.4]" : "scale-[1.1]"
                   )}
                   style={{ 
                     transformOrigin: 'center center',
                     objectFit: option.imageUrl.includes('sapatos') ? 'contain' : 'cover',
-                    margin: isMobile ? '-10%' : '-5%',
-                    width: isMobile ? '120%' : '110%',
-                    height: isMobile ? '120%' : '110%'
+                    margin: isMobile ? '0' : '-5%',
+                    width: isMobile ? '100%' : '110%',
+                    height: isMobile ? '100%' : '110%'
                   }}
                   onError={() => setImageError(true)}
                 />
