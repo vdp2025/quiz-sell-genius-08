@@ -30,14 +30,14 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
 
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-2 md:px-4 py-4 md:py-8">
-      <div className="max-w-4xl mx-auto space-y-6 md:space-y-10">
-        <div className="text-center space-y-3 md:space-y-4">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
+        <div className="text-center space-y-3">
           <img
             src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
             alt="Logo Gisele Galvão"
-            className="h-10 md:h-16 mx-auto"
+            className="h-10 md:h-14 mx-auto"
           />
-          <h1 className="font-playfair text-xl md:text-3xl font-semibold text-[#432818] px-2">
+          <h1 className="font-playfair text-lg md:text-2xl font-semibold text-[#432818] px-2">
             Olá, {userName}, seu Estilo Predominante é:{' '}
             <span className="text-[#B89B7A]">
               {primaryStyle.category}
@@ -45,71 +45,69 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           </h1>
         </div>
 
-        <Card className="p-3 md:p-8 bg-white shadow-md">
-          <div className="space-y-4 md:space-y-8">
-            <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8">
-              <div className="w-full md:w-1/3">
-                <img
-                  src={styleConfig[primaryStyle.category].image}
-                  alt={`Estilo ${primaryStyle.category}`}
-                  className="w-full h-[200px] md:h-[300px] object-contain scale-90 rounded-lg shadow-sm mx-auto"
-                />
+        <Card className="p-3 md:p-6 bg-white shadow-md">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+            <div className="flex flex-col space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl md:text-2xl font-playfair text-[#B89B7A]">
+                  {primaryStyle.category}
+                </h2>
+                <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
               </div>
-              <div className="w-full md:w-2/3 space-y-3 md:space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl md:text-3xl font-playfair text-[#432818]">
-                    {primaryStyle.category}
-                  </h2>
-                  <span className="text-sm font-medium">{primaryStyle.percentage}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-[#B89B7A]/70 h-2 rounded-full transition-all duration-300 ease-in-out" 
-                    style={{ width: `${primaryStyle.percentage}%` }}
-                  ></div>
-                </div>
-                <p className="text-[#1A1818]/80 text-sm md:text-lg">
-                  {styleConfig[primaryStyle.category].description}
-                </p>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div 
+                  className="bg-[#B89B7A] h-1.5 rounded-full transition-all duration-300 ease-in-out" 
+                  style={{ width: `${primaryStyle.percentage}%` }}
+                ></div>
+              </div>
+              <p className="text-[#1A1818]/80 text-sm md:text-base">
+                {styleConfig[primaryStyle.category].description}
+              </p>
+            </div>
+            <div className="w-full md:w-48 lg:w-64 flex-shrink-0">
+              <img
+                src={styleConfig[primaryStyle.category].image}
+                alt={`Estilo ${primaryStyle.category}`}
+                className="w-full h-[200px] md:h-[250px] object-contain scale-90 rounded-lg shadow-sm mx-auto"
+              />
+            </div>
+          </div>
 
-                <div className="mt-4 md:mt-6 space-y-3 md:space-y-4">
-                  <h3 className="text-lg md:text-xl font-playfair text-[#432818]">
-                    Seus Estilos Complementares
-                  </h3>
-                  <div className="grid grid-cols-1 gap-3 md:gap-4">
-                    {secondaryStyles.slice(0, 2).map((style, index) => (
-                      <div key={style.category} className="flex gap-3 md:gap-4 items-start bg-gray-50 p-3 md:p-4 rounded-lg">
-                        <img
-                          src={styleConfig[style.category].image}
-                          alt={`Estilo ${style.category}`}
-                          className="w-16 md:w-20 h-16 md:h-20 object-contain scale-90 rounded"
-                        />
-                        <div className="flex-1">
-                          <div className="flex justify-between items-center mb-1 md:mb-2">
-                            <h4 className="font-playfair text-base md:text-lg text-[#432818]">{style.category}</h4>
-                            <span className="text-xs md:text-sm font-medium">{style.percentage}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                            <div 
-                              className="bg-[#B89B7A]/70 h-2 rounded-full" 
-                              style={{ width: `${style.percentage}%` }}
-                            ></div>
-                          </div>
-                          <p className="text-xs md:text-base text-[#1A1818]/70">
-                            {styleConfig[style.category].description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+          <div className="mt-4 md:mt-6 space-y-3">
+            <h3 className="text-base md:text-lg font-playfair text-[#432818]">
+              Seus Estilos Complementares
+            </h3>
+            <div className="grid grid-cols-1 gap-3">
+              {secondaryStyles.slice(0, 2).map((style, index) => (
+                <div key={style.category} className="flex gap-3 items-start bg-gray-50 p-2 md:p-3 rounded-lg">
+                  <img
+                    src={styleConfig[style.category].image}
+                    alt={`Estilo ${style.category}`}
+                    className="w-14 md:w-16 h-14 md:h-16 object-contain scale-90 rounded"
+                  />
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center mb-1">
+                      <h4 className="font-playfair text-sm md:text-base text-[#432818]">{style.category}</h4>
+                      <span className="text-xs font-medium">{style.percentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1">
+                      <div 
+                        className="bg-[#B89B7A] h-1 rounded-full" 
+                        style={{ width: `${style.percentage}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs md:text-sm text-[#1A1818]/70 mt-1">
+                      {styleConfig[style.category].description}
+                    </p>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 md:p-8 border-2 border-[#B89B7A] bg-white">
-          <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center">
+        <Card className="p-3 md:p-6 border border-[#B89B7A] bg-white">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center">
             <div className="w-full md:w-1/3">
               <div className="bg-[#B89B7A]/10 rounded-lg p-4 md:p-6 flex justify-center">
                 <GiftIcon className="w-16 h-16 md:w-24 md:h-24 text-[#B89B7A]" />
@@ -150,7 +148,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
           </div>
         </Card>
           
-        <div className="text-center mt-8">
+        <div className="text-center mt-6">
           <p className="text-[#1A1818]/80 mb-4">
             Aproveite esta oferta especial por tempo limitado!
           </p>
