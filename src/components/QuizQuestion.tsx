@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -52,8 +53,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         id={`question-${question.id}`}
       >
         <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold tracking-tighter",
-          isStrategicQuestion && "text-[#432818] tracking-tighter inline-block"
+          "text-base sm:text-xl font-playfair text-center mb-4 px-2 pt-2 text-[#432818] font-semibold tracking-normal", // Changed tracking from 'tighter' to 'normal'
+          isStrategicQuestion && "text-[#432818] tracking-normal inline-block"
         )}>
           {highlightStrategicWords(question.title)}
         </h2>
@@ -86,3 +87,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
