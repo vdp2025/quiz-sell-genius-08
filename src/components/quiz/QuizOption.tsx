@@ -85,7 +85,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         {type !== 'text' && option.imageUrl && (
           <div className={cn(
             "overflow-hidden w-full",
-            "sm:scale-90", // New: Reduce image size on desktop
+            "sm:scale-90", // Reduce image size on desktop
             option.imageUrl.includes('sapatos') || option.imageUrl.includes('roupa') 
               ? "aspect-square" 
               : "aspect-[3/4]"
@@ -117,7 +117,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           "cursor-pointer transition-colors duration-300",
           type !== 'text' 
-            ? "text-[0.8rem] sm:text-[0.9rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-gray-800" 
+            ? "text-[0.7rem] sm:text-[0.8rem] leading-tight bg-white/95 px-2 py-1.5 font-medium text-gray-800" 
             : isMobile 
               ? "text-xs leading-relaxed" 
               : "text-lg leading-relaxed",
