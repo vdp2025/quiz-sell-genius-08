@@ -86,11 +86,13 @@ const QuizPage: React.FC = () => {
 
   useEffect(() => {
     if (quizContainerRef.current) {
+      // Adicionando verificação para garantir que o elemento de questão exista
       const questionElement = document.getElementById(
-        showingStrategicQuestions 
+        showingStrategicQuestions && currentStrategicQuestionIndex < strategicQuestions.length
           ? `question-${strategicQuestions[currentStrategicQuestionIndex].id}`
-          : `question-${currentQuestion.id}`
+          : currentQuestion ? `question-${currentQuestion.id}` : ''
       );
+      
       if (questionElement) {
         questionElement.scrollIntoView({ 
           behavior: 'smooth', 
@@ -98,7 +100,7 @@ const QuizPage: React.FC = () => {
         });
       }
     }
-  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions]);
+  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, currentQuestion]);
 
   const handleTransitionContinue = () => {
     console.log('Transition continue clicked, showing strategic questions');
@@ -126,6 +128,10 @@ const QuizPage: React.FC = () => {
     return <QuizFinalTransition onShowResult={handleShowResult} />;
   }
 
+  // Garantir que temos questões para mostrar
+  const hasStrategicQuestion = showingStrategicQuestions && 
+                              currentStrategicQuestionIndex < strategicQuestions.length;
+  
   const currentProgress = showingStrategicQuestions
     ? Math.round(((currentStrategicQuestionIndex + 1) / strategicQuestions.length) * 100)
     : Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
@@ -133,14 +139,6 @@ const QuizPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
-            alt="Logo Gisele Galvão"
-            className="h-16 mx-auto mb-6"
-          />
-        </div>
-
         <AnimatedWrapper>
           <Progress 
             value={currentProgress}
@@ -158,35 +156,33 @@ const QuizPage: React.FC = () => {
           </div>
         </AnimatedWrapper>
 
-        {showingStrategicQuestions ? (
+        {hasStrategicQuestion ? (
           <QuizQuestion
             question={strategicQuestions[currentStrategicQuestionIndex]}
             onAnswer={handleStrategicAnswer}
             currentAnswers={strategicAnswers[strategicQuestions[currentStrategicQuestionIndex].id] || []}
             autoAdvance={true}
           />
-        ) : (
+        ) : !showingStrategicQuestions && currentQuestion ? (
           <QuizQuestion
             question={currentQuestion}
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers}
           />
-        )}
+        ) : null}
 
-        {!showingStrategicQuestions && (
+        {!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0 && (
           <div className="flex justify-between mt-8">
-            {currentQuestionIndex > 0 && (
-              <AnimatedWrapper className="flex">
-                <Button
-                  onClick={handlePrevious}
-                  variant="outline"
-                  className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Voltar
-                </Button>
-              </AnimatedWrapper>
-            )}
+            <AnimatedWrapper className="flex">
+              <Button
+                onClick={handlePrevious}
+                variant="outline"
+                className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Voltar
+              </Button>
+            </AnimatedWrapper>
           </div>
         )}
       </div>
