@@ -37,18 +37,15 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
         <div className="text-center space-y-3">
           <Logo className="h-10 md:h-14 mx-auto" />
           <h1 className="font-playfair text-lg md:text-2xl font-semibold text-[#432818] px-2">
-            Olá, {userName}, seu Estilo Predominante é:{' '}
-            <span className="text-[#B89B7A]">
-              {primaryStyle.category}
-            </span>
+            Olá, {userName}, seu Estilo Predominante é:
           </h1>
         </div>
 
         <Card className="p-3 md:p-6 bg-white shadow-md">
           {isMobile ? (
             <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-3">
-                <div>
+              <div className="flex gap-4">
+                <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <h2 className="text-xl font-playfair text-[#B89B7A]">
                       {primaryStyle.category}
@@ -65,11 +62,11 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                     {styleConfig[primaryStyle.category].description}
                   </p>
                 </div>
-                <div className="w-48 mx-auto">
+                <div className="w-32 flex-shrink-0">
                   <img
                     src={styleConfig[primaryStyle.category].image}
                     alt={`Estilo ${primaryStyle.category}`}
-                    className="w-full h-48 object-contain scale-90 rounded-lg shadow-sm"
+                    className="w-full h-32 object-contain scale-90 rounded-lg shadow-sm"
                   />
                 </div>
               </div>
