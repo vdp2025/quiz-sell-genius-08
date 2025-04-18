@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { EditorConfig } from '@/types/editor';
 import { useEditorBlocks } from './editor/useEditorBlocks';
@@ -30,6 +29,16 @@ export const useEditor = () => {
 
   const clearEditor = () => setConfig(defaultConfig);
 
+  const saveConfig = async () => {
+    try {
+      localStorage.setItem('editorConfig', JSON.stringify(config));
+      return true;
+    } catch (error) {
+      console.error('Error saving editor configuration:', error);
+      return false;
+    }
+  };
+
   return {
     config,
     updateConfig: setConfig,
@@ -37,5 +46,6 @@ export const useEditor = () => {
     ...blockActions,
     ...themeActions,
     ...templateActions,
+    saveConfig
   };
 };

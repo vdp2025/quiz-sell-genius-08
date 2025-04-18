@@ -2,7 +2,19 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Type, Image, ListChecks, MessageSquare, DollarSign } from 'lucide-react';
+import { 
+  LayoutTemplate,
+  Image,
+  Type,
+  ListChecks,
+  MessageSquare,
+  DollarSign,
+  Shield,
+  MousePointer,
+  Award,
+  Layout,
+  Gift
+} from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
 
 interface ComponentsSidebarProps {
@@ -11,22 +23,28 @@ interface ComponentsSidebarProps {
 
 export function ComponentsSidebar({ onComponentSelect }: ComponentsSidebarProps) {
   const components = [
-    { type: 'headline' as const, label: 'Título', icon: Type },
-    { type: 'text' as const, label: 'Texto', icon: Type },
-    { type: 'image' as const, label: 'Imagem', icon: Image },
-    { type: 'benefits' as const, label: 'Benefícios', icon: ListChecks },
-    { type: 'testimonials' as const, label: 'Depoimentos', icon: MessageSquare },
-    { type: 'pricing' as const, label: 'Preço', icon: DollarSign },
-  ];
+    { type: 'header', label: 'Cabeçalho', icon: LayoutTemplate },
+    { type: 'hero-section', label: 'Seção Hero', icon: Layout },
+    { type: 'bonus-carousel', label: 'Carrossel de Bônus', icon: Gift },
+    { type: 'headline', label: 'Título', icon: Type },
+    { type: 'image', label: 'Imagem', icon: Image },
+    { type: 'text', label: 'Texto', icon: Type },
+    { type: 'benefits', label: 'Benefícios', icon: ListChecks },
+    { type: 'testimonials', label: 'Depoimentos', icon: MessageSquare },
+    { type: 'pricing', label: 'Preço', icon: DollarSign },
+    { type: 'guarantee', label: 'Garantia', icon: Shield },
+    { type: 'cta', label: 'Botão CTA', icon: MousePointer },
+    { type: 'style-result', label: 'Resultado do Estilo', icon: Award },
+  ] as const;
 
   return (
-    <div className="h-full flex flex-col bg-white">
-      <div className="p-4 border-b">
-        <h2 className="font-playfair text-lg text-[#432818]">Componentes</h2>
+    <div className="h-full flex flex-col bg-white border-r border-[#B89B7A]/20">
+      <div className="p-4 border-b border-[#B89B7A]/20">
+        <h2 className="font-semibold text-[#432818]">Componentes</h2>
       </div>
       
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-2">
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-2">
           {components.map((component) => (
             <Button
               key={component.type}

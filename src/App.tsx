@@ -1,39 +1,26 @@
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { AuthProvider } from "./context/AuthContext";
-import { QuizProvider } from "./context/QuizContext";
-import Index from "./pages/Index";
-import ResultPage from "./pages/ResultPage";
-import NotFound from "./pages/NotFound";
-import QuizEditorPage from "./pages/admin/QuizEditorPage";
-import EditorPage from "./pages/admin/EditorPage";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import QuizPage from '@/pages/QuizPage';
+import ResultPage from '@/pages/ResultPage';
+import EditorPage from '@/pages/EditorPage';
 
-const queryClient = new QueryClient();
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <QuizPage />,
+  },
+  {
+    path: '/resultado',
+    element: <ResultPage />,
+  },
+  {
+    path: '/editor',
+    element: <EditorPage />,
+  }
+]);
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AuthProvider>
-        <QuizProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
-              <Route path="/admin/editor" element={<EditorPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </QuizProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;
