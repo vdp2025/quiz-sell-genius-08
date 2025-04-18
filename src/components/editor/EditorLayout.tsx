@@ -61,18 +61,6 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
             <PropertiesPanel
               selectedComponentId={selectedComponent}
               onClose={() => setSelectedComponent(null)}
-              onUpdate={(content) => {
-                if (selectedComponent) {
-                  updateBlock(selectedComponent, content);
-                }
-              }}
-              onDelete={() => {
-                if (selectedComponent) {
-                  deleteBlock(selectedComponent);
-                  setSelectedComponent(null);
-                }
-              }}
-              blocks={config.blocks}
             />
           </div>
         </ResizablePanel>
