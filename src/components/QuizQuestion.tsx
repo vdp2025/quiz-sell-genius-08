@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -72,7 +73,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         )} 
         id={`question-${question.id}`}
       >
-        {/* Only show title if hideTitle is false */}
         {!hideTitle && (
           <h2 className={cn(
             "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
