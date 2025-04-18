@@ -86,6 +86,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               isSelected={currentAnswers.includes(option.id)}
               onSelect={handleOptionSelect}
               type={question.type}
+              questionId={question.id}
             />
           ))}
         </div>
@@ -101,4 +102,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-

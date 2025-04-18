@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -17,7 +18,7 @@ export const useQuizLogic = () => {
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const currentAnswers = answers[currentQuestion?.id] || [];
-  const canProceed = currentAnswers.length === currentQuestion?.multiSelect;
+  const canProceed = currentAnswers.length === (currentQuestion?.multiSelect || 0);
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
 
   useEffect(() => {
@@ -89,6 +90,9 @@ export const useQuizLogic = () => {
         }
       });
     });
+
+    console.log('Style counts:', styleCounter);
+    console.log('Total selections:', totalSelections);
 
     const styleResults: StyleResult[] = Object.entries(styleCounter)
       .map(([category, score]) => ({

@@ -58,15 +58,18 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmit = (response: UserResponse) => {
     handleAnswer(response.questionId, response.selectedOptions);
     
-    if (response.selectedOptions.length === currentQuestion.multiSelect && !isLastQuestion) {
-      setTimeout(() => {
-        handleNext();
-      }, 500);
-    } else if (response.selectedOptions.length === currentQuestion.multiSelect && isLastQuestion) {
-      setTimeout(() => {
-        calculateResults();
-        setShowingTransition(true);
-      }, 800);
+    // Verificamos se o número de opções selecionadas é igual ao número requerido
+    if (response.selectedOptions.length === currentQuestion.multiSelect) {
+      if (!isLastQuestion) {
+        setTimeout(() => {
+          handleNext();
+        }, 500);
+      } else {
+        setTimeout(() => {
+          calculateResults();
+          setShowingTransition(true);
+        }, 800);
+      }
     }
   };
 
