@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Block } from '@/types/editor';
-import { ColorPicker } from '../ColorPicker';
 
 interface HeadlineBlockEditorProps {
   block: Block;
@@ -40,9 +39,11 @@ const HeadlineBlockEditor: React.FC<HeadlineBlockEditorProps> = ({ block, onUpda
       
       <div className="space-y-2">
         <Label htmlFor="textColor">Cor do texto</Label>
-        <ColorPicker
-          color={content.textColor || '#432818'}
-          onChange={(color) => onUpdate({ textColor: color })}
+        <Input
+          id="textColor"
+          type="color"
+          value={content.textColor || '#432818'}
+          onChange={(e) => onUpdate({ textColor: e.target.value })}
         />
       </div>
       

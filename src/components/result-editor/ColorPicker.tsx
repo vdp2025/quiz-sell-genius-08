@@ -1,7 +1,6 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { SketchPicker } from 'react-color';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { Input } from '@/components/ui/input';
 
 interface ColorPickerProps {
   color: string;
@@ -9,43 +8,23 @@ interface ColorPickerProps {
 }
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
-  const [showPicker, setShowPicker] = useState(false);
-  const pickerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
-        setShowPicker(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className="relative">
-      <Button
-        type="button"
-        onClick={() => setShowPicker(!showPicker)}
-        className="w-10 h-10 p-0 rounded-md"
-        style={{ backgroundColor: color }}
+    <div className="flex items-center gap-2">
+      <Input
+        type="color"
+        value={color}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-12 h-12 p-1"
       />
-      
-      {showPicker && (
-        <div
-          ref={pickerRef}
-          className="absolute z-10 mt-2"
-          style={{ top: '100%', left: '0' }}
-        >
-          <SketchPicker
-            color={color}
-            onChange={(color) => onChange(color.hex)}
-          />
-        </div>
-      )}
+      <Input
+        type="text"
+        value={color}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="#000000"
+        className="flex-1"
+      />
     </div>
   );
 };
+
+export default ColorPicker;

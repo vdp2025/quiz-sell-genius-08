@@ -2,167 +2,146 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ColorPicker } from '../ColorPicker';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface StyleEditorProps {
   style: any;
   onUpdate: (style: any) => void;
 }
 
-const StyleEditor: React.FC<StyleEditorProps> = ({ style, onUpdate }) => {
-  const handleChange = (key: string, value: string | number) => {
+export const StyleEditor: React.FC<StyleEditorProps> = ({ style, onUpdate }) => {
+  const handleChange = (property: string, value: string) => {
     onUpdate({
       ...style,
-      [key]: value
+      [property]: value
     });
   };
 
   return (
-    <Tabs defaultValue="typography">
-      <TabsList className="w-full">
-        <TabsTrigger value="typography" className="flex-1">Tipografia</TabsTrigger>
-        <TabsTrigger value="layout" className="flex-1">Layout</TabsTrigger>
-        <TabsTrigger value="colors" className="flex-1">Cores</TabsTrigger>
-      </TabsList>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="textAlign">Alinhamento de Texto</Label>
+        <Select 
+          value={style.textAlign || 'left'} 
+          onValueChange={(value) => handleChange('textAlign', value)}
+        >
+          <SelectTrigger id="textAlign">
+            <SelectValue placeholder="Escolha o alinhamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="left">Esquerda</SelectItem>
+            <SelectItem value="center">Centro</SelectItem>
+            <SelectItem value="right">Direita</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       
-      <TabsContent value="typography" className="space-y-4 mt-4">
-        <div className="space-y-2">
-          <Label htmlFor="fontFamily">Fonte</Label>
-          <select
-            id="fontFamily"
-            className="w-full border rounded-md p-2"
-            value={style.fontFamily || ''}
-            onChange={(e) => handleChange('fontFamily', e.target.value)}
-          >
-            <option value="">Padrão</option>
-            <option value="'Playfair Display', serif">Playfair Display</option>
-            <option value="'Inter', sans-serif">Inter</option>
-            <option value="'Arial', sans-serif">Arial</option>
-            <option value="'Georgia', serif">Georgia</option>
-          </select>
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="fontSize">Tamanho da Fonte</Label>
+      <div className="space-y-2">
+        <Label htmlFor="color">Cor do Texto</Label>
+        <div className="flex gap-2">
           <Input
-            id="fontSize"
+            id="color"
+            type="color"
+            value={style.color || '#1A1818'}
+            onChange={(e) => handleChange('color', e.target.value)}
+            className="w-12 h-12 p-1"
+          />
+          <Input
             type="text"
-            value={style.fontSize || ''}
-            onChange={(e) => handleChange('fontSize', e.target.value)}
-            placeholder="16px"
+            value={style.color || '#1A1818'}
+            onChange={(e) => handleChange('color', e.target.value)}
+            placeholder="#1A1818"
+            className="flex-1"
           />
         </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="fontWeight">Peso da Fonte</Label>
-          <select
-            id="fontWeight"
-            className="w-full border rounded-md p-2"
-            value={style.fontWeight || ''}
-            onChange={(e) => handleChange('fontWeight', e.target.value)}
-          >
-            <option value="">Padrão</option>
-            <option value="normal">Normal</option>
-            <option value="bold">Negrito</option>
-            <option value="300">Leve (300)</option>
-            <option value="400">Regular (400)</option>
-            <option value="500">Médio (500)</option>
-            <option value="600">Semi-negrito (600)</option>
-            <option value="700">Negrito (700)</option>
-          </select>
-        </div>
-        
-        <div className="space-y-2">
-          <Label>Alinhamento do Texto</Label>
-          <RadioGroup
-            value={style.textAlign || 'left'}
-            onValueChange={(value) => handleChange('textAlign', value)}
-            className="flex space-x-4"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="left" id="text-left" />
-              <Label htmlFor="text-left">Esquerda</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="center" id="text-center" />
-              <Label htmlFor="text-center">Centro</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="right" id="text-right" />
-              <Label htmlFor="text-right">Direita</Label>
-            </div>
-          </RadioGroup>
-        </div>
-      </TabsContent>
+      </div>
       
-      <TabsContent value="layout" className="space-y-4 mt-4">
-        <div className="space-y-2">
-          <Label htmlFor="width">Largura</Label>
+      <div className="space-y-2">
+        <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+        <div className="flex gap-2">
           <Input
-            id="width"
-            type="text"
-            value={style.width || ''}
-            onChange={(e) => handleChange('width', e.target.value)}
-            placeholder="100%"
+            id="backgroundColor"
+            type="color"
+            value={style.backgroundColor || '#FFFFFF'}
+            onChange={(e) => handleChange('backgroundColor', e.target.value)}
+            className="w-12 h-12 p-1"
           />
-          <p className="text-xs text-[#8F7A6A]">Use valores como "100%", "300px", etc.</p>
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="padding">Espaçamento Interno</Label>
           <Input
-            id="padding"
             type="text"
-            value={style.padding || ''}
-            onChange={(e) => handleChange('padding', e.target.value)}
-            placeholder="16px"
-          />
-          <p className="text-xs text-[#8F7A6A]">Use valores como "16px" ou "16px 24px"</p>
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="margin">Margem</Label>
-          <Input
-            id="margin"
-            type="text"
-            value={style.margin || ''}
-            onChange={(e) => handleChange('margin', e.target.value)}
-            placeholder="16px"
+            value={style.backgroundColor || '#FFFFFF'}
+            onChange={(e) => handleChange('backgroundColor', e.target.value)}
+            placeholder="#FFFFFF"
+            className="flex-1"
           />
         </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="borderRadius">Arredondamento de Bordas</Label>
-          <Input
-            id="borderRadius"
-            type="text"
-            value={style.borderRadius || ''}
-            onChange={(e) => handleChange('borderRadius', e.target.value)}
-            placeholder="8px"
-          />
-        </div>
-      </TabsContent>
+      </div>
       
-      <TabsContent value="colors" className="space-y-4 mt-4">
-        <div className="space-y-2">
-          <Label htmlFor="color">Cor do Texto</Label>
-          <ColorPicker
-            color={style.color || '#000000'}
-            onChange={(color) => handleChange('color', color)}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-          <ColorPicker
-            color={style.backgroundColor || '#ffffff'}
-            onChange={(color) => handleChange('backgroundColor', color)}
-          />
-        </div>
-      </TabsContent>
-    </Tabs>
+      <div className="space-y-2">
+        <Label htmlFor="padding">Espaçamento Interno (Padding)</Label>
+        <Input
+          id="padding"
+          value={style.padding || ''}
+          onChange={(e) => handleChange('padding', e.target.value)}
+          placeholder="1rem ou 16px"
+        />
+        <p className="text-xs text-[#8F7A6A]">Ex: 1rem, 16px, 1rem 2rem (top/bottom left/right)</p>
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="margin">Espaçamento Externo (Margin)</Label>
+        <Input
+          id="margin"
+          value={style.margin || ''}
+          onChange={(e) => handleChange('margin', e.target.value)}
+          placeholder="1rem ou 16px"
+        />
+        <p className="text-xs text-[#8F7A6A]">Ex: 1rem, 16px, 1rem 2rem (top/bottom left/right)</p>
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="borderRadius">Arredondamento de Bordas</Label>
+        <Input
+          id="borderRadius"
+          value={style.borderRadius || ''}
+          onChange={(e) => handleChange('borderRadius', e.target.value)}
+          placeholder="8px"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="fontSize">Tamanho da Fonte</Label>
+        <Input
+          id="fontSize"
+          value={style.fontSize || ''}
+          onChange={(e) => handleChange('fontSize', e.target.value)}
+          placeholder="1rem ou 16px"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="fontWeight">Peso da Fonte</Label>
+        <Select 
+          value={style.fontWeight || 'normal'} 
+          onValueChange={(value) => handleChange('fontWeight', value)}
+        >
+          <SelectTrigger id="fontWeight">
+            <SelectValue placeholder="Escolha o peso da fonte" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="normal">Normal</SelectItem>
+            <SelectItem value="bold">Negrito</SelectItem>
+            <SelectItem value="200">Fino (200)</SelectItem>
+            <SelectItem value="300">Leve (300)</SelectItem>
+            <SelectItem value="400">Regular (400)</SelectItem>
+            <SelectItem value="500">Médio (500)</SelectItem>
+            <SelectItem value="600">Semi-Negrito (600)</SelectItem>
+            <SelectItem value="700">Negrito (700)</SelectItem>
+            <SelectItem value="800">Extra-Negrito (800)</SelectItem>
+            <SelectItem value="900">Ultra-Negrito (900)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
   );
 };
 

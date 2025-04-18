@@ -2,6 +2,7 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Block } from '@/types/editor';
 
 interface HeaderBlockEditorProps {
@@ -16,8 +17,9 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
     <div className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="title">Título</Label>
-        <Input
+        <Textarea
           id="title"
+          rows={2}
           value={content.title || ''}
           onChange={(e) => onUpdate({ title: e.target.value })}
           placeholder="Olá, seu Estilo Predominante é:"
@@ -26,27 +28,28 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo (opcional)</Label>
-        <Input
+        <Textarea
           id="subtitle"
+          rows={2}
           value={content.subtitle || ''}
           onChange={(e) => onUpdate({ subtitle: e.target.value })}
-          placeholder="Subtítulo opcional..."
+          placeholder="Subtítulo personalizado"
         />
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="logo">Logo URL</Label>
+        <Label htmlFor="logo">URL do Logo</Label>
         <Input
           id="logo"
           value={content.logo || ''}
           onChange={(e) => onUpdate({ logo: e.target.value })}
-          placeholder="URL do logo"
+          placeholder="https://exemplo.com/seu-logo.png"
         />
         {content.logo && (
           <div className="mt-2 p-2 bg-gray-50 rounded">
             <img 
               src={content.logo} 
-              alt="Logo preview" 
+              alt="Logo" 
               className="h-10 object-contain mx-auto"
             />
           </div>
@@ -54,12 +57,12 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="logoAlt">Texto alternativo do logo</Label>
+        <Label htmlFor="logoAlt">Texto Alternativo do Logo</Label>
         <Input
           id="logoAlt"
           value={content.logoAlt || ''}
           onChange={(e) => onUpdate({ logoAlt: e.target.value })}
-          placeholder="Descrição do logo para acessibilidade"
+          placeholder="Logo Gisele Galvão"
         />
       </div>
     </div>

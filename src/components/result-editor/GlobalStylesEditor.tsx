@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ColorPicker } from './ColorPicker';
+import { Button } from '@/components/ui/button';
 
 interface GlobalStylesEditorProps {
   globalStyles: {
@@ -23,90 +23,123 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   onCancel
 }) => {
   const [styles, setStyles] = useState(globalStyles);
-
-  const handleChange = (key: string, value: string) => {
-    setStyles(prev => ({
-      ...prev,
-      [key]: value
-    }));
+  
+  const handleChange = (property: string, value: string) => {
+    setStyles({
+      ...styles,
+      [property]: value
+    });
   };
-
+  
   return (
-    <Dialog open={true} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open onOpenChange={() => onCancel()}>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Estilos Globais</DialogTitle>
+          <DialogTitle>Editar Estilos Globais</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label>Cor Primária</Label>
-            <div className="flex items-center gap-4">
-              <ColorPicker
-                color={styles.primaryColor || '#aa6b5d'}
-                onChange={(color) => handleChange('primaryColor', color)}
+            <Label htmlFor="primaryColor">Cor Primária</Label>
+            <div className="flex gap-2">
+              <Input
+                id="primaryColor"
+                type="color"
+                value={styles.primaryColor || '#aa6b5d'}
+                onChange={(e) => handleChange('primaryColor', e.target.value)}
+                className="w-12 h-12 p-1"
               />
-              <span className="text-sm">{styles.primaryColor || '#aa6b5d'}</span>
+              <Input
+                type="text"
+                value={styles.primaryColor || '#aa6b5d'}
+                onChange={(e) => handleChange('primaryColor', e.target.value)}
+                placeholder="#aa6b5d"
+                className="flex-1"
+              />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label>Cor Secundária</Label>
-            <div className="flex items-center gap-4">
-              <ColorPicker
-                color={styles.secondaryColor || '#432818'}
-                onChange={(color) => handleChange('secondaryColor', color)}
+            <Label htmlFor="secondaryColor">Cor Secundária</Label>
+            <div className="flex gap-2">
+              <Input
+                id="secondaryColor"
+                type="color"
+                value={styles.secondaryColor || '#B89B7A'}
+                onChange={(e) => handleChange('secondaryColor', e.target.value)}
+                className="w-12 h-12 p-1"
               />
-              <span className="text-sm">{styles.secondaryColor || '#432818'}</span>
+              <Input
+                type="text"
+                value={styles.secondaryColor || '#B89B7A'}
+                onChange={(e) => handleChange('secondaryColor', e.target.value)}
+                placeholder="#B89B7A"
+                className="flex-1"
+              />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label>Cor do Texto</Label>
-            <div className="flex items-center gap-4">
-              <ColorPicker
-                color={styles.textColor || '#1A1818'}
-                onChange={(color) => handleChange('textColor', color)}
+            <Label htmlFor="textColor">Cor do Texto</Label>
+            <div className="flex gap-2">
+              <Input
+                id="textColor"
+                type="color"
+                value={styles.textColor || '#1A1818'}
+                onChange={(e) => handleChange('textColor', e.target.value)}
+                className="w-12 h-12 p-1"
               />
-              <span className="text-sm">{styles.textColor || '#1A1818'}</span>
+              <Input
+                type="text"
+                value={styles.textColor || '#1A1818'}
+                onChange={(e) => handleChange('textColor', e.target.value)}
+                placeholder="#1A1818"
+                className="flex-1"
+              />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label>Cor de Fundo</Label>
-            <div className="flex items-center gap-4">
-              <ColorPicker
-                color={styles.backgroundColor || '#fffaf7'}
-                onChange={(color) => handleChange('backgroundColor', color)}
+            <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+            <div className="flex gap-2">
+              <Input
+                id="backgroundColor"
+                type="color"
+                value={styles.backgroundColor || '#fffaf7'}
+                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                className="w-12 h-12 p-1"
               />
-              <span className="text-sm">{styles.backgroundColor || '#fffaf7'}</span>
+              <Input
+                type="text"
+                value={styles.backgroundColor || '#fffaf7'}
+                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                placeholder="#fffaf7"
+                className="flex-1"
+              />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label>Fonte Principal</Label>
-            <select
-              className="w-full border rounded-md p-2"
-              value={styles.fontFamily || "'Playfair Display', serif"}
+            <Label htmlFor="fontFamily">Fonte Principal</Label>
+            <Input
+              id="fontFamily"
+              value={styles.fontFamily || ''}
               onChange={(e) => handleChange('fontFamily', e.target.value)}
-            >
-              <option value="'Playfair Display', serif">Playfair Display</option>
-              <option value="'Inter', sans-serif">Inter</option>
-              <option value="'Arial', sans-serif">Arial</option>
-              <option value="'Georgia', serif">Georgia</option>
-            </select>
+              placeholder="'Playfair Display', serif"
+            />
+            <p className="text-xs text-[#8F7A6A]">
+              Exemplo: 'Playfair Display', serif ou 'Inter', sans-serif
+            </p>
           </div>
         </div>
         
-        <DialogFooter className="sm:justify-end">
-          <Button variant="outline" onClick={onCancel}>
-            Cancelar
-          </Button>
-          <Button onClick={() => onSave(styles)} className="bg-[#B89B7A] hover:bg-[#A38A69]">
-            Salvar
-          </Button>
+        <DialogFooter>
+          <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+          <Button onClick={() => onSave(styles)}>Salvar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
+
+export default GlobalStylesEditor;

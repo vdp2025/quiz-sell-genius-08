@@ -22,6 +22,12 @@ export interface EditableContent {
   ctaText?: string;
   images?: Array<{url: string; alt: string}>;
   testimonialsImage?: string;
+  width?: string;
+  height?: string;
+  borderRadius?: string;
+  textColor?: string;
+  alignment?: 'left' | 'center' | 'right';
+  image?: string;
   style?: {
     textAlign?: 'left' | 'center' | 'right';
     color?: string;
@@ -47,6 +53,18 @@ export interface EditorBlock {
   id: string;
   type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials';
   content: EditableContent;
+  order?: number;
+}
+
+export interface EditorConfig {
+  blocks: EditorBlock[];
+  globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
 }
 
 export interface EditorState {
