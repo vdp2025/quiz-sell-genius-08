@@ -1,13 +1,13 @@
-
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { EditorBlock } from '@/types/editor';
-import { EditorBlockItem } from './EditorBlockItem';
 import { AddBlockButton } from './AddBlockButton';
-import { Button } from '../ui/button';
-import { Eye, Save, Undo, Redo, MoveVertical } from 'lucide-react';
-import { useToast } from '../ui/use-toast';
+import { EditorToolbar } from './toolbar/EditorToolbar';
+import { EmptyEditor } from './EmptyEditor';
+import { BlockRenderer } from './BlockRenderer';
+import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
+import { useToast } from '@/components/ui/use-toast';
 
 interface PageEditorProps {
   blocks: EditorBlock[];
@@ -23,20 +23,15 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   isPreviewing
 }) => {
   const { toast } = useToast();
-  const [history, setHistory] = useState<EditorBlock[][]>([blocks]);
-  const [historyIndex, setHistoryIndex] = useState(0);
+  const { addToHistory, undo, redo, canUndo, canRedo } = useEditorHistory(blocks);
   
-  // Use pointer sensor to detect drag events
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
+      activationConstraint: { distance: 5 },
     })
   );
 
-  // Add new block to the editor
-  const handleAddBlock = useCallback((type: EditorBlock['type']) => {
+  const handleAddBlock = (type: EditorBlock['type']) => {
     const newBlocks = [...blocks, {
       id: `block-${Date.now()}`,
       type,
@@ -45,41 +40,26 @@ export const PageEditor: React.FC<PageEditorProps> = ({
     }];
     
     onBlocksChange(newBlocks);
-    // Add to history
-    const newHistory = history.slice(0, historyIndex + 1);
-    newHistory.push(newBlocks);
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-  }, [blocks, onBlocksChange, history, historyIndex]);
+    addToHistory(newBlocks);
+  };
 
-  // Handle block update
-  const handleUpdateBlock = useCallback((id: string, content: any) => {
+  const handleUpdateBlock = (id: string, content: any) => {
     const newBlocks = blocks.map(block => 
       block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     );
     
     onBlocksChange(newBlocks);
-    // Add to history
-    const newHistory = history.slice(0, historyIndex + 1);
-    newHistory.push(newBlocks);
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-  }, [blocks, onBlocksChange, history, historyIndex]);
+    addToHistory(newBlocks);
+  };
 
-  // Handle block deletion
-  const handleDeleteBlock = useCallback((id: string) => {
+  const handleDeleteBlock = (id: string) => {
     const newBlocks = blocks.filter(block => block.id !== id)
       .map((block, index) => ({ ...block, order: index }));
     
     onBlocksChange(newBlocks);
-    // Add to history
-    const newHistory = history.slice(0, historyIndex + 1);
-    newHistory.push(newBlocks);
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-  }, [blocks, onBlocksChange, history, historyIndex]);
+    addToHistory(newBlocks);
+  };
 
-  // Handle drag end event to reorder blocks
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
@@ -91,43 +71,20 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         .map((block, index) => ({ ...block, order: index }));
       
       onBlocksChange(newBlocks);
-      // Add to history
-      const newHistory = history.slice(0, historyIndex + 1);
-      newHistory.push(newBlocks);
-      setHistory(newHistory);
-      setHistoryIndex(newHistory.length - 1);
+      addToHistory(newBlocks);
     }
   };
 
-  // Undo action
   const handleUndo = () => {
-    if (historyIndex > 0) {
-      setHistoryIndex(historyIndex - 1);
-      onBlocksChange(history[historyIndex - 1]);
-    } else {
-      toast({
-        title: "Não é possível desfazer",
-        description: "Você já está no início do histórico.",
-        variant: "destructive"
-      });
-    }
+    const previousBlocks = undo();
+    onBlocksChange(previousBlocks);
   };
 
-  // Redo action
   const handleRedo = () => {
-    if (historyIndex < history.length - 1) {
-      setHistoryIndex(historyIndex + 1);
-      onBlocksChange(history[historyIndex + 1]);
-    } else {
-      toast({
-        title: "Não é possível refazer",
-        description: "Você já está no fim do histórico.",
-        variant: "destructive"
-      });
-    }
+    const nextBlocks = redo();
+    onBlocksChange(nextBlocks);
   };
 
-  // Save changes
   const handleSave = () => {
     toast({
       title: "Alterações salvas",
@@ -137,50 +94,16 @@ export const PageEditor: React.FC<PageEditorProps> = ({
 
   return (
     <div className="h-full flex flex-col">
-      {/* Editor Toolbar */}
-      <div className="bg-white border-b p-3 flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={handleUndo}
-            disabled={historyIndex === 0}
-          >
-            <Undo className="w-4 h-4 mr-1" />
-            Desfazer
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={handleRedo}
-            disabled={historyIndex === history.length - 1}
-          >
-            <Redo className="w-4 h-4 mr-1" />
-            Refazer
-          </Button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={onPreviewToggle}
-          >
-            <Eye className="w-4 h-4 mr-1" />
-            {isPreviewing ? "Editar" : "Visualizar"}
-          </Button>
-          <Button 
-            variant="default" 
-            size="sm"
-            onClick={handleSave}
-            className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-          >
-            <Save className="w-4 h-4 mr-1" />
-            Salvar
-          </Button>
-        </div>
-      </div>
+      <EditorToolbar 
+        onUndo={handleUndo}
+        onRedo={handleRedo}
+        onPreviewToggle={onPreviewToggle}
+        onSave={handleSave}
+        isPreviewing={isPreviewing}
+        canUndo={canUndo}
+        canRedo={canRedo}
+      />
 
-      {/* Editor Content */}
       <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
         {isPreviewing ? (
           <div className="bg-white rounded-lg shadow-sm p-6 min-h-96">
@@ -193,29 +116,20 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         ) : (
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
             <SortableContext items={blocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
-              <div className="space-y-4">
-                {blocks.length === 0 ? (
-                  <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-[#B89B7A]/40">
-                    <p className="text-[#8F7A6A] mb-4">Sua página está vazia. Comece adicionando blocos!</p>
-                    <AddBlockButton onAddBlock={handleAddBlock} />
-                  </div>
-                ) : (
-                  blocks.map(block => (
-                    <EditorBlockItem 
-                      key={block.id}
-                      block={block}
-                      onUpdate={(content) => handleUpdateBlock(block.id, content)}
-                      onDelete={() => handleDeleteBlock(block.id)}
-                    />
-                  ))
-                )}
-                
-                {blocks.length > 0 && (
+              {blocks.length === 0 ? (
+                <EmptyEditor onAddBlock={handleAddBlock} />
+              ) : (
+                <>
+                  <BlockRenderer 
+                    blocks={blocks}
+                    onUpdate={handleUpdateBlock}
+                    onDelete={handleDeleteBlock}
+                  />
                   <div className="mt-8 text-center">
                     <AddBlockButton onAddBlock={handleAddBlock} />
                   </div>
-                )}
-              </div>
+                </>
+              )}
             </SortableContext>
           </DndContext>
         )}
@@ -224,7 +138,6 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   );
 };
 
-// Helper function to get default content for a block type
 function getDefaultContentForType(type: EditorBlock['type']): any {
   switch (type) {
     case 'headline':
@@ -256,7 +169,6 @@ function getDefaultContentForType(type: EditorBlock['type']): any {
   }
 }
 
-// Helper function to render preview of a block
 function renderBlockPreview(block: EditorBlock) {
   switch (block.type) {
     case 'headline':
