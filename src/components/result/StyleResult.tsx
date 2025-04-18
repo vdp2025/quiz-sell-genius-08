@@ -23,6 +23,10 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
   return (
     <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
       <div className="w-full max-w-md mx-auto mb-4">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-sm font-medium text-[#432818]">Estilo Predominante</span>
+          <span className="text-sm font-medium text-[#B89B7A]">{primaryStyle.percentage}%</span>
+        </div>
         <div className="w-full bg-[#F3E8E6] rounded-full h-2">
           <div 
             className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300 ease-in-out" 
@@ -68,4 +72,3 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
     </Card>
   );
 };
-
