@@ -120,6 +120,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           <div className="ml-auto">
             <Button 
               variant="golden"
+              size="default"  // Explicitly set the size to match the "Voltar" button
               className={cn(
                 "transition-all duration-300 opacity-70",
                 currentAnswers.length === question.multiSelect ? "opacity-100 hover:scale-105" : "cursor-not-allowed"
@@ -137,4 +138,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-
