@@ -5,12 +5,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { BlockEditorProps } from './types';
 import { StyleResultPreview } from './StyleResultPreview';
+import { StyleResult } from '@/types/quiz';
 
 export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
 }) => {
-  const selectedStyle = {
+  // Using a properly typed StyleResult object
+  const selectedStyle: StyleResult = {
     category: "Natural",
     score: 100,
     percentage: 100
