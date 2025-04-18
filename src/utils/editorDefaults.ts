@@ -72,7 +72,10 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         title: 'VOCÊ DESCOBRIU SEU ESTILO',
         subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
         heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
-        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp'
+        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp',
+        heroImageAlt: 'Guia de Estilo',
+        quote: 'Descubra como expressar sua personalidade através do seu estilo de vestir',
+        quoteAuthor: 'Gisele Galvão'
       };
     case 'products':
       return {
@@ -92,6 +95,22 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       return { 
         title: 'O que estão dizendo',
         testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
+      };
+    case 'bonus-carousel':
+      return { 
+        title: 'Você também recebe estes bônus',
+        bonusImages: [
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+            alt: 'Bônus 1',
+            title: 'Guia de Estilo Digital'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            alt: 'Bônus 2',
+            title: 'Templates de Looks'
+          }
+        ]
       };
     default:
       return {};
@@ -130,6 +149,13 @@ export const defaultConfig: EditorConfig = {
     }
   ],
   globalStyles: {
+    primaryColor: '#B89B7A',
+    secondaryColor: '#432818',
+    textColor: '#1A1818',
+    backgroundColor: '#fffaf7',
+    fontFamily: 'Inter, sans-serif'
+  },
+  theme: {
     primaryColor: '#B89B7A',
     secondaryColor: '#432818',
     textColor: '#1A1818',
