@@ -14,8 +14,8 @@ const PagePreview = ({ primaryStyle, onSelectComponent }: PagePreviewProps) => {
   const [isPreviewing, setIsPreviewing] = React.useState(false);
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Toolbar */}
+    <div className="h-full flex flex-col bg-[#FAF9F7]">
+      {/* Preview Toolbar */}
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
         <div className="flex gap-2">
           <Button
@@ -48,13 +48,17 @@ const PagePreview = ({ primaryStyle, onSelectComponent }: PagePreviewProps) => {
         </Button>
       </div>
 
-      {/* Preview Area */}
+      {/* Preview Canvas */}
       <div className={`flex-1 overflow-y-auto p-8 ${viewMode === 'mobile' ? 'max-w-md mx-auto' : ''}`}>
         <div 
-          className="min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6"
+          className={`min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6 ${
+            !isPreviewing ? 'cursor-pointer hover:border-[#B89B7A]/40' : ''
+          }`}
           onClick={() => !isPreviewing && onSelectComponent('preview-area')}
         >
-          Preview content will go here
+          <div className="flex items-center justify-center h-full text-[#8F7A6A] text-sm">
+            Arraste componentes para esta área
+          </div>
         </div>
       </div>
     </div>
