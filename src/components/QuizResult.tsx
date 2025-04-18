@@ -62,11 +62,11 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
                     {styleConfig[primaryStyle.category].description}
                   </p>
                 </div>
-                <div className="w-32 flex-shrink-0">
+                <div className="w-40 flex-shrink-0">
                   <img
                     src={styleConfig[primaryStyle.category].image}
                     alt={`Estilo ${primaryStyle.category}`}
-                    className="w-full h-32 object-contain scale-90 rounded-lg shadow-sm"
+                    className="w-full h-40 object-contain scale-90 rounded-lg shadow-sm"
                   />
                 </div>
               </div>
