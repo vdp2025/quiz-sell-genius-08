@@ -56,7 +56,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
               "object-cover w-full h-full",
               "transition-all duration-300 ease-in-out",
               getImageScale(),
-              isSelected && "shadow-lg border-2 border-brand-coffee/40 z-10"
+              isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
             )}
             onError={() => setImageError(true)}
             style={{
