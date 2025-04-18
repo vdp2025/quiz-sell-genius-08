@@ -8,6 +8,8 @@ import { BenefitsBlockEditor } from './blocks/BenefitsBlockEditor';
 import { PricingBlockEditor } from './blocks/PricingBlockEditor';
 import { GuaranteeBlockEditor } from './blocks/GuaranteeBlockEditor';
 import { CTABlockEditor } from './blocks/CTABlockEditor';
+import { StyleResultBlockEditor } from './blocks/StyleResultBlockEditor';
+import { SecondaryStylesBlockEditor } from './blocks/SecondaryStylesBlockEditor';
 
 interface EditBlockContentProps {
   block: EditorBlock;
@@ -39,6 +41,12 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
       
     case 'cta':
       return <CTABlockEditor block={block} onUpdate={onUpdate} />;
+
+    case 'style-result':
+      return <StyleResultBlockEditor block={block} onUpdate={onUpdate} />;
+
+    case 'secondary-styles':
+      return <SecondaryStylesBlockEditor block={block} onUpdate={onUpdate} />;
       
     case 'testimonials':
       return (
