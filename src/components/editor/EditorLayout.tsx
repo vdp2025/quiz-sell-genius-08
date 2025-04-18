@@ -17,7 +17,7 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
 
   // Função para adicionar um bloco quando um componente é selecionado do sidebar
-  const handleComponentSelect = (componentType: string) => {
+  const handleComponentSelect = (componentType: EditorBlock['type']) => {
     addBlock(componentType);
   };
 

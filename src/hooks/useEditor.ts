@@ -66,6 +66,30 @@ export const useEditor = () => {
           title: 'O que nossos clientes dizem',
         };
         break;
+      case 'text':
+        initialContent = {
+          text: 'Adicione seu texto aqui',
+          textColor: '#432818',
+        };
+        break;
+      case 'pricing':
+        initialContent = {
+          title: 'Preço Especial',
+          text: 'Aproveite nossa oferta exclusiva',
+        };
+        break;
+      case 'guarantee':
+        initialContent = {
+          title: 'Garantia',
+          text: 'Satisfação garantida ou seu dinheiro de volta',
+        };
+        break;
+      case 'cta':
+        initialContent = {
+          title: 'Comece Agora',
+          text: 'Clique no botão abaixo para começar',
+        };
+        break;
       default:
         initialContent = {
           text: 'Adicione seu conteúdo aqui',

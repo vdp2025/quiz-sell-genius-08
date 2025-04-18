@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Type, 
@@ -14,9 +15,10 @@ import {
   Quote,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { EditorBlock } from '@/types/editor';
 
 interface ComponentsSidebarProps {
-  onComponentSelect: (type: string) => void;
+  onComponentSelect: (type: EditorBlock['type']) => void;
 }
 
 const componentCategories = [
@@ -24,28 +26,16 @@ const componentCategories = [
     title: 'Texto',
     components: [
       {
-        type: 'headline',
+        type: 'headline' as const,
         icon: Heading1,
         label: 'Título Principal',
         description: 'Títulos impactantes para captar atenção'
       },
       {
-        type: 'subheading',
-        icon: Heading2,
-        label: 'Subtítulo',
-        description: 'Subtítulos complementares'
-      },
-      {
-        type: 'paragraph',
+        type: 'text' as const,
         icon: Text,
         label: 'Texto',
         description: 'Blocos de texto e parágrafos'
-      },
-      {
-        type: 'list',
-        icon: ListOrdered,
-        label: 'Lista',
-        description: 'Listas ordenadas ou com marcadores'
       }
     ]
   },
@@ -53,16 +43,10 @@ const componentCategories = [
     title: 'Mídia',
     components: [
       {
-        type: 'image',
+        type: 'image' as const,
         icon: Image,
         label: 'Imagem',
         description: 'Adicionar imagem ou galeria'
-      },
-      {
-        type: 'video',
-        icon: Video,
-        label: 'Vídeo',
-        description: 'Incorporar vídeo do YouTube/Vimeo'
       }
     ]
   },
@@ -70,32 +54,32 @@ const componentCategories = [
     title: 'Conversão',
     components: [
       {
-        type: 'testimonials',
+        type: 'testimonials' as const,
         icon: MessageCircle,
         label: 'Depoimentos',
         description: 'Seção de depoimentos de clientes'
       },
       {
-        type: 'benefits',
+        type: 'benefits' as const,
         icon: Award,
         label: 'Benefícios',
         description: 'Lista de benefícios do produto'
       },
       {
-        type: 'pricing',
+        type: 'pricing' as const,
         icon: DollarSign,
         label: 'Preço',
         description: 'Seção de preço e botão de compra'
       },
       {
-        type: 'guarantee',
+        type: 'guarantee' as const,
         icon: Shield,
         label: 'Garantia',
         description: 'Seção de garantia do produto'
       },
       {
-        type: 'cta',
-        icon: Button,
+        type: 'cta' as const,
+        icon: Type,
         label: 'Botão CTA',
         description: 'Botão de chamada para ação'
       }
