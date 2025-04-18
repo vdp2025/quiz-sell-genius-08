@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -11,6 +10,7 @@ import { StrategicQuestions } from './quiz/StrategicQuestions';
 import { MainTransition } from './quiz/MainTransition';
 import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
+import { toast } from './ui/use-toast';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -37,41 +37,69 @@ const QuizPage: React.FC = () => {
   const quizContainerRef = useRef<HTMLDivElement>(null);
 
   const handleStrategicAnswer = (response: UserResponse) => {
-    setStrategicAnswers(prev => ({
-      ...prev,
-      [response.questionId]: response.selectedOptions
-    }));
-    
-    saveStrategicAnswer(response.questionId, response.selectedOptions);
-    
-    // Check if we've answered the last strategic question
-    if (response.questionId === strategicQuestions[strategicQuestions.length - 1].id) {
-      setTimeout(() => {
-        setShowingFinalTransition(true);
-      }, 500);
+    try {
+      console.log('Strategic Answer Received:', response);
+      setStrategicAnswers(prev => ({
+        ...prev,
+        [response.questionId]: response.selectedOptions
+      }));
+      
+      saveStrategicAnswer(response.questionId, response.selectedOptions);
+      
+      // Check if we've answered the last strategic question
+      if (response.questionId === strategicQuestions[strategicQuestions.length - 1].id) {
+        setTimeout(() => {
+          setShowingFinalTransition(true);
+        }, 500);
+      }
+    } catch (error) {
+      console.error('Error processing strategic answer:', error);
+      toast({
+        title: "Erro no processamento da resposta",
+        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
+        variant: "destructive",
+      });
     }
   };
 
   const handleAnswerSubmit = (response: UserResponse) => {
-    handleAnswer(response.questionId, response.selectedOptions);
-    
-    if (response.selectedOptions.length === currentQuestion.multiSelect) {
-      if (!isLastQuestion) {
-        setTimeout(() => {
-          handleNext();
-        }, 500);
-      } else {
-        setTimeout(() => {
-          calculateResults();
-          setShowingTransition(true);
-        }, 800);
+    try {
+      handleAnswer(response.questionId, response.selectedOptions);
+      
+      if (response.selectedOptions.length === currentQuestion.multiSelect) {
+        if (!isLastQuestion) {
+          setTimeout(() => {
+            handleNext();
+          }, 500);
+        } else {
+          setTimeout(() => {
+            calculateResults();
+            setShowingTransition(true);
+          }, 800);
+        }
       }
+    } catch (error) {
+      console.error('Error submitting answer:', error);
+      toast({
+        title: "Erro na submissão da resposta",
+        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
+        variant: "destructive",
+      });
     }
   };
 
   const handleShowResult = () => {
-    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-    navigate('/resultado');
+    try {
+      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      navigate('/resultado');
+    } catch (error) {
+      console.error('Error showing result:', error);
+      toast({
+        title: "Erro ao mostrar resultado",
+        description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
@@ -91,48 +119,46 @@ const QuizPage: React.FC = () => {
     }
   }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, currentQuestion]);
 
-  if (showingTransition) {
-    return (
-      <MainTransition
-        onAnswer={handleStrategicAnswer}
-        strategicAnswers={strategicAnswers}
-      />
-    );
-  }
-
-  if (showingFinalTransition) {
-    return <QuizFinalTransition onShowResult={handleShowResult} />;
-  }
-
   return (
     <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
-        <QuizHeader
-          userName={user?.userName}
-          currentQuestionIndex={currentQuestionIndex}
-          totalQuestions={totalQuestions}
-          showingStrategicQuestions={showingStrategicQuestions}
-          currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-        />
-
-        {showingStrategicQuestions ? (
-          <StrategicQuestions
-            currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={strategicAnswers}
+        {showingTransition ? (
+          <MainTransition
             onAnswer={handleStrategicAnswer}
+            strategicAnswers={strategicAnswers}
           />
-        ) : currentQuestion ? (
-          <QuizQuestion
-            question={currentQuestion}
-            onAnswer={handleAnswerSubmit}
-            currentAnswers={currentAnswers}
-          />
-        ) : null}
+        ) : showingFinalTransition ? (
+          <QuizFinalTransition onShowResult={handleShowResult} />
+        ) : (
+          <>
+            <QuizHeader
+              userName={user?.userName}
+              currentQuestionIndex={currentQuestionIndex}
+              totalQuestions={totalQuestions}
+              showingStrategicQuestions={showingStrategicQuestions}
+              currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            />
 
-        <QuizNavigation
-          showPrevious={!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0}
-          onPrevious={handlePrevious}
-        />
+            {showingStrategicQuestions ? (
+              <StrategicQuestions
+                currentQuestionIndex={currentStrategicQuestionIndex}
+                answers={strategicAnswers}
+                onAnswer={handleStrategicAnswer}
+              />
+            ) : currentQuestion ? (
+              <QuizQuestion
+                question={currentQuestion}
+                onAnswer={handleAnswerSubmit}
+                currentAnswers={currentAnswers}
+              />
+            ) : null}
+
+            <QuizNavigation
+              showPrevious={!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0}
+              onPrevious={handlePrevious}
+            />
+          </>
+        )}
       </div>
     </div>
   );

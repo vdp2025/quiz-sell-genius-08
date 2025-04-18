@@ -5,6 +5,7 @@ import { Card } from '../ui/card';
 import { QuizQuestion } from '../QuizQuestion';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { UserResponse } from '@/types/quiz';
+import { toast } from '../ui/use-toast';
 
 interface MainTransitionProps {
   onAnswer: (response: UserResponse) => void;
@@ -19,23 +20,32 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const handleQuestionAnswer = (response: UserResponse) => {
-    onAnswer(response);
-    
-    // Wait a moment and move to the next question
-    setTimeout(() => {
-      if (currentQuestionIndex < strategicQuestions.length - 1) {
-        setCurrentQuestionIndex(prev => prev + 1);
-      }
-    }, 500);
+    try {
+      console.log('Strategic Question Answered:', response);
+      onAnswer(response);
+      
+      // Wait a moment and move to the next question
+      setTimeout(() => {
+        if (currentQuestionIndex < strategicQuestions.length - 1) {
+          setCurrentQuestionIndex(prev => prev + 1);
+        }
+      }, 500);
+    } catch (error) {
+      console.error('Error handling strategic question:', error);
+      toast({
+        title: "Erro na transição do quiz",
+        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
-  // Safely access the current question
-  const currentQuestion = strategicQuestions[currentQuestionIndex];
+  // Safely access the current question with fallback
+  const currentQuestion = strategicQuestions[currentQuestionIndex] || null;
   const currentAnswersForQuestion = currentQuestion 
     ? (strategicAnswers[currentQuestion.id] || []) 
     : [];
 
-  // If we're still showing the intro, display it, otherwise show the current question
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-10 flex items-start justify-center">
       <div className="max-w-3xl w-full mx-auto">
@@ -96,3 +106,4 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     </div>
   );
 };
+
