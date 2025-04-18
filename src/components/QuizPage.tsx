@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -43,13 +44,12 @@ const QuizPage: React.FC = () => {
     
     saveStrategicAnswer(response.questionId, response.selectedOptions);
     
-    setTimeout(() => {
-      if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
-        setCurrentStrategicQuestionIndex(prev => prev + 1);
-      } else {
+    // Check if we've answered the last strategic question
+    if (response.questionId === strategicQuestions[strategicQuestions.length - 1].id) {
+      setTimeout(() => {
         setShowingFinalTransition(true);
-      }
-    }, 500);
+      }, 500);
+    }
   };
 
   const handleAnswerSubmit = (response: UserResponse) => {

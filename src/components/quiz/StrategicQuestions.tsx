@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
@@ -16,10 +16,17 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   answers,
   onAnswer,
 }) => {
+  const [mountKey, setMountKey] = useState(Date.now());
+  
+  // Remount component when question changes to ensure clean state
+  useEffect(() => {
+    setMountKey(Date.now());
+  }, [currentQuestionIndex]);
+
   if (currentQuestionIndex >= strategicQuestions.length) return null;
 
   return (
-    <AnimatedWrapper>
+    <AnimatedWrapper key={mountKey}>
       <QuizQuestion
         question={strategicQuestions[currentQuestionIndex]}
         onAnswer={onAnswer}
