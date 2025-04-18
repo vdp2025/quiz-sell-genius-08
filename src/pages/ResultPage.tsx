@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { useQuiz } from '../hooks/useQuiz';
+import { useQuizContext } from '../context/QuizContext';
 import QuizResult from '../components/QuizResult';
 import { EditorButton } from '@/components/ui/EditorButton';
 
 const ResultPage = () => {
-  const { quizResult } = useQuiz();
+  const { quizResult } = useQuizContext();
   console.log('Usando resultado do contexto:', quizResult);
   
   if (!quizResult || !quizResult.primaryStyle || !quizResult.secondaryStyles) {
