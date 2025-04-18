@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { StyleResult } from '../types/quiz';
@@ -20,9 +21,8 @@ const QuizResult: React.FC<QuizResultProps> = ({
     primaryStyle,
     secondaryStyles
   });
-  const {
-    user
-  } = useAuth();
+  
+  const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white px-4 py-8">
+    <div className="min-h-screen bg-[#fffaf7] px-4 py-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <ResultHeader userName={userName} />
         
