@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResultPagePreview } from '../preview/ResultPagePreview';
-import { PropertiesPanel } from '../properties/PropertiesPanel';
+import PropertiesPanel from '../properties/PropertiesPanel';
 import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
 import { EditorBlock } from '@/types/editor';
 import { useEditor } from '@/hooks/useEditor';

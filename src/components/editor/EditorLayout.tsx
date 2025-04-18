@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
-import ComponentsSidebar from './sidebar/ComponentsSidebar';
+import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
 import PropertiesPanel from './properties/PropertiesPanel';
 import PagePreview from './preview/PagePreview';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
