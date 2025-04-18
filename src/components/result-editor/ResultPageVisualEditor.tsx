@@ -380,6 +380,15 @@ const getDefaultContentForType = (type: Block['type']) => {
         subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
         heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp'
       };
+    case 'text':
+      return { text: 'Digite seu texto aqui...' };
+    case 'image':
+      return { 
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg', 
+        imageAlt: 'Gisele Galvão',
+        width: '100%',
+        borderRadius: '8px'
+      };
     case 'hero-section':
       return { 
         title: 'VOCÊ DESCOBRIU SEU ESTILO',
@@ -402,7 +411,29 @@ const getDefaultContentForType = (type: Block['type']) => {
           {
             url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp',
             alt: 'Celular Peças-Chave'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp',
+            alt: 'Revista Peças-Chave'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911674/Espanhol_Portugu%C3%AAs_1_-_Copia_zuhznw.webp',
+            alt: 'Revista Várias Imagens Peças-Chave do Guarda Roupa'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp',
+            alt: 'Capa Revista Peças-Chave do Guarda Roupa'
           }
+        ]
+      };
+    case 'benefits':
+      return { 
+        title: 'O que você vai aprender:', 
+        items: [
+          'Aplicar seus estilos com autenticidade',
+          'Montar looks práticos para o dia a dia, trabalho e eventos',
+          'Usar cores e modelagens que valorizam quem você é',
+          'Parar de errar nas compras e economizar tempo'
         ]
       };
     case 'testimonials':
