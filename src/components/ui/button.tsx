@@ -19,12 +19,12 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        golden: "bg-white border-2 border-brand-gold text-brand-coffee shadow-lg hover:bg-brand-gold/10 transition-all duration-300 hover:shadow-xl", // New golden variant
+        golden: "bg-white border-2 border-brand-gold text-brand-coffee shadow-lg hover:bg-brand-gold/10 transition-all duration-300 hover:shadow-xl active:shadow-inner active:scale-[0.98] active:bg-brand-gold/20 focus:ring-2 focus:ring-brand-gold/30 focus:ring-offset-2", // Enhanced golden variant
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        lg: "h-11 rounded-md px-8 text-base",
         icon: "h-10 w-10",
       },
     },

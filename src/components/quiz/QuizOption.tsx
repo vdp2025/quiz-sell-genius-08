@@ -41,13 +41,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         className={cn(
           "relative h-full flex flex-col",
-          "transition-all duration-300 ease-out", 
+          "transition-all duration-300 ease-out cursor-pointer", 
           type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-brand-gold bg-white/50 backdrop-blur-[12px] shadow-lg ring-2 ring-brand-gold/20" 
-              : "border-brand-gold shadow-lg ring-2 ring-brand-gold/20"
+              ? "border-brand-gold bg-white/50 backdrop-blur-[12px] shadow-lg ring-2 ring-brand-gold/50 transform scale-[1.02]" 
+              : "border-brand-gold shadow-lg ring-2 ring-brand-gold/50 transform scale-[1.02]"
             : type === 'text' 
               ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md" 
               : "hover:border-brand-gold/40 hover:shadow-md"
@@ -68,7 +68,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", // Removed vertical padding
+                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", 
                 isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
@@ -76,12 +76,22 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-sm leading-relaxed desktop:text-base",
                 (questionId === '1' || questionId === '2') && (
                   isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"
-                )
+                ),
+                isSelected && "text-brand-coffee font-semibold"
               )
         )}>
           {highlightStrategicWords(option.text)}
         </p>
       </div>
+      
+      {/* Typeform-like active indicator */}
+      {isSelected && (
+        <div className="absolute -top-1 -right-1 w-5 h-5 bg-brand-gold rounded-full flex items-center justify-center shadow-md z-10 animate-scale-in">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+      )}
     </div>
   );
 };

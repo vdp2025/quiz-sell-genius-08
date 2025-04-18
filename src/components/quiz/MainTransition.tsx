@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { Card } from '../ui/card';
 import { QuizQuestion } from '../QuizQuestion';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { UserResponse } from '@/types/quiz';
 import { toast } from '../ui/use-toast';
+import { Button } from '../ui/button';
 
 interface MainTransitionProps {
   onAnswer: (response: UserResponse) => void;
@@ -18,23 +19,42 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
 }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Reset selected option when question changes
+    setSelectedOption(null);
+  }, [currentQuestionIndex]);
 
   const handleQuestionAnswer = (response: UserResponse) => {
     try {
       console.log('Strategic Question Answered:', response);
-      onAnswer(response);
+      setSelectedOption(response.selectedOptions[0]);
       
-      setTimeout(() => {
-        if (currentQuestionIndex < strategicQuestions.length - 1) {
-          setCurrentQuestionIndex(prev => prev + 1);
-        }
-      }, 500);
+      // Store the answer but don't advance yet
+      onAnswer(response);
     } catch (error) {
       console.error('Error handling strategic question:', error);
       toast({
         title: "Erro na transição do quiz",
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
+      });
+    }
+  };
+
+  const handleNextQuestion = () => {
+    if (selectedOption) {
+      if (currentQuestionIndex < strategicQuestions.length - 1) {
+        setTimeout(() => {
+          setCurrentQuestionIndex(prev => prev + 1);
+        }, 500);
+      }
+    } else {
+      toast({
+        title: "Selecione uma opção",
+        description: "Por favor, selecione uma opção antes de avançar.",
+        variant: "default",
       });
     }
   };
@@ -47,41 +67,68 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-10 flex items-start justify-center">
       <div className="max-w-3xl w-full mx-auto">
-        <AnimatedWrapper>
-          <Card className="p-8 space-y-8 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
-            <h2 className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-bold mt-4 bg-gradient-to-r from-[#B89B7A] to-[#432818] bg-clip-text text-transparent">
-              Enquanto calculamos o seu resultado...
-            </h2>
-            
-            <p className="text-[#1A1818]/90 text-lg">
-              Queremos te fazer algumas perguntas que vão tornar sua <strong className="text-[#432818]">experiência</strong> ainda mais <strong className="text-[#432818]">completa</strong>.
-            </p>
-            
-            <p className="text-[#1A1818]/90 text-lg">
-              A ideia é simples: te ajudar a enxergar com mais <strong className="text-[#432818]">clareza</strong> onde você está agora — e para onde pode ir com mais <strong className="text-[#432818]">intenção</strong>, <strong className="text-[#432818]">leveza</strong> e <strong className="text-[#432818]">autenticidade</strong>.
-            </p>
-            
-            <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#432818]/10 p-6 rounded-lg border border-[#B89B7A]/20">
-              <p className="text-[#432818] italic text-center font-medium text-lg">
-                Responda com <strong className="text-[#432818] not-italic">sinceridade</strong>. Isso é só entre você e a sua <strong className="text-[#432818] not-italic">nova versão</strong>.
+        {showIntro && (
+          <AnimatedWrapper>
+            <Card className="p-8 space-y-8 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
+              <h2 className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-bold mt-4 bg-gradient-to-r from-[#B89B7A] to-[#432818] bg-clip-text text-transparent">
+                Enquanto calculamos o seu resultado...
+              </h2>
+              
+              <p className="text-[#1A1818]/90 text-lg">
+                Queremos te fazer algumas perguntas que vão tornar sua <strong className="text-[#432818]">experiência</strong> ainda mais <strong className="text-[#432818]">completa</strong>.
               </p>
-            </div>
-          </Card>
-        </AnimatedWrapper>
+              
+              <p className="text-[#1A1818]/90 text-lg">
+                A ideia é simples: te ajudar a enxergar com mais <strong className="text-[#432818]">clareza</strong> onde você está agora — e para onde pode ir com mais <strong className="text-[#432818]">intenção</strong>, <strong className="text-[#432818]">leveza</strong> e <strong className="text-[#432818]">autenticidade</strong>.
+              </p>
+              
+              <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#432818]/10 p-6 rounded-lg border border-[#B89B7A]/20">
+                <p className="text-[#432818] italic text-center font-medium text-lg">
+                  Responda com <strong className="text-[#432818] not-italic">sinceridade</strong>. Isso é só entre você e a sua <strong className="text-[#432818] not-italic">nova versão</strong>.
+                </p>
+              </div>
 
-        <AnimatedWrapper>
-          <Card className="p-8 space-y-6 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
-            <div className="relative">
-              <QuizQuestion
-                key={strategicQuestions[0].id}
-                question={strategicQuestions[0]}
-                onAnswer={handleQuestionAnswer}
-                currentAnswers={currentAnswersForQuestion}
-                autoAdvance={true}
-              />
-            </div>
-          </Card>
-        </AnimatedWrapper>
+              <div className="flex justify-center mt-6">
+                <Button 
+                  variant="golden" 
+                  size="lg"
+                  onClick={() => setShowIntro(false)}
+                  className="transition-all duration-300 hover:scale-105 active:scale-95"
+                >
+                  Continuar
+                </Button>
+              </div>
+            </Card>
+          </AnimatedWrapper>
+        )}
+
+        {!showIntro && (
+          <AnimatedWrapper>
+            <Card className="p-8 space-y-6 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
+              <div className="relative">
+                <QuizQuestion
+                  key={`strategic-${currentQuestionIndex}`}
+                  question={strategicQuestions[currentQuestionIndex]}
+                  onAnswer={handleQuestionAnswer}
+                  currentAnswers={currentAnswersForQuestion}
+                  autoAdvance={false}
+                />
+                
+                <div className="flex justify-center mt-8">
+                  <Button 
+                    variant="golden" 
+                    size="lg"
+                    onClick={handleNextQuestion}
+                    disabled={!selectedOption}
+                    className="transition-all duration-300 hover:scale-105 active:scale-95"
+                  >
+                    {currentQuestionIndex < strategicQuestions.length - 1 ? "Próxima Pergunta" : "Finalizar"}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </AnimatedWrapper>
+        )}
       </div>
     </div>
   );
