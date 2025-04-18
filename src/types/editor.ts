@@ -23,7 +23,8 @@ export interface EditableContent {
 
 export interface EditorBlock {
   id: string;
-  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 'guarantee' | 'cta';
+  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 
+        'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'bonus';
   content: EditableContent;
   order: number;
 }

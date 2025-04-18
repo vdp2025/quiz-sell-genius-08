@@ -1,125 +1,63 @@
 
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Type, 
   Image, 
-  Video, 
-  MessageCircle, 
-  Award, 
+  ListChecks, 
+  MessageSquare, 
   DollarSign, 
-  Shield,
-  Heading1,
-  Heading2,
-  Text,
-  ListOrdered,
-  Quote,
+  Shield, 
+  MousePointer,
+  Layout,
+  Award,
+  Gift
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { EditorBlock } from '@/types/editor';
 
 interface ComponentsSidebarProps {
   onComponentSelect: (type: EditorBlock['type']) => void;
 }
 
-const componentCategories = [
-  {
-    title: 'Texto',
-    components: [
-      {
-        type: 'headline' as const,
-        icon: Heading1,
-        label: 'Título Principal',
-        description: 'Títulos impactantes para captar atenção'
-      },
-      {
-        type: 'text' as const,
-        icon: Text,
-        label: 'Texto',
-        description: 'Blocos de texto e parágrafos'
-      }
-    ]
-  },
-  {
-    title: 'Mídia',
-    components: [
-      {
-        type: 'image' as const,
-        icon: Image,
-        label: 'Imagem',
-        description: 'Adicionar imagem ou galeria'
-      }
-    ]
-  },
-  {
-    title: 'Conversão',
-    components: [
-      {
-        type: 'testimonials' as const,
-        icon: MessageCircle,
-        label: 'Depoimentos',
-        description: 'Seção de depoimentos de clientes'
-      },
-      {
-        type: 'benefits' as const,
-        icon: Award,
-        label: 'Benefícios',
-        description: 'Lista de benefícios do produto'
-      },
-      {
-        type: 'pricing' as const,
-        icon: DollarSign,
-        label: 'Preço',
-        description: 'Seção de preço e botão de compra'
-      },
-      {
-        type: 'guarantee' as const,
-        icon: Shield,
-        label: 'Garantia',
-        description: 'Seção de garantia do produto'
-      },
-      {
-        type: 'cta' as const,
-        icon: Type,
-        label: 'Botão CTA',
-        description: 'Botão de chamada para ação'
-      }
-    ]
-  }
-];
+export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ 
+  onComponentSelect 
+}) => {
+  const components = [
+    { type: 'headline', label: 'Título', icon: Type },
+    { type: 'image', label: 'Imagem', icon: Image },
+    { type: 'text', label: 'Texto', icon: Type },
+    { type: 'benefits', label: 'Benefícios', icon: ListChecks },
+    { type: 'testimonials', label: 'Depoimentos', icon: MessageSquare },
+    { type: 'pricing', label: 'Preço', icon: DollarSign },
+    { type: 'guarantee', label: 'Garantia', icon: Shield },
+    { type: 'cta', label: 'Botão CTA', icon: MousePointer },
+    { type: 'style-result', label: 'Resultado do Estilo', icon: Award },
+    { type: 'secondary-styles', label: 'Estilos Secundários', icon: Layout },
+    { type: 'bonus', label: 'Bônus', icon: Gift }
+  ];
 
-const ComponentsSidebar = ({ onComponentSelect }: ComponentsSidebarProps) => {
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-playfair text-[#432818] mb-4">Componentes</h2>
-      <div className="space-y-6">
-        {componentCategories.map((category) => (
-          <div key={category.title} className="space-y-2">
-            <h3 className="text-sm font-medium text-[#8F7A6A] mb-2">
-              {category.title}
-            </h3>
-            {category.components.map((component) => (
-              <Button
-                key={component.type}
-                variant="ghost"
-                className="w-full flex items-start gap-3 p-3 h-auto rounded-lg hover:bg-[#FAF9F7] transition-colors text-left"
-                onClick={() => onComponentSelect(component.type)}
-              >
-                <component.icon className="w-5 h-5 text-[#B89B7A] mt-1 flex-shrink-0" />
-                <div>
-                  <h4 className="text-sm font-medium text-[#432818] text-left">
-                    {component.label}
-                  </h4>
-                  <p className="text-xs text-[#8F7A6A] text-left">
-                    {component.description}
-                  </p>
-                </div>
-              </Button>
-            ))}
-          </div>
-        ))}
+    <div className="h-full flex flex-col">
+      <div className="p-4 border-b">
+        <h2 className="font-playfair text-lg text-[#432818]">Componentes</h2>
       </div>
+      
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-2">
+          {components.map((component) => (
+            <Button
+              key={component.type}
+              variant="ghost"
+              className="w-full justify-start text-[#8F7A6A] hover:text-[#432818] hover:bg-[#FAF9F7]"
+              onClick={() => onComponentSelect(component.type as EditorBlock['type'])}
+            >
+              <component.icon className="w-4 h-4 mr-2" />
+              {component.label}
+            </Button>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 };
-
-export default ComponentsSidebar;
