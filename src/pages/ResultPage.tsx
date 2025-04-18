@@ -7,29 +7,13 @@ import { Button } from '../components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import { toast } from '../components/ui/use-toast';
-import { Progress } from '../components/ui/progress';
 import { AnimatedWrapper } from '../components/ui/animated-wrapper';
 import { Card } from '../components/ui/card';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [showResult, setShowResult] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    
-    if (quizResult || localResult) {
-      timer = setTimeout(() => {
-        setShowResult(true);
-        setLoading(false);
-      }, 4000);
-    }
-
-    return () => clearTimeout(timer);
-  }, [quizResult, localResult]);
 
   useEffect(() => {
     if (quizResult) {
@@ -87,23 +71,10 @@ const ResultPage: React.FC = () => {
                 se vestir com mais intenção e deixar sua imagem comunicar quem você é de verdade 
                 — com leveza, presença e propósito.
               </p>
-              
-              {!showResult && (
-                <div className="space-y-4">
-                  <p className="text-center text-[#432818] font-medium">
-                    Preparando seu resultado personalizado...
-                  </p>
-                  <Progress 
-                    value={75}
-                    className="w-full h-2 bg-[#B89B7A]/20" 
-                    indicatorClassName="bg-[#B89B7A] transition-all duration-[4000ms] ease-in-out" 
-                  />
-                </div>
-              )}
             </Card>
           </AnimatedWrapper>
 
-          {showResult && resultData && (
+          {resultData && (
             <AnimatedWrapper>
               <QuizResult 
                 primaryStyle={resultData.primaryStyle} 
