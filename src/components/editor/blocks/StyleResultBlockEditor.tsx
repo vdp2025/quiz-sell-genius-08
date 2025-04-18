@@ -2,33 +2,51 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { BlockEditorProps } from './types';
+import { StyleResultPreview } from './StyleResultPreview';
 
 export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
 }) => {
+  const selectedStyle = {
+    category: "Natural",
+    score: 100,
+    percentage: 100
+  };
+
   return (
-    <div className="space-y-4">
-      <div>
-        <Label htmlFor={`${block.id}-title`}>Título do Resultado</Label>
-        <Input
-          id={`${block.id}-title`}
-          value={block.content.title || ''}
-          onChange={(e) => onUpdate({ title: e.target.value })}
-          className="mt-1"
-          placeholder="Seu Estilo Principal é..."
-        />
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="description">Descrição Personalizada</Label>
+          <Textarea
+            id="description"
+            value={block.content.description || ''}
+            onChange={(e) => onUpdate({ description: e.target.value })}
+            placeholder="Descreva o estilo predominante..."
+            className="min-h-[100px]"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="customImage">URL da Imagem Personalizada</Label>
+          <Input
+            id="customImage"
+            value={block.content.customImage || ''}
+            onChange={(e) => onUpdate({ customImage: e.target.value })}
+            placeholder="https://exemplo.com/imagem.jpg"
+          />
+        </div>
       </div>
-      
-      <div>
-        <Label htmlFor={`${block.id}-description`}>Descrição do Resultado</Label>
-        <Input
-          id={`${block.id}-description`}
-          value={block.content.text || ''}
-          onChange={(e) => onUpdate({ text: e.target.value })}
-          className="mt-1"
-          placeholder="Descrição do estilo principal"
+
+      <div className="border-t pt-6">
+        <h3 className="text-sm font-medium text-[#432818] mb-4">Pré-visualização</h3>
+        <StyleResultPreview 
+          primaryStyle={selectedStyle}
+          description={block.content.description}
+          customImage={block.content.customImage}
         />
       </div>
     </div>

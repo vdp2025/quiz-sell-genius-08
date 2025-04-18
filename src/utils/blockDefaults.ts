@@ -97,7 +97,10 @@ export const getDefaultContentForType = (type: Block['type']) => {
         title: 'Transforme seu estilo agora'
       };
     case 'style-result':
-      return { title: 'Seu estilo predominante é {{primaryStyle}}' };
+      return { 
+        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.',
+        customImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
+      };
     case 'secondary-styles':
       return { title: 'Seus Estilos Complementares' };
     default:
