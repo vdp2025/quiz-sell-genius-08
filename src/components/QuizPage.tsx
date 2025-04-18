@@ -1,20 +1,15 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
-import { Button } from './ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { UserResponse } from '../types/quiz';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { Progress } from './ui/progress';
-import { AnimatedWrapper } from './ui/animated-wrapper';
 import { useNavigate } from 'react-router-dom';
-import { toast } from './ui/use-toast';
+import { UserResponse } from '../types/quiz';
 import QuizTransition from './QuizTransition';
 import QuizFinalTransition from './QuizFinalTransition';
 import { strategicQuestions } from '../data/strategicQuestions';
 import { quizQuestions } from '../data/quizQuestions';
-import { Card } from './ui/card';
+import { QuizHeader } from './quiz/QuizHeader';
+import { QuizNavigation } from './quiz/QuizNavigation';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -177,24 +172,13 @@ const QuizPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
-        <AnimatedWrapper>
-          <Progress 
-            value={Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)} 
-            className="w-full h-2 bg-[#B89B7A]/20" 
-            indicatorClassName="bg-[#B89B7A]" 
-          />
-        </AnimatedWrapper>
-        
-        <AnimatedWrapper className="flex justify-between items-center mb-8">
-          <h1 className="text-base font-playfair text-[#432818]">
-            Olá, {user?.userName || 'Visitante'}!
-          </h1>
-          <div className="text-sm text-[#1A1818]/60">
-            {showingStrategicQuestions 
-              ? currentStrategicQuestionIndex + 1 
-              : currentQuestionIndex + 1} de {totalQuestions}
-          </div>
-        </AnimatedWrapper>
+        <QuizHeader
+          userName={user?.userName}
+          currentQuestionIndex={currentQuestionIndex}
+          totalQuestions={totalQuestions}
+          showingStrategicQuestions={showingStrategicQuestions}
+          currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+        />
 
         {hasStrategicQuestion ? (
           <QuizQuestion
@@ -211,20 +195,10 @@ const QuizPage: React.FC = () => {
           />
         ) : null}
 
-        {!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0 && (
-          <div className="flex justify-between mt-8">
-            <AnimatedWrapper className="flex">
-              <Button
-                onClick={handlePrevious}
-                variant="outline"
-                className="flex items-center gap-2 border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Voltar
-              </Button>
-            </AnimatedWrapper>
-          </div>
-        )}
+        <QuizNavigation
+          showPrevious={!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0}
+          onPrevious={handlePrevious}
+        />
       </div>
     </div>
   );
