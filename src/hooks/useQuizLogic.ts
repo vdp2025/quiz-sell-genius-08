@@ -78,6 +78,7 @@ export const useQuizLogic = () => {
 
     let totalSelections = 0;
 
+    // Garantir que todas as respostas sejam contabilizadas
     Object.entries(answers).forEach(([questionId, optionIds]) => {
       const question = quizQuestions.find(q => q.id === questionId);
       if (!question) return;
@@ -94,11 +95,12 @@ export const useQuizLogic = () => {
     console.log('Style counts:', styleCounter);
     console.log('Total selections:', totalSelections);
 
+    // Calcular resultados
     const styleResults: StyleResult[] = Object.entries(styleCounter)
       .map(([category, score]) => ({
         category: category as StyleResult['category'],
         score,
-        percentage: Math.round((score / totalSelections) * 100)
+        percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
       }))
       .sort((a, b) => b.score - a.score);
 

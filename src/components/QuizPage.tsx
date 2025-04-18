@@ -74,8 +74,10 @@ const QuizPage: React.FC = () => {
           handleNext();
         }, 500);
       } else {
+        // Garantir que o quiz não trave na última questão
         setTimeout(() => {
-          calculateResults();
+          const results = calculateResults();
+          console.log('Results calculated before transition:', results);
           setShowingTransition(true);
         }, 800);
       }
