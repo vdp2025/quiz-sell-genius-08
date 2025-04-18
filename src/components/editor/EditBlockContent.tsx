@@ -5,6 +5,9 @@ import { HeadlineBlockEditor } from './blocks/HeadlineBlockEditor';
 import { TextBlockEditor } from './blocks/TextBlockEditor';
 import { ImageBlockEditor } from './blocks/ImageBlockEditor';
 import { BenefitsBlockEditor } from './blocks/BenefitsBlockEditor';
+import { PricingBlockEditor } from './blocks/PricingBlockEditor';
+import { GuaranteeBlockEditor } from './blocks/GuaranteeBlockEditor';
+import { CTABlockEditor } from './blocks/CTABlockEditor';
 
 interface EditBlockContentProps {
   block: EditorBlock;
@@ -27,6 +30,15 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
     
     case 'benefits':
       return <BenefitsBlockEditor block={block} onUpdate={onUpdate} />;
+      
+    case 'pricing':
+      return <PricingBlockEditor block={block} onUpdate={onUpdate} />;
+      
+    case 'guarantee':
+      return <GuaranteeBlockEditor block={block} onUpdate={onUpdate} />;
+      
+    case 'cta':
+      return <CTABlockEditor block={block} onUpdate={onUpdate} />;
       
     case 'testimonials':
       return (
