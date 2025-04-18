@@ -68,15 +68,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium bg-transparent py-1.5 px-2 mt-auto text-brand-coffee relative",
-                // Standardized font size for all image options on mobile
+                "leading-tight font-medium bg-transparent py-1 px-2 mt-auto text-brand-coffee relative", // Reduced vertical padding
                 isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
             : cn(
-                // Standardized font size for all text options on mobile
                 isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-sm leading-relaxed desktop:text-base",
-                // Special case for questions 1 & 2
                 (questionId === '1' || questionId === '2') && (
                   isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"
                 )
