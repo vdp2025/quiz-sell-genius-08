@@ -1,54 +1,51 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
+import React, { useState, useRef, useEffect } from 'react';
+import { SketchPicker } from 'react-color';
+import { Button } from '@/components/ui/button';
 
 interface ColorPickerProps {
   color: string;
   onChange: (color: string) => void;
 }
 
-export const ColorPicker: React.FC<ColorPickerProps> = ({
-  color,
-  onChange
-}) => {
-  const [inputValue, setInputValue] = useState(color);
-  const colorInputRef = useRef<HTMLInputElement>(null);
-  
+export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
+  const [showPicker, setShowPicker] = useState(false);
+  const pickerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    setInputValue(color);
-  }, [color]);
-  
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    onChange(e.target.value);
-  };
-  
-  const handleColorPickerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
-  };
+    function handleClickOutside(event: MouseEvent) {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        setShowPicker(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="flex space-x-2">
-      <div 
-        className="w-10 h-10 rounded border cursor-pointer flex items-center justify-center"
+    <div className="relative">
+      <Button
+        type="button"
+        onClick={() => setShowPicker(!showPicker)}
+        className="w-10 h-10 p-0 rounded-md"
         style={{ backgroundColor: color }}
-        onClick={() => colorInputRef.current?.click()}
-      >
-        <input
-          ref={colorInputRef}
-          type="color"
-          value={color}
-          onChange={handleColorPickerChange}
-          className="sr-only"
-        />
-      </div>
-      <Input
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        className="flex-1"
-        placeholder="#000000"
       />
+      
+      {showPicker && (
+        <div
+          ref={pickerRef}
+          className="absolute z-10 mt-2"
+          style={{ top: '100%', left: '0' }}
+        >
+          <SketchPicker
+            color={color}
+            onChange={(color) => onChange(color.hex)}
+          />
+        </div>
+      )}
     </div>
   );
 };

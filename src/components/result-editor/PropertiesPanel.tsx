@@ -1,11 +1,24 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Block } from '@/types/editor';
+import { X, Trash } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import HeaderBlockEditor from './block-editors/HeaderBlockEditor';
+import HeadlineBlockEditor from './block-editors/HeadlineBlockEditor';
+import TextBlockEditor from './block-editors/TextBlockEditor';
+import ImageBlockEditor from './block-editors/ImageBlockEditor';
+import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
+import PricingBlockEditor from './block-editors/PricingBlockEditor';
+import GuaranteeBlockEditor from './block-editors/GuaranteeBlockEditor';
+import CTABlockEditor from './block-editors/CTABlockEditor';
+import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
+import SecondaryStylesBlockEditor from './block-editors/SecondaryStylesBlockEditor';
+import HeroSectionBlockEditor from './block-editors/HeroSectionBlockEditor';
+import ProductsBlockEditor from './block-editors/ProductsBlockEditor';
+import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
+import StyleEditor from './style-editors/StyleEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -23,195 +36,131 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   onDelete
 }) => {
   const selectedBlock = blocks.find(block => block.id === selectedBlockId);
-
-  if (!selectedBlockId || !selectedBlock) {
+  
+  if (!selectedBlock) {
     return (
-      <div className="h-full p-4 bg-white">
-        <div className="flex justify-between items-center border-b pb-4 mb-4">
-          <h2 className="text-lg font-playfair text-[#432818]">Propriedades</h2>
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
+      <div className="h-full flex flex-col border-l">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h2 className="font-semibold">Propriedades</h2>
         </div>
-        <div className="flex flex-col items-center justify-center h-64 text-[#8F7A6A] text-sm">
-          <p>Selecione um componente para editar suas propriedades</p>
+        <div className="flex-1 flex items-center justify-center p-4 text-center">
+          <p className="text-[#8F7A6A]">
+            Selecione um bloco para editar suas propriedades
+          </p>
         </div>
       </div>
     );
   }
-
+  
+  const getBlockTitle = () => {
+    switch (selectedBlock.type) {
+      case 'header':
+        return 'Cabeçalho';
+      case 'headline':
+        return 'Título e Subtítulo';
+      case 'text':
+        return 'Texto';
+      case 'image':
+        return 'Imagem';
+      case 'benefits':
+        return 'Benefícios';
+      case 'pricing':
+        return 'Preço';
+      case 'guarantee':
+        return 'Garantia';
+      case 'cta':
+        return 'Botão de Ação';
+      case 'style-result':
+        return 'Estilo Principal';
+      case 'secondary-styles':
+        return 'Estilos Secundários';
+      case 'hero-section':
+        return 'Seção Hero';
+      case 'products':
+        return 'Produtos';
+      case 'testimonials':
+        return 'Depoimentos';
+      default:
+        return 'Componente';
+    }
+  };
+  
+  const renderContentEditor = () => {
+    switch (selectedBlock.type) {
+      case 'header':
+        return <HeaderBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'headline':
+        return <HeadlineBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'text':
+        return <TextBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'image':
+        return <ImageBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'benefits':
+        return <BenefitsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'pricing':
+        return <PricingBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'guarantee':
+        return <GuaranteeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'cta':
+        return <CTABlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'style-result':
+        return <StyleResultBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'secondary-styles':
+        return <SecondaryStylesBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'hero-section':
+        return <HeroSectionBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'products':
+        return <ProductsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'testimonials':
+        return <TestimonialsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      default:
+        return <div>Editor não disponível para este tipo de bloco</div>;
+    }
+  };
+  
   return (
-    <div className="h-full p-4 bg-white overflow-y-auto">
-      <div className="flex justify-between items-center border-b pb-4 mb-4">
-        <h2 className="text-lg font-playfair text-[#432818]">
-          {getBlockTitle(selectedBlock.type)}
-        </h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
-
-      <div className="space-y-6">
-        {renderPropertiesFields(selectedBlock, (content) => onUpdate(selectedBlock.id, content))}
-        
-        <div className="pt-4 border-t mt-6">
+    <div className="h-full flex flex-col border-l">
+      <div className="p-4 border-b flex justify-between items-center">
+        <h2 className="font-semibold">{getBlockTitle()}</h2>
+        <div className="flex gap-2">
           <Button
-            variant="destructive"
-            size="sm"
-            className="w-full"
+            variant="ghost"
+            size="icon"
             onClick={() => onDelete(selectedBlock.id)}
+            className="h-8 w-8 hover:bg-red-100 hover:text-red-600"
           >
-            Excluir Componente
+            <Trash className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-8 w-8"
+          >
+            <X className="h-4 w-4" />
           </Button>
         </div>
       </div>
+      
+      <Tabs defaultValue="content" className="flex-1 flex flex-col">
+        <TabsList className="mx-4 mt-2 mb-0">
+          <TabsTrigger value="content">Conteúdo</TabsTrigger>
+          <TabsTrigger value="style">Estilo</TabsTrigger>
+        </TabsList>
+        
+        <ScrollArea className="flex-1">
+          <TabsContent value="content" className="p-4">
+            {renderContentEditor()}
+          </TabsContent>
+          
+          <TabsContent value="style" className="p-4">
+            <StyleEditor
+              style={selectedBlock.content.style || {}}
+              onUpdate={(style) => onUpdate(selectedBlock.id, { style })}
+            />
+          </TabsContent>
+        </ScrollArea>
+      </Tabs>
     </div>
   );
 };
-
-function getBlockTitle(type: Block['type']) {
-  switch (type) {
-    case 'headline': return 'Título';
-    case 'text': return 'Texto';
-    case 'image': return 'Imagem';
-    case 'benefits': return 'Benefícios';
-    case 'testimonials': return 'Depoimentos';
-    case 'pricing': return 'Preço';
-    case 'guarantee': return 'Garantia';
-    case 'cta': return 'Botão CTA';
-    case 'style-result': return 'Resultado do Estilo';
-    case 'secondary-styles': return 'Estilos Secundários';
-    default: return 'Componente';
-  }
-}
-
-function renderPropertiesFields(block: Block, onUpdate: (content: any) => void) {
-  switch (block.type) {
-    case 'headline':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
-            <Input
-              id="title"
-              placeholder="Digite o título"
-              value={block.content.title || ''}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="subtitle">Subtítulo</Label>
-            <Input
-              id="subtitle"
-              placeholder="Digite o subtítulo"
-              value={block.content.subtitle || ''}
-              onChange={(e) => onUpdate({ subtitle: e.target.value })}
-            />
-          </div>
-        </>
-      );
-      
-    case 'text':
-      return (
-        <div className="space-y-2">
-          <Label htmlFor="text">Texto</Label>
-          <Textarea
-            id="text"
-            placeholder="Digite o texto"
-            className="min-h-[100px]"
-            value={block.content.text || ''}
-            onChange={(e) => onUpdate({ text: e.target.value })}
-          />
-        </div>
-      );
-      
-    case 'image':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="imageUrl">URL da Imagem</Label>
-            <Input
-              id="imageUrl"
-              placeholder="https://exemplo.com/imagem.jpg"
-              value={block.content.imageUrl || ''}
-              onChange={(e) => onUpdate({ imageUrl: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="imageAlt">Texto Alternativo</Label>
-            <Input
-              id="imageAlt"
-              placeholder="Descrição da imagem"
-              value={block.content.imageAlt || ''}
-              onChange={(e) => onUpdate({ imageAlt: e.target.value })}
-            />
-          </div>
-        </>
-      );
-      
-    case 'pricing':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="regularPrice">Preço Regular</Label>
-            <Input
-              id="regularPrice"
-              placeholder="197,00"
-              value={block.content.regularPrice || ''}
-              onChange={(e) => onUpdate({ regularPrice: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="salePrice">Preço Promocional</Label>
-            <Input
-              id="salePrice"
-              placeholder="97,00"
-              value={block.content.salePrice || ''}
-              onChange={(e) => onUpdate({ salePrice: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="buttonText">Texto do Botão</Label>
-            <Input
-              id="buttonText"
-              placeholder="Comprar Agora"
-              value={block.content.buttonText || ''}
-              onChange={(e) => onUpdate({ buttonText: e.target.value })}
-            />
-          </div>
-        </>
-      );
-      
-    case 'benefits':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
-            <Input
-              id="title"
-              placeholder="Benefícios"
-              value={block.content.title || ''}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="items">Itens (um por linha)</Label>
-            <Textarea
-              id="items"
-              placeholder="Benefício 1&#10;Benefício 2&#10;Benefício 3"
-              className="min-h-[150px]"
-              value={(block.content.items || []).join('\n')}
-              onChange={(e) => onUpdate({ items: e.target.value.split('\n').filter(item => item.trim() !== '') })}
-            />
-          </div>
-        </>
-      );
-      
-    default:
-      return (
-        <p className="text-sm text-[#8F7A6A]">
-          As propriedades deste componente não podem ser editadas.
-        </p>
-      );
-  }
-}
