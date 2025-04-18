@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { EditorBlock } from '@/types/editor';
 import { useToast } from '@/components/ui/use-toast';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
 
 export const useEditorActions = (
   blocks: EditorBlock[],
