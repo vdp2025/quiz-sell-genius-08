@@ -2,54 +2,86 @@
 import React from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
-import { ShoppingCart, Clock } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
 import BenefitList from './sales/BenefitList';
 import Testimonials from './sales/Testimonials';
 import Guarantee from './sales/Guarantee';
+import Logo from '../ui/logo';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
 }
 
 const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle }) => (
-  <div className="space-y-6">
-    <Card className="p-6 border border-[#B89B7A] bg-white">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-3">
-          Guia Completo do Estilo {primaryStyle.category}
-        </h2>
-        <p className="text-[#1A1818]/80 max-w-2xl mx-auto">
-          Descubra como expressar sua verdadeira essência através do seu estilo pessoal
-        </p>
-      </div>
+  <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
+    <div className="text-center">
+      <Logo className="h-20 mx-auto mb-8" />
+    </div>
 
-      <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
-        <div className="text-center md:text-right">
-          <p className="text-sm text-[#1A1818]/60 mb-1">Preço normal</p>
-          <p className="text-lg line-through text-[#1A1818]/60">R$ 97,00</p>
+    <div className="text-center mb-8">
+      <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
+        Seu estilo foi revelado. Agora é hora da transformação.
+      </h2>
+      <p className="text-[#3a3a3a]">
+        Você descobriu seu estilo {primaryStyle.category}. Mas o verdadeiro poder dessa descoberta está no que você faz com ela. 🌟
+      </p>
+    </div>
+
+    <img
+      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"
+      alt="Resultado do Quiz Visagismo"
+      className="w-full rounded-lg mb-8"
+    />
+
+    <Card className="p-6 border-[#aa6b5d]/20 bg-white">
+      <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
+        Guia de Estilo e Imagem + Bônus Exclusivos
+      </h2>
+      
+      <img
+        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
+        alt="Todos os produtos e bônus mockup"
+        className="w-full rounded-lg mb-6"
+      />
+
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
+          <div className="text-center md:text-right">
+            <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
+            <p className="text-lg line-through text-[#3a3a3a]/60">R$ 175,00</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
+            <p className="text-3xl font-bold text-[#aa6b5d]">R$ 39,00</p>
+          </div>
         </div>
-        <div className="text-center">
-          <p className="text-sm text-[#B89B7A] mb-1">Oferta especial</p>
-          <p className="text-3xl font-bold text-[#432818]">R$ 47,00</p>
-        </div>
-      </div>
 
-      <div className="flex items-center justify-center gap-2 mb-6 text-[#B89B7A]">
-        <Clock className="w-5 h-5" />
-        <span className="text-sm">Oferta por tempo limitado</span>
+        <Button 
+          className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
+          onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
+        >
+          <ShoppingCart className="w-5 h-5 mr-2" />
+          Quero meu Guia + Bônus por R$39,00
+        </Button>
       </div>
-
-      <Button 
-        className="w-full bg-[#B89B7A] hover:bg-[#B89B7A]/90 py-6 rounded-full text-lg"
-        onClick={() => window.location.href = "https://pay.hotmart.com/"}
-      >
-        <ShoppingCart className="w-5 h-5 mr-2" />
-        Quero Garantir Minha Vaga
-      </Button>
     </Card>
 
     <BenefitList />
+    
+    <div className="grid md:grid-cols-2 gap-6">
+      <img
+        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
+        alt="Mockup celular peças-chave por dentro"
+        className="w-full rounded-lg"
+      />
+      <img
+        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
+        alt="Foto Gisele Galvão"
+        className="w-full rounded-lg"
+      />
+    </div>
+    
     <Testimonials />
     <Guarantee />
   </div>

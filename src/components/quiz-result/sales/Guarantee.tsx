@@ -1,23 +1,22 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Shield } from 'lucide-react';
 
 const Guarantee = () => {
   return (
-    <Card className="p-6 bg-white/50 backdrop-blur border border-[#B89B7A]/20 mb-6">
-      <div className="flex items-center gap-4">
-        <Shield className="w-12 h-12 text-[#B89B7A]" />
-        <div>
-          <h3 className="text-xl font-playfair text-[#432818] mb-2">
-            Garantia de 7 dias
-          </h3>
-          <p className="text-[#1A1818]/80">
-            Se você não ficar completamente satisfeita com o material, devolvemos 100% do seu investimento. Sem perguntas.
-          </p>
-        </div>
-      </div>
-    </Card>
+    <div className="space-y-4">
+      <Card className="p-6 bg-[#ffefec] border-2 border-dashed border-[#aa6b5d] text-center">
+        <p className="text-[#3a3a3a] font-semibold">
+          ✨ Oferta exclusiva por tempo limitado. Depois desta página, o valor pode voltar ao original!
+        </p>
+      </Card>
+      
+      <img
+        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp"
+        alt="Selo 7 dias de garantia"
+        className="w-full rounded-lg"
+      />
+    </div>
   );
 };
 
