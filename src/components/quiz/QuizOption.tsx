@@ -43,7 +43,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col",
           "transition-all duration-500 ease-in-out", 
           type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-visible",
+          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
           isSelected 
             ? type === 'text' 
               ? "border-[#B89B7A]/80 bg-[#B89B7A]/10 shadow-2xl"
@@ -68,7 +68,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium bg-white/95 py-2 px-2.5 mt-auto text-brand-coffee relative",
+                "leading-tight font-medium bg-white/95 py-1.5 px-2 mt-auto text-brand-coffee relative",
                 "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )

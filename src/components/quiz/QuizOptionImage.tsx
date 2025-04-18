@@ -35,28 +35,26 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   return (
     <div className={cn(
-      "w-full relative flex-grow overflow-visible",
+      "w-full relative flex-grow overflow-hidden",
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
         ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
         className="w-full h-full"
       >
-        <div className="w-full h-full flex items-center justify-center relative">
+        <div className="w-full h-full flex items-center justify-center">
           <img
             src={imageUrl}
             alt={altText}
             className={cn(
-              "object-contain absolute inset-0 px-1 pt-1",
+              "object-cover w-full h-full",
               "transition-all duration-300 ease-in-out",
               isSelected ? (
                 isMobile 
-                  ? "scale-110 shadow-lg z-10" // Gentler scale on mobile
-                  : "shadow-lg border-2 border-brand-coffee/40 z-10" // No scale on desktop, just elevation
+                  ? "scale-110 shadow-lg z-10" 
+                  : "shadow-lg border-2 border-brand-coffee/40 z-10"
               ) : "scale-100 hover:shadow-md",
-              // Increase zoom by 15% ONLY for questions 1 and 2 on mobile
               isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.15]",
-              "w-full h-full"
             )}
             onError={() => setImageError(true)}
             style={{
