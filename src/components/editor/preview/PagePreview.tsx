@@ -3,6 +3,9 @@ import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, Smartphone, Monitor, PlusIcon } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
+import { HeaderBlock } from './blocks/HeaderBlock';
+import { HeroBlock } from './blocks/HeroBlock';
+import { BonusCarouselBlock } from './blocks/BonusCarouselBlock';
 
 interface PagePreviewProps {
   primaryStyle: StyleResult;
@@ -18,72 +21,11 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
   const renderBlockContent = (block: EditorBlock) => {
     switch (block.type) {
       case 'header':
-        return (
-          <div className="text-center p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            {block.content.logo && (
-              <img src={block.content.logo} alt={block.content.logoAlt || ''} className="mx-auto w-36 mb-6" />
-            )}
-            {block.content.title && (
-              <h1 className="text-4xl md:text-5xl font-bold text-[#aa6b5d]">{block.content.title}</h1>
-            )}
-            {block.content.subtitle && (
-              <p className="text-lg mt-4 max-w-2xl mx-auto">{block.content.subtitle}</p>
-            )}
-          </div>
-        );
-        
+        return <HeaderBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'hero-section':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <section className="grid md:grid-cols-2 gap-8 items-center">
-              {block.content.heroImage && (
-                <img 
-                  src={block.content.heroImage} 
-                  alt={block.content.heroImageAlt || ''} 
-                  className="rounded-lg shadow-lg"
-                />
-              )}
-              <div>
-                {block.content.quote && (
-                  <>
-                    <blockquote className="italic text-lg text-[#6b4e43]">
-                      "{block.content.quote}"
-                    </blockquote>
-                    {block.content.quoteAuthor && (
-                      <span className="not-italic font-medium block mt-2">
-                        — {block.content.quoteAuthor}
-                      </span>
-                    )}
-                  </>
-                )}
-              </div>
-            </section>
-          </div>
-        );
-        
+        return <HeroBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'bonus-carousel':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            {block.content.title && (
-              <h2 className="text-xl font-semibold text-[#aa6b5d] mb-4">{block.content.title}</h2>
-            )}
-            <div className="grid md:grid-cols-3 gap-6">
-              {(block.content.bonusImages || []).map((image, index) => (
-                <div key={index} className="space-y-2">
-                  <img 
-                    src={image.url} 
-                    alt={image.alt} 
-                    className="rounded-lg shadow w-full"
-                  />
-                  {image.title && (
-                    <p className="text-sm text-center text-[#6b4e43]">{image.title}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      
+        return <BonusCarouselBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'headline':
         return (
           <div className="space-y-3 p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
