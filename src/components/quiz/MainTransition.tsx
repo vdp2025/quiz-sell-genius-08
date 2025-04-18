@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { Card } from '../ui/card';
@@ -24,6 +25,12 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     // Reset selected option when question changes
     setSelectedOption(null);
   }, [currentQuestionIndex]);
+
+  // Define the currentAnswersForQuestion variable
+  const currentQuestion = strategicQuestions[currentQuestionIndex];
+  const currentAnswersForQuestion = currentQuestion 
+    ? (strategicAnswers[currentQuestion.id] || []) 
+    : [];
 
   const handleQuestionAnswer = (response: UserResponse) => {
     try {
