@@ -69,10 +69,17 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-transparent py-1.5 px-2 mt-auto text-brand-coffee relative",
-                "text-[0.7rem] sm:text-xs", // Consistent text size for all questions
+                // Smaller font size for questions 1 and 2
+                (questionId === '1' || questionId === '2') 
+                  ? "text-[0.5rem] sm:text-[0.6rem]" 
+                  : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
-            : "text-[0.7rem] sm:text-xs leading-relaxed" // Ensure consistent text size for text options
+            : cn(
+                "text-[0.7rem] sm:text-xs leading-relaxed",
+                // Even smaller font size for text options in questions 1 and 2
+                (questionId === '1' || questionId === '2') && "text-[0.5rem] sm:text-[0.6rem]"
+              )
         )}>
           {highlightStrategicWords(option.text)}
         </p>
@@ -82,3 +89,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
