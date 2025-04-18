@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -30,8 +29,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       className={cn(
         "relative group h-full",
         "transition-all duration-500 ease-in-out transform", 
-        isMobile && "active:scale-[0.98]",
-        isSelected && "scale-[1.02]"
+        !type.includes('text') && !isSelected && "hover:scale-[1.02]"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -51,7 +49,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               : "border-[#403E43] shadow-lg ring-2 ring-[#403E43]/20"
             : type === 'text' 
               ? "border-[#B89B7A]/10 hover:border-[#403E43]/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md" 
-              : "hover:border-[#403E43]/40 hover:scale-[1.01] hover:shadow-md",
+              : "hover:border-[#403E43]/40 hover:shadow-md"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -88,4 +86,3 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
-
