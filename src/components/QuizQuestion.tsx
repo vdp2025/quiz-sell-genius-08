@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -12,7 +11,7 @@ interface QuizQuestionProps {
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
   autoAdvance?: boolean;
-  hideTitle?: boolean; // Add this prop to optionally hide the title
+  hideTitle?: boolean;
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -20,7 +19,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onAnswer,
   currentAnswers,
   autoAdvance = false,
-  hideTitle = false, // Default to showing the title
+  hideTitle = false,
 }) => {
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
@@ -104,7 +103,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         
         {!autoAdvance && (
           <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mt-3 text-center font-medium">
-            Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
+            Selecione 3 Opções para avançar
           </p>
         )}
       </div>
