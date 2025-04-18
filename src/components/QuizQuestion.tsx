@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -56,7 +57,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     }
     
     return isMobile 
-      ? "grid-cols-2 gap-3 px-2"
+      ? "grid-cols-1 gap-3 px-0" // Changed to single column and removed horizontal padding
       : "grid-cols-2 gap-3 px-2";
   };
 
