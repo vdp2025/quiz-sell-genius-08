@@ -40,6 +40,7 @@ export function VisualEditor() {
             selectedBlockId={selectedBlockId}
             onSelectBlock={setSelectedBlockId}
             isPreviewing={isPreviewing}
+            onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
           />
         </ResizablePanel>
 
