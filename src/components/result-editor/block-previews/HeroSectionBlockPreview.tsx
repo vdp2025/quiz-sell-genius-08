@@ -13,43 +13,47 @@ interface HeroSectionBlockPreviewProps {
   primaryStyle: StyleResult;
 }
 
-const HeroSectionBlockPreview: React.FC<HeroSectionBlockPreviewProps> = ({ 
-  content,
-  primaryStyle
-}) => {
+const HeroSectionBlockPreview: React.FC<HeroSectionBlockPreviewProps> = ({ content, primaryStyle }) => {
   return (
-    <div className="relative space-y-6" style={content.style}>
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-playfair text-[#aa6b5d] mb-3">
-          {content.title || "VOCÊ DESCOBRIU SEU ESTILO"}
-        </h1>
-        <p className="text-xl md:text-2xl font-playfair text-[#3a3a3a] mb-6">
-          {content.subtitle || "Agora é hora de aplicar com clareza — e se vestir de você"}
-        </p>
-        
-        <div className="p-4 bg-[#ffefec] border-[#aa6b5d]/20 inline-block mx-auto rounded-lg">
-          <div className="flex items-center gap-2 text-[#aa6b5d]">
-            <span>Seu estilo predominante é</span>
-            <span className="font-semibold">{primaryStyle.category}</span>
+    <div className="bg-[#fff7f3] rounded-lg overflow-hidden" style={content.style}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+        <div className="space-y-4 flex flex-col justify-center">
+          <h2 className="text-2xl md:text-3xl font-playfair font-bold text-[#aa6b5d]">
+            {content.title || 'VOCÊ DESCOBRIU SEU ESTILO'}
+          </h2>
+          
+          <p className="text-[#1A1818]/80">
+            {content.subtitle || 'Agora é hora de aplicar com clareza — e se vestir de você'}
+          </p>
+          
+          <div className="bg-white p-4 rounded-lg inline-block">
+            <p className="text-[#aa6b5d] font-medium">
+              Seu estilo predominante é <span className="font-semibold">{primaryStyle.category}</span>
+            </p>
           </div>
         </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8 items-center">
-        {content.heroImage && (
-          <img
-            src={content.heroImage}
-            alt="Guia Completo de Estilo"
-            className="w-full rounded-lg shadow-lg"
-          />
-        )}
-        {content.heroImage2 && (
-          <img
-            src={content.heroImage2}
-            alt="Gisele Galvão"
-            className="w-full rounded-lg shadow-lg"
-          />
-        )}
+        
+        <div className="relative">
+          {content.heroImage ? (
+            <img
+              src={content.heroImage}
+              alt="Estilo"
+              className="w-full h-auto rounded-lg"
+            />
+          ) : (
+            <div className="bg-gray-100 h-48 flex items-center justify-center rounded-lg">
+              <p className="text-gray-400">Adicione uma imagem principal</p>
+            </div>
+          )}
+          
+          {content.heroImage2 && (
+            <img
+              src={content.heroImage2}
+              alt="Gisele Galvão"
+              className="absolute bottom-0 right-0 w-1/2 h-auto rounded-lg shadow-lg transform translate-x-1/4 translate-y-1/4"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

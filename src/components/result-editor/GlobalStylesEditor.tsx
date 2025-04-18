@@ -1,9 +1,8 @@
 
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { ColorPicker } from './ColorPicker';
 
 interface GlobalStylesEditorProps {
@@ -26,110 +25,86 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   const [styles, setStyles] = useState(globalStyles);
 
   const handleChange = (key: string, value: string) => {
-    setStyles({
-      ...styles,
+    setStyles(prev => ({
+      ...prev,
       [key]: value
-    });
+    }));
   };
-  
-  const fontOptions = [
-    "'Playfair Display', serif",
-    "'Montserrat', sans-serif",
-    "'Roboto', sans-serif",
-    "'Open Sans', sans-serif",
-    "'Lato', sans-serif"
-  ];
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Editar Estilos Globais</DialogTitle>
+          <DialogTitle>Estilos Globais</DialogTitle>
         </DialogHeader>
         
-        <div className="grid gap-4 py-4">
-          <div className="grid gap-2">
-            <Label htmlFor="primaryColor">Cor Primária</Label>
-            <div className="flex gap-2 items-center">
+        <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label>Cor Primária</Label>
+            <div className="flex items-center gap-4">
               <ColorPicker
                 color={styles.primaryColor || '#aa6b5d'}
                 onChange={(color) => handleChange('primaryColor', color)}
               />
-              <Input
-                id="primaryColor"
-                value={styles.primaryColor || '#aa6b5d'}
-                onChange={(e) => handleChange('primaryColor', e.target.value)}
-                className="flex-1"
-              />
+              <span className="text-sm">{styles.primaryColor || '#aa6b5d'}</span>
             </div>
           </div>
           
-          <div className="grid gap-2">
-            <Label htmlFor="secondaryColor">Cor Secundária</Label>
-            <div className="flex gap-2 items-center">
+          <div className="space-y-2">
+            <Label>Cor Secundária</Label>
+            <div className="flex items-center gap-4">
               <ColorPicker
                 color={styles.secondaryColor || '#432818'}
                 onChange={(color) => handleChange('secondaryColor', color)}
               />
-              <Input
-                id="secondaryColor"
-                value={styles.secondaryColor || '#432818'}
-                onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                className="flex-1"
-              />
+              <span className="text-sm">{styles.secondaryColor || '#432818'}</span>
             </div>
           </div>
           
-          <div className="grid gap-2">
-            <Label htmlFor="textColor">Cor do Texto</Label>
-            <div className="flex gap-2 items-center">
+          <div className="space-y-2">
+            <Label>Cor do Texto</Label>
+            <div className="flex items-center gap-4">
               <ColorPicker
                 color={styles.textColor || '#1A1818'}
                 onChange={(color) => handleChange('textColor', color)}
               />
-              <Input
-                id="textColor"
-                value={styles.textColor || '#1A1818'}
-                onChange={(e) => handleChange('textColor', e.target.value)}
-                className="flex-1"
-              />
+              <span className="text-sm">{styles.textColor || '#1A1818'}</span>
             </div>
           </div>
           
-          <div className="grid gap-2">
-            <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-            <div className="flex gap-2 items-center">
+          <div className="space-y-2">
+            <Label>Cor de Fundo</Label>
+            <div className="flex items-center gap-4">
               <ColorPicker
                 color={styles.backgroundColor || '#fffaf7'}
                 onChange={(color) => handleChange('backgroundColor', color)}
               />
-              <Input
-                id="backgroundColor"
-                value={styles.backgroundColor || '#fffaf7'}
-                onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                className="flex-1"
-              />
+              <span className="text-sm">{styles.backgroundColor || '#fffaf7'}</span>
             </div>
           </div>
           
-          <div className="grid gap-2">
-            <Label htmlFor="fontFamily">Fonte Principal</Label>
+          <div className="space-y-2">
+            <Label>Fonte Principal</Label>
             <select
-              id="fontFamily"
+              className="w-full border rounded-md p-2"
               value={styles.fontFamily || "'Playfair Display', serif"}
               onChange={(e) => handleChange('fontFamily', e.target.value)}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {fontOptions.map((font) => (
-                <option key={font} value={font}>{font.split(',')[0].replace(/'/g, '')}</option>
-              ))}
+              <option value="'Playfair Display', serif">Playfair Display</option>
+              <option value="'Inter', sans-serif">Inter</option>
+              <option value="'Arial', sans-serif">Arial</option>
+              <option value="'Georgia', serif">Georgia</option>
             </select>
           </div>
         </div>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={onCancel}>Cancelar</Button>
-          <Button onClick={() => onSave(styles)}>Salvar</Button>
+        <DialogFooter className="sm:justify-end">
+          <Button variant="outline" onClick={onCancel}>
+            Cancelar
+          </Button>
+          <Button onClick={() => onSave(styles)} className="bg-[#B89B7A] hover:bg-[#A38A69]">
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

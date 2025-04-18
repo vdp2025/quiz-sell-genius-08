@@ -8,40 +8,27 @@ interface SecondaryStylesBlockPreviewProps {
   };
 }
 
-const SecondaryStylesBlockPreview: React.FC<SecondaryStylesBlockPreviewProps> = ({ 
-  content
-}) => {
+const SecondaryStylesBlockPreview: React.FC<SecondaryStylesBlockPreviewProps> = ({ content }) => {
   return (
-    <div className="mt-4 md:mt-6 space-y-3" style={content.style}>
-      <h3 className="text-base md:text-lg font-playfair text-[#432818]">
+    <div style={content.style}>
+      <h3 className="text-xl font-bold mb-4 text-[#aa6b5d] text-center">
         {content.title || 'Seus Estilos Complementares'}
       </h3>
-      <div className="grid grid-cols-1 gap-3">
-        {[1, 2].map((index) => (
-          <div key={index} className="flex gap-3 items-start bg-gray-50 p-2 md:p-3 rounded-lg">
-            <div className="w-14 md:w-16 h-14 md:h-16 bg-gray-200 rounded"></div>
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-1">
-                <h4 className="font-playfair text-sm md:text-base text-[#432818]">
-                  {index === 1 ? 'Natural' : 'Contemporâneo'}
-                </h4>
-                <span className="text-xs font-medium">{index === 1 ? '15%' : '10%'}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-1">
-                <div 
-                  className="bg-[#B89B7A] h-1 rounded-full" 
-                  style={{ width: index === 1 ? '15%' : '10%' }}
-                />
-              </div>
-              <p className="text-xs md:text-sm text-[#1A1818]/70 mt-1">
-                {index === 1 
-                  ? 'Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual.'
-                  : 'Você gosta de estar atualizado e seguir as tendências. Seu estilo é moderno e versátil.'
-                }
-              </p>
-            </div>
-          </div>
-        ))}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-[#fff7f3] p-4 rounded-lg">
+          <h4 className="font-medium text-[#aa6b5d] mb-2">Natural</h4>
+          <p className="text-[#1A1818]/80 text-sm">
+            Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia.
+          </p>
+        </div>
+        
+        <div className="bg-[#fff7f3] p-4 rounded-lg">
+          <h4 className="font-medium text-[#aa6b5d] mb-2">Contemporâneo</h4>
+          <p className="text-[#1A1818]/80 text-sm">
+            Você gosta de estar atualizado e seguir as tendências. Seu estilo é moderno e versátil, combinando o clássico com o atual.
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -6,63 +6,49 @@ export interface EditableContent {
   imageUrl?: string;
   imageAlt?: string;
   items?: string[];
-  backgroundColor?: string;
-  textColor?: string;
-  alignment?: 'left' | 'center' | 'right';
-  fontSize?: string;
-  padding?: string;
-  margin?: string;
-  // Properties for pricing block
   regularPrice?: string;
   salePrice?: string;
   buttonText?: string;
-  checkoutUrl?: string;
-  // Properties for CTA block
+  ctaUrl?: string;
+  urgencyText?: string;
   url?: string;
-
-  // Header block properties
   logo?: string;
   logoAlt?: string;
-
-  // Hero section properties
+  description?: string;
+  customImage?: string;
   heroImage?: string;
-  heroImageAlt?: string;
-  quote?: string;
-  quoteAuthor?: string;
-
-  // Bonus carousel properties
-  bonusImages?: Array<{
-    url: string;
-    alt: string;
-    title?: string;
-  }>;
-
-  // Enhanced pricing properties
-  originalPrices?: Array<{
-    item: string;
-    price: string;
-  }>;
+  heroImage2?: string;
+  price?: string;
+  ctaText?: string;
+  images?: Array<{url: string; alt: string}>;
+  testimonialsImage?: string;
+  style?: {
+    textAlign?: 'left' | 'center' | 'right';
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    width?: string;
+    borderRadius?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    fontFamily?: string;
+  };
 }
 
-export interface EditorBlock {
+export interface Block {
   id: string;
-  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 
-        'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'bonus' |
-        'header' | 'hero-section' | 'bonus-carousel';
+  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials';
   content: EditableContent;
   order: number;
 }
 
-export interface EditorConfig {
-  blocks: EditorBlock[];
-  theme: {
-    primaryColor: string;
-    secondaryColor: string;
-    backgroundColor: string;
-    textColor: string;
-    fontFamily: string;
-  };
+export interface EditorBlock {
+  id: string;
+  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials';
+  content: EditableContent;
 }
 
-// Alias for simpler naming in new components
-export type Block = EditorBlock;
+export interface EditorState {
+  blocks: EditorBlock[];
+}
