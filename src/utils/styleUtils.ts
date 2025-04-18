@@ -1,24 +1,33 @@
 
-export const getFallbackStyle = (styleCategory: string) => {
-  const colorMap: Record<string, string> = {
-    'Natural': '#D2C1A5',
-    'Clássico': '#1F456E',
-    'Contemporâneo': '#7F7F7F',
-    'Elegante': '#AF9F7F',
-    'Romântico': '#F5D0E3',
-    'Sexy': '#A82743',
-    'Dramático': '#222222',
-    'Criativo': '#F79862'
-  };
-  
+import { StyleResult } from '@/types/quiz';
+
+export const getDefaultStyle = (category: string = 'Natural'): StyleResult => {
   return {
-    backgroundColor: colorMap[styleCategory] || '#f0f0f0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: ['Natural', 'Elegante', 'Romântico', 'Contemporâneo'].includes(styleCategory) ? '#333' : '#fff',
-    fontSize: '1rem',
-    textAlign: 'center' as const,
-    padding: '1rem'
+    category,
+    score: 100,
+    percentage: 100
   };
+};
+
+export const getStyleColor = (styleType: string): string => {
+  switch (styleType) {
+    case 'Natural':
+      return '#8D9779';
+    case 'Clássico':
+      return '#7E94B4';
+    case 'Contemporâneo':
+      return '#5A7D9A';
+    case 'Elegante':
+      return '#B9995E';
+    case 'Romântico':
+      return '#E4A9A9';
+    case 'Sexy':
+      return '#AB0E1E';
+    case 'Dramático':
+      return '#1A1818';
+    case 'Criativo':
+      return '#CA7D60';
+    default:
+      return '#8D9779';
+  }
 };
