@@ -12,6 +12,13 @@ export interface EditableContent {
   fontSize?: string;
   padding?: string;
   margin?: string;
+  // Properties for pricing block
+  regularPrice?: string;
+  salePrice?: string;
+  buttonText?: string;
+  checkoutUrl?: string;
+  // Properties for CTA block
+  url?: string;
 }
 
 export interface EditorBlock {
