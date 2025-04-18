@@ -1,44 +1,30 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { EyeIcon, MoveIcon, Trash2Icon } from 'lucide-react';
+import { EyeIcon, MoveIcon, Trash2Icon, XIcon } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
+import { useEditor } from '@/hooks/useEditor';
 
 interface SalesPageEditorProps {
   primaryStyle: StyleResult;
+  onClose?: () => void;
 }
 
-interface EditableBlock {
-  id: string;
-  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 'guarantee';
-  content: any;
-}
+const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ 
+  primaryStyle, 
+  onClose 
+}) => {
+  const { 
+    config, 
+    addBlock, 
+    updateBlock, 
+    deleteBlock, 
+    reorderBlocks 
+  } = useEditor();
 
-const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle }) => {
-  const [blocks, setBlocks] = useState<EditableBlock[]>([]);
   const [isPreviewing, setIsPreviewing] = useState(false);
-
-  const addBlock = (type: EditableBlock['type']) => {
-    const newBlock: EditableBlock = {
-      id: Date.now().toString(),
-      type,
-      content: {}
-    };
-    setBlocks([...blocks, newBlock]);
-  };
-
-  const updateBlock = (id: string, content: any) => {
-    setBlocks(blocks.map(block => 
-      block.id === id ? { ...block, content } : block
-    ));
-  };
-
-  const deleteBlock = (id: string) => {
-    setBlocks(blocks.filter(block => block.id !== id));
-  };
 
   return (
     <div className="min-h-screen bg-[#fffaf7] p-4">
@@ -48,17 +34,29 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle }) => {
             <h2 className="text-2xl font-playfair text-[#B89B7A]">
               Editor da Página de Vendas
             </h2>
-            <Button
-              onClick={() => setIsPreviewing(!isPreviewing)}
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-            >
-              <EyeIcon className="w-4 h-4 mr-2" />
-              {isPreviewing ? 'Editar' : 'Previsualizar'}
-            </Button>
+            <div className="flex gap-2">
+              {onClose && (
+                <Button
+                  variant="outline"
+                  onClick={onClose}
+                  className="text-[#8F7A6A]"
+                >
+                  <XIcon className="w-4 h-4 mr-2" />
+                  Fechar
+                </Button>
+              )}
+              <Button
+                onClick={() => setIsPreviewing(!isPreviewing)}
+                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+              >
+                <EyeIcon className="w-4 h-4 mr-2" />
+                {isPreviewing ? 'Editar' : 'Previsualizar'}
+              </Button>
+            </div>
           </div>
           
           <div className="space-y-4">
-            {blocks.map((block) => (
+            {config.blocks.map((block) => (
               <Card key={block.id} className="p-4 relative border border-[#B89B7A]/20">
                 <div className="flex items-center justify-end gap-2 mb-2">
                   <Button

@@ -4,15 +4,17 @@ import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Edit } from 'lucide-react';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import { toast } from '../components/ui/use-toast';
 import { AnimatedWrapper } from '../components/ui/animated-wrapper';
+import SalesPageEditor from '../components/editor/SalesPageEditor';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
   // Use um timeout para garantir que a página de resultados tente carregar os dados
@@ -105,9 +107,27 @@ const ResultPage: React.FC = () => {
     );
   }
 
+  // Se estiver no modo de edição, mostrar o editor de página de vendas
+  if (isEditing) {
+    return (
+      <SalesPageEditor 
+        primaryStyle={localResult.primaryStyle} 
+        onClose={() => setIsEditing(false)}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto relative">
+        <Button 
+          variant="outline" 
+          className="absolute top-0 right-0 z-10 flex items-center gap-2"
+          onClick={() => setIsEditing(true)}
+        >
+          <Edit className="w-4 h-4" />
+          Editar Página
+        </Button>
         <AnimatedWrapper>
           <QuizResult 
             primaryStyle={localResult.primaryStyle} 
@@ -130,3 +150,4 @@ const ResultPage: React.FC = () => {
 };
 
 export default ResultPage;
+
