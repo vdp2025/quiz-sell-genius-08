@@ -5,6 +5,8 @@ import ComponentsSidebar from './sidebar/ComponentsSidebar';
 import PropertiesPanel from './properties/PropertiesPanel';
 import PagePreview from './preview/PagePreview';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { EditorBlock } from '@/types/editor';
+import { useEditor } from '@/hooks/useEditor';
 
 interface EditorLayoutProps {
   primaryStyle?: StyleResult;
@@ -12,13 +14,24 @@ interface EditorLayoutProps {
 
 const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const { config, addBlock, updateBlock, deleteBlock } = useEditor();
+
+  // Função para adicionar um bloco quando um componente é selecionado do sidebar
+  const handleComponentSelect = (componentType: string) => {
+    addBlock(componentType);
+  };
+
+  // Função para mostrar as propriedades de um bloco
+  const handleSelectComponent = (blockId: string) => {
+    setSelectedComponent(blockId);
+  };
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       {/* Left Sidebar - Components */}
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
         <div className="h-full border-r border-[#B89B7A]/20 bg-white overflow-y-auto">
-          <ComponentsSidebar onComponentSelect={(componentType) => console.log('Selected:', componentType)} />
+          <ComponentsSidebar onComponentSelect={handleComponentSelect} />
         </div>
       </ResizablePanel>
       
@@ -32,7 +45,9 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
             score: 0,
             percentage: 100
           }}
-          onSelectComponent={setSelectedComponent}
+          onSelectComponent={handleSelectComponent}
+          blocks={config.blocks}
+          onAddBlock={() => addBlock('headline')}
         />
       </ResizablePanel>
       
@@ -44,6 +59,18 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
           <PropertiesPanel
             selectedComponentId={selectedComponent}
             onClose={() => setSelectedComponent(null)}
+            onUpdate={(content) => {
+              if (selectedComponent) {
+                updateBlock(selectedComponent, content);
+              }
+            }}
+            onDelete={() => {
+              if (selectedComponent) {
+                deleteBlock(selectedComponent);
+                setSelectedComponent(null);
+              }
+            }}
+            blocks={config.blocks}
           />
         </div>
       </ResizablePanel>

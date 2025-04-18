@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { EditorBlock, EditorConfig } from '@/types/editor';
+import { useState, useEffect } from 'react';
+import { EditorBlock, EditorConfig, EditableContent } from '@/types/editor';
 
 const defaultConfig: EditorConfig = {
   blocks: [],
@@ -13,24 +13,81 @@ const defaultConfig: EditorConfig = {
   }
 };
 
+const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
 export const useEditor = () => {
-  const [config, setConfig] = useState<EditorConfig>(defaultConfig);
+  const [config, setConfig] = useState<EditorConfig>(() => {
+    // Tenta carregar a configuração salva do localStorage
+    const savedConfig = localStorage.getItem('editorConfig');
+    if (savedConfig) {
+      try {
+        return JSON.parse(savedConfig);
+      } catch (e) {
+        console.error('Erro ao carregar configuração do editor:', e);
+        return defaultConfig;
+      }
+    }
+    return defaultConfig;
+  });
+
+  // Salva a configuração no localStorage sempre que mudar
+  useEffect(() => {
+    localStorage.setItem('editorConfig', JSON.stringify(config));
+  }, [config]);
 
   const addBlock = (type: EditorBlock['type']) => {
+    const blocksLength = config.blocks.length;
+    let initialContent: EditableContent = {};
+    
+    // Define conteúdo inicial baseado no tipo
+    switch (type) {
+      case 'headline':
+        initialContent = {
+          title: 'Título Principal',
+          subtitle: 'Adicione um subtítulo aqui',
+          textColor: '#432818',
+          alignment: 'center'
+        };
+        break;
+      case 'image':
+        initialContent = {
+          imageUrl: '',
+          imageAlt: 'Descrição da imagem',
+        };
+        break;
+      case 'benefits':
+        initialContent = {
+          title: 'Benefícios',
+          items: ['Benefício 1', 'Benefício 2', 'Benefício 3'],
+        };
+        break;
+      case 'testimonials':
+        initialContent = {
+          title: 'O que nossos clientes dizem',
+        };
+        break;
+      default:
+        initialContent = {
+          text: 'Adicione seu conteúdo aqui',
+        };
+    }
+    
     const newBlock: EditorBlock = {
-      id: Date.now().toString(),
+      id: generateId(),
       type,
-      content: {},
-      order: config.blocks.length
+      content: initialContent,
+      order: blocksLength
     };
     
     setConfig({
       ...config,
       blocks: [...config.blocks, newBlock]
     });
+
+    return newBlock.id;
   };
 
-  const updateBlock = (id: string, content: Partial<EditorBlock['content']>) => {
+  const updateBlock = (id: string, content: Partial<EditableContent>) => {
     setConfig({
       ...config,
       blocks: config.blocks.map(block =>
@@ -44,7 +101,12 @@ export const useEditor = () => {
   const deleteBlock = (id: string) => {
     setConfig({
       ...config,
-      blocks: config.blocks.filter(block => block.id !== id)
+      blocks: config.blocks
+        .filter(block => block.id !== id)
+        .map((block, index) => ({
+          ...block,
+          order: index
+        }))
     });
   };
 
@@ -62,11 +124,44 @@ export const useEditor = () => {
     });
   };
 
+  const updateTheme = (theme: Partial<EditorConfig['theme']>) => {
+    setConfig({
+      ...config,
+      theme: {
+        ...config.theme,
+        ...theme
+      }
+    });
+  };
+
+  const clearEditor = () => {
+    setConfig(defaultConfig);
+  };
+
+  const saveAsTemplate = (name: string) => {
+    const templates = JSON.parse(localStorage.getItem('editorTemplates') || '{}');
+    templates[name] = config;
+    localStorage.setItem('editorTemplates', JSON.stringify(templates));
+  };
+
+  const loadTemplate = (name: string) => {
+    const templates = JSON.parse(localStorage.getItem('editorTemplates') || '{}');
+    if (templates[name]) {
+      setConfig(templates[name]);
+      return true;
+    }
+    return false;
+  };
+
   return {
     config,
     addBlock,
     updateBlock,
     deleteBlock,
-    reorderBlocks
+    reorderBlocks,
+    updateTheme,
+    clearEditor,
+    saveAsTemplate,
+    loadTemplate
   };
 };

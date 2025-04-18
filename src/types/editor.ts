@@ -16,7 +16,7 @@ export interface EditableContent {
 
 export interface EditorBlock {
   id: string;
-  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 'guarantee';
+  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 'guarantee' | 'cta';
   content: EditableContent;
   order: number;
 }
