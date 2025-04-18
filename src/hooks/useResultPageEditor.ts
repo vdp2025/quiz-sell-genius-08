@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -22,6 +21,10 @@ export const useResultPageEditor = (styleType: string) => {
     resetConfig,
     loading 
   } = useResultPageConfig(styleType);
+
+  const togglePreview = useCallback(() => {
+    setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
+  }, []);
 
   const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
@@ -75,38 +78,24 @@ export const useResultPageEditor = (styleType: string) => {
     });
   }, []);
 
-  const handleSave = async () => {
-    // Convertendo blocos para o formato de config
-    const success = await saveConfig();
-    toast({
-      title: success ? 'Alterações salvas' : 'Erro ao salvar',
-      description: success 
-        ? 'As configurações da página de resultados foram salvas com sucesso.'
-        : 'Não foi possível salvar as configurações.',
-      variant: success ? 'default' : 'destructive'
-    });
-  };
-
-  const toggleGlobalStyles = () => {
+  const toggleGlobalStyles = useCallback(() => {
     setState(prev => ({
       ...prev,
       isGlobalStylesOpen: !prev.isGlobalStylesOpen
     }));
-  };
+  }, []);
 
   return {
-    state,
-    setState,
     resultPageConfig,
     loading,
+    isPreviewing: state.isPreviewing,
+    isGlobalStylesOpen: state.isGlobalStylesOpen,
     actions: {
-      handleAddBlock,
-      handleUpdateBlock,
-      handleDeleteBlock,
-      handleReorderBlocks,
-      handleSave,
+      handleSave: () => saveConfig(),
       handleReset: () => resetConfig(styleType),
-      toggleGlobalStyles
+      toggleGlobalStyles,
+      togglePreview,
+      updateSection
     }
   };
 };
