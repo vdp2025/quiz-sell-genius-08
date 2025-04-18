@@ -15,40 +15,54 @@ const ResultPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Use um timeout para garantir que a página de resultados tente carregar os dados
   useEffect(() => {
-    // Try to load the quiz result from the context or localStorage
-    if (quizResult) {
-      console.log('Using quiz result from context:', quizResult);
-      setLocalResult(quizResult);
-      setLoading(false);
-    } else {
-      const savedResultStr = localStorage.getItem('quizResult');
-      
-      if (savedResultStr) {
-        try {
-          const savedResult = JSON.parse(savedResultStr);
-          console.log('Loaded result from localStorage:', savedResult);
-          setLocalResult(savedResult);
+    const loadResults = () => {
+      try {
+        // Primeiro, tente usar o resultado do contexto
+        if (quizResult) {
+          console.log('Usando resultado do contexto:', quizResult);
+          setLocalResult(quizResult);
           setLoading(false);
-        } catch (error) {
-          console.error('Error parsing saved results:', error);
+          return;
+        }
+        
+        // Caso contrário, tente carregar do localStorage
+        const savedResultStr = localStorage.getItem('quizResult');
+        
+        if (savedResultStr) {
+          try {
+            const savedResult = JSON.parse(savedResultStr);
+            console.log('Carregado resultado do localStorage:', savedResult);
+            setLocalResult(savedResult);
+            setLoading(false);
+          } catch (error) {
+            console.error('Erro ao analisar resultados salvos:', error);
+            toast({
+              title: "Erro ao carregar resultados",
+              description: "Não foi possível recuperar seus resultados. Por favor, tente o quiz novamente.",
+              variant: "destructive",
+            });
+            setLoading(false);
+          }
+        } else {
+          console.error('Nenhum resultado encontrado no contexto ou localStorage');
           toast({
-            title: "Erro ao carregar resultados",
-            description: "Não foi possível recuperar seus resultados. Por favor, tente o quiz novamente.",
+            title: "Resultados não encontrados",
+            description: "Não foi possível encontrar seus resultados. Por favor, tente o quiz novamente.",
             variant: "destructive",
           });
           setLoading(false);
         }
-      } else {
-        console.error('No results found in context or localStorage');
-        toast({
-          title: "Resultados não encontrados",
-          description: "Não foi possível encontrar seus resultados. Por favor, tente o quiz novamente.",
-          variant: "destructive",
-        });
+      } catch (error) {
+        console.error('Erro ao carregar resultados:', error);
         setLoading(false);
       }
-    }
+    };
+
+    // Pequeno delay para garantir que localStorage foi atualizado
+    const timer = setTimeout(loadResults, 500);
+    return () => clearTimeout(timer);
   }, [quizResult]);
 
   const handleRetakeQuiz = () => {
@@ -56,7 +70,7 @@ const ResultPage: React.FC = () => {
     navigate('/');
   };
 
-  // Show loading state while waiting for results
+  // Mostrar estado de carregamento enquanto aguarda pelos resultados
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
@@ -67,12 +81,12 @@ const ResultPage: React.FC = () => {
     );
   }
 
-  // If no results are found after loading completes, show error and button to return
+  // Se nenhum resultado for encontrado após o carregamento, mostrar erro e botão para retornar
   if (!localResult) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-lg text-[#432818]">Não foi possível encontrar seu resultado.</p>
+          <p className="text-lg text-[#432818] mb-4">Não foi possível encontrar seu resultado.</p>
           <Button 
             variant="outline" 
             className="mt-4"

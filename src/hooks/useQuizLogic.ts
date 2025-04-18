@@ -114,7 +114,7 @@ export const useQuizLogic = () => {
     };
 
     setQuizResult(result);
-    // Save to localStorage
+    // Save to localStorage immediately
     localStorage.setItem('quizResult', JSON.stringify(result));
     // Also save strategic answers
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
@@ -133,8 +133,10 @@ export const useQuizLogic = () => {
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     console.log('Results saved to localStorage before redirect:', results);
     
-    // Use window.location for a complete page refresh to ensure data is loaded
-    window.location.href = '/resultado';
+    // Force a hard navigation to ensure data persists across page loads
+    setTimeout(() => {
+      window.location.href = '/resultado';
+    }, 300);
     
     return results;
   }, [calculateResults, strategicAnswers]);
@@ -143,8 +145,8 @@ export const useQuizLogic = () => {
     setCurrentQuestionIndex(0);
     setAnswers({});
     setQuizCompleted(false);
-    localStorage.removeItem('quizResult');
     setQuizResult(null);
+    localStorage.removeItem('quizResult');
     localStorage.removeItem('strategicAnswers');
     setStrategicAnswers({});
     console.log('Quiz reset');

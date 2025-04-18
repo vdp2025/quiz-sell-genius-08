@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -36,6 +37,14 @@ const QuizPage: React.FC = () => {
   } = useQuizLogic();
 
   const quizContainerRef = useRef<HTMLDivElement>(null);
+
+  // Save user name to localStorage for use in result page
+  useEffect(() => {
+    if (user?.userName) {
+      localStorage.setItem('userName', user.userName);
+      console.log('User name saved:', user.userName);
+    }
+  }, [user]);
 
   const handleStrategicAnswer = (response: UserResponse) => {
     try {
@@ -99,7 +108,10 @@ const QuizPage: React.FC = () => {
       // Make sure to save strategicAnswers
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
       
-      // The navigation is now handled in submitQuizIfComplete
+      // Force a manual navigation with a delay to ensure storage is completed
+      setTimeout(() => {
+        window.location.href = '/resultado';
+      }, 500);
     } catch (error) {
       console.error('Error showing result:', error);
       toast({
