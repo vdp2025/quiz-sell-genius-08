@@ -2,7 +2,6 @@
 import { QuizTemplate, QuizTemplatePreview } from '@/types/quizTemplate';
 import { QuizQuestion } from '@/types/quiz';
 import { generateId } from '@/utils/idGenerator';
-import { supabase } from '@/integrations/supabase/client';
 import { styleQuizTemplate } from './styleQuizTemplate';
 import { toast } from '@/components/ui/use-toast';
 
@@ -11,26 +10,7 @@ const LOCAL_STORAGE_KEY = 'quiz_templates';
 // Get templates from local storage or initialize with default
 export const getTemplates = async (): Promise<QuizTemplatePreview[]> => {
   try {
-    // Try to get from Supabase if available
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('quiz_templates')
-        .select('id, name, description, created_at, updated_at, is_default');
-      
-      if (!error && data?.length) {
-        return data.map(template => ({
-          id: template.id,
-          name: template.name,
-          description: template.description,
-          questionCount: 0, // We'll need to fetch this separately or store it
-          createdAt: template.created_at,
-          updatedAt: template.updated_at,
-          isDefault: template.is_default
-        }));
-      }
-    }
-    
-    // Fallback to local storage
+    // Try to get from localStorage
     const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (templatesJson) {
       const templates = JSON.parse(templatesJson) as QuizTemplate[];
@@ -71,28 +51,7 @@ export const getTemplates = async (): Promise<QuizTemplatePreview[]> => {
 
 export const getTemplateById = async (id: string): Promise<QuizTemplate | null> => {
   try {
-    // Try to get from Supabase if available
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('quiz_templates')
-        .select('*')
-        .eq('id', id)
-        .single();
-      
-      if (!error && data) {
-        return {
-          id: data.id,
-          name: data.name,
-          description: data.description,
-          questions: data.questions,
-          createdAt: data.created_at,
-          updatedAt: data.updated_at,
-          isDefault: data.is_default
-        };
-      }
-    }
-    
-    // Fallback to local storage
+    // Try to load from localStorage
     const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (templatesJson) {
       const templates = JSON.parse(templatesJson) as QuizTemplate[];
@@ -113,28 +72,7 @@ export const getTemplateById = async (id: string): Promise<QuizTemplate | null> 
 
 export const saveTemplate = async (template: QuizTemplate): Promise<boolean> => {
   try {
-    // Try to save to Supabase if available
-    if (supabase) {
-      const { error } = await supabase
-        .from('quiz_templates')
-        .upsert({
-          id: template.id,
-          name: template.name,
-          description: template.description,
-          questions: template.questions,
-          created_at: template.createdAt,
-          updated_at: new Date().toISOString(),
-          is_default: template.isDefault || false
-        });
-      
-      if (error) {
-        throw error;
-      }
-      
-      return true;
-    }
-    
-    // Fallback to local storage
+    // Save to localStorage
     const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
     let templates: QuizTemplate[] = [];
     
@@ -178,21 +116,7 @@ export const saveTemplate = async (template: QuizTemplate): Promise<boolean> => 
 
 export const deleteTemplate = async (id: string): Promise<boolean> => {
   try {
-    // Try to delete from Supabase if available
-    if (supabase) {
-      const { error } = await supabase
-        .from('quiz_templates')
-        .delete()
-        .eq('id', id);
-      
-      if (error) {
-        throw error;
-      }
-      
-      return true;
-    }
-    
-    // Fallback to local storage
+    // Delete from localStorage
     const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (templatesJson) {
       let templates = JSON.parse(templatesJson) as QuizTemplate[];

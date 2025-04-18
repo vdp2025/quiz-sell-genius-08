@@ -1,7 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { set, get } from 'lodash';
 
@@ -148,22 +147,7 @@ export const useResultPageConfig = (styleType: string) => {
     const loadConfig = async () => {
       setLoading(true);
       try {
-        // Try to load from Supabase if available
-        if (supabase) {
-          const { data, error } = await supabase
-            .from('result_page_configs')
-            .select('*')
-            .eq('style_type', styleType)
-            .single();
-          
-          if (!error && data) {
-            setResultPageConfig(data.config);
-            setLoading(false);
-            return;
-          }
-        }
-        
-        // If Supabase fails or is not available, try localStorage
+        // Try to load from localStorage
         const configsJson = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (configsJson) {
           const configs = JSON.parse(configsJson);
@@ -209,22 +193,7 @@ export const useResultPageConfig = (styleType: string) => {
   // Save the configuration
   const saveConfig = useCallback(async () => {
     try {
-      // Try to save to Supabase if available
-      if (supabase) {
-        const { error } = await supabase
-          .from('result_page_configs')
-          .upsert({
-            style_type: resultPageConfig.styleType,
-            config: resultPageConfig,
-            updated_at: new Date().toISOString()
-          });
-        
-        if (error) {
-          throw error;
-        }
-      }
-      
-      // Also save to localStorage as fallback
+      // Save to localStorage
       const configsJson = localStorage.getItem(LOCAL_STORAGE_KEY);
       let configs = {};
       
