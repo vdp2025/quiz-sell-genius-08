@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -189,7 +190,7 @@ const QuizPage: React.FC = () => {
             Olá, {user?.userName || 'Visitante'}!
           </h1>
           <div className="text-sm text-[#1A1818]/60">
-            Ex: {showingStrategicQuestions 
+            {showingStrategicQuestions 
               ? currentStrategicQuestionIndex + 1 
               : currentQuestionIndex + 1} de {totalQuestions}
           </div>
