@@ -6,10 +6,12 @@ import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
+
 interface QuizResultProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
 }
+
 const QuizResult: React.FC<QuizResultProps> = ({
   primaryStyle,
   secondaryStyles
@@ -22,6 +24,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
     user
   } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
+
   useEffect(() => {
     if (user && user.userName) {
       setUserName(user.userName);
@@ -34,6 +37,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
       }
     }
   }, [user]);
+
   if (!primaryStyle || !secondaryStyles) {
     console.error('Missing required props:', {
       primaryStyle,
@@ -41,17 +45,21 @@ const QuizResult: React.FC<QuizResultProps> = ({
     });
     return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
   }
-  return <div className="md:px-4 md:py-8 px-[5px] py-[15px] bg-[#fefefe]">
-      <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white px-4 py-8">
+      <div className="max-w-4xl mx-auto space-y-8">
         <ResultHeader userName={userName} />
         
-        <Card className="p-3 md:p-6 bg-white shadow-md">
+        <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
           <PrimaryStyleCard primaryStyle={primaryStyle} />
           <SecondaryStylesSection secondaryStyles={secondaryStyles} />
         </Card>
 
         <OfferCard primaryStyle={primaryStyle} />
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default QuizResult;
