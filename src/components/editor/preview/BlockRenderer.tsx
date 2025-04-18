@@ -39,6 +39,27 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
       return <GuaranteeBlock content={block.content} onClick={onSelect} />;
     case 'cta':
       return <CTABlock content={block.content} onClick={onSelect} />;
+    case 'products':
+      return (
+        <div 
+          className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" 
+          onClick={onSelect}
+        >
+          <h3 className="font-medium text-[#432818]">Produtos</h3>
+          <p className="text-sm text-[#8F7A6A]">Clique para editar esta seção de produtos</p>
+        </div>
+      );
+    case 'style-result':
+    case 'secondary-styles':
+      return (
+        <div 
+          className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" 
+          onClick={onSelect}
+        >
+          <h3 className="font-medium text-[#432818]">{block.type === 'style-result' ? 'Estilo Principal' : 'Estilos Secundários'}</h3>
+          <p className="text-sm text-[#8F7A6A]">Clique para editar esta seção</p>
+        </div>
+      );
     default:
       return (
         <div 

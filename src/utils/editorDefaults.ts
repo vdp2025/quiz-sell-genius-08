@@ -1,5 +1,6 @@
 
-import { EditableContent } from '@/types/editor';
+import { EditableContent, EditorConfig } from '@/types/editor';
+import { generateId } from './idGenerator';
 
 export const getDefaultContentForType = (type: string): EditableContent => {
   switch (type) {
@@ -94,5 +95,45 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       };
     default:
       return {};
+  }
+};
+
+export const defaultConfig: EditorConfig = {
+  blocks: [
+    {
+      id: generateId(),
+      type: 'header',
+      content: { 
+        title: 'Olá, seu Estilo Predominante é:',
+        subtitle: '',
+        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo Gisele Galvão'
+      },
+      order: 0
+    },
+    {
+      id: generateId(),
+      type: 'style-result',
+      content: { 
+        title: 'Seu estilo predominante é {{primaryStyle}}',
+        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.'
+      },
+      order: 1
+    },
+    {
+      id: generateId(),
+      type: 'secondary-styles',
+      content: { 
+        title: 'Seus Estilos Complementares' 
+      },
+      order: 2
+    }
+  ],
+  globalStyles: {
+    primaryColor: '#B89B7A',
+    secondaryColor: '#432818',
+    textColor: '#1A1818',
+    backgroundColor: '#fffaf7',
+    fontFamily: 'Inter, sans-serif'
   }
 };

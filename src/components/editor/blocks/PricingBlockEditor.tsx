@@ -44,11 +44,11 @@ export const PricingBlockEditor: React.FC<BlockEditorProps> = ({
       </div>
       
       <div>
-        <Label htmlFor={`${block.id}-checkoutUrl`}>URL do Checkout</Label>
+        <Label htmlFor={`${block.id}-ctaUrl`}>URL do Checkout</Label>
         <Input
-          id={`${block.id}-checkoutUrl`}
-          value={block.content.checkoutUrl || ''}
-          onChange={(e) => onUpdate({ checkoutUrl: e.target.value })}
+          id={`${block.id}-ctaUrl`}
+          value={block.content.ctaUrl || ''}
+          onChange={(e) => onUpdate({ ctaUrl: e.target.value })}
           className="mt-1"
           placeholder="https://pay.hotmart.com/..."
         />

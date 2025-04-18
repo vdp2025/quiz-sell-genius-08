@@ -18,9 +18,10 @@ export interface EditableContent {
   customImage?: string;
   heroImage?: string;
   heroImage2?: string;
+  heroImageAlt?: string;
   price?: string;
   ctaText?: string;
-  images?: Array<{url: string; alt: string}>;
+  images?: Array<{url: string; alt: string; title?: string}>;
   testimonialsImage?: string;
   width?: string;
   height?: string;
@@ -40,18 +41,23 @@ export interface EditableContent {
     fontWeight?: string;
     fontFamily?: string;
   };
+  // Additional properties needed for specific block types
+  bonusImages?: Array<{url: string; alt: string; title?: string}>;
+  quote?: string;
+  quoteAuthor?: string;
+  checkoutUrl?: string;
 }
 
 export interface Block {
   id: string;
-  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials';
+  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials' | 'bonus-carousel';
   content: EditableContent;
   order: number;
 }
 
 export interface EditorBlock {
   id: string;
-  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials';
+  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 'testimonials' | 'bonus-carousel';
   content: EditableContent;
   order?: number;
 }
@@ -59,6 +65,13 @@ export interface EditorBlock {
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
+  theme?: {
     primaryColor?: string;
     secondaryColor?: string;
     textColor?: string;

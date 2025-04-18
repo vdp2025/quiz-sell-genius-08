@@ -7,11 +7,11 @@ export const useEditorTheme = (
   config: EditorConfig,
   setConfig: (config: EditorConfig) => void
 ): EditorThemeActions => {
-  const updateTheme = useCallback((theme: Partial<EditorConfig['theme']>) => {
+  const updateTheme = useCallback((theme: Partial<EditorConfig['globalStyles']>) => {
     setConfig({
       ...config,
-      theme: {
-        ...config.theme,
+      globalStyles: {
+        ...config.globalStyles,
         ...theme
       }
     });

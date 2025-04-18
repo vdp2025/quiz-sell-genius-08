@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { HeaderBlockEditor } from './blocks/HeaderBlockEditor';
@@ -58,6 +59,16 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
 
     case 'secondary-styles':
       return <SecondaryStylesBlockEditor block={block} onUpdate={onUpdate} />;
+      
+    case 'products':
+      return (
+        <div className="p-4 rounded-md bg-[#FAF9F7] border border-[#B89B7A]/20">
+          <p className="text-sm text-[#8F7A6A]">
+            Os produtos são carregados do banco de dados. Para gerenciar produtos, 
+            acesse o painel administrativo.
+          </p>
+        </div>
+      );
       
     case 'testimonials':
       return (
