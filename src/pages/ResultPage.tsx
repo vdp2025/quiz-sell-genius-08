@@ -8,7 +8,6 @@ import { ArrowLeft } from 'lucide-react';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import { toast } from '../components/ui/use-toast';
 import { AnimatedWrapper } from '../components/ui/animated-wrapper';
-import { Card } from '../components/ui/card';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
@@ -59,20 +58,6 @@ const ResultPage: React.FC = () => {
               className="h-16 mx-auto mb-6"
             />
           </div>
-
-          <AnimatedWrapper>
-            <Card className="p-8 space-y-6 bg-white shadow-md mb-8">
-              <h2 className="text-xl font-playfair text-[#432818] text-center mb-6">
-                Obrigada por compartilhar.
-              </h2>
-              
-              <p className="text-[#1A1818]/80">
-                Chegar até aqui já mostra que você está pronta para se olhar com mais amor, 
-                se vestir com mais intenção e deixar sua imagem comunicar quem você é de verdade 
-                — com leveza, presença e propósito.
-              </p>
-            </Card>
-          </AnimatedWrapper>
 
           {resultData && (
             <AnimatedWrapper>
