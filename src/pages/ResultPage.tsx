@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -7,7 +8,7 @@ import { ArrowLeft, Edit } from 'lucide-react';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import { toast } from '../components/ui/use-toast';
 import { AnimatedWrapper } from '../components/ui/animated-wrapper';
-import { UnifiedEditorLayout } from '../components/editor/layouts/UnifiedEditorLayout';
+import { ResultPageBuilder } from '../components/editor/result/ResultPageBuilder';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
@@ -105,7 +106,7 @@ const ResultPage: React.FC = () => {
 
   if (isEditing && localResult) {
     return (
-      <UnifiedEditorLayout primaryStyle={localResult.primaryStyle} />
+      <ResultPageBuilder primaryStyle={localResult.primaryStyle} />
     );
   }
 
