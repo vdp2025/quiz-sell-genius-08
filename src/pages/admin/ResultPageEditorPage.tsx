@@ -3,18 +3,19 @@ import React from 'react';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
 import { useQuizContext } from '@/context/QuizContext';
 import { styleConfig } from '@/config/styleConfig';
+import { StyleResult } from '@/types/quiz';
 
 const ResultPageEditorPage: React.FC = () => {
   const { quizResult } = useQuizContext();
   
   // Caso não haja resultado, usamos um estilo padrão para edição
-  const defaultStyle = {
+  const defaultStyle: StyleResult = {
     category: 'Elegante',
     score: 10,
     percentage: 25
   };
   
-  const defaultSecondaryStyles = [
+  const defaultSecondaryStyles: StyleResult[] = [
     {
       category: 'Natural',
       score: 5,
