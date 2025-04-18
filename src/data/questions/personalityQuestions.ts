@@ -10,13 +10,13 @@ export const personalityQuestions: QuizQuestion[] = [
     options: [
       {
         id: '2a',
-        text: 'Informal, espontânea e prática.',
+        text: 'Informal e prática.',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '2b',
-        text: 'Conservadora e organizada.',
+        text: 'Conservadora.',
         styleCategory: 'Clássico',
         points: 1
       },
@@ -28,13 +28,13 @@ export const personalityQuestions: QuizQuestion[] = [
       },
       {
         id: '2d',
-        text: 'Sofisticada e exigente.',
+        text: 'Sofisticada.',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '2e',
-        text: 'Feminina e delicada.',
+        text: 'Delicada e feminina.',
         styleCategory: 'Romântico',
         points: 1
       },
@@ -115,3 +115,4 @@ export const personalityQuestions: QuizQuestion[] = [
     ]
   }
 ];
+
