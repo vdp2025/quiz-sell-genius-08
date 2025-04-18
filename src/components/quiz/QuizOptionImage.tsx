@@ -33,6 +33,18 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     );
   }
 
+  // Define specific scale values based on question number and device type
+  const getImageScale = () => {
+    if (!isMobile) return "scale-100";
+    
+    // Enhanced scaling for questions 1 and 2
+    if (['1', '2'].includes(questionId.charAt(0))) {
+      return "scale-[1.45] -translate-y-4"; // Increased scale and slight upward shift
+    }
+    
+    return "scale-125"; // Default mobile scale
+  };
+
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
@@ -42,22 +54,19 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
         ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
         className="w-full h-full"
       >
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={imageUrl}
             alt={altText}
             className={cn(
               "object-cover w-full h-full",
               "transition-all duration-300 ease-in-out",
+              getImageScale(),
               isSelected ? (
                 isMobile 
                   ? "scale-110 shadow-lg z-10" 
                   : "shadow-lg border-2 border-brand-coffee/40 z-10"
-              ) : "scale-100 hover:shadow-md",
-              // Aumentamos o zoom para mobile e ajustamos o scale para melhor enquadramento
-              isMobile && "scale-125",
-              // Zoom extra para questões 1 e 2 em mobile
-              isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.35]",
+              ) : "hover:shadow-md",
             )}
             onError={() => setImageError(true)}
             style={{
