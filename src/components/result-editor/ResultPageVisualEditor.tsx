@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
@@ -376,50 +375,11 @@ const getDefaultContentForType = (type: Block['type']) => {
         logoAlt: 'Logo Gisele Galvão'
       };
     case 'headline':
-      return { title: 'VOCÊ DESCOBRIU SEU ESTILO', subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você' };
-    case 'text':
-      return { text: 'Digite seu texto aqui...' };
-    case 'image':
       return { 
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp', 
-        imageAlt: 'Imagem do Resultado',
-        width: '100%',
-        borderRadius: '8px'
+        title: 'VOCÊ DESCOBRIU SEU ESTILO', 
+        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
+        heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp'
       };
-    case 'benefits':
-      return { 
-        title: 'O que você vai aprender:', 
-        items: [
-          'Aplicar seus estilos com autenticidade',
-          'Montar looks práticos para o dia a dia, trabalho e eventos',
-          'Usar cores e modelagens que valorizam quem você é',
-          'Parar de errar nas compras e economizar tempo'
-        ]
-      };
-    case 'pricing':
-      return { 
-        regularPrice: '175,00', 
-        salePrice: '39,00', 
-        buttonText: 'Quero Transformar Meu Estilo',
-        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        urgencyText: 'Oferta por tempo limitado!'
-      };
-    case 'guarantee':
-      return { 
-        title: 'Garantia de 7 dias',
-        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
-      };
-    case 'cta':
-      return { 
-        buttonText: 'Clique Aqui', 
-        url: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        title: 'Transforme seu estilo agora'
-      };
-    case 'style-result':
-      return { title: 'Seu estilo predominante é {{primaryStyle}}' };
-    case 'secondary-styles':
-      return { title: 'Seus Estilos Complementares' };
     case 'hero-section':
       return { 
         title: 'VOCÊ DESCOBRIU SEU ESTILO',
@@ -438,6 +398,10 @@ const getDefaultContentForType = (type: Block['type']) => {
           {
             url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
             alt: 'Todos os produtos e bônus'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp',
+            alt: 'Celular Peças-Chave'
           }
         ]
       };
@@ -446,6 +410,30 @@ const getDefaultContentForType = (type: Block['type']) => {
         title: 'O que estão dizendo',
         testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
       };
+    case 'guarantee':
+      return { 
+        title: 'Garantia de 7 dias',
+        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.',
+        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
+      };
+    case 'pricing':
+      return { 
+        regularPrice: '175,00', 
+        salePrice: '39,00', 
+        buttonText: 'Quero Transformar Meu Estilo',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        urgencyText: 'Oferta por tempo limitado!'
+      };
+    case 'cta':
+      return { 
+        buttonText: 'Clique Aqui', 
+        url: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        title: 'Transforme seu estilo agora'
+      };
+    case 'style-result':
+      return { title: 'Seu estilo predominante é {{primaryStyle}}' };
+    case 'secondary-styles':
+      return { title: 'Seus Estilos Complementares' };
     default:
       return {};
   }
