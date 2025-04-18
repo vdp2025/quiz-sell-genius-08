@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Block } from '@/types/editor';
 
 interface TextBlockEditorProps {
@@ -27,46 +27,20 @@ const TextBlockEditor: React.FC<TextBlockEditorProps> = ({ block, onUpdate }) =>
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="textColor">Cor do texto</Label>
-        <Input
-          id="textColor"
-          type="color"
-          value={content.textColor || '#1A1818'}
-          onChange={(e) => onUpdate({ textColor: e.target.value })}
-        />
-      </div>
-      
-      <div className="space-y-2">
         <Label htmlFor="alignment">Alinhamento</Label>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            className={`p-2 border rounded-md ${
-              (content.alignment || 'left') === 'left' ? 'bg-[#B89B7A]/20' : ''
-            }`}
-            onClick={() => onUpdate({ alignment: 'left' })}
-          >
-            Esquerda
-          </button>
-          <button
-            type="button"
-            className={`p-2 border rounded-md ${
-              (content.alignment || 'left') === 'center' ? 'bg-[#B89B7A]/20' : ''
-            }`}
-            onClick={() => onUpdate({ alignment: 'center' })}
-          >
-            Centro
-          </button>
-          <button
-            type="button"
-            className={`p-2 border rounded-md ${
-              (content.alignment || 'left') === 'right' ? 'bg-[#B89B7A]/20' : ''
-            }`}
-            onClick={() => onUpdate({ alignment: 'right' })}
-          >
-            Direita
-          </button>
-        </div>
+        <Select
+          defaultValue={content.alignment || 'left'}
+          onValueChange={(value) => onUpdate({ alignment: value })}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Selecione o alinhamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="left">Esquerda</SelectItem>
+            <SelectItem value="center">Centro</SelectItem>
+            <SelectItem value="right">Direita</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

@@ -1,18 +1,15 @@
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Monitor, Smartphone, Eye } from 'lucide-react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
-import EditableBlock from './EditableBlock';
-import { useDrag, useDrop } from 'react-dnd';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-
-interface DragItem {
-  index: number;
-  id: string;
-  type: string;
-}
+import BlockRenderer from './BlockRenderer';
+import { cn } from '@/lib/utils';
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { SortableItem } from './SortableItem';
 
 interface EditorPreviewProps {
   blocks: Block[];
@@ -20,7 +17,7 @@ interface EditorPreviewProps {
   onSelectBlock: (id: string | null) => void;
   isPreviewing: boolean;
   primaryStyle: StyleResult;
-  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
+  onReorderBlocks?: (sourceIndex: number, destinationIndex: number) => void;
 }
 
 export const EditorPreview: React.FC<EditorPreviewProps> = ({
@@ -31,92 +28,109 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   primaryStyle,
   onReorderBlocks
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
   
-  const [, drop] = useDrop({
-    accept: 'BLOCK',
-    hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    
+    if (active.id !== over.id && onReorderBlocks) {
+      const oldIndex = blocks.findIndex(block => block.id === active.id);
+      const newIndex = blocks.findIndex(block => block.id === over.id);
       
-      const dragIndex = item.index;
-      const hoverIndex = blocks.length;
-      
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-      
-      // Time to actually perform the action
-      onReorderBlocks(dragIndex, hoverIndex);
-      
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
+      onReorderBlocks(oldIndex, newIndex);
     }
-  });
-  
-  // Apply the reference to the drop target
-  drop(ref);
-  
-  // Styles for preview mode
-  const previewStyle = isPreviewing ? {
-    backgroundColor: '#fffaf7',
-    minHeight: '100vh',
-    padding: '2rem'
-  } : {};
-  
+  };
+
   return (
     <div className="h-full flex flex-col">
-      <div className="bg-[#F7F7F7] p-4 border-b">
-        <h2 className="font-semibold">
-          {isPreviewing ? 'Visualização' : 'Editor'}
-        </h2>
-      </div>
-      
-      <ScrollArea className="flex-1">
-        <div
-          style={previewStyle}
-          className="min-h-full p-4"
+      {/* Preview Controls */}
+      <div className="border-b p-4 bg-white flex items-center justify-between">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode('desktop')}
+            className={cn(viewMode === 'desktop' && 'bg-[#FAF9F7]')}
+          >
+            <Monitor className="w-4 h-4 mr-2" />
+            Desktop
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode('mobile')}
+            className={cn(viewMode === 'mobile' && 'bg-[#FAF9F7]')}
+          >
+            <Smartphone className="w-4 h-4 mr-2" />
+            Mobile
+          </Button>
+        </div>
+
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className={cn(isPreviewing && 'bg-[#FAF9F7]')}
         >
-          <div className="max-w-4xl mx-auto space-y-6">
-            {blocks.map((block, index) => (
-              <EditableBlock
-                key={block.id}
-                block={block}
-                index={index}
-                isSelected={block.id === selectedBlockId}
-                onClick={() => onSelectBlock(block.id)}
-                isPreviewMode={isPreviewing}
-                onReorderBlocks={onReorderBlocks}
-                primaryStyle={primaryStyle}
-              />
-            ))}
-            
-            {!isPreviewing && blocks.length === 0 && (
-              <div 
-                ref={ref}
-                className="border-2 border-dashed border-[#B89B7A]/40 rounded-lg p-10 text-center"
+          <Eye className="w-4 h-4 mr-2" />
+          {isPreviewing ? 'Modo Edição' : 'Visualizar'}
+        </Button>
+      </div>
+
+      {/* Preview Content */}
+      <ScrollArea className="flex-1 p-4 bg-[#FAF9F7]">
+        <div className={cn(
+          "min-h-full bg-white rounded-lg shadow-sm px-6 py-8 mx-auto",
+          viewMode === 'mobile' ? 'max-w-md' : 'max-w-4xl'
+        )}>
+          {isPreviewing ? (
+            // Preview mode (no drag and drop)
+            <div>
+              {blocks.map((block) => (
+                <BlockRenderer
+                  key={block.id}
+                  block={block}
+                  primaryStyle={primaryStyle}
+                  isSelected={false}
+                  onSelect={() => {}}
+                />
+              ))}
+            </div>
+          ) : (
+            // Edit mode with drag and drop
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={blocks.map(block => block.id)}
+                strategy={verticalListSortingStrategy}
               >
-                <p className="text-[#8F7A6A] mb-4">
-                  Arraste componentes para esta área ou clique no botão abaixo
-                </p>
-                <Button
-                  variant="outline"
-                  className="mx-auto border-[#B89B7A] text-[#B89B7A]"
-                  onClick={() => onSelectBlock('new')}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Adicionar Componente
-                </Button>
-              </div>
-            )}
-          </div>
+                {blocks.map((block) => (
+                  <SortableItem key={block.id} id={block.id}>
+                    <BlockRenderer
+                      block={block}
+                      primaryStyle={primaryStyle}
+                      isSelected={selectedBlockId === block.id}
+                      onSelect={() => onSelectBlock(block.id)}
+                    />
+                  </SortableItem>
+                ))}
+              </SortableContext>
+            </DndContext>
+          )}
         </div>
       </ScrollArea>
     </div>
   );
 };
+
+export default EditorPreview;
