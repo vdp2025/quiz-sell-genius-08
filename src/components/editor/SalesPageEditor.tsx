@@ -1,17 +1,19 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { EyeIcon, MoveIcon, Trash2Icon } from 'lucide-react';
+import { EyeIcon, MoveIcon, Trash2Icon, X } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
 import { useEditor } from '@/hooks/useEditor';
 
 interface SalesPageEditorProps {
   primaryStyle: StyleResult;
+  onClose?: () => void; // Made this optional to maintain compatibility
 }
 
-const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle }) => {
+const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose }) => {
   const { 
     config, 
     addBlock, 
@@ -30,13 +32,25 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle }) => {
             <h2 className="text-2xl font-playfair text-[#B89B7A]">
               Editor Visual
             </h2>
-            <Button
-              onClick={() => setIsPreviewing(!isPreviewing)}
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-            >
-              <EyeIcon className="w-4 h-4 mr-2" />
-              {isPreviewing ? 'Editar' : 'Previsualizar'}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setIsPreviewing(!isPreviewing)}
+                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+              >
+                <EyeIcon className="w-4 h-4 mr-2" />
+                {isPreviewing ? 'Editar' : 'Previsualizar'}
+              </Button>
+              {onClose && (
+                <Button
+                  onClick={onClose}
+                  variant="outline"
+                  className="border-[#B89B7A] text-[#B89B7A]"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Fechar Editor
+                </Button>
+              )}
+            </div>
           </div>
           
           <div className="space-y-4">

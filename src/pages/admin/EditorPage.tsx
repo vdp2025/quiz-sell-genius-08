@@ -18,8 +18,8 @@ const EditorPage = () => {
         <SalesPageEditor 
           primaryStyle={quizResult?.primaryStyle || {
             category: 'Natural',
-            percentage: 100,
-            description: 'Default style for editing'
+            score: 0,
+            percentage: 100
           }} 
         />
       </div>

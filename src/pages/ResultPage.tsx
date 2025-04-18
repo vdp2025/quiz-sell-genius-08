@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -150,4 +149,3 @@ const ResultPage: React.FC = () => {
 };
 
 export default ResultPage;
-
