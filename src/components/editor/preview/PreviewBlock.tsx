@@ -4,7 +4,7 @@ import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Trash2, GripVertical } from 'lucide-react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 
 interface PreviewBlockProps {
   block: EditorBlock;
@@ -76,16 +76,26 @@ export function PreviewBlock({
           "absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity",
           isSelected && "opacity-100"
         )}>
-          <Tooltip content="Arrastar">
-            <Button variant="ghost" size="sm">
-              <GripVertical className="w-4 h-4 text-[#8F7A6A]" />
-            </Button>
-          </Tooltip>
-          <Tooltip content="Excluir">
-            <Button variant="ghost" size="sm" className="text-red-500">
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <GripVertical className="w-4 h-4 text-[#8F7A6A]" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Arrastar</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-red-500">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Excluir</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       )}
       {renderContent()}

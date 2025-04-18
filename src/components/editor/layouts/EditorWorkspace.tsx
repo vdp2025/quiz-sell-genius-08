@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
+import ComponentsSidebar from '../sidebar/ComponentsSidebar';
 import { EditPreview } from '../preview/EditPreview';
-import { PropertiesPanel } from '../properties/PropertiesPanel';
+import PropertiesPanel from '../properties/PropertiesPanel';
 import { cn } from '@/lib/utils';
 
 interface EditorWorkspaceProps {
