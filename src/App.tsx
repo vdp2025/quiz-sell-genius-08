@@ -1,6 +1,6 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,6 +25,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/admin/editor" element={<EditorPage />} />
+              {/* Adicionando uma rota de redirecionamento para facilitar acesso ao editor */}
+              <Route path="/editor" element={<Navigate to="/admin/editor" replace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

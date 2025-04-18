@@ -1,8 +1,10 @@
+
 import { useState } from 'react';
 import { Card } from './ui/card';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface QuizWelcomeProps {
   onStart: () => void;
@@ -11,6 +13,7 @@ interface QuizWelcomeProps {
 export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const [name, setName] = useState('');
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleStart = () => {
     if (name.trim()) {
@@ -19,6 +22,10 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
       console.log('User name saved:', name.trim());
       onStart();
     }
+  };
+
+  const goToEditor = () => {
+    navigate('/admin/editor');
   };
 
   return (
@@ -51,6 +58,16 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
           >
             Começar
           </Button>
+          
+          <div className="pt-4 border-t border-[#B89B7A]/20 mt-4">
+            <Button
+              onClick={goToEditor}
+              variant="outline"
+              className="w-full border-[#B89B7A] text-[#B89B7A] hover:bg-[#FAF9F7]"
+            >
+              Acessar Editor de Página de Venda
+            </Button>
+          </div>
         </div>
       </Card>
     </div>

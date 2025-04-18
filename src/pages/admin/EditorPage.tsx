@@ -9,7 +9,7 @@ const EditorPage = () => {
   
   return (
     <AdminLayout>
-      <div className="h-screen bg-[#FAF9F7]">
+      <div className="h-full bg-[#FAF9F7]">
         <EditorLayout 
           primaryStyle={quizResult?.primaryStyle || {
             category: 'Natural',
