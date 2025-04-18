@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { ArrowRight } from 'lucide-react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { QuizQuestion } from './QuizQuestion';
 import { strategicQuestions } from '../data/strategicQuestions';
@@ -15,6 +13,14 @@ interface QuizTransitionProps {
 }
 
 const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, currentAnswers }) => {
+  const handleFirstStrategicAnswer = (response: UserResponse) => {
+    onAnswer(response);
+    // Automatically transition after answering
+    setTimeout(() => {
+      onContinue();
+    }, 500);
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-3xl mx-auto">
@@ -45,20 +51,13 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
                 Responda com sinceridade. Isso é só entre você e a sua nova versão.
               </p>
             </div>
-            
-            <Button 
-              onClick={onContinue}
-              className="w-full bg-[#B89B7A] hover:bg-[#997D5E] text-white font-medium flex items-center justify-center gap-2 py-6"
-            >
-              Começar <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
           </Card>
         </AnimatedWrapper>
 
         <AnimatedWrapper>
           <QuizQuestion
             question={strategicQuestions[0]}
-            onAnswer={onAnswer}
+            onAnswer={handleFirstStrategicAnswer}
             currentAnswers={currentAnswers}
             autoAdvance={true}
           />
@@ -69,3 +68,4 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
 };
 
 export default QuizTransition;
+
