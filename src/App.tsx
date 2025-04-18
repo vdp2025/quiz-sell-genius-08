@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import ResultPage from "./pages/ResultPage";
 import NotFound from "./pages/NotFound";
 import QuizEditorPage from "./pages/admin/QuizEditorPage";
+import ResultPageEditorPage from "./pages/admin/ResultPageEditorPage";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
+              <Route path="/admin/resultado-editor" element={<ResultPageEditorPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

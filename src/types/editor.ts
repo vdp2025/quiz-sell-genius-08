@@ -1,3 +1,4 @@
+
 export interface EditableContent {
   title?: string;
   subtitle?: string;
@@ -62,3 +63,6 @@ export interface EditorConfig {
     fontFamily: string;
   };
 }
+
+// Alias for simpler naming in new components
+export type Block = EditorBlock;
