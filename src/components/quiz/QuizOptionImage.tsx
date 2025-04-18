@@ -54,7 +54,10 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
                   ? "scale-110 shadow-lg z-10" 
                   : "shadow-lg border-2 border-brand-coffee/40 z-10"
               ) : "scale-100 hover:shadow-md",
-              isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.15]",
+              // Aumentamos o zoom para mobile e ajustamos o scale para melhor enquadramento
+              isMobile && "scale-125",
+              // Zoom extra para questões 1 e 2 em mobile
+              isMobile && ['1', '2'].includes(questionId.charAt(0)) && "scale-[1.35]",
             )}
             onError={() => setImageError(true)}
             style={{
@@ -67,3 +70,4 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     </div>
   );
 };
+
