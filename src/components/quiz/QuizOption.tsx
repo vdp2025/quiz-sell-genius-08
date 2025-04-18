@@ -69,16 +69,17 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-transparent py-1.5 px-2 mt-auto text-brand-coffee relative",
-                (questionId === '1' || questionId === '2') 
-                  ? "text-[0.5rem] sm:text-[0.6rem]" 
-                  : "text-[0.7rem] sm:text-xs",
+                // Standardized font size for all image options on mobile
+                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
             : cn(
-                // Desktop font size increased here
-                "text-[0.8rem] sm:text-sm leading-relaxed",
-                !(questionId === '1' || questionId === '2') && "desktop:text-base",
-                (questionId === '1' || questionId === '2') && "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"
+                // Standardized font size for all text options on mobile
+                isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-sm leading-relaxed desktop:text-base",
+                // Special case for questions 1 & 2
+                (questionId === '1' || questionId === '2') && (
+                  isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"
+                )
               )
         )}>
           {highlightStrategicWords(option.text)}
@@ -89,4 +90,3 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
-
