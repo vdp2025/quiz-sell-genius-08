@@ -14,7 +14,8 @@ export interface SalesPageConfig {
 }
 
 export const getSalesPageConfig = (style: StyleResult): SalesPageConfig => {
-  return {
+  // Base configuration
+  const baseConfig: SalesPageConfig = {
     title: "TRANSFORME SEU ESTILO",
     subtitle: `Aprenda a expressar seu estilo ${style.category} com autenticidade`,
     price: "39,00",
@@ -35,4 +36,22 @@ export const getSalesPageConfig = (style: StyleResult): SalesPageConfig => {
     ],
     guaranteeDays: 7
   };
+
+  // You can add style-specific customizations here if needed
+  // For example:
+  switch(style.category) {
+    case 'Natural':
+      return {
+        ...baseConfig,
+        subtitle: "Aprenda a expressar seu estilo Natural com autenticidade e conforto",
+      };
+    case 'Elegante':
+      return {
+        ...baseConfig,
+        subtitle: "Eleve seu estilo Elegante a um novo patamar de sofisticação",
+      };
+    // Add other style cases as needed
+    default:
+      return baseConfig;
+  }
 };

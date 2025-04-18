@@ -5,7 +5,8 @@ import { Header } from '@/components/result/Header';
 import { StyleResultSection } from '@/components/result/StyleResult';
 import { Card } from '@/components/ui/card';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-import OfferCard from './components/quiz-result/sales/OfferCard';
+import OfferCard from '@/components/quiz-result/sales/OfferCard';
+import { styleConfig } from '@/config/styleConfig';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
