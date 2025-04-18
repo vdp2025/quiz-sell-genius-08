@@ -2,17 +2,20 @@
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Card } from '@/components/ui/card';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 
 interface StyleResultSectionProps {
   primaryStyle: StyleResult;
   description: string;
   image: string;
+  secondaryStyles: StyleResult[];
 }
 
 export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
   primaryStyle,
   description,
-  image
+  image,
+  secondaryStyles
 }) => {
   return (
     <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
@@ -31,9 +34,10 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
       
       <div className="grid md:grid-cols-2 gap-4 items-start">
         <div>
-          <p className="text-base text-[#432818] leading-relaxed">
+          <p className="text-base text-[#432818] leading-relaxed mb-4">
             {description}
           </p>
+          <SecondaryStylesSection secondaryStyles={secondaryStyles} />
         </div>
         <div>
           <img 

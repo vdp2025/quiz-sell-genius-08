@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
 import { StyleResultSection } from '@/components/result/StyleResult';
-import { Card } from '@/components/ui/card';
-import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import OfferCard from '@/components/quiz-result/sales/OfferCard';
 import { styleConfig } from '@/config/styleConfig';
 
@@ -45,11 +43,8 @@ const ResultPage = () => {
             primaryStyle={primaryStyle}
             description={styleConfig[primaryStyle.category].description}
             image={styleConfig[primaryStyle.category].image}
+            secondaryStyles={secondaryStyles}
           />
-          
-          <Card className="p-3 bg-white shadow-sm border border-[#B89B7A]/20">
-            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-          </Card>
           
           <OfferCard primaryStyle={primaryStyle} />
         </div>
