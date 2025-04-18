@@ -20,8 +20,10 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
         {/* Components Sidebar */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar 
-            onSelect={(id) => setSelectedComponentId(id)} 
-            selectedId={selectedComponentId}
+            onComponentSelect={(type) => {
+              const id = addBlock(type);
+              setSelectedComponentId(id);
+            }} 
           />
         </ResizablePanel>
 
@@ -42,7 +44,7 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
         {/* Properties Panel */}
         <ResizablePanel defaultSize={25}>
           <PropertiesPanel
-            componentId={selectedComponentId}
+            selectedComponentId={selectedComponentId}
             onClose={() => setSelectedComponentId(null)}
           />
         </ResizablePanel>
@@ -50,3 +52,9 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
     </div>
   );
 }
+
+// Helper function to add a block (this should be moved to useEditor in a real implementation)
+const addBlock = (type: any) => {
+  // For now, return a placeholder ID
+  return `temp-id-${Date.now()}`;
+};

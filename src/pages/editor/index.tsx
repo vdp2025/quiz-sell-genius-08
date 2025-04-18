@@ -1,7 +1,6 @@
 
 import React from 'react';
-import EditorLayout from '@/components/editor/EditorLayout';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { EditorWorkspace } from '@/components/editor/layouts/EditorWorkspace';
 
 const EditorPage = () => {
   return (
@@ -15,7 +14,7 @@ const EditorPage = () => {
       
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
-        <EditorLayout />
+        <EditorWorkspace />
       </div>
     </div>
   );
