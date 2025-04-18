@@ -1,0 +1,141 @@
+
+import React, { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { EyeIcon, MoveIcon, Trash2Icon } from 'lucide-react';
+import { StyleResult } from '@/types/quiz';
+
+interface SalesPageEditorProps {
+  primaryStyle: StyleResult;
+}
+
+interface EditableBlock {
+  id: string;
+  type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 'guarantee';
+  content: any;
+}
+
+const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle }) => {
+  const [blocks, setBlocks] = useState<EditableBlock[]>([]);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+
+  const addBlock = (type: EditableBlock['type']) => {
+    const newBlock: EditableBlock = {
+      id: Date.now().toString(),
+      type,
+      content: {}
+    };
+    setBlocks([...blocks, newBlock]);
+  };
+
+  const updateBlock = (id: string, content: any) => {
+    setBlocks(blocks.map(block => 
+      block.id === id ? { ...block, content } : block
+    ));
+  };
+
+  const deleteBlock = (id: string) => {
+    setBlocks(blocks.filter(block => block.id !== id));
+  };
+
+  return (
+    <div className="min-h-screen bg-[#fffaf7] p-4">
+      <div className="max-w-4xl mx-auto">
+        <Card className="p-6 mb-6 bg-white">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-playfair text-[#B89B7A]">
+              Editor da Página de Vendas
+            </h2>
+            <Button
+              onClick={() => setIsPreviewing(!isPreviewing)}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              <EyeIcon className="w-4 h-4 mr-2" />
+              {isPreviewing ? 'Editar' : 'Previsualizar'}
+            </Button>
+          </div>
+          
+          <div className="space-y-4">
+            {blocks.map((block) => (
+              <Card key={block.id} className="p-4 relative border border-[#B89B7A]/20">
+                <div className="flex items-center justify-end gap-2 mb-2">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="w-8 h-8"
+                  >
+                    <MoveIcon className="w-4 h-4 text-[#8F7A6A]" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => deleteBlock(block.id)}
+                    className="w-8 h-8 text-red-500"
+                  >
+                    <Trash2Icon className="w-4 h-4" />
+                  </Button>
+                </div>
+                
+                {/* Editor específico para cada tipo de bloco */}
+                {block.type === 'headline' && (
+                  <div className="space-y-4">
+                    <Input
+                      placeholder="Título principal"
+                      value={block.content.title || ''}
+                      onChange={(e) => updateBlock(block.id, {
+                        ...block.content,
+                        title: e.target.value
+                      })}
+                      className="border-[#B89B7A]/20"
+                    />
+                    <Textarea
+                      placeholder="Subtítulo"
+                      value={block.content.subtitle || ''}
+                      onChange={(e) => updateBlock(block.id, {
+                        ...block.content,
+                        subtitle: e.target.value
+                      })}
+                      className="border-[#B89B7A]/20"
+                    />
+                  </div>
+                )}
+                {/* Adicionar mais editores específicos para outros tipos de blocos */}
+              </Card>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <Button
+              onClick={() => addBlock('headline')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Headline
+            </Button>
+            <Button
+              onClick={() => addBlock('image')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Imagem
+            </Button>
+            <Button
+              onClick={() => addBlock('benefits')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Benefícios
+            </Button>
+            <Button
+              onClick={() => addBlock('testimonials')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Depoimentos
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default SalesPageEditor;
