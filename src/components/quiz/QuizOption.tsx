@@ -41,14 +41,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "relative h-full flex flex-col",
           "transition-all duration-500 ease-in-out", 
-          type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/20 backdrop-blur-[2px] bg-white/70",
+          type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/10 backdrop-blur-[8px] bg-white/40",
           type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-[#B89B7A]/80 bg-white/80 backdrop-blur-[4px] shadow-2xl"
+              ? "border-[#B89B7A]/40 bg-white/50 backdrop-blur-[12px] shadow-lg" 
               : "border-[#B89B7A]/80 shadow-2xl"
             : type === 'text' 
-              ? "hover:border-[#B89B7A]/40 hover:bg-white/75" 
+              ? "hover:border-[#B89B7A]/30 hover:bg-white/45 hover:backdrop-blur-[10px]" 
               : "hover:border-[#B89B7A]/50",
         )}
       >
