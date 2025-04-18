@@ -47,11 +47,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-[#9b87f5] bg-white/50 backdrop-blur-[12px] shadow-lg ring-2 ring-[#9b87f5]/20" 
-              : "border-[#9b87f5] shadow-lg ring-2 ring-[#9b87f5]/20"
+              ? "border-[#403E43] bg-white/50 backdrop-blur-[12px] shadow-lg ring-2 ring-[#403E43]/20" 
+              : "border-[#403E43] shadow-lg ring-2 ring-[#403E43]/20"
             : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-[#9b87f5]/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md" 
-              : "hover:border-[#9b87f5]/40 hover:scale-[1.01] hover:shadow-md",
+              ? "border-[#B89B7A]/10 hover:border-[#403E43]/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md" 
+              : "hover:border-[#403E43]/40 hover:scale-[1.01] hover:shadow-md",
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -88,3 +88,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
