@@ -4,7 +4,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { EditorPreview } from './EditorPreview';
 import { PropertiesPanel } from './PropertiesPanel';
-import { EditorToolbar } from './EditorToolbar';
+import EditorToolbar from './EditorToolbar';
 import { StyleResult } from '@/types/quiz';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 import { toast } from '@/components/ui/use-toast';

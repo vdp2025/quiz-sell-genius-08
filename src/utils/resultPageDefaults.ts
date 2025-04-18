@@ -33,7 +33,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
         padding: '1.5rem',
         backgroundColor: '#ffffff',
         borderRadius: '0.5rem',
-        marginTop: '1.5rem'
+        margin: '1.5rem 0 0 0'
       }
     },
     offer: {
@@ -51,7 +51,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           backgroundColor: '#fffaf7',
           padding: '2rem',
           borderRadius: '0.5rem',
-          marginTop: '2rem'
+          margin: '2rem 0 0 0'
         }
       },
       products: {
@@ -63,7 +63,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '1.5rem',
           backgroundColor: '#ffffff',
           borderRadius: '0.5rem',
-          marginTop: '1.5rem'
+          margin: '1.5rem 0 0 0'
         }
       },
       pricing: {
@@ -79,7 +79,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '1.5rem',
           backgroundColor: '#ffffff',
           borderRadius: '0.5rem',
-          marginTop: '1.5rem'
+          margin: '1.5rem 0 0 0'
         }
       },
       benefits: {
@@ -97,7 +97,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '1.5rem',
           backgroundColor: '#ffffff',
           borderRadius: '0.5rem',
-          marginTop: '1.5rem'
+          margin: '1.5rem 0 0 0'
         }
       },
       testimonials: {
@@ -109,7 +109,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '1.5rem',
           backgroundColor: '#ffffff',
           borderRadius: '0.5rem',
-          marginTop: '1.5rem'
+          margin: '1.5rem 0 0 0'
         }
       },
       guarantee: {
@@ -122,7 +122,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '1.5rem',
           backgroundColor: '#ffffff',
           borderRadius: '0.5rem',
-          marginTop: '1.5rem'
+          margin: '1.5rem 0 0 0'
         }
       }
     },
