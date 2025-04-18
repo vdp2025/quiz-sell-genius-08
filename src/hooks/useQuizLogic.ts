@@ -114,6 +114,8 @@ export const useQuizLogic = () => {
     };
 
     setQuizResult(result);
+    // Explicitly save to localStorage here to ensure it's saved
+    localStorage.setItem('quizResult', JSON.stringify(result));
     console.log('Results calculated:', result);
 
     return result;

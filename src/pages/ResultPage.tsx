@@ -12,6 +12,7 @@ import { AnimatedWrapper } from '../components/ui/animated-wrapper';
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const ResultPage: React.FC = () => {
     if (quizResult) {
       console.log('Using quiz result from context:', quizResult);
       setLocalResult(quizResult);
+      setLoading(false);
     } else {
       const savedResultStr = localStorage.getItem('quizResult');
       
@@ -27,6 +29,7 @@ const ResultPage: React.FC = () => {
           const savedResult = JSON.parse(savedResultStr);
           console.log('Loaded result from localStorage:', savedResult);
           setLocalResult(savedResult);
+          setLoading(false);
         } catch (error) {
           console.error('Error parsing saved results:', error);
           toast({
@@ -34,9 +37,11 @@ const ResultPage: React.FC = () => {
             description: "Não foi possível recuperar seus resultados. Por favor, tente o quiz novamente.",
             variant: "destructive",
           });
+          setLoading(false);
         }
       } else {
         console.error('No results found in context or localStorage');
+        setLoading(false);
       }
     }
   }, [quizResult]);
@@ -47,11 +52,22 @@ const ResultPage: React.FC = () => {
   };
 
   // Show loading state while waiting for results
-  if (!quizResult && !localResult) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg text-[#432818]">Carregando seu resultado...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If no results are found after loading completes, show error and button to return
+  if (!quizResult && !localResult) {
+    return (
+      <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-[#432818]">Não foi possível encontrar seu resultado.</p>
           <Button 
             variant="outline" 
             className="mt-4"
