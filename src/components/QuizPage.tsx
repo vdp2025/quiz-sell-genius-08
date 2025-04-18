@@ -13,6 +13,7 @@ import QuizTransition from './QuizTransition';
 import QuizFinalTransition from './QuizFinalTransition';
 import { strategicQuestions } from '../data/strategicQuestions';
 import { quizQuestions } from '../data/quizQuestions';
+import { Card } from './ui/card';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -39,7 +40,8 @@ const QuizPage: React.FC = () => {
   } = useQuizLogic();
 
   const quizContainerRef = useRef<HTMLDivElement>(null);
-
+  const transitionTitleRef = useRef<HTMLHeadingElement>(null);
+  
   // Calculate total questions: main quiz + strategic questions
   const totalQuestions = quizQuestions.length + strategicQuestions.length;
 
@@ -89,7 +91,16 @@ const QuizPage: React.FC = () => {
 
   useEffect(() => {
     if (quizContainerRef.current) {
-      // Adicionando verificação para garantir que o elemento de questão exista
+      // If showing transition screen, scroll to the transition title
+      if (showingTransition && transitionTitleRef.current) {
+        transitionTitleRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start'
+        });
+        return;
+      }
+
+      // For questions, use the existing question element scrolling logic
       const questionElement = document.getElementById(
         showingStrategicQuestions && currentStrategicQuestionIndex < strategicQuestions.length
           ? `question-${strategicQuestions[currentStrategicQuestionIndex].id}`
@@ -103,7 +114,7 @@ const QuizPage: React.FC = () => {
         });
       }
     }
-  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, currentQuestion]);
+  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, currentQuestion, showingTransition]);
 
   const handleTransitionContinue = () => {
     console.log('Transition continue clicked, showing strategic questions');
@@ -119,11 +130,43 @@ const QuizPage: React.FC = () => {
 
   if (showingTransition) {
     return (
-      <QuizTransition 
-        onContinue={handleTransitionContinue} 
-        onAnswer={handleStrategicAnswer}
-        currentAnswers={strategicAnswers[strategicQuestions[0].id] || []}
-      />
+      <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
+        <div className="max-w-3xl mx-auto">
+          <AnimatedWrapper>
+            <Card className="p-8 space-y-8 bg-white shadow-md mb-10 border-[#B89B7A]/20">
+              <h2 
+                ref={transitionTitleRef}
+                className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-semibold"
+              >
+                Enquanto calculamos o seu resultado...
+              </h2>
+              
+              <p className="text-[#1A1818]/80 text-base">
+                Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.
+              </p>
+              
+              <p className="text-[#1A1818]/80 text-base">
+                A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.
+              </p>
+              
+              <div className="bg-[#B89B7A]/10 p-6 rounded-lg">
+                <p className="text-[#432818] italic text-center font-medium">
+                  Responda com sinceridade. Isso é só entre você e a sua nova versão.
+                </p>
+              </div>
+            </Card>
+          </AnimatedWrapper>
+
+          <AnimatedWrapper>
+            <QuizQuestion
+              question={strategicQuestions[0]}
+              onAnswer={handleStrategicAnswer}
+              currentAnswers={strategicAnswers[strategicQuestions[0].id] || []}
+              autoAdvance={true}
+            />
+          </AnimatedWrapper>
+        </div>
+      </div>
     );
   }
 
