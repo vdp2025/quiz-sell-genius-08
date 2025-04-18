@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Type, 
@@ -13,9 +12,8 @@ import {
   Text,
   ListOrdered,
   Quote,
-  Button
 } from 'lucide-react';
-import { Button as UIButton } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 interface ComponentsSidebarProps {
   onComponentSelect: (type: string) => void;
@@ -116,7 +114,7 @@ const ComponentsSidebar = ({ onComponentSelect }: ComponentsSidebarProps) => {
               {category.title}
             </h3>
             {category.components.map((component) => (
-              <UIButton
+              <Button
                 key={component.type}
                 variant="ghost"
                 className="w-full flex items-start gap-3 p-3 h-auto rounded-lg hover:bg-[#FAF9F7] transition-colors text-left"
@@ -131,7 +129,7 @@ const ComponentsSidebar = ({ onComponentSelect }: ComponentsSidebarProps) => {
                     {component.description}
                   </p>
                 </div>
-              </UIButton>
+              </Button>
             ))}
           </div>
         ))}
