@@ -15,8 +15,8 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
   image
 }) => {
   return (
-    <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
-      <div className="w-full max-w-md mx-auto mb-8">
+    <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
+      <div className="w-full max-w-md mx-auto mb-4">
         <div className="flex justify-between text-sm text-[#432818] mb-1">
           <span>Compatibilidade</span>
           <span>{primaryStyle.percentage}%</span>
@@ -29,9 +29,9 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
         </div>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-8 items-start">
+      <div className="grid md:grid-cols-2 gap-4 items-start">
         <div>
-          <p className="text-lg text-[#432818] leading-relaxed">
+          <p className="text-base text-[#432818] leading-relaxed">
             {description}
           </p>
         </div>
@@ -39,7 +39,7 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
           <img 
             src={image} 
             alt={`Estilo ${primaryStyle.category}`}
-            className="w-full h-auto rounded-lg shadow-md"
+            className="w-full h-auto rounded-lg shadow-sm"
           />
         </div>
       </div>

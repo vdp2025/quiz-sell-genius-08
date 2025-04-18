@@ -5,7 +5,7 @@ import { Header } from '@/components/result/Header';
 import { StyleResultSection } from '@/components/result/StyleResult';
 import { Card } from '@/components/ui/card';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-import { styleConfig } from '@/config/styleConfig';
+import OfferCard from './components/quiz-result/sales/OfferCard';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -39,16 +39,22 @@ const ResultPage = () => {
     <div className="min-h-screen bg-white">
       <Header primaryStyle={primaryStyle} />
       
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <StyleResultSection 
-          primaryStyle={primaryStyle}
-          description={styleConfig[primaryStyle.category].description}
-          image={styleConfig[primaryStyle.category].image}
-        />
-        
-        <Card className="mt-8 p-6 bg-white shadow-md border border-[#B89B7A]/20">
-          <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-        </Card>
+      <div className="container mx-auto px-4 py-4 max-w-3xl">
+        <div className="space-y-4">
+          <StyleResultSection 
+            primaryStyle={primaryStyle}
+            description={styleConfig[primaryStyle.category].description}
+            image={styleConfig[primaryStyle.category].image}
+          />
+          
+          <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
+            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+          </Card>
+          
+          <div className="mt-8">
+            <OfferCard primaryStyle={primaryStyle} />
+          </div>
+        </div>
       </div>
     </div>
   );

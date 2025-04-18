@@ -18,17 +18,17 @@ export const Header: React.FC<HeaderProps> = ({
   primaryStyle
 }) => {
   return (
-    <Card className="bg-white shadow-sm p-6 mb-8">
-      <div className="flex flex-col items-center gap-4">
-        <Logo className="h-14 md:h-16" />
+    <Card className="bg-white shadow-sm p-4 mb-4">
+      <div className="flex flex-col items-center gap-2">
+        <Logo className="h-12 md:h-14" />
         
         <div className="text-center">
-          <h1 className="text-2xl md:text-3xl font-playfair text-[#432818]">
+          <h1 className="text-xl md:text-2xl font-playfair text-[#432818]">
             {title}
           </h1>
           
           {primaryStyle && (
-            <h2 className="text-2xl font-bold text-[#B89B7A] mt-4">
+            <h2 className="text-xl font-bold text-[#B89B7A] mt-2">
               {primaryStyle.category}
             </h2>
           )}
