@@ -1,11 +1,23 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EditorWorkspace } from '@/components/editor/layouts/EditorWorkspace';
+import { PageEditor } from '@/components/editor/PageEditor';
 import ResultPageEditor from '@/components/result-editor/ResultPageEditor';
+import { EditorBlock } from '@/types/editor';
+import { useEditor } from '@/hooks/useEditor';
 
 const EditorPage = () => {
+  const { config, updateConfig } = useEditor();
+  const [isPreviewing, setIsPreviewing] = useState(false);
+
+  const handleBlocksChange = (blocks: EditorBlock[]) => {
+    updateConfig({
+      ...config,
+      blocks
+    });
+  };
+
   return (
     <AdminLayout>
       <div className="h-full bg-[#FAF9F7]">
@@ -18,7 +30,12 @@ const EditorPage = () => {
           </div>
           
           <TabsContent value="sales" className="h-full mt-0">
-            <EditorWorkspace />
+            <PageEditor 
+              blocks={config.blocks}
+              onBlocksChange={handleBlocksChange}
+              onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
+              isPreviewing={isPreviewing}
+            />
           </TabsContent>
           
           <TabsContent value="results" className="h-full mt-0">

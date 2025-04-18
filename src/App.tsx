@@ -11,6 +11,7 @@ import ResultPage from "./pages/ResultPage";
 import NotFound from "./pages/NotFound";
 import EditorPage from "./pages/admin/EditorPage";
 import QuizEditorPage from "./pages/admin/QuizEditorPage";
+import EditorTestPage from "./pages/EditorTestPage";
 
 const queryClient = new QueryClient();
 
@@ -27,8 +28,7 @@ const App = () => (
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/admin/editor" element={<EditorPage />} />
               <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
-              {/* Adicionando uma rota de redirecionamento para facilitar acesso ao editor */}
-              <Route path="/editor" element={<Navigate to="/admin/editor" replace />} />
+              <Route path="/editor" element={<EditorTestPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

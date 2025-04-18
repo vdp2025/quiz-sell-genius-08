@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { EditorBlock, EditorConfig, EditableContent } from '@/types/editor';
 
 const defaultConfig: EditorConfig = {
@@ -17,29 +17,35 @@ const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9
 
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>(() => {
-    // Tenta carregar a configuração salva do localStorage
+    // Try to load the saved configuration from localStorage
     const savedConfig = localStorage.getItem('editorConfig');
     if (savedConfig) {
       try {
         return JSON.parse(savedConfig);
       } catch (e) {
-        console.error('Erro ao carregar configuração do editor:', e);
+        console.error('Error loading editor configuration:', e);
         return defaultConfig;
       }
     }
     return defaultConfig;
   });
 
-  // Salva a configuração no localStorage sempre que mudar
+  // Save the configuration to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('editorConfig', JSON.stringify(config));
   }, [config]);
 
-  const addBlock = (type: EditorBlock['type']) => {
+  // Update the entire configuration
+  const updateConfig = useCallback((newConfig: EditorConfig) => {
+    setConfig(newConfig);
+  }, []);
+
+  // Add a new block to the editor
+  const addBlock = useCallback((type: EditorBlock['type']) => {
     const blocksLength = config.blocks.length;
     let initialContent: EditableContent = {};
     
-    // Define conteúdo inicial baseado no tipo
+    // Define initial content based on type
     switch (type) {
       case 'headline':
         initialContent = {
@@ -74,8 +80,10 @@ export const useEditor = () => {
         break;
       case 'pricing':
         initialContent = {
-          title: 'Preço Especial',
-          text: 'Aproveite nossa oferta exclusiva',
+          regularPrice: '175,00',
+          salePrice: '39,00',
+          buttonText: 'Quero Comprar Agora',
+          checkoutUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10'
         };
         break;
       case 'guarantee':
@@ -87,7 +95,8 @@ export const useEditor = () => {
       case 'cta':
         initialContent = {
           title: 'Comece Agora',
-          text: 'Clique no botão abaixo para começar',
+          buttonText: 'Clique aqui',
+          url: '#'
         };
         break;
       default:
@@ -109,9 +118,10 @@ export const useEditor = () => {
     });
 
     return newBlock.id;
-  };
+  }, [config]);
 
-  const updateBlock = (id: string, content: Partial<EditableContent>) => {
+  // Update a specific block
+  const updateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
     setConfig({
       ...config,
       blocks: config.blocks.map(block =>
@@ -120,9 +130,10 @@ export const useEditor = () => {
           : block
       )
     });
-  };
+  }, [config]);
 
-  const deleteBlock = (id: string) => {
+  // Delete a block
+  const deleteBlock = useCallback((id: string) => {
     setConfig({
       ...config,
       blocks: config.blocks
@@ -132,9 +143,10 @@ export const useEditor = () => {
           order: index
         }))
     });
-  };
+  }, [config]);
 
-  const reorderBlocks = (startIndex: number, endIndex: number) => {
+  // Reorder blocks
+  const reorderBlocks = useCallback((startIndex: number, endIndex: number) => {
     const newBlocks = Array.from(config.blocks);
     const [removed] = newBlocks.splice(startIndex, 1);
     newBlocks.splice(endIndex, 0, removed);
@@ -146,9 +158,10 @@ export const useEditor = () => {
         order: index
       }))
     });
-  };
+  }, [config]);
 
-  const updateTheme = (theme: Partial<EditorConfig['theme']>) => {
+  // Update theme settings
+  const updateTheme = useCallback((theme: Partial<EditorConfig['theme']>) => {
     setConfig({
       ...config,
       theme: {
@@ -156,29 +169,33 @@ export const useEditor = () => {
         ...theme
       }
     });
-  };
+  }, [config]);
 
-  const clearEditor = () => {
+  // Reset the editor to default state
+  const clearEditor = useCallback(() => {
     setConfig(defaultConfig);
-  };
+  }, []);
 
-  const saveAsTemplate = (name: string) => {
+  // Save current configuration as a template
+  const saveAsTemplate = useCallback((name: string) => {
     const templates = JSON.parse(localStorage.getItem('editorTemplates') || '{}');
     templates[name] = config;
     localStorage.setItem('editorTemplates', JSON.stringify(templates));
-  };
+  }, [config]);
 
-  const loadTemplate = (name: string) => {
+  // Load a saved template
+  const loadTemplate = useCallback((name: string) => {
     const templates = JSON.parse(localStorage.getItem('editorTemplates') || '{}');
     if (templates[name]) {
       setConfig(templates[name]);
       return true;
     }
     return false;
-  };
+  }, []);
 
   return {
     config,
+    updateConfig,
     addBlock,
     updateBlock,
     deleteBlock,
