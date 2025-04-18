@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -6,6 +7,7 @@ import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
+import { strategicQuestions } from '@/data/strategicQuestions';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
