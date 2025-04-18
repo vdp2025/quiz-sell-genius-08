@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -39,10 +38,10 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     
     // Enhanced scaling for questions 1 and 2 - adjusted to prevent cropping
     if (['1', '2'].includes(questionId.charAt(0))) {
-      return "scale-[1.2] translate-y-0"; // Reduced scale to prevent cropping
+      return "scale-110"; // Base scale for questions 1 & 2
     }
     
-    return "scale-[1.15]"; // Slightly reduced default mobile scale
+    return "scale-110"; // Base scale for other questions
   };
 
   return (
@@ -64,7 +63,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
               getImageScale(),
               isSelected ? (
                 isMobile 
-                  ? "scale-110 shadow-lg z-10" 
+                  ? "scale-100" // When selected, return to original size on mobile
                   : "shadow-lg border-2 border-brand-coffee/40 z-10"
               ) : "hover:shadow-md",
             )}
