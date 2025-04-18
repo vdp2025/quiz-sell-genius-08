@@ -43,14 +43,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col",
           "transition-all duration-300 ease-out cursor-pointer", 
           type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
-          type !== 'text' && "border border-[#B89B7A]/30 rounded-lg overflow-hidden",
+          type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-brand-gold bg-white/50 backdrop-blur-[12px] shadow-lg ring-2 ring-brand-gold/50 transform scale-[1.02]" 
-              : "border-brand-gold shadow-lg ring-2 ring-brand-gold/50 transform scale-[1.02]"
+              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]" 
+              : "border-brand-gold/60 shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]"
             : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md" 
-              : "hover:border-brand-gold/40 hover:shadow-md"
+              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-sm" 
+              : "hover:border-brand-gold/40 hover:shadow-sm"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -84,10 +84,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         </p>
       </div>
       
-      {/* Typeform-like active indicator */}
+      {/* Smaller Typeform-like active indicator */}
       {isSelected && (
-        <div className="absolute -top-1 -right-1 w-5 h-5 bg-brand-gold rounded-full flex items-center justify-center shadow-md z-10 animate-scale-in">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 animate-scale-in">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-2 w-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         </div>

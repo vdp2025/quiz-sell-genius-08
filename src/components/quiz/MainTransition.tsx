@@ -106,6 +106,15 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
           <AnimatedWrapper>
             <Card className="p-8 space-y-6 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
               <div className="relative">
+                <div className="mb-8">
+                  <h3 className="text-xl sm:text-2xl font-playfair text-center mb-2 bg-gradient-to-r from-[#B89B7A] to-[#432818] bg-clip-text text-transparent">
+                    {strategicQuestions[currentQuestionIndex].title}
+                  </h3>
+                  <p className="text-[#1A1818]/70 text-center text-sm">
+                    Selecione a opção que mais combina com você
+                  </p>
+                </div>
+
                 <QuizQuestion
                   key={`strategic-${currentQuestionIndex}`}
                   question={strategicQuestions[currentQuestionIndex]}

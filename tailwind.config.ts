@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -133,6 +132,9 @@ export default {
       },
       scale: {
         '115': '1.15',
+      },
+      backgroundImage: {
+        'gradient-gold': 'linear-gradient(to right, #B89B7A, #432818)',
       }
     }
   },
