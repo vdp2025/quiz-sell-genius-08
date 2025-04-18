@@ -42,7 +42,7 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
             <img 
               src={image} 
               alt={`Estilo ${primaryStyle.category}`}
-              className="w-1/2 h-auto rounded-lg shadow-sm mx-auto" // Reduced to 50% width
+              className="w-[30%] h-auto rounded-lg shadow-sm mx-auto" // Reduced to 30% width
             />
             <div className="bg-white rounded-lg p-3 shadow-sm border border-[#B89B7A]/10">
               <SecondaryStylesSection secondaryStyles={secondaryStyles} />
@@ -54,7 +54,7 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
             <img 
               src={image} 
               alt={`Estilo ${primaryStyle.category}`}
-              className="w-1/2 h-auto rounded-lg shadow-sm mx-auto" // Reduced to 50% width
+              className="w-1/2 h-auto rounded-lg shadow-sm mx-auto" 
             />
             <div className="absolute bottom-2 right-2 w-48 bg-white/90 rounded-lg p-2 shadow-md">
               <SecondaryStylesSection secondaryStyles={secondaryStyles} />
@@ -65,4 +65,3 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
     </Card>
   );
 };
-
