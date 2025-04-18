@@ -82,8 +82,10 @@ export const ResultPageVisualEditor: React.FC = () => {
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
         onSave={handleSave}
-        isPreviewing={isPreviewing}
+        isPreviewMode={isPreviewing}
         onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
+        onReset={() => {}}
+        onEditGlobalStyles={() => {}}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
