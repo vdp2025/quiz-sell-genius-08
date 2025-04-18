@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -9,6 +8,8 @@ import { QuizHeader } from './quiz/QuizHeader';
 import { QuizNavigation } from './quiz/QuizNavigation';
 import { StrategicQuestions } from './quiz/StrategicQuestions';
 import { MainTransition } from './quiz/MainTransition';
+import { UserResponse } from '@/types/quiz';
+import { strategicQuestions } from '@/data/strategicQuestions';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
