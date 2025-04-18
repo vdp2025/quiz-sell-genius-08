@@ -10,49 +10,49 @@ export const personalityQuestions: QuizQuestion[] = [
     options: [
       {
         id: '2a',
-        text: 'Informal, espontânea, alegre, essencialista.',
+        text: 'Informal, alegre e prática.',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '2b',
-        text: 'Conservadora, séria, organizada.',
+        text: 'Conservadora e organizada.',
         styleCategory: 'Clássico',
         points: 1
       },
       {
         id: '2c',
-        text: 'Informada, ativa, prática.',
+        text: 'Informada e prática.',
         styleCategory: 'Contemporâneo',
         points: 1
       },
       {
         id: '2d',
-        text: 'Exigente, sofisticada, seletiva.',
+        text: 'Exigente e sofisticada.',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '2e',
-        text: 'Feminina, meiga, delicada, sensível.',
+        text: 'Feminina e delicada.',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '2f',
-        text: 'Glamorosa, vaidosa, sensual.',
+        text: 'Glamorosa e sensual.',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '2g',
-        text: 'Sou cosmopolita, moderna e audaciosa.',
+        text: 'Moderna e audaciosa.',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '2h',
-        text: 'Exótica, aventureira, livre.',
+        text: 'Exótica e livre.',
         styleCategory: 'Criativo',
         points: 1
       }
