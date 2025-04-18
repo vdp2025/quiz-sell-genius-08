@@ -8,6 +8,7 @@ import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/sales/OfferCard';
 import { resultPageStorage } from '@/services/resultPageStorage';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -25,7 +26,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
   
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
-  const [config, setConfig] = useState<any>(null);
+  const [config, setConfig] = useState<ResultPageConfig | null>(null);
   
   // Carregar configurações personalizadas
   useEffect(() => {
@@ -36,6 +37,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
       }
     } catch (error) {
       console.error('Erro ao carregar configurações personalizadas:', error);
+      setConfig(null);
     }
   }, [primaryStyle.category]);
 
@@ -51,6 +53,22 @@ const QuizResult: React.FC<QuizResultProps> = ({
       }
     }
   }, [user]);
+
+  // Aplicar estilos globais se disponíveis
+  const applyGlobalStyles = () => {
+    if (config?.globalStyles) {
+      const styles = {
+        '--primary-color': config.globalStyles.primaryColor || '#aa6b5d',
+        '--secondary-color': config.globalStyles.secondaryColor || '#432818',
+        '--text-color': config.globalStyles.textColor || '#1A1818',
+        '--background-color': config.globalStyles.backgroundColor || '#fffaf7',
+        '--font-family': config.globalStyles.fontFamily || "'Playfair Display', serif",
+      } as React.CSSProperties;
+      
+      return styles;
+    }
+    return {};
+  };
 
   if (!primaryStyle || !secondaryStyles) {
     console.error('Missing required props:', {
@@ -80,26 +98,52 @@ const QuizResult: React.FC<QuizResultProps> = ({
 
   // Versão com configurações personalizadas
   return (
-    <div className="min-h-screen bg-[#fffaf7]">
+    <div 
+      className="min-h-screen" 
+      style={{
+        ...applyGlobalStyles(),
+        backgroundColor: 'var(--background-color)',
+        color: 'var(--text-color)',
+        fontFamily: 'var(--font-family)',
+      }}
+    >
       <div className="max-w-4xl mx-auto">
-        <ResultHeader 
-          userName={userName}
-
-          customTitle={config.header?.content?.title} 
-        />
+        {config.header.visible && (
+          <div style={config.header.style}>
+            <ResultHeader 
+              userName={userName}
+              customTitle={config.header.content.title} 
+            />
+          </div>
+        )}
         
-        <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20 mb-8">
-          <PrimaryStyleCard 
-            primaryStyle={primaryStyle} 
-            customDescription={config.mainContent?.content?.description}
-            customImage={config.mainContent?.content?.customImage}
-          />
-          <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-        </Card>
+        {config.mainContent.visible && (
+          <Card 
+            className="mb-8"
+            style={{
+              ...config.mainContent.style,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <PrimaryStyleCard 
+              primaryStyle={primaryStyle} 
+              customDescription={config.mainContent.content.description}
+              customImage={config.mainContent.content.customImage}
+            />
+            
+            {config.secondaryStyles.visible && (
+              <div style={config.secondaryStyles.style}>
+                <SecondaryStylesSection 
+                  secondaryStyles={secondaryStyles} 
+                />
+              </div>
+            )}
+          </Card>
+        )}
 
         <OfferCard 
           primaryStyle={primaryStyle} 
-          config={config.offer?.hero?.content} 
+          config={config.offer.hero.content} 
         />
       </div>
     </div>

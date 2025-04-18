@@ -7,18 +7,34 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
     header: {
       visible: true,
       content: {
-        title: `Olá, seu Estilo Predominante é:`
+        title: `Olá, seu Estilo Predominante é:`,
+        subtitle: ''
+      },
+      style: {
+        textAlign: 'center',
+        margin: '0 0 2rem 0'
       }
     },
     mainContent: {
       visible: true,
       content: {
         description: getDefaultDescription(styleType)
+      },
+      style: {
+        padding: '1.5rem',
+        backgroundColor: '#ffffff',
+        borderRadius: '0.5rem'
       }
     },
     secondaryStyles: {
       visible: true,
-      content: {}
+      content: {},
+      style: {
+        padding: '1.5rem',
+        backgroundColor: '#ffffff',
+        borderRadius: '0.5rem',
+        marginTop: '1.5rem'
+      }
     },
     offer: {
       hero: {
@@ -30,28 +46,92 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           regularPrice: "175,00",
           ctaText: "Quero meu Guia + Bônus",
           ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+        },
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '2rem',
+          borderRadius: '0.5rem',
+          marginTop: '2rem'
         }
       },
       products: {
         visible: true,
-        content: {}
+        content: {
+          title: "O que você vai receber:"
+        },
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#ffffff',
+          borderRadius: '0.5rem',
+          marginTop: '1.5rem'
+        }
       },
       pricing: {
         visible: true,
-        content: {}
+        content: {
+          price: "39,00",
+          regularPrice: "175,00",
+          ctaText: "Quero meu Guia + Bônus",
+          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+          urgencyText: "Oferta por tempo limitado!"
+        },
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#ffffff',
+          borderRadius: '0.5rem',
+          marginTop: '1.5rem'
+        }
       },
       benefits: {
         visible: true,
-        content: {}
+        content: {
+          title: "Benefícios",
+          items: [
+            "Descubra seu estilo com precisão",
+            "Aprenda a criar looks autênticos",
+            "Economize tempo e dinheiro",
+            "Ganhe confiança na sua imagem"
+          ]
+        },
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#ffffff',
+          borderRadius: '0.5rem',
+          marginTop: '1.5rem'
+        }
       },
       testimonials: {
         visible: true,
-        content: {}
+        content: {
+          title: "O que estão dizendo"
+        },
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#ffffff',
+          borderRadius: '0.5rem',
+          marginTop: '1.5rem'
+        }
       },
       guarantee: {
         visible: true,
-        content: {}
+        content: {
+          title: "Garantia de 7 dias",
+          text: "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
+        },
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#ffffff',
+          borderRadius: '0.5rem',
+          marginTop: '1.5rem'
+        }
       }
+    },
+    globalStyles: {
+      primaryColor: '#aa6b5d',
+      secondaryColor: '#432818',
+      textColor: '#1A1818',
+      backgroundColor: '#fffaf7',
+      fontFamily: "'Playfair Display', serif"
     }
   };
 };

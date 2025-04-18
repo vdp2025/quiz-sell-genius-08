@@ -7,6 +7,12 @@ import ResultPageEditor from '@/components/result-editor/ResultPageEditor';
 const ResultPageEditorPage: React.FC = () => {
   const { quizResult } = useQuizContext();
   
+  // Definir estilos permitidos
+  const styleCategories: StyleResult['category'][] = [
+    'Natural', 'Clássico', 'Contemporâneo', 'Elegante',
+    'Romântico', 'Sexy', 'Dramático', 'Criativo'
+  ];
+  
   // Caso não haja resultado, usamos um estilo padrão para edição
   const defaultStyle: StyleResult = {
     category: 'Elegante',
