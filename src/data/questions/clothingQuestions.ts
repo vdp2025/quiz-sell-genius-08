@@ -10,56 +10,56 @@ export const clothingQuestions: QuizQuestion[] = [
     options: [
       {
         id: '1a',
-        text: 'Looks confortáveis, soltos ao corpo, práticos para usar e para cuidar.',
+        text: 'Conforto, leveza e praticidade no vestir.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '1b',
-        text: 'Roupas discretas, com caimento clássico e que passam despercebidas.',
+        text: 'Discrição, caimento clássico e sobriedade.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
         styleCategory: 'Clássico',
         points: 1
       },
       {
         id: '1c',
-        text: 'Roupas confortáveis mas com um toque de estilo.',
+        text: 'Praticidade com um toque de estilo atual.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
         styleCategory: 'Contemporâneo',
         points: 1
       },
       {
         id: '1d',
-        text: 'Peças com toques refinados, caimento perfeito, atual, mas sem modismos.',
+        text: 'Elegância refinada, moderna e sem exageros.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '1e',
-        text: 'Roupas delicadas de cores suaves, fluídas no corpo.',
+        text: 'Delicadeza em tecidos suaves e fluidos.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '1f',
-        text: 'Roupas que marquem meu corpo, decotes, fendas.',
+        text: 'Sensualidade com destaque para o corpo.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '1g',
-        text: 'Peças estruturadas, assimétricas, modernas.',
+        text: 'Impacto visual com peças estruturadas e assimétricas.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '1h',
-        text: 'Formas e peças marcantes, em um mix no look.',
+        text: 'Mix criativo com formas ousadas e originais.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp',
         styleCategory: 'Criativo',
         points: 1
