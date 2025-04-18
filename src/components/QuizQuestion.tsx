@@ -110,24 +110,26 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <div className="flex flex-col items-center gap-3 mt-6">
+        <div className="flex justify-between items-center gap-3 mt-6">
           {!autoAdvance && (
             <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
               Selecione 3 Opções para avançar
             </p>
           )}
           
-          <Button 
-            variant="golden"
-            className={cn(
-              "transition-all duration-300 opacity-70",
-              currentAnswers.length === question.multiSelect ? "opacity-100 hover:scale-105" : "cursor-not-allowed"
-            )}
-            disabled={currentAnswers.length !== question.multiSelect}
-          >
-            Avançar
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+          <div className="ml-auto">
+            <Button 
+              variant="golden"
+              className={cn(
+                "transition-all duration-300 opacity-70",
+                currentAnswers.length === question.multiSelect ? "opacity-100 hover:scale-105" : "cursor-not-allowed"
+              )}
+              disabled={currentAnswers.length !== question.multiSelect}
+            >
+              Avançar
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
         </div>
       </div>
     </AnimatedWrapper>
