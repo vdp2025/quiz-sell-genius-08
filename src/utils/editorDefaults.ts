@@ -57,8 +57,9 @@ export const getDefaultContentForType = (type: string): EditableContent => {
     case 'cta':
       return { 
         buttonText: 'Clique Aqui', 
-        url: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        title: 'Transforme seu estilo agora'
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        title: 'Transforme seu estilo agora',
+        url: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
       };
     case 'style-result':
       return { 

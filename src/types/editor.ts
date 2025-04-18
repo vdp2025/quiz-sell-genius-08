@@ -26,6 +26,9 @@ export interface EditorBlock {
   order: number;
 }
 
+// Alias EditorBlock as Block for backward compatibility
+export type Block = EditorBlock;
+
 export interface EditableContent {
   // Header
   title?: string;
@@ -43,6 +46,7 @@ export interface EditableContent {
   imageAlt?: string;
   width?: string;
   borderRadius?: string;
+  height?: string;
   
   // Benefits
   items?: string[];
@@ -69,6 +73,7 @@ export interface EditableContent {
   images?: {
     url: string;
     alt: string;
+    title?: string;
   }[];
   
   // Testimonials
@@ -80,4 +85,25 @@ export interface EditableContent {
     alt: string;
     title: string;
   }[];
+  
+  // General properties
+  description?: string;
+  url?: string;
+  ctaText?: string;
+  price?: string;
+  customImage?: string;
+  
+  // Styling
+  style?: {
+    textAlign?: 'left' | 'center' | 'right';
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    width?: string;
+    borderRadius?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    fontFamily?: string;
+  };
 }

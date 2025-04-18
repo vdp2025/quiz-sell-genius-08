@@ -38,8 +38,8 @@ const CTABlockEditor: React.FC<CTABlockEditorProps> = ({ block, onUpdate }) => {
         <Label htmlFor="url">URL do Botão</Label>
         <Input
           id="url"
-          value={content.url || ''}
-          onChange={(e) => onUpdate({ url: e.target.value })}
+          value={content.url || content.ctaUrl || ''}
+          onChange={(e) => onUpdate({ url: e.target.value, ctaUrl: e.target.value })}
           placeholder="https://pay.hotmart.com/..."
         />
       </div>
