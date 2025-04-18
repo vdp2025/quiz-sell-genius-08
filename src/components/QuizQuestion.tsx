@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -75,12 +76,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         id={`question-${question.id}`}
       >
         {!hideTitle && (
-          <h2 className={cn(
-            "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-            isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line"
-          )}>
-            {highlightStrategicWords(question.title)}
-          </h2>
+          <>
+            <h2 className={cn(
+              "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+              isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line"
+            )}>
+              {highlightStrategicWords(question.title)}
+            </h2>
+            {!isStrategicQuestion && (
+              <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+                Selecione 3 Opções
+              </p>
+            )}
+          </>
         )}
         
         <div className={cn(
@@ -127,3 +135,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
