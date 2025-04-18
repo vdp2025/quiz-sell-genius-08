@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -13,6 +12,7 @@ import { toast } from './ui/use-toast';
 import QuizTransition from './QuizTransition';
 import QuizFinalTransition from './QuizFinalTransition';
 import { strategicQuestions } from '../data/strategicQuestions';
+import { quizQuestions } from '../data/quizQuestions';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -32,13 +32,16 @@ const QuizPage: React.FC = () => {
     handleAnswer,
     handleNext,
     handlePrevious,
-    totalQuestions,
+    totalQuestions: mainQuizTotalQuestions,
     submitQuizIfComplete,
     calculateResults,
     handleStrategicAnswer: saveStrategicAnswer
   } = useQuizLogic();
 
   const quizContainerRef = useRef<HTMLDivElement>(null);
+
+  // Calculate total questions: main quiz + strategic questions
+  const totalQuestions = quizQuestions.length + strategicQuestions.length;
 
   const handleStrategicAnswer = (response: UserResponse) => {
     console.log('Strategic question answered:', response);
@@ -134,25 +137,27 @@ const QuizPage: React.FC = () => {
   
   const currentProgress = showingStrategicQuestions
     ? Math.round(((currentStrategicQuestionIndex + 1) / strategicQuestions.length) * 100)
-    : Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+    : Math.round(((currentQuestionIndex + 1) / quizQuestions.length) * 100);
 
   return (
     <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
         <AnimatedWrapper>
           <Progress 
-            value={currentProgress}
+            value={Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)} 
             className="w-full h-2 bg-[#B89B7A]/20" 
             indicatorClassName="bg-[#B89B7A]" 
           />
         </AnimatedWrapper>
         
         <AnimatedWrapper className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-playfair text-[#432818]">
+          <h1 className="text-base font-playfair text-[#432818]"> {/* Reduced font size */}
             Olá, {user?.userName || 'Visitante'}!
           </h1>
           <div className="text-sm text-[#1A1818]/60">
-            Questão {showingStrategicQuestions ? currentStrategicQuestionIndex + 1 : currentQuestionIndex + 1} de {showingStrategicQuestions ? strategicQuestions.length : totalQuestions}
+            Ex: {showingStrategicQuestions 
+              ? currentStrategicQuestionIndex + 1 
+              : currentQuestionIndex + 1} de {totalQuestions}
           </div>
         </AnimatedWrapper>
 
