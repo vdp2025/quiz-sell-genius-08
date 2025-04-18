@@ -41,6 +41,11 @@ const ResultPage: React.FC = () => {
         }
       } else {
         console.error('No results found in context or localStorage');
+        toast({
+          title: "Resultados não encontrados",
+          description: "Não foi possível encontrar seus resultados. Por favor, tente o quiz novamente.",
+          variant: "destructive",
+        });
         setLoading(false);
       }
     }
@@ -63,7 +68,7 @@ const ResultPage: React.FC = () => {
   }
 
   // If no results are found after loading completes, show error and button to return
-  if (!quizResult && !localResult) {
+  if (!localResult) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
         <div className="text-center">
@@ -81,30 +86,26 @@ const ResultPage: React.FC = () => {
     );
   }
 
-  const resultData = quizResult || localResult;
-
   return (
     <div>
       <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {resultData && (
-            <AnimatedWrapper>
-              <QuizResult 
-                primaryStyle={resultData.primaryStyle} 
-                secondaryStyles={resultData.secondaryStyles} 
-              />
-              <div className="max-w-4xl mx-auto py-8 px-4">
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleRetakeQuiz}
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Refazer o Quiz
-                </Button>
-              </div>
-            </AnimatedWrapper>
-          )}
+          <AnimatedWrapper>
+            <QuizResult 
+              primaryStyle={localResult.primaryStyle} 
+              secondaryStyles={localResult.secondaryStyles} 
+            />
+            <div className="max-w-4xl mx-auto py-8 px-4">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={handleRetakeQuiz}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Refazer o Quiz
+              </Button>
+            </div>
+          </AnimatedWrapper>
         </div>
       </div>
     </div>
