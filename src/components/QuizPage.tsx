@@ -10,6 +10,8 @@ import { strategicQuestions } from '../data/strategicQuestions';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizHeader } from './quiz/QuizHeader';
 import { QuizNavigation } from './quiz/QuizNavigation';
+import { Card } from './ui/card';
+import { AnimatedWrapper } from './ui/animated-wrapper';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
