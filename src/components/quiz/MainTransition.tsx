@@ -19,13 +19,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
 }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Reset selected option when question changes
-    setSelectedOption(null);
-  }, [currentQuestionIndex]);
-
+  
   // Define the currentAnswersForQuestion variable
   const currentQuestion = strategicQuestions[currentQuestionIndex];
   const currentAnswersForQuestion = currentQuestion 
@@ -37,11 +31,14 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
       console.log('Strategic Question Answered:', response);
       onAnswer(response);
       
-      // Auto advance after a short delay
-      if (currentQuestionIndex < strategicQuestions.length - 1) {
-        setTimeout(() => {
-          setCurrentQuestionIndex(prev => prev + 1);
-        }, 500);
+      // Only auto advance if the user has selected an option
+      if (response.selectedOptions.length > 0) {
+        // Auto advance after a short delay
+        if (currentQuestionIndex < strategicQuestions.length - 1) {
+          setTimeout(() => {
+            setCurrentQuestionIndex(prev => prev + 1);
+          }, 500);
+        }
       }
     } catch (error) {
       console.error('Error handling strategic question:', error);
@@ -50,6 +47,12 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentQuestionIndex < strategicQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
     }
   };
 
@@ -110,6 +113,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   currentAnswers={currentAnswersForQuestion}
                   autoAdvance={true}
                   hideTitle={true}
+                  onNextClick={handleNextClick}
                 />
               </div>
             </Card>

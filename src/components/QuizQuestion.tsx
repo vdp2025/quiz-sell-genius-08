@@ -15,6 +15,7 @@ interface QuizQuestionProps {
   currentAnswers: string[];
   autoAdvance?: boolean;
   hideTitle?: boolean;
+  onNextClick?: () => void;
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -23,6 +24,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = false,
   hideTitle = false,
+  onNextClick,
 }) => {
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
@@ -63,6 +65,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     return isMobile 
       ? "grid-cols-2 gap-1 px-0.5"
       : "grid-cols-2 gap-3 px-2";
+  };
+
+  const handleNextButtonClick = () => {
+    if (onNextClick && currentAnswers.length === question.multiSelect) {
+      onNextClick();
+    }
   };
 
   return (
@@ -120,12 +128,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           <div className="ml-auto">
             <Button 
               variant="golden"
-              size="default"  // Explicitly set the size to match the "Voltar" button
+              size="default"
               className={cn(
                 "transition-all duration-300 opacity-70",
                 currentAnswers.length === question.multiSelect ? "opacity-100 hover:scale-105" : "cursor-not-allowed"
               )}
               disabled={currentAnswers.length !== question.multiSelect}
+              onClick={handleNextButtonClick}
             >
               Avançar
               <ArrowRight className="w-4 h-4 ml-2" />

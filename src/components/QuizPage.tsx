@@ -57,9 +57,14 @@ const QuizPage: React.FC = () => {
       saveStrategicAnswer(response.questionId, response.selectedOptions);
       
       // Check if we've answered the last strategic question
-      if (response.questionId === strategicQuestions[strategicQuestions.length - 1].id) {
+      if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
         setTimeout(() => {
           setShowingFinalTransition(true);
+        }, 500);
+      } else {
+        // Move to the next strategic question
+        setTimeout(() => {
+          setCurrentStrategicQuestionIndex(prev => prev + 1);
         }, 500);
       }
     } catch (error) {
@@ -82,6 +87,8 @@ const QuizPage: React.FC = () => {
             handleNext();
           }, 500);
         } else {
+          // If it's the last question, proceed to transition
+          console.log('Last question reached, showing transition...');
           setTimeout(() => {
             // Make sure to calculate results before transitioning
             calculateResults();
@@ -110,6 +117,8 @@ const QuizPage: React.FC = () => {
       
       // Force a manual navigation with a delay to ensure storage is completed
       setTimeout(() => {
+        console.log('Navigating to /resultado page...');
+        // Using window.location to force a full page load
         window.location.href = '/resultado';
       }, 500);
     } catch (error) {
@@ -138,6 +147,17 @@ const QuizPage: React.FC = () => {
       });
     }
   }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, currentQuestion]);
+
+  // Add a handler for the button click in QuizQuestion component
+  const handleNextClick = () => {
+    if (!isLastQuestion) {
+      handleNext();
+    } else {
+      // For the last question, calculate results and transition
+      calculateResults();
+      setShowingTransition(true);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
@@ -170,6 +190,7 @@ const QuizPage: React.FC = () => {
                 question={currentQuestion}
                 onAnswer={handleAnswerSubmit}
                 currentAnswers={currentAnswers}
+                onNextClick={handleNextClick}
               />
             ) : null}
 
