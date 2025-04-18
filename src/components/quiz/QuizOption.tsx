@@ -69,10 +69,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-transparent py-1.5 px-2 mt-auto text-brand-coffee relative",
-                "text-[0.7rem] sm:text-xs",
+                "text-[0.7rem] sm:text-xs", // Consistent text size for all questions
                 isSelected && "font-semibold"
               )
-            : "text-xs sm:text-lg leading-relaxed"
+            : "text-[0.7rem] sm:text-xs leading-relaxed" // Ensure consistent text size for text options
         )}>
           {highlightStrategicWords(option.text)}
         </p>
