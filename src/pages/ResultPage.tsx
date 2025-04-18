@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
@@ -14,7 +14,33 @@ const ResultPage = () => {
   const [searchParams] = useSearchParams();
   const { primaryStyle, secondaryStyles } = useQuiz();
 
-  const styleDescription = `Como uma pessoa ${primaryStyle?.category.toLowerCase()}, 
+  useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (!primaryStyle) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <h1 className="text-2xl font-playfair text-[#432818] mb-4">
+            Resultados não encontrados
+          </h1>
+          <p className="text-[#8F7A6A] mb-6">
+            Parece que você ainda não completou o quiz.
+          </p>
+          <a 
+            href="/" 
+            className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
+          >
+            Fazer o Quiz
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  const styleDescription = `Como uma pessoa ${primaryStyle.category.toLowerCase()}, 
     você tem uma personalidade única que se reflete no seu estilo pessoal. 
     Vamos te ajudar a potencializar essas características e criar looks incríveis.`;
 
@@ -62,10 +88,6 @@ const ResultPage = () => {
       order: 3
     }
   ];
-
-  if (!primaryStyle) {
-    return <div>Carregando...</div>;
-  }
 
   return (
     <div className="min-h-screen bg-white">
