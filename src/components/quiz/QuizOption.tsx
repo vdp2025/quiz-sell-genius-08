@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -28,8 +29,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group h-full",
-        "transition-all duration-500 ease-in-out", 
-        isMobile && "active:scale-[0.98]"
+        "transition-all duration-500 ease-in-out transform", 
+        isMobile && "active:scale-[0.98]",
+        isSelected && "scale-[1.02]"
       )}
       onClick={() => onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
@@ -40,16 +42,16 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         className={cn(
           "relative h-full flex flex-col",
-          "transition-all duration-500 ease-in-out", 
-          type === 'text' && "p-4 rounded-lg border border-[#B89B7A]/10 backdrop-blur-[8px] bg-white/40",
+          "transition-all duration-300 ease-out", 
+          type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
           type !== 'text' && "border border-[#B89B7A]/30 rounded-lg cursor-pointer overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-[#B89B7A]/40 bg-white/50 backdrop-blur-[12px] shadow-lg" 
-              : "border-[#B89B7A]/80 shadow-2xl"
+              ? "border-[#9b87f5] bg-white/50 backdrop-blur-[12px] shadow-lg ring-2 ring-[#9b87f5]/20" 
+              : "border-[#9b87f5] shadow-lg ring-2 ring-[#9b87f5]/20"
             : type === 'text' 
-              ? "hover:border-[#B89B7A]/30 hover:bg-white/45 hover:backdrop-blur-[10px]" 
-              : "hover:border-[#B89B7A]/50",
+              ? "border-[#B89B7A]/10 hover:border-[#9b87f5]/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md" 
+              : "hover:border-[#9b87f5]/40 hover:scale-[1.01] hover:shadow-md",
         )}
       >
         {type !== 'text' && option.imageUrl && (
