@@ -1,13 +1,12 @@
+
 import React from 'react';
-import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
 import { EditorBlock } from '@/types/editor';
-import { AddBlockButton } from './AddBlockButton';
 import { EditorToolbar } from './toolbar/EditorToolbar';
-import { EmptyEditor } from './EmptyEditor';
-import { BlockRenderer } from './BlockRenderer';
+import { EditorContent } from './content/EditorContent';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
-import { useToast } from '@/components/ui/use-toast';
+import { useEditorActions } from '@/hooks/editor/useEditorActions';
 
 interface PageEditorProps {
   blocks: EditorBlock[];
@@ -22,43 +21,12 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   onPreviewToggle,
   isPreviewing
 }) => {
-  const { toast } = useToast();
   const { addToHistory, undo, redo, canUndo, canRedo } = useEditorHistory(blocks);
-  
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
-    })
+  const { handleAddBlock, handleUpdateBlock, handleDeleteBlock, handleSave } = useEditorActions(
+    blocks,
+    onBlocksChange,
+    addToHistory
   );
-
-  const handleAddBlock = (type: EditorBlock['type']) => {
-    const newBlocks = [...blocks, {
-      id: `block-${Date.now()}`,
-      type,
-      content: getDefaultContentForType(type),
-      order: blocks.length
-    }];
-    
-    onBlocksChange(newBlocks);
-    addToHistory(newBlocks);
-  };
-
-  const handleUpdateBlock = (id: string, content: any) => {
-    const newBlocks = blocks.map(block => 
-      block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-    );
-    
-    onBlocksChange(newBlocks);
-    addToHistory(newBlocks);
-  };
-
-  const handleDeleteBlock = (id: string) => {
-    const newBlocks = blocks.filter(block => block.id !== id)
-      .map((block, index) => ({ ...block, order: index }));
-    
-    onBlocksChange(newBlocks);
-    addToHistory(newBlocks);
-  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -75,28 +43,11 @@ export const PageEditor: React.FC<PageEditorProps> = ({
     }
   };
 
-  const handleUndo = () => {
-    const previousBlocks = undo();
-    onBlocksChange(previousBlocks);
-  };
-
-  const handleRedo = () => {
-    const nextBlocks = redo();
-    onBlocksChange(nextBlocks);
-  };
-
-  const handleSave = () => {
-    toast({
-      title: "Alterações salvas",
-      description: "Suas alterações foram salvas com sucesso."
-    });
-  };
-
   return (
     <div className="h-full flex flex-col">
       <EditorToolbar 
-        onUndo={handleUndo}
-        onRedo={handleRedo}
+        onUndo={undo}
+        onRedo={redo}
         onPreviewToggle={onPreviewToggle}
         onSave={handleSave}
         isPreviewing={isPreviewing}
@@ -105,115 +56,15 @@ export const PageEditor: React.FC<PageEditorProps> = ({
       />
 
       <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
-        {isPreviewing ? (
-          <div className="bg-white rounded-lg shadow-sm p-6 min-h-96">
-            {blocks.map(block => (
-              <div key={block.id} className="mb-4">
-                {renderBlockPreview(block)}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <SortableContext items={blocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
-              {blocks.length === 0 ? (
-                <EmptyEditor onAddBlock={handleAddBlock} />
-              ) : (
-                <>
-                  <BlockRenderer 
-                    blocks={blocks}
-                    onUpdate={handleUpdateBlock}
-                    onDelete={handleDeleteBlock}
-                  />
-                  <div className="mt-8 text-center">
-                    <AddBlockButton onAddBlock={handleAddBlock} />
-                  </div>
-                </>
-              )}
-            </SortableContext>
-          </DndContext>
-        )}
+        <EditorContent 
+          blocks={blocks}
+          onDragEnd={handleDragEnd}
+          onAddBlock={handleAddBlock}
+          onUpdateBlock={handleUpdateBlock}
+          onDeleteBlock={handleDeleteBlock}
+          isPreviewing={isPreviewing}
+        />
       </div>
     </div>
   );
 };
-
-function getDefaultContentForType(type: EditorBlock['type']): any {
-  switch (type) {
-    case 'headline':
-      return { title: 'Novo Título', subtitle: 'Novo Subtítulo', alignment: 'center' };
-    case 'text':
-      return { text: 'Adicione seu texto aqui', alignment: 'left' };
-    case 'image':
-      return { imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp', imageAlt: 'Descrição da imagem' };
-    case 'benefits':
-      return { title: 'Benefícios', items: ['Benefício 1', 'Benefício 2', 'Benefício 3'] };
-    case 'testimonials':
-      return { title: 'Depoimentos dos Clientes' };
-    case 'pricing':
-      return { 
-        regularPrice: '175,00', 
-        salePrice: '39,00', 
-        buttonText: 'Quero Comprar Agora', 
-        checkoutUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10'
-      };
-    case 'guarantee':
-      return { 
-        title: 'Garantia de 7 Dias',
-        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.'
-      };
-    case 'cta':
-      return { title: 'Comece Agora', buttonText: 'Quero Começar', url: '#' };
-    default:
-      return {};
-  }
-}
-
-function renderBlockPreview(block: EditorBlock) {
-  switch (block.type) {
-    case 'headline':
-      return (
-        <div className="text-center mb-6">
-          {block.content.title && <h2 className="text-3xl font-playfair text-[#432818] mb-2">{block.content.title}</h2>}
-          {block.content.subtitle && <p className="text-xl text-[#8F7A6A]">{block.content.subtitle}</p>}
-        </div>
-      );
-    case 'text':
-      return <p className="mb-4">{block.content.text}</p>;
-    case 'image':
-      return (
-        <div className="mb-6 text-center">
-          <img 
-            src={block.content.imageUrl} 
-            alt={block.content.imageAlt || ''} 
-            className="max-w-full h-auto rounded-lg mx-auto"
-          />
-        </div>
-      );
-    case 'benefits':
-      return (
-        <div className="mb-6">
-          <h3 className="text-xl font-playfair text-[#432818] mb-4">{block.content.title}</h3>
-          <ul className="space-y-2">
-            {block.content.items?.map((item: string, index: number) => (
-              <li key={index} className="flex items-start gap-2">
-                <span className="text-[#B89B7A]">✓</span> {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    case 'pricing':
-      return (
-        <div className="mb-6 p-6 bg-white border rounded-lg text-center">
-          <p className="text-lg line-through text-[#8F7A6A]">R$ {block.content.regularPrice}</p>
-          <p className="text-3xl font-bold text-[#B89B7A] mb-4">R$ {block.content.salePrice}</p>
-          <button className="bg-[#B89B7A] text-white px-6 py-2 rounded-md">
-            {block.content.buttonText}
-          </button>
-        </div>
-      );
-    default:
-      return <p>Bloco tipo: {block.type}</p>;
-  }
-}
