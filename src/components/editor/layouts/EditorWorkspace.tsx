@@ -5,6 +5,7 @@ import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
 import { EditPreview } from '../preview/EditPreview';
 import PropertiesPanel from '../properties/PropertiesPanel';
 import { cn } from '@/lib/utils';
+import { useEditor } from '@/hooks/useEditor';
 
 interface EditorWorkspaceProps {
   className?: string;
@@ -13,6 +14,7 @@ interface EditorWorkspaceProps {
 export function EditorWorkspace({ className }: EditorWorkspaceProps) {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+  const { config, addBlock, updateBlock, deleteBlock } = useEditor();
 
   return (
     <div className={cn("h-screen flex flex-col bg-[#FAF9F7]", className)}>
@@ -46,15 +48,21 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
           <PropertiesPanel
             selectedComponentId={selectedComponentId}
             onClose={() => setSelectedComponentId(null)}
+            blocks={config.blocks}
+            onUpdate={(content) => {
+              if (selectedComponentId) {
+                updateBlock(selectedComponentId, content);
+              }
+            }}
+            onDelete={() => {
+              if (selectedComponentId) {
+                deleteBlock(selectedComponentId);
+                setSelectedComponentId(null);
+              }
+            }}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
 }
-
-// Helper function to add a block (this should be moved to useEditor in a real implementation)
-const addBlock = (type: any) => {
-  // For now, return a placeholder ID
-  return `temp-id-${Date.now()}`;
-};

@@ -51,7 +51,54 @@ export function PreviewBlock({
             )}
           </div>
         );
-      // ... Add other block type renderers here
+      case 'text':
+        return (
+          <div 
+            className={cn(
+              "prose max-w-none",
+              block.content.alignment === 'center' && 'text-center',
+              block.content.alignment === 'right' && 'text-right'
+            )}
+          >
+            {block.content.text}
+          </div>
+        );
+      case 'benefits':
+        return (
+          <div className="space-y-4">
+            {block.content.title && (
+              <h3 className="text-xl font-playfair text-[#432818]">{block.content.title}</h3>
+            )}
+            <ul className="space-y-2">
+              {block.content.items?.map((item: string, index: number) => (
+                <li key={index} className="flex items-start gap-2">
+                  <span className="text-[#B89B7A]">✓</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      case 'pricing':
+        return (
+          <div className="text-center space-y-4">
+            {block.content.regularPrice && (
+              <p className="text-lg line-through text-[#8F7A6A]">
+                R$ {block.content.regularPrice}
+              </p>
+            )}
+            {block.content.salePrice && (
+              <p className="text-3xl font-bold text-[#B89B7A]">
+                R$ {block.content.salePrice}
+              </p>
+            )}
+            {block.content.buttonText && (
+              <Button className="bg-[#B89B7A] hover:bg-[#8F7A6A]">
+                {block.content.buttonText}
+              </Button>
+            )}
+          </div>
+        );
       default:
         return (
           <p className="text-[#8F7A6A]">
