@@ -43,15 +43,17 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
                   className="rounded-lg shadow-lg"
                 />
               )}
-              {block.content.quote && (
-                <blockquote className="italic text-lg text-[#6b4e43]">
-                  "{block.content.quote}"
-                  {block.content.quoteAuthor && (
-                    <br />
-                    <span className="not-italic font-medium">— {block.content.quoteAuthor}</span>
-                  )}
-                </blockquote>
-              )}
+              <div>
+                {block.content.quote && (
+                  <blockquote className="italic text-lg text-[#6b4e43]">
+                    "{block.content.quote}"
+                    {block.content.quoteAuthor && (
+                      <br />
+                      <span className="not-italic font-medium">— {block.content.quoteAuthor}</span>
+                    )}
+                  </blockquote>
+                )}
+              </div>
             </section>
           </div>
         );
