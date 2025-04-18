@@ -45,13 +45,16 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
               )}
               <div>
                 {block.content.quote && (
-                  <blockquote className="italic text-lg text-[#6b4e43]">
-                    "{block.content.quote}"
+                  <>
+                    <blockquote className="italic text-lg text-[#6b4e43]">
+                      "{block.content.quote}"
+                    </blockquote>
                     {block.content.quoteAuthor && (
-                      <br />
-                      <span className="not-italic font-medium">— {block.content.quoteAuthor}</span>
+                      <span className="not-italic font-medium block mt-2">
+                        — {block.content.quoteAuthor}
+                      </span>
                     )}
-                  </blockquote>
+                  </>
                 )}
               </div>
             </section>
@@ -184,7 +187,6 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
 
   return (
     <div className="h-full flex flex-col bg-[#FAF9F7]">
-      {/* Preview Toolbar */}
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
         <div className="flex gap-2">
           <Button
@@ -217,7 +219,6 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
         </Button>
       </div>
 
-      {/* Preview Canvas */}
       <div className={`flex-1 overflow-y-auto p-8 ${viewMode === 'mobile' ? 'max-w-md mx-auto' : ''}`}>
         <div className="min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6">
           {blocks.length > 0 ? (
