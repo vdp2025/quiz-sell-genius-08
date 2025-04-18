@@ -3,20 +3,11 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { OfferContent } from '@/types/resultPageConfig';
 
 interface OfferEditorProps {
-  content: {
-    title?: string;
-    subtitle?: string;
-    price?: string;
-    regularPrice?: string;
-    ctaText?: string;
-    ctaUrl?: string;
-    heroImage?: string;
-    heroImage2?: string;
-    [key: string]: any;
-  };
-  onUpdate: (content: any) => void;
+  content: OfferContent;
+  onUpdate: (content: OfferContent) => void;
 }
 
 const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {

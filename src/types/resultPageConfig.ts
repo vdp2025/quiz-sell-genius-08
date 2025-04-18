@@ -27,6 +27,19 @@ export interface SectionContent {
   images?: ImageOptions[];
 }
 
+// Define a specific interface for offer content
+export interface OfferContent {
+  title?: string;
+  subtitle?: string;
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  heroImage?: string;
+  heroImage2?: string;
+  [key: string]: any;
+}
+
 export interface Section {
   visible: boolean;
   content: SectionContent;
@@ -34,8 +47,14 @@ export interface Section {
   style?: StyleOptions;
 }
 
+// Extend the Section to create an OfferSection
 export interface OfferSection {
-  hero: Section;
+  hero: {
+    visible: boolean;
+    content: OfferContent; // Use the specific content type
+    appearance?: Record<string, any>;
+    style?: StyleOptions;
+  };
   products: Section;
   pricing: Section;
   benefits: Section;

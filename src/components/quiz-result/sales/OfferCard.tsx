@@ -8,19 +8,11 @@ import BenefitList from './BenefitList';
 import Testimonials from './Testimonials';
 import Guarantee from './Guarantee';
 import Logo from '../../ui/logo';
+import { OfferContent } from '@/types/resultPageConfig';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
-  config?: {
-    title?: string;
-    subtitle?: string;
-    price?: string;
-    regularPrice?: string;
-    ctaText?: string;
-    ctaUrl?: string;
-    heroImage?: string;
-    heroImage2?: string;
-  };
+  config?: OfferContent;
 }
 
 const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {

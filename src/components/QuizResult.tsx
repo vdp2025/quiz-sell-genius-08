@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { StyleResult } from '../types/quiz';
@@ -7,7 +8,7 @@ import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/sales/OfferCard';
 import { resultPageStorage } from '@/services/resultPageStorage';
-import { ResultPageConfig } from '@/types/resultPageConfig';
+import { ResultPageConfig, OfferContent } from '@/types/resultPageConfig';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -54,7 +55,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
   }, [user]);
 
   // Get offer config from local storage or use default
-  const [offerConfig, setOfferConfig] = useState(() => {
+  const [offerConfig, setOfferConfig] = useState<OfferContent | null>(() => {
     try {
       const saved = localStorage.getItem(`offer_config_${primaryStyle.category}`);
       return saved ? JSON.parse(saved) : null;
@@ -156,7 +157,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
 
         <OfferCard 
           primaryStyle={primaryStyle} 
-          config={config.offer.hero.content} 
+          config={config.offer.hero.content as OfferContent} 
         />
       </div>
     </div>

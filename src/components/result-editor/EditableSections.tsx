@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Card } from '@/components/ui/card';
-import { ResultPageConfig } from '@/types/resultPageConfig';
+import { ResultPageConfig, OfferContent } from '@/types/resultPageConfig';
 import { EditSectionOverlay } from './EditSectionOverlay';
 import ResultHeader from '../quiz-result/ResultHeader';
 import PrimaryStyleCard from '../quiz-result/PrimaryStyleCard';
@@ -39,7 +39,7 @@ export const EditableSections: React.FC<EditableSectionsProps> = ({
   // Carregar as configurações da seção ou usar valores padrão
   const headerConfig = config.header?.content || {};
   const primaryStyleConfig = config.mainContent?.content || {};
-  const offerConfig = config.offer?.hero?.content || {};
+  const offerConfig = config.offer?.hero?.content as OfferContent || {};
 
   return (
     <div className="relative max-w-4xl mx-auto">
