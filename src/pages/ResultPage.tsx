@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -51,8 +50,6 @@ const ResultPage: React.FC = () => {
     <div>
       <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* Removed the redundant logo section */}
-
           {resultData && (
             <AnimatedWrapper>
               <QuizResult 

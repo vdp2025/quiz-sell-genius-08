@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
+import Logo from './ui/logo';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, ShoppingCart, GiftIcon } from 'lucide-react';
@@ -34,11 +35,7 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
     <div className="min-h-screen bg-[#FAF9F7] px-2 md:px-4 py-4 md:py-8">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
         <div className="text-center space-y-3">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
-            alt="Logo Gisele Galvão"
-            className="h-10 md:h-14 mx-auto"
-          />
+          <Logo className="h-10 md:h-14 mx-auto" />
           <h1 className="font-playfair text-lg md:text-2xl font-semibold text-[#432818] px-2">
             Olá, {userName}, seu Estilo Predominante é:{' '}
             <span className="text-[#B89B7A]">
