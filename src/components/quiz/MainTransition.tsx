@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { Card } from '../ui/card';
@@ -29,10 +28,14 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
   const handleQuestionAnswer = (response: UserResponse) => {
     try {
       console.log('Strategic Question Answered:', response);
-      setSelectedOption(response.selectedOptions[0]);
-      
-      // Store the answer but don't advance yet
       onAnswer(response);
+      
+      // Auto advance after a short delay
+      if (currentQuestionIndex < strategicQuestions.length - 1) {
+        setTimeout(() => {
+          setCurrentQuestionIndex(prev => prev + 1);
+        }, 500);
+      }
     } catch (error) {
       console.error('Error handling strategic question:', error);
       toast({
@@ -43,31 +46,10 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     }
   };
 
-  const handleNextQuestion = () => {
-    if (selectedOption) {
-      if (currentQuestionIndex < strategicQuestions.length - 1) {
-        setTimeout(() => {
-          setCurrentQuestionIndex(prev => prev + 1);
-        }, 500);
-      }
-    } else {
-      toast({
-        title: "Selecione uma opção",
-        description: "Por favor, selecione uma opção antes de avançar.",
-        variant: "default",
-      });
-    }
-  };
-
-  const currentQuestion = strategicQuestions[currentQuestionIndex] || null;
-  const currentAnswersForQuestion = currentQuestion 
-    ? (strategicAnswers[currentQuestion.id] || []) 
-    : [];
-
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-10 flex items-start justify-center">
       <div className="max-w-3xl w-full mx-auto">
-        {showIntro && (
+        {showIntro ? (
           <AnimatedWrapper>
             <Card className="p-8 space-y-8 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
               <h2 className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-bold mt-4 bg-gradient-to-r from-[#B89B7A] to-[#432818] bg-clip-text text-transparent">
@@ -100,9 +82,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
               </div>
             </Card>
           </AnimatedWrapper>
-        )}
-
-        {!showIntro && (
+        ) : (
           <AnimatedWrapper>
             <Card className="p-8 space-y-6 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
               <div className="relative">
@@ -113,6 +93,9 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   <p className="text-[#1A1818]/70 text-center text-sm">
                     Selecione a opção que mais combina com você
                   </p>
+                  <p className="text-[#1A1818]/50 text-center text-xs mt-1">
+                    Selecione 1 opção para avançar
+                  </p>
                 </div>
 
                 <QuizQuestion
@@ -120,20 +103,8 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   question={strategicQuestions[currentQuestionIndex]}
                   onAnswer={handleQuestionAnswer}
                   currentAnswers={currentAnswersForQuestion}
-                  autoAdvance={false}
+                  autoAdvance={true}
                 />
-                
-                <div className="flex justify-center mt-8">
-                  <Button 
-                    variant="golden" 
-                    size="lg"
-                    onClick={handleNextQuestion}
-                    disabled={!selectedOption}
-                    className="transition-all duration-300 hover:scale-105 active:scale-95"
-                  >
-                    {currentQuestionIndex < strategicQuestions.length - 1 ? "Próxima Pergunta" : "Finalizar"}
-                  </Button>
-                </div>
               </div>
             </Card>
           </AnimatedWrapper>
