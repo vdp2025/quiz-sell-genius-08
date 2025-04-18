@@ -70,16 +70,25 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({ primar
         <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
           <div className="h-full border-l border-[#B89B7A]/20 bg-white overflow-y-auto">
             <PropertiesPanel
-              selectedSection={selectedSection}
-              selectedBlock={selectedBlock}
+              selectedComponentId={selectedSection || selectedBlock}
               onClose={() => {
                 setSelectedSection(null);
                 setSelectedBlock(null);
               }}
-              onUpdateSection={updateSection}
-              onUpdateBlock={updateBlock}
-              onDeleteBlock={deleteBlock}
-              resultConfig={resultPageConfig}
+              blocks={config.blocks}
+              onUpdate={(content) => {
+                if (selectedSection) {
+                  updateSection(selectedSection, content);
+                } else if (selectedBlock) {
+                  updateBlock(selectedBlock, content);
+                }
+              }}
+              onDelete={() => {
+                if (selectedBlock) {
+                  deleteBlock(selectedBlock);
+                  setSelectedBlock(null);
+                }
+              }}
             />
           </div>
         </ResizablePanel>
