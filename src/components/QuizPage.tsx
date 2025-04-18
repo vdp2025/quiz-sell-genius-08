@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -31,7 +32,8 @@ const QuizPage: React.FC = () => {
     handlePrevious,
     totalQuestions,
     calculateResults,
-    handleStrategicAnswer: saveStrategicAnswer
+    handleStrategicAnswer: saveStrategicAnswer,
+    submitQuizIfComplete
   } = useQuizLogic();
 
   const quizContainerRef = useRef<HTMLDivElement>(null);
@@ -73,6 +75,7 @@ const QuizPage: React.FC = () => {
           }, 500);
         } else {
           setTimeout(() => {
+            // Make sure to calculate results before transitioning
             calculateResults();
             setShowingTransition(true);
           }, 800);
@@ -90,7 +93,18 @@ const QuizPage: React.FC = () => {
 
   const handleShowResult = () => {
     try {
+      // Make sure to calculate and save results before navigating
+      const results = submitQuizIfComplete();
+      console.log('Final results being saved:', results);
+      
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      
+      // Ensure results are saved to localStorage before navigating
+      if (results) {
+        localStorage.setItem('quizResult', JSON.stringify(results));
+        console.log('Results saved before navigation:', results);
+      }
+      
       navigate('/resultado');
     } catch (error) {
       console.error('Error showing result:', error);

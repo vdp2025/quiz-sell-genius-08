@@ -93,6 +93,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
           <AnimatedWrapper>
             <Card className="p-8 space-y-6 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
               <div className="relative">
+                {/* Only display the title here, removing it from QuizQuestion */}
                 <div className="mb-8">
                   <h3 className="text-xl sm:text-2xl font-playfair text-center mb-2 bg-gradient-to-r from-[#B89B7A] to-[#432818] bg-clip-text text-transparent">
                     {strategicQuestions[currentQuestionIndex].title}
@@ -111,6 +112,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   onAnswer={handleQuestionAnswer}
                   currentAnswers={currentAnswersForQuestion}
                   autoAdvance={true}
+                  hideTitle={true} // Add this prop to hide the title in QuizQuestion
                 />
               </div>
             </Card>

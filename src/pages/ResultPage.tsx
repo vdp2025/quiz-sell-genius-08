@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import QuizResult from '../components/QuizResult';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -14,7 +15,9 @@ const ResultPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Try to load the quiz result from the context or localStorage
     if (quizResult) {
+      console.log('Using quiz result from context:', quizResult);
       setLocalResult(quizResult);
     } else {
       const savedResultStr = localStorage.getItem('quizResult');
@@ -22,6 +25,7 @@ const ResultPage: React.FC = () => {
       if (savedResultStr) {
         try {
           const savedResult = JSON.parse(savedResultStr);
+          console.log('Loaded result from localStorage:', savedResult);
           setLocalResult(savedResult);
         } catch (error) {
           console.error('Error parsing saved results:', error);
@@ -31,6 +35,8 @@ const ResultPage: React.FC = () => {
             variant: "destructive",
           });
         }
+      } else {
+        console.error('No results found in context or localStorage');
       }
     }
   }, [quizResult]);
@@ -40,8 +46,23 @@ const ResultPage: React.FC = () => {
     navigate('/');
   };
 
+  // Show loading state while waiting for results
   if (!quizResult && !localResult) {
-    return <Navigate to="/" replace />;
+    return (
+      <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-[#432818]">Carregando seu resultado...</p>
+          <Button 
+            variant="outline" 
+            className="mt-4"
+            onClick={() => navigate('/')}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar para o Quiz
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   const resultData = quizResult || localResult;

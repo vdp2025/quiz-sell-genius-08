@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -11,6 +12,7 @@ interface QuizQuestionProps {
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
   autoAdvance?: boolean;
+  hideTitle?: boolean; // Add this prop to optionally hide the title
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -18,6 +20,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onAnswer,
   currentAnswers,
   autoAdvance = false,
+  hideTitle = false, // Default to showing the title
 }) => {
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
@@ -70,12 +73,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         )} 
         id={`question-${question.id}`}
       >
-        <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-          isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line"
-        )}>
-          {highlightStrategicWords(question.title)}
-        </h2>
+        {/* Only show title if hideTitle is false */}
+        {!hideTitle && (
+          <h2 className={cn(
+            "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+            isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line"
+          )}>
+            {highlightStrategicWords(question.title)}
+          </h2>
+        )}
         
         <div className={cn(
           "grid h-full",
