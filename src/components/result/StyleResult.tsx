@@ -32,21 +32,17 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
       </div>
       
       <div className="space-y-4">
-        <p className="text-base text-[#432818] leading-relaxed">
-          {description}
-        </p>
-        
         {isMobile ? (
-          // Mobile layout - Complementary styles below the image
-          <div className="space-y-4">
+          // Mobile layout - Image left, description right
+          <div className="flex gap-4">
             <img 
               src={image} 
               alt={`Estilo ${primaryStyle.category}`}
-              className="w-[30%] h-auto rounded-lg shadow-sm mx-auto" // Reduced to 30% width
+              className="w-[30%] h-min rounded-lg shadow-sm" 
             />
-            <div className="bg-white rounded-lg p-3 shadow-sm border border-[#B89B7A]/10">
-              <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-            </div>
+            <p className="text-base text-[#432818] leading-relaxed flex-1">
+              {description}
+            </p>
           </div>
         ) : (
           // Desktop layout - Complementary styles overlay on image
@@ -61,7 +57,15 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
             </div>
           </div>
         )}
+
+        {/* Show secondary styles below on mobile */}
+        {isMobile && (
+          <div className="bg-white rounded-lg p-3 shadow-sm border border-[#B89B7A]/10">
+            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+          </div>
+        )}
       </div>
     </Card>
   );
 };
+
