@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, Smartphone, Monitor, PlusIcon } from 'lucide-react';
@@ -22,10 +22,18 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
         return (
           <div className="space-y-3 p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
             {block.content.title && (
-              <h2 className="text-3xl font-playfair text-[#432818]">{block.content.title}</h2>
+              <h2 className={`text-3xl font-playfair ${block.content.textColor ? `text-[${block.content.textColor}]` : 'text-[#432818]'}`}>{block.content.title}</h2>
             )}
             {block.content.subtitle && (
               <p className="text-xl text-[#8F7A6A]">{block.content.subtitle}</p>
+            )}
+          </div>
+        );
+      case 'text':
+        return (
+          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
+            {block.content.text && (
+              <p className={`${block.content.textColor ? `text-[${block.content.textColor}]` : 'text-[#432818]'}`}>{block.content.text}</p>
             )}
           </div>
         );
@@ -48,7 +56,7 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
       case 'benefits':
         return (
           <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-4">Benefícios</h3>
+            <h3 className="text-xl font-playfair text-[#B89B7A] mb-4">{block.content.title || 'Benefícios'}</h3>
             <div className="space-y-2">
               {(block.content.items || ['Benefício 1', 'Benefício 2', 'Benefício 3']).map((item, index) => (
                 <div key={index} className="flex items-start gap-2">
@@ -62,7 +70,7 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
       case 'testimonials':
         return (
           <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-4">Depoimentos</h3>
+            <h3 className="text-xl font-playfair text-[#B89B7A] mb-4">{block.content.title || 'Depoimentos'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[1, 2].map(num => (
                 <div key={num} className="bg-white p-4 rounded-lg shadow-sm">
@@ -71,6 +79,35 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
                 </div>
               ))}
             </div>
+          </div>
+        );
+      case 'pricing':
+        return (
+          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
+            <h3 className="text-xl font-playfair text-[#B89B7A] mb-2">{block.content.title || 'Preço Especial'}</h3>
+            <p className="text-[#432818] mb-4">{block.content.text || 'Aproveite nossa oferta exclusiva'}</p>
+            <div className="bg-[#FAF9F7] p-4 rounded-lg border border-[#B89B7A]/20 text-center">
+              <p className="text-2xl font-bold text-[#B89B7A]">R$ 197,00</p>
+              <Button className="mt-4 bg-[#B89B7A] hover:bg-[#8F7A6A]">Comprar Agora</Button>
+            </div>
+          </div>
+        );
+      case 'guarantee':
+        return (
+          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
+            <h3 className="text-xl font-playfair text-[#B89B7A] mb-2">{block.content.title || 'Garantia'}</h3>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-[#B89B7A] flex items-center justify-center text-white text-2xl">7</div>
+              <p className="text-[#432818]">{block.content.text || 'Satisfação garantida ou seu dinheiro de volta em até 7 dias.'}</p>
+            </div>
+          </div>
+        );
+      case 'cta':
+        return (
+          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7] text-center" onClick={() => onSelectComponent(block.id)}>
+            <h3 className="text-xl font-playfair text-[#B89B7A] mb-2">{block.content.title || 'Comece Agora'}</h3>
+            <p className="text-[#432818] mb-4">{block.content.text || 'Clique no botão abaixo para começar'}</p>
+            <Button className="bg-[#B89B7A] hover:bg-[#8F7A6A] px-8 py-2 text-lg">Quero Comprar</Button>
           </div>
         );
       default:
@@ -132,7 +169,7 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
             <div 
               className="flex flex-col items-center justify-center h-64 text-[#8F7A6A] text-sm border-2 border-dashed border-[#B89B7A]/40 rounded-lg"
             >
-              <p className="mb-4">Arraste componentes para esta área</p>
+              <p className="mb-4">Arraste componentes para esta área ou clique no botão abaixo</p>
               <Button 
                 variant="outline"
                 onClick={onAddBlock}

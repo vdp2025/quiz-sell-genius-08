@@ -9,13 +9,15 @@ const EditorPage = () => {
   
   return (
     <AdminLayout>
-      <EditorLayout 
-        primaryStyle={quizResult?.primaryStyle || {
-          category: 'Natural',
-          score: 0,
-          percentage: 100
-        }} 
-      />
+      <div className="h-screen bg-[#FAF9F7]">
+        <EditorLayout 
+          primaryStyle={quizResult?.primaryStyle || {
+            category: 'Natural',
+            score: 0,
+            percentage: 100
+          }} 
+        />
+      </div>
     </AdminLayout>
   );
 };
