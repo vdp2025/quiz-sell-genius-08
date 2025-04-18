@@ -5,14 +5,26 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, Clock, Lock } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
-const PricingSection = () => {
+interface PricingSectionProps {
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+const PricingSection: React.FC<PricingSectionProps> = ({
+  price = "39,00",
+  regularPrice = "175,00",
+  ctaText = "Transformar Meu Estilo Agora",
+  ctaUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePurchase = () => {
     setIsLoading(true);
     // Simulate loading for better UX
     setTimeout(() => {
-      window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
+      window.location.href = ctaUrl;
       setIsLoading(false);
     }, 500);
   };
@@ -30,14 +42,14 @@ const PricingSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-center gap-8">
           <div>
             <p className="text-sm text-[#3a3a3a]/60 mb-1">De</p>
-            <p className="text-2xl line-through text-[#3a3a3a]/60">R$ 175,00</p>
+            <p className="text-2xl line-through text-[#3a3a3a]/60">R$ {regularPrice}</p>
           </div>
           <div className="text-center">
             <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
             <div className="flex items-baseline gap-1 justify-center">
               <span className="text-sm">R$</span>
-              <p className="text-5xl font-bold text-[#aa6b5d]">39</p>
-              <span className="text-lg">,00</span>
+              <p className="text-5xl font-bold text-[#aa6b5d]">{price.split(',')[0]}</p>
+              <span className="text-lg">,{price.split(',')[1] || '00'}</span>
             </div>
             <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
           </div>
@@ -63,7 +75,7 @@ const PricingSection = () => {
           ) : (
             <>
               <ShoppingCart className="w-6 h-6 mr-2" />
-              Transformar Meu Estilo Agora
+              {ctaText}
             </>
           )}
         </Button>

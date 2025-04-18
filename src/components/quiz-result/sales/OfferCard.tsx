@@ -10,13 +10,31 @@ import Guarantee from './Guarantee';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
+  config?: {
+    title?: string;
+    subtitle?: string;
+    price?: string;
+    regularPrice?: string;
+    ctaText?: string;
+    ctaUrl?: string;
+    [key: string]: any;
+  };
 }
 
-const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle }) => (
+const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => (
   <div className="space-y-12 bg-[#fffaf7] px-4 py-8 rounded-lg">
-    <HeroSection primaryStyle={primaryStyle} />
+    <HeroSection 
+      primaryStyle={primaryStyle} 
+      title={config.title}
+      subtitle={config.subtitle}
+    />
     <ProductShowcase />
-    <PricingSection />
+    <PricingSection 
+      price={config.price}
+      regularPrice={config.regularPrice}
+      ctaText={config.ctaText}
+      ctaUrl={config.ctaUrl}
+    />
     
     <div className="grid md:grid-cols-2 gap-8">
       <img
@@ -34,7 +52,12 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle }) => (
     <BenefitList />
     <Testimonials />
     <Guarantee />
-    <PricingSection />
+    <PricingSection 
+      price={config.price}
+      regularPrice={config.regularPrice}
+      ctaText={config.ctaText}
+      ctaUrl={config.ctaUrl}
+    />
   </div>
 );
 

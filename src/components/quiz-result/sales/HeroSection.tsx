@@ -6,17 +6,23 @@ import { ArrowRight } from 'lucide-react';
 
 interface HeroSectionProps {
   primaryStyle: StyleResult;
+  title?: string;
+  subtitle?: string;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ primaryStyle }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ 
+  primaryStyle,
+  title,
+  subtitle
+}) => {
   return (
     <div className="relative space-y-6">
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-5xl font-playfair text-[#aa6b5d] mb-3">
-          VOCÊ DESCOBRIU SEU ESTILO
+          {title || "VOCÊ DESCOBRIU SEU ESTILO"}
         </h1>
         <p className="text-xl md:text-2xl font-playfair text-[#3a3a3a] mb-6">
-          Agora é hora de aplicar com clareza — e se vestir de você
+          {subtitle || "Agora é hora de aplicar com clareza — e se vestir de você"}
         </p>
         
         <Card className="p-4 bg-[#ffefec] border-[#aa6b5d]/20 inline-block mx-auto">
