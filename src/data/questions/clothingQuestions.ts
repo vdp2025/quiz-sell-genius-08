@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '../../types/quiz';
 
 export const clothingQuestions: QuizQuestion[] = [
@@ -10,14 +9,14 @@ export const clothingQuestions: QuizQuestion[] = [
     options: [
       {
         id: '1a',
-        text: 'Visual leve, despojado e natural.',
+        text: 'Visual leve e despojado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '1b',
-        text: 'Visual clássico e tradicional.',
+        text: 'Visual clássico discreto.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp',
         styleCategory: 'Clássico',
         points: 1
@@ -31,7 +30,7 @@ export const clothingQuestions: QuizQuestion[] = [
       },
       {
         id: '1d',
-        text: 'Visual refinado e imponente.',
+        text: 'Visual refinado atemporal.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
         styleCategory: 'Elegante',
         points: 1
@@ -59,7 +58,7 @@ export const clothingQuestions: QuizQuestion[] = [
       },
       {
         id: '1h',
-        text: 'Visual criativo, colorido e ousado.',
+        text: 'Visual criativo e ousado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
         styleCategory: 'Criativo',
         points: 1
