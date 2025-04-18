@@ -29,6 +29,12 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     }, 500);
   };
 
+  // Safely access the current question
+  const currentQuestion = strategicQuestions[currentQuestionIndex];
+  const currentAnswersForQuestion = currentQuestion 
+    ? (strategicAnswers[currentQuestion.id] || []) 
+    : [];
+
   // If we're still showing the intro, display it, otherwise show the current question
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-10 flex items-start justify-center">
@@ -64,15 +70,26 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
               </div>
             </Card>
           </AnimatedWrapper>
-        ) : (
+        ) : currentQuestion ? (
           <AnimatedWrapper>
             <QuizQuestion
-              key={strategicQuestions[currentQuestionIndex].id}
-              question={strategicQuestions[currentQuestionIndex]}
+              key={currentQuestion.id}
+              question={currentQuestion}
               onAnswer={handleQuestionAnswer}
-              currentAnswers={strategicAnswers[strategicQuestions[currentQuestionIndex].id] || []}
+              currentAnswers={currentAnswersForQuestion}
               autoAdvance={true}
             />
+          </AnimatedWrapper>
+        ) : (
+          <AnimatedWrapper>
+            <Card className="p-8 space-y-6 bg-white shadow-md mb-10 border-[#B89B7A]/20">
+              <h2 className="text-xl font-playfair text-[#432818] text-center font-semibold">
+                Finalizando...
+              </h2>
+              <p className="text-center text-[#1A1818]/80">
+                Estamos processando suas respostas.
+              </p>
+            </Card>
           </AnimatedWrapper>
         )}
       </div>
