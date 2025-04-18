@@ -87,26 +87,24 @@ const ResultPage: React.FC = () => {
   }
 
   return (
-    <div>
-      <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <AnimatedWrapper>
-            <QuizResult 
-              primaryStyle={localResult.primaryStyle} 
-              secondaryStyles={localResult.secondaryStyles} 
-            />
-            <div className="max-w-4xl mx-auto py-8 px-4">
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-2"
-                onClick={handleRetakeQuiz}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Refazer o Quiz
-              </Button>
-            </div>
-          </AnimatedWrapper>
-        </div>
+    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
+      <div className="max-w-2xl mx-auto">
+        <AnimatedWrapper>
+          <QuizResult 
+            primaryStyle={localResult.primaryStyle} 
+            secondaryStyles={localResult.secondaryStyles} 
+          />
+          <div className="max-w-4xl mx-auto py-8 px-4">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={handleRetakeQuiz}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Refazer o Quiz
+            </Button>
+          </div>
+        </AnimatedWrapper>
       </div>
     </div>
   );

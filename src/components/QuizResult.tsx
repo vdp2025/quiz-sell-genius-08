@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -14,6 +15,8 @@ interface QuizResultProps {
 }
 
 const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }) => {
+  console.log('Rendering QuizResult with:', { primaryStyle, secondaryStyles });
+  
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
   const isMobile = useIsMobile();
@@ -31,8 +34,13 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
     }
   }, [user]);
 
+  if (!primaryStyle || !secondaryStyles) {
+    console.error('Missing required props:', { primaryStyle, secondaryStyles });
+    return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
+  }
+
   return (
-    <div className="min-h-screen bg-[#FAF9F7] px-2 md:px-4 py-4 md:py-8">
+    <div className="bg-[#FAF9F7] px-2 md:px-4 py-4 md:py-8">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
         <div className="text-center space-y-3">
           <Logo className="h-10 md:h-14 mx-auto" />

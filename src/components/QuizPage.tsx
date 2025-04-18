@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { QuizQuestion } from './QuizQuestion';
@@ -93,19 +92,14 @@ const QuizPage: React.FC = () => {
 
   const handleShowResult = () => {
     try {
-      // Make sure to calculate and save results before navigating
+      // Calculate and save results before navigating
       const results = submitQuizIfComplete();
       console.log('Final results being saved:', results);
       
+      // Make sure to save strategicAnswers
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
       
-      // Ensure results are saved to localStorage before navigating
-      if (results) {
-        localStorage.setItem('quizResult', JSON.stringify(results));
-        console.log('Results saved before navigation:', results);
-      }
-      
-      navigate('/resultado');
+      // The navigation is now handled in submitQuizIfComplete
     } catch (error) {
       console.error('Error showing result:', error);
       toast({
