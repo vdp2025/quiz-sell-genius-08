@@ -6,6 +6,13 @@ import { EditorBlock } from '@/types/editor';
 import { HeaderBlock } from './blocks/HeaderBlock';
 import { HeroBlock } from './blocks/HeroBlock';
 import { BonusCarouselBlock } from './blocks/BonusCarouselBlock';
+import { HeadlineBlock } from './blocks/HeadlineBlock';
+import { TextBlock } from './blocks/TextBlock';
+import { BenefitsBlock } from './blocks/BenefitsBlock';
+import { TestimonialsBlock } from './blocks/TestimonialsBlock';
+import { PricingBlock } from './blocks/PricingBlock';
+import { GuaranteeBlock } from './blocks/GuaranteeBlock';
+import { CTABlock } from './blocks/CTABlock';
 
 interface PagePreviewProps {
   primaryStyle: StyleResult;
@@ -27,97 +34,19 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
       case 'bonus-carousel':
         return <BonusCarouselBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'headline':
-        return (
-          <div className="space-y-3 p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            {block.content.title && (
-              <h2 className={`text-3xl font-playfair ${block.content.textColor ? `text-[${block.content.textColor}]` : 'text-[#432818]'}`}>{block.content.title}</h2>
-            )}
-            {block.content.subtitle && (
-              <p className="text-xl text-[#8F7A6A]">{block.content.subtitle}</p>
-            )}
-          </div>
-        );
+        return <HeadlineBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'text':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            {block.content.text && (
-              <p className={`${block.content.textColor ? `text-[${block.content.textColor}]` : 'text-[#432818]'}`}>{block.content.text}</p>
-            )}
-          </div>
-        );
-      case 'image':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            {block.content.imageUrl ? (
-              <img 
-                src={block.content.imageUrl} 
-                alt={block.content.imageAlt || "Imagem"} 
-                className="max-w-full rounded-md"
-              />
-            ) : (
-              <div className="h-40 bg-[#F0EBE5] rounded-md flex items-center justify-center text-[#8F7A6A]">
-                Imagem Placeholder
-              </div>
-            )}
-          </div>
-        );
+        return <TextBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'benefits':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-4">{block.content.title || 'Benefícios'}</h3>
-            <div className="space-y-2">
-              {(block.content.items || ['Benefício 1', 'Benefício 2', 'Benefício 3']).map((item, index) => (
-                <div key={index} className="flex items-start gap-2">
-                  <div className="w-5 h-5 rounded-full bg-[#B89B7A] flex-shrink-0 mt-1" />
-                  <p>{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        return <BenefitsBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'testimonials':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-4">{block.content.title || 'Depoimentos'}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1, 2].map(num => (
-                <div key={num} className="bg-white p-4 rounded-lg shadow-sm">
-                  <p className="italic text-[#432818]">"Este produto transformou meu estilo completamente!"</p>
-                  <p className="font-medium mt-2">Cliente {num}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        return <TestimonialsBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'pricing':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-2">{block.content.title || 'Preço Especial'}</h3>
-            <p className="text-[#432818] mb-4">{block.content.text || 'Aproveite nossa oferta exclusiva'}</p>
-            <div className="bg-[#FAF9F7] p-4 rounded-lg border border-[#B89B7A]/20 text-center">
-              <p className="text-2xl font-bold text-[#B89B7A]">R$ 197,00</p>
-              <Button className="mt-4 bg-[#B89B7A] hover:bg-[#8F7A6A]">Comprar Agora</Button>
-            </div>
-          </div>
-        );
+        return <PricingBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'guarantee':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-2">{block.content.title || 'Garantia'}</h3>
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#B89B7A] flex items-center justify-center text-white text-2xl">7</div>
-              <p className="text-[#432818]">{block.content.text || 'Satisfação garantida ou seu dinheiro de volta em até 7 dias.'}</p>
-            </div>
-          </div>
-        );
+        return <GuaranteeBlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       case 'cta':
-        return (
-          <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7] text-center" onClick={() => onSelectComponent(block.id)}>
-            <h3 className="text-xl font-playfair text-[#B89B7A] mb-2">{block.content.title || 'Comece Agora'}</h3>
-            <p className="text-[#432818] mb-4">{block.content.text || 'Clique no botão abaixo para começar'}</p>
-            <Button className="bg-[#B89B7A] hover:bg-[#8F7A6A] px-8 py-2 text-lg">Quero Comprar</Button>
-          </div>
-        );
+        return <CTABlock content={block.content} onClick={() => onSelectComponent(block.id)} />;
       default:
         return (
           <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={() => onSelectComponent(block.id)}>
