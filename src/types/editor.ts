@@ -1,4 +1,3 @@
-
 export interface EditableContent {
   title?: string;
   subtitle?: string;
@@ -19,12 +18,36 @@ export interface EditableContent {
   checkoutUrl?: string;
   // Properties for CTA block
   url?: string;
+
+  // Header block properties
+  logo?: string;
+  logoAlt?: string;
+
+  // Hero section properties
+  heroImage?: string;
+  heroImageAlt?: string;
+  quote?: string;
+  quoteAuthor?: string;
+
+  // Bonus carousel properties
+  bonusImages?: Array<{
+    url: string;
+    alt: string;
+    title?: string;
+  }>;
+
+  // Enhanced pricing properties
+  originalPrices?: Array<{
+    item: string;
+    price: string;
+  }>;
 }
 
 export interface EditorBlock {
   id: string;
   type: 'headline' | 'image' | 'text' | 'benefits' | 'testimonials' | 'pricing' | 
-        'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'bonus';
+        'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'bonus' |
+        'header' | 'hero-section' | 'bonus-carousel';
   content: EditableContent;
   order: number;
 }

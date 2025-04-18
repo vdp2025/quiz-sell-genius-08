@@ -1,6 +1,8 @@
-
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
+import { HeaderBlockEditor } from './blocks/HeaderBlockEditor';
+import { HeroSectionBlockEditor } from './blocks/HeroSectionBlockEditor';
+import { BonusCarouselBlockEditor } from './blocks/BonusCarouselBlockEditor';
 import { HeadlineBlockEditor } from './blocks/HeadlineBlockEditor';
 import { TextBlockEditor } from './blocks/TextBlockEditor';
 import { ImageBlockEditor } from './blocks/ImageBlockEditor';
@@ -21,6 +23,15 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
   onUpdate
 }) => {
   switch (block.type) {
+    case 'header':
+      return <HeaderBlockEditor block={block} onUpdate={onUpdate} />;
+      
+    case 'hero-section':
+      return <HeroSectionBlockEditor block={block} onUpdate={onUpdate} />;
+      
+    case 'bonus-carousel':
+      return <BonusCarouselBlockEditor block={block} onUpdate={onUpdate} />;
+    
     case 'headline':
       return <HeadlineBlockEditor block={block} onUpdate={onUpdate} />;
     
