@@ -32,19 +32,20 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
         </div>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-4 items-start">
-        <div>
-          <p className="text-base text-[#432818] leading-relaxed mb-4">
-            {description}
-          </p>
-          <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-        </div>
-        <div>
+      <div className="space-y-4">
+        <p className="text-base text-[#432818] leading-relaxed">
+          {description}
+        </p>
+        
+        <div className="relative">
           <img 
             src={image} 
             alt={`Estilo ${primaryStyle.category}`}
             className="w-full h-auto rounded-lg shadow-sm"
           />
+          <div className="absolute bottom-2 right-2 w-48 bg-white/90 rounded-lg p-2 shadow-md">
+            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+          </div>
         </div>
       </div>
     </Card>
