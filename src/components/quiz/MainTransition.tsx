@@ -72,11 +72,6 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
         <AnimatedWrapper>
           <Card className="p-8 space-y-6 bg-white shadow-lg border-[#B89B7A]/20 mb-10">
             <div className="relative">
-              <div className="absolute -top-3 -right-3">
-                <span className="inline-flex items-center justify-center px-3 py-1 text-xs font-semibold leading-none text-[#432818] bg-[#B89B7A]/20 rounded-full">
-                  Fase 2
-                </span>
-              </div>
               <QuizQuestion
                 key={strategicQuestions[0].id}
                 question={strategicQuestions[0]}
