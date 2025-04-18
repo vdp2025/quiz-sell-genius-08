@@ -98,9 +98,6 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   <h3 className="text-xl sm:text-2xl font-playfair text-center mb-2 bg-gradient-to-r from-[#B89B7A] to-[#432818] bg-clip-text text-transparent">
                     {strategicQuestions[currentQuestionIndex].title}
                   </h3>
-                  <p className="text-[#1A1818]/70 text-center text-sm">
-                    Selecione a opção que mais combina com você
-                  </p>
                   <p className="text-[#1A1818]/50 text-center text-xs mt-1">
                     Selecione 1 opção para avançar
                   </p>
@@ -112,7 +109,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   onAnswer={handleQuestionAnswer}
                   currentAnswers={currentAnswersForQuestion}
                   autoAdvance={true}
-                  hideTitle={true} // Add this prop to hide the title in QuizQuestion
+                  hideTitle={true}
                 />
               </div>
             </Card>
