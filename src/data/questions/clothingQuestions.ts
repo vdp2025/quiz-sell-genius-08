@@ -9,56 +9,56 @@ export const clothingQuestions: QuizQuestion[] = [
     options: [
       {
         id: '1a',
-        text: 'Visual leve e despojado.',
+        text: 'Visual leve e natural',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '1b',
-        text: 'Visual clássico discreto.',
+        text: 'Visual clássico discreto',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp',
         styleCategory: 'Clássico',
         points: 1
       },
       {
         id: '1c',
-        text: 'Visual casual com toque atual.',
+        text: 'Visual casual moderno',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
         styleCategory: 'Contemporâneo',
         points: 1
       },
       {
         id: '1d',
-        text: 'Visual refinado atemporal.',
+        text: 'Visual refinado',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '1e',
-        text: 'Visual romântico, feminino e delicado.',
+        text: 'Visual romântico e delicado',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '1f',
-        text: 'Visual sensual, com saia justa e decote.',
+        text: 'Visual sensual e marcante',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '1g',
-        text: 'Visual marcante e urbano (jeans + jaqueta).',
+        text: 'Visual urbano marcante',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '1h',
-        text: 'Visual criativo e ousado.',
+        text: 'Visual criativo e ousado',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
         styleCategory: 'Criativo',
         points: 1
