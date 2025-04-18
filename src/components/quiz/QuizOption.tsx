@@ -68,7 +68,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium bg-transparent py-1 px-2 mt-auto text-brand-coffee relative", // Reduced vertical padding
+                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", // Removed vertical padding
                 isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-xs",
                 isSelected && "font-semibold"
               )
