@@ -1,7 +1,7 @@
 
 import { StyleResult } from '@/types/quiz';
 
-export const getDefaultStyle = (category: string = 'Natural'): StyleResult => {
+export const getDefaultStyle = (category: "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo" = 'Natural'): StyleResult => {
   return {
     category,
     score: 100,
@@ -30,4 +30,22 @@ export const getStyleColor = (styleType: string): string => {
     default:
       return '#8D9779';
   }
+};
+
+// Add the missing getFallbackStyle function
+export const getFallbackStyle = (styleCategory: string): React.CSSProperties => {
+  const backgroundColor = getStyleColor(styleCategory);
+  return {
+    backgroundColor,
+    color: '#ffffff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    borderRadius: '4px',
+    padding: '8px',
+    fontWeight: 'bold',
+    width: '100%',
+    height: '100%'
+  };
 };
