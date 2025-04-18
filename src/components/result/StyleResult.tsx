@@ -20,10 +20,6 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
   return (
     <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
       <div className="w-full max-w-md mx-auto mb-4">
-        <div className="flex justify-between text-sm text-[#432818] mb-1">
-          <span>Compatibilidade</span>
-          <span>{primaryStyle.percentage}%</span>
-        </div>
         <div className="w-full bg-[#F3E8E6] rounded-full h-2">
           <div 
             className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300 ease-in-out" 
@@ -41,7 +37,7 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
           <img 
             src={image} 
             alt={`Estilo ${primaryStyle.category}`}
-            className="w-full h-auto rounded-lg shadow-sm"
+            className="w-3/4 h-auto rounded-lg shadow-sm mx-auto" // Reduced image size and centered
           />
           <div className="absolute bottom-2 right-2 w-48 bg-white/90 rounded-lg p-2 shadow-md">
             <SecondaryStylesSection secondaryStyles={secondaryStyles} />
