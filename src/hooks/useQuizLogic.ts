@@ -28,13 +28,22 @@ export const useQuizLogic = () => {
     }
   }, [quizResult]);
 
+  useEffect(() => {
+    if (Object.keys(strategicAnswers).length > 0) {
+      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      console.log('Strategic answers saved to localStorage:', strategicAnswers);
+    }
+  }, [strategicAnswers]);
+
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: selectedOptions
-    }));
-    
-    console.log(`Question ${questionId} answered with options:`, selectedOptions);
+    setAnswers(prev => {
+      const newAnswers = {
+        ...prev,
+        [questionId]: selectedOptions
+      };
+      console.log(`Question ${questionId} answered with options:`, selectedOptions);
+      return newAnswers;
+    });
   }, []);
 
   const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
@@ -132,11 +141,6 @@ export const useQuizLogic = () => {
     localStorage.setItem('quizResult', JSON.stringify(results));
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     console.log('Results saved to localStorage before redirect:', results);
-    
-    // Force a hard navigation to ensure data persists across page loads
-    setTimeout(() => {
-      window.location.href = '/resultado';
-    }, 300);
     
     return results;
   }, [calculateResults, strategicAnswers]);

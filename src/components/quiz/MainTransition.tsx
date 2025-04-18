@@ -33,12 +33,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
       
       // Only auto advance if the user has selected an option
       if (response.selectedOptions.length > 0) {
-        // Auto advance after a short delay
-        if (currentQuestionIndex < strategicQuestions.length - 1) {
-          setTimeout(() => {
-            setCurrentQuestionIndex(prev => prev + 1);
-          }, 500);
-        }
+        // We don't auto-advance here anymore, we'll do it through the onNextClick
       }
     } catch (error) {
       console.error('Error handling strategic question:', error);
@@ -53,6 +48,12 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
   const handleNextClick = () => {
     if (currentQuestionIndex < strategicQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      // If this is the last strategic question, notify the parent component
+      onAnswer({
+        questionId: currentQuestion.id,
+        selectedOptions: currentAnswersForQuestion,
+      });
     }
   };
 

@@ -34,6 +34,11 @@ const ResultPage: React.FC = () => {
           try {
             const savedResult = JSON.parse(savedResultStr);
             console.log('Carregado resultado do localStorage:', savedResult);
+            
+            if (!savedResult.primaryStyle) {
+              throw new Error('Formato de resultado inválido');
+            }
+            
             setLocalResult(savedResult);
             setLoading(false);
           } catch (error) {
@@ -61,7 +66,7 @@ const ResultPage: React.FC = () => {
     };
 
     // Pequeno delay para garantir que localStorage foi atualizado
-    const timer = setTimeout(loadResults, 500);
+    const timer = setTimeout(loadResults, 800);
     return () => clearTimeout(timer);
   }, [quizResult]);
 
@@ -82,7 +87,7 @@ const ResultPage: React.FC = () => {
   }
 
   // Se nenhum resultado for encontrado após o carregamento, mostrar erro e botão para retornar
-  if (!localResult) {
+  if (!localResult || !localResult.primaryStyle) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
         <div className="text-center">

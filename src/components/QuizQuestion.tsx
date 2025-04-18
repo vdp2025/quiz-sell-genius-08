@@ -49,6 +49,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       questionId: question.id,
       selectedOptions: newSelectedOptions,
     });
+    
+    // If autoAdvance is true and we have selected an option, and onNextClick is provided, call it
+    if (autoAdvance && newSelectedOptions.length > 0 && onNextClick) {
+      setTimeout(() => {
+        onNextClick();
+      }, 300);
+    }
   };
 
   const getGridColumns = () => {

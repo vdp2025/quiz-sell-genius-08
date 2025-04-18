@@ -115,10 +115,10 @@ const QuizPage: React.FC = () => {
       // Make sure to save strategicAnswers
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
       
-      // Force a manual navigation with a delay to ensure storage is completed
+      // Force navigation with a delay to ensure storage is completed
       setTimeout(() => {
         console.log('Navigating to /resultado page...');
-        // Using window.location to force a full page load
+        // Use window.location.href for a full page reload to ensure data is properly persisted
         window.location.href = '/resultado';
       }, 500);
     } catch (error) {
