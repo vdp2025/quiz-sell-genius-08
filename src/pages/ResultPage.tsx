@@ -7,7 +7,7 @@ import { ArrowLeft, Edit } from 'lucide-react';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import { toast } from '../components/ui/use-toast';
 import { AnimatedWrapper } from '../components/ui/animated-wrapper';
-import SalesPageEditor from '../components/editor/SalesPageEditor';
+import { UnifiedEditorLayout } from '../components/editor/layouts/UnifiedEditorLayout';
 
 const ResultPage: React.FC = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
@@ -16,7 +16,6 @@ const ResultPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
-  // Use um timeout para garantir que a página de resultados tente carregar os dados
   useEffect(() => {
     const loadResults = () => {
       try {
@@ -76,7 +75,6 @@ const ResultPage: React.FC = () => {
     navigate('/');
   };
 
-  // Mostrar estado de carregamento enquanto aguarda pelos resultados
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
@@ -87,7 +85,6 @@ const ResultPage: React.FC = () => {
     );
   }
 
-  // Se nenhum resultado for encontrado após o carregamento, mostrar erro e botão para retornar
   if (!localResult || !localResult.primaryStyle) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
@@ -106,13 +103,9 @@ const ResultPage: React.FC = () => {
     );
   }
 
-  // Se estiver no modo de edição, mostrar o editor de página de vendas
-  if (isEditing) {
+  if (isEditing && localResult) {
     return (
-      <SalesPageEditor 
-        primaryStyle={localResult.primaryStyle} 
-        onClose={() => setIsEditing(false)}
-      />
+      <UnifiedEditorLayout primaryStyle={localResult.primaryStyle} />
     );
   }
 
