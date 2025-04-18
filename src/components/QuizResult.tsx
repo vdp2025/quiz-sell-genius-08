@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { StyleResult } from '../types/quiz';
@@ -6,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
-import OfferCard from './quiz-result/OfferCard';
+import OfferCard from './quiz-result/sales/OfferCard';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -47,11 +46,11 @@ const QuizResult: React.FC<QuizResultProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-[#fffaf7] px-4 py-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#fffaf7]">
+      <div className="max-w-4xl mx-auto">
         <ResultHeader userName={userName} />
         
-        <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
+        <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20 mb-8">
           <PrimaryStyleCard primaryStyle={primaryStyle} />
           <SecondaryStylesSection secondaryStyles={secondaryStyles} />
         </Card>
