@@ -75,8 +75,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 isSelected && "font-semibold"
               )
             : cn(
-                "text-[0.7rem] sm:text-xs leading-relaxed",
-                (questionId === '1' || questionId === '2') && "text-[0.5rem] sm:text-[0.6rem]"
+                // Desktop font size increased here
+                "text-[0.8rem] sm:text-sm leading-relaxed",
+                !(questionId === '1' || questionId === '2') && "desktop:text-base",
+                (questionId === '1' || questionId === '2') && "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"
               )
         )}>
           {highlightStrategicWords(option.text)}
