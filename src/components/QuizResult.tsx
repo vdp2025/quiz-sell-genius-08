@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { StyleResult } from '../types/quiz';
@@ -54,6 +53,17 @@ const QuizResult: React.FC<QuizResultProps> = ({
     }
   }, [user]);
 
+  // Get offer config from local storage or use default
+  const [offerConfig, setOfferConfig] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`offer_config_${primaryStyle.category}`);
+      return saved ? JSON.parse(saved) : null;
+    } catch (error) {
+      console.error('Error loading offer config:', error);
+      return null;
+    }
+  });
+
   // Aplicar estilos globais se disponíveis
   const applyGlobalStyles = () => {
     if (config?.globalStyles) {
@@ -90,7 +100,10 @@ const QuizResult: React.FC<QuizResultProps> = ({
             <SecondaryStylesSection secondaryStyles={secondaryStyles} />
           </Card>
 
-          <OfferCard primaryStyle={primaryStyle} />
+          <OfferCard 
+            primaryStyle={primaryStyle} 
+            config={offerConfig}
+          />
         </div>
       </div>
     );
