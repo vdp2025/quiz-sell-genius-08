@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -6,6 +5,8 @@ import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption } from './quiz/QuizOption';
 import { highlightStrategicWords } from '@/utils/textHighlight';
+import { Button } from './ui/button';
+import { ArrowRight } from 'lucide-react';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -67,7 +68,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-6xl mx-auto pb-5",
+          "w-full max-w-6xl mx-auto pb-5 relative",
           isMobile && "px-2",
           isStrategicQuestion && "max-w-3xl"
         )} 
@@ -101,11 +102,25 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        {!autoAdvance && (
-          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mt-3 text-center font-medium">
-            Selecione 3 Opções para avançar
-          </p>
-        )}
+        <div className="flex flex-col items-center gap-3 mt-6">
+          {!autoAdvance && (
+            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
+              Selecione 3 Opções para avançar
+            </p>
+          )}
+          
+          <Button 
+            variant="golden"
+            className={cn(
+              "transition-all duration-300 opacity-70",
+              currentAnswers.length === question.multiSelect ? "opacity-100 hover:scale-105" : "cursor-not-allowed"
+            )}
+            disabled={currentAnswers.length !== question.multiSelect}
+          >
+            Avançar
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
       </div>
     </AnimatedWrapper>
   );
