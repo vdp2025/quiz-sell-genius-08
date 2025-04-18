@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
@@ -40,21 +39,19 @@ const ResultPage = () => {
     <div className="min-h-screen bg-white">
       <Header primaryStyle={primaryStyle} />
       
-      <div className="container mx-auto px-4 py-4 max-w-3xl">
-        <div className="space-y-4">
+      <div className="container mx-auto px-3 py-2 max-w-2xl">
+        <div className="space-y-3">
           <StyleResultSection 
             primaryStyle={primaryStyle}
             description={styleConfig[primaryStyle.category].description}
             image={styleConfig[primaryStyle.category].image}
           />
           
-          <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
+          <Card className="p-3 bg-white shadow-sm border border-[#B89B7A]/20">
             <SecondaryStylesSection secondaryStyles={secondaryStyles} />
           </Card>
           
-          <div className="mt-8">
-            <OfferCard primaryStyle={primaryStyle} />
-          </div>
+          <OfferCard primaryStyle={primaryStyle} />
         </div>
       </div>
     </div>
