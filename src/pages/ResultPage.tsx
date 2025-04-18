@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuiz } from '@/hooks/useQuiz';
@@ -15,7 +14,6 @@ const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
 
   useEffect(() => {
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
 
@@ -40,58 +38,9 @@ const ResultPage = () => {
     );
   }
 
-  const styleDescription = `Como uma pessoa ${primaryStyle.category.toLowerCase()}, 
-    você tem uma personalidade única que se reflete no seu estilo pessoal. 
-    Vamos te ajudar a potencializar essas características e criar looks incríveis.`;
-
-  const benefits = [
-    { text: "Descubra as cores que mais combinam com você" },
-    { text: "Aprenda a criar looks que valorizam seu corpo" },
-    { text: "Economize tempo e dinheiro nas compras" },
-    { text: "Aumente sua autoestima e confiança" },
-    { text: "Monte um guarda-roupa inteligente e versátil" },
-    { text: "Desenvolva seu estilo pessoal autêntico" }
-  ];
-
-  const testimonials = [
-    {
-      text: "Mudei completamente minha forma de me vestir e hoje me sinto muito mais confiante!",
-      author: "Maria Silva"
-    },
-    {
-      text: "O método é incrível! Agora sei exatamente o que combina comigo.",
-      author: "Ana Santos"
-    },
-    {
-      text: "Vale cada centavo! Economizei muito parando de comprar roupas erradas.",
-      author: "Joana Lima"
-    }
-  ];
-
-  const bonuses = [
-    {
-      title: "Cartela de Cores Personalizada",
-      description: "Descubra as cores que mais combinam com seu estilo e tom de pele",
-      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-      order: 1
-    },
-    {
-      title: "Guia de Peças-Chave",
-      description: "Lista completa das peças essenciais para seu estilo",
-      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-      order: 2
-    },
-    {
-      title: "Visagismo Básico",
-      description: "Aprenda a harmonizar suas características faciais",
-      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-      order: 3
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header primaryStyle={primaryStyle} />
       
       <HeroSection 
         title="Transforme seu Guarda-Roupa com Autoconhecimento"
