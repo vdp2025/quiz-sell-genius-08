@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { StyleResult } from '../types/quiz';
@@ -7,18 +6,22 @@ import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
-
 interface QuizResultProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
 }
-
-const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }) => {
-  console.log('Rendering QuizResult with:', { primaryStyle, secondaryStyles });
-  
-  const { user } = useAuth();
+const QuizResult: React.FC<QuizResultProps> = ({
+  primaryStyle,
+  secondaryStyles
+}) => {
+  console.log('Rendering QuizResult with:', {
+    primaryStyle,
+    secondaryStyles
+  });
+  const {
+    user
+  } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
-  
   useEffect(() => {
     if (user && user.userName) {
       setUserName(user.userName);
@@ -31,14 +34,14 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
       }
     }
   }, [user]);
-
   if (!primaryStyle || !secondaryStyles) {
-    console.error('Missing required props:', { primaryStyle, secondaryStyles });
+    console.error('Missing required props:', {
+      primaryStyle,
+      secondaryStyles
+    });
     return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
   }
-
-  return (
-    <div className="bg-[#FAF9F7] px-2 md:px-4 py-4 md:py-8">
+  return <div className="md:px-4 md:py-8 px-[5px] py-[15px] bg-[#fefefe]">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
         <ResultHeader userName={userName} />
         
@@ -49,8 +52,6 @@ const QuizResult: React.FC<QuizResultProps> = ({ primaryStyle, secondaryStyles }
 
         <OfferCard primaryStyle={primaryStyle} />
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default QuizResult;
