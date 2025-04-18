@@ -34,22 +34,31 @@ const QuizPage: React.FC = () => {
     handlePrevious,
     totalQuestions,
     submitQuizIfComplete,
-    calculateResults
+    calculateResults,
+    handleStrategicAnswer: saveStrategicAnswer
   } = useQuizLogic();
 
   const quizContainerRef = useRef<HTMLDivElement>(null);
 
   const handleStrategicAnswer = (response: UserResponse) => {
+    console.log('Strategic question answered:', response);
+    
+    // Save the answer
     setStrategicAnswers(prev => ({
       ...prev,
       [response.questionId]: response.selectedOptions
     }));
     
+    // Also save to the persistent storage through context
+    saveStrategicAnswer(response.questionId, response.selectedOptions);
+    
     // Add a slight delay before moving to the next strategic question
     setTimeout(() => {
       if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
         setCurrentStrategicQuestionIndex(prev => prev + 1);
+        console.log('Moving to next strategic question:', currentStrategicQuestionIndex + 1);
       } else {
+        console.log('All strategic questions answered, showing final transition');
         setShowingFinalTransition(true);
       }
     }, 500);
@@ -90,11 +99,13 @@ const QuizPage: React.FC = () => {
   }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions]);
 
   const handleTransitionContinue = () => {
+    console.log('Transition continue clicked, showing strategic questions');
     setShowingTransition(false);
     setShowingStrategicQuestions(true);
   };
 
   const handleShowResult = () => {
+    console.log('Saving strategic answers and navigating to result page');
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     navigate('/resultado');
   };
