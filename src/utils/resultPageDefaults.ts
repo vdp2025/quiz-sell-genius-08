@@ -1,132 +1,81 @@
+
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
-export const createDefaultConfig = (styleType: string): ResultPageConfig => ({
-  styleType,
-  header: {
-    visible: true,
-    content: {
-      title: 'Olá, {{userName}}, seu Estilo Predominante é:',
-      showLogo: true
-    },
-    appearance: {
-      textColor: '#432818',
-      fontSize: 'lg'
-    }
-  },
-  mainContent: {
-    visible: true,
-    content: {
-      description: 'Características principais do seu estilo {{primaryStyle}}:',
-      showStyleImage: true,
-      showPercentage: true
-    },
-    appearance: {
-      backgroundColor: 'white',
-      textColor: '#1A1818',
-      borderColor: '#B89B7A'
-    }
-  },
-  secondaryStyles: {
-    visible: true,
-    content: {
-      title: 'Seus Estilos Complementares',
-      showImages: true,
-      maxStyles: 2
-    },
-    appearance: {
-      backgroundColor: '#f9f9f9',
-      textColor: '#1A1818',
-      compact: false
-    }
-  },
-  offer: {
-    hero: {
+export const createDefaultConfig = (styleType: string): ResultPageConfig => {
+  return {
+    styleType,
+    header: {
       visible: true,
       content: {
-        title: 'VOCÊ DESCOBRIU SEU ESTILO',
-        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        image1: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
-        image2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp'
-      },
-      appearance: {
-        textColor: '#aa6b5d',
-        backgroundColor: '#fffaf7',
-        showImages: true
+        title: `Olá, seu Estilo Predominante é:`
       }
     },
-    products: {
+    mainContent: {
       visible: true,
       content: {
-        title: 'Transforme seu Estilo',
-        productImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
-        benefitTitle1: 'Guia de Estilo e Imagem',
-        benefitItems1: 'Descubra seu estilo com precisão,Aprenda a criar looks autênticos,Técnicas de composição visual',
-        benefitTitle2: 'Bônus Exclusivos',
-        benefitItems2: 'Visagismo Facial Estratégico,Peças-Chave do Guarda-Roupa,Consultoria em Grupo'
-      },
-      appearance: {
-        textColor: '#aa6b5d',
-        backgroundColor: 'white',
-        showImages: true
+        description: getDefaultDescription(styleType)
       }
     },
-    pricing: {
+    secondaryStyles: {
       visible: true,
-      content: {
-        regularPrice: '175,00',
-        salePrice: '39,00',
-        buttonText: 'Quero Transformar Meu Estilo Agora',
-        checkoutUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        limitedTimeText: 'Oferta por tempo limitado'
-      },
-      appearance: {
-        backgroundColor: 'white',
-        accentColor: '#aa6b5d',
-        textColor: '#3a3a3a',
-        buttonSize: 'large'
-      }
+      content: {}
     },
-    benefits: {
-      visible: true,
-      content: {
-        title1: 'O que você vai aprender:',
-        benefits1: 'Aplicar seus estilos com autenticidade,Montar looks práticos para o dia a dia, trabalho e eventos,Usar cores e modelagens que valorizam quem você é,Parar de errar nas compras e economizar tempo',
-        title2: 'Bônus Exclusivos:',
-        benefits2: 'Visagismo Facial Estratégico: descubra cortes, acessórios e formatos que valorizam seu rosto,Peças-Chave do Guarda-Roupa: construa um armário funcional com o que você já tem'
+    offer: {
+      hero: {
+        visible: true,
+        content: {
+          title: "VOCÊ DESCOBRIU SEU ESTILO",
+          subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
+          price: "39,00",
+          regularPrice: "175,00",
+          ctaText: "Quero meu Guia + Bônus",
+          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+        }
       },
-      appearance: {
-        backgroundColor: 'white',
-        textColor: '#3a3a3a',
-        accentColor: '#aa6b5d',
-        iconColor: '#aa6b5d'
-      }
-    },
-    testimonials: {
-      visible: true,
-      content: {
-        title: 'O que as alunas estão dizendo',
-        showAvatars: true,
-        maxTestimonials: 3
+      products: {
+        visible: true,
+        content: {}
       },
-      appearance: {
-        backgroundColor: '#f9ede8',
-        cardBackgroundColor: 'white',
-        textColor: '#3a3a3a',
-        accentColor: '#aa6b5d'
-      }
-    },
-    guarantee: {
-      visible: true,
-      content: {
-        text: '✨ Oferta exclusiva por tempo limitado. Depois desta página, o valor pode voltar ao original!',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
+      pricing: {
+        visible: true,
+        content: {}
       },
-      appearance: {
-        backgroundColor: '#ffefec',
-        borderColor: '#aa6b5d',
-        borderStyle: 'dashed',
-        textColor: '#3a3a3a'
+      benefits: {
+        visible: true,
+        content: {}
+      },
+      testimonials: {
+        visible: true,
+        content: {}
+      },
+      guarantee: {
+        visible: true,
+        content: {}
       }
     }
+  };
+};
+
+// Descrições padrão baseadas no tipo de estilo
+function getDefaultDescription(styleType: string): string {
+  switch (styleType) {
+    case 'Natural':
+      return "Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia.";
+    case 'Clássico':
+      return "Você aprecia roupas atemporais e elegantes. Seu estilo é refinado e tradicional, com peças de qualidade que nunca saem de moda.";
+    case 'Contemporâneo':
+      return "Você gosta de estar atualizado e seguir as tendências. Seu estilo é moderno e versátil, combinando o clássico com o atual.";
+    case 'Elegante':
+      return "Você valoriza a sofisticação e o requinte. Seu estilo é polido e imponente, com peças de alta qualidade e acabamento impecável.";
+    case 'Romântico':
+      return "Você aprecia detalhes delicados e femininos. Seu estilo é suave e gracioso, com elementos como rendas, babados e estampas florais.";
+    case 'Sexy':
+      return "Você gosta de valorizar suas curvas. Seu estilo é sensual e marcante, com peças que destacam seu corpo e sua confiança.";
+    case 'Dramático':
+      return "Você busca impactar e chamar atenção. Seu estilo é arrojado e marcante, com peças estruturadas e de design diferenciado.";
+    case 'Criativo':
+      return "Você adora expressar sua individualidade. Seu estilo é único e original, combinando cores, texturas e elementos de forma não convencional.";
+    default:
+      return "Seu estilo pessoal reflete sua personalidade e preferências únicas.";
   }
-});
+}

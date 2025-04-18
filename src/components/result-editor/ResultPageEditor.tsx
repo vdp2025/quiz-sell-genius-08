@@ -1,164 +1,105 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Save } from 'lucide-react';
+import { Eye, EyeOff, Save, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
-import SectionEditor from './SectionEditor';
-import StyleSelector from './StyleSelector';
-import PreviewPanel from './PreviewPanel';
+import QuizResult from '../QuizResult';
+import { EditableSections } from './EditableSections';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 
-const ResultPageEditor: React.FC = () => {
-  const [selectedStyle, setSelectedStyle] = useState<StyleResult>({
-    category: 'Natural',
-    score: 0,
-    percentage: 100
-  });
+interface ResultPageEditorProps {
+  primaryStyle: StyleResult;
+  secondaryStyles: StyleResult[];
+}
 
-  const { 
-    resultPageConfig, 
-    updateSection, 
-    resetConfig, 
-    saveConfig,
-    loading
-  } = useResultPageConfig(selectedStyle.category);
-
-  useEffect(() => {
-    // When style changes, load the appropriate configuration
-    resetConfig(selectedStyle.category);
-  }, [selectedStyle.category, resetConfig]);
-
-  const handleSaveChanges = async () => {
-    const success = await saveConfig();
-    if (success) {
+const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
+  primaryStyle,
+  secondaryStyles
+}) => {
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const { resultPageConfig, updateSection, saveConfig, loading } = useResultPageConfig(primaryStyle.category);
+  
+  const handleSave = async () => {
+    try {
+      await saveConfig();
       toast({
-        title: 'Alterações salvas',
-        description: 'As configurações da página de resultados foram salvas com sucesso.'
+        title: "Alterações salvas",
+        description: "As alterações na página de resultados foram salvas com sucesso.",
       });
-    } else {
+    } catch (error) {
       toast({
-        title: 'Erro ao salvar',
-        description: 'Não foi possível salvar as configurações.',
-        variant: 'destructive'
+        title: "Erro ao salvar",
+        description: "Ocorreu um erro ao salvar as alterações.",
+        variant: "destructive",
       });
     }
   };
 
-  const handleStyleChange = (style: StyleResult) => {
-    setSelectedStyle(style);
-  };
-
   if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-[#1A1818]/70">Carregando configurações...</p>
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-screen">Carregando editor...</div>;
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#FAF9F7]">
-      <div className="flex-shrink-0 border-b bg-white p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-playfair text-[#432818]">Editor da Página de Resultados</h1>
-        <Button className="bg-[#B89B7A] hover:bg-[#A38A69]" onClick={handleSaveChanges}>
-          <Save className="w-4 h-4 mr-2" />
-          Salvar Alterações
-        </Button>
-      </div>
-
-      <div className="flex-1 overflow-hidden">
-        <div className="h-full flex">
-          {/* Left sidebar - Style selection and configuration */}
-          <div className="w-1/3 border-r overflow-auto p-4 bg-white">
-            <Card className="mb-4">
-              <CardHeader>
-                <CardTitle className="text-lg">Estilo Selecionado</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <StyleSelector selectedStyle={selectedStyle} onStyleChange={handleStyleChange} />
-              </CardContent>
-            </Card>
-
-            <Tabs defaultValue="header">
-              <TabsList className="w-full mb-4">
-                <TabsTrigger value="header">Cabeçalho</TabsTrigger>
-                <TabsTrigger value="content">Conteúdo</TabsTrigger>
-                <TabsTrigger value="offer">Oferta</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="header" className="space-y-4">
-                <SectionEditor 
-                  section={resultPageConfig.header} 
-                  onUpdate={(updatedSection) => updateSection('header', updatedSection)}
-                  sectionName="Cabeçalho"
-                />
-              </TabsContent>
-
-              <TabsContent value="content" className="space-y-4">
-                <SectionEditor 
-                  section={resultPageConfig.mainContent} 
-                  onUpdate={(updatedSection) => updateSection('mainContent', updatedSection)}
-                  sectionName="Conteúdo Principal"
-                />
-                
-                <SectionEditor 
-                  section={resultPageConfig.secondaryStyles} 
-                  onUpdate={(updatedSection) => updateSection('secondaryStyles', updatedSection)}
-                  sectionName="Estilos Secundários"
-                />
-              </TabsContent>
-
-              <TabsContent value="offer" className="space-y-4">
-                <SectionEditor 
-                  section={resultPageConfig.offer.hero} 
-                  onUpdate={(updatedSection) => updateSection('offer.hero', updatedSection)}
-                  sectionName="Cabeçalho da Oferta"
-                />
-                
-                <SectionEditor 
-                  section={resultPageConfig.offer.products} 
-                  onUpdate={(updatedSection) => updateSection('offer.products', updatedSection)}
-                  sectionName="Produtos"
-                />
-                
-                <SectionEditor 
-                  section={resultPageConfig.offer.pricing} 
-                  onUpdate={(updatedSection) => updateSection('offer.pricing', updatedSection)}
-                  sectionName="Preço e CTA"
-                />
-                
-                <SectionEditor 
-                  section={resultPageConfig.offer.benefits} 
-                  onUpdate={(updatedSection) => updateSection('offer.benefits', updatedSection)}
-                  sectionName="Benefícios"
-                />
-                
-                <SectionEditor 
-                  section={resultPageConfig.offer.testimonials} 
-                  onUpdate={(updatedSection) => updateSection('offer.testimonials', updatedSection)}
-                  sectionName="Depoimentos"
-                />
-                
-                <SectionEditor 
-                  section={resultPageConfig.offer.guarantee} 
-                  onUpdate={(updatedSection) => updateSection('offer.guarantee', updatedSection)}
-                  sectionName="Garantia"
-                />
-              </TabsContent>
-            </Tabs>
-          </div>
-
-          {/* Right side - Preview */}
-          <div className="flex-1 overflow-auto">
-            <PreviewPanel 
-              resultPageConfig={resultPageConfig}
-              selectedStyle={selectedStyle}
-            />
-          </div>
+    <div className="min-h-screen flex flex-col">
+      {/* Barra de ferramentas do editor */}
+      <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
+        <div className="flex items-center gap-3">
+          <Link to="/resultado">
+            <Button variant="outline" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar
+            </Button>
+          </Link>
+          <h1 className="text-2xl font-playfair text-[#432818]">Editor da Página de Resultados</h1>
         </div>
+        
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            onClick={() => setIsPreviewMode(!isPreviewMode)}
+          >
+            {isPreviewMode ? (
+              <>
+                <EyeOff className="w-4 h-4 mr-2" />
+                Editar
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4 mr-2" />
+                Visualizar
+              </>
+            )}
+          </Button>
+          
+          <Button 
+            className="bg-[#B89B7A] hover:bg-[#A38A69]" 
+            onClick={handleSave}
+          >
+            <Save className="w-4 h-4 mr-2" />
+            Salvar
+          </Button>
+        </div>
+      </div>
+      
+      {/* Conteúdo da página */}
+      <div className="flex-1">
+        {isPreviewMode ? (
+          // Modo de visualização
+          <QuizResult 
+            primaryStyle={primaryStyle} 
+            secondaryStyles={secondaryStyles} 
+          />
+        ) : (
+          // Modo de edição
+          <EditableSections
+            primaryStyle={primaryStyle}
+            secondaryStyles={secondaryStyles}
+            config={resultPageConfig}
+            onSectionUpdate={updateSection}
+          />
+        )}
       </div>
     </div>
   );

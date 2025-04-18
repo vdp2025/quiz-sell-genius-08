@@ -1,7 +1,11 @@
 
+export interface SectionContent {
+  [key: string]: any;
+}
+
 export interface Section {
   visible: boolean;
-  content: Record<string, any>;
+  content: SectionContent;
   appearance?: Record<string, any>;
 }
 

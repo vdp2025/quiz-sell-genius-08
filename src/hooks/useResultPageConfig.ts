@@ -4,7 +4,7 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
 import { createDefaultConfig } from '@/utils/resultPageDefaults';
 import { resultPageStorage } from '@/services/resultPageStorage';
-import { set } from 'lodash';
+import { set, get } from 'lodash';
 
 export const useResultPageConfig = (styleType: string) => {
   const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(createDefaultConfig(styleType));
@@ -36,10 +36,10 @@ export const useResultPageConfig = (styleType: string) => {
     loadConfig();
   }, [styleType]);
 
-  const updateSection = useCallback((path: string, newSection: any) => {
+  const updateSection = useCallback((path: string, newContent: any) => {
     setResultPageConfig(prevConfig => {
       const newConfig = { ...prevConfig };
-      set(newConfig, path, newSection);
+      set(newConfig, path, newContent);
       return newConfig;
     });
   }, []);

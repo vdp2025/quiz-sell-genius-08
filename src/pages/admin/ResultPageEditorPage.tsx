@@ -1,9 +1,8 @@
 
 import React from 'react';
-import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
 import { useQuizContext } from '@/context/QuizContext';
-import { styleConfig } from '@/config/styleConfig';
 import { StyleResult } from '@/types/quiz';
+import ResultPageEditor from '@/components/result-editor/ResultPageEditor';
 
 const ResultPageEditorPage: React.FC = () => {
   const { quizResult } = useQuizContext();
@@ -33,12 +32,10 @@ const ResultPageEditorPage: React.FC = () => {
   const secondaryStyles = quizResult?.secondaryStyles || defaultSecondaryStyles;
 
   return (
-    <div className="min-h-screen bg-[#fffaf7]">
-      <ResultPageEditorWithControls 
-        primaryStyle={primaryStyle}
-        secondaryStyles={secondaryStyles.slice(0, 2)}
-      />
-    </div>
+    <ResultPageEditor 
+      primaryStyle={primaryStyle}
+      secondaryStyles={secondaryStyles.slice(0, 2)}
+    />
   );
 };
 
