@@ -42,22 +42,18 @@ const QuizPage: React.FC = () => {
   const quizContainerRef = useRef<HTMLDivElement>(null);
   const transitionTitleRef = useRef<HTMLHeadingElement>(null);
   
-  // Calculate total questions: main quiz + strategic questions
   const totalQuestions = quizQuestions.length + strategicQuestions.length;
 
   const handleStrategicAnswer = (response: UserResponse) => {
     console.log('Strategic question answered:', response);
     
-    // Save the answer
     setStrategicAnswers(prev => ({
       ...prev,
       [response.questionId]: response.selectedOptions
     }));
     
-    // Also save to the persistent storage through context
     saveStrategicAnswer(response.questionId, response.selectedOptions);
     
-    // Add a slight delay before moving to the next strategic question
     setTimeout(() => {
       if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
         setCurrentStrategicQuestionIndex(prev => prev + 1);
@@ -72,14 +68,12 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmit = (response: UserResponse) => {
     handleAnswer(response.questionId, response.selectedOptions);
     
-    // Verificamos se o número de opções selecionadas é igual ao número requerido
     if (response.selectedOptions.length === currentQuestion.multiSelect) {
       if (!isLastQuestion) {
         setTimeout(() => {
           handleNext();
         }, 500);
       } else {
-        // Garantir que o quiz não trave na última questão
         setTimeout(() => {
           const results = calculateResults();
           console.log('Results calculated before transition:', results);
@@ -91,7 +85,6 @@ const QuizPage: React.FC = () => {
 
   useEffect(() => {
     if (quizContainerRef.current) {
-      // If showing transition screen, scroll to the transition title
       if (showingTransition && transitionTitleRef.current) {
         transitionTitleRef.current.scrollIntoView({ 
           behavior: 'smooth', 
@@ -100,7 +93,6 @@ const QuizPage: React.FC = () => {
         return;
       }
 
-      // For questions, use the existing question element scrolling logic
       const questionElement = document.getElementById(
         showingStrategicQuestions && currentStrategicQuestionIndex < strategicQuestions.length
           ? `question-${strategicQuestions[currentStrategicQuestionIndex].id}`
@@ -136,22 +128,22 @@ const QuizPage: React.FC = () => {
             <Card className="p-8 space-y-8 bg-white shadow-md mb-10 border-[#B89B7A]/20">
               <h2 
                 ref={transitionTitleRef}
-                className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-semibold"
+                className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-bold"
               >
                 Enquanto calculamos o seu resultado...
               </h2>
               
-              <p className="text-[#1A1818]/80 text-base">
-                Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.
+              <p className="text-[#1A1818]/90 text-base">
+                Queremos te fazer algumas perguntas que vão tornar sua <strong className="text-[#432818]">experiência</strong> ainda mais <strong className="text-[#432818]">completa</strong>.
               </p>
               
-              <p className="text-[#1A1818]/80 text-base">
-                A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.
+              <p className="text-[#1A1818]/90 text-base">
+                A ideia é simples: te ajudar a enxergar com mais <strong className="text-[#432818]">clareza</strong> onde você está agora — e para onde pode ir com mais <strong className="text-[#432818]">intenção</strong>, <strong className="text-[#432818]">leveza</strong> e <strong className="text-[#432818]">autenticidade</strong>.
               </p>
               
               <div className="bg-[#B89B7A]/10 p-6 rounded-lg">
                 <p className="text-[#432818] italic text-center font-medium">
-                  Responda com sinceridade. Isso é só entre você e a sua nova versão.
+                  Responda com <strong className="text-[#432818] not-italic">sinceridade</strong>. Isso é só entre você e a sua <strong className="text-[#432818] not-italic">nova versão</strong>.
                 </p>
               </div>
             </Card>
@@ -174,7 +166,6 @@ const QuizPage: React.FC = () => {
     return <QuizFinalTransition onShowResult={handleShowResult} />;
   }
 
-  // Garantir que temos questões para mostrar
   const hasStrategicQuestion = showingStrategicQuestions && 
                               currentStrategicQuestionIndex < strategicQuestions.length;
   
@@ -194,7 +185,7 @@ const QuizPage: React.FC = () => {
         </AnimatedWrapper>
         
         <AnimatedWrapper className="flex justify-between items-center mb-8">
-          <h1 className="text-base font-playfair text-[#432818]"> {/* Reduced font size */}
+          <h1 className="text-base font-playfair text-[#432818]">
             Olá, {user?.userName || 'Visitante'}!
           </h1>
           <div className="text-sm text-[#1A1818]/60">

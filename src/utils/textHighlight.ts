@@ -3,30 +3,46 @@ import React from 'react';
 
 export const highlightStrategicWords = (text: string): React.ReactNode => {
   const strategicWords = [
-    'conforto', 'estilo', 'elegante', 'sofisticado', 'moderno',
-    'clássico', 'tradicional', 'casual', 'discreto', 'refinado',
-    'delicado', 'sensual', 'glamorosa', 'ousado', 'criativo',
-    'exclusivo', 'atemporal', 'único', 'autêntico', 'atual',
-    'tendência', 'personalidade', 'identidade', 'estruturado',
-    'fluido', 'clean', 'minimalista', 'versátil', 'despojado',
-    'natural', 'romântico', 'prático', 'contemporâneo', 'dramático',
-    'marcante', 'impacto', 'status', 'presença', 'poder',
-    'desconectada', 'dúvidas', 'segura', 'evoluir', 
-    'combiná-las', 'impulso', 'arrependo', 'percebida', 
-    'autenticidade', 'leveza', 'confiante', 'presença', 
-    'elegância', 'autoridade', 'admirada', 'consciência', 
-    'estilosa', 'facilidade', 'propósito', 'transformar',
-    'intenção', 'clareza', 'versão', 'experiência', 'espelho',
-    'imagem', 'atualmente'
+    // Personal Growth & Transformation
+    'transformar', 'evoluir', 'versão', 'autenticidade', 'experiência',
+    'clareza', 'intenção', 'propósito', 'consciência', 'confiante',
+    
+    // Style & Image Related
+    'imagem', 'estilo', 'presença', 'elegância', 'identidade',
+    'combiná-las', 'looks', 'peças', 'roupas', 'guarda-roupa',
+    
+    // Emotional States
+    'desconectada', 'dúvidas', 'segura', 'confiante', 'arrependo',
+    'indecisão', 'limitada', 'impulso',
+    
+    // Quality & Value Words
+    'autoridade', 'admirada', 'estilosa', 'exclusivo', 'estratégico',
+    'prático', 'completa', 'perfeito', 'facilidade',
+    
+    // Key Concepts
+    'investimento', 'resultado', 'experiência', 'material', 'compromisso',
+    'escolhas', 'autenticidade', 'leveza',
+    
+    // Action Words
+    'transformar', 'aplicar', 'comprar', 'vestir', 'montar',
+    'criar', 'usar', 'valoriza', 'funciona'
   ];
 
-  const pattern = new RegExp(`(${strategicWords.join('|')})`, 'gi');
+  // Remove duplicates and sort by length (longer words first to prevent partial matches)
+  const uniqueSortedWords = [...new Set(strategicWords)]
+    .sort((a, b) => b.length - a.length);
+
+  const pattern = new RegExp(`(${uniqueSortedWords.join('|')})`, 'gi');
   const parts = text.split(pattern);
   
   return parts.map((part, index) => {
-    if (strategicWords.some(word => part.toLowerCase() === word.toLowerCase())) {
-      return React.createElement('strong', { key: index, className: 'text-brand-coffee/80' }, part);
+    if (uniqueSortedWords.some(word => part.toLowerCase() === word.toLowerCase())) {
+      return React.createElement('strong', { 
+        key: index, 
+        className: 'text-[#432818] font-medium'  // Changed to match the coffee color theme
+      }, part);
     }
     return part;
   });
 };
+
