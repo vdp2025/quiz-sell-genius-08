@@ -22,29 +22,15 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex flex-col items-center gap-4">
         <Logo className="h-14 md:h-16" />
         
-        <div className="text-center space-y-4">
+        <div className="text-center">
           <h1 className="text-2xl md:text-3xl font-playfair text-[#432818]">
             {title}
           </h1>
           
           {primaryStyle && (
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-[#B89B7A]">
-                {primaryStyle.category}
-              </h2>
-              <div className="w-full max-w-md mx-auto">
-                <div className="flex justify-between text-sm text-[#432818] mb-1">
-                  <span>Compatibilidade</span>
-                  <span>{primaryStyle.percentage}%</span>
-                </div>
-                <div className="w-full bg-[#F3E8E6] rounded-full h-2">
-                  <div 
-                    className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300 ease-in-out" 
-                    style={{ width: `${primaryStyle.percentage}%` }} 
-                  />
-                </div>
-              </div>
-            </div>
+            <h2 className="text-2xl font-bold text-[#B89B7A] mt-4">
+              {primaryStyle.category}
+            </h2>
           )}
         </div>
       </div>

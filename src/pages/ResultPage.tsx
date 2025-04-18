@@ -14,7 +14,6 @@ const ResultPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Return early if no primary style
   if (!primaryStyle) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">

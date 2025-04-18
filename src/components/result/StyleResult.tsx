@@ -16,24 +16,16 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
 }) => {
   return (
     <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-playfair text-[#432818] mb-4">
-          Seu estilo predominante é:
-        </h2>
-        <h3 className="text-2xl font-bold text-[#B89B7A] mb-4">
-          {primaryStyle.category}
-        </h3>
-        <div className="w-full max-w-md mx-auto">
-          <div className="flex justify-between text-sm text-[#432818] mb-1">
-            <span>Compatibilidade</span>
-            <span>{primaryStyle.percentage}%</span>
-          </div>
-          <div className="w-full bg-[#F3E8E6] rounded-full h-2">
-            <div 
-              className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300 ease-in-out" 
-              style={{ width: `${primaryStyle.percentage}%` }} 
-            />
-          </div>
+      <div className="w-full max-w-md mx-auto mb-8">
+        <div className="flex justify-between text-sm text-[#432818] mb-1">
+          <span>Compatibilidade</span>
+          <span>{primaryStyle.percentage}%</span>
+        </div>
+        <div className="w-full bg-[#F3E8E6] rounded-full h-2">
+          <div 
+            className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300 ease-in-out" 
+            style={{ width: `${primaryStyle.percentage}%` }} 
+          />
         </div>
       </div>
       
