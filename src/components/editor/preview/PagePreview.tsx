@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
-import { Button } from '@/components/ui/button';
-import { EyeIcon, Smartphone, Monitor, PlusIcon } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
+import { PreviewToolbar } from './PreviewToolbar';
+import { PreviewContainer } from './PreviewContainer';
 import { HeaderBlock } from './blocks/HeaderBlock';
 import { HeroBlock } from './blocks/HeroBlock';
 import { BonusCarouselBlock } from './blocks/BonusCarouselBlock';
@@ -58,65 +59,18 @@ const PagePreview = ({ primaryStyle, onSelectComponent, blocks, onAddBlock }: Pa
 
   return (
     <div className="h-full flex flex-col bg-[#FAF9F7]">
-      <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setViewMode('desktop')}
-            className={viewMode === 'desktop' ? 'bg-[#FAF9F7]' : ''}
-          >
-            <Monitor className="w-4 h-4 mr-2" />
-            Desktop
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setViewMode('mobile')}
-            className={viewMode === 'mobile' ? 'bg-[#FAF9F7]' : ''}
-          >
-            <Smartphone className="w-4 h-4 mr-2" />
-            Mobile
-          </Button>
-        </div>
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsPreviewing(!isPreviewing)}
-        >
-          <EyeIcon className="w-4 h-4 mr-2" />
-          {isPreviewing ? 'Editar' : 'Visualizar'}
-        </Button>
-      </div>
-
-      <div className={`flex-1 overflow-y-auto p-8 ${viewMode === 'mobile' ? 'max-w-md mx-auto' : ''}`}>
-        <div className="min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6">
-          {blocks.length > 0 ? (
-            <div className="space-y-6">
-              {blocks.map((block) => (
-                <div key={block.id} className="relative">
-                  {renderBlockContent(block)}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div 
-              className="flex flex-col items-center justify-center h-64 text-[#8F7A6A] text-sm border-2 border-dashed border-[#B89B7A]/40 rounded-lg"
-            >
-              <p className="mb-4">Arraste componentes para esta área ou clique no botão abaixo</p>
-              <Button 
-                variant="outline"
-                onClick={onAddBlock}
-                className="border-[#B89B7A] text-[#B89B7A]"
-              >
-                <PlusIcon className="w-4 h-4 mr-2" />
-                Adicionar Componente
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
+      <PreviewToolbar
+        viewMode={viewMode}
+        isPreviewing={isPreviewing}
+        onViewModeChange={setViewMode}
+        onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
+      />
+      <PreviewContainer
+        viewMode={viewMode}
+        blocks={blocks}
+        onAddBlock={onAddBlock}
+        renderBlockContent={renderBlockContent}
+      />
     </div>
   );
 };
