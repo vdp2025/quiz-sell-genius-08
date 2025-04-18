@@ -15,11 +15,12 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
     'combiná-las', 'impulso', 'arrependo', 'percebida', 
     'autenticidade', 'leveza', 'confiante', 'presença', 
     'elegância', 'autoridade', 'admirada', 'consciência', 
-    'estilosa', 'facilidade', 'propósito', 'transformar'
+    'estilosa', 'facilidade', 'propósito', 'transformar',
+    'intenção', 'clareza', 'versão', 'experiência', 'espelho',
+    'imagem', 'atualmente'
   ];
 
   const pattern = new RegExp(`(${strategicWords.join('|')})`, 'gi');
-  
   const parts = text.split(pattern);
   
   return parts.map((part, index) => {
@@ -29,4 +30,3 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
     return part;
   });
 };
-

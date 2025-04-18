@@ -15,7 +15,6 @@ interface QuizTransitionProps {
 const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, currentAnswers }) => {
   const handleFirstStrategicAnswer = (response: UserResponse) => {
     onAnswer(response);
-    // Automatically transition after answering
     setTimeout(() => {
       onContinue();
     }, 500);
@@ -24,14 +23,6 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-8">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
-            alt="Logo Gisele Galvão"
-            className="h-16 mx-auto mb-6"
-          />
-        </div>
-        
         <AnimatedWrapper>
           <Card className="p-8 space-y-8 bg-white shadow-md mb-10 border-[#B89B7A]/20">
             <h2 className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-semibold">
@@ -68,4 +59,3 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
 };
 
 export default QuizTransition;
-

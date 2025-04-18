@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -52,12 +51,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       }
       
       return isMobile 
-        ? "grid-cols-1 gap-3 px-2" // Increased gap and padding for better readability on mobile
+        ? "grid-cols-1 gap-3 px-2"
         : "grid-cols-1 gap-4 px-4";
     }
     
     return isMobile 
-      ? "grid-cols-2 gap-3 px-2" // Increased gap for consistent spacing
+      ? "grid-cols-2 gap-3 px-2"
       : "grid-cols-2 gap-3 px-2";
   };
 
@@ -65,15 +64,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     <AnimatedWrapper>
       <div 
         className={cn(
-          "w-full max-w-6xl mx-auto pb-5", // Increased bottom padding
-          isMobile && "px-2", // Added small horizontal padding on mobile
-          isStrategicQuestion && "max-w-3xl" // Narrower container for strategic questions
+          "w-full max-w-6xl mx-auto pb-5",
+          isMobile && "px-2",
+          isStrategicQuestion && "max-w-3xl"
         )} 
         id={`question-${question.id}`}
       >
         <h2 className={cn(
-          "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal", // Increased margins
-          isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line" // Special styling for strategic questions
+          "text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+          isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line"
         )}>
           {highlightStrategicWords(question.title)}
         </h2>
@@ -81,9 +80,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <div className={cn(
           "grid h-full",
           getGridColumns(),
-          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3", // Increased gap
-          hasImageOptions && "mb-4 relative", // Reduced margin
-          isStrategicQuestion && "gap-4" // Bigger gap for strategic questions
+          (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3",
+          hasImageOptions && "mb-4 relative",
+          isStrategicQuestion && "gap-4"
         )}>
           {question.options.map((option) => (
             <QuizOption
@@ -98,7 +97,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         </div>
         
         {!autoAdvance && (
-          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mt-3 text-center font-medium"> {/* Increased font size, padding and margin */}
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mt-3 text-center font-medium">
             Selecione {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}
           </p>
         )}
