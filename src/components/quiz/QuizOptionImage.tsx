@@ -37,12 +37,12 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   const getImageScale = () => {
     if (!isMobile) return "scale-100";
     
-    // Enhanced scaling for questions 1 and 2
+    // Enhanced scaling for questions 1 and 2 - adjusted to prevent cropping
     if (['1', '2'].includes(questionId.charAt(0))) {
-      return "scale-[1.45] -translate-y-4"; // Increased scale and slight upward shift
+      return "scale-[1.2] translate-y-0"; // Reduced scale to prevent cropping
     }
     
-    return "scale-125"; // Default mobile scale
+    return "scale-[1.15]"; // Slightly reduced default mobile scale
   };
 
   return (
@@ -79,4 +79,3 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     </div>
   );
 };
-
