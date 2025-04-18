@@ -57,7 +57,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     }
     
     return isMobile 
-      ? "grid-cols-1 gap-3 px-0" // Changed to single column and removed horizontal padding
+      ? "grid-cols-2 gap-1 px-1" // Changed to 2 columns with minimal gap and padding
       : "grid-cols-2 gap-3 px-2";
   };
 
