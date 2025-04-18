@@ -3,7 +3,7 @@ import { QuizQuestion } from '../../types/quiz';
 export const clothingQuestions: QuizQuestion[] = [
   {
     id: '1',
-    title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
+    title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
     type: 'both',
     multiSelect: 3,
     options: [
@@ -44,7 +44,7 @@ export const clothingQuestions: QuizQuestion[] = [
       },
       {
         id: '1f',
-        text: 'Visual sensual e marcante',
+        text: 'Visual sensual marcante',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
         styleCategory: 'Sexy',
         points: 1
