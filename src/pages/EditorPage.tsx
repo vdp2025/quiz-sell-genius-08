@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -83,6 +84,18 @@ export const EditorPage = () => {
     );
   }
 
+  const handleJsonUpdate = (newConfig: any) => {
+    if (newConfig) {
+      Object.keys(newConfig).forEach(key => {
+        actions.updateSection(key, newConfig[key]);
+      });
+      toast({
+        title: "Configuração atualizada",
+        description: "As alterações foram aplicadas com sucesso",
+      });
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col">
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center">
@@ -109,13 +122,7 @@ export const EditorPage = () => {
         onReset={actions.handleReset}
         onEditGlobalStyles={actions.toggleGlobalStyles}
         resultPageConfig={resultPageConfig}
-        onUpdateConfig={(newConfig) => {
-          if (newConfig) {
-            Object.keys(newConfig).forEach(key => {
-              actions.updateSection(key, newConfig[key]);
-            });
-          }
-        }}
+        onUpdateConfig={handleJsonUpdate}
         onToggleJsonMode={() => setIsJsonMode(!isJsonMode)}
         isJsonMode={isJsonMode}
       />
@@ -133,13 +140,7 @@ export const EditorPage = () => {
               <div className="bg-white rounded-lg shadow-sm p-6 h-full">
                 <JsonConfigEditor 
                   config={resultPageConfig}
-                  onUpdate={(newConfig) => {
-                    if (newConfig) {
-                      Object.keys(newConfig).forEach(key => {
-                        actions.updateSection(key, newConfig[key]);
-                      });
-                    }
-                  }}
+                  onUpdate={handleJsonUpdate}
                 />
               </div>
             </div>

@@ -33,11 +33,6 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       const parsedConfig = JSON.parse(jsonText);
       onUpdate(parsedConfig);
       setParseError(null);
-      toast({
-        title: "Configuração atualizada",
-        description: "As alterações foram salvas com sucesso",
-        variant: "default"
-      });
     } catch (error) {
       setParseError("JSON inválido. Verifique o formato.");
       toast({
@@ -77,6 +72,10 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
     try {
       setJsonText(JSON.stringify(config, null, 2));
       setParseError(null);
+      toast({
+        title: "Configuração resetada",
+        description: "O editor foi resetado para a última configuração salva",
+      });
     } catch (error) {
       console.error('Error resetting JSON:', error);
     }
