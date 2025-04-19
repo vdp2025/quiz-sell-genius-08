@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -34,7 +35,8 @@ export const EditorPage = () => {
 
   const handleUpdateConfig = (newConfig: any) => {
     if (newConfig.blocks) {
-      actions.handleUpdateBlocks(newConfig.blocks);
+      // Update all blocks at once by setting them in state via the updateSection method
+      actions.updateSection('blocks', newConfig.blocks);
     }
     // Update other config sections if needed
   };
@@ -46,7 +48,7 @@ export const EditorPage = () => {
         isPreviewMode={isPreviewing}
         onPreviewToggle={actions.togglePreview}
         onReset={actions.handleReset}
-        onUpdateBlocks={actions.handleUpdateBlocks}
+        onUpdateBlocks={(blocks) => actions.updateSection('blocks', blocks)}
         styleType={styleCategory}
         config={resultPageConfig}
         onUpdateConfig={handleUpdateConfig}

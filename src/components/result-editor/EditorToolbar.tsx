@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -20,13 +21,14 @@ import { BlockFactory } from '@/utils/blocks/BlockFactory';
 import { toast } from '@/components/ui/use-toast';
 import { JsonEditorPanel } from './JsonEditorPanel';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { Block } from '@/types/editor';
 
 interface EditorToolbarProps {
   onSave: () => Promise<void>;
   isPreviewMode: boolean;
   onPreviewToggle: () => void;
   onReset?: () => void;
-  onUpdateBlocks?: (blocks: any[]) => void;
+  onUpdateBlocks?: (blocks: Block[]) => void;
   styleType?: string;
   config?: ResultPageConfig;
   onUpdateConfig?: (config: ResultPageConfig) => void;

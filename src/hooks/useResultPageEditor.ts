@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -70,6 +71,16 @@ export const useResultPageEditor = (styleType: string) => {
         blocks: updatedBlocks
       };
     });
+  }, []);
+
+  // New method to update multiple blocks at once
+  const handleUpdateBlocks = useCallback((newBlocks: Block[]) => {
+    setState(prev => ({
+      ...prev,
+      blocks: newBlocks
+    }));
+    
+    setTimeout(() => handleSave(), 100);
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
@@ -174,6 +185,7 @@ export const useResultPageEditor = (styleType: string) => {
       setSelectedBlockId: (id: string | null) => setState(prev => ({ ...prev, selectedBlockId: id })),
       handleAddBlock,
       handleUpdateBlock,
+      handleUpdateBlocks, // Add the new method to the returned actions
       handleDeleteBlock,
       handleReorderBlocks
     }
