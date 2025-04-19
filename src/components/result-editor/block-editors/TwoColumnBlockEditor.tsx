@@ -1,12 +1,11 @@
 
 import React from 'react';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Block } from '@/types/editor';
-import StyleEditor from '../style-editors/StyleEditor';
+import { ImageUploader } from '@/components/editor/ImageUploader';
 
 interface TwoColumnBlockEditorProps {
   block: Block;
@@ -14,127 +13,150 @@ interface TwoColumnBlockEditorProps {
 }
 
 const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUpdate }) => {
-  const { content = {} } = block;
-  
-  // Ensure leftColumn and rightColumn exist and have style property
-  const leftColumn = content.leftColumn || { content: '', width: '50%', style: {} };
-  const rightColumn = content.rightColumn || { content: '', width: '50%', style: {} };
-  
-  const handleLeftColumnUpdate = (leftColumnUpdate: any) => {
+  const content = block.content;
+  const leftColumn = content.leftColumn || {};
+  const rightColumn = content.rightColumn || {};
+
+  const handleLeftColumnChange = (data: any) => {
     onUpdate({
-      ...content,
       leftColumn: {
         ...leftColumn,
-        ...leftColumnUpdate
+        ...data
       }
     });
   };
-  
-  const handleRightColumnUpdate = (rightColumnUpdate: any) => {
+
+  const handleRightColumnChange = (data: any) => {
     onUpdate({
-      ...content,
       rightColumn: {
         ...rightColumn,
-        ...rightColumnUpdate
+        ...data
       }
     });
   };
-  
+
   return (
     <div className="space-y-6">
-      <Card className="p-4">
-        <Tabs defaultValue="layout" className="w-full">
-          <TabsList className="w-full mb-4">
-            <TabsTrigger value="layout" className="flex-1">Layout</TabsTrigger>
-            <TabsTrigger value="left" className="flex-1">Coluna Esquerda</TabsTrigger>
-            <TabsTrigger value="right" className="flex-1">Coluna Direita</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="layout" className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="columnGap">Espaçamento entre Colunas</Label>
-              <Input
-                id="columnGap"
-                value={content.columnGap || '20px'}
-                onChange={(e) => onUpdate({ ...content, columnGap: e.target.value })}
-                placeholder="ex: 20px ou 1rem"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="leftColumnWidth">Largura da Coluna Esquerda</Label>
-              <Input
-                id="leftColumnWidth"
-                value={leftColumn.width || '50%'}
-                onChange={(e) => handleLeftColumnUpdate({ width: e.target.value })}
-                placeholder="ex: 50% ou 300px"
-              />
-              <p className="text-xs text-muted-foreground">Em telas pequenas, as colunas serão empilhadas</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="rightColumnWidth">Largura da Coluna Direita</Label>
-              <Input
-                id="rightColumnWidth"
-                value={rightColumn.width || '50%'}
-                onChange={(e) => handleRightColumnUpdate({ width: e.target.value })}
-                placeholder="ex: 50% ou 300px"
-              />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="left" className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="leftContent">Conteúdo da Coluna Esquerda</Label>
-              <Textarea
-                id="leftContent"
-                value={leftColumn.content || ''}
-                onChange={(e) => handleLeftColumnUpdate({ content: e.target.value })}
-                placeholder="Adicione conteúdo HTML ou texto simples aqui"
-                className="min-h-[150px]"
-              />
-              <p className="text-xs text-muted-foreground">Você pode adicionar HTML básico como &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, etc.</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Estilo da Coluna Esquerda</Label>
-              <StyleEditor
-                style={leftColumn.style || {}}
-                onUpdate={(style) => handleLeftColumnUpdate({ style })}
-              />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="right" className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="rightContent">Conteúdo da Coluna Direita</Label>
-              <Textarea
-                id="rightContent"
-                value={rightColumn.content || ''}
-                onChange={(e) => handleRightColumnUpdate({ content: e.target.value })}
-                placeholder="Adicione conteúdo HTML ou texto simples aqui"
-                className="min-h-[150px]"
-              />
-              <p className="text-xs text-muted-foreground">Você pode adicionar HTML básico como &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, etc.</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Estilo da Coluna Direita</Label>
-              <StyleEditor
-                style={rightColumn.style || {}}
-                onUpdate={(style) => handleRightColumnUpdate({ style })}
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-      </Card>
-      
       <div className="space-y-2">
-        <Label>Estilo do Container</Label>
-        <StyleEditor
-          style={content.style || {}}
-          onUpdate={(style) => onUpdate({ ...content, style })}
+        <Label htmlFor="columnGap">Espaçamento entre colunas</Label>
+        <Input
+          id="columnGap"
+          value={content.columnGap || '24px'}
+          onChange={(e) => onUpdate({ columnGap: e.target.value })}
+          placeholder="24px"
         />
+      </div>
+      
+      <div className="border-t pt-4">
+        <h3 className="font-medium mb-3">Coluna Esquerda</h3>
+        
+        <div className="space-y-3">
+          <div className="space-y-2">
+            <Label htmlFor="leftColumnType">Tipo de Conteúdo</Label>
+            <Select
+              value={leftColumn.type || 'image'}
+              onValueChange={(value) => handleLeftColumnChange({ type: value })}
+            >
+              <SelectTrigger id="leftColumnType">
+                <SelectValue placeholder="Selecione o tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="image">Imagem</SelectItem>
+                <SelectItem value="text">Texto</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {leftColumn.type === 'image' && (
+            <div className="space-y-2">
+              <Label>Imagem</Label>
+              <ImageUploader
+                currentImageUrl={leftColumn.imageUrl || ''}
+                onImageChange={(url) => handleLeftColumnChange({ imageUrl: url })}
+                imageAlt="Imagem da coluna esquerda"
+              />
+            </div>
+          )}
+          
+          {leftColumn.type === 'text' && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="leftTitle">Título</Label>
+                <Input
+                  id="leftTitle"
+                  value={leftColumn.title || ''}
+                  onChange={(e) => handleLeftColumnChange({ title: e.target.value })}
+                  placeholder="Título"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="leftText">Texto</Label>
+                <Textarea
+                  id="leftText"
+                  value={leftColumn.text || ''}
+                  onChange={(e) => handleLeftColumnChange({ text: e.target.value })}
+                  placeholder="Texto"
+                />
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+      
+      <div className="border-t pt-4">
+        <h3 className="font-medium mb-3">Coluna Direita</h3>
+        
+        <div className="space-y-3">
+          <div className="space-y-2">
+            <Label htmlFor="rightColumnType">Tipo de Conteúdo</Label>
+            <Select
+              value={rightColumn.type || 'text'}
+              onValueChange={(value) => handleRightColumnChange({ type: value })}
+            >
+              <SelectTrigger id="rightColumnType">
+                <SelectValue placeholder="Selecione o tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="image">Imagem</SelectItem>
+                <SelectItem value="text">Texto</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {rightColumn.type === 'image' && (
+            <div className="space-y-2">
+              <Label>Imagem</Label>
+              <ImageUploader
+                currentImageUrl={rightColumn.imageUrl || ''}
+                onImageChange={(url) => handleRightColumnChange({ imageUrl: url })}
+                imageAlt="Imagem da coluna direita"
+              />
+            </div>
+          )}
+          
+          {rightColumn.type === 'text' && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="rightTitle">Título</Label>
+                <Input
+                  id="rightTitle"
+                  value={rightColumn.title || ''}
+                  onChange={(e) => handleRightColumnChange({ title: e.target.value })}
+                  placeholder="Título"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rightText">Texto</Label>
+                <Textarea
+                  id="rightText"
+                  value={rightColumn.text || ''}
+                  onChange={(e) => handleRightColumnChange({ text: e.target.value })}
+                  placeholder="Texto"
+                />
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

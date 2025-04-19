@@ -32,12 +32,29 @@ export const EditorPage = () => {
     percentage: 100
   };
 
+  const handleUpdateBlocks = (newBlocks: any[]) => {
+    // Clear existing blocks
+    blocks.forEach(block => {
+      actions.handleDeleteBlock(block.id);
+    });
+    
+    // Add new blocks after a short delay to ensure state is updated
+    setTimeout(() => {
+      newBlocks.forEach(block => {
+        actions.handleAddBlock(block.type);
+      });
+    }, 100);
+  };
+
   return (
     <div className="h-screen flex flex-col">
       <EditorToolbar 
         onSave={actions.handleSave}
         isPreviewMode={isPreviewing}
         onPreviewToggle={actions.togglePreview}
+        onReset={actions.handleReset}
+        onUpdateBlocks={handleUpdateBlocks}
+        styleType={styleCategory}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">

@@ -1,28 +1,25 @@
 
-import React, { useState } from 'react';
-import { X, Trash2, PaintBucket, Type, Image as ImageIcon, Layout, Columns } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EditableContent, Block } from '@/types/editor';
-import { StyleControls } from '../editor/controls/StyleControls';
-import TextBlockEditor from './block-editors/TextBlockEditor';
-import ImageBlockEditor from './block-editors/ImageBlockEditor';
+import { Button } from '@/components/ui/button';
+import { X, Trash2 } from 'lucide-react';
+import { Block } from '@/types/editor';
 import HeadlineBlockEditor from './block-editors/HeadlineBlockEditor';
-import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
-import StyleHeroBlockEditor from './block-editors/StyleHeroBlockEditor';
 import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
+import StyleHeroBlockEditor from './block-editors/StyleHeroBlockEditor';
+import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
 import OfferBlockEditor from './block-editors/OfferBlockEditor';
-import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
 import GuaranteeBlockEditor from './block-editors/GuaranteeBlockEditor';
+import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
+import FAQBlockEditor from './block-editors/FAQBlockEditor';
 import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
   blocks: Block[];
   onClose: () => void;
-  onUpdate: (id: string, content: Partial<EditableContent>) => void;
-  onDelete: (id: string) => void;
+  onUpdate: (content: any) => void;
+  onDelete: () => void;
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -32,155 +29,99 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   onUpdate,
   onDelete
 }) => {
-  const [activeTab, setActiveTab] = useState<string>("content");
   const selectedBlock = blocks.find(block => block.id === selectedBlockId);
 
-  if (!selectedBlockId || !selectedBlock) {
-    return (
-      <div className="h-full p-4 bg-white flex flex-col">
-        <div className="border-b pb-4 mb-4 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-[#432818]">Propriedades</h2>
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
-        </div>
-        <div className="flex-1 flex items-center justify-center">
-          <p className="text-[#8F7A6A] text-center">
-            Selecione um bloco para editar suas propriedades
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const handleUpdateContent = (content: Partial<EditableContent>) => {
-    onUpdate(selectedBlockId, content);
-  };
-
-  const getBlockIcon = (type: string) => {
+  const getBlockEditorTitle = (type: Block['type']) => {
     switch (type) {
-      case 'text': return <Type className="w-4 h-4 mr-2" />;
-      case 'image': return <ImageIcon className="w-4 h-4 mr-2" />;
-      case 'header':
-      case 'headline': return <Type className="w-4 h-4 mr-2" />;
-      case 'two-column': return <Columns className="w-4 h-4 mr-2" />;
-      default: return <Layout className="w-4 h-4 mr-2" />;
+      case 'headline': return 'Editar Título';
+      case 'benefits': return 'Editar Benefícios';
+      case 'style-hero': return 'Editar Hero de Estilo';
+      case 'style-result': return 'Editar Resultado do Estilo';
+      case 'offer': return 'Editar Oferta';
+      case 'guarantee': return 'Editar Garantia';
+      case 'testimonials': return 'Editar Depoimentos';
+      case 'faq': return 'Editar Perguntas Frequentes';
+      case 'two-column': return 'Editar Duas Colunas';
+      default: return 'Editar Bloco';
     }
   };
 
   const renderBlockEditor = () => {
+    if (!selectedBlock) return null;
+
     switch (selectedBlock.type) {
-      case 'text':
-        return <TextBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
-      case 'image':
-        return <ImageBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
       case 'headline':
-        return <HeadlineBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
-      case 'style-result':
-        return <StyleResultBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
-      case 'style-hero':
-        return <StyleHeroBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+        return <HeadlineBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
       case 'benefits':
-        return <BenefitsBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+        return <BenefitsBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
+      case 'style-hero':
+        return <StyleHeroBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
+      case 'style-result':
+        return <StyleResultBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
       case 'offer':
-        return <OfferBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
-      case 'testimonials':
-        return <TestimonialsBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+        return <OfferBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
       case 'guarantee':
-        return <GuaranteeBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+        return <GuaranteeBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
+      case 'testimonials':
+        return <TestimonialsBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
+      case 'faq':
+        return <FAQBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
       case 'two-column':
-        return <TwoColumnBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+        return <TwoColumnBlockEditor block={selectedBlock} onUpdate={onUpdate} />;
+        
       default:
-        return (
-          <div className="p-4 text-center text-gray-500">
-            Editor específico para o tipo de bloco "{selectedBlock.type}" não disponível ainda.
-            Em breve teremos mais opções de edição!
-          </div>
-        );
+        return <p>Tipo de bloco não suportado: {selectedBlock.type}</p>;
     }
   };
 
   return (
-    <div className="h-full bg-white flex flex-col">
-      <div className="border-b p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          {getBlockIcon(selectedBlock.type)}
-          <h2 className="text-lg font-medium text-[#432818]">
-            {getBlockTitle(selectedBlock.type)}
-          </h2>
-        </div>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="mx-4 mt-2 grid grid-cols-2">
-          <TabsTrigger value="content">Conteúdo</TabsTrigger>
-          <TabsTrigger value="style">Aparência</TabsTrigger>
-        </TabsList>
-
-        <ScrollArea className="flex-1 p-4">
-          <TabsContent value="content" className="space-y-4 mt-0">
+    <div className="h-full flex flex-col bg-white border-l border-[#B89B7A]/20">
+      {selectedBlock ? (
+        <>
+          <div className="p-4 border-b border-[#B89B7A]/20 flex justify-between items-center">
+            <h2 className="font-semibold text-[#432818]">
+              {getBlockEditorTitle(selectedBlock.type)}
+            </h2>
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                onClick={onDelete}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onClose}
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <ScrollArea className="flex-1 p-4">
             {renderBlockEditor()}
-          </TabsContent>
-
-          <TabsContent value="style" className="mt-0">
-            <StyleControls
-              style={selectedBlock.content.style || {}}
-              onUpdate={(newStyle) => {
-                handleUpdateContent({
-                  style: newStyle
-                });
-              }}
-            />
-          </TabsContent>
-        </ScrollArea>
-      </Tabs>
-
-      <div className="border-t p-4">
-        <Button
-          variant="destructive"
-          size="sm"
-          className="w-full"
-          onClick={() => onDelete(selectedBlockId)}
-        >
-          <Trash2 className="w-4 h-4 mr-2" />
-          Excluir Bloco
-        </Button>
-      </div>
+          </ScrollArea>
+        </>
+      ) : (
+        <div className="h-full flex items-center justify-center text-[#8F7A6A]">
+          <div className="text-center p-6">
+            <p>Selecione um bloco para editar</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
-function getBlockTitle(type: Block['type']): string {
-  const titles: Record<string, string> = {
-    'header': 'Cabeçalho',
-    'headline': 'Título',
-    'text': 'Texto',
-    'image': 'Imagem',
-    'style-result': 'Resultado de Estilo',
-    'secondary-styles': 'Estilos Secundários',
-    'benefits': 'Benefícios',
-    'pricing': 'Preço',
-    'testimonials': 'Depoimentos',
-    'hero-section': 'Seção Hero',
-    'products': 'Produtos',
-    'cta': 'Botão CTA',
-    'guarantee': 'Garantia',
-    'spacer': 'Espaçador',
-    'icon': 'Ícone',
-    'two-column': 'Duas Colunas',
-    'video': 'Vídeo',
-    'carousel': 'Carrossel',
-    'custom-code': 'Código Personalizado',
-    'animation-block': 'Animação',
-    'faq': 'Perguntas Frequentes',
-    'style-hero': 'Hero de Estilo',
-    'offer': 'Oferta de Produto'
-  };
-  
-  return titles[type] || 'Bloco';
-}
 
 export default PropertiesPanel;

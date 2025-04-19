@@ -1,14 +1,12 @@
 
 import React from 'react';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Block } from '@/types/editor';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Plus, Trash } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Testimonial } from '@/types/testimonials';
-import { toast } from '@/components/ui/use-toast';
+import { Block } from '@/types/editor';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2 } from 'lucide-react';
+import { ImageUploader } from '@/components/editor/ImageUploader';
 
 interface TestimonialsBlockEditorProps {
   block: Block;
@@ -16,144 +14,121 @@ interface TestimonialsBlockEditorProps {
 }
 
 const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block, onUpdate }) => {
-  const content = block.content || {};
+  const content = block.content;
   const testimonials = content.testimonials || [];
 
-  const handleTestimonialUpdate = (index: number, field: string, value: string) => {
-    const updatedTestimonials = [...testimonials];
-    
-    if (!updatedTestimonials[index]) {
-      updatedTestimonials[index] = { 
-        id: `testimonial-${Date.now()}`, 
-        text: '', 
-        name: '', 
-        image: '', 
-        location: '' 
-      };
-    }
-    
-    updatedTestimonials[index] = {
-      ...updatedTestimonials[index],
+  const handleAddTestimonial = () => {
+    const newTestimonials = [
+      ...testimonials,
+      {
+        text: 'Novo depoimento',
+        name: 'Nome da pessoa',
+        location: 'Cidade',
+        image: ''
+      }
+    ];
+    onUpdate({ testimonials: newTestimonials });
+  };
+
+  const handleUpdateTestimonial = (index: number, field: string, value: string) => {
+    const newTestimonials = [...testimonials];
+    newTestimonials[index] = {
+      ...newTestimonials[index],
       [field]: value
     };
-    
-    onUpdate({ testimonials: updatedTestimonials });
+    onUpdate({ testimonials: newTestimonials });
   };
 
-  const addTestimonial = () => {
-    const newTestimonial = {
-      id: `testimonial-${Date.now()}`,
-      text: '',
-      name: '',
-      image: '',
-      location: ''
-    };
-    
-    const updatedTestimonials = [...testimonials, newTestimonial];
-    onUpdate({ testimonials: updatedTestimonials });
-    
-    toast({
-      title: "Depoimento adicionado",
-      description: "Um novo depoimento foi adicionado à lista."
-    });
-  };
-
-  const removeTestimonial = (index: number) => {
-    const updatedTestimonials = testimonials.filter((_, i) => i !== index);
-    onUpdate({ testimonials: updatedTestimonials });
-    
-    toast({
-      title: "Depoimento removido",
-      description: "O depoimento foi removido da lista."
-    });
+  const handleRemoveTestimonial = (index: number) => {
+    const newTestimonials = [...testimonials];
+    newTestimonials.splice(index, 1);
+    onUpdate({ testimonials: newTestimonials });
   };
 
   return (
-    <ScrollArea className="h-[calc(100vh-220px)] pr-4">
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <Label>Título da Seção</Label>
-          <Input
-            value={content.title || ''}
-            onChange={(e) => onUpdate({ title: e.target.value })}
-            placeholder="O que estão dizendo"
-          />
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label>Depoimentos</Label>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={addTestimonial}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Adicionar
-            </Button>
-          </div>
-
-          {testimonials.map((testimonial, index) => (
-            <div key={testimonial.id || index} className="space-y-4 p-4 border rounded-lg bg-gray-50">
-              <div className="flex justify-between items-center">
-                <Label>Depoimento {index + 1}</Label>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => removeTestimonial(index)}
-                  className="text-red-500 hover:bg-red-50"
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Texto</Label>
-                <Textarea
-                  value={testimonial.text || ''}
-                  onChange={(e) => handleTestimonialUpdate(index, 'text', e.target.value)}
-                  placeholder="Digite o depoimento..."
-                  className="min-h-[100px]"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Nome</Label>
-                <Input
-                  value={testimonial.name || testimonial.author || ''}
-                  onChange={(e) => handleTestimonialUpdate(index, 'name', e.target.value)}
-                  placeholder="Nome do cliente"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Cargo/Posição</Label>
-                <Input
-                  value={testimonial.location || testimonial.position || ''}
-                  onChange={(e) => handleTestimonialUpdate(index, 'location', e.target.value)}
-                  placeholder="Ex: Empresária"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>URL da Imagem</Label>
-                <Input
-                  value={testimonial.image || ''}
-                  onChange={(e) => handleTestimonialUpdate(index, 'image', e.target.value)}
-                  placeholder="URL da imagem do cliente"
-                />
-              </div>
-            </div>
-          ))}
-          
-          {testimonials.length === 0 && (
-            <div className="p-4 text-center border rounded-lg bg-gray-50">
-              <p className="text-gray-500">Nenhum depoimento adicionado ainda. Clique em "Adicionar" para criar um novo.</p>
-            </div>
-          )}
-        </div>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="title">Título</Label>
+        <Input
+          id="title"
+          value={content.title || ''}
+          onChange={(e) => onUpdate({ title: e.target.value })}
+          placeholder="O que nossas clientes dizem"
+        />
       </div>
-    </ScrollArea>
+      
+      <div className="border-t pt-4">
+        <div className="flex items-center justify-between mb-4">
+          <Label>Depoimentos</Label>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleAddTestimonial}
+          >
+            <Plus className="w-4 h-4 mr-2" /> Adicionar
+          </Button>
+        </div>
+        
+        {testimonials.map((testimonial: any, index: number) => (
+          <div key={index} className="border p-4 mb-4 rounded-md">
+            <div className="flex justify-between items-center mb-3">
+              <h4 className="font-medium">Depoimento {index + 1}</h4>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => handleRemoveTestimonial(index)}
+                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <Label htmlFor={`text-${index}`}>Texto do depoimento</Label>
+                <Textarea
+                  id={`text-${index}`}
+                  value={testimonial.text || ''}
+                  onChange={(e) => handleUpdateTestimonial(index, 'text', e.target.value)}
+                  placeholder="Digite o depoimento aqui..."
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor={`name-${index}`}>Nome</Label>
+                <Input
+                  id={`name-${index}`}
+                  value={testimonial.name || ''}
+                  onChange={(e) => handleUpdateTestimonial(index, 'name', e.target.value)}
+                  placeholder="Nome da pessoa"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor={`location-${index}`}>Localização</Label>
+                <Input
+                  id={`location-${index}`}
+                  value={testimonial.location || ''}
+                  onChange={(e) => handleUpdateTestimonial(index, 'location', e.target.value)}
+                  placeholder="Cidade, Estado"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Foto (opcional)</Label>
+                <ImageUploader
+                  currentImageUrl={testimonial.image || ''}
+                  onImageChange={(url) => handleUpdateTestimonial(index, 'image', url)}
+                  imageAlt={`Foto de ${testimonial.name || 'cliente'}`}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

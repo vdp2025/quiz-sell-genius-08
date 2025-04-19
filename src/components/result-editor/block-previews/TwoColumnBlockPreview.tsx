@@ -1,61 +1,70 @@
 
 import React from 'react';
+import { EditableContent } from '@/types/editor';
 
 interface TwoColumnBlockPreviewProps {
-  content: {
-    leftColumn?: {
-      content?: string;
-      width?: string;
-      style?: any;
-    };
-    rightColumn?: {
-      content?: string;
-      width?: string;
-      style?: any;
-    };
-    columnGap?: string;
-    style?: any;
-  };
+  content: EditableContent;
+  styleType?: string;
 }
 
-const TwoColumnBlockPreview: React.FC<TwoColumnBlockPreviewProps> = ({ content }) => {
-  const leftWidth = content.leftColumn?.width || '50%';
-  const rightWidth = content.rightColumn?.width || '50%';
-  const gap = content.columnGap || '20px';
+const TwoColumnBlockPreview: React.FC<TwoColumnBlockPreviewProps> = ({ content, styleType = 'Natural' }) => {
+  const getStyleColor = () => {
+    const styleColors: Record<string, string> = {
+      'Natural': '#B89B7A',
+      'Clássico': '#9F9B9D',
+      'Contemporâneo': '#3E4152',
+      'Elegante': '#9B7A6D',
+      'Romântico': '#D69BCD',
+      'Sexy': '#DF5461',
+      'Dramático': '#465362',
+      'Criativo': '#E9742B'
+    };
+    
+    return styleColors[styleType] || '#B89B7A';
+  };
   
+  const styleColor = getStyleColor();
+  const leftColumn = content.leftColumn || {};
+  const rightColumn = content.rightColumn || {};
+  const columnGap = content.columnGap || '24px';
+
+  const renderColumn = (column: any, side: 'left' | 'right') => {
+    if (column.type === 'image') {
+      return (
+        <img 
+          src={column.imageUrl || 'https://placehold.co/600x400?text=Imagem'} 
+          alt={`Imagem ${side}`}
+          className="w-full h-auto rounded-lg"
+        />
+      );
+    } else if (column.type === 'text') {
+      return (
+        <div>
+          <h3 className="text-xl font-bold mb-3" style={{ color: styleColor }}>
+            {column.title || `Título da coluna ${side}`}
+          </h3>
+          <p className="text-gray-700">
+            {column.text || `Conteúdo de texto para a coluna ${side}. Edite este texto no editor de blocos.`}
+          </p>
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
   return (
-    <div style={content.style} className="w-full">
-      <div className="flex flex-wrap md:flex-nowrap" style={{ gap }}>
-        <div 
-          style={{ 
-            width: leftWidth,
-            ...content.leftColumn?.style
-          }} 
-          className="w-full md:w-auto bg-[#f9f9f9] p-4 rounded-lg"
-        >
-          {content.leftColumn?.content ? (
-            <div dangerouslySetInnerHTML={{ __html: content.leftColumn.content }} />
-          ) : (
-            <div className="h-20 flex items-center justify-center text-gray-400">
-              Coluna Esquerda
-            </div>
-          )}
+    <div className="bg-white rounded-lg shadow-md p-8">
+      <div 
+        className="flex flex-col md:flex-row items-center"
+        style={{ gap: columnGap }}
+      >
+        <div className="md:w-1/2 mb-6 md:mb-0">
+          {renderColumn(leftColumn, 'left')}
         </div>
         
-        <div 
-          style={{ 
-            width: rightWidth,
-            ...content.rightColumn?.style
-          }} 
-          className="w-full md:w-auto bg-[#f9f9f9] p-4 rounded-lg"
-        >
-          {content.rightColumn?.content ? (
-            <div dangerouslySetInnerHTML={{ __html: content.rightColumn.content }} />
-          ) : (
-            <div className="h-20 flex items-center justify-center text-gray-400">
-              Coluna Direita
-            </div>
-          )}
+        <div className="md:w-1/2">
+          {renderColumn(rightColumn, 'right')}
         </div>
       </div>
     </div>

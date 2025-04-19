@@ -1,26 +1,79 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Save, Eye, EyeOff } from 'lucide-react';
+import { 
+  Save,
+  Eye,
+  EyeOff,
+  LayoutTemplate,
+  Plus,
+  ChevronDown
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { BlockFactory } from '@/utils/blocks/BlockFactory';
+import { toast } from '@/components/ui/use-toast';
 
 interface EditorToolbarProps {
-  onSave: () => void;
+  onSave: () => Promise<void>;
   isPreviewMode: boolean;
   onPreviewToggle: () => void;
+  onReset?: () => void;
+  onUpdateBlocks?: (blocks: any[]) => void;
+  styleType?: string;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onSave,
   isPreviewMode,
   onPreviewToggle,
+  onReset,
+  onUpdateBlocks,
+  styleType = 'Natural'
 }) => {
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await onSave();
+      toast({
+        title: "Salvo com sucesso",
+        description: "Suas alterações foram salvas.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar suas alterações.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCreateSalesPage = () => {
+    if (onUpdateBlocks) {
+      const salesBlocks = BlockFactory.createSalesPageBlocks(styleType);
+      onUpdateBlocks(salesBlocks);
+      toast({
+        title: "Modelo de página de vendas criado",
+        description: "O modelo de página de vendas foi criado com sucesso.",
+      });
+    }
+  };
+
   return (
     <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50">
       <div className="flex items-center gap-3">
         <Link to="/resultado">
           <Button variant="outline" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <LayoutTemplate className="w-4 h-4 mr-2" />
             Voltar
           </Button>
         </Link>
@@ -30,6 +83,28 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
       </div>
       
       <div className="flex gap-2">
+        {onUpdateBlocks && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Plus className="w-4 h-4 mr-2" />
+                Modelos
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleCreateSalesPage}>
+                Criar Página de Vendas
+              </DropdownMenuItem>
+              {onReset && (
+                <DropdownMenuItem onClick={onReset}>
+                  Reiniciar Página
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      
         <Button
           variant="outline"
           size="sm"
@@ -47,14 +122,18 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             </>
           )}
         </Button>
+        
         <Button 
-          onClick={onSave}
+          onClick={handleSave}
+          disabled={isSaving}
           className="bg-[#B89B7A] hover:bg-[#A38A69]"
         >
           <Save className="w-4 h-4 mr-2" />
-          Salvar Alterações
+          {isSaving ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
     </div>
   );
 };
+
+export default EditorToolbar;

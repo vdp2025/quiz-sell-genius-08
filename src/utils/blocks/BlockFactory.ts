@@ -10,7 +10,9 @@ import {
 import {
   createOfferBlock,
   createGuaranteeBlock,
-  createFaqBlock
+  createFaqBlock,
+  createTwoColumnBlock,
+  createTestimonialBlock
 } from './salesBlocks';
 import {
   createStyleHeroBlock,
@@ -43,6 +45,8 @@ export class BlockFactory {
         return createGuaranteeBlock(order);
       case 'faq':
         return createFaqBlock(order);
+      case 'two-column':
+        return createTwoColumnBlock(order);
       case 'style-hero':
         return createStyleHeroBlock(styleType || 'Natural', order);
       case 'style-result':
@@ -69,6 +73,24 @@ export class BlockFactory {
       this.createBlock('style-hero', 0, styleType),
       this.createBlock('style-result', 1, styleType),
       this.createBlock('headline', 2),
+      this.createBlock('benefits', 3),
+      this.createBlock('offer', 4),
+      this.createBlock('testimonials', 5),
+      this.createBlock('guarantee', 6),
+      this.createBlock('faq', 7)
+    ];
+  }
+  
+  /**
+   * Creates a set of blocks for a sales page
+   * @param styleType The style type
+   * @returns An array of blocks
+   */
+  static createSalesPageBlocks(styleType: string): Block[] {
+    return [
+      this.createBlock('style-hero', 0, styleType),
+      this.createBlock('style-result', 1, styleType),
+      this.createBlock('two-column', 2),
       this.createBlock('benefits', 3),
       this.createBlock('offer', 4),
       this.createBlock('testimonials', 5),
