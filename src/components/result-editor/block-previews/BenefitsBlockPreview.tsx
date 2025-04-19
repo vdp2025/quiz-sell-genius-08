@@ -29,7 +29,7 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
         
         {content.subtitle && (
           <p className="text-[#666] mb-6 text-center">
-            {content.subtitle || "Criado para mulheres que querem muito mais do que "saber seu estilo". Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade."}
+            {content.subtitle || "Criado para mulheres que querem muito mais do que \"saber seu estilo\". Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade."}
           </p>
         )}
         
