@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
@@ -15,15 +16,37 @@ export const EditorPage = () => {
   ];
   
   useEffect(() => {
+    // Verificar se temos um estilo predominante salvo do quiz
+    const savedResult = localStorage.getItem('quizResult');
+    let userPrimaryStyle = null;
+    
+    if (savedResult) {
+      try {
+        const parsedResult = JSON.parse(savedResult);
+        if (parsedResult.primaryStyle && parsedResult.primaryStyle.category) {
+          userPrimaryStyle = parsedResult.primaryStyle.category;
+        }
+      } catch (error) {
+        console.error('Erro ao analisar o resultado do quiz:', error);
+      }
+    }
+    
+    // Se estamos na rota base do editor, redirecionar para o estilo do usuário ou um padrão
     if (!style && window.location.pathname === '/editor') {
-      navigate('/editor/Natural');
+      if (userPrimaryStyle && styleCategories.includes(userPrimaryStyle)) {
+        navigate(`/editor/${userPrimaryStyle}`);
+      } else {
+        // Apenas como fallback se não houver resultado do quiz
+        navigate('/editor/Natural');
+      }
     } else if (style && !styleCategories.includes(style)) {
       toast({
         title: "Estilo inválido",
-        description: `O estilo "${style}" não existe. Redirecionando para o estilo Natural.`,
+        description: `O estilo "${style}" não existe. Redirecionando para ${userPrimaryStyle || 'Natural'}.`,
         variant: "destructive"
       });
-      navigate('/editor/Natural');
+      
+      navigate(`/editor/${userPrimaryStyle || 'Natural'}`);
     }
   }, [style, navigate]);
   
