@@ -24,7 +24,7 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     style = {} 
   } = content;
 
-  // Dynamic icon import
+  // Get the icon component
   const IconComponent = dynamicIconImport(icon);
   
   const containerStyle = {
@@ -37,17 +37,18 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     justifyContent: 'center',
     gap: '0.5rem'
   };
+
+  const sizeInPixels = parseInt(size) || 24;
   
   return (
-    <div className="w-full" style={containerStyle}>
-      {IconComponent && (
-        <div className="flex items-center justify-center">
-          <IconComponent 
-            style={{ color, width: size, height: size }} 
-            strokeWidth={1.5}
-          />
-        </div>
-      )}
+    <div className="w-full" style={containerStyle as React.CSSProperties}>
+      <div className="flex items-center justify-center">
+        <IconComponent 
+          color={color}
+          size={sizeInPixels}
+          strokeWidth={1.5}
+        />
+      </div>
       
       {title && (
         <div className={cn(
