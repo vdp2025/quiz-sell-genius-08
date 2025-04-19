@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
@@ -28,71 +27,94 @@ interface BlockRendererProps {
   block: Block;
   primaryStyle?: StyleResult;
   styleType?: string;
+  onClick?: () => void;
 }
 
-export const BlockRenderer: React.FC<BlockRendererProps> = ({ 
-  block, 
+export const BlockRenderer: React.FC<BlockRendererProps> = ({
+  block,
   primaryStyle,
-  styleType
+  styleType,
+  onClick
 }) => {
-  switch (block.type) {
-    case 'header':
-      return <HeaderBlockPreview content={block.content} />;
-    case 'headline':
-      return <HeadlineBlockPreview content={block.content} />;
-    case 'text':
-      return <TextBlockPreview content={block.content} />;
-    case 'image':
-      return <ImageBlockPreview content={block.content} />;
-    case 'style-result':
-      return <StyleResultBlockPreview 
-        content={block.content} 
-        primaryStyle={primaryStyle}
-        styleType={styleType}
-      />;
-    case 'secondary-styles':
-      return <SecondaryStylesBlockPreview content={block.content} />;
-    case 'benefits':
-      return <BenefitsBlockPreview content={block.content} />;
-    case 'pricing':
-      return <PricingBlockPreview content={block.content} />;
-    case 'testimonials':
-      return <TestimonialsBlockPreview content={block.content} />;
-    case 'hero-section':
-      return <HeroSectionBlockPreview 
-        content={block.content} 
-        primaryStyle={primaryStyle || { category: 'Natural', score: 0, percentage: 0 }}
-      />;
-    case 'products':
-      return <ProductsBlockPreview content={block.content} />;
-    case 'cta':
-      return <CTABlockPreview content={block.content} />;
-    case 'guarantee':
-      return <GuaranteeBlockPreview content={block.content} />;
-    case 'spacer':
-      return <SpacerBlockPreview content={block.content} />;
-    case 'icon':
-      return <IconBlockPreview content={block.content} />;
-    case 'two-column':
-      return <TwoColumnBlockPreview content={block.content} />;
-    case 'video':
-      return <VideoBlockPreview content={block.content} />;
-    case 'carousel':
-      return <CarouselBlockPreview content={block.content} />;
-    case 'custom-code':
-      return <CustomCodeBlockPreview content={block.content} />;
-    case 'animation-block':
-      return <AnimationBlockPreview content={block.content} />;
-    case 'faq':
-      return <FAQBlockPreview content={block.content} />;
-    default:
-      return (
-        <div className="p-4 bg-gray-100 rounded-lg">
-          <h3 className="font-medium text-[#432818]">{block.type}</h3>
-          <p className="text-sm text-[#8F7A6A]">
-            Block type: {block.type}
-          </p>
-        </div>
-      );
-  }
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClick?.();
+  };
+
+  const renderContent = () => {
+    switch (block.type) {
+      case 'header':
+        return (
+          <div className="text-center space-y-4" onClick={handleClick}>
+            {block.content.title && (
+              <h1 className="text-2xl font-playfair text-[#432818]">
+                {block.content.title}
+              </h1>
+            )}
+            {block.content.subtitle && (
+              <p className="text-[#8F7A6A]">{block.content.subtitle}</p>
+            )}
+          </div>
+        );
+      case 'headline':
+        return <HeadlineBlockPreview content={block.content} />;
+      case 'text':
+        return <TextBlockPreview content={block.content} />;
+      case 'image':
+        return <ImageBlockPreview content={block.content} />;
+      case 'style-result':
+        return <StyleResultBlockPreview 
+          content={block.content} 
+          primaryStyle={primaryStyle}
+          styleType={styleType}
+        />;
+      case 'secondary-styles':
+        return <SecondaryStylesBlockPreview content={block.content} />;
+      case 'benefits':
+        return <BenefitsBlockPreview content={block.content} />;
+      case 'pricing':
+        return <PricingBlockPreview content={block.content} />;
+      case 'testimonials':
+        return <TestimonialsBlockPreview content={block.content} />;
+      case 'hero-section':
+        return <HeroSectionBlockPreview 
+          content={block.content} 
+          primaryStyle={primaryStyle || { category: 'Natural', score: 0, percentage: 0 }}
+        />;
+      case 'products':
+        return <ProductsBlockPreview content={block.content} />;
+      case 'cta':
+        return <CTABlockPreview content={block.content} />;
+      case 'guarantee':
+        return <GuaranteeBlockPreview content={block.content} />;
+      case 'spacer':
+        return <SpacerBlockPreview content={block.content} />;
+      case 'icon':
+        return <IconBlockPreview content={block.content} />;
+      case 'two-column':
+        return <TwoColumnBlockPreview content={block.content} />;
+      case 'video':
+        return <VideoBlockPreview content={block.content} />;
+      case 'carousel':
+        return <CarouselBlockPreview content={block.content} />;
+      case 'custom-code':
+        return <CustomCodeBlockPreview content={block.content} />;
+      case 'animation-block':
+        return <AnimationBlockPreview content={block.content} />;
+      case 'faq':
+        return <FAQBlockPreview content={block.content} />;
+      default:
+        return (
+          <div onClick={handleClick}>
+            Tipo de bloco não suportado: {block.type}
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="relative" style={block.content.style}>
+      {renderContent()}
+    </div>
+  );
 };

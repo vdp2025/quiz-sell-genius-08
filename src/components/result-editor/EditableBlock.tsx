@@ -23,6 +23,16 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
   primaryStyle,
   styleType
 }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelect();
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // We'll implement delete functionality later
+  };
+
   if (isPreview) {
     return (
       <div className="relative">
@@ -43,7 +53,7 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
           ? "ring-2 ring-[#B89B7A] rounded-lg"
           : "hover:ring-2 hover:ring-[#B89B7A]/40 rounded-lg"
       )}
-      onClick={onSelect}
+      onClick={handleClick}
     >
       <div className="relative">
         <BlockRenderer 
@@ -53,13 +63,22 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
         />
         
         <div className="absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]">
+          <button 
+            className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <GripVertical className="w-4 h-4 text-[#8F7A6A] cursor-move" />
           </button>
-          <button className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]">
+          <button 
+            className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]"
+            onClick={handleClick}
+          >
             <Edit className="w-4 h-4 text-[#8F7A6A]" />
           </button>
-          <button className="p-1 rounded bg-white shadow-sm hover:bg-red-50">
+          <button 
+            className="p-1 rounded bg-white shadow-sm hover:bg-red-50"
+            onClick={handleDelete}
+          >
             <Trash className="w-4 h-4 text-red-500" />
           </button>
         </div>
