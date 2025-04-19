@@ -17,10 +17,10 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
   secondaryStyles
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+    <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-md font-medium text-[#432818]">Estilo Predominante</h3>
+          <h3 className="text-md font-medium text-[#432818]">{primaryStyle.category}</h3>
           <span className="text-sm font-medium text-[#B89B7A]">{primaryStyle.percentage}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
@@ -46,27 +46,29 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
         </div>
       </div>
       
-      <div className="mt-6">
-        <h3 className="text-md font-medium text-[#432818] mb-3">
-          Estilos Complementares
-        </h3>
-        <div className="space-y-3">
-          {secondaryStyles.slice(0, 2).map((style) => (
-            <div key={style.category} className="flex flex-col">
-              <div className="flex justify-between items-center mb-1">
-                <h4 className="text-sm text-[#432818]">{style.category}</h4>
-                <span className="text-xs font-medium text-[#B89B7A]">{style.percentage}%</span>
+      {secondaryStyles.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-md font-medium text-[#432818] mb-3">
+            Estilos Complementares
+          </h3>
+          <div className="space-y-3">
+            {secondaryStyles.map((style) => (
+              <div key={style.category} className="flex flex-col">
+                <div className="flex justify-between items-center mb-1">
+                  <h4 className="text-sm text-[#432818]">{style.category}</h4>
+                  <span className="text-xs font-medium text-[#B89B7A]">{style.percentage}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                  <div 
+                    className="bg-[#B89B7A] h-1.5 rounded-full" 
+                    style={{ width: `${style.percentage}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-1.5">
-                <div 
-                  className="bg-[#B89B7A] h-1.5 rounded-full" 
-                  style={{ width: `${style.percentage}%` }}
-                />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

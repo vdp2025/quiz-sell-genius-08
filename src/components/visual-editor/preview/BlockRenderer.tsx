@@ -4,6 +4,8 @@ import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { StyleResult } from '@/types/quiz';
+import { styleConfig } from '@/config/styleConfig';
+import { StyleResultSection } from '@/components/result/StyleResult';
 import StyleHeroBlockPreview from '@/components/result-editor/block-previews/StyleHeroBlockPreview';
 import StyleOfferBlockPreview from '@/components/result-editor/block-previews/StyleOfferBlockPreview';
 
@@ -22,6 +24,12 @@ export function BlockRenderer({
   isPreview,
   primaryStyle
 }: BlockRendererProps) {
+  // Create mock secondary styles for preview
+  const mockSecondaryStyles: StyleResult[] = [
+    { category: 'Contemporâneo', score: 4, percentage: 30 },
+    { category: 'Clássico', score: 3, percentage: 20 }
+  ];
+
   return (
     <div
       onClick={() => !isPreview && onSelect()}
@@ -32,10 +40,8 @@ export function BlockRenderer({
         !isPreview && "border-2 border-dashed border-[#B89B7A]/40"
       )}
     >
-      {/* Block Content */}
-      {renderBlockContent(block, primaryStyle)}
+      {renderBlockContent(block, primaryStyle, mockSecondaryStyles)}
 
-      {/* Edit Controls */}
       {!isPreview && isSelected && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button variant="ghost" size="sm" className="text-[#8F7A6A]">
@@ -47,7 +53,11 @@ export function BlockRenderer({
   );
 }
 
-function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult) {
+function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[]) {
+  if (!primaryStyle) {
+    return <div>Carregando...</div>;
+  }
+
   switch (block.type) {
     case 'headline':
       return (
@@ -66,14 +76,12 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult) {
       return <p className="text-[#432818]">{block.content.text}</p>;
     case 'style-result':
       return (
-        <div className="p-4 bg-[#FAF9F7] rounded-lg">
-          <h3 className="text-xl font-playfair text-[#432818]">
-            Estilo {primaryStyle?.category || 'Principal'}
-          </h3>
-          <p className="text-[#8F7A6A]">
-            {block.content.description || 'Descrição do estilo principal'}
-          </p>
-        </div>
+        <StyleResultSection
+          primaryStyle={primaryStyle}
+          description={block.content.description || styleConfig[primaryStyle.category].description}
+          image={block.content.imageUrl || styleConfig[primaryStyle.category].image}
+          secondaryStyles={secondaryStyles || []}
+        />
       );
     case 'style-hero':
       return <StyleHeroBlockPreview content={block.content} styleType={primaryStyle?.category || 'Natural'} />;
