@@ -24,7 +24,7 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     style = {} 
   } = content;
 
-  // Get the icon component
+  // Get the icon component as a React ElementType
   const IconComponent = dynamicIconImport(icon);
   
   const containerStyle = {
