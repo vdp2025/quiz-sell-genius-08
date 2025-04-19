@@ -37,12 +37,12 @@ export const useResultPageEditor = (styleType: string) => {
 
   // Auto-save when blocks change
   useEffect(() => {
+    if (state.blocks.length === 0) return;
+    
     const autoSaveTimer = setTimeout(() => {
-      if (state.blocks.length > 0) {
-        handleSave();
-      }
-    }, 2000); // Auto-save after 2 seconds of inactivity (reduced from 3 seconds)
-
+      handleSave();
+    }, 1000); // Auto-save after 1 second of inactivity
+    
     return () => clearTimeout(autoSaveTimer);
   }, [state.blocks]);
 
@@ -64,21 +64,25 @@ export const useResultPageEditor = (styleType: string) => {
       selectedBlockId: newBlock.id
     }));
     
-    // Salvar imediatamente ao adicionar um bloco
-    setTimeout(() => handleSave(), 500);
+    // Save immediately after adding a block
+    setTimeout(() => handleSave(), 100);
     
     return newBlock.id;
   }, [state.blocks]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    setState(prev => ({
-      ...prev,
-      blocks: prev.blocks.map(block =>
+    setState(prev => {
+      const updatedBlocks = prev.blocks.map(block =>
         block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-      )
-    }));
+      );
+      
+      return {
+        ...prev,
+        blocks: updatedBlocks
+      };
+    });
     
-    // Isso dispara o useEffect para autosave
+    // Auto-save will be triggered by the effect
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
@@ -86,14 +90,6 @@ export const useResultPageEditor = (styleType: string) => {
       const newBlocks = prev.blocks
         .filter(block => block.id !== id)
         .map((block, index) => ({ ...block, order: index }));
-        
-      setTimeout(() => {
-        const configToSave = {
-          ...resultPageConfig,
-          blocks: newBlocks
-        };
-        resultPageStorage.save(configToSave);
-      }, 500);
       
       return {
         ...prev,
@@ -101,7 +97,10 @@ export const useResultPageEditor = (styleType: string) => {
         selectedBlockId: null
       };
     });
-  }, [resultPageConfig]);
+    
+    // Save immediately after deleting a block
+    setTimeout(() => handleSave(), 100);
+  }, []);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     setState(prev => {
@@ -114,21 +113,15 @@ export const useResultPageEditor = (styleType: string) => {
         order: index
       }));
       
-      // Salvar imediatamente ao reordenar blocos
-      setTimeout(() => {
-        const configToSave = {
-          ...resultPageConfig,
-          blocks: newBlocks
-        };
-        resultPageStorage.save(configToSave);
-      }, 500);
-      
       return {
         ...prev,
         blocks: newBlocks
       };
     });
-  }, [resultPageConfig]);
+    
+    // Save immediately after reordering blocks
+    setTimeout(() => handleSave(), 100);
+  }, []);
 
   const toggleGlobalStyles = useCallback(() => {
     setState(prev => ({
@@ -154,6 +147,8 @@ export const useResultPageEditor = (styleType: string) => {
   // Renamed from saveConfig to handleSave to avoid conflicts
   const handleSave = useCallback(async (): Promise<void> => {
     try {
+      console.log("Saving blocks:", state.blocks);
+      
       // Ensure the latest blocks are in the config
       const configToSave = {
         ...resultPageConfig,
@@ -170,6 +165,8 @@ export const useResultPageEditor = (styleType: string) => {
         description: "As alterações foram salvas com sucesso",
         variant: "default"
       });
+      
+      return Promise.resolve();
     } catch (error) {
       console.error('Error saving result page config:', error);
       toast({
@@ -177,6 +174,8 @@ export const useResultPageEditor = (styleType: string) => {
         description: 'Não foi possível salvar a configuração da página de resultados',
         variant: 'destructive'
       });
+      
+      return Promise.reject(error);
     }
   }, [resultPageConfig, state.blocks, updateConfigSection]);
 

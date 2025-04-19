@@ -1,19 +1,12 @@
 
 import React from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Testimonial } from '@/types/testimonials';
 
 interface TestimonialsBlockPreviewProps {
   content: {
     title?: string;
-    testimonials?: Array<{
-      id?: string;
-      text?: string;
-      name?: string;
-      position?: string;
-      image?: string;
-      location?: string;
-      author?: string;
-    }>;
+    testimonials?: Partial<Testimonial>[];
     image?: string;
     style?: any;
   };
@@ -59,7 +52,7 @@ const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ con
         
         <div className="space-y-6">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-[#fff8f5] p-4 rounded-lg">
+            <div key={testimonial.id || index} className="bg-[#fff8f5] p-4 rounded-lg">
               <div className="flex items-start gap-4">
                 {testimonial.image && (
                   <Avatar className="w-16 h-16">

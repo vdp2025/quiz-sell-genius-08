@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Plus, Trash } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Testimonial } from '@/types/testimonials';
+import { toast } from '@/components/ui/use-toast';
 
 interface TestimonialsBlockEditorProps {
   block: Block;
@@ -22,7 +23,13 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
     const updatedTestimonials = [...testimonials];
     
     if (!updatedTestimonials[index]) {
-      updatedTestimonials[index] = { id: `testimonial-${Date.now()}`, text: '', name: '', image: '', location: '' };
+      updatedTestimonials[index] = { 
+        id: `testimonial-${Date.now()}`, 
+        text: '', 
+        name: '', 
+        image: '', 
+        location: '' 
+      };
     }
     
     updatedTestimonials[index] = {
@@ -41,12 +48,24 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
       image: '',
       location: ''
     };
-    onUpdate({ testimonials: [...testimonials, newTestimonial] });
+    
+    const updatedTestimonials = [...testimonials, newTestimonial];
+    onUpdate({ testimonials: updatedTestimonials });
+    
+    toast({
+      title: "Depoimento adicionado",
+      description: "Um novo depoimento foi adicionado à lista."
+    });
   };
 
   const removeTestimonial = (index: number) => {
     const updatedTestimonials = testimonials.filter((_, i) => i !== index);
     onUpdate({ testimonials: updatedTestimonials });
+    
+    toast({
+      title: "Depoimento removido",
+      description: "O depoimento foi removido da lista."
+    });
   };
 
   return (
@@ -75,7 +94,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
           </div>
 
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="space-y-4 p-4 border rounded-lg bg-gray-50">
+            <div key={testimonial.id || index} className="space-y-4 p-4 border rounded-lg bg-gray-50">
               <div className="flex justify-between items-center">
                 <Label>Depoimento {index + 1}</Label>
                 <Button
@@ -126,6 +145,12 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
               </div>
             </div>
           ))}
+          
+          {testimonials.length === 0 && (
+            <div className="p-4 text-center border rounded-lg bg-gray-50">
+              <p className="text-gray-500">Nenhum depoimento adicionado ainda. Clique em "Adicionar" para criar um novo.</p>
+            </div>
+          )}
         </div>
       </div>
     </ScrollArea>

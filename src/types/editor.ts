@@ -1,3 +1,4 @@
+
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
@@ -93,8 +94,8 @@ export interface EditableContent {
     name?: string;
     image?: string;
     location?: string;
-    author?: string;
-    position?: string;
+    author?: string;    // For backward compatibility
+    position?: string;  // For backward compatibility
   }>;
   
   // Guarantee Block Properties
