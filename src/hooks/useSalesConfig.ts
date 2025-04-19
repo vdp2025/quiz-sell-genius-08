@@ -7,21 +7,36 @@ export const useSalesConfig = (styleType: string) => {
   const [config, setConfig] = useState(salesConfig);
 
   useEffect(() => {
-    // Create a new config object without modifying the structure
     const newConfig = JSON.parse(JSON.stringify(salesConfig));
+    const styleLower = styleType.toLowerCase();
     
-    // Set the style image for the specific style
-    newConfig.styleImage = salesConfig.images.capas[styleType.toLowerCase()];
+    // Set the style image
+    newConfig.styleImage = salesConfig.images.capas[styleLower];
     
-    // Update the header title for the style
-    for (let i = 0; i < newConfig.defaultBlocks.length; i++) {
-      if (newConfig.defaultBlocks[i].type === 'header') {
-        newConfig.defaultBlocks[i].content.title = `Você descobriu seu Estilo ${styleType}! E isso é muito poderoso.`;
-        break;
+    // Update blocks with style-specific content
+    newConfig.defaultBlocks = newConfig.defaultBlocks.map(block => {
+      // Update header title
+      if (block.type === 'header') {
+        block.content.title = `Você descobriu seu Estilo ${styleType}! E isso é muito poderoso.`;
       }
-    }
+      
+      // Update hero section
+      if (block.type === 'hero-section') {
+        block.content.title = `SEU ESTILO É ${styleType.toUpperCase()}`;
+        block.content.subtitle = "Agora é hora de aplicar com clareza — e se vestir de você";
+      }
+      
+      // Update benefits with style-specific items
+      if (block.type === 'benefits' && salesConfig.styleSpecificContent[styleLower]) {
+        block.content.items = [
+          ...salesConfig.styleSpecificContent[styleLower].benefits,
+          ...block.content.items.slice(-2) // Keep the last 2 generic benefits
+        ];
+      }
+      
+      return block;
+    });
     
-    // Update the state with the new config
     setConfig(newConfig);
   }, [styleType]);
 
