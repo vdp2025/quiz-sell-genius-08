@@ -4,9 +4,14 @@ import HeaderEditor from '@/components/result-editor/editors/HeaderEditor';
 import MainContentEditor from '@/components/result-editor/editors/MainContentEditor';
 import OfferHeroEditor from '@/components/result-editor/editors/OfferHeroEditor';
 import PricingEditor from '@/components/result-editor/editors/PricingEditor';
+import { ResultPageConfig } from '@/types/resultPageConfig';
+
+type SectionTitle = {
+  [key: string]: string;
+};
 
 export function getEditorTitle(sectionPath: string): string {
-  const map: Record<string, string> = {
+  const map: SectionTitle = {
     'header': 'Cabeçalho',
     'mainContent': 'Estilo Principal',
     'secondaryStyles': 'Estilos Secundários',
@@ -24,7 +29,7 @@ export function getEditorTitle(sectionPath: string): string {
 
 export function renderContentEditor(
   sectionPath: string,
-  config: any,
+  config: ResultPageConfig,
   updateSection: (path: string, content: any) => void
 ): React.ReactNode {
   const pathParts = sectionPath.split('.');
@@ -33,8 +38,8 @@ export function renderContentEditor(
   
   for (const part of pathParts) {
     currentPath = currentPath ? `${currentPath}.${part}` : part;
-    if (current[part]) {
-      current = current[part];
+    if (current[part as keyof typeof current]) {
+      current = current[part as keyof typeof current] as any;
     }
   }
   
@@ -107,13 +112,13 @@ export function renderContentEditor(
   }
 }
 
-export function getSectionStyle(sectionPath: string, config: any): Record<string, any> {
+export function getSectionStyle(sectionPath: string, config: ResultPageConfig): Record<string, any> {
   const pathParts = sectionPath.split('.');
   let current = { ...config };
   
   for (const part of pathParts) {
-    if (current[part]) {
-      current = current[part];
+    if (current[part as keyof typeof current]) {
+      current = current[part as keyof typeof current] as any;
     }
   }
   
