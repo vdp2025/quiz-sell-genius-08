@@ -1,12 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
+import { EditorPreview } from '@/components/result-editor/EditorPreview';
+import { PropertiesPanel } from '@/components/result-editor/PropertiesPanel';
+import EditorToolbar from '@/components/result-editor/EditorToolbar';
+import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+import { JsonConfigEditor } from '@/components/result-editor/JsonConfigEditor';
+import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
 
 export const EditorPage = () => {
-  const [showTemplates, setShowTemplates] = useState(false);
   const { style } = useParams<{ style?: string }>();
   const navigate = useNavigate();
   
@@ -14,6 +20,8 @@ export const EditorPage = () => {
     "Natural", "Clássico", "Contemporâneo", "Elegante", 
     "Romântico", "Sexy", "Dramático", "Criativo"
   ];
+  
+  const [isJsonMode, setIsJsonMode] = useState(false);
   
   useEffect(() => {
     // Verificar se temos um estilo predominante salvo do quiz
@@ -48,7 +56,7 @@ export const EditorPage = () => {
       
       navigate(`/editor/${userPrimaryStyle || 'Natural'}`);
     }
-  }, [style, navigate]);
+  }, [style, navigate, styleCategories]);
   
   if (!style) {
     return null;
@@ -62,44 +70,119 @@ export const EditorPage = () => {
     percentage: 100
   };
   
+  const {
+    resultPageConfig,
+    loading,
+    blocks,
+    selectedBlockId,
+    isPreviewing,
+    isGlobalStylesOpen,
+    actions
+  } = useResultPageEditor(styleCategory);
+
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <p className="text-[#1A1818]/70">Carregando configurações...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-screen">
-      {showTemplates ? (
-        <div className="p-8 max-w-4xl mx-auto">
-          <Button
-            onClick={() => setShowTemplates(false)}
-            variant="outline"
-            className="mb-4"
-          >
-            Voltar ao Editor
-          </Button>
-          <h2 className="text-2xl font-playfair text-[#432818] mb-6">Modelos de Página</h2>
+    <div className="h-screen flex flex-col">
+      <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center">
+        <h1 className="text-xl font-medium mr-auto">Editor de Página - Estilo {styleCategory}</h1>
+        <div className="flex gap-2">
+          {styleCategories.map(cat => (
+            <Link key={cat} to={`/editor/${cat}`}>
+              <Button
+                variant={cat === styleCategory ? "default" : "outline"}
+                size="sm"
+                className={cat === styleCategory ? "bg-[#B89B7A] hover:bg-[#A38A69]" : ""}
+              >
+                {cat}
+              </Button>
+            </Link>
+          ))}
         </div>
-      ) : (
-        <div className="h-full">
-          <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center">
-            <h1 className="text-xl font-medium mr-auto">Editor de Página - Estilo {styleCategory}</h1>
-            <div className="flex gap-2">
-              {styleCategories.map(cat => (
-                <Link key={cat} to={`/editor/${cat}`}>
-                  <Button
-                    variant={cat === styleCategory ? "default" : "outline"}
-                    size="sm"
-                    className={cat === styleCategory ? "bg-[#B89B7A] hover:bg-[#A38A69]" : ""}
-                  >
-                    {cat}
-                  </Button>
-                </Link>
-              ))}
+      </div>
+    
+      <EditorToolbar 
+        onSave={actions.handleSave}
+        isPreviewMode={isPreviewing}
+        onPreviewToggle={actions.togglePreview}
+        onReset={actions.handleReset}
+        onEditGlobalStyles={actions.toggleGlobalStyles}
+        resultPageConfig={resultPageConfig}
+        onUpdateConfig={(newConfig) => {
+          if (newConfig) {
+            Object.keys(newConfig).forEach(key => {
+              actions.updateSection(key, newConfig[key]);
+            });
+          }
+        }}
+        onToggleJsonMode={() => setIsJsonMode(!isJsonMode)}
+        isJsonMode={isJsonMode}
+      />
+      
+      <ResizablePanelGroup direction="horizontal" className="flex-1">
+        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+          <ComponentsSidebar onComponentSelect={actions.handleAddBlock} />
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel defaultSize={55}>
+          {isJsonMode ? (
+            <div className="h-full flex flex-col p-4 bg-[#FAF9F7] overflow-auto">
+              <div className="bg-white rounded-lg shadow-sm p-6 h-full">
+                <JsonConfigEditor 
+                  config={resultPageConfig}
+                  onUpdate={(newConfig) => {
+                    if (newConfig) {
+                      Object.keys(newConfig).forEach(key => {
+                        actions.updateSection(key, newConfig[key]);
+                      });
+                    }
+                  }}
+                />
+              </div>
             </div>
-          </div>
-          
-          <ResultPageVisualEditor 
-            selectedStyle={selectedStyle}
-            onShowTemplates={() => setShowTemplates(true)}
-            styleType={styleCategory}
+          ) : (
+            <EditorPreview
+              blocks={blocks}
+              selectedBlockId={selectedBlockId}
+              onSelectBlock={actions.setSelectedBlockId}
+              isPreviewing={isPreviewing}
+              primaryStyle={selectedStyle}
+              onReorderBlocks={actions.handleReorderBlocks}
+              styleType={styleCategory}
+            />
+          )}
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel defaultSize={25}>
+          <PropertiesPanel
+            selectedBlockId={selectedBlockId}
+            blocks={blocks}
+            onClose={() => actions.setSelectedBlockId(null)}
+            onUpdate={actions.handleUpdateBlock}
+            onDelete={actions.handleDeleteBlock}
           />
-        </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+      
+      {isGlobalStylesOpen && (
+        <GlobalStylesEditor
+          globalStyles={resultPageConfig.globalStyles || {}}
+          onSave={(styles) => {
+            actions.updateSection('globalStyles', styles);
+            actions.toggleGlobalStyles();
+          }}
+          onCancel={actions.toggleGlobalStyles}
+        />
       )}
     </div>
   );

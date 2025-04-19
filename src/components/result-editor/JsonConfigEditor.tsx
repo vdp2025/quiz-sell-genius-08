@@ -1,9 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Download, Upload, Save } from 'lucide-react';
+import { Download, Upload, Save, RefreshCw } from 'lucide-react';
 import { exportProjectAsJson } from '@/utils/exportUtils';
 import { toast } from '@/components/ui/use-toast';
 
@@ -16,29 +15,23 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
   config,
   onUpdate
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [jsonText, setJsonText] = useState('');
   const [parseError, setParseError] = useState<string | null>(null);
 
-  const handleOpen = () => {
+  useEffect(() => {
     try {
       setJsonText(JSON.stringify(config, null, 2));
-      setIsOpen(true);
       setParseError(null);
     } catch (error) {
-      toast({
-        title: "Erro ao abrir JSON",
-        description: "Não foi possível carregar a configuração atual.",
-        variant: "destructive"
-      });
+      console.error('Error stringifying JSON:', error);
+      setParseError('Erro ao converter configuração para JSON');
     }
-  };
+  }, [config]);
 
   const handleSave = () => {
     try {
       const parsedConfig = JSON.parse(jsonText);
       onUpdate(parsedConfig);
-      setIsOpen(false);
       setParseError(null);
       toast({
         title: "Configuração atualizada",
@@ -65,79 +58,89 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
         try {
           const content = e.target?.result as string;
           const parsedConfig = JSON.parse(content);
-          onUpdate(parsedConfig);
-          toast({
-            title: "Configuração importada",
-            description: "O arquivo foi importado com sucesso",
-            variant: "default"
-          });
+          setJsonText(JSON.stringify(parsedConfig, null, 2));
+          setParseError(null);
         } catch (error) {
           toast({
             title: "Erro ao importar",
             description: "Arquivo JSON inválido",
             variant: "destructive"
           });
+          setParseError("Erro ao importar arquivo. JSON inválido.");
         }
       };
       reader.readAsText(file);
     }
   };
 
+  const handleReset = () => {
+    try {
+      setJsonText(JSON.stringify(config, null, 2));
+      setParseError(null);
+    } catch (error) {
+      console.error('Error resetting JSON:', error);
+    }
+  };
+
   return (
-    <>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleOpen}
-      >
-        Editar JSON
-      </Button>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Configuração JSON</DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4">
-            <Textarea
-              value={jsonText}
-              onChange={(e) => setJsonText(e.target.value)}
-              className="min-h-[400px] font-mono text-sm"
-            />
-            {parseError && (
-              <div className="text-red-500 text-sm">{parseError}</div>
-            )}
-            
-            <div className="flex justify-end space-x-2">
-              <Button 
-                variant="outline" 
-                onClick={handleExport}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Exportar
-              </Button>
-              <Button 
-                onClick={() => document.getElementById('import-json')?.click()}
-                variant="outline"
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                Importar
-              </Button>
-              <input
-                id="import-json"
-                type="file"
-                accept=".json"
-                className="hidden"
-                onChange={handleImport}
-              />
-              <Button onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
-                Salvar Alterações
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+    <div className="h-full flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold text-[#432818]">Editor JSON</h2>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleExport}
+          >
+            <Download className="w-4 h-4 mr-1" />
+            Exportar
+          </Button>
+          <Button 
+            variant="outline"
+            size="sm"
+            onClick={() => document.getElementById('import-json')?.click()}
+          >
+            <Upload className="w-4 h-4 mr-1" />
+            Importar
+          </Button>
+          <input
+            id="import-json"
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={handleImport}
+          />
+          <Button 
+            variant="outline"
+            size="sm"
+            onClick={handleReset}
+          >
+            <RefreshCw className="w-4 h-4 mr-1" />
+            Resetar
+          </Button>
+          <Button 
+            className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            size="sm"
+            onClick={handleSave}
+          >
+            <Save className="w-4 h-4 mr-1" />
+            Aplicar
+          </Button>
+        </div>
+      </div>
+      
+      <Textarea
+        value={jsonText}
+        onChange={(e) => setJsonText(e.target.value)}
+        className="flex-1 font-mono text-sm resize-none p-4 h-full"
+        placeholder="JSON da configuração da página"
+      />
+      
+      {parseError && (
+        <div className="mt-2 p-2 bg-red-50 text-red-600 text-sm rounded border border-red-200">
+          {parseError}
+        </div>
+      )}
+    </div>
   );
 };
