@@ -8,14 +8,11 @@ import EditorToolbar from '@/components/result-editor/EditorToolbar';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
-import { JsonEditorPanel } from '@/components/result-editor/JsonEditorPanel';
-import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style?: string }>();
   const navigate = useNavigate();
-  const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false);
   
   const styleCategories = [
     "Natural", "Clássico", "Contemporâneo", "Elegante", 
@@ -83,40 +80,7 @@ export const EditorPage = () => {
       </div>
     );
   }
-
-  const handleJsonUpdate = async (newConfig: ResultPageConfig) => {
-    if (!newConfig || !newConfig.styleType) {
-      toast({
-        title: 'Erro ao atualizar JSON',
-        description: 'Configuração inválida',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    try {
-      Object.entries(newConfig).forEach(([key, value]) => {
-        actions.updateSection(key, value);
-      });
-
-      await actions.handleSave();
-
-      toast({
-        title: 'JSON atualizado',
-        description: 'As alterações foram aplicadas com sucesso'
-      });
-
-      setIsJsonEditorOpen(false);
-    } catch (error) {
-      console.error('Error updating JSON:', error);
-      toast({
-        title: 'Erro ao atualizar JSON',
-        description: 'Ocorreu um erro ao aplicar as alterações',
-        variant: 'destructive'
-      });
-    }
-  };
-
+  
   return (
     <div className="h-screen flex flex-col">
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center">
@@ -143,8 +107,6 @@ export const EditorPage = () => {
         onReset={actions.handleReset}
         onEditGlobalStyles={actions.toggleGlobalStyles}
         resultPageConfig={resultPageConfig}
-        onUpdateConfig={handleJsonUpdate}
-        onToggleJsonEditor={() => setIsJsonEditorOpen(true)}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
@@ -190,13 +152,6 @@ export const EditorPage = () => {
           onCancel={actions.toggleGlobalStyles}
         />
       )}
-      
-      <JsonEditorPanel
-        isOpen={isJsonEditorOpen}
-        onClose={() => setIsJsonEditorOpen(false)}
-        config={resultPageConfig}
-        onUpdate={handleJsonUpdate}
-      />
     </div>
   );
 };
