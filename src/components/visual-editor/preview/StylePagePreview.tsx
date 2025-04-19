@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Monitor, Smartphone, Eye } from 'lucide-react';
@@ -15,6 +14,7 @@ interface StylePagePreviewProps {
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   styleType: string;
+  onUpdateBlock?: (blockId: string, content: any) => void;
 }
 
 export function StylePagePreview({
@@ -23,7 +23,8 @@ export function StylePagePreview({
   onSelectBlock,
   isPreviewing,
   onPreviewToggle,
-  styleType
+  styleType,
+  onUpdateBlock
 }: StylePagePreviewProps) {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
   
@@ -70,7 +71,6 @@ export function StylePagePreview({
           "min-h-full bg-white rounded-lg shadow-sm p-6",
           viewMode === 'mobile' && 'max-w-md mx-auto'
         )}>
-          {/* Style Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-playfair text-[#432818] mb-4">
               Estilo {styleType}
@@ -80,7 +80,6 @@ export function StylePagePreview({
             </p>
           </div>
 
-          {/* Style Image */}
           <div className="mb-8">
             <img 
               src={styleInfo.image} 
@@ -89,7 +88,6 @@ export function StylePagePreview({
             />
           </div>
 
-          {/* Blocks */}
           {blocks.map((block) => (
             <BlockRenderer
               key={block.id}
@@ -98,6 +96,7 @@ export function StylePagePreview({
               onSelect={() => onSelectBlock(block.id)}
               isPreview={isPreviewing}
               primaryStyle={styleResult}
+              onUpdate={onUpdateBlock ? (content) => onUpdateBlock(block.id, content) : undefined}
             />
           ))}
         </div>

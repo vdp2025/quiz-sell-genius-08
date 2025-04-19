@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
@@ -21,6 +20,7 @@ interface BlockRendererProps {
   onSelect: () => void;
   isPreview: boolean;
   primaryStyle?: StyleResult;
+  onUpdate?: (content: any) => void;
 }
 
 export function BlockRenderer({
@@ -28,7 +28,8 @@ export function BlockRenderer({
   isSelected,
   onSelect,
   isPreview,
-  primaryStyle
+  primaryStyle,
+  onUpdate
 }: BlockRendererProps) {
   // Create mock secondary styles for preview
   const mockSecondaryStyles: StyleResult[] = [
@@ -46,7 +47,7 @@ export function BlockRenderer({
         !isPreview && "border-2 border-dashed border-[#B89B7A]/40"
       )}
     >
-      {renderBlockContent(block, primaryStyle, mockSecondaryStyles)}
+      {renderBlockContent(block, primaryStyle, mockSecondaryStyles, onUpdate)}
 
       {!isPreview && isSelected && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -59,7 +60,7 @@ export function BlockRenderer({
   );
 }
 
-function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[]) {
+function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[], onUpdate?: (content: any) => void) {
   if (!primaryStyle && (block.type === 'style-result' || block.type === 'secondary-styles')) {
     return <div>Carregando...</div>;
   }
@@ -85,7 +86,12 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
     case 'benefits':
       return <BenefitsBlockPreview content={block.content} />;
     case 'testimonials':
-      return <TestimonialsBlockPreview content={block.content} />;
+      return <TestimonialsBlockPreview 
+        content={block.content} 
+        isPreview={isPreview}
+        onUpdate={onUpdate}
+        block={block}
+      />;
     case 'guarantee':
       return <GuaranteeBlockPreview content={block.content} />;
     case 'two-column':
