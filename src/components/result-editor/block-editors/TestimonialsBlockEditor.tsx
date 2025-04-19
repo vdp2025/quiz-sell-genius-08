@@ -22,7 +22,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
     const updatedTestimonials = [...testimonials];
     
     if (!updatedTestimonials[index]) {
-      updatedTestimonials[index] = { text: '', name: '', image: '', location: '' };
+      updatedTestimonials[index] = { id: `testimonial-${Date.now()}`, text: '', name: '', image: '', location: '' };
     }
     
     updatedTestimonials[index] = {
@@ -101,7 +101,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
               <div className="space-y-2">
                 <Label>Nome</Label>
                 <Input
-                  value={testimonial.name || ''}
+                  value={testimonial.name || testimonial.author || ''}
                   onChange={(e) => handleTestimonialUpdate(index, 'name', e.target.value)}
                   placeholder="Nome do cliente"
                 />
@@ -110,7 +110,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
               <div className="space-y-2">
                 <Label>Cargo/Posição</Label>
                 <Input
-                  value={testimonial.location || ''}
+                  value={testimonial.location || testimonial.position || ''}
                   onChange={(e) => handleTestimonialUpdate(index, 'location', e.target.value)}
                   placeholder="Ex: Empresária"
                 />

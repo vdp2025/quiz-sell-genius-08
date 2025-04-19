@@ -1,4 +1,3 @@
-
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
@@ -89,8 +88,12 @@ export interface EditableContent {
   
   // Testimonials Properties
   testimonials?: Array<{
-    text: string;
-    author: string;
+    id?: string;
+    text?: string;
+    name?: string;
+    image?: string;
+    location?: string;
+    author?: string;
     position?: string;
   }>;
   

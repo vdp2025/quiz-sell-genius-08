@@ -5,6 +5,6 @@ export interface Testimonial {
   image: string;
   text: string;
   location?: string;
-  position?: string;  // Adicionado para retrocompatibilidade
-  author?: string;    // Adicionado para retrocompatibilidade
+  position?: string;  // For backward compatibility
+  author?: string;    // For backward compatibility
 }
