@@ -22,6 +22,7 @@ export function SortableItem({ id, children }: SortableItemProps) {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 10 : 1,
+    opacity: isDragging ? 0.6 : 1,
   };
 
   return (

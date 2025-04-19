@@ -1,10 +1,13 @@
+
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Block } from '@/types/editor';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { EditableBlock } from './EditableBlock';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SortableItem } from './SortableItem';
 
 interface EditorPreviewProps {
   blocks: Block[];
@@ -13,7 +16,7 @@ interface EditorPreviewProps {
   isPreviewing: boolean;
   primaryStyle: StyleResult;
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
-  styleType?: string; // Add the styleType prop
+  styleType?: string;
 }
 
 export const EditorPreview: React.FC<EditorPreviewProps> = ({
@@ -25,10 +28,23 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   onReorderBlocks,
   styleType
 }) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   // Handle drag end event
-  const handleDragEnd = (result: any) => {
-    if (!result.destination) return;
-    onReorderBlocks(result.source.index, result.destination.index);
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = blocks.findIndex(block => block.id === active.id);
+      const newIndex = blocks.findIndex(block => block.id === over.id);
+      
+      onReorderBlocks(oldIndex, newIndex);
+    }
   };
 
   return (
@@ -51,47 +67,31 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
           </div>
         ) : (
           // Edit mode - show draggable blocks
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="blocks">
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="space-y-4"
-                >
-                  {blocks.map((block, index) => (
-                    <Draggable
-                      key={block.id}
-                      draggableId={block.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={`${
-                            snapshot.isDragging ? "opacity-50" : ""
-                          }`}
-                        >
-                          <EditableBlock
-                            key={block.id}
-                            block={block}
-                            isSelected={block.id === selectedBlockId}
-                            onSelect={() => onSelectBlock(block.id)}
-                            isPreview={false}
-                            primaryStyle={primaryStyle}
-                            styleType={styleType}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <DndContext 
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={blocks.map(block => block.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-4">
+                {blocks.map((block) => (
+                  <SortableItem key={block.id} id={block.id}>
+                    <EditableBlock
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onSelectBlock(block.id)}
+                      isPreview={false}
+                      primaryStyle={primaryStyle}
+                      styleType={styleType}
+                    />
+                  </SortableItem>
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
 
         {/* Add block placeholder */}
