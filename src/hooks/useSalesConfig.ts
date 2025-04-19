@@ -7,27 +7,39 @@ export const useSalesConfig = (styleType: string) => {
   const [config, setConfig] = useState(salesConfig);
 
   useEffect(() => {
-    // Create a deep copy of the defaultBlocks to ensure we don't modify the original
-    const modifiedBlocks = salesConfig.defaultBlocks.map(block => {
-      if (block.type === 'header') {
-        return {
-          ...block,
+    // Instead of modifying the defaultBlocks array, just create a complete new config
+    // This avoids type issues with the complex nested structure
+    const newConfig = {
+      ...salesConfig,
+      styleImage: salesConfig.images.capas[styleType.toLowerCase()]
+    };
+    
+    // We'll create a brand new array with carefully constructed objects
+    const headerBlock = salesConfig.defaultBlocks.find(block => block.type === 'header');
+    if (headerBlock) {
+      // Find index of the header block to replace it in the same position
+      const headerIndex = salesConfig.defaultBlocks.findIndex(block => block.type === 'header');
+      
+      if (headerIndex !== -1) {
+        // Create a new array with all blocks
+        const newBlocks = [...salesConfig.defaultBlocks];
+        
+        // Replace the header block with updated title
+        newBlocks[headerIndex] = {
+          ...headerBlock,
           content: {
-            ...block.content,
+            ...headerBlock.content,
             title: `Você descobriu seu Estilo ${styleType}! E isso é muito poderoso.`
           }
         };
+        
+        // Set the new blocks array on the config
+        newConfig.defaultBlocks = newBlocks;
       }
-      return { ...block };
-    });
+    }
     
-    const styleSpecificConfig = {
-      ...salesConfig,
-      styleImage: salesConfig.images.capas[styleType.toLowerCase()],
-      defaultBlocks: modifiedBlocks
-    };
-    
-    setConfig(styleSpecificConfig);
+    // Update the state with the new config
+    setConfig(newConfig);
   }, [styleType]);
 
   return config;
