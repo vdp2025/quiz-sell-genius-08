@@ -17,30 +17,56 @@ export interface ToasterToast extends Toast {
   duration?: number;
 }
 
-export const useToast = () => {
-  const [toasts, setToasts] = useState<ToasterToast[]>([]);
+// Create a store to handle toasts outside of React components
+const TOAST_LIMIT = 5;
+let toasts: ToasterToast[] = [];
+let listeners: ((toasts: ToasterToast[]) => void)[] = [];
 
-  const toast = ({ ...props }: ToasterToast) => {
-    const id = props.id || Math.random().toString(36).substring(2, 9);
-    const newToast = {
-      ...props,
-      id,
-      type: props.type || 'normal',
-      dismissible: props.dismissible !== false
+const emitChange = () => {
+  listeners.forEach((listener) => {
+    listener(toasts);
+  });
+};
+
+export const toast = (props: Omit<ToasterToast, "id">) => {
+  const id = props.id || Math.random().toString(36).substring(2, 9);
+  const newToast = {
+    ...props,
+    id,
+    type: props.type || 'normal',
+    dismissible: props.dismissible !== false
+  };
+
+  toasts = [newToast, ...toasts].slice(0, TOAST_LIMIT);
+  emitChange();
+  
+  return id;
+};
+
+export const dismiss = (toastId?: string) => {
+  toasts = toastId
+    ? toasts.filter((t) => t.id !== toastId)
+    : [];
+  emitChange();
+};
+
+export const useToast = () => {
+  const [_toasts, setToasts] = useState<ToasterToast[]>(toasts);
+
+  // Subscribe to changes
+  useState(() => {
+    const listener = (newToasts: ToasterToast[]) => {
+      setToasts(newToasts);
     };
 
-    setToasts((currentToasts) => [...currentToasts, newToast]);
-    return id;
-  };
-
-  const dismiss = (toastId?: string) => {
-    setToasts((currentToasts) =>
-      currentToasts.filter((t) => (toastId ? t.id !== toastId : false))
-    );
-  };
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter((l) => l !== listener);
+    };
+  });
 
   return {
-    toasts,
+    toasts: _toasts,
     toast,
     dismiss
   };
