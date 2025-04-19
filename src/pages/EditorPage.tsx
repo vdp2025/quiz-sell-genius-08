@@ -52,7 +52,6 @@ export const EditorPage = () => {
             Voltar ao Editor
           </Button>
           <h2 className="text-2xl font-playfair text-[#432818] mb-6">Modelos de Página</h2>
-          {/* Removed TemplateList */}
         </div>
       ) : (
         <div className="h-full">
