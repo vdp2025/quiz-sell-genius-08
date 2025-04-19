@@ -1,14 +1,18 @@
 
-import React from 'react';
-import { X, Trash2, PaintBucket } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Trash2, PaintBucket, Type, Image as ImageIcon, Layout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { EditableContent, Block } from '@/types/editor';
 import { StyleControls } from '../editor/controls/StyleControls';
+import TextBlockEditor from './block-editors/TextBlockEditor';
+import ImageBlockEditor from './block-editors/ImageBlockEditor';
+import HeadlineBlockEditor from './block-editors/HeadlineBlockEditor';
+import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
+import StyleHeroBlockEditor from './block-editors/StyleHeroBlockEditor';
+import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
+import OfferBlockEditor from './block-editors/OfferBlockEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -25,6 +29,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   onUpdate,
   onDelete
 }) => {
+  const [activeTab, setActiveTab] = useState<string>("content");
   const selectedBlock = blocks.find(block => block.id === selectedBlockId);
 
   if (!selectedBlockId || !selectedBlock) {
@@ -49,18 +54,57 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     onUpdate(selectedBlockId, content);
   };
 
+  const getBlockIcon = (type: string) => {
+    switch (type) {
+      case 'text': return <Type className="w-4 h-4 mr-2" />;
+      case 'image': return <ImageIcon className="w-4 h-4 mr-2" />;
+      case 'header':
+      case 'headline': return <Type className="w-4 h-4 mr-2" />;
+      default: return <Layout className="w-4 h-4 mr-2" />;
+    }
+  };
+
+  const renderBlockEditor = () => {
+    switch (selectedBlock.type) {
+      case 'text':
+        return <TextBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'image':
+        return <ImageBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'headline':
+        return <HeadlineBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'style-result':
+        return <StyleResultBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'style-hero':
+        return <StyleHeroBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'benefits':
+        return <BenefitsBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'offer':
+        return <OfferBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      default:
+        return (
+          <div className="p-4 text-center text-gray-500">
+            Editor específico para o tipo de bloco "{selectedBlock.type}" não disponível ainda.
+            Em breve teremos mais opções de edição!
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="h-full bg-white flex flex-col">
       <div className="border-b p-4 flex justify-between items-center">
-        <h2 className="text-lg font-medium text-[#432818]">
-          {getBlockTitle(selectedBlock.type)}
-        </h2>
+        <div className="flex items-center">
+          {getBlockIcon(selectedBlock.type)}
+          <h2 className="text-lg font-medium text-[#432818]">
+            {getBlockTitle(selectedBlock.type)}
+          </h2>
+        </div>
         <Button variant="ghost" size="sm" onClick={onClose}>
           <X className="w-4 h-4" />
         </Button>
       </div>
 
-      <Tabs defaultValue="content" className="flex-1 flex flex-col">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <TabsList className="mx-4 mt-2 grid grid-cols-2">
           <TabsTrigger value="content">Conteúdo</TabsTrigger>
           <TabsTrigger value="style">Aparência</TabsTrigger>
@@ -68,7 +112,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
         <ScrollArea className="flex-1 p-4">
           <TabsContent value="content" className="space-y-4 mt-0">
-            {renderContentInputs(selectedBlock, handleUpdateContent)}
+            {renderBlockEditor()}
           </TabsContent>
 
           <TabsContent value="style" className="mt-0">
@@ -128,257 +172,6 @@ function getBlockTitle(type: Block['type']): string {
   };
   
   return titles[type] || 'Bloco';
-}
-
-// Function to render different inputs based on block type
-function renderContentInputs(block: Block, onUpdate: (content: Partial<EditableContent>) => void) {
-  const { type, content } = block;
-  
-  // Common inputs for most block types
-  const commonInputs = (
-    <>
-      <div className="space-y-2">
-        <Label htmlFor="title">Título</Label>
-        <Input
-          id="title"
-          value={content.title || ''}
-          onChange={(e) => onUpdate({ title: e.target.value })}
-          placeholder="Digite o título"
-        />
-      </div>
-      
-      {(type === 'headline' || type === 'header' || type === 'style-hero') && (
-        <div className="space-y-2">
-          <Label htmlFor="subtitle">Subtítulo</Label>
-          <Input
-            id="subtitle"
-            value={content.subtitle || ''}
-            onChange={(e) => onUpdate({ subtitle: e.target.value })}
-            placeholder="Digite o subtítulo"
-          />
-        </div>
-      )}
-      
-      {(type === 'text' || type === 'style-result' || type === 'style-hero') && (
-        <div className="space-y-2">
-          <Label htmlFor="description">Descrição</Label>
-          <Textarea
-            id="description"
-            value={content.description || ''}
-            onChange={(e) => onUpdate({ description: e.target.value })}
-            placeholder="Digite a descrição"
-            className="min-h-[100px]"
-          />
-        </div>
-      )}
-    </>
-  );
-  
-  // Block-specific inputs
-  switch (type) {
-    case 'image':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="imageUrl">URL da Imagem</Label>
-            <Input
-              id="imageUrl"
-              value={content.imageUrl || ''}
-              onChange={(e) => onUpdate({ imageUrl: e.target.value })}
-              placeholder="https://exemplo.com/imagem.jpg"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="imageAlt">Texto Alternativo</Label>
-            <Input
-              id="imageAlt"
-              value={content.imageAlt || ''}
-              onChange={(e) => onUpdate({ imageAlt: e.target.value })}
-              placeholder="Descrição da imagem"
-            />
-          </div>
-        </>
-      );
-    
-    case 'style-hero':
-      return (
-        <>
-          {commonInputs}
-          <div className="space-y-2">
-            <Label htmlFor="mainImage">Imagem Principal</Label>
-            <Input
-              id="mainImage"
-              value={content.mainImage || ''}
-              onChange={(e) => onUpdate({ mainImage: e.target.value })}
-              placeholder="https://exemplo.com/imagem.jpg"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="styleType">Tipo de Estilo</Label>
-            <Input
-              id="styleType"
-              value={content.styleType || ''}
-              onChange={(e) => onUpdate({ styleType: e.target.value })}
-              placeholder="Natural, Clássico, etc."
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="ctaText">Texto do Botão</Label>
-            <Input
-              id="ctaText"
-              value={content.ctaText || ''}
-              onChange={(e) => onUpdate({ ctaText: e.target.value })}
-              placeholder="Ex: Saiba Mais"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="ctaUrl">URL do Botão</Label>
-            <Input
-              id="ctaUrl"
-              value={content.ctaUrl || ''}
-              onChange={(e) => onUpdate({ ctaUrl: e.target.value })}
-              placeholder="https://exemplo.com/pagina"
-            />
-          </div>
-        </>
-      );
-    
-    case 'offer':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
-            <Input
-              id="title"
-              value={content.title || ''}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-              placeholder="Título da Oferta"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="subtitle">Subtítulo</Label>
-            <Input
-              id="subtitle"
-              value={content.subtitle || ''}
-              onChange={(e) => onUpdate({ subtitle: e.target.value })}
-              placeholder="Subtítulo da Oferta"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Descrição</Label>
-            <Textarea
-              id="description"
-              value={content.description || ''}
-              onChange={(e) => onUpdate({ description: e.target.value })}
-              placeholder="Descrição da Oferta"
-              className="min-h-[80px]"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="productImage">Imagem do Produto</Label>
-            <Input
-              id="productImage"
-              value={content.productImage || ''}
-              onChange={(e) => onUpdate({ productImage: e.target.value })}
-              placeholder="https://exemplo.com/produto.jpg"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <Label htmlFor="price">Preço</Label>
-              <Input
-                id="price"
-                value={content.price || ''}
-                onChange={(e) => onUpdate({ price: e.target.value })}
-                placeholder="R$ 39,90"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="regularPrice">Preço Normal</Label>
-              <Input
-                id="regularPrice"
-                value={content.regularPrice || ''}
-                onChange={(e) => onUpdate({ regularPrice: e.target.value })}
-                placeholder="R$ 99,90"
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="ctaText">Texto do Botão</Label>
-            <Input
-              id="ctaText"
-              value={content.ctaText || ''}
-              onChange={(e) => onUpdate({ ctaText: e.target.value })}
-              placeholder="COMPRAR AGORA"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="ctaUrl">URL do Botão</Label>
-            <Input
-              id="ctaUrl"
-              value={content.ctaUrl || ''}
-              onChange={(e) => onUpdate({ ctaUrl: e.target.value })}
-              placeholder="https://exemplo.com/checkout"
-            />
-          </div>
-        </>
-      );
-    
-    case 'style-result':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
-            <Input
-              id="title"
-              value={content.title || ''}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-              placeholder="Título do Resultado"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Descrição</Label>
-            <Textarea
-              id="description"
-              value={content.description || ''}
-              onChange={(e) => onUpdate({ description: e.target.value })}
-              placeholder="Descrição do estilo"
-              className="min-h-[100px]"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="imageUrl">URL da Imagem</Label>
-            <Input
-              id="imageUrl"
-              value={content.imageUrl || ''}
-              onChange={(e) => onUpdate({ imageUrl: e.target.value })}
-              placeholder="https://exemplo.com/estilo.jpg"
-            />
-          </div>
-        </>
-      );
-    
-    case 'secondary-styles':
-      return (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
-            <Input
-              id="title"
-              value={content.title || ''}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-              placeholder="Estilos Complementares"
-            />
-          </div>
-          <p className="text-sm text-[#8F7A6A] mt-2">
-            Os estilos secundários são carregados automaticamente com base no resultado do quiz.
-          </p>
-        </>
-      );
-    
-    default:
-      return commonInputs;
-  }
 }
 
 export default PropertiesPanel;

@@ -1,9 +1,10 @@
 
 import React from 'react';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Block } from '@/types/editor';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RichTextEditor } from '@/components/editor/RichTextEditor';
 
 interface HeadlineBlockEditorProps {
   block: Block;
@@ -17,66 +18,57 @@ const HeadlineBlockEditor: React.FC<HeadlineBlockEditorProps> = ({ block, onUpda
     <div className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="title">Título</Label>
-        <Textarea
+        <Input
           id="title"
-          rows={2}
           value={content.title || ''}
           onChange={(e) => onUpdate({ title: e.target.value })}
-          placeholder="Digite o título aqui"
+          placeholder="Digite o título"
         />
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo</Label>
-        <Textarea
+        <Input
           id="subtitle"
-          rows={2}
           value={content.subtitle || ''}
           onChange={(e) => onUpdate({ subtitle: e.target.value })}
-          placeholder="Digite o subtítulo aqui"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="textColor">Cor do texto</Label>
-        <Input
-          id="textColor"
-          type="color"
-          value={content.textColor || '#432818'}
-          onChange={(e) => onUpdate({ textColor: e.target.value })}
+          placeholder="Digite o subtítulo"
         />
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="alignment">Alinhamento</Label>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            className={`p-2 border rounded-md ${
-              (content.alignment || 'center') === 'left' ? 'bg-[#B89B7A]/20' : ''
-            }`}
-            onClick={() => onUpdate({ alignment: 'left' })}
-          >
-            Esquerda
-          </button>
-          <button
-            type="button"
-            className={`p-2 border rounded-md ${
-              (content.alignment || 'center') === 'center' ? 'bg-[#B89B7A]/20' : ''
-            }`}
-            onClick={() => onUpdate({ alignment: 'center' })}
-          >
-            Centro
-          </button>
-          <button
-            type="button"
-            className={`p-2 border rounded-md ${
-              (content.alignment || 'center') === 'right' ? 'bg-[#B89B7A]/20' : ''
-            }`}
-            onClick={() => onUpdate({ alignment: 'right' })}
-          >
-            Direita
-          </button>
+        <Select
+          value={content.alignment || 'left'}
+          onValueChange={(value) => onUpdate({ alignment: value })}
+        >
+          <SelectTrigger id="alignment">
+            <SelectValue placeholder="Selecione o alinhamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="left">Esquerda</SelectItem>
+            <SelectItem value="center">Centro</SelectItem>
+            <SelectItem value="right">Direita</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="textColor">Cor do texto</Label>
+        <div className="flex space-x-2">
+          <Input
+            id="textColor"
+            type="color"
+            value={content.textColor || '#432818'}
+            onChange={(e) => onUpdate({ textColor: e.target.value })}
+            className="w-12"
+          />
+          <Input
+            value={content.textColor || '#432818'}
+            onChange={(e) => onUpdate({ textColor: e.target.value })}
+            placeholder="#000000"
+            className="flex-1"
+          />
         </div>
       </div>
     </div>
