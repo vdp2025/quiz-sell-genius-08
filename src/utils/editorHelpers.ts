@@ -15,7 +15,8 @@ export function getEditorTitle(sectionPath: string): string {
     'offer.benefits': 'Benefícios',
     'offer.pricing': 'Preço e Botão de Compra',
     'offer.testimonials': 'Depoimentos',
-    'offer.guarantee': 'Garantia'
+    'offer.guarantee': 'Garantia',
+    'result': 'RESULTADO'
   };
   
   return map[sectionPath] || sectionPath;
@@ -81,6 +82,40 @@ export function renderContentEditor(
           content={current.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
+      );
+      
+    case 'result':
+      return (
+        <div className="space-y-4">
+          {Object.entries(current.content || {}).map(([key, value]) => {
+            if (typeof value === 'string') {
+              return (
+                <div key={key} className="space-y-2">
+                  <label htmlFor={key} className="text-sm font-medium capitalize">
+                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                  </label>
+                  {value.length > 100 ? (
+                    <textarea
+                      id={key}
+                      value={value}
+                      onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
+                      className="w-full min-h-[100px] p-2 border rounded-md"
+                    />
+                  ) : (
+                    <input
+                      id={key}
+                      type="text"
+                      value={value}
+                      onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                    />
+                  )}
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
       );
       
     default:
