@@ -3,6 +3,7 @@ import React from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { EditorBlock, EditableContent } from '@/types/editor';
+import { StyleControls } from '@/components/editor/controls/StyleControls';
 
 interface PropertiesPanelProps {
   selectedComponentId: string | null;
@@ -37,16 +38,8 @@ const PropertiesPanel = ({
     );
   }
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdate?.({ title: e.target.value });
-  };
-
-  const handleAlignmentChange = (alignment: 'left' | 'center' | 'right') => {
-    onUpdate?.({ alignment });
-  };
-
   return (
-    <div className="h-full p-4 bg-white">
+    <div className="h-full p-4 bg-white overflow-y-auto">
       <div className="flex justify-between items-center border-b pb-4 mb-4">
         <h2 className="text-lg font-playfair text-[#432818]">Propriedades</h2>
         <Button variant="ghost" size="sm" onClick={onClose}>
@@ -54,84 +47,60 @@ const PropertiesPanel = ({
         </Button>
       </div>
       
-      <div className="space-y-4">
-        <p className="text-sm text-[#8F7A6A]">
-          Editando componente: {selectedBlock.type}
-        </p>
-        
+      <div className="space-y-6">
+        {/* Content Properties */}
         <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium text-[#432818] block mb-1">
-              Título
-            </label>
-            <input 
-              type="text" 
-              className="w-full border border-[#B89B7A]/30 rounded-md p-2 text-sm" 
-              placeholder="Insira um título"
-              value={selectedBlock.content.title || ''}
-              onChange={handleTitleChange}
-            />
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium text-[#432818] block mb-1">
-              Alinhamento
-            </label>
-            <div className="flex space-x-2">
-              <Button 
-                variant={selectedBlock.content.alignment === 'left' ? 'default' : 'outline'} 
-                size="sm" 
-                className="flex-1"
-                onClick={() => handleAlignmentChange('left')}
-              >
-                Esquerda
-              </Button>
-              <Button 
-                variant={selectedBlock.content.alignment === 'center' ? 'default' : 'outline'} 
-                size="sm" 
-                className="flex-1"
-                onClick={() => handleAlignmentChange('center')}
-              >
-                Centro
-              </Button>
-              <Button 
-                variant={selectedBlock.content.alignment === 'right' ? 'default' : 'outline'} 
-                size="sm" 
-                className="flex-1"
-                onClick={() => handleAlignmentChange('right')}
-              >
-                Direita
-              </Button>
-            </div>
-          </div>
-
-          {/* Add more property fields based on block type */}
-          {selectedBlock.type === 'text' && (
-            <div>
-              <label className="text-sm font-medium text-[#432818] block mb-1">
-                Texto
-              </label>
-              <textarea 
-                className="w-full border border-[#B89B7A]/30 rounded-md p-2 text-sm" 
-                placeholder="Insira o texto"
-                value={selectedBlock.content.text || ''}
-                onChange={(e) => onUpdate?.({ text: e.target.value })}
-                rows={4}
-              />
-            </div>
+          <h3 className="text-sm font-medium text-[#432818]">Conteúdo</h3>
+          {selectedBlock.type === 'image' && (
+            <>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">URL da Imagem</label>
+                <input 
+                  type="text"
+                  className="w-full mt-1 p-2 border rounded"
+                  value={selectedBlock.content.imageUrl || ''}
+                  onChange={(e) => onUpdate?.({ imageUrl: e.target.value })}
+                  placeholder="https://exemplo.com/imagem.jpg"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">Texto Alternativo</label>
+                <input
+                  type="text"
+                  className="w-full mt-1 p-2 border rounded"
+                  value={selectedBlock.content.imageAlt || ''}
+                  onChange={(e) => onUpdate?.({ imageAlt: e.target.value })}
+                  placeholder="Descrição da imagem"
+                />
+              </div>
+            </>
           )}
+        </div>
 
-          {/* Delete button */}
-          <div className="pt-4 border-t mt-6">
-            <Button 
-              variant="destructive" 
-              size="sm" 
-              className="w-full"
-              onClick={onDelete}
-            >
-              Excluir Componente
-            </Button>
-          </div>
+        {/* Style Properties */}
+        <div className="space-y-4">
+          <h3 className="text-sm font-medium text-[#432818]">Estilos</h3>
+          <StyleControls
+            style={selectedBlock.content.style || {}}
+            onUpdate={(newStyle) => {
+              onUpdate?.({
+                ...selectedBlock.content,
+                style: newStyle
+              });
+            }}
+          />
+        </div>
+
+        {/* Delete button */}
+        <div className="pt-4 border-t">
+          <Button 
+            variant="destructive" 
+            size="sm" 
+            className="w-full"
+            onClick={onDelete}
+          >
+            Excluir Componente
+          </Button>
         </div>
       </div>
     </div>

@@ -1,14 +1,15 @@
-
 import React from 'react';
 import { Block } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { StyleResult } from '@/types/quiz';
+import { StyleControls } from '@/components/editor/controls/StyleControls';
 
 interface BlockRendererProps {
   block: Block;
   primaryStyle: StyleResult;
   isSelected: boolean;
   onSelect: () => void;
+  onUpdate?: (content: any) => void;
   isDragging?: boolean;
 }
 
@@ -17,24 +18,57 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   primaryStyle,
   isSelected,
   onSelect,
+  onUpdate,
   isDragging = false
 }) => {
-  // Render different block types
+  // Render different block types with their styles
   const renderBlockContent = () => {
     const content = block.content;
+    const style = content.style || {};
     
+    const containerStyle = {
+      backgroundColor: style.backgroundColor,
+      margin: style.margin,
+      padding: style.padding,
+      borderRadius: style.borderRadius
+    };
+    
+    const imageStyle = {
+      width: style.width,
+      height: style.height,
+      objectFit: style.objectFit as 'cover' | 'contain'
+    };
+
     switch (block.type) {
       case 'header':
         return (
-          <div className="text-center py-4">
+          <div style={containerStyle} className="text-center py-4">
             {content.logo && (
-              <img src={content.logo} alt={content.logoAlt || 'Logo'} className="h-16 mx-auto mb-4" />
+              <img 
+                src={content.logo} 
+                alt={content.logoAlt || 'Logo'} 
+                style={imageStyle} 
+                className="mx-auto mb-4"
+              />
             )}
-            <h1 className="text-2xl font-semibold mb-2 text-[#432818]">{content.title || 'Olá, seu Estilo Predominante é:'}</h1>
-            {content.subtitle && <p className="text-[#8F7A6A]">{content.subtitle}</p>}
+            <h1 className="text-2xl font-semibold mb-2 text-[#432818]">
+              {content.title || 'Olá, seu Estilo Predominante é:'}
+            </h1>
           </div>
         );
-        
+
+      case 'image':
+        return (
+          <div style={containerStyle} className="py-4">
+            <img 
+              src={content.imageUrl || 'https://placehold.co/600x400?text=Imagem'} 
+              alt={content.imageAlt || 'Imagem'} 
+              style={imageStyle}
+              className="mx-auto"
+            />
+          </div>
+        );
+
       case 'headline':
         return (
           <div className={`text-${content.alignment || 'center'} py-4`}>
@@ -44,28 +78,14 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             {content.subtitle && <p className="text-[#8F7A6A]">{content.subtitle}</p>}
           </div>
         );
-        
+
       case 'text':
         return (
           <div className={`text-${content.alignment || 'left'} py-4`}>
             <p className="text-[#432818]">{content.text || 'Digite seu texto aqui...'}</p>
           </div>
         );
-        
-      case 'image':
-        return (
-          <div className="py-4 flex justify-center">
-            <img 
-              src={content.imageUrl || 'https://placehold.co/600x400?text=Imagem'} 
-              alt={content.imageAlt || 'Imagem'} 
-              style={{ 
-                width: content.width || '100%',
-                borderRadius: content.borderRadius || '8px'
-              }}
-            />
-          </div>
-        );
-        
+
       case 'benefits':
         return (
           <div className="py-4">
@@ -80,7 +100,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </ul>
           </div>
         );
-        
+
       case 'pricing':
         return (
           <div className="py-6 text-center">
@@ -102,7 +122,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             )}
           </div>
         );
-        
+
       case 'guarantee':
         return (
           <div className="py-4 flex flex-col md:flex-row items-center gap-6 bg-[#FAF9F7] p-6 rounded-lg">
@@ -115,7 +135,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </div>
           </div>
         );
-        
+
       case 'cta':
         return (
           <div className="py-6 text-center">
@@ -127,7 +147,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </button>
           </div>
         );
-        
+
       case 'style-result':
         return (
           <div className="py-4">
@@ -146,7 +166,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             )}
           </div>
         );
-        
+
       case 'secondary-styles':
         return (
           <div className="py-4">
@@ -160,7 +180,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </div>
           </div>
         );
-        
+
       case 'hero-section':
         return (
           <div className="py-6">
@@ -203,7 +223,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </div>
           </div>
         );
-        
+
       case 'products':
         return (
           <div className="py-6">
@@ -227,7 +247,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </div>
           </div>
         );
-        
+
       case 'testimonials':
         return (
           <div className="py-6">
@@ -250,7 +270,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             )}
           </div>
         );
-        
+
       case 'bonus-carousel':
         return (
           <div className="py-6">
@@ -272,7 +292,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </div>
           </div>
         );
-        
+
       default:
         return <p>Bloco não reconhecido: {block.type}</p>;
     }
@@ -282,12 +302,26 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     <div
       onClick={onSelect}
       className={cn(
-        "border-2 p-4 mb-4 rounded-lg cursor-pointer transition-all",
-        isSelected ? "border-[#B89B7A] bg-[#FAF9F7]" : "border-dashed border-gray-300 hover:border-[#B89B7A]/50",
+        "relative p-4 rounded-lg transition-all duration-200",
+        isSelected ? "ring-2 ring-[#B89B7A] bg-[#FAF9F7]" : "border-2 border-dashed border-gray-300 hover:border-[#B89B7A]/50",
         isDragging && "opacity-50"
       )}
     >
       {renderBlockContent()}
+      
+      {isSelected && onUpdate && (
+        <div className="mt-4 p-4 border-t">
+          <StyleControls
+            style={block.content.style || {}}
+            onUpdate={(newStyle) => {
+              onUpdate({
+                ...block.content,
+                style: newStyle
+              });
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
