@@ -19,8 +19,6 @@ interface BlockRendererProps {
   onSelect?: () => void;
   isPreview?: boolean;
   primaryStyle?: StyleResult;
-  onClick?: () => void;
-  onUpdate?: (content: any) => void;
   styleType?: string;
 }
 
@@ -30,8 +28,6 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
   onSelect = () => {},
   isPreview = false,
   primaryStyle,
-  onClick,
-  onUpdate,
   styleType = 'Natural'
 }) => {
   const renderBlockContent = () => {
@@ -55,7 +51,12 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
         return <GuaranteeBlockPreview content={block.content} styleType={styleType} />;
         
       case 'testimonials':
-        return <TestimonialsBlockPreview content={block.content} styleType={styleType} />;
+        return <TestimonialsBlockPreview 
+          content={block.content} 
+          styleType={styleType}
+          isPreview={isPreview}
+          block={block}
+        />;
         
       case 'faq':
         return <FAQBlockPreview content={block.content} styleType={styleType} />;
@@ -77,7 +78,6 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
       )}
       onClick={() => {
         if (!isPreview) {
-          if (onClick) onClick();
           onSelect();
         }
       }}

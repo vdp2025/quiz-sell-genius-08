@@ -9,9 +9,32 @@ interface BenefitsBlockPreviewProps {
     style?: any;
   };
   styleType?: string;
+  isPreview?: boolean;
+  block?: any;
 }
 
-const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content, styleType }) => {
+const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ 
+  content, 
+  styleType = 'Natural',
+  isPreview,
+  block
+}) => {
+  const getStyleColor = () => {
+    const styleColors: Record<string, string> = {
+      'Natural': '#B89B7A',
+      'Clássico': '#9F9B9D',
+      'Contemporâneo': '#3E4152',
+      'Elegante': '#9B7A6D',
+      'Romântico': '#D69BCD',
+      'Sexy': '#DF5461',
+      'Dramático': '#465362',
+      'Criativo': '#E9742B'
+    };
+    
+    return styleColors[styleType] || '#B89B7A';
+  };
+  
+  const styleColor = getStyleColor();
   const defaultBenefits = [
     "Como montar looks com intenção (e não no improviso)",
     "Como usar suas cores, modelagens e tecidos a seu favor",
@@ -24,7 +47,7 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content, st
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden" style={content.style}>
       <div className="p-6">
-        <h2 className="text-2xl font-playfair font-bold text-[#aa6b5d] mb-3 text-center">
+        <h2 className="text-2xl font-playfair font-bold mb-3 text-center" style={{ color: styleColor }}>
           {content.title || "O Guia de Estilo e Imagem + Bônus Exclusivos"}
         </h2>
         

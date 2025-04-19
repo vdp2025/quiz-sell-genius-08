@@ -5,6 +5,8 @@ import { StyleResult } from '@/types/quiz';
 import { Edit, Trash, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import BlockRenderer from './BlockRenderer';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface EditableBlockProps {
   block: Block;
@@ -25,8 +27,29 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
   styleType,
   onDelete
 }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({
+    id: block.id,
+    disabled: isPreview
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 999 : 1
+  };
+
   const handleClick = () => {
-    onSelect();
+    if (!isPreview) {
+      onSelect();
+    }
   };
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -53,6 +76,8 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
 
   return (
     <div
+      ref={setNodeRef}
+      style={style}
       className={cn(
         "group relative transition-all",
         isSelected
@@ -69,13 +94,13 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
           isPreview={false}
           isSelected={isSelected}
           onSelect={handleClick}
-          onClick={handleClick}
         />
         
         <div className="absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]"
-            onClick={(e) => e.stopPropagation()}
+            {...attributes}
+            {...listeners}
           >
             <GripVertical className="w-4 h-4 text-[#8F7A6A] cursor-move" />
           </button>

@@ -7,16 +7,16 @@ interface TestimonialsBlockPreviewProps {
   content: EditableContent;
   styleType?: string;
   isPreview?: boolean;
-  onUpdate?: (content: any) => void;
   block?: EditorBlock;
+  onUpdate?: (content: any) => void;
 }
 
 const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ 
   content, 
   styleType = 'Natural',
   isPreview,
-  onUpdate,
-  block
+  block,
+  onUpdate
 }) => {
   const getStyleColor = () => {
     const styleColors: Record<string, string> = {

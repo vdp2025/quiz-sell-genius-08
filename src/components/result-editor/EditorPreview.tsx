@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
 import { EditableBlock } from './EditableBlock';
@@ -53,7 +53,6 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
       <div className="max-w-4xl mx-auto py-8 px-4">
         {blocks.length === 0 ? (
           <EmptyEditor onAddBlock={(type) => {
-            // This would typically be handled in the parent component
             console.log('Add block of type:', type);
           }} />
         ) : (
@@ -87,3 +86,5 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
     </div>
   );
 };
+
+export default EditorPreview;

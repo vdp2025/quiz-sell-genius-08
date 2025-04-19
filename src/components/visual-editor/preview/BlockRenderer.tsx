@@ -68,9 +68,9 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
 
   switch (block.type) {
     case 'headline':
-      return <HeadlineBlockPreview content={block.content} styleType={primaryStyle?.category} />;
+      return <HeadlineBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
     case 'text':
-      return <TextBlockPreview content={block.content} />;
+      return <TextBlockPreview content={block.content} isPreview={isPreview} block={block} />;
     case 'style-result':
       return (
         <StyleResultSection
@@ -81,11 +81,11 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
         />
       );
     case 'style-hero':
-      return <StyleHeroBlockPreview content={block.content} styleType={primaryStyle?.category || 'Natural'} />;
+      return <StyleHeroBlockPreview content={block.content} styleType={primaryStyle?.category || 'Natural'} isPreview={isPreview} block={block} />;
     case 'offer':
-      return <StyleOfferBlockPreview content={block.content} />;
+      return <StyleOfferBlockPreview content={block.content} isPreview={isPreview} block={block} />;
     case 'benefits':
-      return <BenefitsBlockPreview content={block.content} styleType={primaryStyle?.category} />;
+      return <BenefitsBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
     case 'testimonials':
       return <TestimonialsBlockPreview 
         content={block.content} 
@@ -95,9 +95,9 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
         block={block}
       />;
     case 'guarantee':
-      return <GuaranteeBlockPreview content={block.content} styleType={primaryStyle?.category} />;
+      return <GuaranteeBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
     case 'two-column':
-      return <TwoColumnBlockPreview content={block.content} styleType={primaryStyle?.category} />;
+      return <TwoColumnBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>

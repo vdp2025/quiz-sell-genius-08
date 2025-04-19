@@ -10,9 +10,11 @@ interface HeadlineBlockPreviewProps {
     style?: any;
   };
   styleType?: string;
+  isPreview?: boolean;
+  block?: any;
 }
 
-const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content, styleType }) => {
+const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content, styleType, isPreview, block }) => {
   const textColor = content.textColor || '#432818';
   const alignment = content.alignment || 'center';
   

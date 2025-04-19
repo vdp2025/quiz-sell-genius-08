@@ -1,6 +1,5 @@
 
 import { useState, useCallback } from 'react';
-import { Block } from '@/types/editor';
 
 export const useBlockDragging = (onReorder: (sourceIndex: number, destinationIndex: number) => void) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -9,10 +8,15 @@ export const useBlockDragging = (onReorder: (sourceIndex: number, destinationInd
     setIsDragging(true);
   }, []);
 
-  const handleDragEnd = useCallback((source: number, destination: number) => {
+  const handleDragEnd = useCallback((result: any) => {
     setIsDragging(false);
-    if (destination !== undefined && source !== destination) {
-      onReorder(source, destination);
+    
+    if (!result.destination) {
+      return;
+    }
+    
+    if (result.source.index !== result.destination.index) {
+      onReorder(result.source.index, result.destination.index);
     }
   }, [onReorder]);
 
