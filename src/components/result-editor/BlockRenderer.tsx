@@ -2,32 +2,32 @@
 import React from 'react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
-import { HeaderBlockPreview } from './block-previews/HeaderBlockPreview';
-import { HeadlineBlockPreview } from './block-previews/HeadlineBlockPreview';
-import { TextBlockPreview } from './block-previews/TextBlockPreview';
-import { ImageBlockPreview } from './block-previews/ImageBlockPreview';
+import HeaderBlockPreview from './block-previews/HeaderBlockPreview';
+import HeadlineBlockPreview from './block-previews/HeadlineBlockPreview';
+import TextBlockPreview from './block-previews/TextBlockPreview';
+import ImageBlockPreview from './block-previews/ImageBlockPreview';
 import { StyleResultBlockPreview } from './block-previews/StyleResultBlockPreview';
-import { SecondaryStylesBlockPreview } from './block-previews/SecondaryStylesBlockPreview';
-import { BenefitsBlockPreview } from './block-previews/BenefitsBlockPreview';
-import { PricingBlockPreview } from './block-previews/PricingBlockPreview';
-import { TestimonialsBlockPreview } from './block-previews/TestimonialsBlockPreview';
-import { HeroSectionBlockPreview } from './block-previews/HeroSectionBlockPreview';
-import { ProductsBlockPreview } from './block-previews/ProductsBlockPreview';
-import { CTABlockPreview } from './block-previews/CTABlockPreview';
-import { GuaranteeBlockPreview } from './block-previews/GuaranteeBlockPreview';
-import { SpacerBlockPreview } from './block-previews/SpacerBlockPreview';
-import { IconBlockPreview } from './block-previews/IconBlockPreview';
-import { TwoColumnBlockPreview } from './block-previews/TwoColumnBlockPreview';
-import { VideoBlockPreview } from './block-previews/VideoBlockPreview';
-import { CarouselBlockPreview } from './block-previews/CarouselBlockPreview';
-import { CustomCodeBlockPreview } from './block-previews/CustomCodeBlockPreview';
-import { AnimationBlockPreview } from './block-previews/AnimationBlockPreview';
-import { FAQBlockPreview } from './block-previews/FAQBlockPreview';
+import SecondaryStylesBlockPreview from './block-previews/SecondaryStylesBlockPreview';
+import BenefitsBlockPreview from './block-previews/BenefitsBlockPreview';
+import PricingBlockPreview from './block-previews/PricingBlockPreview';
+import TestimonialsBlockPreview from './block-previews/TestimonialsBlockPreview';
+import HeroSectionBlockPreview from './block-previews/HeroSectionBlockPreview';
+import ProductsBlockPreview from './block-previews/ProductsBlockPreview';
+import CTABlockPreview from './block-previews/CTABlockPreview';
+import GuaranteeBlockPreview from './block-previews/GuaranteeBlockPreview';
+import SpacerBlockPreview from './block-previews/SpacerBlockPreview';
+import IconBlockPreview from './block-previews/IconBlockPreview';
+import TwoColumnBlockPreview from './block-previews/TwoColumnBlockPreview';
+import VideoBlockPreview from './block-previews/VideoBlockPreview';
+import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
+import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
+import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
+import FAQBlockPreview from './block-previews/FAQBlockPreview';
 
 interface BlockRendererProps {
   block: Block;
   primaryStyle?: StyleResult;
-  styleType?: string; // Add styleType prop
+  styleType?: string;
 }
 
 export const BlockRenderer: React.FC<BlockRendererProps> = ({ 

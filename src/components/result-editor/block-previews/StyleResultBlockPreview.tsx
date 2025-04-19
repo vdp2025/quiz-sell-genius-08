@@ -10,7 +10,7 @@ interface StyleResultBlockPreviewProps {
   styleType?: string;
 }
 
-export const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
+const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
   content,
   primaryStyle,
   styleType
@@ -47,3 +47,6 @@ export const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = (
     </div>
   );
 };
+
+export default StyleResultBlockPreview;
+export { StyleResultBlockPreview };
