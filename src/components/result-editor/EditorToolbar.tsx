@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
+import { Save, Eye, RefreshCw, Palette, Download } from 'lucide-react';
+import { exportProjectAsJson } from '@/utils/exportUtils';
 
 interface EditorToolbarProps {
   onSave: () => void;
@@ -9,6 +10,7 @@ interface EditorToolbarProps {
   onPreviewToggle: () => void;
   onReset: () => void;
   onEditGlobalStyles: () => void;
+  resultPageConfig?: any;
 }
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -16,8 +18,15 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   isPreviewMode,
   onPreviewToggle,
   onReset,
-  onEditGlobalStyles
+  onEditGlobalStyles,
+  resultPageConfig
 }) => {
+  const handleExport = () => {
+    if (resultPageConfig) {
+      exportProjectAsJson(resultPageConfig);
+    }
+  };
+
   return (
     <div className="border-b bg-white px-4 py-3 flex items-center justify-between">
       <div>
@@ -53,6 +62,15 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Resetar
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExport}
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Exportar JSON
         </Button>
         
         <Button

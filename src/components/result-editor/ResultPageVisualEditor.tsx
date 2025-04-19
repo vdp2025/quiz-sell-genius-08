@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -51,6 +50,7 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({ selectedStyle })
           onPreviewToggle={togglePreview}
           onReset={handleReset}
           onEditGlobalStyles={toggleGlobalStyles}
+          resultPageConfig={resultPageConfig}  // Adicione esta linha
         />
         
         <ResizablePanelGroup direction="horizontal" className="flex-1">
