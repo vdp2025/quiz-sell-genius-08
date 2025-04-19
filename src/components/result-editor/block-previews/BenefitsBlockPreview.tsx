@@ -18,7 +18,7 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
     "Como parar de comprar por impulso e montar um guarda-roupa funcional"
   ];
 
-  const benefits = content.items || defaultBenefits;
+  const benefits = content.items && content.items.length > 0 ? content.items : defaultBenefits;
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden" style={content.style}>
@@ -29,7 +29,7 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
         
         {content.subtitle && (
           <p className="text-[#666] mb-6 text-center">
-            {content.subtitle || "Criado para mulheres que querem muito mais do que \"saber seu estilo\". Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade."}
+            {content.subtitle}
           </p>
         )}
         

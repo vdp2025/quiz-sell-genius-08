@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Block } from '@/types/editor';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
 interface BenefitsBlockEditorProps {
   block: Block;
@@ -45,11 +46,12 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo</Label>
-        <Input
+        <Textarea
           id="subtitle"
           value={content.subtitle || ''}
           onChange={(e) => onUpdate({ subtitle: e.target.value })}
           placeholder="Ex: Criado para mulheres que querem muito mais do que 'saber seu estilo'."
+          className="min-h-[80px]"
         />
       </div>
       
@@ -68,17 +70,18 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
         
         {(content.items || []).map((item: string, index: number) => (
           <div key={index} className="flex items-center space-x-2">
-            <Input
+            <Textarea
               value={item}
               onChange={(e) => handleUpdateItem(index, e.target.value)}
               placeholder="Descrição do benefício"
+              className="min-h-[60px]"
             />
             <Button 
               type="button" 
               size="sm" 
               variant="ghost" 
               onClick={() => handleRemoveItem(index)}
-              className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0"
             >
               <Trash2 className="h-4 w-4" />
             </Button>

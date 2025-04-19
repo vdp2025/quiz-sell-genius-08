@@ -8,6 +8,11 @@ import { styleConfig } from '@/config/styleConfig';
 import { StyleResultSection } from '@/components/result/StyleResult';
 import StyleHeroBlockPreview from '@/components/result-editor/block-previews/StyleHeroBlockPreview';
 import StyleOfferBlockPreview from '@/components/result-editor/block-previews/StyleOfferBlockPreview';
+import BenefitsBlockPreview from '@/components/result-editor/block-previews/BenefitsBlockPreview';
+import TestimonialsBlockPreview from '@/components/result-editor/block-previews/TestimonialsBlockPreview';
+import TextBlockPreview from '@/components/result-editor/block-previews/TextBlockPreview';
+import HeadlineBlockPreview from '@/components/result-editor/block-previews/HeadlineBlockPreview';
+import GuaranteeBlockPreview from '@/components/result-editor/block-previews/GuaranteeBlockPreview';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -54,32 +59,21 @@ export function BlockRenderer({
 }
 
 function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[]) {
-  if (!primaryStyle) {
+  if (!primaryStyle && (block.type === 'style-result' || block.type === 'secondary-styles')) {
     return <div>Carregando...</div>;
   }
 
   switch (block.type) {
     case 'headline':
-      return (
-        <div className="space-y-2">
-          {block.content.title && (
-            <h2 className="text-2xl font-playfair text-[#432818]">
-              {block.content.title}
-            </h2>
-          )}
-          {block.content.subtitle && (
-            <p className="text-[#8F7A6A]">{block.content.subtitle}</p>
-          )}
-        </div>
-      );
+      return <HeadlineBlockPreview content={block.content} />;
     case 'text':
-      return <p className="text-[#432818]">{block.content.text}</p>;
+      return <TextBlockPreview content={block.content} />;
     case 'style-result':
       return (
         <StyleResultSection
-          primaryStyle={primaryStyle}
-          description={block.content.description || styleConfig[primaryStyle.category].description}
-          image={block.content.imageUrl || styleConfig[primaryStyle.category].image}
+          primaryStyle={primaryStyle!}
+          description={block.content.description || styleConfig[primaryStyle!.category].description}
+          image={block.content.imageUrl || styleConfig[primaryStyle!.category].image}
           secondaryStyles={secondaryStyles || []}
         />
       );
@@ -87,6 +81,12 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
       return <StyleHeroBlockPreview content={block.content} styleType={primaryStyle?.category || 'Natural'} />;
     case 'offer':
       return <StyleOfferBlockPreview content={block.content} />;
+    case 'benefits':
+      return <BenefitsBlockPreview content={block.content} />;
+    case 'testimonials':
+      return <TestimonialsBlockPreview content={block.content} />;
+    case 'guarantee':
+      return <GuaranteeBlockPreview content={block.content} />;
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>

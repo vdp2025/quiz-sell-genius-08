@@ -4,10 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Block } from '@/types/editor';
-import { ImageUploader } from '@/components/editor/ImageUploader';
-import { RichTextEditor } from '@/components/editor/RichTextEditor';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Plus, Trash } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
 interface TestimonialsBlockEditorProps {
   block: Block;
@@ -44,7 +43,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
   return (
     <ScrollArea className="h-[calc(100vh-220px)] pr-4">
       <div className="space-y-6">
-        <div className="space-y-4">
+        <div className="space-y-2">
           <Label>Título da Seção</Label>
           <Input
             value={content.title || ''}
@@ -53,13 +52,12 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
           />
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           <Label>Imagem Principal</Label>
-          <ImageUploader
-            currentImageUrl={content.image || ''}
-            onImageChange={(url) => onUpdate({ image: url })}
-            imageAlt="Imagem de depoimentos"
-            onAltChange={(alt) => onUpdate({ imageAlt: alt })}
+          <Input
+            value={content.image || ''}
+            onChange={(e) => onUpdate({ image: e.target.value })}
+            placeholder="URL da imagem principal"
           />
         </div>
 
@@ -84,24 +82,26 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
                   variant="ghost"
                   size="sm"
                   onClick={() => removeTestimonial(index)}
+                  className="text-red-500 hover:bg-red-50"
                 >
-                  <Trash className="h-4 w-4 text-red-500" />
+                  <Trash className="h-4 w-4" />
                 </Button>
               </div>
 
               <div className="space-y-2">
                 <Label>Texto</Label>
-                <RichTextEditor
-                  initialValue={testimonial.text}
-                  onChange={(value) => handleTestimonialUpdate(index, 'text', value)}
+                <Textarea
+                  value={testimonial.text || ''}
+                  onChange={(e) => handleTestimonialUpdate(index, 'text', e.target.value)}
                   placeholder="Digite o depoimento..."
+                  className="min-h-[100px]"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label>Nome</Label>
                 <Input
-                  value={testimonial.author}
+                  value={testimonial.author || ''}
                   onChange={(e) => handleTestimonialUpdate(index, 'author', e.target.value)}
                   placeholder="Nome do cliente"
                 />
@@ -110,7 +110,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
               <div className="space-y-2">
                 <Label>Cargo/Posição</Label>
                 <Input
-                  value={testimonial.position}
+                  value={testimonial.position || ''}
                   onChange={(e) => handleTestimonialUpdate(index, 'position', e.target.value)}
                   placeholder="Ex: Empresária"
                 />
