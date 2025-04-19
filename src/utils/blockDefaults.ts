@@ -1,3 +1,4 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { EditableContent, EditorBlock } from '@/types/editor';
 
@@ -124,7 +125,11 @@ export const getDefaultContentForType = (blockType: string): EditableContent => 
         ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
         productImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
         bonusImages: [
-          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp'
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp',
+            alt: 'Bônus Exclusivo',
+            title: 'Guia de Visagismo Facial'
+          }
         ],
         bonuses: [
           'Peças-chave do Guarda-Roupa de Sucesso: Itens essenciais que descomplicam a rotina e valorizam o seu estilo pessoal.',
