@@ -3,8 +3,10 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Block } from '@/types/editor';
+import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Block } from '@/types/editor';
+import StyleEditor from '../style-editors/StyleEditor';
 
 interface TwoColumnBlockEditorProps {
   block: Block;
@@ -12,92 +14,124 @@ interface TwoColumnBlockEditorProps {
 }
 
 const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUpdate }) => {
-  const content = block.content;
+  const { content = {} } = block;
   
-  const updateLeftColumn = (data: any) => {
+  const handleLeftColumnUpdate = (leftColumn: any) => {
     onUpdate({
+      ...content,
       leftColumn: {
         ...content.leftColumn,
-        ...data
+        ...leftColumn
       }
     });
   };
   
-  const updateRightColumn = (data: any) => {
+  const handleRightColumnUpdate = (rightColumn: any) => {
     onUpdate({
+      ...content,
       rightColumn: {
         ...content.rightColumn,
-        ...data
+        ...rightColumn
       }
     });
   };
-
+  
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label>Tamanho das Colunas</Label>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label className="text-xs">Esquerda</Label>
-            <Input
-              value={(content.leftColumn?.width || '50%')}
-              onChange={(e) => updateLeftColumn({ width: e.target.value })}
-              placeholder="50%"
-            />
-          </div>
-          <div>
-            <Label className="text-xs">Direita</Label>
-            <Input
-              value={(content.rightColumn?.width || '50%')}
-              onChange={(e) => updateRightColumn({ width: e.target.value })}
-              placeholder="50%"
-            />
-          </div>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <Card className="p-4">
+        <Tabs defaultValue="layout" className="w-full">
+          <TabsList className="w-full mb-4">
+            <TabsTrigger value="layout" className="flex-1">Layout</TabsTrigger>
+            <TabsTrigger value="left" className="flex-1">Coluna Esquerda</TabsTrigger>
+            <TabsTrigger value="right" className="flex-1">Coluna Direita</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="layout" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="columnGap">Espaçamento entre Colunas</Label>
+              <Input
+                id="columnGap"
+                value={content.columnGap || '20px'}
+                onChange={(e) => onUpdate({ ...content, columnGap: e.target.value })}
+                placeholder="ex: 20px ou 1rem"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="leftColumnWidth">Largura da Coluna Esquerda</Label>
+              <Input
+                id="leftColumnWidth"
+                value={(content.leftColumn?.width || '50%')}
+                onChange={(e) => handleLeftColumnUpdate({ width: e.target.value })}
+                placeholder="ex: 50% ou 300px"
+              />
+              <p className="text-xs text-muted-foreground">Em telas pequenas, as colunas serão empilhadas</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="rightColumnWidth">Largura da Coluna Direita</Label>
+              <Input
+                id="rightColumnWidth"
+                value={(content.rightColumn?.width || '50%')}
+                onChange={(e) => handleRightColumnUpdate({ width: e.target.value })}
+                placeholder="ex: 50% ou 300px"
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="left" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="leftContent">Conteúdo da Coluna Esquerda</Label>
+              <Textarea
+                id="leftContent"
+                value={(content.leftColumn?.content || '')}
+                onChange={(e) => handleLeftColumnUpdate({ content: e.target.value })}
+                placeholder="Adicione conteúdo HTML ou texto simples aqui"
+                className="min-h-[150px]"
+              />
+              <p className="text-xs text-muted-foreground">Você pode adicionar HTML básico como &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, etc.</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Estilo da Coluna Esquerda</Label>
+              <StyleEditor
+                style={content.leftColumn?.style || {}}
+                onUpdate={(style) => handleLeftColumnUpdate({ style })}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="right" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="rightContent">Conteúdo da Coluna Direita</Label>
+              <Textarea
+                id="rightContent"
+                value={(content.rightColumn?.content || '')}
+                onChange={(e) => handleRightColumnUpdate({ content: e.target.value })}
+                placeholder="Adicione conteúdo HTML ou texto simples aqui"
+                className="min-h-[150px]"
+              />
+              <p className="text-xs text-muted-foreground">Você pode adicionar HTML básico como &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, etc.</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Estilo da Coluna Direita</Label>
+              <StyleEditor
+                style={content.rightColumn?.style || {}}
+                onUpdate={(style) => handleRightColumnUpdate({ style })}
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </Card>
       
       <div className="space-y-2">
-        <Label htmlFor="columnGap">Espaçamento Entre Colunas</Label>
-        <Input
-          id="columnGap"
-          value={content.columnGap || '20px'}
-          onChange={(e) => onUpdate({ columnGap: e.target.value })}
-          placeholder="20px"
+        <Label>Estilo do Container</Label>
+        <StyleEditor
+          style={content.style || {}}
+          onUpdate={(style) => onUpdate({ ...content, style })}
         />
       </div>
-      
-      <Tabs defaultValue="left">
-        <TabsList className="grid grid-cols-2">
-          <TabsTrigger value="left">Coluna Esquerda</TabsTrigger>
-          <TabsTrigger value="right">Coluna Direita</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="left" className="space-y-4 pt-4">
-          <div className="space-y-2">
-            <Label htmlFor="leftColumnContent">Conteúdo</Label>
-            <Textarea
-              id="leftColumnContent"
-              rows={5}
-              value={(content.leftColumn?.content || '')}
-              onChange={(e) => updateLeftColumn({ content: e.target.value })}
-              placeholder="Conteúdo da coluna esquerda"
-            />
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="right" className="space-y-4 pt-4">
-          <div className="space-y-2">
-            <Label htmlFor="rightColumnContent">Conteúdo</Label>
-            <Textarea
-              id="rightColumnContent"
-              rows={5}
-              value={(content.rightColumn?.content || '')}
-              onChange={(e) => updateRightColumn({ content: e.target.value })}
-              placeholder="Conteúdo da coluna direita"
-            />
-          </div>
-        </TabsContent>
-      </Tabs>
     </div>
   );
 };

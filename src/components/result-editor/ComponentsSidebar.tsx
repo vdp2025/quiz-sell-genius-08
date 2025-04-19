@@ -1,75 +1,102 @@
 
 import React from 'react';
+import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Block } from '@/types/editor';
-import { LayoutTemplate, Type, Image, ListCheck, BarChart2, Clock, ShieldCheck, MousePointer, Palette, Users, Gift, Star, Video, Columns, SplitSquareVertical, LayoutGrid, Space } from 'lucide-react';
+import { 
+  Layout, 
+  Type, 
+  Image, 
+  CreditCard, 
+  Check, 
+  Award, 
+  Sparkles, 
+  ShieldCheck, 
+  Columns, 
+  Palette, 
+  Video, 
+  Layers, 
+  Heart,
+  Share2,
+  Gift,
+  SlidersHorizontal,
+  FileText,
+  Maximize
+} from 'lucide-react';
 
-interface ComponentsSidebarProps {
-  onComponentSelect: (type: Block['type']) => void;
-}
+const componentGroups = [
+  {
+    title: 'Básico',
+    components: [
+      { name: 'Cabeçalho', type: 'header', icon: <Layout className="h-4 w-4" /> },
+      { name: 'Título', type: 'headline', icon: <Type className="h-4 w-4" /> },
+      { name: 'Texto', type: 'text', icon: <FileText className="h-4 w-4" /> },
+      { name: 'Imagem', type: 'image', icon: <Image className="h-4 w-4" /> },
+      { name: 'Duas Colunas', type: 'two-column', icon: <Columns className="h-4 w-4" /> },
+      { name: 'Espaçador', type: 'spacer', icon: <Maximize className="h-4 w-4" /> },
+      { name: 'Ícone Decorativo', type: 'icon', icon: <Sparkles className="h-4 w-4" /> },
+    ]
+  },
+  {
+    title: 'Seções',
+    components: [
+      { name: 'Seção Hero', type: 'hero-section', icon: <Layers className="h-4 w-4" /> },
+      { name: 'Benefícios', type: 'benefits', icon: <Check className="h-4 w-4" /> },
+      { name: 'Depoimentos', type: 'testimonials', icon: <Heart className="h-4 w-4" /> },
+      { name: 'Produtos', type: 'products', icon: <ShieldCheck className="h-4 w-4" /> },
+      { name: 'Carrossel de Bônus', type: 'bonus-carousel', icon: <Gift className="h-4 w-4" /> },
+      { name: 'Garantia', type: 'guarantee', icon: <Award className="h-4 w-4" /> },
+      { name: 'Vídeo', type: 'video', icon: <Video className="h-4 w-4" /> },
+    ]
+  },
+  {
+    title: 'Conversão',
+    components: [
+      { name: 'Preço', type: 'pricing', icon: <CreditCard className="h-4 w-4" /> },
+      { name: 'Botão CTA', type: 'cta', icon: <Share2 className="h-4 w-4" /> },
+    ]
+  },
+  {
+    title: 'Resultado do Quiz',
+    components: [
+      { name: 'Estilo Principal', type: 'style-result', icon: <Palette className="h-4 w-4" /> },
+      { name: 'Estilos Secundários', type: 'secondary-styles', icon: <SlidersHorizontal className="h-4 w-4" /> },
+    ]
+  }
+];
 
-export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
-  onComponentSelect
-}) => {
-  const componentGroups = [
-    {
-      title: 'Básicos',
-      components: [
-        { type: 'header', name: 'Cabeçalho', icon: <LayoutTemplate className="w-4 h-4" /> },
-        { type: 'headline', name: 'Título e Subtítulo', icon: <Type className="w-4 h-4" /> },
-        { type: 'text', name: 'Texto', icon: <Type className="w-4 h-4" /> },
-        { type: 'image', name: 'Imagem', icon: <Image className="w-4 h-4" /> },
-        { type: 'spacer', name: 'Espaçamento', icon: <Space className="w-4 h-4" /> },
-        { type: 'video', name: 'Vídeo', icon: <Video className="w-4 h-4" /> },
-        { type: 'two-column', name: 'Duas Colunas', icon: <Columns className="w-4 h-4" /> },
-      ]
-    },
-    {
-      title: 'Estilo',
-      components: [
-        { type: 'style-result', name: 'Estilo Principal', icon: <Palette className="w-4 h-4" /> },
-        { type: 'secondary-styles', name: 'Estilos Secundários', icon: <Star className="w-4 h-4" /> },
-      ]
-    },
-    {
-      title: 'Página de Venda',
-      components: [
-        { type: 'hero-section', name: 'Seção Hero', icon: <LayoutTemplate className="w-4 h-4" /> },
-        { type: 'benefits', name: 'Benefícios', icon: <ListCheck className="w-4 h-4" /> },
-        { type: 'products', name: 'Produtos', icon: <BarChart2 className="w-4 h-4" /> },
-        { type: 'testimonials', name: 'Depoimentos', icon: <Users className="w-4 h-4" /> },
-        { type: 'pricing', name: 'Preço', icon: <BarChart2 className="w-4 h-4" /> },
-        { type: 'guarantee', name: 'Garantia', icon: <ShieldCheck className="w-4 h-4" /> },
-        { type: 'cta', name: 'Botão CTA', icon: <MousePointer className="w-4 h-4" /> },
-        { type: 'bonus-carousel', name: 'Carrossel de Bônus', icon: <Gift className="w-4 h-4" /> },
-      ]
-    }
-  ];
+type ComponentsSidebarProps = {
+  onComponentSelect: (type: string) => void;
+};
 
+export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
   return (
-    <div className="h-full flex flex-col border-r">
-      <div className="p-4 border-b bg-white">
+    <div className="h-full border-r bg-white">
+      <div className="p-4 border-b">
         <h2 className="font-semibold text-[#432818]">Componentes</h2>
         <p className="text-sm text-[#8F7A6A]">Arraste ou clique para adicionar</p>
       </div>
       
-      <ScrollArea className="flex-1">
+      <ScrollArea className="h-[calc(100vh-10rem)]">
         <div className="p-4 space-y-6">
-          {componentGroups.map((group, groupIndex) => (
-            <div key={groupIndex} className="space-y-2">
-              <h3 className="font-medium text-sm text-[#432818] mb-3">{group.title}</h3>
+          {componentGroups.map((group) => (
+            <div key={group.title} className="space-y-3">
+              <h3 className="text-sm font-medium text-[#432818]">{group.title}</h3>
               <div className="space-y-2">
-                {group.components.map((component, componentIndex) => (
-                  <Button
-                    key={componentIndex}
-                    variant="outline"
-                    className="w-full justify-start border-[#B89B7A]/30 hover:bg-[#FAF9F7] hover:border-[#B89B7A]"
-                    onClick={() => onComponentSelect(component.type as Block['type'])}
+                {group.components.map((component) => (
+                  <Card
+                    key={component.type}
+                    className="p-3 cursor-pointer hover:bg-[#FAF9F7] transition-colors flex items-center gap-2"
+                    onClick={() => onComponentSelect(component.type)}
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('componentType', component.type);
+                    }}
                   >
-                    {component.icon}
-                    <span className="ml-2">{component.name}</span>
-                  </Button>
+                    <div className="bg-[#FAF9F7] rounded-md p-1.5">
+                      {component.icon}
+                    </div>
+                    <span className="text-sm text-[#432818]">{component.name}</span>
+                  </Card>
                 ))}
               </div>
             </div>
@@ -79,5 +106,3 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
     </div>
   );
 };
-
-export default ComponentsSidebar;

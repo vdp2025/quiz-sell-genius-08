@@ -6,10 +6,12 @@ interface TwoColumnBlockPreviewProps {
     leftColumn?: {
       content?: string;
       width?: string;
+      style?: any;
     };
     rightColumn?: {
       content?: string;
       width?: string;
+      style?: any;
     };
     columnGap?: string;
     style?: any;
@@ -23,8 +25,14 @@ const TwoColumnBlockPreview: React.FC<TwoColumnBlockPreviewProps> = ({ content }
   
   return (
     <div style={content.style} className="w-full">
-      <div className="flex flex-wrap" style={{ gap }}>
-        <div style={{ width: leftWidth }} className="bg-[#f9f9f9] p-4 rounded-lg">
+      <div className="flex flex-wrap md:flex-nowrap" style={{ gap }}>
+        <div 
+          style={{ 
+            width: leftWidth,
+            ...content.leftColumn?.style
+          }} 
+          className="w-full md:w-auto bg-[#f9f9f9] p-4 rounded-lg"
+        >
           {content.leftColumn?.content ? (
             <div dangerouslySetInnerHTML={{ __html: content.leftColumn.content }} />
           ) : (
@@ -34,7 +42,13 @@ const TwoColumnBlockPreview: React.FC<TwoColumnBlockPreviewProps> = ({ content }
           )}
         </div>
         
-        <div style={{ width: rightWidth }} className="bg-[#f9f9f9] p-4 rounded-lg">
+        <div 
+          style={{ 
+            width: rightWidth,
+            ...content.rightColumn?.style
+          }} 
+          className="w-full md:w-auto bg-[#f9f9f9] p-4 rounded-lg"
+        >
           {content.rightColumn?.content ? (
             <div dangerouslySetInnerHTML={{ __html: content.rightColumn.content }} />
           ) : (

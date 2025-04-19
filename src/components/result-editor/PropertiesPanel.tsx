@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
 import SpacerBlockEditor from './block-editors/SpacerBlockEditor';
 import VideoBlockEditor from './block-editors/VideoBlockEditor';
 import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
+import IconBlockEditor from './block-editors/IconBlockEditor';
 import StyleEditor from './style-editors/StyleEditor';
 
 interface PropertiesPanelProps {
@@ -88,6 +90,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return 'Vídeo';
       case 'two-column':
         return 'Duas Colunas';
+      case 'icon':
+        return 'Ícone Decorativo';
       default:
         return 'Componente';
     }
@@ -127,6 +131,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return <VideoBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       case 'two-column':
         return <TwoColumnBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'icon':
+        return <IconBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       default:
         return <div>Editor não disponível para este tipo de bloco</div>;
     }
