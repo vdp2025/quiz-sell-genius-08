@@ -50,7 +50,7 @@ const HeroSectionBlockPreview: React.FC<HeroSectionBlockPreviewProps> = ({ conte
             <img
               src={content.heroImage2}
               alt="Gisele Galvão"
-              className="absolute bottom-0 right-0 w-1/2 h-auto rounded-lg shadow-lg transform translate-x-1/4 translate-y-1/4"
+              className="w-full h-auto rounded-lg shadow-lg transform translate-x-1/4 translate-y-1/4"
             />
           )}
         </div>

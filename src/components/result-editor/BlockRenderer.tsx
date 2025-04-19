@@ -59,7 +59,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     case 'testimonials':
       return <TestimonialsBlockPreview content={block.content} />;
     case 'hero-section':
-      return <HeroSectionBlockPreview content={block.content} />;
+      return <HeroSectionBlockPreview 
+        content={block.content} 
+        primaryStyle={primaryStyle || { category: 'Natural', score: 0, percentage: 0 }}
+      />;
     case 'products':
       return <ProductsBlockPreview content={block.content} />;
     case 'cta':
