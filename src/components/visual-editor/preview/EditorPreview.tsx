@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { StylePagePreview } from './StylePagePreview';
+import { Block } from '@/types/editor';
 
 interface EditorPreviewProps {
-  blocks: EditorBlock[];
+  blocks: Block[];
   selectedBlockId: string | null;
   onSelectBlock: (id: string | null) => void;
   isPreviewing: boolean;

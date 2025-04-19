@@ -3,19 +3,22 @@ import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { StyleResult } from '@/types/quiz';
 
 interface BlockRendererProps {
   block: EditorBlock;
   isSelected: boolean;
   onSelect: () => void;
   isPreview: boolean;
+  primaryStyle?: StyleResult;
 }
 
 export function BlockRenderer({
   block,
   isSelected,
   onSelect,
-  isPreview
+  isPreview,
+  primaryStyle
 }: BlockRendererProps) {
   return (
     <div
@@ -28,7 +31,7 @@ export function BlockRenderer({
       )}
     >
       {/* Block Content */}
-      {renderBlockContent(block)}
+      {renderBlockContent(block, primaryStyle)}
 
       {/* Edit Controls */}
       {!isPreview && isSelected && (
@@ -42,7 +45,7 @@ export function BlockRenderer({
   );
 }
 
-function renderBlockContent(block: EditorBlock) {
+function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult) {
   switch (block.type) {
     case 'headline':
       return (
@@ -59,6 +62,17 @@ function renderBlockContent(block: EditorBlock) {
       );
     case 'text':
       return <p className="text-[#432818]">{block.content.text}</p>;
+    case 'style-result':
+      return (
+        <div className="p-4 bg-[#FAF9F7] rounded-lg">
+          <h3 className="text-xl font-playfair text-[#432818]">
+            Estilo {primaryStyle?.category || 'Principal'}
+          </h3>
+          <p className="text-[#8F7A6A]">
+            {block.content.description || 'Descrição do estilo principal'}
+          </p>
+        </div>
+      );
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>
