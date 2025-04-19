@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
@@ -75,6 +74,7 @@ export const EditorPage = () => {
           <ResultPageVisualEditor 
             selectedStyle={selectedStyle}
             onShowTemplates={() => setShowTemplates(true)}
+            styleType={styleCategory}
           />
         </div>
       )}
