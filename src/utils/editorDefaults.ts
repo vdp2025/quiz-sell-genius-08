@@ -1,4 +1,3 @@
-
 import { EditableContent, EditorConfig } from '@/types/editor';
 import { generateId } from './idGenerator';
 
@@ -91,7 +90,24 @@ export const getDefaultContentForType = (type: string): EditableContent => {
     case 'testimonials':
       return { 
         title: 'O que estão dizendo',
-        testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
+        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp',
+        testimonials: [
+          {
+            text: 'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.',
+            author: 'Mariangela',
+            position: 'Engenheira'
+          },
+          {
+            text: 'Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.',
+            author: 'Patrícia Paranhos',
+            position: 'Advogada'
+          },
+          {
+            text: 'A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.',
+            author: 'Sônia Spier',
+            position: 'Terapeuta'
+          }
+        ]
       };
     case 'bonus-carousel':
       return { 
