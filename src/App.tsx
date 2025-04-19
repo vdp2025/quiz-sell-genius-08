@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
 import EditorPage from './pages/EditorPage';
@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<QuizPage />} />
           <Route path="/resultado" element={<ResultPage />} />
-          <Route path="/editor" element={<EditorPage />} />
+          <Route path="/editor" element={<Navigate to="/editor/Natural" replace />} />
           <Route path="/editor/:style" element={<EditorPage />} />
         </Routes>
         <Toaster />
