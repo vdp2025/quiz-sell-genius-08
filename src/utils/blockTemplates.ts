@@ -104,8 +104,8 @@ export const blockTemplates: BlockTemplate[] = [
         'Parar de errar nas compras e economizar tempo'
       ],
       style: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        display: 'flex',
+        flexWrap: 'wrap',
         gap: '20px',
         padding: '30px',
         backgroundColor: '#FAF9F7'
