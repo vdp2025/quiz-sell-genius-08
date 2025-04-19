@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { HeaderBlock } from './blocks/HeaderBlock';
@@ -13,6 +12,7 @@ import { GuaranteeBlock } from './blocks/GuaranteeBlock';
 import { CTABlock } from './blocks/CTABlock';
 import { BonusBlock } from './blocks/BonusBlock';
 import { UrgencyBlock } from './blocks/UrgencyBlock';
+import MentorBlockPreview from '@/components/result-editor/block-previews/MentorBlockPreview';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -66,6 +66,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
           <p className="text-sm text-[#8F7A6A]">Clique para editar esta seção</p>
         </div>
       );
+    case 'mentor':
+      return <MentorBlockPreview content={block.content} />;
     default:
       return (
         <div 

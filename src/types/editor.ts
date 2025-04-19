@@ -22,7 +22,7 @@ export interface EditorBlock {
   type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
          'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon' |
-         'faq' | 'carousel' | 'custom-code' | 'animation-block' | 'bonus' | 'urgency';
+         'faq' | 'carousel' | 'custom-code' | 'animation-block' | 'bonus' | 'urgency' | 'mentor';
   content: EditableContent;
   order: number;
 }

@@ -80,18 +80,18 @@ export const EditorPage = () => {
   useEffect(() => {
     if (!loading && blocks.length === 0) {
       // Use the allowed block types from the editor
-      const allowedBlockTypes: Block['type'][] = [
+      const allowedBlockTypes = [
         'header', 'headline', 'text', 'image', 'benefits', 
         'pricing', 'guarantee', 'cta', 'style-result', 
         'secondary-styles', 'hero-section', 'products',
         'testimonials', 'bonus-carousel', 'video', 'two-column',
         'icon', 'spacer', 'mentor'
-      ];
+      ] as const;
       
       // Add each default block
       salesConfig.defaultBlocks.forEach(block => {
         // Verify the block type is in our allowed list before adding it
-        if (allowedBlockTypes.includes(block.type as Block['type'])) {
+        if (allowedBlockTypes.includes(block.type as any)) {
           actions.handleAddBlock(block.type as Block['type']);
         } else {
           console.warn(`Block type "${block.type}" is not supported by the editor`);
