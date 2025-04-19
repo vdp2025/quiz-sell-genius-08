@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -10,6 +9,7 @@ import EditorToolbar from './EditorToolbar';
 import { GlobalStylesEditor } from './GlobalStylesEditor';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { EditorProps } from '@/types/editorTypes';
+import { TemplateSelector } from './TemplateSelector';
 
 interface ResultPageVisualEditorProps extends EditorProps {
   onShowTemplates?: () => void;
@@ -65,6 +65,14 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           <ResizablePanel defaultSize={55}>
+            <TemplateSelector
+              currentStyle={selectedStyle.category}
+              onTemplateSelect={(template) => {
+                Object.keys(template).forEach(key => {
+                  actions.updateSection(key, template[key]);
+                });
+              }}
+            />
             <EditorPreview
               blocks={blocks}
               selectedBlockId={selectedBlockId}

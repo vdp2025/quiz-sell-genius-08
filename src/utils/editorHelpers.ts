@@ -22,19 +22,6 @@ export function getEditorTitle(sectionPath: string): string {
   return map[sectionPath] || sectionPath;
 }
 
-export function getSectionStyle(sectionPath: string, config: any): any {
-  const pathParts = sectionPath.split('.');
-  let current = { ...config };
-  
-  for (const part of pathParts) {
-    if (current[part]) {
-      current = current[part];
-    }
-  }
-  
-  return current.style || {};
-}
-
 export function renderContentEditor(
   sectionPath: string,
   config: any,
@@ -59,7 +46,7 @@ export function renderContentEditor(
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
-      
+    
     case 'mainContent':
       return (
         <MainContentEditor 
@@ -67,7 +54,7 @@ export function renderContentEditor(
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
-      
+    
     case 'offer.hero':
       return (
         <OfferHeroEditor 
@@ -75,7 +62,7 @@ export function renderContentEditor(
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
-      
+    
     case 'offer.pricing':
       return (
         <PricingEditor 
@@ -83,41 +70,7 @@ export function renderContentEditor(
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
-      
-    case 'result':
-      return (
-        <div className="space-y-4">
-          {Object.entries(current.content || {}).map(([key, value]) => {
-            if (typeof value === 'string') {
-              return (
-                <div key={key} className="space-y-2">
-                  <label htmlFor={key} className="text-sm font-medium capitalize">
-                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                  </label>
-                  {value.length > 100 ? (
-                    <textarea
-                      id={key}
-                      value={value}
-                      onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
-                      className="w-full min-h-[100px] p-2 border rounded-md"
-                    />
-                  ) : (
-                    <input
-                      id={key}
-                      type="text"
-                      value={value}
-                      onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
-                      className="w-full p-2 border rounded-md"
-                    />
-                  )}
-                </div>
-              );
-            }
-            return null;
-          })}
-        </div>
-      );
-      
+    
     default:
       return (
         <div className="space-y-4">
