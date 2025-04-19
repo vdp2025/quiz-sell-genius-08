@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -13,11 +14,13 @@ import { TemplateSelector } from './TemplateSelector';
 
 interface ResultPageVisualEditorProps extends EditorProps {
   onShowTemplates?: () => void;
+  styleType: string; // Add the styleType prop to the interface
 }
 
 export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
   selectedStyle,
-  onShowTemplates
+  onShowTemplates,
+  styleType
 }) => {
   const {
     resultPageConfig,
@@ -27,7 +30,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     isPreviewing,
     isGlobalStylesOpen,
     actions
-  } = useResultPageEditor(selectedStyle.category);
+  } = useResultPageEditor(styleType); // Pass styleType to the hook
 
   if (loading) {
     return (
@@ -66,7 +69,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
 
           <ResizablePanel defaultSize={55}>
             <TemplateSelector
-              currentStyle={selectedStyle.category}
+              currentStyle={styleType}
               onTemplateSelect={(template) => {
                 Object.keys(template).forEach(key => {
                   actions.updateSection(key, template[key]);
@@ -80,6 +83,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
               isPreviewing={isPreviewing}
               primaryStyle={selectedStyle}
               onReorderBlocks={actions.handleReorderBlocks}
+              styleType={styleType}
             />
           </ResizablePanel>
 
