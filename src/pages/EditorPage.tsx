@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -8,6 +9,7 @@ import EditorToolbar from '@/components/result-editor/EditorToolbar';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const EditorPage = () => {
