@@ -82,14 +82,10 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       return {
         title: 'O que você vai receber:',
         images: [
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
-            alt: 'Guia de Estilo - 3 Revistas'
-          },
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
-            alt: 'Todos os produtos e bônus'
-          }
+          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+            alt: 'Guia de Estilo - 3 Revistas' },
+          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            alt: 'Todos os produtos e bônus' }
         ]
       };
     case 'testimonials':
@@ -101,16 +97,12 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       return { 
         title: 'Você também recebe estes bônus',
         bonusImages: [
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
             alt: 'Bônus 1',
-            title: 'Guia de Estilo Digital'
-          },
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            title: 'Guia de Estilo Digital' },
+          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
             alt: 'Bônus 2',
-            title: 'Templates de Looks'
-          }
+            title: 'Templates de Looks' }
         ]
       };
     default:

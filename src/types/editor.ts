@@ -80,7 +80,7 @@ export interface EditableContent {
   icon?: string;
   size?: string;
   color?: string;
-  position?: 'left' | 'center' | 'right';
+  position?: 'left' | 'center' | 'right' | 'bottom' | 'top';
   
   // Video Properties 
   videoUrl?: string;
@@ -95,9 +95,10 @@ export interface EditableContent {
   rightColumn?: any;
   columnGap?: string;
   
-  // Carousel Properties 
+  // Carousel & Products Properties 
   carouselImages?: Array<{url: string; alt: string; caption?: string}>;
   bonusImages?: Array<{url: string; alt: string; title: string}>;
+  images?: Array<{url: string; alt: string; title?: string}>;
   autoPlay?: boolean;
   interval?: number;
   showArrows?: boolean;
@@ -160,7 +161,6 @@ export interface EditableContent {
   faqItems?: Array<{ question: string; answer: string }>;
   defaultOpen?: boolean;
   image?: string;
-  images?: string[];
   height?: string;
   checkoutUrl?: string;
 }

@@ -45,18 +45,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   const renderContent = () => {
     switch (block.type) {
       case 'header':
-        return (
-          <div className="text-center space-y-4" onClick={handleClick}>
-            {block.content.title && (
-              <h1 className="text-2xl font-playfair text-[#432818]">
-                {block.content.title}
-              </h1>
-            )}
-            {block.content.subtitle && (
-              <p className="text-[#8F7A6A]">{block.content.subtitle}</p>
-            )}
-          </div>
-        );
+        return <HeaderBlockPreview content={block.content} />;
       case 'headline':
         return <HeadlineBlockPreview content={block.content} />;
       case 'text':
@@ -113,7 +102,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     }
   };
 
-  // Properly casting the style to React.CSSProperties
   return (
     <div className="relative" style={block.content.style as React.CSSProperties}>
       {renderContent()}

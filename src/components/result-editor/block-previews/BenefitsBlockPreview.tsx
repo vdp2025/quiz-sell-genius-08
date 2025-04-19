@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Check, CheckCircle, CircleCheck, BadgeCheck, Star, Award, Shield, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface BenefitsBlockPreviewProps {
   content: {
@@ -40,21 +39,6 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
     }
   };
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariant = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
-
   return (
     <div
       className="max-w-4xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-[#fff7f3] to-white"
@@ -64,22 +48,17 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
         {content.title || 'Benefícios'}
       </h3>
       
-      <motion.div 
-        className="grid md:grid-cols-2 gap-6"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
+      <div className="grid md:grid-cols-2 gap-6">
         {(content.items || [
           'Aplicar seus estilos com autenticidade',
           'Montar looks práticos para o dia a dia',
           'Usar cores e modelagens que valorizam você',
           'Parar de errar nas compras e economizar'
         ]).map((item, index) => (
-          <motion.div
+          <div
             key={index}
-            className="flex items-start gap-4 p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
-            variants={itemVariant}
+            className="flex items-start gap-4 p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300 animate-fade-in"
+            style={{ animationDelay: `${index * 100}ms` }}
           >
             <div className="flex-shrink-0 mt-1">
               {content.useIcons !== false ? (
@@ -89,9 +68,9 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
               )}
             </div>
             <p className="text-[#1A1818]/80 text-lg">{item}</p>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };

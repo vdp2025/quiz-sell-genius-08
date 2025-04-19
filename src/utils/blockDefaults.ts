@@ -233,7 +233,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         size: '48px',
         color: '#B89B7A',
         title: 'Texto do ícone',
-        position: 'right',
+        position: 'center',
         style: {
           padding: '20px'
         }
