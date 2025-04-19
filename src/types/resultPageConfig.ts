@@ -1,3 +1,4 @@
+
 import { Block } from './editor';
 
 export interface StyleOptions {
@@ -11,6 +12,7 @@ export interface StyleOptions {
   borderRadius?: string;
   textAlign?: 'left' | 'center' | 'right';
   fontFamily?: string;
+  marginTop?: string; // Added this property
 }
 
 export interface ImageOptions {

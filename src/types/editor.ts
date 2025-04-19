@@ -1,3 +1,4 @@
+
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
@@ -111,9 +112,21 @@ export interface EditableContent {
   
   // Testimonials
   testimonialsImage?: string;
+  testimonials?: Array<{text: string; author: string; position?: string}>;
+  
+  // Mentor Properties
+  name?: string;
+  bio?: string;
+  
+  // Guarantee Properties
+  days?: number;
+  description?: string;
+  
+  // Offer Properties
+  bonusTitle?: string;
+  bonuses?: string[];
   
   // General properties
-  description?: string;
   url?: string;
   ctaText?: string;
   price?: string;
@@ -172,7 +185,6 @@ export interface EditableContent {
   // Style Hero and Offer Block Properties
   styleType?: string;
   features?: string[];
-  bonuses?: string[];
   productImage?: string;
   mainImage?: string;
 }

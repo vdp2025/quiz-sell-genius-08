@@ -1,6 +1,6 @@
 
 import { v4 as uuidv4 } from 'uuid';
-import { EditableContent } from '@/types/editor';
+import { EditableContent, EditorBlock } from '@/types/editor';
 
 export const getDefaultContentForType = (blockType: string): EditableContent => {
   switch (blockType) {
@@ -143,7 +143,7 @@ export const getDefaultContentForType = (blockType: string): EditableContent => 
   }
 };
 
-export const createDefaultBlocks = (styleType: string) => {
+export const createDefaultBlocks = (styleType: string): EditorBlock[] => {
   return [
     {
       id: uuidv4(),
@@ -199,5 +199,5 @@ export const createDefaultBlocks = (styleType: string) => {
       content: getDefaultContentForType('mentor'),
       order: 7
     }
-  ];
+  ] as EditorBlock[];
 };

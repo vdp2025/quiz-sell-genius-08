@@ -34,7 +34,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       visible: true,
       content: {},
       style: {
-        marginTop: '1.5rem'
+        margin: '1.5rem 0 0 0' // Changed from marginTop to margin
       }
     },
     offer: {
@@ -50,7 +50,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '2rem',
           backgroundColor: '#fff8f5',
           borderRadius: '0.5rem',
-          marginTop: '2rem'
+          margin: '2rem 0 0 0' // Changed from marginTop to margin
         }
       },
       products: {
