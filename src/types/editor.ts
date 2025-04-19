@@ -80,7 +80,8 @@ export interface EditableContent {
   icon?: string;
   size?: string;
   color?: string;
-  position?: 'left' | 'center' | 'right' | 'bottom' | 'top';
+  // Updating position to match what IconBlockPreview expects
+  position?: 'left' | 'right' | 'bottom' | 'top';
   
   // Video Properties 
   videoUrl?: string;
