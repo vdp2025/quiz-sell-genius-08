@@ -157,25 +157,28 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         </div>
       </div>
       
-      <Tabs defaultValue="content" className="flex-1 flex flex-col">
-        <TabsList className="mx-4 mt-2 mb-0">
-          <TabsTrigger value="content">Conteúdo</TabsTrigger>
-          <TabsTrigger value="style">Estilo</TabsTrigger>
-        </TabsList>
-        
-        <ScrollArea className="flex-1">
-          <TabsContent value="content" className="p-4">
-            {renderContentEditor()}
-          </TabsContent>
+      <ScrollArea className="flex-1">
+        <Tabs defaultValue="content" className="w-full">
+          <TabsList className="mx-4 mt-2 mb-0 sticky top-0 bg-white z-10">
+            <TabsTrigger value="content">Conteúdo</TabsTrigger>
+            <TabsTrigger value="style">Estilo</TabsTrigger>
+          </TabsList>
           
-          <TabsContent value="style" className="p-4">
-            <StyleEditor
-              style={selectedBlock.content.style || {}}
-              onUpdate={(style) => onUpdate(selectedBlock.id, { style })}
-            />
-          </TabsContent>
-        </ScrollArea>
-      </Tabs>
+          <div className="p-4">
+            <TabsContent value="content" className="mt-0">
+              {renderContentEditor()}
+            </TabsContent>
+            
+            <TabsContent value="style" className="mt-0">
+              <StyleEditor
+                style={selectedBlock.content.style || {}}
+                onUpdate={(style) => onUpdate(selectedBlock.id, { style })}
+              />
+            </TabsContent>
+          </div>
+        </Tabs>
+      </ScrollArea>
     </div>
   );
 };
+

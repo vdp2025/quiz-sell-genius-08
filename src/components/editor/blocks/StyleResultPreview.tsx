@@ -17,13 +17,11 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
   description,
   customImage
 }) => {
-  // Create mock secondary styles for preview
   const mockSecondaryStyles: StyleResult[] = [
     { category: 'Contemporâneo', score: 4, percentage: 30 },
     { category: 'Clássico', score: 3, percentage: 20 }
   ];
 
-  // Get style name from category directly, as styleConfig might not have a name property
   const styleName = primaryStyle.category;
 
   return (
@@ -31,10 +29,10 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-1/2">
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-1">
-                <h2 className="text-lg font-medium text-[#432818]">{styleName}</h2>
-                <span className="text-[#B89B7A] font-medium">{primaryStyle.percentage}%</span>
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-semibold text-[#432818] truncate pr-4">{styleName}</h2>
+                <span className="text-[#B89B7A] font-medium whitespace-nowrap">{primaryStyle.percentage}%</span>
               </div>
               <div className="w-full bg-[#F3E8E6] rounded-full h-2">
                 <div 
@@ -47,17 +45,21 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
               </div>
             </div>
             
-            <p className="text-[#432818]/80 leading-relaxed">
-              {description || styleConfig[primaryStyle.category]?.description || ''}
-            </p>
+            <div className="prose max-w-none">
+              <p className="text-[#432818]/80 leading-relaxed whitespace-pre-wrap">
+                {description || styleConfig[primaryStyle.category]?.description || ''}
+              </p>
+            </div>
           </div>
 
           <div className="w-full md:w-1/2">
-            <img 
-              src={customImage || styleConfig[primaryStyle.category]?.image}
-              alt={`Estilo ${styleName}`}
-              className="w-full h-[300px] object-cover rounded-lg"
-            />
+            <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-[#FAF9F7]">
+              <img 
+                src={customImage || styleConfig[primaryStyle.category]?.image}
+                alt={`Estilo ${styleName}`}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
           </div>
         </div>
 
@@ -68,3 +70,4 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
     </Card>
   );
 };
+
