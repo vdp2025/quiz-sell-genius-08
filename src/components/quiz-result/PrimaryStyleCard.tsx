@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';
 import { styleConfig } from '@/config/styleConfig';
 import { Textarea } from '../ui/textarea';
@@ -27,19 +26,21 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-md font-medium text-[#432818]">Estilo Predominante</h3>
-        <span className="text-sm font-medium text-[#B89B7A]">{primaryStyle.percentage}%</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-        <div 
-          className="bg-[#B89B7A] h-2 rounded-full" 
-          style={{ width: `${primaryStyle.percentage}%` }}
-        />
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <h3 className="text-[#432818] font-medium">Estilo Predominante</h3>
+          <span className="text-[#B89B7A] font-medium">{primaryStyle.percentage}%</span>
+        </div>
+        <div className="w-full h-2 bg-[#F3E8E6] rounded">
+          <div 
+            className="h-full bg-[#B89B7A] rounded transition-all duration-300"
+            style={{ width: `${primaryStyle.percentage}%` }}
+          />
+        </div>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-6 items-center">
-        <div className="order-2 md:order-1">
+      <div className="grid grid-cols-2 gap-8 items-start mt-6">
+        <div className="space-y-4">
           {isEditing ? (
             <div className="relative">
               <Textarea
@@ -58,7 +59,7 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
             </p>
           )}
         </div>
-        <div className="order-1 md:order-2 flex justify-center">
+        <div className="flex justify-center">
           <img 
             src={imageUrl} 
             alt={`Estilo ${primaryStyle.category}`} 
