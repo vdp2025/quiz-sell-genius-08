@@ -1,11 +1,9 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
-import { getDefaultContentForType } from '@/utils/blockDefaults';
-import { generateId } from '@/utils/idGenerator';
+import { BlockFactory } from '@/utils/blocks/BlockFactory';
 import { resultPageStorage } from '@/services/resultPageStorage';
 
 export const useResultPageEditor = (styleType: string) => {
@@ -16,7 +14,6 @@ export const useResultPageEditor = (styleType: string) => {
     isGlobalStylesOpen: false
   });
 
-  // Destructure functions from the useResultPageConfig hook
   const { 
     resultPageConfig, 
     updateSection: updateConfigSection, 
@@ -25,7 +22,6 @@ export const useResultPageEditor = (styleType: string) => {
     loading 
   } = useResultPageConfig(styleType);
 
-  // Initialize blocks from resultPageConfig when it's loaded
   useEffect(() => {
     if (resultPageConfig && !loading) {
       setState(prev => ({
@@ -35,13 +31,12 @@ export const useResultPageEditor = (styleType: string) => {
     }
   }, [resultPageConfig, loading]);
 
-  // Auto-save when blocks change
   useEffect(() => {
     if (state.blocks.length === 0) return;
     
     const autoSaveTimer = setTimeout(() => {
       handleSave();
-    }, 1000); // Auto-save after 1 second of inactivity
+    }, 1000);
     
     return () => clearTimeout(autoSaveTimer);
   }, [state.blocks]);
@@ -51,12 +46,7 @@ export const useResultPageEditor = (styleType: string) => {
   }, []);
 
   const handleAddBlock = useCallback((type: Block['type']) => {
-    const newBlock: Block = {
-      id: generateId(),
-      type,
-      content: getDefaultContentForType(type),
-      order: state.blocks.length
-    };
+    const newBlock = BlockFactory.createBlock(type, state.blocks.length, styleType);
     
     setState(prev => ({
       ...prev,
@@ -64,11 +54,10 @@ export const useResultPageEditor = (styleType: string) => {
       selectedBlockId: newBlock.id
     }));
     
-    // Save immediately after adding a block
     setTimeout(() => handleSave(), 100);
     
     return newBlock.id;
-  }, [state.blocks]);
+  }, [state.blocks, styleType]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
     setState(prev => {
@@ -81,8 +70,6 @@ export const useResultPageEditor = (styleType: string) => {
         blocks: updatedBlocks
       };
     });
-    
-    // Auto-save will be triggered by the effect
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
@@ -98,7 +85,6 @@ export const useResultPageEditor = (styleType: string) => {
       };
     });
     
-    // Save immediately after deleting a block
     setTimeout(() => handleSave(), 100);
   }, []);
 
@@ -119,7 +105,6 @@ export const useResultPageEditor = (styleType: string) => {
       };
     });
     
-    // Save immediately after reordering blocks
     setTimeout(() => handleSave(), 100);
   }, []);
 
@@ -130,12 +115,9 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
-  // Renamed from updateSection to handleUpdateSection to avoid conflicts
   const handleUpdateSection = useCallback((path: string, newContent: any) => {
-    // Call the updateSection from useResultPageConfig
     updateConfigSection(path, newContent);
 
-    // Update blocks if blocks array is being modified
     if (path === 'blocks') {
       setState(prev => ({
         ...prev,
@@ -144,12 +126,10 @@ export const useResultPageEditor = (styleType: string) => {
     }
   }, [updateConfigSection]);
 
-  // Renamed from saveConfig to handleSave to avoid conflicts
   const handleSave = useCallback(async (): Promise<void> => {
     try {
       console.log("Saving blocks:", state.blocks);
       
-      // Ensure the latest blocks are in the config
       const configToSave = {
         ...resultPageConfig,
         blocks: state.blocks
@@ -157,7 +137,6 @@ export const useResultPageEditor = (styleType: string) => {
       
       await resultPageStorage.save(configToSave);
       
-      // Update the config in the hook
       updateConfigSection('blocks', state.blocks);
       
       toast({

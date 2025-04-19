@@ -1,8 +1,6 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Block, EditorConfig } from '@/types/editor';
-import { generateId } from '@/utils/idGenerator';
-import { getDefaultContentForType } from '@/utils/blockDefaults';
+import { BlockFactory } from '@/utils/blocks/BlockFactory';
 
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>({
@@ -27,7 +25,6 @@ export const useEditor = () => {
     }
   });
 
-  // Load config from localStorage on initial mount
   useEffect(() => {
     const savedConfig = localStorage.getItem('editorConfig');
     if (savedConfig) {
@@ -40,12 +37,7 @@ export const useEditor = () => {
   }, []);
 
   const addBlock = useCallback((type: Block['type']) => {
-    const newBlock: Block = {
-      id: generateId(),
-      type,
-      content: getDefaultContentForType(type),
-      order: config.blocks.length
-    };
+    const newBlock = BlockFactory.createBlock(type, config.blocks.length);
     
     setConfig(prev => ({
       ...prev,
