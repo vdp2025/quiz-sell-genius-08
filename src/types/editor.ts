@@ -119,4 +119,30 @@ export interface EditableContent {
     position?: string;
     zIndex?: string;
   };
+
+  // Animation Properties
+  animationType?: 'fade-in' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-out';
+  animationDuration?: string;
+  animationDelay?: string;
+  animationTrigger?: 'onLoad' | 'onScroll' | 'onHover';
+
+  // Carousel Properties
+  carouselImages?: string[];
+  bonusImages?: string[];
+  autoPlay?: boolean;
+  interval?: number;
+  showArrows?: boolean;
+  showDots?: boolean;
+
+  // Block-specific Properties
+  code?: string;
+  faqItems?: Array<{ question: string; answer: string }>;
+  defaultOpen?: boolean;
+  image?: string;
+  size?: string;
+  color?: string;
+  position?: 'left' | 'center' | 'right';
+  images?: string[];
+  height?: string;
+  icon?: string;
 }
