@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -35,11 +34,11 @@ export const useResultPageEditor = (styleType: string) => {
   useEffect(() => {
     if (state.blocks.length === 0) return;
     
-    const autoSaveTimer = setTimeout(() => {
+    const saveTimer = setTimeout(() => {
       handleSave();
-    }, 1000);
+    }, 2000);
     
-    return () => clearTimeout(autoSaveTimer);
+    return () => clearTimeout(saveTimer);
   }, [state.blocks]);
 
   const togglePreview = useCallback(() => {
@@ -73,7 +72,6 @@ export const useResultPageEditor = (styleType: string) => {
     });
   }, []);
 
-  // New method to update multiple blocks at once
   const handleUpdateBlocks = useCallback((newBlocks: Block[]) => {
     setState(prev => ({
       ...prev,
@@ -185,7 +183,7 @@ export const useResultPageEditor = (styleType: string) => {
       setSelectedBlockId: (id: string | null) => setState(prev => ({ ...prev, selectedBlockId: id })),
       handleAddBlock,
       handleUpdateBlock,
-      handleUpdateBlocks, // Add the new method to the returned actions
+      handleUpdateBlocks,
       handleDeleteBlock,
       handleReorderBlocks
     }

@@ -1,101 +1,152 @@
 
 import { Block } from '@/types/editor';
-import { generateId } from '../idGenerator';
-import { getDefaultContentForType } from './defaultContent';
-import { 
-  createHeadlineBlock, 
-  createBenefitsBlock, 
-  createTestimonialsBlock 
-} from './commonBlocks';
-import {
-  createOfferBlock,
-  createGuaranteeBlock,
-  createFaqBlock,
-  createTwoColumnBlock,
-  createTestimonialBlock
-} from './salesBlocks';
-import {
-  createStyleHeroBlock,
-  createStyleResultBlock
-} from './styleBlocks';
+import { generateId } from '@/utils/idGenerator';
+import { salesConfig } from '@/config/salesConfig';
 
-/**
- * BlockFactory - A class to manage creation of different block types
- * using the Factory Method pattern
- */
 export class BlockFactory {
-  /**
-   * Creates a block of the specified type
-   * @param type The type of block to create
-   * @param order The order of the block in the layout
-   * @param styleType Optional style type for style-specific blocks
-   * @returns A new Block instance
-   */
-  static createBlock(type: Block['type'], order: number, styleType?: string): Block {
-    switch (type) {
-      case 'headline':
-        return createHeadlineBlock(order);
-      case 'benefits':
-        return createBenefitsBlock(order);
-      case 'testimonials':
-        return createTestimonialsBlock(order);
-      case 'offer':
-        return createOfferBlock(order);
-      case 'guarantee':
-        return createGuaranteeBlock(order);
-      case 'faq':
-        return createFaqBlock(order);
-      case 'two-column':
-        return createTwoColumnBlock(order);
-      case 'style-hero':
-        return createStyleHeroBlock(styleType || 'Natural', order);
-      case 'style-result':
-        return createStyleResultBlock(styleType || 'Natural', order);
-      default:
-        // For block types without a specific factory method,
-        // create a generic block with default content
-        return {
-          id: generateId(),
-          type,
-          content: getDefaultContentForType(type),
-          order
-        };
-    }
+  static createBlock(type: Block['type'], order: number, styleType: string = 'Natural'): Block {
+    return {
+      id: generateId(),
+      type,
+      content: {},
+      order
+    };
   }
 
-  /**
-   * Creates a set of default blocks for a style page
-   * @param styleType The style type
-   * @returns An array of blocks
-   */
-  static createDefaultBlocks(styleType: string): Block[] {
-    return [
-      this.createBlock('style-hero', 0, styleType),
-      this.createBlock('style-result', 1, styleType),
-      this.createBlock('headline', 2),
-      this.createBlock('benefits', 3),
-      this.createBlock('offer', 4),
-      this.createBlock('testimonials', 5),
-      this.createBlock('guarantee', 6),
-      this.createBlock('faq', 7)
-    ];
-  }
-  
-  /**
-   * Creates a set of blocks for a sales page
-   * @param styleType The style type
-   * @returns An array of blocks
-   */
   static createSalesPageBlocks(styleType: string): Block[] {
+    const style = styleType.toLowerCase();
+    const config = salesConfig;
+    const styleSpecificBenefits = config.styleSpecificContent[style]?.benefits || config.defaultBlocks[2].content.items;
+    const styleGuideImage = config.images.capas[style];
+
     return [
-      this.createBlock('style-hero', 0, styleType),
-      this.createBlock('style-result', 1, styleType),
-      this.createBlock('two-column', 2),
-      this.createBlock('benefits', 3),
-      this.createBlock('offer', 4),
-      this.createBlock('testimonials', 5),
-      this.createBlock('guarantee', 6),
-      this.createBlock('faq', 7)
+      // Hero Section Block
+      {
+        id: generateId(),
+        type: 'hero-section',
+        order: 0,
+        content: {
+          title: "VOCÊ DESCOBRIU SEU ESTILO",
+          subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
+          heroImage: styleGuideImage,
+          heroImage2: config.images.gisele,
+          style: {
+            backgroundColor: "#fff7f3"
+          }
+        }
+      },
+      
+      // Style Hero Block
+      {
+        id: generateId(),
+        type: 'style-hero',
+        order: 1,
+        content: {
+          title: `Seu Guia de Estilo ${styleType}`,
+          subtitle: "Conhecimento é clareza. E clareza muda o jeito que você se vê, se escolhe, se posiciona.",
+          description: "Mas é na ação que a verdadeira transformação acontece. É quando você aplica o que aprendeu… que o espelho começa a contar uma nova história.",
+          mainImage: config.images.mockups.tablet,
+          style: {
+            backgroundColor: "#ffffff",
+            padding: "2rem",
+            borderRadius: "1rem",
+            marginTop: "2rem"
+          }
+        }
+      },
+
+      // Benefits Block
+      {
+        id: generateId(),
+        type: 'benefits',
+        order: 2,
+        content: {
+          title: "O que você vai descobrir no seu Guia de Estilo:",
+          items: styleSpecificBenefits,
+          style: {
+            backgroundColor: "#ffffff",
+            padding: "2rem",
+            borderRadius: "1rem",
+            marginTop: "2rem"
+          }
+        }
+      },
+
+      // Offer Block with Images
+      {
+        id: generateId(),
+        type: 'offer',
+        order: 3,
+        content: {
+          title: "Receba agora seu Guia Completo:",
+          subtitle: "Transforme seu guarda-roupa com sabedoria",
+          price: "39,00",
+          regularPrice: "175,00",
+          ctaText: "Quero meu Guia + Bônus por R$39,00",
+          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+          productImage: config.images.mockups.todos,
+          style: {
+            backgroundColor: "#ffffff",
+            padding: "2rem",
+            borderRadius: "1rem",
+            marginTop: "2rem"
+          }
+        }
+      },
+
+      // Testimonials Block
+      {
+        id: generateId(),
+        type: 'testimonials',
+        order: 4,
+        content: {
+          title: "O que dizem as alunas",
+          testimonialsImage: config.images.depoimentos,
+          style: {
+            backgroundColor: "#ffffff",
+            padding: "2rem",
+            borderRadius: "1rem",
+            marginTop: "2rem"
+          }
+        }
+      },
+
+      // Guarantee Block
+      {
+        id: generateId(),
+        type: 'guarantee',
+        order: 5,
+        content: {
+          title: "Garantia de 7 dias",
+          text: "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.",
+          image: config.images.garantia,
+          style: {
+            backgroundColor: "#ffffff",
+            padding: "2rem",
+            borderRadius: "1rem",
+            marginTop: "2rem"
+          }
+        }
+      },
+
+      // Final CTA Block
+      {
+        id: generateId(),
+        type: 'cta',
+        order: 6,
+        content: {
+          title: "Transforme seu estilo agora",
+          buttonText: "Quero o Guia + Bônus por R$39,00",
+          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+          style: {
+            backgroundColor: "#fff7f3",
+            padding: "2rem",
+            borderRadius: "1rem",
+            marginTop: "2rem",
+            marginBottom: "2rem"
+          }
+        }
+      }
     ];
   }
 }
