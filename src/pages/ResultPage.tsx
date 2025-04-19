@@ -6,6 +6,9 @@ import { StyleResultSection } from '@/components/result/StyleResult';
 import OfferCard from '@/components/quiz-result/sales/OfferCard';
 import { styleConfig } from '@/config/styleConfig';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Edit } from 'lucide-react';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -25,12 +28,12 @@ const ResultPage = () => {
           <p className="text-[#8F7A6A] mb-6">
             Parece que você ainda não completou o quiz.
           </p>
-          <a 
-            href="/" 
+          <Link 
+            to="/" 
             className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
           >
             Fazer o Quiz
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -59,6 +62,15 @@ const ResultPage = () => {
           />
           
           <OfferCard primaryStyle={primaryStyle} />
+          
+          <div className="text-center mt-8 mb-4">
+            <Link to="/editor">
+              <Button variant="outline" size="sm" className="bg-white">
+                <Edit className="w-4 h-4 mr-2" />
+                Editar Página de Resultados
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
