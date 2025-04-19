@@ -13,7 +13,9 @@ import {
   MousePointer,
   Award,
   Layout,
-  Gift
+  Gift,
+  Sparkles,
+  ShoppingCart
 } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
 
@@ -23,19 +25,21 @@ interface ComponentsSidebarProps {
 
 export function ComponentsSidebar({ onComponentSelect }: ComponentsSidebarProps) {
   const components = [
-    { type: 'header', label: 'Cabeçalho', icon: LayoutTemplate },
-    { type: 'hero-section', label: 'Seção Hero', icon: Layout },
-    { type: 'bonus-carousel', label: 'Carrossel de Bônus', icon: Gift },
-    { type: 'headline', label: 'Título', icon: Type },
-    { type: 'image', label: 'Imagem', icon: Image },
-    { type: 'text', label: 'Texto', icon: Type },
-    { type: 'benefits', label: 'Benefícios', icon: ListChecks },
-    { type: 'testimonials', label: 'Depoimentos', icon: MessageSquare },
-    { type: 'pricing', label: 'Preço', icon: DollarSign },
-    { type: 'guarantee', label: 'Garantia', icon: Shield },
-    { type: 'cta', label: 'Botão CTA', icon: MousePointer },
-    { type: 'style-result', label: 'Resultado do Estilo', icon: Award },
-  ] as const;
+    { type: 'header' as const, label: 'Cabeçalho', icon: LayoutTemplate },
+    { type: 'hero-section' as const, label: 'Seção Hero', icon: Layout },
+    { type: 'style-hero' as const, label: 'Hero de Estilo', icon: Sparkles },
+    { type: 'offer' as const, label: 'Oferta de Estilo', icon: ShoppingCart },
+    { type: 'bonus-carousel' as const, label: 'Carrossel de Bônus', icon: Gift },
+    { type: 'headline' as const, label: 'Título', icon: Type },
+    { type: 'image' as const, label: 'Imagem', icon: Image },
+    { type: 'text' as const, label: 'Texto', icon: Type },
+    { type: 'benefits' as const, label: 'Benefícios', icon: ListChecks },
+    { type: 'testimonials' as const, label: 'Depoimentos', icon: MessageSquare },
+    { type: 'pricing' as const, label: 'Preço', icon: DollarSign },
+    { type: 'guarantee' as const, label: 'Garantia', icon: Shield },
+    { type: 'cta' as const, label: 'Botão CTA', icon: MousePointer },
+    { type: 'style-result' as const, label: 'Resultado do Estilo', icon: Award },
+  ];
 
   return (
     <div className="h-full flex flex-col bg-white border-r border-[#B89B7A]/20">

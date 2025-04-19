@@ -1,19 +1,22 @@
-
 export interface EditorConfig {
   blocks: EditorBlock[];
-  globalStyles: {
+  globalStyles?: {
     primaryColor: string;
     secondaryColor: string;
     textColor: string;
     backgroundColor: string;
     fontFamily: string;
   };
-  theme: {
+  theme?: {
     primaryColor: string;
     secondaryColor: string;
     textColor: string;
     backgroundColor: string;
     fontFamily: string;
+  };
+  meta?: {
+    title: string;
+    description: string;
   };
 }
 
@@ -22,7 +25,8 @@ export interface EditorBlock {
   type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
          'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon' |
-         'faq' | 'carousel' | 'custom-code' | 'animation-block' | 'bonus' | 'urgency' | 'mentor';
+         'faq' | 'carousel' | 'custom-code' | 'animation-block' | 'bonus' | 'urgency' | 'mentor' |
+         'style-hero' | 'offer';
   content: EditableContent;
   order: number;
 }
@@ -164,4 +168,11 @@ export interface EditableContent {
   image?: string;
   height?: string;
   checkoutUrl?: string;
+
+  // Style Hero and Offer Block Properties
+  styleType?: string;
+  features?: string[];
+  bonuses?: string[];
+  productImage?: string;
+  mainImage?: string;
 }

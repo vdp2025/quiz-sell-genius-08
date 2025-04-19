@@ -73,6 +73,7 @@ export const getDefaultContentForType = (type: Block['type']): any => {
         subtitle: 'Transforme sua imagem e expresse sua verdadeira essência',
         description: 'Conheça as cores, modelagens e combinações que valorizam sua beleza natural',
         mainImage: salesConfig.images.mockups.todos,
+        styleType: 'Natural',
         style: {}
       };
     case 'offer':

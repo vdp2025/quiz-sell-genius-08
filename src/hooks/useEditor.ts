@@ -7,6 +7,20 @@ import { getDefaultContentForType } from '@/utils/blockDefaults';
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>({
     blocks: [],
+    globalStyles: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#1A1818',
+      backgroundColor: '#fffaf7',
+      fontFamily: 'Inter, sans-serif'
+    },
+    theme: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#1A1818',
+      backgroundColor: '#fffaf7',
+      fontFamily: 'Inter, sans-serif'
+    },
     meta: {
       title: 'Página de Venda',
       description: 'Página de venda personalizada'
@@ -85,13 +99,21 @@ export const useEditor = () => {
     }
   }, [config]);
 
+  const updateConfig = useCallback((newConfig: Partial<EditorConfig>) => {
+    setConfig(prev => ({
+      ...prev,
+      ...newConfig
+    }));
+  }, []);
+
   return {
     config,
     addBlock,
     updateBlock,
     deleteBlock,
     reorderBlocks,
-    saveConfig
+    saveConfig,
+    updateConfig
   };
 };
 
