@@ -1,3 +1,4 @@
+
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
@@ -138,6 +139,7 @@ export interface EditableContent {
     backgroundColor?: string;
     padding?: string;
     margin?: string;
+    marginLeft?: string;
     width?: string;
     height?: string;
     borderRadius?: string;

@@ -7,7 +7,7 @@ interface ImageBlockPreviewProps {
     imageAlt?: string;
     width?: string;
     style?: {
-      objectFit?: 'cover' | 'contain' | 'fill';
+      objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
       margin?: string;
       marginLeft?: string;
     };

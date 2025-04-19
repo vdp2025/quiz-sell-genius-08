@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { ZoomIn, ZoomOut, Maximize, AspectRatio as AspectRatioIcon, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize } from 'lucide-react';
+import { AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 
 interface ImageBlockEditorProps {
   block: Block;
@@ -33,13 +34,29 @@ const ImageBlockEditor: React.FC<ImageBlockEditorProps> = ({ block, onUpdate }) 
   };
 
   const handleAlignment = (value: string) => {
-    onUpdate({
-      style: {
-        ...content.style,
-        margin: value === 'center' ? '0 auto' : '0',
-        marginLeft: value === 'right' ? 'auto' : undefined
-      }
-    });
+    if (value === 'center') {
+      onUpdate({
+        style: {
+          ...content.style,
+          margin: '0 auto'
+        }
+      });
+    } else if (value === 'right') {
+      onUpdate({
+        style: {
+          ...content.style,
+          margin: '0',
+          marginLeft: 'auto'
+        }
+      });
+    } else {
+      onUpdate({
+        style: {
+          ...content.style,
+          margin: '0'
+        }
+      });
+    }
   };
 
   const handleFitToContainer = () => {
@@ -87,7 +104,9 @@ const ImageBlockEditor: React.FC<ImageBlockEditorProps> = ({ block, onUpdate }) 
               size="sm"
               onClick={() => setAspectLocked(!aspectLocked)}
             >
-              <AspectRatioIcon className="h-4 w-4" />
+              <div className="h-4 w-4 flex items-center justify-center">
+                <span className="text-xs font-bold">A/R</span>
+              </div>
             </Button>
           </div>
         </div>
@@ -145,6 +164,8 @@ const ImageBlockEditor: React.FC<ImageBlockEditorProps> = ({ block, onUpdate }) 
               <SelectItem value="cover">Preencher (cover)</SelectItem>
               <SelectItem value="contain">Conter (contain)</SelectItem>
               <SelectItem value="fill">Esticar (fill)</SelectItem>
+              <SelectItem value="none">Original (none)</SelectItem>
+              <SelectItem value="scale-down">Reduzir (scale-down)</SelectItem>
             </SelectContent>
           </Select>
         </div>
