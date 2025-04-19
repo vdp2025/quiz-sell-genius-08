@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { EditableContent, EditorBlock } from '@/types/editor';
 
@@ -124,7 +123,9 @@ export const getDefaultContentForType = (blockType: string): EditableContent => 
         ctaText: 'Quero meu Guia + Bônus por R$39,00',
         ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
         productImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
-        bonusImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp',
+        bonusImages: [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp'
+        ],
         bonuses: [
           'Peças-chave do Guarda-Roupa de Sucesso: Itens essenciais que descomplicam a rotina e valorizam o seu estilo pessoal.',
           'Mini Guia de Visagismo Facial: Para alinhar seu rosto, cabelo e maquiagem com a sua identidade visual.'
