@@ -41,7 +41,7 @@ export const renderContentEditor = (
   sectionPath: string, 
   config: ResultPageConfig,
   updateSection: (path: string, content: any) => void
-) => {
+): React.ReactNode => {
   // Determine which editor to render based on the section path
   if (sectionPath === 'header') {
     return (
