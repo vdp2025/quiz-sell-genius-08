@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '@/types/quiz';
-import { getStyleConfig } from '@/utils/styleUtils';
+import { getStyleConfig, StyleCategory } from '@/utils/styleUtils';
 
 interface StyleHeroBlockPreviewProps {
   content: {
@@ -37,7 +37,9 @@ const StyleHeroBlockPreview: React.FC<StyleHeroBlockPreviewProps> = ({ content, 
   
   // Usar o estilo do quiz se disponível, senão usar styleType ou conteúdo
   const displayStyle = userPrimaryStyle?.category || styleType || content.styleType || 'Natural';
-  const styleInfo = getStyleConfig(displayStyle);
+  
+  // Cast the displayStyle to StyleCategory to satisfy TypeScript
+  const styleInfo = getStyleConfig(displayStyle as StyleCategory);
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-[#fff7f3] to-white rounded-2xl p-8" style={content.style}>

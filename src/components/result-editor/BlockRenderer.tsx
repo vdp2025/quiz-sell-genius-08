@@ -6,7 +6,7 @@ import HeaderBlockPreview from './block-previews/HeaderBlockPreview';
 import HeadlineBlockPreview from './block-previews/HeadlineBlockPreview';
 import TextBlockPreview from './block-previews/TextBlockPreview';
 import ImageBlockPreview from './block-previews/ImageBlockPreview';
-import { StyleResultBlockPreview } from './block-previews/StyleResultBlockPreview';
+import StyleResultBlockPreview from './block-previews/StyleResultBlockPreview';
 import SecondaryStylesBlockPreview from './block-previews/SecondaryStylesBlockPreview';
 import BenefitsBlockPreview from './block-previews/BenefitsBlockPreview';
 import PricingBlockPreview from './block-previews/PricingBlockPreview';

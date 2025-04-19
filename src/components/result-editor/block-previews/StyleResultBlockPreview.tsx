@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { EditableContent } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
-import { getStyleConfig } from '@/utils/styleUtils';
+import { getStyleConfig, StyleCategory } from '@/utils/styleUtils';
 
 interface StyleResultBlockPreviewProps {
   content: EditableContent;
@@ -34,7 +34,9 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
   
   // Usar o estilo do quiz se disponível, senão usar styleType ou primaryStyle
   const displayStyle = userPrimaryStyle?.category || styleType || primaryStyle?.category || 'Natural';
-  const styleInfo = getStyleConfig(displayStyle);
+  
+  // Cast the displayStyle to StyleCategory to satisfy TypeScript
+  const styleInfo = getStyleConfig(displayStyle as StyleCategory);
 
   return (
     <div className="p-6 bg-white rounded-lg border border-[#B89B7A]/20" style={content.style as React.CSSProperties}>
