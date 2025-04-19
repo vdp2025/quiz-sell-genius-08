@@ -7,6 +7,7 @@ import { PropertiesPanel } from '@/components/result-editor/PropertiesPanel';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { EditorToolbar } from '@/components/result-editor/EditorToolbar';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
+import { StyleResult } from '@/types/quiz';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style: string }>();
@@ -17,8 +18,17 @@ export const EditorPage = () => {
     actions,
   } = useResultPageEditor(style || 'Natural');
 
-  const selectedStyle = {
-    category: style || 'Natural',
+  // Ensure we're using a valid style category by checking against the allowed values
+  // This is a TypeScript type guard function
+  const isValidStyleCategory = (s: string): s is StyleResult['category'] => {
+    return ["Natural", "Clássico", "Contemporâneo", "Elegante", "Romântico", "Sexy", "Dramático", "Criativo"].includes(s);
+  };
+  
+  // Get styleCategory, defaulting to "Natural" if invalid
+  const styleCategory = style && isValidStyleCategory(style) ? style : "Natural";
+  
+  const selectedStyle: StyleResult = {
+    category: styleCategory,
     score: 100,
     percentage: 100
   };
@@ -46,7 +56,7 @@ export const EditorPage = () => {
             isPreviewing={isPreviewing}
             primaryStyle={selectedStyle}
             onReorderBlocks={actions.handleReorderBlocks}
-            styleType={style}
+            styleType={styleCategory}
             onDeleteBlock={actions.handleDeleteBlock}
           />
         </ResizablePanel>
