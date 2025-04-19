@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { cn } from '@/lib/utils';
+import { dynamicIconImport } from '@/utils/dynamicIconImport';
 
 interface IconBlockPreviewProps {
   content: {
@@ -14,71 +16,47 @@ interface IconBlockPreviewProps {
 
 const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
   const { 
-    icon = '✓', 
-    size = '48px', 
-    color = '#B89B7A', 
-    title, 
-    position = 'right', 
+    icon = 'star', 
+    size = '32px', 
+    color = '#B89B7A',
+    title = '',
+    position = 'top',
     style = {} 
   } = content;
+
+  // Dynamic icon import
+  const IconComponent = dynamicIconImport(icon);
   
-  const iconStyle = {
-    fontSize: size,
-    color: color,
-    display: 'inline-block'
-  };
-  
-  const renderIcon = () => (
-    <span style={iconStyle}>{icon}</span>
-  );
-  
-  const renderTitle = () => (
-    title ? <span className="text-[#432818]">{title}</span> : null
-  );
-  
-  const renderContent = () => {
-    switch (position) {
-      case 'top':
-        return (
-          <div className="flex flex-col items-center gap-2">
-            {renderIcon()}
-            {renderTitle()}
-          </div>
-        );
-      case 'right':
-        return (
-          <div className="flex items-center gap-2">
-            {renderTitle()}
-            {renderIcon()}
-          </div>
-        );
-      case 'bottom':
-        return (
-          <div className="flex flex-col items-center gap-2">
-            {renderTitle()}
-            {renderIcon()}
-          </div>
-        );
-      case 'left':
-        return (
-          <div className="flex items-center gap-2">
-            {renderIcon()}
-            {renderTitle()}
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center gap-2">
-            {renderIcon()}
-            {renderTitle()}
-          </div>
-        );
-    }
+  const containerStyle = {
+    ...style,
+    display: 'flex',
+    flexDirection: position === 'right' ? 'row-reverse' : 
+                 position === 'bottom' ? 'column-reverse' : 
+                 position === 'left' ? 'row' : 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.5rem'
   };
   
   return (
-    <div style={style} className="p-4">
-      {renderContent()}
+    <div className="w-full" style={containerStyle}>
+      {IconComponent && (
+        <div className="flex items-center justify-center">
+          <IconComponent 
+            style={{ color, width: size, height: size }} 
+            strokeWidth={1.5}
+          />
+        </div>
+      )}
+      
+      {title && (
+        <div className={cn(
+          "text-center",
+          (position === 'left' || position === 'right') && "flex-1"
+        )}>
+          {title}
+        </div>
+      )}
     </div>
   );
 };
