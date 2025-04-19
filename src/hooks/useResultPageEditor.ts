@@ -97,10 +97,11 @@ export const useResultPageEditor = (styleType: string) => {
   }, []);
 
   // Save blocks along with other config data
-  const handleSave = useCallback(async () => {
+  // Modified to return Promise<void> instead of Promise<boolean>
+  const handleSave = useCallback(async (): Promise<void> => {
     // Update the blocks in the config before saving
     updateSection('blocks', state.blocks);
-    return await saveConfig();
+    await saveConfig();
   }, [state.blocks, updateSection, saveConfig]);
 
   return {

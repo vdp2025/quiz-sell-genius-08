@@ -48,8 +48,23 @@ export const useResultPageConfig = (styleType: string) => {
     setResultPageConfig(createDefaultConfig(styleType));
   }, []);
 
-  const saveConfig = useCallback(async () => {
-    return await resultPageStorage.save(resultPageConfig);
+  // Modified to return Promise<void> instead of Promise<boolean>
+  const saveConfig = useCallback(async (): Promise<void> => {
+    try {
+      await resultPageStorage.save(resultPageConfig);
+      toast({
+        title: "Configuração salva",
+        description: "As alterações foram salvas com sucesso",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error saving result page config:', error);
+      toast({
+        title: 'Erro ao salvar configuração',
+        description: 'Não foi possível salvar a configuração da página de resultados',
+        variant: 'destructive'
+      });
+    }
   }, [resultPageConfig]);
 
   return {
