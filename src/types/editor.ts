@@ -102,9 +102,11 @@ export interface EditableContent {
     padding?: string;
     margin?: string;
     width?: string;
+    height?: string;
     borderRadius?: string;
     fontSize?: string;
     fontWeight?: string;
     fontFamily?: string;
+    objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   };
 }

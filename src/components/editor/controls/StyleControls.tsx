@@ -51,6 +51,25 @@ export const StyleControls: React.FC<StyleControlsProps> = ({ style, onUpdate })
       </div>
 
       <div>
+        <Label>Ajuste da Imagem</Label>
+        <Select
+          value={style.objectFit || 'cover'}
+          onValueChange={(value) => handleChange('objectFit', value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione o ajuste" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="cover">Cobrir</SelectItem>
+            <SelectItem value="contain">Conter</SelectItem>
+            <SelectItem value="fill">Preencher</SelectItem>
+            <SelectItem value="none">Nenhum</SelectItem>
+            <SelectItem value="scale-down">Escalar para baixo</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
         <Label>Espaçamento</Label>
         <div className="grid grid-cols-2 gap-2">
           <div>
