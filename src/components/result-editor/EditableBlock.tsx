@@ -25,8 +25,7 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
   styleType,
   onDelete
 }) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleClick = () => {
     onSelect();
   };
 

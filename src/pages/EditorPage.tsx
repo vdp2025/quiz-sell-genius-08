@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -157,6 +156,7 @@ export const EditorPage = () => {
               primaryStyle={selectedStyle}
               onReorderBlocks={actions.handleReorderBlocks}
               styleType={styleCategory}
+              onDeleteBlock={actions.handleDeleteBlock}
             />
           )}
         </ResizablePanel>

@@ -17,6 +17,7 @@ interface EditorPreviewProps {
   primaryStyle: StyleResult;
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
   styleType?: string;
+  onDeleteBlock?: (id: string) => void; // Add optional onDeleteBlock prop
 }
 
 export const EditorPreview: React.FC<EditorPreviewProps> = ({
@@ -26,7 +27,8 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   isPreviewing,
   primaryStyle,
   onReorderBlocks,
-  styleType
+  styleType,
+  onDeleteBlock
 }) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -86,7 +88,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
                       isPreview={false}
                       primaryStyle={primaryStyle}
                       styleType={styleType}
-                      onDelete={(id) => onDelete && onDelete(id)}
+                      onDelete={onDeleteBlock}
                     />
                   </SortableItem>
                 ))}

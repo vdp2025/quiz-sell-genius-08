@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
@@ -39,7 +38,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onClick?.();
+    if (onClick) onClick();
   };
 
   const renderContent = () => {
