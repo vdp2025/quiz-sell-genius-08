@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -9,13 +8,13 @@ import EditorToolbar from '@/components/result-editor/EditorToolbar';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
-import { JsonConfigEditor } from '@/components/result-editor/JsonConfigEditor';
+import { JsonEditorPanel } from '@/components/result-editor/JsonEditorPanel';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style?: string }>();
   const navigate = useNavigate();
-  const [isJsonMode, setIsJsonMode] = useState(false);
+  const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false);
   
   const styleCategories = [
     "Natural", "Clássico", "Contemporâneo", "Elegante", 
@@ -89,10 +88,6 @@ export const EditorPage = () => {
       Object.keys(newConfig).forEach(key => {
         actions.updateSection(key, newConfig[key]);
       });
-      toast({
-        title: "Configuração atualizada",
-        description: "As alterações foram aplicadas com sucesso",
-      });
     }
   };
 
@@ -123,8 +118,7 @@ export const EditorPage = () => {
         onEditGlobalStyles={actions.toggleGlobalStyles}
         resultPageConfig={resultPageConfig}
         onUpdateConfig={handleJsonUpdate}
-        onToggleJsonMode={() => setIsJsonMode(!isJsonMode)}
-        isJsonMode={isJsonMode}
+        onToggleJsonEditor={() => setIsJsonEditorOpen(true)}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
@@ -135,10 +129,10 @@ export const EditorPage = () => {
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={55}>
-          {isJsonMode ? (
+          {isJsonEditorOpen ? (
             <div className="h-full flex flex-col p-4 bg-[#FAF9F7] overflow-auto">
               <div className="bg-white rounded-lg shadow-sm p-6 h-full">
-                <JsonConfigEditor 
+                <JsonEditorPanel
                   config={resultPageConfig}
                   onUpdate={handleJsonUpdate}
                 />

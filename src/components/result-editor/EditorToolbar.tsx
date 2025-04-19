@@ -1,15 +1,12 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { JsonConfigEditor } from './JsonConfigEditor';
 import { 
   Eye, 
   Save, 
   Download, 
   RefreshCw, 
   Palette,
-  Code,
-  Layout
+  FileCode
 } from 'lucide-react';
 import { exportProjectAsJson } from '@/utils/exportUtils';
 import { ResultPageConfig } from '@/types/resultPageConfig';
@@ -23,8 +20,7 @@ interface EditorToolbarProps {
   resultPageConfig: ResultPageConfig;
   onUpdateConfig: (newConfig: any) => void;
   onShowTemplates?: () => void;
-  onToggleJsonMode?: () => void;
-  isJsonMode?: boolean;
+  onToggleJsonEditor: () => void;
 }
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -36,47 +32,30 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   resultPageConfig,
   onUpdateConfig,
   onShowTemplates,
-  onToggleJsonMode,
-  isJsonMode
+  onToggleJsonEditor
 }) => {
-  const handleExport = () => {
-    exportProjectAsJson(resultPageConfig);
-  };
+  const handleExport = () => exportProjectAsJson(resultPageConfig);
 
   return (
     <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex flex-wrap items-center justify-between gap-2">
       <div className="flex items-center gap-2">
-        {onToggleJsonMode && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onToggleJsonMode}
-            className={isJsonMode ? "bg-[#FAF9F7]" : ""}
-          >
-            {isJsonMode ? (
-              <>
-                <Layout className="w-4 h-4 mr-2" />
-                Modo Visual
-              </>
-            ) : (
-              <>
-                <Code className="w-4 h-4 mr-2" />
-                Modo JSON
-              </>
-            )}
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onToggleJsonEditor}
+        >
+          <FileCode className="w-4 h-4 mr-2" />
+          Editor JSON
+        </Button>
         
-        {!isJsonMode && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onPreviewToggle}
-          >
-            <Eye className="w-4 h-4 mr-2" />
-            {isPreviewMode ? "Editar" : "Visualizar"}
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onPreviewToggle}
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          {isPreviewMode ? "Editar" : "Visualizar"}
+        </Button>
         
         <Button
           variant="outline"
