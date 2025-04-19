@@ -1,244 +1,139 @@
 
-import { EditableContent } from '@/types/editor';
+import { Block } from '@/types/editor';
+import { salesConfig } from '@/config/salesConfig';
 
-export const getDefaultContentForType = (type: string): EditableContent => {
+export const getDefaultContentForType = (type: Block['type']): any => {
   switch (type) {
     case 'header':
       return {
-        title: 'Olá, seu Estilo Predominante é:',
-        logo: '',
-        logoAlt: 'Logo da empresa',
-        style: {
-          backgroundColor: '#ffffff',
-          padding: '20px 0',
-          textAlign: 'center'
-        }
+        title: 'Seu Estilo Único',
+        logoUrl: '',
+        backgroundColor: '#ffffff'
       };
-      
     case 'headline':
       return {
-        title: 'VOCÊ DESCOBRIU SEU ESTILO',
-        subtitle: 'Agora é hora de aplicar com clareza',
-        alignment: 'center',
-        textColor: '#432818',
-        style: {
-          fontSize: '32px',
-          fontWeight: 'bold',
-          margin: '20px 0'
-        }
+        title: 'Título Principal',
+        subtitle: 'Subtítulo ou descrição opcional'
       };
-      
     case 'text':
       return {
-        text: 'Digite seu texto aqui...',
-        alignment: 'left',
-        style: {
-          fontSize: '16px',
-          lineHeight: '1.6',
-          margin: '20px 0'
-        }
+        text: 'Adicione seu texto aqui. Este é um bloco de texto simples para explicações ou detalhes.'
       };
-      
     case 'image':
       return {
-        imageUrl: 'https://placehold.co/600x400?text=Imagem',
-        imageAlt: 'Descrição da imagem',
-        style: {
-          width: '100%',
-          height: 'auto',
-          margin: '0 auto',
-          borderRadius: '8px'
-        }
+        url: '',
+        alt: 'Descrição da imagem',
+        caption: '',
+        width: '100%'
       };
-      
     case 'benefits':
       return {
-        title: 'O que você vai aprender:',
+        title: 'Benefícios',
         items: [
-          'Benefício 1: Descubra como aplicar seu estilo no dia a dia',
-          'Benefício 2: Aprenda a combinar peças de forma harmoniosa',
-          'Benefício 3: Crie looks que valorizam seu tipo físico'
-        ],
-        useIcons: true,
-        icon: '✓',
-        iconColor: '#B89B7A',
-        style: {
-          padding: '20px',
-          backgroundColor: '#faf9f7',
-          borderRadius: '8px'
-        }
+          'Benefício 1: Descrição do primeiro benefício',
+          'Benefício 2: Descrição do segundo benefício',
+          'Benefício 3: Descrição do terceiro benefício'
+        ]
       };
-      
     case 'pricing':
       return {
         regularPrice: '197,00',
         salePrice: '97,00',
         buttonText: 'Quero Transformar Meu Estilo',
-        ctaUrl: '#checkout',
-        urgencyText: 'Oferta por tempo limitado!',
-        style: {
-          padding: '30px',
-          backgroundColor: '#faf9f7',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }
+        ctaUrl: 'https://pay.hotmart.com/',
+        urgencyText: 'Oferta por tempo limitado!'
       };
-      
-    case 'guarantee':
-      return {
-        title: 'Garantia de 7 dias',
-        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.',
-        image: '/lovable-uploads/ce883c46-80e0-4171-9c2d-9288f44f88eb.png',
-        style: {
-          padding: '20px',
-          backgroundColor: '#faf9f7',
-          borderRadius: '8px'
-        }
-      };
-      
-    case 'cta':
-      return {
-        title: 'Pronta para transformar seu estilo?',
-        buttonText: 'Sim, quero começar agora!',
-        ctaUrl: '#checkout',
-        style: {
-          padding: '30px',
-          backgroundColor: '#faf9f7',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }
-      };
-      
-    case 'style-result':
-      return {
-        title: 'Seu estilo predominante é {{primaryStyle}}',
-        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.',
-        customImage: '',
-        style: {
-          padding: '20px',
-          backgroundColor: '#faf9f7',
-          borderRadius: '8px'
-        }
-      };
-      
-    case 'secondary-styles':
-      return {
-        title: 'Seus Estilos Complementares',
-        description: 'Além do seu estilo predominante, você também possui traços dos seguintes estilos:',
-        style: {
-          padding: '20px',
-          backgroundColor: '#faf9f7',
-          borderRadius: '8px'
-        }
-      };
-      
-    case 'hero-section':
-      return {
-        title: 'VOCÊ DESCOBRIU SEU ESTILO',
-        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        heroImage: 'https://placehold.co/800x500?text=Imagem+Principal',
-        heroImageAlt: 'Guia de Estilo',
-        heroImage2: 'https://placehold.co/800x300?text=Imagem+Secundária',
-        quote: 'Descobrir seu estilo pessoal é o primeiro passo para construir um guarda-roupa autêntico e funcional.',
-        quoteAuthor: 'Consultora de Estilo',
-        style: {
-          padding: '30px 0'
-        }
-      };
-      
-    case 'products':
-      return {
-        title: 'O que você vai receber:',
-        images: [
-          { url: 'https://placehold.co/400x300?text=Produto+1', alt: 'Produto 1', title: 'Guia de Estilo Digital' },
-          { url: 'https://placehold.co/400x300?text=Produto+2', alt: 'Produto 2', title: 'Workshop de Coloração Pessoal' }
-        ],
-        style: {
-          padding: '30px 0'
-        }
-      };
-      
     case 'testimonials':
       return {
-        title: 'O que estão dizendo',
-        testimonialsImage: 'https://placehold.co/800x400?text=Depoimentos',
-        style: {
-          padding: '30px 0'
-        }
+        title: 'O Que Estão Dizendo',
+        testimonials: []
       };
-      
-    case 'bonus-carousel':
+    case 'guarantee':
       return {
-        title: 'Você também recebe estes bônus',
-        bonusImages: [
-          { url: 'https://placehold.co/400x300?text=Bônus+1', alt: 'Bônus 1', title: 'Bônus #1: Guia de Compras' },
-          { url: 'https://placehold.co/400x300?text=Bônus+2', alt: 'Bônus 2', title: 'Bônus #2: Cartela de Cores' }
+        title: 'Garantia de 7 Dias',
+        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.',
+        image: salesConfig.images.garantia
+      };
+    case 'cta':
+      return {
+        title: 'Transforme Seu Estilo Agora',
+        buttonText: 'Quero Meu Guia Completo',
+        ctaUrl: 'https://pay.hotmart.com/'
+      };
+    case 'hero-section':
+      return {
+        title: 'DESCUBRA SEU ESTILO',
+        subtitle: 'Transforme sua imagem e expresse sua verdadeira essência',
+        mainImage: salesConfig.images.mockups.todos,
+        urgencyText: 'Oferta especial por tempo limitado!'
+      };
+    case 'style-hero':
+      return {
+        title: 'Descubra seu Estilo',
+        subtitle: 'Transforme sua imagem e expresse sua verdadeira essência',
+        description: 'Conheça as cores, modelagens e combinações que valorizam sua beleza natural',
+        mainImage: salesConfig.images.mockups.todos,
+        style: {}
+      };
+    case 'offer':
+      return {
+        title: 'Transforme Seu Visual',
+        subtitle: 'Descubra o poder de um estilo autêntico',
+        price: '97',
+        regularPrice: '197',
+        ctaText: 'Quero Transformar Meu Estilo',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        productImage: salesConfig.images.mockups.todos,
+        urgencyText: 'Promoção acaba em breve!',
+        features: [
+          'Descubra seu estilo único e autêntico',
+          'Aprenda a criar looks impactantes',
+          'Aumente sua autoestima e confiança',
+          'Economize tempo e dinheiro'
         ],
-        style: {
-          padding: '30px 0'
-        }
+        bonuses: [
+          'Guia de Visagismo Digital',
+          'Cartela de Cores Personalizada',
+          'Acesso ao Grupo VIP'
+        ],
+        style: {}
       };
-      
-    case 'video':
+    case 'products':
       return {
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        videoTitle: 'Vídeo Explicativo',
-        videoDescription: 'Assista este vídeo para entender melhor como aplicar seu estilo.',
-        videoThumbnail: '',
-        videoAutoplay: false,
-        videoControls: true,
-        style: {
-          width: '100%',
-          height: 'auto'
-        }
-      };
-      
-    case 'two-column':
-      return {
-        leftColumn: {
-          content: '<h3>Coluna da Esquerda</h3><p>Adicione seu conteúdo aqui.</p>',
-          width: '50%',
-          style: {
-            padding: '20px',
-            backgroundColor: '#f9f9f9',
-            borderRadius: '8px'
+        title: 'Receba agora seu Guia Completo:',
+        images: [
+          {
+            url: salesConfig.images.mockups.guiaEstilo,
+            alt: 'Guia de Estilo - Edição Digital'
+          },
+          {
+            url: salesConfig.images.mockups.todos,
+            alt: 'Todos os produtos e bônus exclusivos'
+          },
+          {
+            url: salesConfig.images.mockups.pecasChave,
+            alt: 'Acesso via Celular e Tablet'
           }
-        },
-        rightColumn: {
-          content: '<h3>Coluna da Direita</h3><p>Adicione seu conteúdo aqui.</p>',
-          width: '50%',
-          style: {
-            padding: '20px',
-            backgroundColor: '#f9f9f9',
-            borderRadius: '8px'
-          }
-        },
-        columnGap: '20px',
-        style: {
-          margin: '20px 0'
-        }
+        ]
       };
-      
-    case 'spacer':
+    case 'style-result':
       return {
-        height: '50px',
-        style: {
-          width: '100%'
-        }
+        description: 'Descrição do estilo principal...',
+        customImage: '',
+        showSecondaryStyles: true
       };
-      
-    case 'icon':
+    case 'secondary-styles':
       return {
-        icon: '✓',
-        size: '48px',
-        color: '#B89B7A',
-        title: 'Texto do ícone',
-        position: 'right', // Changed from 'center' to 'right' to match allowed values
-        style: {
-          padding: '20px'
-        }
+        title: 'Seus Estilos Secundários',
+        description: 'Você também tem influências de outros estilos em sua personalidade.'
       };
-      
+    case 'mentor':
+      return {
+        name: 'Gisele Galvão',
+        image: salesConfig.images.gisele,
+        title: 'Consultora de Imagem e Estilo',
+        bio: 'Especialista em coloração pessoal com Certificação internacional. Há mais de 5 anos ajudando mulheres a expressarem sua verdadeira essência através do estilo.'
+      };
     default:
       return {};
   }

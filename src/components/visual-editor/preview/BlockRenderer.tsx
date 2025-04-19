@@ -4,6 +4,8 @@ import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { StyleResult } from '@/types/quiz';
+import StyleHeroBlockPreview from '@/components/result-editor/block-previews/StyleHeroBlockPreview';
+import StyleOfferBlockPreview from '@/components/result-editor/block-previews/StyleOfferBlockPreview';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -73,6 +75,10 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult) {
           </p>
         </div>
       );
+    case 'style-hero':
+      return <StyleHeroBlockPreview content={block.content} styleType={primaryStyle?.category || 'Natural'} />;
+    case 'offer':
+      return <StyleOfferBlockPreview content={block.content} />;
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>

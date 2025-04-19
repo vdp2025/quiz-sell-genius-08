@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { HeaderBlock } from './blocks/HeaderBlock';
@@ -13,6 +14,8 @@ import { CTABlock } from './blocks/CTABlock';
 import { BonusBlock } from './blocks/BonusBlock';
 import { UrgencyBlock } from './blocks/UrgencyBlock';
 import MentorBlockPreview from '@/components/result-editor/block-previews/MentorBlockPreview';
+import StyleHeroBlockPreview from '@/components/result-editor/block-previews/StyleHeroBlockPreview';
+import StyleOfferBlockPreview from '@/components/result-editor/block-previews/StyleOfferBlockPreview';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -45,6 +48,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
       return <BonusBlock content={block.content} onClick={onSelect} />;
     case 'urgency':
       return <UrgencyBlock content={block.content} onClick={onSelect} />;
+    case 'style-hero':
+      return <StyleHeroBlockPreview content={block.content} styleType={block.content.styleType || 'Natural'} />;
+    case 'offer':
+      return <StyleOfferBlockPreview content={block.content} />;
     case 'products':
       return (
         <div 

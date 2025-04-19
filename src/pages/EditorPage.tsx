@@ -85,8 +85,12 @@ export const EditorPage = () => {
         'pricing', 'guarantee', 'cta', 'style-result', 
         'secondary-styles', 'hero-section', 'products',
         'testimonials', 'bonus-carousel', 'video', 'two-column',
-        'icon', 'spacer', 'mentor'
+        'icon', 'spacer', 'mentor', 'style-hero', 'offer'
       ] as const;
+      
+      // Add default style-hero and offer blocks first
+      actions.handleAddBlock('style-hero');
+      actions.handleAddBlock('offer');
       
       // Add each default block
       salesConfig.defaultBlocks.forEach(block => {
