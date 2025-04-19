@@ -1,3 +1,4 @@
+
 export const salesConfig = {
   images: {
     logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
@@ -29,15 +30,15 @@ export const salesConfig = {
       type: "header",
       content: {
         logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-        title: "Você descobriu seu Estilo Sexy! E isso é muito poderoso.",
+        title: "Você descobriu seu Estilo! E isso é muito poderoso.",
         logoHeight: 80
       }
     },
     {
       type: "hero-section",
       content: {
-        title: "SEU ESTILO É SEXY",
-        subtitle: "Agora é hora de expressar sua sensualidade com elegância e autenticidade",
+        title: "SEU ESTILO É",
+        subtitle: "Agora é hora de expressar sua verdadeira essência com autenticidade",
         heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
         heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
       }
@@ -45,13 +46,13 @@ export const salesConfig = {
     {
       type: "benefits",
       content: {
-        title: "O que você vai descobrir no seu Guia de Estilo Sexy:",
+        title: "O que você vai descobrir no seu Guia de Estilo:",
         items: [
-          "Como criar looks sensuais mantendo a elegância",
-          "As cores e modelagens que valorizam suas curvas",
-          "Como transmitir confiança através do seu visual",
-          "Técnicas para equilibrar sensualidade e sofisticação",
-          "Os melhores tecidos e caimentos para seu estilo",
+          "Como criar looks autênticos e poderosos",
+          "As cores e modelagens que mais valorizam você",
+          "Como transmitir sua mensagem através do visual",
+          "Técnicas para equilibrar estilo e personalidade",
+          "Os melhores tecidos e caimentos para seu perfil",
           "Como montar produções impactantes para cada ocasião"
         ]
       }
@@ -63,7 +64,7 @@ export const salesConfig = {
         images: [
           {
             url: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp",
-            alt: "Guia de Estilo Sexy - Edição Digital"
+            alt: "Guia de Estilo - Edição Digital"
           },
           {
             url: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp",
@@ -90,7 +91,7 @@ export const salesConfig = {
       content: {
         regularPrice: "175,00",
         salePrice: "39,00",
-        buttonText: "Quero Meu Guia de Estilo Sexy",
+        buttonText: "Quero meu Guia de Estilo",
         ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
         urgencyText: "Oferta por tempo limitado",
         paymentMethods: "Aceitamos PIX, cartão de crédito e boleto",
@@ -124,78 +125,85 @@ export const salesConfig = {
       }
     }
   ],
-  mentor: {
-    name: "Gisele Galvão",
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.43.29_ubwaq9.webp",
-    title: "Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca pessoal",
-    credentials: "Especialista em coloração pessoal com Certificação internacional",
-    bio: "Advogada de formação. Mãe da Victória, esposa do Fabrício. Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata."
-  },
   styleSpecificContent: {
     natural: {
       benefits: [
         "Como criar looks confortáveis sem perder o estilo",
-        "Tecidos e modelagens ideais para o estilo Natural",
-        "Combinações descomplicadas e versáteis",
-        "Acessórios que complementam sem exageros"
+        "As cores e modelagens que valorizam sua naturalidade",
+        "Como transmitir autenticidade através do visual",
+        "Os melhores tecidos e caimentos para seu perfil",
+        "Como equilibrar conforto e elegância",
+        "Looks versáteis para todas as ocasiões"
       ]
     },
     classico: {
       benefits: [
         "Como criar looks atemporais e sofisticados",
-        "Peças-chave do guarda-roupa clássico",
-        "Combinações que transmitem credibilidade",
-        "Acessórios que elevam o visual"
+        "As cores e modelagens que valorizam sua elegância",
+        "Como transmitir credibilidade através do visual",
+        "Os melhores tecidos e acabamentos para seu perfil",
+        "Como equilibrar tradição e modernidade",
+        "Looks refinados para todas as ocasiões"
       ]
     },
     contemporaneo: {
       benefits: [
-        "Como mesclar tendências com praticidade",
-        "Looks modernos para o dia a dia",
-        "Combinações versáteis e atuais",
-        "Acessórios que fazem a diferença"
+        "Como criar looks modernos e versáteis",
+        "As cores e modelagens que valorizam sua atualidade",
+        "Como transmitir dinamismo através do visual",
+        "Os melhores tecidos e tendências para seu perfil",
+        "Como equilibrar tendências e personalidade",
+        "Looks contemporâneos para todas as ocasiões"
       ]
     },
     elegante: {
       benefits: [
-        "Como criar looks refinados e sofisticados",
-        "Tecidos e acabamentos premium",
-        "Combinações que transmitem poder",
-        "Acessórios que elevam o status"
+        "Como criar looks sofisticados e refinados",
+        "As cores e modelagens que valorizam sua distinção",
+        "Como transmitir poder através do visual",
+        "Os melhores tecidos e acabamentos premium",
+        "Como equilibrar luxo e discrição",
+        "Looks imponentes para todas as ocasiões"
       ]
     },
     romantico: {
       benefits: [
         "Como criar looks delicados e femininos",
-        "Tecidos e estampas que transmitem suavidade",
-        "Combinações harmoniosas e graciosas",
-        "Acessórios que realçam a feminilidade"
+        "As cores e modelagens que valorizam sua doçura",
+        "Como transmitir suavidade através do visual",
+        "Os melhores tecidos e detalhes para seu perfil",
+        "Como equilibrar romantismo e modernidade",
+        "Looks encantadores para todas as ocasiões"
       ]
     },
     sexy: {
       benefits: [
         "Como criar looks sensuais com elegância",
-        "Tecidos e modelagens que valorizam as curvas",
-        "Combinações que transmitem confiança",
-        "Acessórios que realçam o poder feminino",
-        "Equilíbrio entre sensualidade e sofisticação",
-        "Looks impactantes para cada ocasião"
+        "As cores e modelagens que valorizam suas curvas",
+        "Como transmitir confiança através do visual",
+        "Os melhores tecidos e caimentos para seu perfil",
+        "Como equilibrar sensualidade e sofisticação",
+        "Looks impactantes para todas as ocasiões"
       ]
     },
     dramatico: {
       benefits: [
-        "Como criar looks impactantes e modernos",
-        "Peças estruturadas e marcantes",
-        "Combinações que chamam atenção",
-        "Acessórios statement que fazem a diferença"
+        "Como criar looks marcantes e poderosos",
+        "As cores e modelagens que valorizam seu impacto",
+        "Como transmitir intensidade através do visual",
+        "Os melhores tecidos e estruturas para seu perfil",
+        "Como equilibrar dramaticidade e elegância",
+        "Looks memoráveis para todas as ocasiões"
       ]
     },
     criativo: {
       benefits: [
-        "Como criar looks autênticos e originais",
-        "Misturas de cores e estampas",
-        "Combinações únicas e expressivas",
-        "Acessórios que contam sua história"
+        "Como criar looks originais e autênticos",
+        "As cores e modelagens que valorizam sua criatividade",
+        "Como transmitir personalidade através do visual",
+        "Os melhores tecidos e combinações para seu perfil",
+        "Como equilibrar originalidade e harmonia",
+        "Looks únicos para todas as ocasiões"
       ]
     }
   }
