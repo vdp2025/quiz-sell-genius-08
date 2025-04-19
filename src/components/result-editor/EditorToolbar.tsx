@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, RefreshCw, Palette, Download } from 'lucide-react';
-import { exportProjectAsJson } from '@/utils/exportUtils';
+import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
+import { JsonConfigEditor } from './JsonConfigEditor';
 
 interface EditorToolbarProps {
   onSave: () => void;
@@ -11,6 +11,7 @@ interface EditorToolbarProps {
   onReset: () => void;
   onEditGlobalStyles: () => void;
   resultPageConfig?: any;
+  onUpdateConfig?: (newConfig: any) => void;
 }
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -19,14 +20,9 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onPreviewToggle,
   onReset,
   onEditGlobalStyles,
-  resultPageConfig
+  resultPageConfig,
+  onUpdateConfig
 }) => {
-  const handleExport = () => {
-    if (resultPageConfig) {
-      exportProjectAsJson(resultPageConfig);
-    }
-  };
-
   return (
     <div className="border-b bg-white px-4 py-3 flex items-center justify-between">
       <div>
@@ -53,6 +49,13 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
           <Palette className="w-4 h-4 mr-2" />
           Estilos Globais
         </Button>
+
+        {resultPageConfig && onUpdateConfig && (
+          <JsonConfigEditor 
+            config={resultPageConfig}
+            onUpdate={onUpdateConfig}
+          />
+        )}
         
         <Button
           variant="outline"
@@ -62,15 +65,6 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Resetar
-        </Button>
-        
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleExport}
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Exportar JSON
         </Button>
         
         <Button
