@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -11,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { JsonEditorPanel } from '@/components/result-editor/JsonEditorPanel';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style?: string }>();
@@ -84,10 +84,35 @@ export const EditorPage = () => {
     );
   }
 
-  const handleJsonUpdate = (newConfig: any) => {
-    if (newConfig) {
-      Object.keys(newConfig).forEach(key => {
-        actions.updateSection(key, newConfig[key]);
+  const handleJsonUpdate = async (newConfig: ResultPageConfig) => {
+    if (!newConfig || !newConfig.styleType) {
+      toast({
+        title: 'Erro ao atualizar JSON',
+        description: 'Configuração inválida',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      Object.entries(newConfig).forEach(([key, value]) => {
+        actions.updateSection(key, value);
+      });
+
+      await actions.handleSave();
+
+      toast({
+        title: 'JSON atualizado',
+        description: 'As alterações foram aplicadas com sucesso'
+      });
+
+      setIsJsonEditorOpen(false);
+    } catch (error) {
+      console.error('Error updating JSON:', error);
+      toast({
+        title: 'Erro ao atualizar JSON',
+        description: 'Ocorreu um erro ao aplicar as alterações',
+        variant: 'destructive'
       });
     }
   };

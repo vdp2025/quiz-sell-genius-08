@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -6,6 +5,7 @@ import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
 import { getDefaultContentForType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
+import { set, get } from 'lodash';
 
 export const useResultPageEditor = (styleType: string) => {
   const [state, setState] = useState<EditorState>({
@@ -96,13 +96,50 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
-  // Save blocks along with other config data
-  // Modified to return Promise<void> instead of Promise<boolean>
-  const handleSave = useCallback(async (): Promise<void> => {
-    // Update the blocks in the config before saving
-    updateSection('blocks', state.blocks);
-    await saveConfig();
-  }, [state.blocks, updateSection, saveConfig]);
+  const updateSection = useCallback((path: string, newContent: any) => {
+    setResultPageConfig(prevConfig => {
+      const newConfig = { ...prevConfig };
+      set(newConfig, path, newContent);
+      return newConfig;
+    });
+
+    // Update blocks if blocks array is being modified
+    if (path === 'blocks') {
+      setState(prev => ({
+        ...prev,
+        blocks: newContent
+      }));
+    }
+  }, []);
+
+  // Modified to return Promise<void> and ensure sync
+  const saveConfig = useCallback(async (): Promise<void> => {
+    try {
+      // Ensure the latest blocks are in the config
+      const configToSave = {
+        ...resultPageConfig,
+        blocks: state.blocks
+      };
+      
+      await resultPageStorage.save(configToSave);
+      
+      // Update local state with saved config
+      setResultPageConfig(configToSave);
+      
+      toast({
+        title: "Configuração salva",
+        description: "As alterações foram salvas com sucesso",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error saving result page config:', error);
+      toast({
+        title: 'Erro ao salvar configuração',
+        description: 'Não foi possível salvar a configuração da página de resultados',
+        variant: 'destructive'
+      });
+    }
+  }, [resultPageConfig, state.blocks]);
 
   return {
     resultPageConfig,
