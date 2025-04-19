@@ -106,3 +106,16 @@ export function renderContentEditor(
       );
   }
 }
+
+export function getSectionStyle(sectionPath: string, config: any): Record<string, any> {
+  const pathParts = sectionPath.split('.');
+  let current = { ...config };
+  
+  for (const part of pathParts) {
+    if (current[part]) {
+      current = current[part];
+    }
+  }
+  
+  return current.style || {};
+}
