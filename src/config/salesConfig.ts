@@ -1,4 +1,3 @@
-
 export const salesConfig = {
   images: {
     logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
@@ -27,20 +26,25 @@ export const salesConfig = {
   },
   defaultBlocks: [
     {
-      type: "header",
+      type: "hero-section",
       content: {
-        logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-        title: "Você descobriu seu Estilo! E isso é muito poderoso.",
-        logoHeight: 80
+        title: "DESCUBRA SEU ESTILO",
+        subtitle: "Aprenda a expressar sua verdadeira essência com autenticidade",
+        mainImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
+        urgencyText: "Oferta especial por tempo limitado!"
       }
     },
     {
-      type: "hero-section",
+      type: "offer",
       content: {
-        title: "SEU ESTILO É",
-        subtitle: "Agora é hora de expressar sua verdadeira essência com autenticidade",
-        heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
-        heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
+        title: "Transforme Seu Visual",
+        subtitle: "Descubra o poder de um estilo autêntico",
+        price: "97",
+        regularPrice: "197",
+        ctaText: "Quero Transformar Meu Estilo",
+        ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+        productImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp",
+        urgencyText: "Promoção acaba em breve!"
       }
     },
     {
@@ -184,7 +188,8 @@ export const salesConfig = {
         "Os melhores tecidos e caimentos para seu perfil",
         "Como equilibrar sensualidade e sofisticação",
         "Looks impactantes para todas as ocasiões"
-      ]
+      ],
+      heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp"
     },
     dramatico: {
       benefits: [
