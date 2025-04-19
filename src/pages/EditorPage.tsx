@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
-import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
 export const EditorPage = () => {
@@ -17,7 +15,6 @@ export const EditorPage = () => {
     "Romântico", "Sexy", "Dramático", "Criativo"
   ];
   
-  // Por padrão, se não houver um estilo na URL, redireciona para o editor Natural
   useEffect(() => {
     if (!style && window.location.pathname === '/editor') {
       navigate('/editor/Natural');
@@ -32,7 +29,7 @@ export const EditorPage = () => {
   }, [style, navigate]);
   
   if (!style) {
-    return null; // Evita renderização antes do redirecionamento
+    return null;
   }
   
   const styleCategory = style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo";
@@ -52,11 +49,10 @@ export const EditorPage = () => {
             variant="outline"
             className="mb-4"
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
             Voltar ao Editor
           </Button>
           <h2 className="text-2xl font-playfair text-[#432818] mb-6">Modelos de Página</h2>
-          <TemplateList />
+          {/* Removed TemplateList */}
         </div>
       ) : (
         <div className="h-full">
