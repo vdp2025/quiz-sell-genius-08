@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -129,27 +130,16 @@ export const EditorPage = () => {
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={55}>
-          {isJsonEditorOpen ? (
-            <div className="h-full flex flex-col p-4 bg-[#FAF9F7] overflow-auto">
-              <div className="bg-white rounded-lg shadow-sm p-6 h-full">
-                <JsonEditorPanel
-                  config={resultPageConfig}
-                  onUpdate={handleJsonUpdate}
-                />
-              </div>
-            </div>
-          ) : (
-            <EditorPreview
-              blocks={blocks}
-              selectedBlockId={selectedBlockId}
-              onSelectBlock={actions.setSelectedBlockId}
-              isPreviewing={isPreviewing}
-              primaryStyle={selectedStyle}
-              onReorderBlocks={actions.handleReorderBlocks}
-              styleType={styleCategory}
-              onDeleteBlock={actions.handleDeleteBlock}
-            />
-          )}
+          <EditorPreview
+            blocks={blocks}
+            selectedBlockId={selectedBlockId}
+            onSelectBlock={actions.setSelectedBlockId}
+            isPreviewing={isPreviewing}
+            primaryStyle={selectedStyle}
+            onReorderBlocks={actions.handleReorderBlocks}
+            styleType={styleCategory}
+            onDeleteBlock={actions.handleDeleteBlock}
+          />
         </ResizablePanel>
 
         <ResizableHandle withHandle />
@@ -175,6 +165,13 @@ export const EditorPage = () => {
           onCancel={actions.toggleGlobalStyles}
         />
       )}
+      
+      <JsonEditorPanel
+        isOpen={isJsonEditorOpen}
+        onClose={() => setIsJsonEditorOpen(false)}
+        config={resultPageConfig}
+        onUpdate={handleJsonUpdate}
+      />
     </div>
   );
 };
