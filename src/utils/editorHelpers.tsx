@@ -4,7 +4,7 @@ import HeaderEditor from '@/components/result-editor/editors/HeaderEditor';
 import MainContentEditor from '@/components/result-editor/editors/MainContentEditor';
 import OfferHeroEditor from '@/components/result-editor/editors/OfferHeroEditor';
 import PricingEditor from '@/components/result-editor/editors/PricingEditor';
-import { ResultPageConfig } from '@/types/resultPageConfig';
+import { ResultPageConfig, Section, OfferSection } from '@/types/resultPageConfig';
 
 type SectionTitle = {
   [key: string]: string;
@@ -27,27 +27,49 @@ export function getEditorTitle(sectionPath: string): string {
   return map[sectionPath] || sectionPath;
 }
 
+interface SectionData {
+  content: any;
+  style?: Record<string, any>;
+}
+
+// Helper function to get the correct section data from config
+function getSectionData(config: ResultPageConfig, sectionPath: string): SectionData {
+  const pathParts = sectionPath.split('.');
+  
+  if (pathParts.length === 1) {
+    // Direct section like 'header', 'mainContent'
+    const section = config[pathParts[0] as keyof ResultPageConfig] as Section;
+    return {
+      content: section.content,
+      style: section.style
+    };
+  } else if (pathParts.length === 2 && pathParts[0] === 'offer') {
+    // Nested section like 'offer.hero', 'offer.pricing'
+    const offerSection = config.offer as OfferSection;
+    const subSection = offerSection[pathParts[1] as keyof OfferSection] as Section;
+    return {
+      content: subSection.content,
+      style: subSection.style
+    };
+  }
+  
+  // Default empty section data
+  return { content: {}, style: {} };
+}
+
 export function renderContentEditor(
   sectionPath: string,
   config: ResultPageConfig,
   updateSection: (path: string, content: any) => void
 ): React.ReactNode {
-  const pathParts = sectionPath.split('.');
-  let current = { ...config };
-  let currentPath = '';
-  
-  for (const part of pathParts) {
-    currentPath = currentPath ? `${currentPath}.${part}` : part;
-    if (current[part as keyof typeof current]) {
-      current = current[part as keyof typeof current] as any;
-    }
-  }
+  // Get the content for the section
+  const sectionData = getSectionData(config, sectionPath);
   
   switch(sectionPath) {
     case 'header':
       return (
         <HeaderEditor 
-          content={current.content}
+          content={sectionData.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
@@ -55,7 +77,7 @@ export function renderContentEditor(
     case 'mainContent':
       return (
         <MainContentEditor 
-          content={current.content}
+          content={sectionData.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
@@ -63,7 +85,7 @@ export function renderContentEditor(
     case 'offer.hero':
       return (
         <OfferHeroEditor 
-          content={current.content}
+          content={sectionData.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
@@ -71,7 +93,7 @@ export function renderContentEditor(
     case 'offer.pricing':
       return (
         <PricingEditor 
-          content={current.content}
+          content={sectionData.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
@@ -79,7 +101,7 @@ export function renderContentEditor(
     default:
       return (
         <div className="space-y-4">
-          {Object.entries(current.content || {}).map(([key, value]) => {
+          {Object.entries(sectionData.content || {}).map(([key, value]) => {
             if (typeof value === 'string') {
               return (
                 <div key={key} className="space-y-2">
@@ -113,14 +135,6 @@ export function renderContentEditor(
 }
 
 export function getSectionStyle(sectionPath: string, config: ResultPageConfig): Record<string, any> {
-  const pathParts = sectionPath.split('.');
-  let current = { ...config };
-  
-  for (const part of pathParts) {
-    if (current[part as keyof typeof current]) {
-      current = current[part as keyof typeof current] as any;
-    }
-  }
-  
-  return current.style || {};
+  const sectionData = getSectionData(config, sectionPath);
+  return sectionData.style || {};
 }

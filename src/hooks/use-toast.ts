@@ -11,7 +11,7 @@ export interface Toast extends ToastProps {
 
 export interface ToasterToast extends Toast {
   id: string;
-  type?: 'normal' | 'error' | 'success' | 'warning';
+  variant?: "default" | "destructive";
   icon?: React.ReactNode;
   dismissible?: boolean;
   duration?: number;
@@ -29,11 +29,11 @@ const emitChange = () => {
 };
 
 export const toast = (props: Omit<ToasterToast, "id">) => {
-  const id = props.id || Math.random().toString(36).substring(2, 9);
+  const id = props.id ?? Math.random().toString(36).substring(2, 9);
   const newToast = {
     ...props,
     id,
-    type: props.type || 'normal',
+    variant: props.variant || 'default',
     dismissible: props.dismissible !== false
   };
 

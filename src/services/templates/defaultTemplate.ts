@@ -30,7 +30,7 @@ export const defaultTemplate: ResultPageConfig = {
     visible: true,
     content: {},
     style: {
-      marginTop: "2rem"
+      margin: "2rem 0 0 0"
     }
   },
   offer: {
