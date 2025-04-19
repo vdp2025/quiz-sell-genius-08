@@ -50,7 +50,7 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
     }
   };
 
-  const item = {
+  const itemVariant = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
   };
@@ -79,7 +79,7 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
           <motion.div
             key={index}
             className="flex items-start gap-4 p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
-            variants={item}
+            variants={itemVariant}
           >
             <div className="flex-shrink-0 mt-1">
               {content.useIcons !== false ? (

@@ -1,3 +1,4 @@
+
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles: {
@@ -63,7 +64,6 @@ export interface EditableContent {
   guaranteeText?: string;
 
   // Hero Section Properties
-  subtitle?: string;
   heroImage?: string;
   heroImage2?: string;
   heroImageAlt?: string;
@@ -73,9 +73,38 @@ export interface EditableContent {
 
   // Benefits Section Properties
   items?: string[];
-  icon?: string;
-  iconColor?: string;
   useIcons?: boolean;
+  iconColor?: string;
+  
+  // Icon Properties
+  icon?: string;
+  size?: string;
+  color?: string;
+  position?: 'left' | 'center' | 'right';
+  
+  // Video Properties 
+  videoUrl?: string;
+  videoTitle?: string;
+  videoDescription?: string;
+  videoThumbnail?: string;
+  videoAutoplay?: boolean;
+  videoControls?: boolean;
+  
+  // Two Column Block
+  leftColumn?: any;
+  rightColumn?: any;
+  columnGap?: string;
+  
+  // Carousel Properties 
+  carouselImages?: Array<{url: string; alt: string; caption?: string}>;
+  bonusImages?: Array<{url: string; alt: string; title: string}>;
+  autoPlay?: boolean;
+  interval?: number;
+  showArrows?: boolean;
+  showDots?: boolean;
+  
+  // Testimonials
+  testimonialsImage?: string;
   
   // General properties
   description?: string;
@@ -125,24 +154,13 @@ export interface EditableContent {
   animationDuration?: string;
   animationDelay?: string;
   animationTrigger?: 'onLoad' | 'onScroll' | 'onHover';
-
-  // Carousel Properties
-  carouselImages?: string[];
-  bonusImages?: string[];
-  autoPlay?: boolean;
-  interval?: number;
-  showArrows?: boolean;
-  showDots?: boolean;
-
-  // Block-specific Properties
+  
+  // Additional properties
   code?: string;
   faqItems?: Array<{ question: string; answer: string }>;
   defaultOpen?: boolean;
   image?: string;
-  size?: string;
-  color?: string;
-  position?: 'left' | 'center' | 'right';
   images?: string[];
   height?: string;
-  icon?: string;
+  checkoutUrl?: string;
 }
