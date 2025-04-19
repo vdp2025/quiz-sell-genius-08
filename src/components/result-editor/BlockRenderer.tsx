@@ -15,20 +15,22 @@ import TwoColumnBlockPreview from './block-previews/TwoColumnBlockPreview';
 
 interface BlockRendererProps {
   block: Block;
-  isSelected: boolean;
-  onSelect: () => void;
-  isPreview: boolean;
-  primaryStyle: StyleResult;
+  isSelected?: boolean;
+  onSelect?: () => void;
+  isPreview?: boolean;
+  primaryStyle?: StyleResult;
+  onClick?: () => void;
   onUpdate?: (content: any) => void;
   styleType?: string;
 }
 
 const BlockRenderer: React.FC<BlockRendererProps> = ({
   block,
-  isSelected,
-  onSelect,
-  isPreview,
+  isSelected = false,
+  onSelect = () => {},
+  isPreview = false,
   primaryStyle,
+  onClick,
   onUpdate,
   styleType = 'Natural'
 }) => {
@@ -73,7 +75,12 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
         !isPreview && "cursor-pointer hover:outline hover:outline-[#B89B7A] hover:outline-2 hover:outline-dashed",
         isSelected && !isPreview && "outline outline-[#B89B7A] outline-2 outline-dashed"
       )}
-      onClick={() => !isPreview && onSelect()}
+      onClick={() => {
+        if (!isPreview) {
+          if (onClick) onClick();
+          onSelect();
+        }
+      }}
     >
       {renderBlockContent()}
     </div>

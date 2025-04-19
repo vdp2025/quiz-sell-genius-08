@@ -8,9 +8,10 @@ interface BenefitsBlockPreviewProps {
     items?: string[];
     style?: any;
   };
+  styleType?: string;
 }
 
-const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) => {
+const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content, styleType }) => {
   const defaultBenefits = [
     "Como montar looks com intenção (e não no improviso)",
     "Como usar suas cores, modelagens e tecidos a seu favor",

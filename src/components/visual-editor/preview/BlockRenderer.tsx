@@ -68,7 +68,7 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
 
   switch (block.type) {
     case 'headline':
-      return <HeadlineBlockPreview content={block.content} />;
+      return <HeadlineBlockPreview content={block.content} styleType={primaryStyle?.category} />;
     case 'text':
       return <TextBlockPreview content={block.content} />;
     case 'style-result':
@@ -85,18 +85,19 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
     case 'offer':
       return <StyleOfferBlockPreview content={block.content} />;
     case 'benefits':
-      return <BenefitsBlockPreview content={block.content} />;
+      return <BenefitsBlockPreview content={block.content} styleType={primaryStyle?.category} />;
     case 'testimonials':
       return <TestimonialsBlockPreview 
         content={block.content} 
-        isPreview={!!isPreview}
+        styleType={primaryStyle?.category}
+        isPreview={isPreview}
         onUpdate={onUpdate}
         block={block}
       />;
     case 'guarantee':
-      return <GuaranteeBlockPreview content={block.content} />;
+      return <GuaranteeBlockPreview content={block.content} styleType={primaryStyle?.category} />;
     case 'two-column':
-      return <TwoColumnBlockPreview content={block.content} />;
+      return <TwoColumnBlockPreview content={block.content} styleType={primaryStyle?.category} />;
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>

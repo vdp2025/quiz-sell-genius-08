@@ -1,14 +1,23 @@
 
 import React from 'react';
-import { EditableContent } from '@/types/editor';
+import { EditableContent, EditorBlock } from '@/types/editor';
 import { Quote } from 'lucide-react';
 
 interface TestimonialsBlockPreviewProps {
   content: EditableContent;
   styleType?: string;
+  isPreview?: boolean;
+  onUpdate?: (content: any) => void;
+  block?: EditorBlock;
 }
 
-const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ content, styleType = 'Natural' }) => {
+const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ 
+  content, 
+  styleType = 'Natural',
+  isPreview,
+  onUpdate,
+  block
+}) => {
   const getStyleColor = () => {
     const styleColors: Record<string, string> = {
       'Natural': '#B89B7A',

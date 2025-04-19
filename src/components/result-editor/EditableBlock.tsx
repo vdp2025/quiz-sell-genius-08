@@ -43,6 +43,9 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
           block={block} 
           primaryStyle={primaryStyle}
           styleType={styleType}
+          isPreview={true}
+          isSelected={false}
+          onSelect={() => {}}
         />
       </div>
     );
@@ -63,6 +66,9 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
           block={block} 
           primaryStyle={primaryStyle}
           styleType={styleType}
+          isPreview={false}
+          isSelected={isSelected}
+          onSelect={handleClick}
           onClick={handleClick}
         />
         
