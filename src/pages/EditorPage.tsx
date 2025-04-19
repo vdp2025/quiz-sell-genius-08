@@ -1,143 +1,34 @@
 
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
 import { EditorPreview } from '@/components/result-editor/EditorPreview';
 import { PropertiesPanel } from '@/components/result-editor/PropertiesPanel';
-import EditorToolbar from '@/components/result-editor/EditorToolbar';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
-import { useSalesConfig } from '@/hooks/useSalesConfig';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/use-toast';
-import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
-import { Block } from '@/types/editor';
+import { EditorToolbar } from '@/components/result-editor/EditorToolbar';
+import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
 
 export const EditorPage = () => {
-  const { style } = useParams<{ style?: string }>();
-  const navigate = useNavigate();
-  const salesConfig = useSalesConfig(style || 'Natural');
-  
-  const styleCategories = [
-    "Natural", "Clássico", "Contemporâneo", "Elegante", 
-    "Romântico", "Sexy", "Dramático", "Criativo"
-  ];
-  
-  useEffect(() => {
-    const savedResult = localStorage.getItem('quizResult');
-    let userPrimaryStyle = null;
-    
-    if (savedResult) {
-      try {
-        const parsedResult = JSON.parse(savedResult);
-        if (parsedResult.primaryStyle && parsedResult.primaryStyle.category) {
-          userPrimaryStyle = parsedResult.primaryStyle.category;
-        }
-      } catch (error) {
-        console.error('Erro ao analisar o resultado do quiz:', error);
-      }
-    }
-    
-    if (!style && window.location.pathname === '/editor') {
-      if (userPrimaryStyle && styleCategories.includes(userPrimaryStyle)) {
-        navigate(`/editor/${userPrimaryStyle}`);
-      } else {
-        navigate('/editor/Natural');
-      }
-    } else if (style && !styleCategories.includes(style)) {
-      toast({
-        title: "Estilo inválido",
-        description: `O estilo "${style}" não existe. Redirecionando para ${userPrimaryStyle || 'Natural'}.`,
-        variant: "destructive"
-      });
-      
-      navigate(`/editor/${userPrimaryStyle || 'Natural'}`);
-    }
-  }, [style, navigate, styleCategories]);
-  
-  if (!style) {
-    return null;
-  }
-  
-  const styleCategory = style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo";
-  
-  const selectedStyle = {
-    category: styleCategory,
-    score: 100,
-    percentage: 100
-  };
-  
+  const { style } = useParams<{ style: string }>();
   const {
-    resultPageConfig,
-    loading,
     blocks,
     selectedBlockId,
     isPreviewing,
-    isGlobalStylesOpen,
-    actions
-  } = useResultPageEditor(styleCategory);
+    actions,
+  } = useResultPageEditor(style || 'Natural');
 
-  useEffect(() => {
-    if (!loading && blocks.length === 0) {
-      // Use the allowed block types from the editor
-      const allowedBlockTypes: Block['type'][] = [
-        'header', 'headline', 'text', 'image', 'benefits', 
-        'pricing', 'guarantee', 'cta', 'style-result', 
-        'secondary-styles', 'hero-section', 'products',
-        'testimonials', 'bonus-carousel', 'video', 'two-column',
-        'icon', 'spacer', 'mentor', 'style-hero', 'offer'
-      ];
-      
-      // Add default style-hero and offer blocks first
-      actions.handleAddBlock('style-hero' as Block['type']);
-      actions.handleAddBlock('offer' as Block['type']);
-      
-      // Add each default block
-      salesConfig.defaultBlocks.forEach(block => {
-        // Verify the block type is in our allowed list before adding it
-        if (allowedBlockTypes.includes(block.type as Block['type'])) {
-          actions.handleAddBlock(block.type as Block['type']);
-        } else {
-          console.warn(`Block type "${block.type}" is not supported by the editor`);
-        }
-      });
-    }
-  }, [loading, salesConfig, blocks.length, actions]);
+  const selectedStyle = {
+    category: style || 'Natural',
+    score: 100,
+    percentage: 100
+  };
 
-  if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-[#1A1818]/70">Carregando configurações...</p>
-      </div>
-    );
-  }
-  
   return (
     <div className="h-screen flex flex-col">
-      <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center">
-        <h1 className="text-xl font-medium mr-auto">Editor de Página - Estilo {styleCategory}</h1>
-        <div className="flex gap-2">
-          {styleCategories.map(cat => (
-            <Link key={cat} to={`/editor/${cat}`}>
-              <Button
-                variant={cat === styleCategory ? "default" : "outline"}
-                size="sm"
-                className={cat === styleCategory ? "bg-[#B89B7A] hover:bg-[#A38A69]" : ""}
-              >
-                {cat}
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </div>
-    
       <EditorToolbar 
         onSave={actions.handleSave}
         isPreviewMode={isPreviewing}
         onPreviewToggle={actions.togglePreview}
-        onReset={actions.handleReset}
-        onEditGlobalStyles={actions.toggleGlobalStyles}
-        resultPageConfig={resultPageConfig}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
@@ -155,7 +46,7 @@ export const EditorPage = () => {
             isPreviewing={isPreviewing}
             primaryStyle={selectedStyle}
             onReorderBlocks={actions.handleReorderBlocks}
-            styleType={styleCategory}
+            styleType={style}
             onDeleteBlock={actions.handleDeleteBlock}
           />
         </ResizablePanel>
@@ -167,22 +58,20 @@ export const EditorPage = () => {
             selectedBlockId={selectedBlockId}
             blocks={blocks}
             onClose={() => actions.setSelectedBlockId(null)}
-            onUpdate={actions.handleUpdateBlock}
-            onDelete={actions.handleDeleteBlock}
+            onUpdate={(content) => {
+              if (selectedBlockId) {
+                actions.handleUpdateBlock(selectedBlockId, content);
+              }
+            }}
+            onDelete={() => {
+              if (selectedBlockId) {
+                actions.handleDeleteBlock(selectedBlockId);
+                actions.setSelectedBlockId(null);
+              }
+            }}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
-      
-      {isGlobalStylesOpen && (
-        <GlobalStylesEditor
-          globalStyles={resultPageConfig.globalStyles || {}}
-          onSave={(styles) => {
-            actions.updateSection('globalStyles', styles);
-            actions.toggleGlobalStyles();
-          }}
-          onCancel={actions.toggleGlobalStyles}
-        />
-      )}
     </div>
   );
 };

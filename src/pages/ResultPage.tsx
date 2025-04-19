@@ -39,23 +39,26 @@ const ResultPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#fffaf7]">
+    <div className="min-h-screen bg-[#fffaf7] flex flex-col">
       <Header 
-        primaryStyle={primaryStyle}
-        logoHeight={globalStyles.logoHeight}
         logo={globalStyles.logo}
         logoAlt={globalStyles.logoAlt}
+        title="Olá, seu Estilo Predominante é:"
+        primaryStyle={primaryStyle}
+        logoHeight={56}
       />
       
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <StyleResultSection 
-          primaryStyle={primaryStyle}
-          description={styleConfig[primaryStyle.category].description}
-          image={styleConfig[primaryStyle.category].image}
-          secondaryStyles={secondaryStyles}
-        />
-        
-        <OfferCard primaryStyle={primaryStyle} />
+      <div className="flex-1">
+        <div className="container mx-auto px-4 py-8 max-w-2xl">
+          <StyleResultSection 
+            primaryStyle={primaryStyle}
+            description={styleConfig[primaryStyle.category].description}
+            image={styleConfig[primaryStyle.category].image}
+            secondaryStyles={secondaryStyles}
+          />
+          
+          <OfferCard primaryStyle={primaryStyle} />
+        </div>
       </div>
 
       <EditorButton />
