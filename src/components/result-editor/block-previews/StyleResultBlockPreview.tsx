@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { EditableContent } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
 import { getStyleConfig } from '@/utils/styleUtils';
@@ -15,9 +15,26 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
   primaryStyle,
   styleType
 }) => {
-  // Use styleType if provided, otherwise use primaryStyle
-  const styleCategory = styleType || primaryStyle?.category || 'Natural';
-  const styleInfo = getStyleConfig(styleCategory as any);
+  const [userPrimaryStyle, setUserPrimaryStyle] = useState<StyleResult | null>(null);
+  
+  // Carregar o resultado do quiz do localStorage
+  useEffect(() => {
+    const savedResult = localStorage.getItem('quizResult');
+    if (savedResult) {
+      try {
+        const result = JSON.parse(savedResult);
+        if (result.primaryStyle) {
+          setUserPrimaryStyle(result.primaryStyle);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar resultado do quiz:', error);
+      }
+    }
+  }, []);
+  
+  // Usar o estilo do quiz se disponível, senão usar styleType ou primaryStyle
+  const displayStyle = userPrimaryStyle?.category || styleType || primaryStyle?.category || 'Natural';
+  const styleInfo = getStyleConfig(displayStyle as any);
 
   return (
     <div className="p-6 bg-white rounded-lg border border-[#B89B7A]/20">
@@ -25,19 +42,19 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
         {content.imageUrl ? (
           <img
             src={content.imageUrl}
-            alt={styleCategory}
+            alt={displayStyle}
             className="w-full md:w-1/3 rounded-lg"
           />
         ) : (
           <img
             src={styleInfo.image}
-            alt={styleCategory}
+            alt={displayStyle}
             className="w-full md:w-1/3 rounded-lg"
           />
         )}
         <div className="flex-1">
           <h2 className="text-xl font-playfair text-[#432818] mb-2">
-            {content.title || `Seu estilo predominante é ${styleCategory}`}
+            {content.title || `Seu estilo predominante é ${displayStyle}`}
           </h2>
           <p className="text-[#8F7A6A]">
             {content.description || styleInfo.description}

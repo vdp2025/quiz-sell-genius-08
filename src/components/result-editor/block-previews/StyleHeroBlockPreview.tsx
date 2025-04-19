@@ -1,7 +1,7 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { StyleResult } from '@/types/quiz';
+import { getStyleConfig } from '@/utils/styleUtils';
 
 interface StyleHeroBlockPreviewProps {
   content: {
@@ -9,67 +9,82 @@ interface StyleHeroBlockPreviewProps {
     subtitle?: string;
     description?: string;
     mainImage?: string;
+    styleType?: string;
     style?: any;
   };
-  styleType: string;
+  styleType?: string;
 }
 
 const StyleHeroBlockPreview: React.FC<StyleHeroBlockPreviewProps> = ({ content, styleType }) => {
+  const [userPrimaryStyle, setUserPrimaryStyle] = useState<StyleResult | null>(null);
+  
+  // Carregar o estilo do usuário do localStorage
+  useEffect(() => {
+    const savedResult = localStorage.getItem('quizResult');
+    if (savedResult) {
+      try {
+        const result = JSON.parse(savedResult);
+        if (result.primaryStyle) {
+          setUserPrimaryStyle(result.primaryStyle);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estilo do usuário:', error);
+      }
+    }
+  }, []);
+  
+  // Usar o estilo do quiz se disponível, senão usar styleType ou conteúdo
+  const displayStyle = userPrimaryStyle?.category || styleType || content.styleType || 'Natural';
+  const styleInfo = getStyleConfig(displayStyle as any);
+
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-[#fff7f3] to-white rounded-2xl p-8 md:p-12" style={content.style}>
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-6xl mx-auto"
-      >
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <motion.h1 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-[#aa6b5d]"
-            >
-              {content.title || `Descubra seu Estilo ${styleType}`}
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl md:text-2xl text-[#1A1818]/80"
-            >
-              {content.subtitle || "Transforme sua imagem e expresse sua verdadeira essência"}
-            </motion.p>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="inline-flex items-center text-[#aa6b5d] font-medium hover:text-[#8f574a] transition-colors"
-            >
-              <span>Descubra mais</span>
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </motion.div>
+    <div className="relative overflow-hidden bg-gradient-to-br from-[#fff7f3] to-white rounded-2xl p-8" style={content.style}>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#aa6b5d]/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+      
+      <div className="relative max-w-5xl mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#aa6b5d] mb-4">
+            {content.title || `DESCUBRA SEU ESTILO ${displayStyle.toUpperCase()}`}
+          </h2>
+          
+          <p className="text-xl text-[#1A1818]/80 max-w-2xl mx-auto">
+            {content.subtitle || 'Transforme sua imagem e expresse sua verdadeira essência'}
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 className="text-2xl font-medium text-[#aa6b5d] mb-4">{displayStyle}</h3>
+            <p className="text-[#1A1818]/80 mb-6">
+              {content.description || styleInfo.description}
+            </p>
+            <div className="bg-white p-4 rounded-lg inline-block shadow-sm">
+              <div className="flex items-center text-[#aa6b5d]">
+                <span className="font-semibold mr-2">Conheça seu estilo único</span>
+                <span className="text-sm bg-[#aa6b5d] text-white px-2 py-1 rounded">
+                  {userPrimaryStyle ? `${userPrimaryStyle.percentage}%` : '100%'}
+                </span>
+              </div>
+            </div>
           </div>
           
-          {content.mainImage && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="relative"
-            >
+          <div className="relative">
+            {content.mainImage ? (
               <img
                 src={content.mainImage}
-                alt={`Estilo ${styleType}`}
-                className="w-full rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-500"
+                alt={displayStyle}
+                className="w-full h-auto rounded-lg shadow-lg"
               />
-            </motion.div>
-          )}
+            ) : (
+              <img
+                src={styleInfo.image}
+                alt={displayStyle}
+                className="w-full h-auto rounded-lg shadow-lg"
+              />
+            )}
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

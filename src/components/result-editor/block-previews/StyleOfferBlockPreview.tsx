@@ -1,8 +1,8 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShoppingCart, Star, Award, Timer } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
+import { CheckCircle } from 'lucide-react';
 
 interface StyleOfferBlockPreviewProps {
   content: {
@@ -12,129 +12,121 @@ interface StyleOfferBlockPreviewProps {
     regularPrice?: string;
     ctaText?: string;
     ctaUrl?: string;
-    features?: string[];
-    bonuses?: string[];
     productImage?: string;
     urgencyText?: string;
+    features?: string[];
+    bonuses?: string[];
     style?: any;
   };
 }
 
 const StyleOfferBlockPreview: React.FC<StyleOfferBlockPreviewProps> = ({ content }) => {
-  const defaultFeatures = [
-    "Descubra seu estilo único e autêntico",
-    "Aprenda a criar looks impactantes",
-    "Aumente sua autoestima e confiança",
-    "Economize tempo e dinheiro"
-  ];
-
-  const defaultBonuses = [
-    "Guia de Visagismo Digital",
-    "Cartela de Cores Personalizada",
-    "Acesso ao Grupo VIP"
-  ];
+  const [userPrimaryStyle, setUserPrimaryStyle] = useState<StyleResult | null>(null);
+  
+  // Carregar o estilo do usuário do localStorage
+  useEffect(() => {
+    const savedResult = localStorage.getItem('quizResult');
+    if (savedResult) {
+      try {
+        const result = JSON.parse(savedResult);
+        if (result.primaryStyle) {
+          setUserPrimaryStyle(result.primaryStyle);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estilo do usuário:', error);
+      }
+    }
+  }, []);
+  
+  const styleType = userPrimaryStyle?.category || 'Natural';
 
   return (
-    <div className="bg-gradient-to-br from-[#fff7f3] to-white rounded-2xl p-8 md:p-12 shadow-xl" style={content.style}>
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-5xl mx-auto"
-      >
-        {content.urgencyText && (
-          <div className="bg-[#aa6b5d] text-white px-4 py-2 rounded-full flex items-center justify-center gap-2 mb-8 animate-pulse">
-            <Timer className="w-4 h-4" />
-            <p className="text-sm font-medium">{content.urgencyText}</p>
-          </div>
-        )}
-
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-[#aa6b5d]">
-                {content.title || "Transforme Seu Estilo Hoje"}
-              </h2>
-              <p className="text-xl text-[#1A1818]/80">
-                {content.subtitle || "Descubra o poder de um visual autêntico e impactante"}
+    <div className="bg-white rounded-xl shadow-xl overflow-hidden" style={content.style}>
+      <div className="p-8 md:p-12">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#432818] mb-3">
+            {content.title || `Transforme Seu Visual com o Poder do Estilo ${styleType}`}
+          </h2>
+          <p className="text-lg text-[#8F7A6A]">
+            {content.subtitle || 'Descubra como expressar sua verdadeira essência através das roupas'}
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
+          <div>
+            <div className="bg-[#FAF9F7] p-6 rounded-xl mb-6">
+              <div className="flex justify-between items-end mb-2">
+                <div>
+                  <span className="text-sm text-[#8F7A6A] line-through mb-1 block">
+                    R$ {content.regularPrice || '197'}
+                  </span>
+                  <span className="text-3xl font-bold text-[#AA6B5D]">
+                    R$ {content.price || '97'}
+                  </span>
+                </div>
+                <span className="bg-[#aa6b5d]/10 text-[#aa6b5d] text-sm font-medium px-3 py-1 rounded">
+                  Oferta exclusiva
+                </span>
+              </div>
+              
+              <Button className="w-full bg-[#AA6B5D] hover:bg-[#905c50] text-white py-6 rounded-lg text-lg mb-3">
+                {content.ctaText || `Quero Meu Guia de Estilo ${styleType}`}
+              </Button>
+              
+              <p className="text-center text-sm text-[#8F7A6A]">
+                {content.urgencyText || 'Oferta por tempo limitado!'}
               </p>
             </div>
-
+            
             <div className="space-y-4">
-              {(content.features || defaultFeatures).map((feature, index) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-3"
-                >
-                  <Star className="w-5 h-5 text-[#aa6b5d] flex-shrink-0 mt-1" />
-                  <p className="text-[#1A1818]/80">{feature}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-[#aa6b5d] flex items-center gap-2">
-                <Award className="w-5 h-5" />
-                Bônus Exclusivos
-              </h3>
-              {(content.bonuses || defaultBonuses).map((bonus, index) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                  className="flex items-center gap-3"
-                >
-                  <div className="w-2 h-2 rounded-full bg-[#aa6b5d]" />
-                  <p className="text-[#1A1818]/80">{bonus}</p>
-                </motion.div>
-              ))}
+              <h3 className="font-medium text-[#432818]">O que você vai receber:</h3>
+              <ul className="space-y-2">
+                {(content.features || [
+                  `Guia completo do estilo ${styleType}`,
+                  'Análise detalhada das suas características',
+                  'Combinações perfeitas para seu tipo físico',
+                  'Paleta de cores personalizada'
+                ]).map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-[#AA6B5D] mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-[#432818]">{feature}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-
-          <div className="space-y-8">
-            {content.productImage && (
-              <motion.img
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-                src={content.productImage}
-                alt="Produto"
-                className="w-full rounded-lg shadow-xl mb-8"
+          
+          <div>
+            {content.productImage ? (
+              <img 
+                src={content.productImage} 
+                alt="Guia de Estilo" 
+                className="w-full rounded-lg shadow-md"
               />
-            )}
-
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-center space-y-4 mb-6">
-                <p className="text-sm text-[#1A1818]/60">
-                  <span className="line-through">R$ {content.regularPrice || "197,00"}</span>
-                </p>
-                <div className="flex items-baseline justify-center">
-                  <span className="text-sm text-[#aa6b5d]">R$</span>
-                  <p className="text-4xl font-bold text-[#aa6b5d] mx-1">
-                    {content.price || "97"}
-                  </p>
-                  <span className="text-sm text-[#aa6b5d]">,00</span>
-                </div>
-                <p className="text-sm text-[#1A1818]/60">
-                  ou 12x de R$ {((Number(content.price || "97") / 12)).toFixed(2)}
-                </p>
+            ) : (
+              <div className="aspect-video bg-[#FAF9F7] rounded-lg flex items-center justify-center">
+                <p className="text-[#8F7A6A]">Imagem do produto</p>
               </div>
-
-              <Button 
-                className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-xl text-lg shadow-lg transition-all duration-300 hover:scale-105"
-                onClick={() => content.ctaUrl && window.open(content.ctaUrl, '_blank')}
-              >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {content.ctaText || "Quero Transformar Meu Estilo"}
-              </Button>
-            </div>
+            )}
+            
+            {(content.bonuses && content.bonuses.length > 0) && (
+              <div className="mt-6">
+                <h3 className="font-medium text-[#432818] mb-3">Bônus exclusivos:</h3>
+                <ul className="space-y-2">
+                  {content.bonuses.map((bonus, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="inline-block bg-[#AA6B5D] text-white rounded-full w-5 h-5 text-xs flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
+                        {index + 1}
+                      </span>
+                      <span className="text-[#432818]">{bonus}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
