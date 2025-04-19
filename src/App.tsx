@@ -1,24 +1,12 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import QuizPage from './components/QuizPage';
-import ResultPage from './pages/ResultPage';
-import EditorPage from './pages/EditorPage';
-import { AuthProvider } from './context/AuthContext';
-import { Toaster } from './components/ui/toaster';
+import { Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<QuizPage />} />
-          <Route path="/resultado" element={<ResultPage />} />
-          <Route path="/editor" element={<EditorPage />} />
-          <Route path="/editor/:style" element={<EditorPage />} />
-        </Routes>
-        <Toaster />
-      </Router>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+    </Routes>
   );
 }
 
