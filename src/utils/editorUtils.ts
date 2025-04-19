@@ -6,7 +6,7 @@ import OfferHeroEditor from '@/components/result-editor/editors/OfferHeroEditor'
 import PricingEditor from '@/components/result-editor/editors/PricingEditor';
 
 export function getEditorTitle(sectionPath: string): string {
-  const map = {
+  const map: Record<string, string> = {
     'header': 'Cabeçalho',
     'mainContent': 'Estilo Principal',
     'secondaryStyles': 'Estilos Secundários',
@@ -34,7 +34,7 @@ export function getSectionStyle(sectionPath: string, config: any): any {
   return current.style || {};
 }
 
-export function renderContentEditor(sectionPath: string, config: any, updateSection: (path: string, content: any) => void) {
+export function renderContentEditor(sectionPath: string, config: any, updateSection: (path: string, content: any) => void): React.ReactNode {
   const pathParts = sectionPath.split('.');
   let current = { ...config };
   let currentPath = '';
@@ -54,6 +54,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
+      
     case 'mainContent':
       return (
         <MainContentEditor 
@@ -61,6 +62,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
+      
     case 'offer.hero':
       return (
         <OfferHeroEditor 
@@ -68,6 +70,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
+      
     case 'offer.pricing':
       return (
         <PricingEditor 
@@ -75,6 +78,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
+      
     default:
       return (
         <div className="space-y-4">
@@ -110,4 +114,3 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
       );
   }
 }
-
