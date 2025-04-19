@@ -29,7 +29,7 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       toast({
         title: "Erro ao abrir JSON",
         description: "Não foi possível carregar a configuração atual.",
-        type: 'error'
+        variant: "destructive"
       });
     }
   };
@@ -43,14 +43,14 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       toast({
         title: "Configuração atualizada",
         description: "As alterações foram salvas com sucesso",
-        type: 'success'
+        variant: "default"
       });
     } catch (error) {
       setParseError("JSON inválido. Verifique o formato.");
       toast({
         title: "Erro ao salvar",
         description: "JSON inválido. Verifique o formato e tente novamente.",
-        type: 'error'
+        variant: "destructive"
       });
     }
   };
@@ -69,13 +69,13 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           toast({
             title: "Configuração importada",
             description: "O arquivo foi importado com sucesso",
-            type: 'success'
+            variant: "default"
           });
         } catch (error) {
           toast({
             title: "Erro ao importar",
             description: "Arquivo JSON inválido",
-            type: 'error'
+            variant: "destructive"
           });
         }
       };

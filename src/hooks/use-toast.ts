@@ -29,10 +29,10 @@ const emitChange = () => {
 };
 
 export const toast = (props: Omit<ToasterToast, "id">) => {
-  const id = props.id ?? Math.random().toString(36).substring(2, 9);
+  const generatedId = Math.random().toString(36).substring(2, 9);
   const newToast = {
     ...props,
-    id,
+    id: generatedId,
     variant: props.variant || 'default',
     dismissible: props.dismissible !== false
   };
@@ -40,7 +40,7 @@ export const toast = (props: Omit<ToasterToast, "id">) => {
   toasts = [newToast, ...toasts].slice(0, TOAST_LIMIT);
   emitChange();
   
-  return id;
+  return generatedId;
 };
 
 export const dismiss = (toastId?: string) => {

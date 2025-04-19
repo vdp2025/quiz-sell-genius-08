@@ -40,16 +40,16 @@ function getSectionData(config: ResultPageConfig, sectionPath: string): SectionD
     // Direct section like 'header', 'mainContent'
     const section = config[pathParts[0] as keyof ResultPageConfig] as Section;
     return {
-      content: section.content,
-      style: section.style
+      content: section?.content || {},
+      style: section?.style || {}
     };
   } else if (pathParts.length === 2 && pathParts[0] === 'offer') {
     // Nested section like 'offer.hero', 'offer.pricing'
     const offerSection = config.offer as OfferSection;
     const subSection = offerSection[pathParts[1] as keyof OfferSection] as Section;
     return {
-      content: subSection.content,
-      style: subSection.style
+      content: subSection?.content || {},
+      style: subSection?.style || {}
     };
   }
   

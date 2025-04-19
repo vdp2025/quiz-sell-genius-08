@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { QuizTemplate } from '@/types/quizTemplate';
-import { getAllTemplates } from '@/services/templates/templateService';
+import { getTemplates } from '@/services/templates/templateService';
 import { Button } from '@/components/ui/button';
 
 interface TemplateSelectorProps {
@@ -16,7 +16,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const allTemplates = await getAllTemplates();
+        const allTemplates = await getTemplates();
         setTemplates(allTemplates);
       } catch (error) {
         console.error('Error fetching templates:', error);
