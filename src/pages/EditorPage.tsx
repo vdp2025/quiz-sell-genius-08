@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -7,14 +6,15 @@ import { EditorPreview } from '@/components/result-editor/EditorPreview';
 import { PropertiesPanel } from '@/components/result-editor/PropertiesPanel';
 import EditorToolbar from '@/components/result-editor/EditorToolbar';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
+import { useSalesConfig } from '@/hooks/useSalesConfig';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
-import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style?: string }>();
   const navigate = useNavigate();
+  const salesConfig = useSalesConfig(style || 'Natural');
   
   const styleCategories = [
     "Natural", "Clássico", "Contemporâneo", "Elegante", 
@@ -74,6 +74,14 @@ export const EditorPage = () => {
     isGlobalStylesOpen,
     actions
   } = useResultPageEditor(styleCategory);
+
+  useEffect(() => {
+    if (!loading && blocks.length === 0) {
+      salesConfig.defaultBlocks.forEach(block => {
+        actions.handleAddBlock(block.type);
+      });
+    }
+  }, [loading, salesConfig, blocks.length]);
 
   if (loading) {
     return (
