@@ -2,9 +2,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
+import EditorPage from './pages/EditorPage';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
-import QuizEditorPage from './pages/admin/QuizEditorPage';
 
 function App() {
   return (
@@ -13,7 +13,8 @@ function App() {
         <Routes>
           <Route path="/" element={<QuizPage />} />
           <Route path="/resultado" element={<ResultPage />} />
-          <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
+          <Route path="/editor" element={<Navigate to="/editor/Natural" replace />} />
+          <Route path="/editor/:style" element={<EditorPage />} />
         </Routes>
         <Toaster />
       </Router>
