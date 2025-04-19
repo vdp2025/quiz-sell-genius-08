@@ -25,10 +25,10 @@ export const useResultPageEditor = (styleType: string) => {
 
   // Initialize blocks from resultPageConfig when it's loaded
   useEffect(() => {
-    if (resultPageConfig && resultPageConfig.blocks && !loading) {
+    if (resultPageConfig && !loading) {
       setState(prev => ({
         ...prev,
-        blocks: resultPageConfig.blocks
+        blocks: resultPageConfig.blocks || []
       }));
     }
   }, [resultPageConfig, loading]);
@@ -96,6 +96,13 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
+  // Save blocks along with other config data
+  const handleSave = useCallback(async () => {
+    // Update the blocks in the config before saving
+    updateSection('blocks', state.blocks);
+    return await saveConfig();
+  }, [state.blocks, updateSection, saveConfig]);
+
   return {
     resultPageConfig,
     loading,
@@ -104,7 +111,7 @@ export const useResultPageEditor = (styleType: string) => {
     isPreviewing: state.isPreviewing,
     isGlobalStylesOpen: state.isGlobalStylesOpen,
     actions: {
-      handleSave: () => saveConfig(),
+      handleSave,
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,

@@ -1,3 +1,4 @@
+import { Block } from './editor';
 
 export interface StyleOptions {
   fontSize?: string;
@@ -27,7 +28,6 @@ export interface SectionContent {
   images?: ImageOptions[];
 }
 
-// Define a specific interface for offer content
 export interface OfferContent {
   title?: string;
   subtitle?: string;
@@ -47,11 +47,10 @@ export interface Section {
   style?: StyleOptions;
 }
 
-// Extend the Section to create an OfferSection
 export interface OfferSection {
   hero: {
     visible: boolean;
-    content: OfferContent; // Use the specific content type
+    content: OfferContent;
     appearance?: Record<string, any>;
     style?: StyleOptions;
   };
@@ -75,6 +74,7 @@ export interface ResultPageConfig {
     backgroundColor?: string;
     fontFamily?: string;
   };
+  blocks?: Block[];
 }
 
 export interface ResultPageConfigsStore {
