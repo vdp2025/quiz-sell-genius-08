@@ -2,6 +2,11 @@
 import React from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { get } from 'lodash';
+import HeaderEditor from '@/components/result-editor/editors/HeaderEditor';
+import MainContentEditor from '@/components/result-editor/editors/MainContentEditor';
+import OfferHeroEditor from '@/components/result-editor/editors/OfferHeroEditor';
+import PricingEditor from '@/components/result-editor/editors/PricingEditor';
+import OfferEditor from '@/components/result-editor/editors/OfferEditor';
 
 // Function to get the style for a section
 export const getSectionStyle = (sectionPath: string, config: ResultPageConfig) => {
@@ -37,8 +42,45 @@ export const renderContentEditor = (
   config: ResultPageConfig,
   updateSection: (path: string, content: any) => void
 ) => {
-  // This function would contain all the specific editors for each section type
-  // We're returning a placeholder for now
+  // Determine which editor to render based on the section path
+  if (sectionPath === 'header') {
+    return (
+      <HeaderEditor 
+        content={config.header.content} 
+        onUpdate={(content) => updateSection(`${sectionPath}.content`, content)} 
+      />
+    );
+  } else if (sectionPath === 'mainContent') {
+    return (
+      <MainContentEditor 
+        content={config.mainContent.content} 
+        onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+      />
+    );
+  } else if (sectionPath === 'offer.hero') {
+    return (
+      <OfferHeroEditor 
+        content={config.offer.hero.content} 
+        onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+      />
+    );
+  } else if (sectionPath === 'offer.pricing') {
+    return (
+      <PricingEditor 
+        content={config.offer.pricing.content} 
+        onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+      />
+    );
+  } else if (sectionPath === 'offer') {
+    return (
+      <OfferEditor 
+        content={config.offer.content} 
+        onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+      />
+    );
+  }
+  
+  // Default placeholder editor
   return (
     <div className="p-4">
       <p className="text-gray-500 text-sm">
