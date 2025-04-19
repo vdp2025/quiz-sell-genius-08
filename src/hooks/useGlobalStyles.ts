@@ -6,6 +6,8 @@ interface GlobalStyles {
   textColor?: string;
   fontFamily?: string;
   logoHeight?: number;
+  logo?: string;
+  logoAlt?: string;
 }
 
 export const useGlobalStyles = () => {
@@ -15,7 +17,9 @@ export const useGlobalStyles = () => {
       backgroundColor: '#fff',
       textColor: '#432818',
       fontFamily: 'inherit',
-      logoHeight: 56
+      logoHeight: 56,
+      logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+      logoAlt: "Logo Gisele Galvão"
     };
   });
 

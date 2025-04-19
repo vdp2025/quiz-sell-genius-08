@@ -45,6 +45,8 @@ const ResultPage = () => {
       <Header 
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
+        logo={globalStyles.logo}
+        logoAlt={globalStyles.logoAlt}
       />
       
       <div className="container mx-auto px-3 py-2 max-w-2xl">

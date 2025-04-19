@@ -35,6 +35,7 @@ export interface EditableContent {
   subtitle?: string;
   logo?: string;
   logoAlt?: string;
+  logoHeight?: number | string;
   
   // Text
   text?: string;
