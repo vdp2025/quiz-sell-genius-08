@@ -15,7 +15,8 @@ import {
   ScrollText, 
   Video, 
   Grid2X2, 
-  DollarSign
+  DollarSign,
+  Columns
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -92,6 +93,12 @@ export function ComponentsSidebar({ onComponentSelect }: ComponentSidebarProps) 
           name: 'Imagem',
           icon: <ImageIcon className="w-4 h-4" />,
           description: 'Imagem com legenda opcional'
+        },
+        {
+          type: 'two-column',
+          name: 'Duas Colunas',
+          icon: <Columns className="w-4 h-4" />,
+          description: 'Container com duas colunas'
         }
       ]
     },
@@ -129,84 +136,61 @@ export function ComponentsSidebar({ onComponentSelect }: ComponentSidebarProps) 
           description: 'Botão de chamada para ação'
         }
       ]
-    },
-    {
-      name: 'Avançado',
-      items: [
-        {
-          type: 'video',
-          name: 'Vídeo',
-          icon: <Video className="w-4 h-4" />,
-          description: 'Incorporar vídeo'
-        },
-        {
-          type: 'two-column',
-          name: 'Duas Colunas',
-          icon: <Grid2X2 className="w-4 h-4" />,
-          description: 'Layout de duas colunas'
-        },
-        {
-          type: 'faq',
-          name: 'Perguntas Frequentes',
-          icon: <ScrollText className="w-4 h-4" />,
-          description: 'Seção de perguntas e respostas'
-        }
-      ]
     }
   ];
 
-  const filteredCategories = categories.map(category => ({
-    ...category,
-    items: category.items.filter(item => 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
-    )
-  })).filter(category => category.items.length > 0);
+  // Filter components based on search term
+  const filteredCategories = searchTerm 
+    ? categories.map(category => ({
+        ...category,
+        items: category.items.filter(item => 
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        )
+      })).filter(category => category.items.length > 0)
+    : categories;
 
   return (
-    <div className="h-full bg-white border-r border-[#B89B7A]/20 flex flex-col">
+    <div className="h-full flex flex-col bg-white border-r border-[#B89B7A]/20">
       <div className="p-4 border-b border-[#B89B7A]/20">
-        <h2 className="text-lg font-medium text-[#432818] mb-3">Componentes</h2>
+        <h2 className="font-semibold text-[#432818] mb-4">Componentes</h2>
         <Input
-          type="text"
-          placeholder="Buscar componentes..."
+          placeholder="Pesquisar componentes..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full"
+          className="border-[#B89B7A]/30"
         />
       </div>
       
-      <div className="flex-1 overflow-auto p-3">
-        {filteredCategories.map((category) => (
-          <div key={category.name} className="mb-6">
-            <h3 className="text-sm font-medium text-[#8F7A6A] mb-2 px-2">{category.name}</h3>
-            <div className="space-y-1">
-              {category.items.map((item) => (
-                <Button
-                  key={item.type}
-                  variant="ghost"
-                  className="w-full justify-start py-2 px-2 h-auto text-[#432818] hover:bg-[#FAF9F7]"
-                  onClick={() => onComponentSelect(item.type)}
-                >
-                  <div className="flex items-start">
-                    <div className="p-1 bg-[#FAF9F7] rounded mr-3 flex-shrink-0">
-                      {item.icon}
-                    </div>
-                    <div className="text-left">
-                      <p className="font-medium text-sm">{item.name}</p>
+      <div className="flex-1 overflow-auto p-4">
+        <div className="space-y-6">
+          {filteredCategories.map((category) => (
+            <div key={category.name}>
+              <h3 className="text-sm font-medium text-[#8F7A6A] mb-2">{category.name}</h3>
+              <div className="space-y-1">
+                {category.items.map((item) => (
+                  <Button
+                    key={item.type}
+                    variant="ghost"
+                    className="w-full justify-start text-[#432818] hover:bg-[#FAF9F7]"
+                    onClick={() => onComponentSelect(item.type)}
+                  >
+                    <div className="mr-2">{item.icon}</div>
+                    <div className="flex flex-col items-start">
+                      <span>{item.name}</span>
                       {item.description && (
-                        <p className="text-xs text-[#8F7A6A] mt-0.5">{item.description}</p>
+                        <span className="text-xs text-[#8F7A6A] font-normal">
+                          {item.description}
+                        </span>
                       )}
                     </div>
-                  </div>
-                </Button>
-              ))}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
 }
-
-export default ComponentsSidebar;

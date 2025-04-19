@@ -15,7 +15,8 @@ import {
   Layout,
   Gift,
   Sparkles,
-  ShoppingCart
+  ShoppingCart,
+  Columns
 } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
 
@@ -33,6 +34,7 @@ export function ComponentsSidebar({ onComponentSelect }: ComponentsSidebarProps)
     { type: 'headline' as const, label: 'Título', icon: Type },
     { type: 'image' as const, label: 'Imagem', icon: Image },
     { type: 'text' as const, label: 'Texto', icon: Type },
+    { type: 'two-column' as const, label: 'Duas Colunas', icon: Columns },
     { type: 'benefits' as const, label: 'Benefícios', icon: ListChecks },
     { type: 'testimonials' as const, label: 'Depoimentos', icon: MessageSquare },
     { type: 'pricing' as const, label: 'Preço', icon: DollarSign },

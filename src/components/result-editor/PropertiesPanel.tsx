@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { X, Trash2, PaintBucket, Type, Image as ImageIcon, Layout } from 'lucide-react';
+import { X, Trash2, PaintBucket, Type, Image as ImageIcon, Layout, Columns } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,6 +15,7 @@ import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
 import OfferBlockEditor from './block-editors/OfferBlockEditor';
 import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
 import GuaranteeBlockEditor from './block-editors/GuaranteeBlockEditor';
+import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -61,6 +63,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       case 'image': return <ImageIcon className="w-4 h-4 mr-2" />;
       case 'header':
       case 'headline': return <Type className="w-4 h-4 mr-2" />;
+      case 'two-column': return <Columns className="w-4 h-4 mr-2" />;
       default: return <Layout className="w-4 h-4 mr-2" />;
     }
   };
@@ -85,6 +88,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return <TestimonialsBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
       case 'guarantee':
         return <GuaranteeBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'two-column':
+        return <TwoColumnBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
       default:
         return (
           <div className="p-4 text-center text-gray-500">

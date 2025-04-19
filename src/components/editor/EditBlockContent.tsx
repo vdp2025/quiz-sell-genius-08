@@ -14,6 +14,7 @@ import { CTABlockEditor } from './blocks/CTABlockEditor';
 import { StyleResultBlockEditor } from './blocks/StyleResultBlockEditor';
 import { SecondaryStylesBlockEditor } from './blocks/SecondaryStylesBlockEditor';
 import TestimonialsBlockEditor from '@/components/result-editor/block-editors/TestimonialsBlockEditor';
+import TwoColumnBlockEditor from '@/components/result-editor/block-editors/TwoColumnBlockEditor';
 
 interface EditBlockContentProps {
   block: EditorBlock;
@@ -63,6 +64,9 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
     
     case 'testimonials':
       return <TestimonialsBlockEditor block={block} onUpdate={onUpdate} />;
+    
+    case 'two-column':
+      return <TwoColumnBlockEditor block={block} onUpdate={onUpdate} />;
       
     case 'products':
       return (

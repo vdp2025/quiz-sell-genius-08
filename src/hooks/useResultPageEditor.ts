@@ -36,6 +36,17 @@ export const useResultPageEditor = (styleType: string) => {
     }
   }, [resultPageConfig, loading]);
 
+  // Auto-save when blocks change
+  useEffect(() => {
+    const autoSaveTimer = setTimeout(() => {
+      if (state.blocks.length > 0) {
+        handleSave();
+      }
+    }, 3000); // Auto-save after 3 seconds of inactivity
+
+    return () => clearTimeout(autoSaveTimer);
+  }, [state.blocks]);
+
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
   }, []);
