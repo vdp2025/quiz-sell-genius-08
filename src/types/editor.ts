@@ -133,6 +133,10 @@ export interface EditableContent {
     fontSize?: string;
     fontWeight?: string;
     fontFamily?: string;
+    lineHeight?: string;
+    borderStyle?: string;
+    borderWidth?: string;
+    borderColor?: string;
     objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   };
 }

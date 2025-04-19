@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { EditableContent } from '@/types/editor';
-import { ColorPicker } from '@/components/ui/color-picker';
+import { ColorPicker } from '@/components/result-editor/ColorPicker';
 
 interface StyleEditorProps {
   style: EditableContent['style'];
@@ -67,16 +67,7 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
               />
             </div>
           </div>
-
-          <div className="space-y-2">
-            <Label>Altura da Linha</Label>
-            <Input
-              value={style.lineHeight || ''}
-              onChange={(e) => updateStyle('lineHeight', e.target.value)}
-              placeholder="ex: 1.5"
-            />
-          </div>
-
+          
           <div className="space-y-2">
             <Label>Alinhamento do Texto</Label>
             <select
@@ -100,21 +91,17 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Cor do Texto</Label>
-            <Input
-              type="color"
-              value={style.color || '#000000'}
-              onChange={(e) => updateStyle('color', e.target.value)}
-              className="h-10"
+            <ColorPicker
+              color={style.color || '#000000'}
+              onChange={(color) => updateStyle('color', color)}
             />
           </div>
 
           <div className="space-y-2">
             <Label>Cor de Fundo</Label>
-            <Input
-              type="color"
-              value={style.backgroundColor || '#ffffff'}
-              onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-              className="h-10"
+            <ColorPicker
+              color={style.backgroundColor || '#ffffff'}
+              onChange={(color) => updateStyle('backgroundColor', color)}
             />
           </div>
         </div>
@@ -171,48 +158,6 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
           </select>
         </div>
       )}
-
-      {/* Border Controls */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium text-[#432818]">Borda</h3>
-        
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Estilo da Borda</Label>
-            <select
-              value={style.borderStyle || 'none'}
-              onChange={(e) => updateStyle('borderStyle', e.target.value)}
-              className="w-full p-2 border rounded"
-            >
-              <option value="none">Nenhuma</option>
-              <option value="solid">Sólida</option>
-              <option value="dashed">Tracejada</option>
-              <option value="dotted">Pontilhada</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Largura da Borda</Label>
-              <Input
-                value={style.borderWidth || ''}
-                onChange={(e) => updateStyle('borderWidth', e.target.value)}
-                placeholder="ex: 1px"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Cor da Borda</Label>
-              <Input
-                type="color"
-                value={style.borderColor || '#000000'}
-                onChange={(e) => updateStyle('borderColor', e.target.value)}
-                className="h-10"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
