@@ -4,15 +4,30 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { giseleStyleTemplate } from '@/services/templates/giseleStyleTemplate';
 import { useEditor } from '@/hooks/useEditor';
+import { toast } from '@/components/ui/use-toast';
 
 export const TemplateList = () => {
   const { config, updateConfig } = useEditor();
 
   const handleSelectTemplate = (template: any) => {
-    updateConfig({
-      ...config,
-      blocks: template
-    });
+    try {
+      updateConfig({
+        ...config,
+        blocks: template
+      });
+      
+      toast({
+        title: "Modelo aplicado",
+        description: "O modelo foi aplicado com sucesso",
+      });
+    } catch (error) {
+      console.error("Erro ao aplicar o modelo:", error);
+      toast({
+        title: "Erro ao aplicar modelo",
+        description: "Não foi possível aplicar o modelo selecionado",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

@@ -46,6 +46,14 @@ export const giseleStyleTemplate: Block[] = [
     order: 3
   },
   {
+    id: "bonus-inclusos",
+    type: "bonus",
+    content: {
+      text: "🎁 Bônus 1: Visagismo Facial Estratégico\nAprenda a usar seu formato de rosto com inteligência estética.\n\n🎁 Bônus 2: Peças-Chave do Guarda-Roupa\nLooks funcionais com o que você já tem, com praticidade e estilo."
+    },
+    order: 4
+  },
+  {
     id: "pricing-calltoaction",
     type: "pricing",
     content: {
@@ -53,19 +61,26 @@ export const giseleStyleTemplate: Block[] = [
       salePrice: "39,00",
       buttonText: "Quero meu Guia + Bônus",
       checkoutUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-      urgencyText: "Oferta exclusiva por tempo limitado" // Changed from limitedTimeText to urgencyText
+      urgencyText: "Oferta exclusiva por tempo limitado"
     },
-    order: 4
+    order: 5
   },
   {
     id: "bloco-depoimentos",
     type: "testimonials",
     content: {
       title: "Transformações reais:",
-      // Changed from testimonials property to a format that matches EditableContent
       text: "Renata C. (41 anos): \"Comprei menos, combinei mais e finalmente entendi o que comunica quem eu sou.\"\n\nTatiane M. (34 anos): \"O visagismo foi revelador! Cortei o cabelo certo, acertei nos brincos e estou sendo notada.\"\n\nLuciana D. (38 anos): \"Me sinto mais leve, elegante e segura ao me posicionar.\""
     },
-    order: 5
+    order: 6
+  },
+  {
+    id: "urgency-banner",
+    type: "urgency",
+    content: {
+      text: "✨ Essa oferta especial é exclusiva para quem concluiu o teste de estilo. Aproveite antes que o valor volte ao normal!"
+    },
+    order: 7
   },
   {
     id: "cta-final",
@@ -76,6 +91,6 @@ export const giseleStyleTemplate: Block[] = [
       url: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
       alignment: "center"
     },
-    order: 6
+    order: 8
   }
 ];
