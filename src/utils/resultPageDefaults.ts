@@ -1,5 +1,6 @@
 
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { createDefaultBlocks } from './blockDefaults';
 
 export const createDefaultConfig = (styleType: string): ResultPageConfig => {
   return {
@@ -7,18 +8,21 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
     header: {
       visible: true,
       content: {
-        title: `Olá, seu Estilo Predominante é:`,
-        subtitle: ''
+        title: 'Olá, seu Estilo Predominante é:',
+        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo Gisele Galvão'
       },
       style: {
-        textAlign: 'center',
-        margin: '0 0 2rem 0'
+        backgroundColor: '#ffffff',
+        padding: '1rem',
+        textAlign: 'center'
       }
     },
     mainContent: {
       visible: true,
       content: {
-        description: getDefaultDescription(styleType)
+        description: 'Seu estilo reflete sua personalidade única e autêntica. Agora que você conhece seu estilo predominante, pode aplicar esse conhecimento para criar uma imagem que comunique exatamente quem você é.',
+        customImage: styleImagePath(styleType) || ''
       },
       style: {
         padding: '1.5rem',
@@ -30,132 +34,89 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       visible: true,
       content: {},
       style: {
-        padding: '1.5rem',
-        backgroundColor: '#ffffff',
-        borderRadius: '0.5rem',
-        margin: '1.5rem 0 0 0'
+        marginTop: '1.5rem'
       }
     },
     offer: {
       hero: {
         visible: true,
         content: {
-          title: "VOCÊ DESCOBRIU SEU ESTILO",
-          subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
-          price: "39,00",
-          regularPrice: "175,00",
-          ctaText: "Quero meu Guia + Bônus",
-          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+          title: 'Transforme Seu Estilo',
+          subtitle: 'Você já descobriu seu estilo. Agora é hora de transformá-lo em realidade.',
+          heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+          heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg'
         },
         style: {
-          backgroundColor: '#fffaf7',
           padding: '2rem',
+          backgroundColor: '#fff8f5',
           borderRadius: '0.5rem',
-          margin: '2rem 0 0 0'
+          marginTop: '2rem'
         }
       },
       products: {
         visible: true,
-        content: {
-          title: "O que você vai receber:"
-        },
-        style: {
-          padding: '1.5rem',
-          backgroundColor: '#ffffff',
-          borderRadius: '0.5rem',
-          margin: '1.5rem 0 0 0'
-        }
+        content: {},
+        style: {}
       },
       pricing: {
         visible: true,
         content: {
-          price: "39,00",
-          regularPrice: "175,00",
-          ctaText: "Quero meu Guia + Bônus",
-          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-          urgencyText: "Oferta por tempo limitado!"
+          price: '39,00',
+          regularPrice: '175,00',
+          ctaText: 'Quero meu Guia + Bônus por R$39,00',
+          ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
         },
-        style: {
-          padding: '1.5rem',
-          backgroundColor: '#ffffff',
-          borderRadius: '0.5rem',
-          margin: '1.5rem 0 0 0'
-        }
+        style: {}
       },
       benefits: {
         visible: true,
         content: {
-          title: "Benefícios",
           items: [
-            "Descubra seu estilo com precisão",
-            "Aprenda a criar looks autênticos",
-            "Economize tempo e dinheiro",
-            "Ganhe confiança na sua imagem"
+            'Como montar looks com intenção (e não no improviso)',
+            'Como usar suas cores, modelagens e tecidos a seu favor',
+            'Como alinhar sua imagem com seus valores e objetivos',
+            'Como parar de comprar por impulso e montar um guarda-roupa funcional'
           ]
         },
-        style: {
-          padding: '1.5rem',
-          backgroundColor: '#ffffff',
-          borderRadius: '0.5rem',
-          margin: '1.5rem 0 0 0'
-        }
+        style: {}
       },
       testimonials: {
         visible: true,
-        content: {
-          title: "O que estão dizendo"
-        },
-        style: {
-          padding: '1.5rem',
-          backgroundColor: '#ffffff',
-          borderRadius: '0.5rem',
-          margin: '1.5rem 0 0 0'
-        }
+        content: {},
+        style: {}
       },
       guarantee: {
         visible: true,
         content: {
-          title: "Garantia de 7 dias",
-          text: "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
+          days: 7,
+          title: 'Garantia de 7 dias',
+          description: 'Você tem uma semana para acessar o conteúdo completo, testar e aplicar. Se não fizer sentido pra você, devolvemos 100% do seu investimento. Sem burocracia.'
         },
-        style: {
-          padding: '1.5rem',
-          backgroundColor: '#ffffff',
-          borderRadius: '0.5rem',
-          margin: '1.5rem 0 0 0'
-        }
+        style: {}
       }
     },
     globalStyles: {
       primaryColor: '#aa6b5d',
-      secondaryColor: '#432818',
-      textColor: '#1A1818',
+      secondaryColor: '#8f574a',
+      textColor: '#432818',
       backgroundColor: '#fffaf7',
-      fontFamily: "'Playfair Display', serif"
-    }
+      fontFamily: 'Playfair Display, serif'
+    },
+    blocks: createDefaultBlocks(styleType)
   };
 };
 
-// Descrições padrão baseadas no tipo de estilo
-function getDefaultDescription(styleType: string): string {
-  switch (styleType) {
-    case 'Natural':
-      return "Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia.";
-    case 'Clássico':
-      return "Você aprecia roupas atemporais e elegantes. Seu estilo é refinado e tradicional, com peças de qualidade que nunca saem de moda.";
-    case 'Contemporâneo':
-      return "Você gosta de estar atualizado e seguir as tendências. Seu estilo é moderno e versátil, combinando o clássico com o atual.";
-    case 'Elegante':
-      return "Você valoriza a sofisticação e o requinte. Seu estilo é polido e imponente, com peças de alta qualidade e acabamento impecável.";
-    case 'Romântico':
-      return "Você aprecia detalhes delicados e femininos. Seu estilo é suave e gracioso, com elementos como rendas, babados e estampas florais.";
-    case 'Sexy':
-      return "Você gosta de valorizar suas curvas. Seu estilo é sensual e marcante, com peças que destacam seu corpo e sua confiança.";
-    case 'Dramático':
-      return "Você busca impactar e chamar atenção. Seu estilo é arrojado e marcante, com peças estruturadas e de design diferenciado.";
-    case 'Criativo':
-      return "Você adora expressar sua individualidade. Seu estilo é único e original, combinando cores, texturas e elementos de forma não convencional.";
-    default:
-      return "Seu estilo pessoal reflete sua personalidade e preferências únicas.";
-  }
+function styleImagePath(styleType: string): string {
+  const styleImages: Record<string, string> = {
+    'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+    'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+    'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+    'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+    'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+    'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
+    'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+    'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
+  };
+  
+  return styleImages[styleType] || styleImages['Natural'];
 }

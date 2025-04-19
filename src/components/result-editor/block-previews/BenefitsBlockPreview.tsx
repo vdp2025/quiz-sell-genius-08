@@ -1,75 +1,48 @@
 
 import React from 'react';
-import { Check, CheckCircle, CircleCheck, BadgeCheck, Star, Award, Shield, Sparkles } from 'lucide-react';
 
 interface BenefitsBlockPreviewProps {
   content: {
     title?: string;
+    subtitle?: string;
     items?: string[];
-    useIcons?: boolean;
-    icon?: string;
-    iconColor?: string;
     style?: any;
   };
 }
 
 const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) => {
-  const renderIcon = (iconName: string) => {
-    const iconColor = content.iconColor || '#aa6b5d';
-    const iconProps = { size: 24, color: iconColor };
-    
-    switch (iconName) {
-      case 'check-circle':
-        return <CheckCircle {...iconProps} />;
-      case 'circle-check':
-        return <CircleCheck {...iconProps} />;
-      case 'badge-check':
-        return <BadgeCheck {...iconProps} />;
-      case 'star':
-        return <Star {...iconProps} />;
-      case 'award':
-        return <Award {...iconProps} />;
-      case 'shield':
-        return <Shield {...iconProps} />;
-      case 'sparkles':
-        return <Sparkles {...iconProps} />;
-      case 'check':
-      default:
-        return <Check {...iconProps} />;
-    }
-  };
+  const defaultBenefits = [
+    "Como montar looks com intenção (e não no improviso)",
+    "Como usar suas cores, modelagens e tecidos a seu favor",
+    "Como alinhar sua imagem com seus valores e objetivos",
+    "Como parar de comprar por impulso e montar um guarda-roupa funcional"
+  ];
+
+  const benefits = content.items || defaultBenefits;
 
   return (
-    <div
-      className="max-w-4xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-[#fff7f3] to-white"
-      style={content.style}
-    >
-      <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#aa6b5d] text-center mb-8">
-        {content.title || 'Benefícios'}
-      </h3>
-      
-      <div className="grid md:grid-cols-2 gap-6">
-        {(content.items || [
-          'Aplicar seus estilos com autenticidade',
-          'Montar looks práticos para o dia a dia',
-          'Usar cores e modelagens que valorizam você',
-          'Parar de errar nas compras e economizar'
-        ]).map((item, index) => (
-          <div
-            key={index}
-            className="flex items-start gap-4 p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300 animate-fade-in"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <div className="flex-shrink-0 mt-1">
-              {content.useIcons !== false ? (
-                renderIcon(content.icon || 'check')
-              ) : (
-                <span className="text-[#aa6b5d] text-2xl">✓</span>
-              )}
-            </div>
-            <p className="text-[#1A1818]/80 text-lg">{item}</p>
-          </div>
-        ))}
+    <div className="bg-white rounded-lg shadow-md overflow-hidden" style={content.style}>
+      <div className="p-6">
+        <h2 className="text-2xl font-playfair font-bold text-[#aa6b5d] mb-3 text-center">
+          {content.title || "O Guia de Estilo e Imagem + Bônus Exclusivos"}
+        </h2>
+        
+        {content.subtitle && (
+          <p className="text-[#666] mb-6 text-center">
+            {content.subtitle || "Criado para mulheres que querem muito mais do que "saber seu estilo". Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade."}
+          </p>
+        )}
+        
+        <h3 className="font-semibold text-[#432818] mb-4">Você vai aprender:</h3>
+        
+        <ul className="space-y-3">
+          {benefits.map((benefit, index) => (
+            <li key={index} className="flex items-start">
+              <span className="text-[#aa6b5d] mr-2 mt-1">✔️</span>
+              <span className="text-[#666]">{benefit}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

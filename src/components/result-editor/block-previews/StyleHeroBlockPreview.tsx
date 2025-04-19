@@ -1,7 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
-import { StyleResult } from '@/types/quiz';
-import { getStyleConfig, StyleCategory } from '@/utils/styleUtils';
+import React from 'react';
 
 interface StyleHeroBlockPreviewProps {
   content: {
@@ -11,93 +9,51 @@ interface StyleHeroBlockPreviewProps {
     mainImage?: string;
     styleType?: string;
     style?: any;
-    ctaText?: string;
-    ctaUrl?: string;
   };
   styleType?: string;
 }
 
-const StyleHeroBlockPreview: React.FC<StyleHeroBlockPreviewProps> = ({ content, styleType }) => {
-  const [userPrimaryStyle, setUserPrimaryStyle] = useState<StyleResult | null>(null);
-  
-  // Carregar o estilo do usuário do localStorage
-  useEffect(() => {
-    const savedResult = localStorage.getItem('quizResult');
-    if (savedResult) {
-      try {
-        const result = JSON.parse(savedResult);
-        if (result.primaryStyle) {
-          setUserPrimaryStyle(result.primaryStyle);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar estilo do usuário:', error);
-      }
-    }
-  }, []);
-  
-  // Usar o estilo do quiz se disponível, senão usar styleType ou conteúdo
-  const displayStyle = userPrimaryStyle?.category || styleType || content.styleType || 'Natural';
-  
-  // Cast the displayStyle to StyleCategory to satisfy TypeScript
-  const styleInfo = getStyleConfig(displayStyle as StyleCategory);
+const StyleHeroBlockPreview: React.FC<StyleHeroBlockPreviewProps> = ({ content, styleType = 'Natural' }) => {
+  // Get the appropriate image based on style type
+  const getStyleGuideImage = () => {
+    const styleImages: Record<string, string> = {
+      'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+      'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+      'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+      'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+      'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+      'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
+      'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+      'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
+    };
+    
+    return styleImages[styleType] || styleImages['Natural'];
+  };
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-[#fff7f3] to-white rounded-2xl p-8" style={content.style}>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#aa6b5d]/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-      
-      <div className="relative max-w-5xl mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#aa6b5d] mb-4">
-            {content.title || `DESCUBRA SEU ESTILO ${displayStyle.toUpperCase()}`}
-          </h2>
-          
-          <p className="text-xl text-[#1A1818]/80 max-w-2xl mx-auto">
-            {content.subtitle || 'Transforme sua imagem e expresse sua verdadeira essência'}
-          </p>
-        </div>
+    <div style={content.style} className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="px-6 py-8 text-center">
+        <h2 className="text-2xl md:text-3xl font-playfair font-bold text-[#aa6b5d] mb-4">
+          {content.title || "Você já descobriu seu Estilo"}
+        </h2>
+        <p className="text-[#8F7A6A] mb-6 max-w-xl mx-auto">
+          {content.subtitle || "Conhecimento é clareza. E clareza muda o jeito que você se vê, se escolhe, se posiciona."}
+        </p>
+        <p className="text-[#432818] mb-6 max-w-xl mx-auto">
+          {content.description || "Mas é na ação que a verdadeira transformação acontece. É quando você aplica o que aprendeu… que o espelho começa a contar uma nova história."}
+        </p>
         
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h3 className="text-2xl font-medium text-[#aa6b5d] mb-4">{displayStyle}</h3>
-            <p className="text-[#1A1818]/80 mb-6">
-              {content.description || styleInfo.description}
-            </p>
-            <div className="bg-white p-4 rounded-lg inline-block shadow-sm">
-              <div className="flex items-center text-[#aa6b5d]">
-                <span className="font-semibold mr-2">Conheça seu estilo único</span>
-                <span className="text-sm bg-[#aa6b5d] text-white px-2 py-1 rounded">
-                  {userPrimaryStyle ? `${userPrimaryStyle.percentage}%` : '100%'}
-                </span>
-              </div>
-            </div>
-            
-            {content.ctaText && (
-              <div className="mt-6">
-                <a 
-                  href={content.ctaUrl || "#"} 
-                  className="inline-block px-6 py-3 bg-[#aa6b5d] text-white font-medium rounded-lg hover:bg-[#8a574a] transition-colors"
-                >
-                  {content.ctaText}
-                </a>
-              </div>
-            )}
-          </div>
-          
-          <div className="relative">
-            {content.mainImage ? (
-              <img
-                src={content.mainImage}
-                alt={displayStyle}
-                className="w-full h-auto rounded-lg shadow-lg"
-              />
-            ) : (
-              <img
-                src={styleInfo.image}
-                alt={displayStyle}
-                className="w-full h-auto rounded-lg shadow-lg"
-              />
-            )}
-          </div>
+        <div className="grid md:grid-cols-2 gap-8 mt-12">
+          <img
+            src={getStyleGuideImage()}
+            alt={`Guia de Estilo ${styleType}`}
+            className="w-full rounded-lg shadow-lg"
+          />
+          <img
+            src={content.mainImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"}
+            alt="Guia de Estilo e Imagem"
+            className="w-full rounded-lg shadow-lg"
+          />
         </div>
       </div>
     </div>

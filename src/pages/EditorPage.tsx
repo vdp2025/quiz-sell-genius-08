@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { EditorPreview } from '@/components/result-editor/EditorPreview';
@@ -19,7 +19,6 @@ export const EditorPage = () => {
   } = useResultPageEditor(style || 'Natural');
 
   // Ensure we're using a valid style category by checking against the allowed values
-  // This is a TypeScript type guard function
   const isValidStyleCategory = (s: string): s is StyleResult['category'] => {
     return ["Natural", "Clássico", "Contemporâneo", "Elegante", "Romântico", "Sexy", "Dramático", "Criativo"].includes(s);
   };
