@@ -20,7 +20,7 @@ export function createDefaultBlocks(styleType: string): Block[] {
       id: generateId(),
       type: 'style-result',
       content: {
-        description: true, // Changed from showDetails to description
+        description: 'Descrição do seu estilo', // Changed from boolean to string
         styleType
       },
       order: 1
