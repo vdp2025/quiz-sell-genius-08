@@ -7,8 +7,7 @@ import OfferCard from '@/components/quiz-result/sales/OfferCard';
 import { styleConfig } from '@/config/styleConfig';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Edit } from 'lucide-react';
+import { EditorButton } from '@/components/ui/EditorButton';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -40,11 +39,7 @@ const ResultPage = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fff',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
+    <div className="min-h-screen bg-[#fffaf7]">
       <Header 
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
@@ -52,27 +47,18 @@ const ResultPage = () => {
         logoAlt={globalStyles.logoAlt}
       />
       
-      <div className="container mx-auto px-3 py-2 max-w-2xl">
-        <div className="space-y-3">
-          <StyleResultSection 
-            primaryStyle={primaryStyle}
-            description={styleConfig[primaryStyle.category].description}
-            image={styleConfig[primaryStyle.category].image}
-            secondaryStyles={secondaryStyles}
-          />
-          
-          <OfferCard primaryStyle={primaryStyle} />
-          
-          <div className="text-center mt-8 mb-4">
-            <Link to="/editor">
-              <Button variant="outline" size="sm" className="bg-white">
-                <Edit className="w-4 h-4 mr-2" />
-                Editar Página de Resultados
-              </Button>
-            </Link>
-          </div>
-        </div>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <StyleResultSection 
+          primaryStyle={primaryStyle}
+          description={styleConfig[primaryStyle.category].description}
+          image={styleConfig[primaryStyle.category].image}
+          secondaryStyles={secondaryStyles}
+        />
+        
+        <OfferCard primaryStyle={primaryStyle} />
       </div>
+
+      <EditorButton />
     </div>
   );
 };
