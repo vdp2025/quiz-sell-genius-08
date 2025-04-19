@@ -49,8 +49,13 @@ const ImageBlockEditor: React.FC<ImageBlockEditorProps> = ({ block, onUpdate }) 
       <div className="space-y-2">
         <Label htmlFor="objectFit">Ajuste da imagem</Label>
         <Select 
-          value={content.objectFit || 'cover'} 
-          onValueChange={(value) => onUpdate({ objectFit: value })}
+          value={content.style?.objectFit || 'cover'} 
+          onValueChange={(value) => onUpdate({ 
+            style: { 
+              ...content.style, 
+              objectFit: value 
+            } 
+          })}
         >
           <SelectTrigger id="objectFit">
             <SelectValue placeholder="Selecione um ajuste" />
