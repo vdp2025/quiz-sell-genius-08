@@ -4,13 +4,25 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ColorPicker } from '@/components/result-editor/ColorPicker';
+import { Switch } from '@/components/ui/switch';
 
 interface StyleControlsProps {
   style: any;
   onUpdate: (style: any) => void;
+  showLogoControls?: boolean;
+  logoWidth?: string | number;
+  logoHeight?: string | number;
+  onLogoSizeChange?: (width: string, height: string) => void;
 }
 
-export const StyleControls: React.FC<StyleControlsProps> = ({ style, onUpdate }) => {
+export const StyleControls: React.FC<StyleControlsProps> = ({ 
+  style, 
+  onUpdate,
+  showLogoControls = false,
+  logoWidth,
+  logoHeight,
+  onLogoSizeChange
+}) => {
   const handleChange = (property: string, value: string) => {
     onUpdate({
       ...style,
@@ -27,6 +39,30 @@ export const StyleControls: React.FC<StyleControlsProps> = ({ style, onUpdate })
           onChange={(color) => handleChange('backgroundColor', color)}
         />
       </div>
+
+      {showLogoControls && onLogoSizeChange && (
+        <div>
+          <Label>Tamanho do Logo</Label>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Label className="text-xs">Largura</Label>
+              <Input
+                value={logoWidth || ''}
+                onChange={(e) => onLogoSizeChange(e.target.value, logoHeight?.toString() || '')}
+                placeholder="auto"
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Altura</Label>
+              <Input
+                value={logoHeight || ''}
+                onChange={(e) => onLogoSizeChange(logoWidth?.toString() || '', e.target.value)}
+                placeholder="auto"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div>
         <Label>Dimensões da Imagem</Label>

@@ -21,7 +21,7 @@ export interface EditorBlock {
   id: string;
   type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
-         'testimonials' | 'bonus-carousel';
+         'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column';
   content: EditableContent;
   order: number;
 }
@@ -36,6 +36,7 @@ export interface EditableContent {
   logo?: string;
   logoAlt?: string;
   logoHeight?: number | string;
+  logoWidth?: number | string;
   
   // Text
   text?: string;
@@ -51,6 +52,9 @@ export interface EditableContent {
   
   // Benefits
   items?: string[];
+  icon?: string;
+  iconColor?: string;
+  useIcons?: boolean;
   
   // Pricing
   regularPrice?: string;
@@ -86,6 +90,28 @@ export interface EditableContent {
     alt: string;
     title: string;
   }[];
+  
+  // Video
+  videoUrl?: string;
+  videoTitle?: string;
+  videoDescription?: string;
+  videoThumbnail?: string;
+  videoAutoplay?: boolean;
+  videoControls?: boolean;
+  
+  // Two-Column
+  leftColumn?: {
+    content?: string;
+    width?: string;
+  };
+  rightColumn?: {
+    content?: string;
+    width?: string;
+  };
+  columnGap?: string;
+  
+  // Spacer
+  height?: string;
   
   // General properties
   description?: string;

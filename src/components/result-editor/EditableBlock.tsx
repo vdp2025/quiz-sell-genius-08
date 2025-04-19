@@ -18,6 +18,9 @@ import SecondaryStylesBlockPreview from './block-previews/SecondaryStylesBlockPr
 import HeroSectionBlockPreview from './block-previews/HeroSectionBlockPreview';
 import ProductsBlockPreview from './block-previews/ProductsBlockPreview';
 import TestimonialsBlockPreview from './block-previews/TestimonialsBlockPreview';
+import SpacerBlockPreview from './block-previews/SpacerBlockPreview';
+import VideoBlockPreview from './block-previews/VideoBlockPreview';
+import TwoColumnBlockPreview from './block-previews/TwoColumnBlockPreview';
 
 interface DragItem {
   index: number;
@@ -115,6 +118,12 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
         return <ProductsBlockPreview content={block.content} />;
       case 'testimonials':
         return <TestimonialsBlockPreview content={block.content} />;
+      case 'spacer':
+        return <SpacerBlockPreview content={block.content} />;
+      case 'video':
+        return <VideoBlockPreview content={block.content} />;
+      case 'two-column':
+        return <TwoColumnBlockPreview content={block.content} />;
       default:
         return <div>Tipo de bloco desconhecido: {block.type}</div>;
     }

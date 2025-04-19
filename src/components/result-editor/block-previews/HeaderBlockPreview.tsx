@@ -7,25 +7,39 @@ interface HeaderBlockPreviewProps {
     subtitle?: string;
     logo?: string;
     logoAlt?: string;
+    logoWidth?: string | number;
+    logoHeight?: string | number;
     style?: any;
   };
 }
 
 const HeaderBlockPreview: React.FC<HeaderBlockPreviewProps> = ({ content }) => {
+  const logoStyle = {
+    width: content.logoWidth || 'auto',
+    height: content.logoHeight || 'auto',
+    maxWidth: '100%',
+    objectFit: 'contain'
+  };
+
   return (
-    <div className="text-center space-y-4" style={content.style}>
+    <div style={content.style} className="text-center">
       {content.logo && (
-        <img 
-          src={content.logo} 
-          alt={content.logoAlt || 'Logo'} 
-          className="h-12 mx-auto"
+        <img
+          src={content.logo}
+          alt={content.logoAlt || 'Logo'}
+          style={logoStyle}
+          className="mx-auto mb-4"
         />
       )}
-      <h1 className="font-playfair text-xl md:text-2xl font-semibold text-[#432818]">
-        {content.title || 'Olá, seu Estilo Predominante é:'}
-      </h1>
+      
+      {content.title && (
+        <h1 className="text-xl md:text-2xl font-semibold text-[#432818] mb-2">
+          {content.title}
+        </h1>
+      )}
+      
       {content.subtitle && (
-        <p className="text-[#1A1818]/70">{content.subtitle}</p>
+        <p className="text-[#8F7A6A]">{content.subtitle}</p>
       )}
     </div>
   );

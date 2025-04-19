@@ -65,6 +65,27 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
           placeholder="Logo Gisele Galvão"
         />
       </div>
+      
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-2">
+          <Label htmlFor="logoWidth">Largura do Logo</Label>
+          <Input
+            id="logoWidth"
+            value={content.logoWidth || ''}
+            onChange={(e) => onUpdate({ logoWidth: e.target.value })}
+            placeholder="auto"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="logoHeight">Altura do Logo</Label>
+          <Input
+            id="logoHeight"
+            value={content.logoHeight || ''}
+            onChange={(e) => onUpdate({ logoHeight: e.target.value })}
+            placeholder="auto"
+          />
+        </div>
+      </div>
     </div>
   );
 };

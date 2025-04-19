@@ -18,6 +18,9 @@ import SecondaryStylesBlockEditor from './block-editors/SecondaryStylesBlockEdit
 import HeroSectionBlockEditor from './block-editors/HeroSectionBlockEditor';
 import ProductsBlockEditor from './block-editors/ProductsBlockEditor';
 import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
+import SpacerBlockEditor from './block-editors/SpacerBlockEditor';
+import VideoBlockEditor from './block-editors/VideoBlockEditor';
+import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
 import StyleEditor from './style-editors/StyleEditor';
 
 interface PropertiesPanelProps {
@@ -80,6 +83,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return 'Produtos';
       case 'testimonials':
         return 'Depoimentos';
+      case 'spacer':
+        return 'Espaçamento';
+      case 'video':
+        return 'Vídeo';
+      case 'two-column':
+        return 'Duas Colunas';
       default:
         return 'Componente';
     }
@@ -113,6 +122,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return <ProductsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       case 'testimonials':
         return <TestimonialsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'spacer':
+        return <SpacerBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'video':
+        return <VideoBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'two-column':
+        return <TwoColumnBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       default:
         return <div>Editor não disponível para este tipo de bloco</div>;
     }

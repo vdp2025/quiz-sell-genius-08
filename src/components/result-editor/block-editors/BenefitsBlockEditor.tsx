@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { X, Plus } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { ColorPicker } from '@/components/result-editor/ColorPicker';
+import { X, Plus, CheckCircle, CircleCheck, Check, Star, Award, BadgeCheck, Shield, Sparkles } from 'lucide-react';
 import { Block } from '@/types/editor';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface BenefitsBlockEditorProps {
   block: Block;
@@ -42,6 +45,17 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
     }
   };
 
+  const icons = [
+    { id: 'check', component: <Check className="h-4 w-4" /> },
+    { id: 'check-circle', component: <CheckCircle className="h-4 w-4" /> },
+    { id: 'circle-check', component: <CircleCheck className="h-4 w-4" /> },
+    { id: 'badge-check', component: <BadgeCheck className="h-4 w-4" /> },
+    { id: 'star', component: <Star className="h-4 w-4" /> },
+    { id: 'award', component: <Award className="h-4 w-4" /> },
+    { id: 'shield', component: <Shield className="h-4 w-4" /> },
+    { id: 'sparkles', component: <Sparkles className="h-4 w-4" /> },
+  ];
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -53,6 +67,55 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
           placeholder="O que você vai aprender:"
         />
       </div>
+      
+      <div className="flex items-center justify-between">
+        <Label htmlFor="useIcons">Usar Ícones</Label>
+        <Switch
+          id="useIcons"
+          checked={content.useIcons !== false}
+          onCheckedChange={(checked) => onUpdate({ useIcons: checked })}
+        />
+      </div>
+      
+      {content.useIcons !== false && (
+        <>
+          <div className="space-y-2">
+            <Label>Ícone</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-full justify-start">
+                  {icons.find(i => i.id === content.icon)?.component || icons[0].component}
+                  <span className="ml-2">
+                    {content.icon || 'check'}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0" align="start">
+                <div className="grid grid-cols-4 gap-2 p-2">
+                  {icons.map((icon) => (
+                    <Button
+                      key={icon.id}
+                      variant="ghost"
+                      className="h-9 w-9 p-0"
+                      onClick={() => onUpdate({ icon: icon.id })}
+                    >
+                      {icon.component}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+          
+          <div className="space-y-2">
+            <Label>Cor do Ícone</Label>
+            <ColorPicker
+              color={content.iconColor || '#aa6b5d'}
+              onChange={(color) => onUpdate({ iconColor: color })}
+            />
+          </div>
+        </>
+      )}
       
       <div className="space-y-2">
         <Label>Itens de Benefícios</Label>

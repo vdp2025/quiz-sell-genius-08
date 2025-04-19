@@ -3,7 +3,7 @@ import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Block } from '@/types/editor';
-import { LayoutTemplate, Type, Image, ListCheck, BarChart2, Clock, ShieldCheck, MousePointer, Palette, Users, Gift, Star } from 'lucide-react';
+import { LayoutTemplate, Type, Image, ListCheck, BarChart2, Clock, ShieldCheck, MousePointer, Palette, Users, Gift, Star, Video, Columns, SplitSquareVertical, LayoutGrid, Space } from 'lucide-react';
 
 interface ComponentsSidebarProps {
   onComponentSelect: (type: Block['type']) => void;
@@ -20,6 +20,9 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
         { type: 'headline', name: 'Título e Subtítulo', icon: <Type className="w-4 h-4" /> },
         { type: 'text', name: 'Texto', icon: <Type className="w-4 h-4" /> },
         { type: 'image', name: 'Imagem', icon: <Image className="w-4 h-4" /> },
+        { type: 'spacer', name: 'Espaçamento', icon: <Space className="w-4 h-4" /> },
+        { type: 'video', name: 'Vídeo', icon: <Video className="w-4 h-4" /> },
+        { type: 'two-column', name: 'Duas Colunas', icon: <Columns className="w-4 h-4" /> },
       ]
     },
     {
