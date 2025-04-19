@@ -1,51 +1,37 @@
 
-import { StyleResult } from '@/types/quiz';
+import { StyleCategory } from '@/types/quiz';
 
-export const getDefaultStyle = (category: "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo" = 'Natural'): StyleResult => {
-  return {
-    category,
-    score: 100,
-    percentage: 100
+export const getStyleColor = (category: StyleCategory): string => {
+  const colorMap: Record<StyleCategory, string> = {
+    'Natural': '#8F7A6A',
+    'Contemporâneo': '#B89B7A',
+    'Clássico': '#432818',
+    'Elegante': '#AA6B5D',
+    'Romântico': '#D4A5A5',
+    'Sexy': '#9E2B2B',
+    'Dramático': '#2B2B2B',
+    'Criativo': '#F0A500'
   };
+  
+  return colorMap[category] || '#B89B7A';
 };
 
-export const getStyleColor = (styleType: string): string => {
-  switch (styleType) {
-    case 'Natural':
-      return '#8D9779';
-    case 'Clássico':
-      return '#7E94B4';
-    case 'Contemporâneo':
-      return '#5A7D9A';
-    case 'Elegante':
-      return '#B9995E';
-    case 'Romântico':
-      return '#E4A9A9';
-    case 'Sexy':
-      return '#AB0E1E';
-    case 'Dramático':
-      return '#1A1818';
-    case 'Criativo':
-      return '#CA7D60';
-    default:
-      return '#8D9779';
-  }
-};
-
-// Add the missing getFallbackStyle function
-export const getFallbackStyle = (styleCategory: string): React.CSSProperties => {
-  const backgroundColor = getStyleColor(styleCategory);
+export const getStyleConfig = (category: StyleCategory) => {
   return {
-    backgroundColor,
-    color: '#ffffff',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    borderRadius: '4px',
-    padding: '8px',
-    fontWeight: 'bold',
-    width: '100%',
-    height: '100%'
+    Natural: {
+      name: 'Natural',
+      description: 'Seu estilo é caracterizado pela simplicidade e conforto.',
+      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/1_srgjwx.webp'
+    },
+    Contemporâneo: {
+      name: 'Contemporâneo',
+      description: 'Você combina modernidade com praticidade.',
+      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
+    },
+    // ... add other styles
+  }[category] || {
+    name: category,
+    description: 'Seu estilo único e pessoal.',
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/1_srgjwx.webp'
   };
 };

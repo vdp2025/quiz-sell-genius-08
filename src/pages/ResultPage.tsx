@@ -1,12 +1,15 @@
+
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
 import { StyleResultSection } from '@/components/result/StyleResult';
 import OfferCard from '@/components/quiz-result/sales/OfferCard';
 import { styleConfig } from '@/config/styleConfig';
+import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
+  const { globalStyles } = useGlobalStyles();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,8 +37,15 @@ const ResultPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header primaryStyle={primaryStyle} />
+    <div className="min-h-screen" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fff',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    }}>
+      <Header 
+        primaryStyle={primaryStyle}
+        logoHeight={globalStyles.logoHeight}
+      />
       
       <div className="container mx-auto px-3 py-2 max-w-2xl">
         <div className="space-y-3">

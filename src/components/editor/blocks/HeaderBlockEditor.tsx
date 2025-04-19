@@ -22,35 +22,25 @@ export const HeaderBlockEditor: React.FC<BlockEditorProps> = ({
       </div>
       
       <div>
+        <Label htmlFor={`${block.id}-logoHeight`}>Altura do Logo (px)</Label>
+        <Input
+          id={`${block.id}-logoHeight`}
+          type="number"
+          value={block.content.logoHeight || '56'}
+          onChange={(e) => onUpdate({ logoHeight: e.target.value })}
+          className="mt-1"
+          placeholder="56"
+        />
+      </div>
+
+      <div>
         <Label htmlFor={`${block.id}-logoAlt`}>Texto Alternativo do Logo</Label>
         <Input
           id={`${block.id}-logoAlt`}
           value={block.content.logoAlt || ''}
           onChange={(e) => onUpdate({ logoAlt: e.target.value })}
           className="mt-1"
-          placeholder="Descrição do logo para acessibilidade"
-        />
-      </div>
-
-      <div>
-        <Label htmlFor={`${block.id}-title`}>Título Principal</Label>
-        <Input
-          id={`${block.id}-title`}
-          value={block.content.title || ''}
-          onChange={(e) => onUpdate({ title: e.target.value })}
-          className="mt-1"
-          placeholder="Seu Estilo Revelado"
-        />
-      </div>
-
-      <div>
-        <Label htmlFor={`${block.id}-subtitle`}>Subtítulo</Label>
-        <Input
-          id={`${block.id}-subtitle`}
-          value={block.content.subtitle || ''}
-          onChange={(e) => onUpdate({ subtitle: e.target.value })}
-          className="mt-1"
-          placeholder="Descrição curta e envolvente"
+          placeholder="Logo Gisele Galvão"
         />
       </div>
     </div>
