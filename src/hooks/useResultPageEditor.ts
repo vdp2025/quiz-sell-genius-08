@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -5,7 +6,8 @@ import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
 import { getDefaultContentForType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
-import { set, get } from 'lodash';
+import { set } from 'lodash';
+import { resultPageStorage } from '@/services/resultPageStorage';
 
 export const useResultPageEditor = (styleType: string) => {
   const [state, setState] = useState<EditorState>({
@@ -15,10 +17,11 @@ export const useResultPageEditor = (styleType: string) => {
     isGlobalStylesOpen: false
   });
 
+  // Destructure functions from the useResultPageConfig hook
   const { 
     resultPageConfig, 
-    updateSection, 
-    saveConfig,
+    updateSection: updateConfigSection, 
+    saveConfig: saveConfigToDB,
     resetConfig,
     loading 
   } = useResultPageConfig(styleType);
@@ -96,12 +99,10 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
-  const updateSection = useCallback((path: string, newContent: any) => {
-    setResultPageConfig(prevConfig => {
-      const newConfig = { ...prevConfig };
-      set(newConfig, path, newContent);
-      return newConfig;
-    });
+  // Renamed from updateSection to handleUpdateSection to avoid conflicts
+  const handleUpdateSection = useCallback((path: string, newContent: any) => {
+    // Call the updateSection from useResultPageConfig
+    updateConfigSection(path, newContent);
 
     // Update blocks if blocks array is being modified
     if (path === 'blocks') {
@@ -110,10 +111,10 @@ export const useResultPageEditor = (styleType: string) => {
         blocks: newContent
       }));
     }
-  }, []);
+  }, [updateConfigSection]);
 
-  // Modified to return Promise<void> and ensure sync
-  const saveConfig = useCallback(async (): Promise<void> => {
+  // Renamed from saveConfig to handleSave to avoid conflicts
+  const handleSave = useCallback(async (): Promise<void> => {
     try {
       // Ensure the latest blocks are in the config
       const configToSave = {
@@ -123,8 +124,8 @@ export const useResultPageEditor = (styleType: string) => {
       
       await resultPageStorage.save(configToSave);
       
-      // Update local state with saved config
-      setResultPageConfig(configToSave);
+      // Update the config in the hook
+      updateConfigSection('blocks', state.blocks);
       
       toast({
         title: "Configuração salva",
@@ -139,7 +140,7 @@ export const useResultPageEditor = (styleType: string) => {
         variant: 'destructive'
       });
     }
-  }, [resultPageConfig, state.blocks]);
+  }, [resultPageConfig, state.blocks, updateConfigSection]);
 
   return {
     resultPageConfig,
@@ -153,7 +154,7 @@ export const useResultPageEditor = (styleType: string) => {
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,
-      updateSection,
+      updateSection: handleUpdateSection,
       setSelectedBlockId: (id: string | null) => setState(prev => ({ ...prev, selectedBlockId: id })),
       handleAddBlock,
       handleUpdateBlock,
