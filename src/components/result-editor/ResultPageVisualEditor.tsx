@@ -9,7 +9,6 @@ import { PropertiesPanel } from './PropertiesPanel';
 import EditorToolbar from './EditorToolbar';
 import { GlobalStylesEditor } from './GlobalStylesEditor';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
-import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
 
 interface ResultPageVisualEditorProps extends EditorProps {
@@ -23,23 +22,12 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
   const {
     resultPageConfig,
     loading,
-    isPreviewing,
-    isGlobalStylesOpen,
-    actions: {
-      handleSave,
-      handleReset,
-      toggleGlobalStyles,
-      togglePreview,
-      updateSection
-    }
-  } = useResultPageEditor(selectedStyle.category);
-
-  const {
     blocks,
     selectedBlockId,
-    setSelectedBlockId,
-    actions: blockActions
-  } = useBlockOperations();
+    isPreviewing,
+    isGlobalStylesOpen,
+    actions
+  } = useResultPageEditor(selectedStyle.category);
 
   if (loading) {
     return (
@@ -53,16 +41,16 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen flex flex-col overflow-hidden">
         <EditorToolbar 
-          onSave={handleSave}
+          onSave={actions.handleSave}
           isPreviewMode={isPreviewing}
-          onPreviewToggle={togglePreview}
-          onReset={handleReset}
-          onEditGlobalStyles={toggleGlobalStyles}
+          onPreviewToggle={actions.togglePreview}
+          onReset={actions.handleReset}
+          onEditGlobalStyles={actions.toggleGlobalStyles}
           resultPageConfig={resultPageConfig}
           onUpdateConfig={(newConfig) => {
             if (newConfig) {
               Object.keys(newConfig).forEach(key => {
-                updateSection(key, newConfig[key]);
+                actions.updateSection(key, newConfig[key]);
               });
             }
           }}
@@ -71,7 +59,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         
         <ResizablePanelGroup direction="horizontal" className="flex-1">
           <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
+            <ComponentsSidebar onComponentSelect={actions.handleAddBlock} />
           </ResizablePanel>
 
           <ResizableHandle withHandle />
@@ -80,10 +68,10 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
             <EditorPreview
               blocks={blocks}
               selectedBlockId={selectedBlockId}
-              onSelectBlock={setSelectedBlockId}
+              onSelectBlock={actions.setSelectedBlockId}
               isPreviewing={isPreviewing}
               primaryStyle={selectedStyle}
-              onReorderBlocks={blockActions.handleReorderBlocks}
+              onReorderBlocks={actions.handleReorderBlocks}
             />
           </ResizablePanel>
 
@@ -93,9 +81,9 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
             <PropertiesPanel
               selectedBlockId={selectedBlockId}
               blocks={blocks}
-              onClose={() => setSelectedBlockId(null)}
-              onUpdate={blockActions.handleUpdateBlock}
-              onDelete={blockActions.handleDeleteBlock}
+              onClose={() => actions.setSelectedBlockId(null)}
+              onUpdate={actions.handleUpdateBlock}
+              onDelete={actions.handleDeleteBlock}
             />
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -104,10 +92,10 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           <GlobalStylesEditor
             globalStyles={resultPageConfig.globalStyles || {}}
             onSave={(styles) => {
-              updateSection('globalStyles', styles);
-              toggleGlobalStyles();
+              actions.updateSection('globalStyles', styles);
+              actions.toggleGlobalStyles();
             }}
-            onCancel={toggleGlobalStyles}
+            onCancel={actions.toggleGlobalStyles}
           />
         )}
       </div>

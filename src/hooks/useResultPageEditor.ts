@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+
+import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
@@ -21,6 +22,16 @@ export const useResultPageEditor = (styleType: string) => {
     resetConfig,
     loading 
   } = useResultPageConfig(styleType);
+
+  // Initialize blocks from resultPageConfig when it's loaded
+  useEffect(() => {
+    if (resultPageConfig && resultPageConfig.blocks && !loading) {
+      setState(prev => ({
+        ...prev,
+        blocks: resultPageConfig.blocks
+      }));
+    }
+  }, [resultPageConfig, loading]);
 
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
@@ -88,6 +99,8 @@ export const useResultPageEditor = (styleType: string) => {
   return {
     resultPageConfig,
     loading,
+    blocks: state.blocks,
+    selectedBlockId: state.selectedBlockId,
     isPreviewing: state.isPreviewing,
     isGlobalStylesOpen: state.isGlobalStylesOpen,
     actions: {
@@ -95,7 +108,12 @@ export const useResultPageEditor = (styleType: string) => {
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,
-      updateSection
+      updateSection,
+      setSelectedBlockId: (id: string | null) => setState(prev => ({ ...prev, selectedBlockId: id })),
+      handleAddBlock,
+      handleUpdateBlock,
+      handleDeleteBlock,
+      handleReorderBlocks
     }
   };
 };
