@@ -23,7 +23,8 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
     { category: 'Clássico', score: 3, percentage: 20 }
   ];
 
-  const styleName = styleConfig[primaryStyle.category]?.name || primaryStyle.category;
+  // Get style name from category directly, as styleConfig might not have a name property
+  const styleName = primaryStyle.category;
 
   return (
     <Card className="p-6 bg-white shadow-sm">
