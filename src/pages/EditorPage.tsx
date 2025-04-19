@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -10,6 +11,7 @@ import { useSalesConfig } from '@/hooks/useSalesConfig';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
+import { Block } from '@/types/editor';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style?: string }>();
@@ -77,11 +79,14 @@ export const EditorPage = () => {
 
   useEffect(() => {
     if (!loading && blocks.length === 0) {
+      // Use type assertion to ensure block types match expected values
       salesConfig.defaultBlocks.forEach(block => {
-        actions.handleAddBlock(block.type);
+        // Convert string to actual Block type
+        const blockType = block.type as Block['type'];
+        actions.handleAddBlock(blockType);
       });
     }
-  }, [loading, salesConfig, blocks.length]);
+  }, [loading, salesConfig, blocks.length, actions]);
 
   if (loading) {
     return (
