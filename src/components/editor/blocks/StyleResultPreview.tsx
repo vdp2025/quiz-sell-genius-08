@@ -31,8 +31,8 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
           <div className="w-full md:w-1/2">
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-[#432818] truncate pr-4">{styleName}</h2>
-                <span className="text-[#B89B7A] font-medium whitespace-nowrap">{primaryStyle.percentage}%</span>
+                <h2 className="text-xl font-semibold text-[#432818] pr-4 break-words">{styleName}</h2>
+                <span className="text-[#B89B7A] font-medium whitespace-nowrap ml-2">{primaryStyle.percentage}%</span>
               </div>
               <div className="w-full bg-[#F3E8E6] rounded-full h-2">
                 <div 
@@ -58,6 +58,7 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
                 src={customImage || styleConfig[primaryStyle.category]?.image}
                 alt={`Estilo ${styleName}`}
                 className="w-full h-full object-cover rounded-lg"
+                loading="lazy"
               />
             </div>
           </div>
@@ -70,4 +71,3 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
     </Card>
   );
 };
-

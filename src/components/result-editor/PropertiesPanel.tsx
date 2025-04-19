@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -135,7 +134,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   
   return (
     <div className="h-full flex flex-col border-l">
-      <div className="p-4 border-b flex justify-between items-center">
+      <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
         <h2 className="font-semibold">{getBlockTitle()}</h2>
         <div className="flex gap-2">
           <Button
@@ -157,14 +156,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         </div>
       </div>
       
-      <ScrollArea className="flex-1">
-        <Tabs defaultValue="content" className="w-full">
-          <TabsList className="mx-4 mt-2 mb-0 sticky top-0 bg-white z-10">
-            <TabsTrigger value="content">Conteúdo</TabsTrigger>
-            <TabsTrigger value="style">Estilo</TabsTrigger>
-          </TabsList>
-          
-          <div className="p-4">
+      <ScrollArea className="flex-1 overflow-y-auto">
+        <div className="p-4">
+          <Tabs defaultValue="content" className="w-full">
+            <TabsList className="mb-4 sticky top-0 bg-white z-10">
+              <TabsTrigger value="content">Conteúdo</TabsTrigger>
+              <TabsTrigger value="style">Estilo</TabsTrigger>
+            </TabsList>
+            
             <TabsContent value="content" className="mt-0">
               {renderContentEditor()}
             </TabsContent>
@@ -175,10 +174,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 onUpdate={(style) => onUpdate(selectedBlock.id, { style })}
               />
             </TabsContent>
-          </div>
-        </Tabs>
+          </Tabs>
+        </div>
       </ScrollArea>
     </div>
   );
 };
-
