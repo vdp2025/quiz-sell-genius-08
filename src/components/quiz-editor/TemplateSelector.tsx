@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { QuizTemplate } from '@/types/quizTemplate';
+import { QuizTemplate, QuizTemplatePreview } from '@/types/quizTemplate';
 import { getTemplates } from '@/services/templates/templateService';
 import { Button } from '@/components/ui/button';
 
@@ -10,7 +10,7 @@ interface TemplateSelectorProps {
 }
 
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate }) => {
-  const [templates, setTemplates] = useState<QuizTemplate[]>([]);
+  const [templates, setTemplates] = useState<QuizTemplatePreview[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
             <CardContent>
               <p className="text-[#8F7A6A] text-sm mb-4">{template.description || 'Modelo de quiz padrão'}</p>
               <p className="text-xs text-[#8F7A6A]">
-                {template.questions.length} perguntas • 
+                {template.questionCount} perguntas • 
                 Atualizado em {new Date(template.updatedAt).toLocaleDateString('pt-BR')}
               </p>
             </CardContent>
