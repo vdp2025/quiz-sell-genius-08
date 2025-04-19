@@ -1,3 +1,4 @@
+
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
@@ -22,11 +23,11 @@ export interface EditorConfig {
 
 export interface EditorBlock {
   id: string;
-  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
+  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
          'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon' |
          'faq' | 'carousel' | 'custom-code' | 'animation-block' | 'bonus' | 'urgency' | 'mentor' |
-         'style-hero' | 'offer';
+         'style-hero' | 'offer' | 'guarantee';
   content: EditableContent;
   order: number;
 }
@@ -50,23 +51,23 @@ export interface EditableContent {
   
   // Image
   imageUrl?: string;
-  imageAlt?: string;
   width?: string;
   borderRadius?: string;
   
   // Pricing Block Properties
   regularPrice?: string;
   salePrice?: string;
+  price?: string;
   buttonText?: string;
   ctaUrl?: string;
+  ctaText?: string;
   urgencyText?: string;
   installments?: {
     number: number;
     value: string;
   };
   paymentMethods?: string;
-  guaranteeText?: string;
-
+  
   // Hero Section Properties
   heroImage?: string;
   heroImage2?: string;
@@ -74,11 +75,44 @@ export interface EditableContent {
   quote?: string;
   quoteAuthor?: string;
   primaryStyle?: string;
-
+  
+  // Description and content for various blocks
+  description?: string;
+  
   // Benefits Section Properties
   items?: string[];
   useIcons?: boolean;
   iconColor?: string;
+  
+  // Style Result Properties
+  customImage?: string;
+  
+  // Testimonials Properties
+  testimonials?: Array<{
+    text: string;
+    author: string;
+    position?: string;
+  }>;
+  
+  // Guarantee Block Properties
+  days?: number;
+  guaranteeText?: string;
+  guaranteeImage?: string;
+  guaranteeDescription?: string;
+  
+  // CTA Properties
+  url?: string;
+  
+  // Offer Block Properties
+  bonuses?: string[];
+  bonusTitle?: string;
+  productImage?: string;
+  bonusImage?: string;
+  benefits?: string[];
+  
+  // Mentor Properties
+  name?: string;
+  bio?: string;
   
   // Icon Properties
   icon?: string;
@@ -109,21 +143,10 @@ export interface EditableContent {
   showArrows?: boolean;
   showDots?: boolean;
   
-  // Testimonials Block Properties
-  testimonials?: Array<{
-    text: string;
-    author: string;
-    position?: string;
-  }>;
-  title?: string;
+  // Image Properties
   image?: string;
   imageAlt?: string;
-  
-  // Guarantee Block Properties
-  days?: number;
-  guaranteeText?: string;
-  guaranteeImage?: string;
-  guaranteeDescription?: string;
+  mainImage?: string;
   
   // Style Properties
   style?: {
@@ -172,13 +195,10 @@ export interface EditableContent {
   code?: string;
   faqItems?: Array<{ question: string; answer: string }>;
   defaultOpen?: boolean;
-  image?: string;
   height?: string;
   checkoutUrl?: string;
 
   // Style Hero and Offer Block Properties
   styleType?: string;
   features?: string[];
-  productImage?: string;
-  mainImage?: string;
 }
