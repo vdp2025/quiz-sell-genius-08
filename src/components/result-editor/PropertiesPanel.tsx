@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { X, Trash2, PaintBucket, Type, Image as ImageIcon, Layout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,8 @@ import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
 import StyleHeroBlockEditor from './block-editors/StyleHeroBlockEditor';
 import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
 import OfferBlockEditor from './block-editors/OfferBlockEditor';
+import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
+import GuaranteeBlockEditor from './block-editors/GuaranteeBlockEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -80,6 +81,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return <BenefitsBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
       case 'offer':
         return <OfferBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'testimonials':
+        return <TestimonialsBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
+      case 'guarantee':
+        return <GuaranteeBlockEditor block={selectedBlock} onUpdate={handleUpdateContent} />;
       default:
         return (
           <div className="p-4 text-center text-gray-500">
@@ -143,7 +148,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   );
 };
 
-// Helper function to get a user-friendly title for each block type
 function getBlockTitle(type: Block['type']): string {
   const titles: Record<string, string> = {
     'header': 'Cabeçalho',

@@ -1,4 +1,3 @@
-
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
@@ -110,29 +109,23 @@ export interface EditableContent {
   showArrows?: boolean;
   showDots?: boolean;
   
-  // Testimonials
-  testimonialsImage?: string;
-  testimonials?: Array<{text: string; author: string; position?: string}>;
+  // Testimonials Block Properties
+  testimonials?: Array<{
+    text: string;
+    author: string;
+    position?: string;
+  }>;
+  title?: string;
+  image?: string;
+  imageAlt?: string;
   
-  // Mentor Properties
-  name?: string;
-  bio?: string;
-  
-  // Guarantee Properties
+  // Guarantee Block Properties
   days?: number;
-  description?: string;
+  guaranteeText?: string;
+  guaranteeImage?: string;
+  guaranteeDescription?: string;
   
-  // Offer Properties
-  bonusTitle?: string;
-  bonuses?: string[];
-  
-  // General properties
-  url?: string;
-  ctaText?: string;
-  price?: string;
-  customImage?: string;
-  
-  // Styling
+  // Style Properties
   style?: {
     textAlign?: 'left' | 'center' | 'right' | 'justify';
     color?: string;
