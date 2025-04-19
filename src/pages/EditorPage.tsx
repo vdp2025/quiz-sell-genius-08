@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,14 @@ export const EditorPage = () => {
           </Button>
           <h2 className="text-2xl font-playfair text-[#432818] mb-6">Modelos de Página</h2>
           <TemplateList />
+          
+          <div className="mt-8 text-center">
+            <Link to="/templates">
+              <Button className="bg-[#B89B7A] hover:bg-[#A38A69]">
+                Ver Todos os Modelos Disponíveis
+              </Button>
+            </Link>
+          </div>
         </div>
       ) : (
         <ResultPageVisualEditor 
