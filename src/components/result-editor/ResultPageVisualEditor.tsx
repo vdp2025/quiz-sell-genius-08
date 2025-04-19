@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -12,7 +11,9 @@ import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
 
-export const ResultPageVisualEditor: React.FC<EditorProps> = ({ selectedStyle }) => {
+export const ResultPageVisualEditor: React.FC<EditorProps> = ({ 
+  selectedStyle
+}) => {
   const {
     resultPageConfig,
     loading,

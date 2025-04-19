@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
@@ -10,8 +9,9 @@ interface EditorToolbarProps {
   onPreviewToggle: () => void;
   onReset: () => void;
   onEditGlobalStyles: () => void;
-  resultPageConfig?: any;
-  onUpdateConfig?: (newConfig: any) => void;
+  resultPageConfig: any;
+  onUpdateConfig: (config: any) => void;
+  onShowTemplates?: () => void;
 }
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -21,17 +21,21 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onReset,
   onEditGlobalStyles,
   resultPageConfig,
-  onUpdateConfig
+  onUpdateConfig,
+  onShowTemplates
 }) => {
   return (
-    <div className="border-b bg-white px-4 py-3 flex items-center justify-between">
-      <div>
-        <h1 className="text-xl font-medium text-[#432818]">
-          Editor da Página de Resultados
-        </h1>
-      </div>
-      
-      <div className="flex gap-2">
+    <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        {onShowTemplates && (
+          <Button
+            variant="outline"
+            onClick={onShowTemplates}
+            className="text-[#8F7A6A]"
+          >
+            Modelos de Página
+          </Button>
+        )}
         <Button
           variant="outline"
           size="sm"

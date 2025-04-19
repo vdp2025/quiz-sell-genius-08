@@ -1,19 +1,17 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
-import { getDefaultStyle } from '@/utils/styleUtils';
-import { StyleResult } from '@/types/quiz';
+import { TemplateList } from '@/components/editor/templates/TemplateList';
+import { Button } from '@/components/ui/button';
 
 export const EditorPage = () => {
-  // Get style from params or use a default
+  const [showTemplates, setShowTemplates] = useState(false);
   const { style } = useParams<{ style?: string }>();
   
-  // Convert style param to proper type or use default
   const styleCategory = (style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo") || 'Natural';
   
-  // Create a properly typed StyleResult object
-  const selectedStyle: StyleResult = {
+  const selectedStyle = {
     category: styleCategory,
     score: 100,
     percentage: 100
@@ -21,9 +19,26 @@ export const EditorPage = () => {
   
   return (
     <div className="h-screen">
-      <ResultPageVisualEditor selectedStyle={selectedStyle} />
+      {showTemplates ? (
+        <div className="p-8 max-w-4xl mx-auto">
+          <Button
+            onClick={() => setShowTemplates(false)}
+            variant="outline"
+            className="mb-4"
+          >
+            Voltar ao Editor
+          </Button>
+          <TemplateList />
+        </div>
+      ) : (
+        <ResultPageVisualEditor 
+          selectedStyle={selectedStyle} 
+          onShowTemplates={() => setShowTemplates(true)}
+        />
+      )}
     </div>
   );
 };
 
 export default EditorPage;
+
