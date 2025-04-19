@@ -29,7 +29,7 @@ export const createUnifiedTemplate = (styleType: string): UnifiedTemplate => {
     header: {
       visible: true,
       content: {
-        title: "Olá, seu estilo predominante é:",
+        title: "Olá, Seu Estilo Predominante é:",
         subtitle: ""
       },
       style: {
@@ -40,7 +40,7 @@ export const createUnifiedTemplate = (styleType: string): UnifiedTemplate => {
     mainContent: {
       visible: true,
       content: {
-        description: "Você valoriza o conforto e a praticidade. seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia."
+        description: "Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia."
       },
       style: defaultStyleProps
     },
@@ -56,12 +56,12 @@ export const createUnifiedTemplate = (styleType: string): UnifiedTemplate => {
       hero: {
         visible: true,
         content: {
-          title: "Você descobriu seu estilo",
+          title: "VOCÊ DESCOBRIU SEU ESTILO",
           subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
-          price: "39,00",
-          regularPrice: "175,00",
-          ctaText: "Quero meu guia + bônus",
-          ctaUrl: "https://pay.hotmart.com/w98977034c?checkoutmode=10&bid=1744967466912"
+          price: "R$ 39,00",
+          regularPrice: "R$ 175,00",
+          ctaText: "QUERO MEU GUIA + BÔNUS",
+          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
         },
         style: {
           ...defaultStyleProps,
@@ -70,33 +70,48 @@ export const createUnifiedTemplate = (styleType: string): UnifiedTemplate => {
       },
       products: {
         visible: true,
-        content: {},
+        content: {
+          title: "O Que Você Vai Receber:"
+        },
         style: defaultStyleProps
       },
       pricing: {
         visible: true,
         content: {
-          price: "39,00",
-          regularPrice: "175,00",
-          ctaText: "Quero meu guia + bônus",
-          ctaUrl: "https://pay.hotmart.com/w98977034c?checkoutmode=10&bid=1744967466912",
-          urgencyText: "Oferta por tempo limitado!"
+          price: "R$ 39,00",
+          regularPrice: "R$ 175,00",
+          ctaText: "QUERO MEU GUIA + BÔNUS",
+          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+          urgencyText: "Oferta por Tempo Limitado!"
         },
         style: defaultStyleProps
       },
       testimonials: {
         visible: true,
-        content: {},
+        content: {
+          title: "O Que Estão Dizendo"
+        },
         style: defaultStyleProps
       },
       benefits: {
         visible: true,
-        content: {},
+        content: {
+          title: "Benefícios",
+          items: [
+            "Descubra Seu Estilo com Precisão",
+            "Aprenda a Criar Looks Autênticos",
+            "Economize Tempo e Dinheiro",
+            "Ganhe Confiança na Sua Imagem"
+          ]
+        },
         style: defaultStyleProps
       },
       guarantee: {
         visible: true,
-        content: {},
+        content: {
+          title: "Garantia de 7 Dias",
+          text: "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
+        },
         style: defaultStyleProps
       }
     },
@@ -112,7 +127,7 @@ export const createUnifiedTemplate = (styleType: string): UnifiedTemplate => {
         id: generateId(),
         type: "hero",
         content: {
-          title: "Seu estilo foi revelado. Agora é hora da transformação.",
+          title: "Seu Estilo Foi Revelado. Agora é Hora da Transformação.",
           subtitle: "Você acabou de dar um passo essencial: descobrir o seu estilo predominante. Mas o verdadeiro poder dessa descoberta não está no resultado em si — e sim no que você faz com ele.",
           image1: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
           image2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
@@ -125,7 +140,7 @@ export const createUnifiedTemplate = (styleType: string): UnifiedTemplate => {
         id: generateId(),
         type: "products",
         content: {
-          title: "O que você vai receber:",
+          title: "O Que Você Vai Receber:",
           productImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp"
         },
         style: defaultStyleProps,
