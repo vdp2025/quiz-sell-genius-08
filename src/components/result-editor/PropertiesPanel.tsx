@@ -1,10 +1,12 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Block } from '@/types/editor';
 import { X, Trash } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card } from '@/components/ui/card';
+import { blockTemplates } from '@/utils/blockTemplates';
+import StyleEditor from './style-editors/StyleEditor';
 import HeaderBlockEditor from './block-editors/HeaderBlockEditor';
 import HeadlineBlockEditor from './block-editors/HeadlineBlockEditor';
 import TextBlockEditor from './block-editors/TextBlockEditor';
@@ -26,7 +28,6 @@ import FAQBlockEditor from './block-editors/FAQBlockEditor';
 import CarouselBlockEditor from './block-editors/CarouselBlockEditor';
 import CustomCodeBlockEditor from './block-editors/CustomCodeBlockEditor';
 import AnimationBlockEditor from './block-editors/AnimationBlockEditor';
-import StyleEditor from './style-editors/StyleEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -60,52 +61,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     );
   }
   
-  const getBlockTitle = () => {
-    switch (selectedBlock.type) {
-      case 'header':
-        return 'Cabeçalho';
-      case 'headline':
-        return 'Título e Subtítulo';
-      case 'text':
-        return 'Texto';
-      case 'image':
-        return 'Imagem';
-      case 'benefits':
-        return 'Benefícios';
-      case 'pricing':
-        return 'Preço';
-      case 'guarantee':
-        return 'Garantia';
-      case 'cta':
-        return 'Botão de Ação';
-      case 'style-result':
-        return 'Estilo Principal';
-      case 'secondary-styles':
-        return 'Estilos Secundários';
-      case 'hero-section':
-        return 'Seção Hero';
-      case 'products':
-        return 'Produtos';
-      case 'testimonials':
-        return 'Depoimentos';
-      case 'spacer':
-        return 'Espaçamento';
-      case 'video':
-        return 'Vídeo';
-      case 'two-column':
-        return 'Duas Colunas';
-      case 'icon':
-        return 'Ícone Decorativo';
-      case 'faq':
-        return 'Perguntas Frequentes';
-      case 'carousel':
-        return 'Carrossel de Imagens';
-      case 'custom-code':
-        return 'Código Personalizado';
-      case 'animation-block':
-        return 'Bloco com Animação';
-      default:
-        return 'Componente';
+  const availableTemplates = blockTemplates.filter(
+    template => template.type === selectedBlock.type
+  );
+
+  const handleApplyTemplate = (templateId: string) => {
+    const template = blockTemplates.find(t => t.id === templateId);
+    if (template) {
+      onUpdate(selectedBlock.id, { ...template.content });
     }
   };
   
@@ -160,8 +123,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   
   return (
     <div className="h-full flex flex-col border-l">
-      <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-        <h2 className="font-semibold">{getBlockTitle()}</h2>
+      <div className="p-4 border-b flex justify-between items-center">
+        <h2 className="font-semibold">{selectedBlock.type}</h2>
         <div className="flex gap-2">
           <Button
             variant="ghost"
@@ -182,19 +145,49 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         </div>
       </div>
       
-      <ScrollArea className="flex-1 overflow-y-auto">
+      <ScrollArea className="flex-1">
         <div className="p-4">
-          <Tabs defaultValue="content" className="w-full">
-            <TabsList className="mb-4 sticky top-0 bg-white z-10">
+          <Tabs defaultValue="templates">
+            <TabsList className="mb-4">
+              <TabsTrigger value="templates">Templates</TabsTrigger>
               <TabsTrigger value="content">Conteúdo</TabsTrigger>
               <TabsTrigger value="style">Estilo</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="content" className="mt-0">
+            <TabsContent value="templates">
+              <div className="grid gap-4">
+                {availableTemplates.map(template => (
+                  <Card
+                    key={template.id}
+                    className="p-4 cursor-pointer hover:bg-[#FAF9F7] transition-colors"
+                    onClick={() => handleApplyTemplate(template.id)}
+                  >
+                    <h3 className="font-medium mb-2">{template.name}</h3>
+                    {template.preview && (
+                      <img 
+                        src={template.preview} 
+                        alt={template.name}
+                        className="w-full rounded-md mb-2" 
+                      />
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => handleApplyTemplate(template.id)}
+                    >
+                      Aplicar Template
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="content">
               {renderContentEditor()}
             </TabsContent>
             
-            <TabsContent value="style" className="mt-0">
+            <TabsContent value="style">
               <StyleEditor
                 style={selectedBlock.content.style || {}}
                 onUpdate={(style) => onUpdate(selectedBlock.id, { style })}

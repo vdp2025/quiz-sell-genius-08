@@ -12,7 +12,7 @@ interface EditableBlockProps {
   onSelect: () => void;
   isPreview: boolean;
   primaryStyle: StyleResult;
-  styleType?: string; // Add styleType prop
+  styleType?: string;
 }
 
 export const EditableBlock: React.FC<EditableBlockProps> = ({
@@ -38,25 +38,31 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
   return (
     <div
       className={cn(
-        "group relative p-4 rounded-lg transition-all border-2 border-dashed",
+        "group relative transition-all",
         isSelected
-          ? "border-[#B89B7A] bg-[#FAF9F7]"
-          : "border-[#B89B7A]/40 hover:border-[#B89B7A]/60 hover:bg-[#FAF9F7]/50"
+          ? "ring-2 ring-[#B89B7A] rounded-lg"
+          : "hover:ring-2 hover:ring-[#B89B7A]/40 rounded-lg"
       )}
       onClick={onSelect}
     >
-      {/* Block Content */}
-      <BlockRenderer 
-        block={block} 
-        primaryStyle={primaryStyle}
-        styleType={styleType}
-      />
-
-      {/* Block Controls */}
-      <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <GripVertical className="w-4 h-4 text-[#8F7A6A] cursor-grab" />
-        <Edit className="w-4 h-4 text-[#8F7A6A]" />
-        <Trash className="w-4 h-4 text-red-500" />
+      <div className="relative">
+        <BlockRenderer 
+          block={block} 
+          primaryStyle={primaryStyle}
+          styleType={styleType}
+        />
+        
+        <div className="absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]">
+            <GripVertical className="w-4 h-4 text-[#8F7A6A] cursor-move" />
+          </button>
+          <button className="p-1 rounded bg-white shadow-sm hover:bg-[#FAF9F7]">
+            <Edit className="w-4 h-4 text-[#8F7A6A]" />
+          </button>
+          <button className="p-1 rounded bg-white shadow-sm hover:bg-red-50">
+            <Trash className="w-4 h-4 text-red-500" />
+          </button>
+        </div>
       </div>
     </div>
   );
