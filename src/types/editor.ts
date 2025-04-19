@@ -48,7 +48,7 @@ export interface EditableContent {
   imageAlt?: string;
   width?: string;
   borderRadius?: string;
-  height?: string;
+  // Removed duplicate height property
   
   // Benefits
   items?: string[];
