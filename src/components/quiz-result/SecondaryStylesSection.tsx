@@ -4,9 +4,15 @@ import { StyleResult } from '@/types/quiz';
 
 interface SecondaryStylesSectionProps {
   secondaryStyles: StyleResult[];
+  isEditing?: boolean;
+  onUpdate?: (value: any) => void;
 }
 
-const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ secondaryStyles }) => {
+const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ 
+  secondaryStyles,
+  isEditing = false,
+  onUpdate
+}) => {
   return (
     <div className="space-y-1.5">
       <h3 className="text-xs font-medium text-[#432818] mb-1">
