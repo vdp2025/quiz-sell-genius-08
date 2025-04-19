@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Check, CheckCircle, CircleCheck, BadgeCheck, Star, Award, Shield, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface BenefitsBlockPreviewProps {
   content: {
@@ -16,7 +17,7 @@ interface BenefitsBlockPreviewProps {
 const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) => {
   const renderIcon = (iconName: string) => {
     const iconColor = content.iconColor || '#aa6b5d';
-    const iconProps = { size: 18, color: iconColor };
+    const iconProps = { size: 24, color: iconColor };
     
     switch (iconName) {
       case 'check-circle':
@@ -39,30 +40,58 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
     }
   };
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div style={content.style}>
-      <h3 className="text-xl font-bold mb-4 text-[#aa6b5d]">
+    <div
+      className="max-w-4xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-[#fff7f3] to-white"
+      style={content.style}
+    >
+      <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#aa6b5d] text-center mb-8">
         {content.title || 'Benefícios'}
       </h3>
-      <ul className="space-y-3">
+      
+      <motion.div 
+        className="grid md:grid-cols-2 gap-6"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
         {(content.items || [
           'Aplicar seus estilos com autenticidade',
-          'Montar looks práticos para o dia a dia, trabalho e eventos',
-          'Usar cores e modelagens que valorizam quem você é',
-          'Parar de errar nas compras e economizar tempo'
+          'Montar looks práticos para o dia a dia',
+          'Usar cores e modelagens que valorizam você',
+          'Parar de errar nas compras e economizar'
         ]).map((item, index) => (
-          <li key={index} className="flex items-start">
-            {content.useIcons !== false ? (
-              <span className="text-[#aa6b5d] mr-2 flex-shrink-0 mt-0.5">
-                {renderIcon(content.icon || 'check')}
-              </span>
-            ) : (
-              <span className="text-[#aa6b5d] mr-2">✓</span>
-            )}
-            <span className="text-[#1A1818]/80">{item}</span>
-          </li>
+          <motion.div
+            key={index}
+            className="flex items-start gap-4 p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
+            variants={item}
+          >
+            <div className="flex-shrink-0 mt-1">
+              {content.useIcons !== false ? (
+                renderIcon(content.icon || 'check')
+              ) : (
+                <span className="text-[#aa6b5d] text-2xl">✓</span>
+              )}
+            </div>
+            <p className="text-[#1A1818]/80 text-lg">{item}</p>
+          </motion.div>
         ))}
-      </ul>
+      </motion.div>
     </div>
   );
 };

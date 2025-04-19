@@ -1,4 +1,3 @@
-
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles: {
@@ -50,103 +49,33 @@ export interface EditableContent {
   width?: string;
   borderRadius?: string;
   
-  // Benefits
-  items?: string[];
-  icon?: string;
-  iconColor?: string;
-  useIcons?: boolean;
-  
-  // Pricing
+  // Pricing Block Properties
   regularPrice?: string;
   salePrice?: string;
   buttonText?: string;
   ctaUrl?: string;
   urgencyText?: string;
-  checkoutUrl?: string;
-  
-  // Guarantee
-  image?: string;
-  
-  // Hero Section
+  installments?: {
+    number: number;
+    value: string;
+  };
+  paymentMethods?: string;
+  guaranteeText?: string;
+
+  // Hero Section Properties
+  subtitle?: string;
   heroImage?: string;
   heroImage2?: string;
   heroImageAlt?: string;
   quote?: string;
   quoteAuthor?: string;
-  
-  // Products
-  images?: {
-    url: string;
-    alt: string;
-    title?: string;
-  }[];
-  
-  // Testimonials
-  testimonialsImage?: string;
-  
-  // Bonus Carousel
-  bonusImages?: {
-    url: string;
-    alt: string;
-    title: string;
-  }[];
-  
-  // Video
-  videoUrl?: string;
-  videoTitle?: string;
-  videoDescription?: string;
-  videoThumbnail?: string;
-  videoAutoplay?: boolean;
-  videoControls?: boolean;
-  
-  // Two-Column
-  leftColumn?: {
-    content?: string;
-    width?: string;
-    style?: any;
-  };
-  rightColumn?: {
-    content?: string;
-    width?: string;
-    style?: any;
-  };
-  columnGap?: string;
-  
-  // Spacer
-  height?: string;
-  
-  // Icon Block
-  size?: string;
-  color?: string;
-  position?: 'top' | 'right' | 'bottom' | 'left';
-  
-  // FAQ Block
-  faqItems?: {
-    question: string;
-    answer: string;
-  }[];
-  defaultOpen?: boolean;
-  
-  // Carousel Block
-  carouselImages?: {
-    url: string;
-    alt: string;
-    caption?: string;
-  }[];
-  autoPlay?: boolean;
-  interval?: number;
-  showArrows?: boolean;
-  showDots?: boolean;
-  
-  // Custom Code Block
-  code?: string;
-  
-  // Animation Block
-  animationType?: 'fade-in' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-out';
-  animationDuration?: string;
-  animationDelay?: string;
-  animationTrigger?: 'onLoad' | 'onScroll' | 'onHover';
-  children?: EditableContent;
+  primaryStyle?: string;
+
+  // Benefits Section Properties
+  items?: string[];
+  icon?: string;
+  iconColor?: string;
+  useIcons?: boolean;
   
   // General properties
   description?: string;
