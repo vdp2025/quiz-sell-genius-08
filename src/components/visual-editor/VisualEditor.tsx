@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
@@ -18,6 +17,7 @@ export function VisualEditor() {
         isPreviewing={isPreviewing}
         onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
         onSave={saveConfig}
+        config={config}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
