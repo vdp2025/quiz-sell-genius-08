@@ -1,3 +1,4 @@
+
 import { generateId } from './idGenerator';
 import { Block } from '@/types/editor';
 
@@ -19,7 +20,7 @@ export function createDefaultBlocks(styleType: string): Block[] {
       id: generateId(),
       type: 'style-result',
       content: {
-        showDetails: true,
+        description: true, // Changed from showDetails to description
         styleType
       },
       order: 1
@@ -68,7 +69,7 @@ export function createDefaultBlocks(styleType: string): Block[] {
       type: 'testimonials',
       content: {
         title: 'O que dizem as alunas',
-        items: [
+        testimonials: [ // Changed from 'items' to 'testimonials' to match the type
           {
             text: "O guia mudou completamente minha relação com a moda. Agora sei exatamente o que combina comigo!",
             author: "Maria Silva",
