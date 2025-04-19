@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
@@ -47,7 +48,7 @@ export function BlockRenderer({
         !isPreview && "border-2 border-dashed border-[#B89B7A]/40"
       )}
     >
-      {renderBlockContent(block, primaryStyle, mockSecondaryStyles, onUpdate)}
+      {renderBlockContent(block, primaryStyle, mockSecondaryStyles, isPreview, onUpdate)}
 
       {!isPreview && isSelected && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -60,7 +61,7 @@ export function BlockRenderer({
   );
 }
 
-function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[], onUpdate?: (content: any) => void) {
+function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[], isPreview?: boolean, onUpdate?: (content: any) => void) {
   if (!primaryStyle && (block.type === 'style-result' || block.type === 'secondary-styles')) {
     return <div>Carregando...</div>;
   }
@@ -88,7 +89,7 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
     case 'testimonials':
       return <TestimonialsBlockPreview 
         content={block.content} 
-        isPreview={isPreview}
+        isPreview={!!isPreview}
         onUpdate={onUpdate}
         block={block}
       />;
