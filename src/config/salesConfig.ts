@@ -29,15 +29,15 @@ export const salesConfig = {
       type: "header",
       content: {
         logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-        title: "Você descobriu seu Estilo! E isso é muito poderoso.",
+        title: "Você descobriu seu Estilo Sexy! E isso é muito poderoso.",
         logoHeight: 80
       }
     },
     {
       type: "hero-section",
       content: {
-        title: "VOCÊ DESCOBRIU SEU ESTILO",
-        subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
+        title: "SEU ESTILO É SEXY",
+        subtitle: "Agora é hora de expressar sua sensualidade com elegância e autenticidade",
         heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
         heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
       }
@@ -45,25 +45,25 @@ export const salesConfig = {
     {
       type: "benefits",
       content: {
-        title: "O que você vai aprender:",
+        title: "O que você vai descobrir no seu Guia de Estilo Sexy:",
         items: [
-          "Como montar looks com intenção (e não no improviso)",
-          "Como usar suas cores, modelagens e tecidos a seu favor",
-          "Como alinhar sua imagem com seus valores e objetivos",
-          "Como parar de comprar por impulso e montar um guarda-roupa funcional",
-          "Como escolher peças que valorizem seu tipo de corpo",
-          "Como criar looks autênticos e poderosos"
+          "Como criar looks sensuais mantendo a elegância",
+          "As cores e modelagens que valorizam suas curvas",
+          "Como transmitir confiança através do seu visual",
+          "Técnicas para equilibrar sensualidade e sofisticação",
+          "Os melhores tecidos e caimentos para seu estilo",
+          "Como montar produções impactantes para cada ocasião"
         ]
       }
     },
     {
       type: "products",
       content: {
-        title: "O que você vai receber:",
+        title: "Receba agora seu Guia Completo:",
         images: [
           {
             url: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp",
-            alt: "Guia de Estilo - 3 Revistas Completas"
+            alt: "Guia de Estilo Sexy - Edição Digital"
           },
           {
             url: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp",
@@ -71,7 +71,7 @@ export const salesConfig = {
           },
           {
             url: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp",
-            alt: "Guia Digital em seu Celular"
+            alt: "Acesso via Celular e Tablet"
           }
         ]
       }
@@ -81,8 +81,8 @@ export const salesConfig = {
       content: {
         name: "Gisele Galvão",
         image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.43.29_ubwaq9.webp",
-        title: "Consultora de Imagem e Estilo, Personal Branding",
-        bio: "Especialista em coloração pessoal com Certificação internacional. Advogada de formação, mãe da Victória e esposa do Fabrício. Apaixonada pela vida, pelos detalhes e por ajudar mulheres a se expressarem através da imagem."
+        title: "Consultora de Imagem e Estilo",
+        bio: "Especialista em coloração pessoal com Certificação internacional. Há mais de 5 anos ajudando mulheres a expressarem sua verdadeira essência através do estilo."
       }
     },
     {
@@ -90,9 +90,9 @@ export const salesConfig = {
       content: {
         regularPrice: "175,00",
         salePrice: "39,00",
-        buttonText: "Quero Transformar Meu Estilo",
+        buttonText: "Quero Meu Guia de Estilo Sexy",
         ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-        urgencyText: "Oferta válida apenas nesta página",
+        urgencyText: "Oferta por tempo limitado",
         paymentMethods: "Aceitamos PIX, cartão de crédito e boleto",
         installments: {
           number: 12,
@@ -103,7 +103,7 @@ export const salesConfig = {
     {
       type: "testimonials",
       content: {
-        title: "O que estão dizendo",
+        title: "Depoimentos de mulheres que transformaram seu estilo",
         testimonialsImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp"
       }
     },
@@ -177,7 +177,9 @@ export const salesConfig = {
         "Como criar looks sensuais com elegância",
         "Tecidos e modelagens que valorizam as curvas",
         "Combinações que transmitem confiança",
-        "Acessórios que realçam o poder feminino"
+        "Acessórios que realçam o poder feminino",
+        "Equilíbrio entre sensualidade e sofisticação",
+        "Looks impactantes para cada ocasião"
       ]
     },
     dramatico: {
