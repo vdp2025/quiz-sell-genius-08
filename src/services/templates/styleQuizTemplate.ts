@@ -9,7 +9,7 @@ const createQuestionId = (category: string, index: number) => `${category}_${ind
 const createOptionId = (questionId: string, index: number) => `${questionId}_option_${index}`;
 
 // Create the style quiz template
-export const styleQuizTemplate: QuizQuestion[] = [
+const styleQuizTemplate: QuizQuestion[] = [
   {
     id: createQuestionId('clothingQuestions', 1),
     title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
@@ -300,3 +300,5 @@ export const styleQuizTemplate: QuizQuestion[] = [
   }
   // You can add more questions, but for brevity I'm limiting to these 5
 ];
+
+export default styleQuizTemplate;
