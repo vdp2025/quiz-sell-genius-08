@@ -34,10 +34,10 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
   
   // Usar o estilo do quiz se disponível, senão usar styleType ou primaryStyle
   const displayStyle = userPrimaryStyle?.category || styleType || primaryStyle?.category || 'Natural';
-  const styleInfo = getStyleConfig(displayStyle as any);
+  const styleInfo = getStyleConfig(displayStyle);
 
   return (
-    <div className="p-6 bg-white rounded-lg border border-[#B89B7A]/20">
+    <div className="p-6 bg-white rounded-lg border border-[#B89B7A]/20" style={content.style as React.CSSProperties}>
       <div className="flex flex-col md:flex-row items-center gap-6">
         {content.imageUrl ? (
           <img
@@ -66,4 +66,3 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
 };
 
 export default StyleResultBlockPreview;
-export { StyleResultBlockPreview };

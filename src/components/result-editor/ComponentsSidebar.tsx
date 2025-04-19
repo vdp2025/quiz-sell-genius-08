@@ -1,121 +1,212 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Block } from '@/types/editor';
 import { 
-  Layout, 
+  LayoutTemplate, 
   Type, 
-  Image, 
-  CreditCard, 
-  Check, 
-  Award, 
+  ImageIcon, 
   Sparkles, 
-  ShieldCheck, 
-  Columns, 
-  Palette, 
+  ListChecks, 
+  ShoppingCart, 
+  Award, 
+  Star, 
+  Heading, 
+  ScrollText, 
   Video, 
-  Layers, 
-  Heart,
-  Share2,
-  Gift,
-  SlidersHorizontal,
-  FileText,
-  Maximize,
-  HelpCircle,
-  Images,
-  Code,
-  Wand2
+  Grid2X2, 
+  DollarSign
 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
-const componentGroups = [
-  {
-    title: 'Básico',
-    components: [
-      { name: 'Cabeçalho', type: 'header', icon: <Layout className="h-4 w-4" /> },
-      { name: 'Título', type: 'headline', icon: <Type className="h-4 w-4" /> },
-      { name: 'Texto', type: 'text', icon: <FileText className="h-4 w-4" /> },
-      { name: 'Imagem', type: 'image', icon: <Image className="h-4 w-4" /> },
-      { name: 'Duas Colunas', type: 'two-column', icon: <Columns className="h-4 w-4" /> },
-      { name: 'Espaçador', type: 'spacer', icon: <Maximize className="h-4 w-4" /> },
-      { name: 'Ícone Decorativo', type: 'icon', icon: <Sparkles className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Seções',
-    components: [
-      { name: 'Seção Hero', type: 'hero-section', icon: <Layers className="h-4 w-4" /> },
-      { name: 'Benefícios', type: 'benefits', icon: <Check className="h-4 w-4" /> },
-      { name: 'Depoimentos', type: 'testimonials', icon: <Heart className="h-4 w-4" /> },
-      { name: 'Produtos', type: 'products', icon: <ShieldCheck className="h-4 w-4" /> },
-      { name: 'Carrossel de Bônus', type: 'bonus-carousel', icon: <Gift className="h-4 w-4" /> },
-      { name: 'Garantia', type: 'guarantee', icon: <Award className="h-4 w-4" /> },
-      { name: 'Vídeo', type: 'video', icon: <Video className="h-4 w-4" /> },
-      { name: 'FAQ', type: 'faq', icon: <HelpCircle className="h-4 w-4" /> },
-      { name: 'Carrossel', type: 'carousel', icon: <Images className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Conversão',
-    components: [
-      { name: 'Preço', type: 'pricing', icon: <CreditCard className="h-4 w-4" /> },
-      { name: 'Botão CTA', type: 'cta', icon: <Share2 className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Resultado do Quiz',
-    components: [
-      { name: 'Estilo Principal', type: 'style-result', icon: <Palette className="h-4 w-4" /> },
-      { name: 'Estilos Secundários', type: 'secondary-styles', icon: <SlidersHorizontal className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Avançado',
-    components: [
-      { name: 'Código Personalizado', type: 'custom-code', icon: <Code className="h-4 w-4" /> },
-      { name: 'Animação', type: 'animation-block', icon: <Wand2 className="h-4 w-4" /> },
-    ]
-  }
-];
+interface ComponentSidebarProps {
+  onComponentSelect: (type: Block['type']) => void;
+}
 
-type ComponentsSidebarProps = {
-  onComponentSelect: (type: string) => void;
+type ComponentCategory = {
+  name: string;
+  items: {
+    type: Block['type'];
+    name: string;
+    icon: React.ReactNode;
+    description?: string;
+  }[];
 };
 
-export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
+export function ComponentsSidebar({ onComponentSelect }: ComponentSidebarProps) {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  
+  const categories: ComponentCategory[] = [
+    {
+      name: 'Estilo',
+      items: [
+        {
+          type: 'style-hero',
+          name: 'Hero de Estilo',
+          icon: <Sparkles className="w-4 h-4" />,
+          description: 'Seção principal destacando o estilo'
+        },
+        {
+          type: 'style-result',
+          name: 'Resultado de Estilo',
+          icon: <Sparkles className="w-4 h-4" />,
+          description: 'Mostra o estilo predominante'
+        },
+        {
+          type: 'secondary-styles',
+          name: 'Estilos Secundários',
+          icon: <Star className="w-4 h-4" />,
+          description: 'Mostrar estilos complementares'
+        },
+        {
+          type: 'offer',
+          name: 'Oferta de Produto',
+          icon: <ShoppingCart className="w-4 h-4" />,
+          description: 'Bloco de oferta para venda'
+        }
+      ]
+    },
+    {
+      name: 'Básicos',
+      items: [
+        {
+          type: 'header',
+          name: 'Cabeçalho',
+          icon: <LayoutTemplate className="w-4 h-4" />,
+          description: 'Cabeçalho com logo e menu'
+        },
+        {
+          type: 'headline',
+          name: 'Título',
+          icon: <Heading className="w-4 h-4" />,
+          description: 'Título e subtítulo'
+        },
+        {
+          type: 'text',
+          name: 'Texto',
+          icon: <Type className="w-4 h-4" />,
+          description: 'Bloco de texto simples'
+        },
+        {
+          type: 'image',
+          name: 'Imagem',
+          icon: <ImageIcon className="w-4 h-4" />,
+          description: 'Imagem com legenda opcional'
+        }
+      ]
+    },
+    {
+      name: 'Venda',
+      items: [
+        {
+          type: 'benefits',
+          name: 'Benefícios',
+          icon: <ListChecks className="w-4 h-4" />,
+          description: 'Lista de benefícios'
+        },
+        {
+          type: 'pricing',
+          name: 'Preço',
+          icon: <DollarSign className="w-4 h-4" />,
+          description: 'Bloco de preço e compra'
+        },
+        {
+          type: 'testimonials',
+          name: 'Depoimentos',
+          icon: <Star className="w-4 h-4" />,
+          description: 'Depoimentos de clientes'
+        },
+        {
+          type: 'guarantee',
+          name: 'Garantia',
+          icon: <Award className="w-4 h-4" />,
+          description: 'Bloco de garantia'
+        },
+        {
+          type: 'cta',
+          name: 'Botão CTA',
+          icon: <ShoppingCart className="w-4 h-4" />,
+          description: 'Botão de chamada para ação'
+        }
+      ]
+    },
+    {
+      name: 'Avançado',
+      items: [
+        {
+          type: 'video',
+          name: 'Vídeo',
+          icon: <Video className="w-4 h-4" />,
+          description: 'Incorporar vídeo'
+        },
+        {
+          type: 'two-column',
+          name: 'Duas Colunas',
+          icon: <Grid2X2 className="w-4 h-4" />,
+          description: 'Layout de duas colunas'
+        },
+        {
+          type: 'faq',
+          name: 'Perguntas Frequentes',
+          icon: <ScrollText className="w-4 h-4" />,
+          description: 'Seção de perguntas e respostas'
+        }
+      ]
+    }
+  ];
+
+  const filteredCategories = categories.map(category => ({
+    ...category,
+    items: category.items.filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+  })).filter(category => category.items.length > 0);
+
   return (
-    <div className="h-full border-r bg-white">
-      <div className="p-4 border-b">
-        <h2 className="font-semibold text-[#432818]">Componentes</h2>
-        <p className="text-sm text-[#8F7A6A]">Arraste ou clique para adicionar</p>
+    <div className="h-full bg-white border-r border-[#B89B7A]/20 flex flex-col">
+      <div className="p-4 border-b border-[#B89B7A]/20">
+        <h2 className="text-lg font-medium text-[#432818] mb-3">Componentes</h2>
+        <Input
+          type="text"
+          placeholder="Buscar componentes..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full"
+        />
       </div>
       
-      <ScrollArea className="h-[calc(100vh-10rem)]">
-        <div className="p-4 space-y-6">
-          {componentGroups.map((group) => (
-            <div key={group.title} className="space-y-3">
-              <h3 className="text-sm font-medium text-[#432818]">{group.title}</h3>
-              <div className="space-y-2">
-                {group.components.map((component) => (
-                  <Card
-                    key={component.type}
-                    className="p-3 cursor-pointer hover:bg-[#FAF9F7] transition-colors flex items-center gap-2"
-                    onClick={() => onComponentSelect(component.type)}
-                    draggable
-                    onDragStart={(e) => {
-                      e.dataTransfer.setData('componentType', component.type);
-                    }}
-                  >
-                    <div className="bg-[#FAF9F7] rounded-md p-1.5">
-                      {component.icon}
+      <div className="flex-1 overflow-auto p-3">
+        {filteredCategories.map((category) => (
+          <div key={category.name} className="mb-6">
+            <h3 className="text-sm font-medium text-[#8F7A6A] mb-2 px-2">{category.name}</h3>
+            <div className="space-y-1">
+              {category.items.map((item) => (
+                <Button
+                  key={item.type}
+                  variant="ghost"
+                  className="w-full justify-start py-2 px-2 h-auto text-[#432818] hover:bg-[#FAF9F7]"
+                  onClick={() => onComponentSelect(item.type)}
+                >
+                  <div className="flex items-start">
+                    <div className="p-1 bg-[#FAF9F7] rounded mr-3 flex-shrink-0">
+                      {item.icon}
                     </div>
-                    <span className="text-sm text-[#432818]">{component.name}</span>
-                  </Card>
-                ))}
-              </div>
+                    <div className="text-left">
+                      <p className="font-medium text-sm">{item.name}</p>
+                      {item.description && (
+                        <p className="text-xs text-[#8F7A6A] mt-0.5">{item.description}</p>
+                      )}
+                    </div>
+                  </div>
+                </Button>
+              ))}
             </div>
-          ))}
-        </div>
-      </ScrollArea>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
+}
+
+export default ComponentsSidebar;

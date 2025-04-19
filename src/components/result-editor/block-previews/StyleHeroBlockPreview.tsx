@@ -11,6 +11,8 @@ interface StyleHeroBlockPreviewProps {
     mainImage?: string;
     styleType?: string;
     style?: any;
+    ctaText?: string;
+    ctaUrl?: string;
   };
   styleType?: string;
 }
@@ -35,7 +37,7 @@ const StyleHeroBlockPreview: React.FC<StyleHeroBlockPreviewProps> = ({ content, 
   
   // Usar o estilo do quiz se disponível, senão usar styleType ou conteúdo
   const displayStyle = userPrimaryStyle?.category || styleType || content.styleType || 'Natural';
-  const styleInfo = getStyleConfig(displayStyle as any);
+  const styleInfo = getStyleConfig(displayStyle);
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-[#fff7f3] to-white rounded-2xl p-8" style={content.style}>
@@ -66,6 +68,17 @@ const StyleHeroBlockPreview: React.FC<StyleHeroBlockPreviewProps> = ({ content, 
                 </span>
               </div>
             </div>
+            
+            {content.ctaText && (
+              <div className="mt-6">
+                <a 
+                  href={content.ctaUrl || "#"} 
+                  className="inline-block px-6 py-3 bg-[#aa6b5d] text-white font-medium rounded-lg hover:bg-[#8a574a] transition-colors"
+                >
+                  {content.ctaText}
+                </a>
+              </div>
+            )}
           </div>
           
           <div className="relative">

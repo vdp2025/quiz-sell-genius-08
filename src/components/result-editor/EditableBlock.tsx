@@ -4,7 +4,7 @@ import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
 import { Edit, Trash, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { BlockRenderer } from './BlockRenderer';
+import BlockRenderer from './BlockRenderer';
 
 interface EditableBlockProps {
   block: Block;
@@ -90,3 +90,5 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
     </div>
   );
 };
+
+export default EditableBlock;

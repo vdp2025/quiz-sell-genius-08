@@ -8,26 +8,30 @@ interface SortableItemProps {
   children: React.ReactNode;
 }
 
-export function SortableItem({ id, children }: SortableItemProps) {
+export const SortableItem: React.FC<SortableItemProps> = ({ id, children }) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging,
   } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 10 : 1,
-    opacity: isDragging ? 0.6 : 1,
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div 
+      ref={setNodeRef} 
+      style={style} 
+      {...attributes} 
+      {...listeners}
+    >
       {children}
     </div>
   );
-}
+};
+
+export default SortableItem;

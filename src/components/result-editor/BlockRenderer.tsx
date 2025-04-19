@@ -23,6 +23,8 @@ import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
 import FAQBlockPreview from './block-previews/FAQBlockPreview';
+import StyleHeroBlockPreview from './block-previews/StyleHeroBlockPreview';
+import StyleOfferBlockPreview from './block-previews/StyleOfferBlockPreview';
 
 interface BlockRendererProps {
   block: Block;
@@ -93,6 +95,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         return <AnimationBlockPreview content={block.content} />;
       case 'faq':
         return <FAQBlockPreview content={block.content} />;
+      case 'style-hero':
+        return <StyleHeroBlockPreview content={block.content} styleType={styleType} />;
+      case 'offer':
+        return <StyleOfferBlockPreview content={block.content} />;
       default:
         return (
           <div onClick={handleClick}>
@@ -108,3 +114,5 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     </div>
   );
 };
+
+export default BlockRenderer;

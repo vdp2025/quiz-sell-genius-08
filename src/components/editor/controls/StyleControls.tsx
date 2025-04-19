@@ -1,140 +1,172 @@
 
 import React from 'react';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ColorPicker } from '@/components/result-editor/ColorPicker';
-import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
+import { ColorPicker } from './ColorPicker';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { Palette } from 'lucide-react';
 
 interface StyleControlsProps {
-  style: any;
-  onUpdate: (style: any) => void;
-  showLogoControls?: boolean;
-  logoWidth?: string | number;
-  logoHeight?: string | number;
-  onLogoSizeChange?: (width: string, height: string) => void;
+  style: Record<string, any>;
+  onUpdate: (style: Record<string, any>) => void;
 }
 
-export const StyleControls: React.FC<StyleControlsProps> = ({ 
-  style, 
-  onUpdate,
-  showLogoControls = false,
-  logoWidth,
-  logoHeight,
-  onLogoSizeChange
-}) => {
-  const handleChange = (property: string, value: string) => {
-    onUpdate({
-      ...style,
-      [property]: value
-    });
+export const StyleControls: React.FC<StyleControlsProps> = ({ style, onUpdate }) => {
+  const handleChange = (prop: string, value: any) => {
+    onUpdate({ ...style, [prop]: value });
   };
-
+  
   return (
-    <div className="space-y-4">
-      <div>
-        <Label>Cor do Fundo</Label>
-        <ColorPicker
-          color={style.backgroundColor || '#FFFFFF'}
-          onChange={(color) => handleChange('backgroundColor', color)}
-        />
+    <div className="space-y-5">
+      <div className="space-y-3">
+        <h3 className="font-medium text-[#432818]">Texto</h3>
+        
+        <div className="space-y-2">
+          <Label htmlFor="textAlign">Alinhamento</Label>
+          <Select
+            value={style.textAlign || 'left'}
+            onValueChange={(value) => handleChange('textAlign', value)}
+          >
+            <SelectTrigger id="textAlign">
+              <SelectValue placeholder="Alinhamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="left">Esquerda</SelectItem>
+              <SelectItem value="center">Centro</SelectItem>
+              <SelectItem value="right">Direita</SelectItem>
+              <SelectItem value="justify">Justificado</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="fontSize">Tamanho do Texto</Label>
+          <Input
+            id="fontSize"
+            type="text"
+            value={style.fontSize || ''}
+            onChange={(e) => handleChange('fontSize', e.target.value)}
+            placeholder="16px, 1.2rem, etc."
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="fontWeight">Peso da Fonte</Label>
+          <Select
+            value={style.fontWeight || '400'}
+            onValueChange={(value) => handleChange('fontWeight', value)}
+          >
+            <SelectTrigger id="fontWeight">
+              <SelectValue placeholder="Peso da Fonte" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="300">Leve (300)</SelectItem>
+              <SelectItem value="400">Normal (400)</SelectItem>
+              <SelectItem value="500">Médio (500)</SelectItem>
+              <SelectItem value="600">Semi-Bold (600)</SelectItem>
+              <SelectItem value="700">Bold (700)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-
-      {showLogoControls && onLogoSizeChange && (
-        <div>
-          <Label>Tamanho do Logo</Label>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <Label className="text-xs">Largura</Label>
-              <Input
-                value={logoWidth || ''}
-                onChange={(e) => onLogoSizeChange(e.target.value, logoHeight?.toString() || '')}
-                placeholder="auto"
+      
+      <div className="space-y-3">
+        <h3 className="font-medium text-[#432818]">Cores</h3>
+        
+        <div className="space-y-2">
+          <Label>Cor do Texto</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-5 h-5 rounded-full border"
+                    style={{ backgroundColor: style.color || '#000000' }} 
+                  />
+                  <span>{style.color || 'Selecionar cor'}</span>
+                </div>
+                <Palette className="w-4 h-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0" align="start">
+              <ColorPicker 
+                color={style.color || '#000000'} 
+                onChange={(color) => handleChange('color', color)} 
               />
-            </div>
-            <div>
-              <Label className="text-xs">Altura</Label>
-              <Input
-                value={logoHeight || ''}
-                onChange={(e) => onLogoSizeChange(logoWidth?.toString() || '', e.target.value)}
-                placeholder="auto"
+            </PopoverContent>
+          </Popover>
+        </div>
+        
+        <div className="space-y-2">
+          <Label>Cor de Fundo</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-5 h-5 rounded-full border"
+                    style={{ backgroundColor: style.backgroundColor || 'transparent' }} 
+                  />
+                  <span>{style.backgroundColor || 'Transparente'}</span>
+                </div>
+                <Palette className="w-4 h-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0" align="start">
+              <ColorPicker 
+                color={style.backgroundColor || '#ffffff'} 
+                onChange={(color) => handleChange('backgroundColor', color)} 
               />
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div>
-        <Label>Dimensões da Imagem</Label>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label className="text-xs">Largura</Label>
-            <Input
-              value={style.width || ''}
-              onChange={(e) => handleChange('width', e.target.value)}
-              placeholder="100%"
-            />
-          </div>
-          <div>
-            <Label className="text-xs">Altura</Label>
-            <Input
-              value={style.height || ''}
-              onChange={(e) => handleChange('height', e.target.value)}
-              placeholder="auto"
-            />
-          </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
-
-      <div>
-        <Label>Ajuste da Imagem</Label>
-        <Select
-          value={style.objectFit || 'cover'}
-          onValueChange={(value) => handleChange('objectFit', value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Selecione o ajuste" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="cover">Cobrir</SelectItem>
-            <SelectItem value="contain">Conter</SelectItem>
-            <SelectItem value="fill">Preencher</SelectItem>
-            <SelectItem value="none">Nenhum</SelectItem>
-            <SelectItem value="scale-down">Escalar para baixo</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <Label>Espaçamento</Label>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label className="text-xs">Margem</Label>
-            <Input
-              value={style.margin || ''}
-              onChange={(e) => handleChange('margin', e.target.value)}
-              placeholder="0px"
-            />
-          </div>
-          <div>
-            <Label className="text-xs">Padding</Label>
-            <Input
-              value={style.padding || ''}
-              onChange={(e) => handleChange('padding', e.target.value)}
-              placeholder="0px"
-            />
-          </div>
+      
+      <div className="space-y-3">
+        <h3 className="font-medium text-[#432818]">Espaçamento</h3>
+        
+        <div className="space-y-2">
+          <Label htmlFor="padding">Padding</Label>
+          <Input
+            id="padding"
+            type="text"
+            value={style.padding || ''}
+            onChange={(e) => handleChange('padding', e.target.value)}
+            placeholder="10px ou 10px 20px"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="margin">Margin</Label>
+          <Input
+            id="margin"
+            type="text"
+            value={style.margin || ''}
+            onChange={(e) => handleChange('margin', e.target.value)}
+            placeholder="10px ou 10px 20px"
+          />
         </div>
       </div>
-
-      <div>
-        <Label>Arredondamento das Bordas</Label>
-        <Input
-          value={style.borderRadius || ''}
-          onChange={(e) => handleChange('borderRadius', e.target.value)}
-          placeholder="0px"
-        />
+      
+      <div className="space-y-3">
+        <h3 className="font-medium text-[#432818]">Borda</h3>
+        
+        <div className="space-y-2">
+          <Label htmlFor="borderRadius">Arredondamento</Label>
+          <Input
+            id="borderRadius"
+            type="text"
+            value={style.borderRadius || ''}
+            onChange={(e) => handleChange('borderRadius', e.target.value)}
+            placeholder="4px, 1rem, etc."
+          />
+        </div>
       </div>
     </div>
   );
 };
+
+export default StyleControls;

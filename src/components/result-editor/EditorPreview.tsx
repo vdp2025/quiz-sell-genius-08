@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Block } from '@/types/editor';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { EditableBlock } from './EditableBlock';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ interface EditorPreviewProps {
   primaryStyle: StyleResult;
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
   styleType?: string;
-  onDeleteBlock?: (id: string) => void; // Add optional onDeleteBlock prop
+  onDeleteBlock?: (id: string) => void;
 }
 
 export const EditorPreview: React.FC<EditorPreviewProps> = ({
@@ -45,7 +45,9 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
       const oldIndex = blocks.findIndex(block => block.id === active.id);
       const newIndex = blocks.findIndex(block => block.id === over.id);
       
-      onReorderBlocks(oldIndex, newIndex);
+      if (oldIndex !== -1 && newIndex !== -1) {
+        onReorderBlocks(oldIndex, newIndex);
+      }
     }
   };
 
@@ -113,3 +115,5 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
     </div>
   );
 };
+
+export default EditorPreview;
