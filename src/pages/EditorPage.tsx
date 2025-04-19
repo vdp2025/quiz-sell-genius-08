@@ -14,16 +14,14 @@ import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEdito
 export const EditorPage = () => {
   const { style } = useParams<{ style?: string }>();
   const navigate = useNavigate();
+  const [isJsonMode, setIsJsonMode] = useState(false);
   
   const styleCategories = [
     "Natural", "Clássico", "Contemporâneo", "Elegante", 
     "Romântico", "Sexy", "Dramático", "Criativo"
   ];
   
-  const [isJsonMode, setIsJsonMode] = useState(false);
-  
   useEffect(() => {
-    // Verificar se temos um estilo predominante salvo do quiz
     const savedResult = localStorage.getItem('quizResult');
     let userPrimaryStyle = null;
     
@@ -38,12 +36,10 @@ export const EditorPage = () => {
       }
     }
     
-    // Se estamos na rota base do editor, redirecionar para o estilo do usuário ou um padrão
     if (!style && window.location.pathname === '/editor') {
       if (userPrimaryStyle && styleCategories.includes(userPrimaryStyle)) {
         navigate(`/editor/${userPrimaryStyle}`);
       } else {
-        // Apenas como fallback se não houver resultado do quiz
         navigate('/editor/Natural');
       }
     } else if (style && !styleCategories.includes(style)) {
