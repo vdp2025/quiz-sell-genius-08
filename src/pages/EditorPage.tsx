@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -12,6 +11,7 @@ import { StyleResult } from '@/types/quiz';
 export const EditorPage = () => {
   const { style } = useParams<{ style: string }>();
   const {
+    resultPageConfig,
     blocks,
     selectedBlockId,
     isPreviewing,
@@ -32,18 +32,11 @@ export const EditorPage = () => {
     percentage: 100
   };
 
-  const handleUpdateBlocks = (newBlocks: any[]) => {
-    // Clear existing blocks
-    blocks.forEach(block => {
-      actions.handleDeleteBlock(block.id);
-    });
-    
-    // Add new blocks after a short delay to ensure state is updated
-    setTimeout(() => {
-      newBlocks.forEach(block => {
-        actions.handleAddBlock(block.type);
-      });
-    }, 100);
+  const handleUpdateConfig = (newConfig: any) => {
+    if (newConfig.blocks) {
+      actions.handleUpdateBlocks(newConfig.blocks);
+    }
+    // Update other config sections if needed
   };
 
   return (
@@ -53,8 +46,10 @@ export const EditorPage = () => {
         isPreviewMode={isPreviewing}
         onPreviewToggle={actions.togglePreview}
         onReset={actions.handleReset}
-        onUpdateBlocks={handleUpdateBlocks}
+        onUpdateBlocks={actions.handleUpdateBlocks}
         styleType={styleCategory}
+        config={resultPageConfig}
+        onUpdateConfig={handleUpdateConfig}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">

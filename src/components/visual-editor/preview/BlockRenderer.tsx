@@ -48,7 +48,7 @@ export function BlockRenderer({
         !isPreview && "border-2 border-dashed border-[#B89B7A]/40"
       )}
     >
-      {renderBlockContent(block, primaryStyle, mockSecondaryStyles, isPreview, onUpdate)}
+      {renderBlockContent(block, primaryStyle, isPreview, onUpdate)}
 
       {!isPreview && isSelected && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -61,43 +61,49 @@ export function BlockRenderer({
   );
 }
 
-function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, secondaryStyles?: StyleResult[], isPreview?: boolean, onUpdate?: (content: any) => void) {
+function renderBlockContent(
+  block: EditorBlock, 
+  primaryStyle?: StyleResult,
+  isPreview?: boolean,
+  onUpdate?: (content: any) => void
+) {
   if (!primaryStyle && (block.type === 'style-result' || block.type === 'secondary-styles')) {
     return <div>Carregando...</div>;
   }
 
+  const commonProps = {
+    content: block.content,
+    styleType: primaryStyle?.category,
+    isPreview: isPreview || false,
+    block: block
+  };
+
   switch (block.type) {
     case 'headline':
-      return <HeadlineBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
+      return <HeadlineBlockPreview {...commonProps} />;
     case 'text':
-      return <TextBlockPreview content={block.content} isPreview={isPreview} block={block} />;
+      return <TextBlockPreview {...commonProps} />;
     case 'style-result':
       return (
         <StyleResultSection
           primaryStyle={primaryStyle!}
           description={block.content.description || styleConfig[primaryStyle!.category].description}
           image={block.content.imageUrl || styleConfig[primaryStyle!.category].image}
-          secondaryStyles={secondaryStyles || []}
+          secondaryStyles={[]}
         />
       );
     case 'style-hero':
-      return <StyleHeroBlockPreview content={block.content} styleType={primaryStyle?.category || 'Natural'} isPreview={isPreview} block={block} />;
+      return <StyleHeroBlockPreview {...commonProps} />;
     case 'offer':
-      return <StyleOfferBlockPreview content={block.content} isPreview={isPreview} block={block} />;
+      return <StyleOfferBlockPreview {...commonProps} />;
     case 'benefits':
-      return <BenefitsBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
+      return <BenefitsBlockPreview {...commonProps} />;
     case 'testimonials':
-      return <TestimonialsBlockPreview 
-        content={block.content} 
-        styleType={primaryStyle?.category}
-        isPreview={isPreview}
-        onUpdate={onUpdate}
-        block={block}
-      />;
+      return <TestimonialsBlockPreview {...commonProps} onUpdate={onUpdate} />;
     case 'guarantee':
-      return <GuaranteeBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
+      return <GuaranteeBlockPreview {...commonProps} />;
     case 'two-column':
-      return <TwoColumnBlockPreview content={block.content} styleType={primaryStyle?.category} isPreview={isPreview} block={block} />;
+      return <TwoColumnBlockPreview {...commonProps} />;
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>
