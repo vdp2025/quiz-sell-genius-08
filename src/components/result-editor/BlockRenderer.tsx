@@ -113,7 +113,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     }
   };
 
-  // Using React.CSSProperties to ensure style is correctly typed
+  // Properly casting the style to React.CSSProperties
   return (
     <div className="relative" style={block.content.style as React.CSSProperties}>
       {renderContent()}

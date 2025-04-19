@@ -49,7 +49,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   onDelete
 }) => {
   const selectedBlock = blocks.find(block => block.id === selectedBlockId);
-  const { handleApplyTemplate } = useTemplateSelection(onUpdate);
+  const { selectedTemplateId, setSelectedTemplateId, handleApplyTemplate } = useTemplateSelection(onUpdate);
   
   if (!selectedBlock) {
     return (
@@ -75,6 +75,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
   // Function to render the appropriate content editor based on block type
   const renderContentEditor = () => {
+    if (!selectedBlock) return null;
+    
     switch (selectedBlock.type) {
       case 'header':
         return <HeaderBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;

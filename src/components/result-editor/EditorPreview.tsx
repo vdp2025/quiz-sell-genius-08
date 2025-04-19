@@ -2,7 +2,7 @@
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Block } from '@/types/editor';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { EditableBlock } from './EditableBlock';
 import { PlusCircle } from 'lucide-react';
@@ -35,8 +35,8 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
     })
   );
 
-  // Handle drag end event
-  const handleDragEnd = (event) => {
+  // Handle drag end event with proper typing
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
     if (over && active.id !== over.id) {
@@ -86,6 +86,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
                       isPreview={false}
                       primaryStyle={primaryStyle}
                       styleType={styleType}
+                      onDelete={(id) => onDelete && onDelete(id)}
                     />
                   </SortableItem>
                 ))}
