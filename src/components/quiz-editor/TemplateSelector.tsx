@@ -20,8 +20,8 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
     },
     {
       id: 'style-quiz-template-2',
-      name: 'Quiz de Estilo Avançado',
-      description: 'Template avançado para quiz de estilo com imagens',
+      name: 'Quiz de Estilo Simplificado',
+      description: 'Template simplificado para quiz de estilo com 2 perguntas',
       image: '/template-thumbnails/style-quiz-2.jpg',
       template: styleQuizTemplate2
     }
