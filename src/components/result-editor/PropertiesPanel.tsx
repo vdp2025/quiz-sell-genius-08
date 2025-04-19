@@ -22,6 +22,10 @@ import SpacerBlockEditor from './block-editors/SpacerBlockEditor';
 import VideoBlockEditor from './block-editors/VideoBlockEditor';
 import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
 import IconBlockEditor from './block-editors/IconBlockEditor';
+import FAQBlockEditor from './block-editors/FAQBlockEditor';
+import CarouselBlockEditor from './block-editors/CarouselBlockEditor';
+import CustomCodeBlockEditor from './block-editors/CustomCodeBlockEditor';
+import AnimationBlockEditor from './block-editors/AnimationBlockEditor';
 import StyleEditor from './style-editors/StyleEditor';
 
 interface PropertiesPanelProps {
@@ -92,6 +96,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return 'Duas Colunas';
       case 'icon':
         return 'Ícone Decorativo';
+      case 'faq':
+        return 'Perguntas Frequentes';
+      case 'carousel':
+        return 'Carrossel de Imagens';
+      case 'custom-code':
+        return 'Código Personalizado';
+      case 'animation-block':
+        return 'Bloco com Animação';
       default:
         return 'Componente';
     }
@@ -133,6 +145,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return <TwoColumnBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       case 'icon':
         return <IconBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'faq':
+        return <FAQBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'carousel':
+        return <CarouselBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'custom-code':
+        return <CustomCodeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'animation-block':
+        return <AnimationBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       default:
         return <div>Editor não disponível para este tipo de bloco</div>;
     }

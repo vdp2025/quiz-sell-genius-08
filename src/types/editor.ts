@@ -21,7 +21,8 @@ export interface EditorBlock {
   id: string;
   type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
-         'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon';
+         'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon' |
+         'faq' | 'carousel' | 'custom-code' | 'animation-block';
   content: EditableContent;
   order: number;
 }
@@ -119,6 +120,34 @@ export interface EditableContent {
   color?: string;
   position?: 'top' | 'right' | 'bottom' | 'left';
   
+  // FAQ Block
+  faqItems?: {
+    question: string;
+    answer: string;
+  }[];
+  defaultOpen?: boolean;
+  
+  // Carousel Block
+  carouselImages?: {
+    url: string;
+    alt: string;
+    caption?: string;
+  }[];
+  autoPlay?: boolean;
+  interval?: number;
+  showArrows?: boolean;
+  showDots?: boolean;
+  
+  // Custom Code Block
+  code?: string;
+  
+  // Animation Block
+  animationType?: 'fade-in' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-out';
+  animationDuration?: string;
+  animationDelay?: string;
+  animationTrigger?: 'onLoad' | 'onScroll' | 'onHover';
+  children?: EditableContent;
+  
   // General properties
   description?: string;
   url?: string;
@@ -153,5 +182,12 @@ export interface EditableContent {
     boxShadow?: string;
     maxWidth?: string;
     type?: string;
+    animation?: string;
+    transition?: string;
+    transform?: string;
+    opacity?: string;
+    overflow?: string;
+    position?: string;
+    zIndex?: string;
   };
 }

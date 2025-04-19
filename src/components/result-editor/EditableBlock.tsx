@@ -21,6 +21,11 @@ import TestimonialsBlockPreview from './block-previews/TestimonialsBlockPreview'
 import SpacerBlockPreview from './block-previews/SpacerBlockPreview';
 import VideoBlockPreview from './block-previews/VideoBlockPreview';
 import TwoColumnBlockPreview from './block-previews/TwoColumnBlockPreview';
+import IconBlockPreview from './block-previews/IconBlockPreview';
+import FAQBlockPreview from './block-previews/FAQBlockPreview';
+import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
+import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
+import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
 
 interface DragItem {
   index: number;
@@ -124,6 +129,16 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
         return <VideoBlockPreview content={block.content} />;
       case 'two-column':
         return <TwoColumnBlockPreview content={block.content} />;
+      case 'icon':
+        return <IconBlockPreview content={block.content} />;
+      case 'faq':
+        return <FAQBlockPreview content={block.content} />;
+      case 'carousel':
+        return <CarouselBlockPreview content={block.content} />;
+      case 'custom-code':
+        return <CustomCodeBlockPreview content={block.content} />;
+      case 'animation-block':
+        return <AnimationBlockPreview content={block.content} />;
       default:
         return <div>Tipo de bloco desconhecido: {block.type}</div>;
     }

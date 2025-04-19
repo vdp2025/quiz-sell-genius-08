@@ -20,7 +20,11 @@ import {
   Gift,
   SlidersHorizontal,
   FileText,
-  Maximize
+  Maximize,
+  HelpCircle,
+  Images,
+  Code,
+  Wand2
 } from 'lucide-react';
 
 const componentGroups = [
@@ -46,6 +50,8 @@ const componentGroups = [
       { name: 'Carrossel de Bônus', type: 'bonus-carousel', icon: <Gift className="h-4 w-4" /> },
       { name: 'Garantia', type: 'guarantee', icon: <Award className="h-4 w-4" /> },
       { name: 'Vídeo', type: 'video', icon: <Video className="h-4 w-4" /> },
+      { name: 'FAQ', type: 'faq', icon: <HelpCircle className="h-4 w-4" /> },
+      { name: 'Carrossel', type: 'carousel', icon: <Images className="h-4 w-4" /> },
     ]
   },
   {
@@ -60,6 +66,13 @@ const componentGroups = [
     components: [
       { name: 'Estilo Principal', type: 'style-result', icon: <Palette className="h-4 w-4" /> },
       { name: 'Estilos Secundários', type: 'secondary-styles', icon: <SlidersHorizontal className="h-4 w-4" /> },
+    ]
+  },
+  {
+    title: 'Avançado',
+    components: [
+      { name: 'Código Personalizado', type: 'custom-code', icon: <Code className="h-4 w-4" /> },
+      { name: 'Animação', type: 'animation-block', icon: <Wand2 className="h-4 w-4" /> },
     ]
   }
 ];
