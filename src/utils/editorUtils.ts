@@ -25,26 +25,30 @@ export function getSectionStyle(sectionPath: string, config: any): any {
   const pathParts = sectionPath.split('.');
   let current = { ...config };
   
-  pathParts.forEach(part => {
+  for (const part of pathParts) {
     if (current[part]) {
       current = current[part];
     }
-  });
+  }
   
   return current.style || {};
 }
 
-export function renderContentEditor(sectionPath: string, config: any, updateSection: (path: string, content: any) => void): React.ReactNode {
+export function renderContentEditor(
+  sectionPath: string,
+  config: any,
+  updateSection: (path: string, content: any) => void
+): React.ReactNode {
   const pathParts = sectionPath.split('.');
   let current = { ...config };
   let currentPath = '';
   
-  pathParts.forEach(part => {
+  for (const part of pathParts) {
     currentPath = currentPath ? `${currentPath}.${part}` : part;
     if (current[part]) {
       current = current[part];
     }
-  });
+  }
   
   switch(sectionPath) {
     case 'header':
@@ -82,7 +86,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
     default:
       return (
         <div className="space-y-4">
-          {Object.entries(current.content).map(([key, value]) => {
+          {Object.entries(current.content || {}).map(([key, value]) => {
             if (typeof value === 'string') {
               return (
                 <div key={key} className="space-y-2">
@@ -92,7 +96,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
                   {value.length > 100 ? (
                     <textarea
                       id={key}
-                      value={value as string}
+                      value={value}
                       onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
                       className="w-full min-h-[100px] p-2 border rounded-md"
                     />
@@ -100,7 +104,7 @@ export function renderContentEditor(sectionPath: string, config: any, updateSect
                     <input
                       id={key}
                       type="text"
-                      value={value as string}
+                      value={value}
                       onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
                       className="w-full p-2 border rounded-md"
                     />
