@@ -1,4 +1,3 @@
-
 import { EditableContent } from '@/types/editor';
 
 export const getDefaultContentForType = (type: string): EditableContent => {
@@ -233,7 +232,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         size: '48px',
         color: '#B89B7A',
         title: 'Texto do ícone',
-        position: 'center',
+        position: 'right',
         style: {
           padding: '20px'
         }
