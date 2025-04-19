@@ -2,6 +2,8 @@
 import { Block } from '@/types/editor';
 import { generateId } from '@/utils/idGenerator';
 import { salesConfig } from '@/config/salesConfig';
+import { createHeadlineBlock, createBenefitsBlock, createTestimonialsBlock } from './commonBlocks';
+import { createStyleHeroBlock, createStyleResultBlock } from './styleBlocks';
 
 export class BlockFactory {
   static createBlock(type: Block['type'], order: number, styleType: string = 'Natural'): Block {
@@ -11,6 +13,16 @@ export class BlockFactory {
       content: {},
       order
     };
+  }
+
+  static createDefaultBlocks(styleType: string): Block[] {
+    return [
+      createStyleHeroBlock(styleType, 0),
+      createHeadlineBlock(1),
+      createStyleResultBlock(styleType, 2),
+      createBenefitsBlock(3),
+      createTestimonialsBlock(4)
+    ];
   }
 
   static createSalesPageBlocks(styleType: string): Block[] {
@@ -50,7 +62,7 @@ export class BlockFactory {
             backgroundColor: "#ffffff",
             padding: "2rem",
             borderRadius: "1rem",
-            marginTop: "2rem"
+            margin: "2rem 0 0 0"
           }
         }
       },
@@ -67,7 +79,7 @@ export class BlockFactory {
             backgroundColor: "#ffffff",
             padding: "2rem",
             borderRadius: "1rem",
-            marginTop: "2rem"
+            margin: "2rem 0 0 0"
           }
         }
       },
@@ -89,7 +101,7 @@ export class BlockFactory {
             backgroundColor: "#ffffff",
             padding: "2rem",
             borderRadius: "1rem",
-            marginTop: "2rem"
+            margin: "2rem 0 0 0"
           }
         }
       },
@@ -106,7 +118,7 @@ export class BlockFactory {
             backgroundColor: "#ffffff",
             padding: "2rem",
             borderRadius: "1rem",
-            marginTop: "2rem"
+            margin: "2rem 0 0 0"
           }
         }
       },
@@ -124,7 +136,7 @@ export class BlockFactory {
             backgroundColor: "#ffffff",
             padding: "2rem",
             borderRadius: "1rem",
-            marginTop: "2rem"
+            margin: "2rem 0 0 0"
           }
         }
       },
@@ -142,8 +154,7 @@ export class BlockFactory {
             backgroundColor: "#fff7f3",
             padding: "2rem",
             borderRadius: "1rem",
-            marginTop: "2rem",
-            marginBottom: "2rem"
+            margin: "2rem 0 0 0"
           }
         }
       }

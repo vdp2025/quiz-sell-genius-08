@@ -10,7 +10,10 @@ export function createHeadlineBlock(order: number): Block {
       title: 'Chegou a hora de transformar seu estilo',
       subtitle: 'Descubra como expressar sua verdadeira personalidade através das suas escolhas',
       alignment: 'center',
-      textColor: '#432818'
+      textColor: '#432818',
+      style: {
+        margin: "2rem 0 1rem 0"
+      }
     },
     order
   };
@@ -28,7 +31,13 @@ export function createBenefitsBlock(order: number): Block {
         'Como montar um guarda-roupa funcional e versátil',
         'Como usar cores e modelagens a seu favor',
         'Como desenvolver mais confiança no seu estilo'
-      ]
+      ],
+      style: {
+        backgroundColor: "#ffffff",
+        padding: "2rem",
+        borderRadius: "1rem",
+        margin: "2rem 0 0 0"
+      }
     },
     order
   };
@@ -51,7 +60,13 @@ export function createTestimonialsBlock(order: number): Block {
           author: "Ana Costa",
           location: "Rio de Janeiro"
         }
-      ]
+      ],
+      style: {
+        backgroundColor: "#ffffff",
+        padding: "2rem",
+        borderRadius: "1rem",
+        margin: "2rem 0 0 0"
+      }
     },
     order
   };
