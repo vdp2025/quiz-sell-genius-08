@@ -66,7 +66,6 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
     const pathParts = sectionPath.split('.');
     const sectionName = pathParts[pathParts.length - 1];
     
-    // Get current section
     let currentSection = { ...resultPageConfig };
     pathParts.forEach((part, index) => {
       if (index < pathParts.length - 1) {
@@ -286,8 +285,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <div className="py-6">
             {editingSection && (
               <StyleEditor 
-                sectionPath={editingSection}
-                currentStyle={getSectionStyle(editingSection, resultPageConfig)}
+                style={getSectionStyle(editingSection, resultPageConfig)}
                 onUpdate={(style) => {
                   updateSection(`${editingSection}.style`, style);
                 }}
@@ -358,7 +356,6 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
     }
   });
   
-  // Get the content editor based on the section type
   switch(sectionPath) {
     case 'header':
       return (

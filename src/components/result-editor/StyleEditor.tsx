@@ -2,7 +2,7 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+// Remove the unused Switch import
 import { EditableContent } from '@/types/editor';
 import { ColorPicker } from '@/components/result-editor/ColorPicker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

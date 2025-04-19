@@ -43,7 +43,7 @@ interface IconBlockEditorProps {
 }
 
 const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) => {
-  const { content = { icon: '✓', size: '48px', color: '#B89B7A' } } = block;
+  const content = block.content || { icon: '✓', size: '48px', color: '#B89B7A', style: {} };
   const [searchTerm, setSearchTerm] = useState('');
   
   const filteredIcons = searchTerm 
@@ -134,7 +134,7 @@ const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) =>
                 id="iconPosition"
                 className="w-full p-2 border rounded"
                 value={content.position || 'right'}
-                onChange={(e) => onUpdate({ ...content, position: e.target.value })}
+                onChange={(e) => onUpdate({ ...content, position: e.target.value as 'top' | 'right' | 'bottom' | 'left' })}
               >
                 <option value="top">Texto acima</option>
                 <option value="right">Texto à direita</option>

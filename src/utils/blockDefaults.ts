@@ -45,7 +45,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         imageAlt: 'Descrição da imagem',
         style: {
           width: '100%',
-          maxWidth: '600px',
+          height: 'auto',
           margin: '0 auto',
           borderRadius: '8px'
         }
@@ -92,10 +92,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         style: {
           padding: '20px',
           backgroundColor: '#faf9f7',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '20px'
+          borderRadius: '8px'
         }
       };
       
@@ -192,8 +189,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         videoControls: true,
         style: {
           width: '100%',
-          maxWidth: '800px',
-          margin: '0 auto'
+          height: 'auto'
         }
       };
       
@@ -239,10 +235,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         title: 'Texto do ícone',
         position: 'right',
         style: {
-          padding: '20px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
+          padding: '20px'
         }
       };
       

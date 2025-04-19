@@ -21,7 +21,7 @@ export interface EditorBlock {
   id: string;
   type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
-         'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column';
+         'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon';
   content: EditableContent;
   order: number;
 }
@@ -48,7 +48,6 @@ export interface EditableContent {
   imageAlt?: string;
   width?: string;
   borderRadius?: string;
-  // Removed duplicate height property
   
   // Benefits
   items?: string[];
@@ -103,15 +102,22 @@ export interface EditableContent {
   leftColumn?: {
     content?: string;
     width?: string;
+    style?: any;
   };
   rightColumn?: {
     content?: string;
     width?: string;
+    style?: any;
   };
   columnGap?: string;
   
   // Spacer
   height?: string;
+  
+  // Icon Block
+  size?: string;
+  color?: string;
+  position?: 'top' | 'right' | 'bottom' | 'left';
   
   // General properties
   description?: string;
@@ -122,7 +128,7 @@ export interface EditableContent {
   
   // Styling
   style?: {
-    textAlign?: 'left' | 'center' | 'right';
+    textAlign?: 'left' | 'center' | 'right' | 'justify';
     color?: string;
     backgroundColor?: string;
     padding?: string;
@@ -134,9 +140,18 @@ export interface EditableContent {
     fontWeight?: string;
     fontFamily?: string;
     lineHeight?: string;
+    letterSpacing?: string;
     borderStyle?: string;
     borderWidth?: string;
     borderColor?: string;
     objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+    display?: string;
+    flexDirection?: string;
+    justifyContent?: string;
+    alignItems?: string;
+    gap?: string;
+    boxShadow?: string;
+    maxWidth?: string;
+    type?: string;
   };
 }

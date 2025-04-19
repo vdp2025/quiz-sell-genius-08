@@ -41,29 +41,29 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
       case 'top':
         return (
           <div className="flex flex-col items-center gap-2">
-            {renderTitle()}
             {renderIcon()}
+            {renderTitle()}
           </div>
         );
       case 'right':
         return (
           <div className="flex items-center gap-2">
-            {renderIcon()}
             {renderTitle()}
+            {renderIcon()}
           </div>
         );
       case 'bottom':
         return (
           <div className="flex flex-col items-center gap-2">
-            {renderIcon()}
             {renderTitle()}
+            {renderIcon()}
           </div>
         );
       case 'left':
         return (
           <div className="flex items-center gap-2">
-            {renderTitle()}
             {renderIcon()}
+            {renderTitle()}
           </div>
         );
       default:
