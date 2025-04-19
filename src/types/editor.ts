@@ -175,7 +175,7 @@ export interface EditableContent {
     borderColor?: string;
     objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
     display?: string;
-    flexDirection?: string;
+    flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
     justifyContent?: string;
     alignItems?: string;
     gap?: string;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
@@ -112,8 +113,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     }
   };
 
+  // Using React.CSSProperties to ensure style is correctly typed
   return (
-    <div className="relative" style={block.content.style}>
+    <div className="relative" style={block.content.style as React.CSSProperties}>
       {renderContent()}
     </div>
   );

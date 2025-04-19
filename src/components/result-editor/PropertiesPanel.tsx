@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,29 @@ import { Card } from '@/components/ui/card';
 import { blockTemplates } from '@/utils/blockTemplates';
 import { useTemplateSelection } from '@/hooks/useTemplateSelection';
 import StyleEditor from './style-editors/StyleEditor';
+
+// Import all the block editors
+import HeaderBlockEditor from './block-editors/HeaderBlockEditor';
+import HeadlineBlockEditor from './block-editors/HeadlineBlockEditor';
+import TextBlockEditor from './block-editors/TextBlockEditor';
+import ImageBlockEditor from './block-editors/ImageBlockEditor';
+import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
+import PricingBlockEditor from './block-editors/PricingBlockEditor';
+import GuaranteeBlockEditor from './block-editors/GuaranteeBlockEditor';
+import CTABlockEditor from './block-editors/CTABlockEditor';
+import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
+import SecondaryStylesBlockEditor from './block-editors/SecondaryStylesBlockEditor';
+import HeroSectionBlockEditor from './block-editors/HeroSectionBlockEditor';
+import ProductsBlockEditor from './block-editors/ProductsBlockEditor';
+import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
+import SpacerBlockEditor from './block-editors/SpacerBlockEditor';
+import VideoBlockEditor from './block-editors/VideoBlockEditor';
+import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
+import IconBlockEditor from './block-editors/IconBlockEditor';
+import FAQBlockEditor from './block-editors/FAQBlockEditor';
+import CarouselBlockEditor from './block-editors/CarouselBlockEditor';
+import CustomCodeBlockEditor from './block-editors/CustomCodeBlockEditor';
+import AnimationBlockEditor from './block-editors/AnimationBlockEditor';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -48,6 +72,56 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   const availableTemplates = blockTemplates.filter(
     template => template.type === selectedBlock.type
   );
+
+  // Function to render the appropriate content editor based on block type
+  const renderContentEditor = () => {
+    switch (selectedBlock.type) {
+      case 'header':
+        return <HeaderBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'headline':
+        return <HeadlineBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'text':
+        return <TextBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'image':
+        return <ImageBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'benefits':
+        return <BenefitsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'pricing':
+        return <PricingBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'guarantee':
+        return <GuaranteeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'cta':
+        return <CTABlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'style-result':
+        return <StyleResultBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'secondary-styles':
+        return <SecondaryStylesBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'hero-section':
+        return <HeroSectionBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'products':
+        return <ProductsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'testimonials':
+        return <TestimonialsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'spacer':
+        return <SpacerBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'video':
+        return <VideoBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'two-column':
+        return <TwoColumnBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'icon':
+        return <IconBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'faq':
+        return <FAQBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'carousel':
+        return <CarouselBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'custom-code':
+        return <CustomCodeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'animation-block':
+        return <AnimationBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      default:
+        return <div>Editor não disponível para este tipo de bloco</div>;
+    }
+  };
 
   return (
     <div className="h-full flex flex-col border-l">
@@ -132,53 +206,4 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       </ScrollArea>
     </div>
   );
-};
-
-const renderContentEditor = () => {
-  switch (selectedBlock.type) {
-    case 'header':
-      return <HeaderBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'headline':
-      return <HeadlineBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'text':
-      return <TextBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'image':
-      return <ImageBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'benefits':
-      return <BenefitsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'pricing':
-      return <PricingBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'guarantee':
-      return <GuaranteeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'cta':
-      return <CTABlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'style-result':
-      return <StyleResultBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'secondary-styles':
-      return <SecondaryStylesBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'hero-section':
-      return <HeroSectionBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'products':
-      return <ProductsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'testimonials':
-      return <TestimonialsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'spacer':
-      return <SpacerBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'video':
-      return <VideoBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'two-column':
-      return <TwoColumnBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'icon':
-      return <IconBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'faq':
-      return <FAQBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'carousel':
-      return <CarouselBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'custom-code':
-      return <CustomCodeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    case 'animation-block':
-      return <AnimationBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-    default:
-      return <div>Editor não disponível para este tipo de bloco</div>;
-  }
 };

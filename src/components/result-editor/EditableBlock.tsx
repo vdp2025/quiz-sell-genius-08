@@ -13,6 +13,7 @@ interface EditableBlockProps {
   isPreview: boolean;
   primaryStyle: StyleResult;
   styleType?: string;
+  onDelete?: (id: string) => void;
 }
 
 export const EditableBlock: React.FC<EditableBlockProps> = ({
@@ -21,7 +22,8 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
   onSelect,
   isPreview,
   primaryStyle,
-  styleType
+  styleType,
+  onDelete
 }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -30,7 +32,9 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // We'll implement delete functionality later
+    if (onDelete) {
+      onDelete(block.id);
+    }
   };
 
   if (isPreview) {
@@ -60,6 +64,7 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
           block={block} 
           primaryStyle={primaryStyle}
           styleType={styleType}
+          onClick={handleClick}
         />
         
         <div className="absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

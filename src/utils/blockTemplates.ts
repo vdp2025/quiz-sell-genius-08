@@ -105,6 +105,7 @@ export const blockTemplates: BlockTemplate[] = [
       ],
       style: {
         display: 'flex',
+        flexDirection: 'column',
         gap: '20px',
         padding: '30px',
         backgroundColor: '#FAF9F7'
