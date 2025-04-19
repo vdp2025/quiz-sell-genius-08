@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Card } from './ui/card';
 import { StyleResult } from '@/types/quiz';
 import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
@@ -28,7 +27,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
 
   return (
     <div className="min-h-screen bg-[#fffaf7] pt-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto px-4 max-w-2xl">
         <ResultHeader 
           userName={userName}
           customTitle={config?.header?.title}
@@ -36,7 +35,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
           onUpdate={(value) => onUpdate?.('header', { title: value })}
         />
         
-        <div className="space-y-8 mt-8">
+        <div className="bg-white rounded-lg shadow-sm p-6 my-8">
           <PrimaryStyleCard 
             primaryStyle={primaryStyle}
             customDescription={config?.primaryStyle?.description}
@@ -49,14 +48,14 @@ const QuizResult: React.FC<QuizResultProps> = ({
             isEditing={isEditing}
             onUpdate={(value) => onUpdate?.('secondaryStyles', value)}
           />
-          
-          <OfferCard 
-            primaryStyle={primaryStyle}
-            config={config?.offer}
-            isEditing={isEditing}
-            onUpdate={(value) => onUpdate?.('offer', value)}
-          />
         </div>
+        
+        <OfferCard 
+          primaryStyle={primaryStyle}
+          config={config?.offer}
+          isEditing={isEditing}
+          onUpdate={(value) => onUpdate?.('offer', value)}
+        />
       </div>
     </div>
   );

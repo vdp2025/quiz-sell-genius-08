@@ -14,24 +14,22 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({
   onUpdate
 }) => {
   return (
-    <div className="space-y-1.5">
-      <h3 className="text-xs font-medium text-[#432818] mb-1">
+    <div className="mt-6">
+      <h3 className="text-md font-medium text-[#432818] mb-3">
         Estilos Complementares
       </h3>
-      <div className="grid grid-cols-1 gap-1.5">
+      <div className="space-y-3">
         {secondaryStyles.slice(0, 2).map((style) => (
-          <div key={style.category} className="flex justify-between items-center">
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-0.5">
-                <h4 className="text-xs text-[#432818]">{style.category}</h4>
-                <span className="text-2xs font-medium text-[#8F7A6A]">{style.percentage}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-1">
-                <div 
-                  className="bg-[#B89B7A] h-1 rounded-full" 
-                  style={{ width: `${style.percentage}%` }}
-                />
-              </div>
+          <div key={style.category} className="flex flex-col">
+            <div className="flex justify-between items-center mb-1">
+              <h4 className="text-sm text-[#432818]">{style.category}</h4>
+              <span className="text-xs font-medium text-[#B89B7A]">{style.percentage}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-1.5">
+              <div 
+                className="bg-[#B89B7A] h-1.5 rounded-full" 
+                style={{ width: `${style.percentage}%` }}
+              />
             </div>
           </div>
         ))}

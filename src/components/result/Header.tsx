@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import Logo from '../ui/logo';
 import { StyleResult } from '@/types/quiz';
+import Logo from '../ui/logo';
 
 interface HeaderProps {
   logo?: string;
@@ -20,22 +19,20 @@ export const Header: React.FC<HeaderProps> = ({
   logoHeight = 56
 }) => {
   return (
-    <Card className="bg-white shadow-sm p-4 mb-4">
-      <div className="flex flex-col items-center gap-2">
-        <Logo className={`h-${logoHeight}px`} style={{ height: `${logoHeight}px` }} />
+    <div className="bg-white border-b shadow-sm p-4 mb-4 text-center">
+      <Logo className={`h-${logoHeight}px mx-auto mb-4`} style={{ height: `${logoHeight}px` }} />
+      
+      <div className="text-center">
+        <h1 className="text-xl md:text-2xl font-playfair text-[#432818] mb-1">
+          {title}
+        </h1>
         
-        <div className="text-center">
-          <h1 className="text-xl md:text-2xl font-playfair text-[#432818]">
-            {title}
-          </h1>
-          
-          {primaryStyle && (
-            <h2 className="text-xl font-bold text-[#B89B7A] mt-2">
-              {primaryStyle.category}
-            </h2>
-          )}
-        </div>
+        {primaryStyle && (
+          <h2 className="text-2xl font-bold text-[#B89B7A] mb-2">
+            {primaryStyle.category}
+          </h2>
+        )}
       </div>
-    </Card>
+    </div>
   );
 };

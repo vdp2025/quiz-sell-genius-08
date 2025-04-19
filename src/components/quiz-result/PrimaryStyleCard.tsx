@@ -26,9 +26,20 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   const description = customDescription || styleConfig[primaryStyle.category].description;
   
   return (
-    <Card className="p-6 bg-white mb-8">
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="space-y-4">
+    <div className="space-y-4">
+      <div className="flex justify-between items-center mb-2">
+        <h3 className="text-md font-medium text-[#432818]">Estilo Predominante</h3>
+        <span className="text-sm font-medium text-[#B89B7A]">{primaryStyle.percentage}%</span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+        <div 
+          className="bg-[#B89B7A] h-2 rounded-full" 
+          style={{ width: `${primaryStyle.percentage}%` }}
+        />
+      </div>
+      
+      <div className="grid md:grid-cols-2 gap-6 items-center">
+        <div className="order-2 md:order-1">
           {isEditing ? (
             <div className="relative">
               <Textarea
@@ -47,15 +58,15 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
             </p>
           )}
         </div>
-        <div className="order-first md:order-last">
+        <div className="order-1 md:order-2 flex justify-center">
           <img 
             src={imageUrl} 
             alt={`Estilo ${primaryStyle.category}`} 
-            className="w-full h-full object-cover rounded-lg"
+            className="h-80 object-contain"
           />
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Button } from '../ui/button';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from '../ui/use-toast';
 import QuizResult from '../QuizResult';
@@ -11,6 +11,7 @@ import { useQuizResultConfig } from '@/hooks/useQuizResultConfig';
 const ResultEditor = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { config, updateConfig, saveConfig } = useQuizResultConfig(primaryStyle?.category || 'Natural');
+  const [isPreviewMode, setIsPreviewMode] = React.useState(false);
   
   const handleSave = async () => {
     try {
@@ -59,13 +60,32 @@ const ResultEditor = () => {
           </h1>
         </div>
         
-        <Button 
-          onClick={handleSave}
-          className="bg-[#B89B7A] hover:bg-[#A38A69]"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar Alterações
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsPreviewMode(!isPreviewMode)}
+          >
+            {isPreviewMode ? (
+              <>
+                <EyeOff className="w-4 h-4 mr-2" />
+                Modo Edição
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4 mr-2" />
+                Visualizar
+              </>
+            )}
+          </Button>
+          <Button 
+            onClick={handleSave}
+            className="bg-[#B89B7A] hover:bg-[#A38A69]"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            Salvar Alterações
+          </Button>
+        </div>
       </div>
 
       {/* Content */}
@@ -73,7 +93,7 @@ const ResultEditor = () => {
         <QuizResult 
           primaryStyle={primaryStyle} 
           secondaryStyles={secondaryStyles}
-          isEditing={true}
+          isEditing={!isPreviewMode}
           onUpdate={updateConfig}
           config={config}
         />

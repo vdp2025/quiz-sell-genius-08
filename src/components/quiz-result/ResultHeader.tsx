@@ -17,7 +17,6 @@ const ResultHeader: React.FC<ResultHeaderProps> = ({
   isEditing = false,
   onUpdate
 }) => {
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const defaultTitle = `Olá, ${userName}, seu Estilo Predominante é:`;
   const displayTitle = customTitle || defaultTitle;
 
@@ -43,7 +42,6 @@ const ResultHeader: React.FC<ResultHeaderProps> = ({
         />
         <button 
           className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={() => setIsEditingTitle(true)}
         >
           <Edit className="w-4 h-4 text-[#B89B7A]" />
         </button>
