@@ -7,6 +7,7 @@ import { Block } from '@/types/editor';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Plus, Trash } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
+import { Testimonial } from '@/types/testimonials';
 
 interface TestimonialsBlockEditorProps {
   block: Block;
@@ -14,23 +15,31 @@ interface TestimonialsBlockEditorProps {
 }
 
 const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block, onUpdate }) => {
-  const content = block.content;
+  const content = block.content || {};
   const testimonials = content.testimonials || [];
 
   const handleTestimonialUpdate = (index: number, field: string, value: string) => {
     const updatedTestimonials = [...testimonials];
+    
+    if (!updatedTestimonials[index]) {
+      updatedTestimonials[index] = { text: '', name: '', image: '', location: '' };
+    }
+    
     updatedTestimonials[index] = {
       ...updatedTestimonials[index],
       [field]: value
     };
+    
     onUpdate({ testimonials: updatedTestimonials });
   };
 
   const addTestimonial = () => {
     const newTestimonial = {
+      id: `testimonial-${Date.now()}`,
       text: '',
-      author: '',
-      position: ''
+      name: '',
+      image: '',
+      location: ''
     };
     onUpdate({ testimonials: [...testimonials, newTestimonial] });
   };
@@ -49,15 +58,6 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
             value={content.title || ''}
             onChange={(e) => onUpdate({ title: e.target.value })}
             placeholder="O que estão dizendo"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>Imagem Principal</Label>
-          <Input
-            value={content.image || ''}
-            onChange={(e) => onUpdate({ image: e.target.value })}
-            placeholder="URL da imagem principal"
           />
         </div>
 
@@ -101,8 +101,8 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
               <div className="space-y-2">
                 <Label>Nome</Label>
                 <Input
-                  value={testimonial.author || ''}
-                  onChange={(e) => handleTestimonialUpdate(index, 'author', e.target.value)}
+                  value={testimonial.name || ''}
+                  onChange={(e) => handleTestimonialUpdate(index, 'name', e.target.value)}
                   placeholder="Nome do cliente"
                 />
               </div>
@@ -110,9 +110,18 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
               <div className="space-y-2">
                 <Label>Cargo/Posição</Label>
                 <Input
-                  value={testimonial.position || ''}
-                  onChange={(e) => handleTestimonialUpdate(index, 'position', e.target.value)}
+                  value={testimonial.location || ''}
+                  onChange={(e) => handleTestimonialUpdate(index, 'location', e.target.value)}
                   placeholder="Ex: Empresária"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>URL da Imagem</Label>
+                <Input
+                  value={testimonial.image || ''}
+                  onChange={(e) => handleTestimonialUpdate(index, 'image', e.target.value)}
+                  placeholder="URL da imagem do cliente"
                 />
               </div>
             </div>

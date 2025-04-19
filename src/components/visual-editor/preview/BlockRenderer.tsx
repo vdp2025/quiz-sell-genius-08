@@ -13,6 +13,7 @@ import TestimonialsBlockPreview from '@/components/result-editor/block-previews/
 import TextBlockPreview from '@/components/result-editor/block-previews/TextBlockPreview';
 import HeadlineBlockPreview from '@/components/result-editor/block-previews/HeadlineBlockPreview';
 import GuaranteeBlockPreview from '@/components/result-editor/block-previews/GuaranteeBlockPreview';
+import TwoColumnBlockPreview from '@/components/result-editor/block-previews/TwoColumnBlockPreview';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -87,6 +88,8 @@ function renderBlockContent(block: EditorBlock, primaryStyle?: StyleResult, seco
       return <TestimonialsBlockPreview content={block.content} />;
     case 'guarantee':
       return <GuaranteeBlockPreview content={block.content} />;
+    case 'two-column':
+      return <TwoColumnBlockPreview content={block.content} />;
     default:
       return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>

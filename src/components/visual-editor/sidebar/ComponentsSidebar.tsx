@@ -41,6 +41,7 @@ export function ComponentsSidebar({ onComponentSelect }: ComponentsSidebarProps)
     { type: 'guarantee' as const, label: 'Garantia', icon: Shield },
     { type: 'cta' as const, label: 'Botão CTA', icon: MousePointer },
     { type: 'style-result' as const, label: 'Resultado do Estilo', icon: Award },
+    { type: 'secondary-styles' as const, label: 'Estilos Secundários', icon: Award },
   ];
 
   return (

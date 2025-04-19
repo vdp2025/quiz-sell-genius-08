@@ -6,7 +6,6 @@ import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
 import { getDefaultContentForType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
-import { set } from 'lodash';
 import { resultPageStorage } from '@/services/resultPageStorage';
 
 export const useResultPageEditor = (styleType: string) => {
@@ -42,7 +41,7 @@ export const useResultPageEditor = (styleType: string) => {
       if (state.blocks.length > 0) {
         handleSave();
       }
-    }, 3000); // Auto-save after 3 seconds of inactivity
+    }, 2000); // Auto-save after 2 seconds of inactivity (reduced from 3 seconds)
 
     return () => clearTimeout(autoSaveTimer);
   }, [state.blocks]);
@@ -65,6 +64,9 @@ export const useResultPageEditor = (styleType: string) => {
       selectedBlockId: newBlock.id
     }));
     
+    // Salvar imediatamente ao adicionar um bloco
+    setTimeout(() => handleSave(), 500);
+    
     return newBlock.id;
   }, [state.blocks]);
 
@@ -75,17 +77,31 @@ export const useResultPageEditor = (styleType: string) => {
         block.id === id ? { ...block, content: { ...block.content, ...content } } : block
       )
     }));
+    
+    // Isso dispara o useEffect para autosave
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      blocks: prev.blocks
+    setState(prev => {
+      const newBlocks = prev.blocks
         .filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index })),
-      selectedBlockId: null
-    }));
-  }, []);
+        .map((block, index) => ({ ...block, order: index }));
+        
+      setTimeout(() => {
+        const configToSave = {
+          ...resultPageConfig,
+          blocks: newBlocks
+        };
+        resultPageStorage.save(configToSave);
+      }, 500);
+      
+      return {
+        ...prev,
+        blocks: newBlocks,
+        selectedBlockId: null
+      };
+    });
+  }, [resultPageConfig]);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     setState(prev => {
@@ -93,15 +109,26 @@ export const useResultPageEditor = (styleType: string) => {
       const [removed] = result.splice(sourceIndex, 1);
       result.splice(destinationIndex, 0, removed);
       
+      const newBlocks = result.map((block, index) => ({
+        ...block,
+        order: index
+      }));
+      
+      // Salvar imediatamente ao reordenar blocos
+      setTimeout(() => {
+        const configToSave = {
+          ...resultPageConfig,
+          blocks: newBlocks
+        };
+        resultPageStorage.save(configToSave);
+      }, 500);
+      
       return {
         ...prev,
-        blocks: result.map((block, index) => ({
-          ...block,
-          order: index
-        }))
+        blocks: newBlocks
       };
     });
-  }, []);
+  }, [resultPageConfig]);
 
   const toggleGlobalStyles = useCallback(() => {
     setState(prev => ({

@@ -1,13 +1,18 @@
 
 import React from 'react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface TestimonialsBlockPreviewProps {
   content: {
     title?: string;
     testimonials?: Array<{
-      text: string;
-      author: string;
+      id?: string;
+      text?: string;
+      name?: string;
       position?: string;
+      image?: string;
+      location?: string;
+      author?: string;
     }>;
     image?: string;
     style?: any;
@@ -18,22 +23,22 @@ const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ con
   const defaultTestimonials = [
     {
       text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
-      author: "Mariangela",
-      position: "Engenheira"
+      name: "Mariangela",
+      location: "Engenheira"
     },
     {
       text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
-      author: "Patrícia Paranhos",
-      position: "Advogada"
+      name: "Patrícia Paranhos",
+      location: "Advogada"
     },
     {
       text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
-      author: "Sônia Spier",
-      position: "Terapeuta"
+      name: "Sônia Spier",
+      location: "Terapeuta"
     }
   ];
 
-  const testimonials = content.testimonials || defaultTestimonials;
+  const testimonials = content.testimonials && content.testimonials.length > 0 ? content.testimonials : defaultTestimonials;
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden" style={content.style}>
@@ -55,11 +60,25 @@ const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ con
         <div className="space-y-6">
           {testimonials.map((testimonial, index) => (
             <div key={index} className="bg-[#fff8f5] p-4 rounded-lg">
-              <p className="text-[#666] mb-3 italic">"{testimonial.text}"</p>
-              <p className="text-[#aa6b5d] font-medium">
-                — {testimonial.author}
-                {testimonial.position && <span className="text-[#999]">, {testimonial.position}</span>}
-              </p>
+              <div className="flex items-start gap-4">
+                {testimonial.image && (
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage src={testimonial.image} alt={testimonial.name || testimonial.author || ''} />
+                    <AvatarFallback>
+                      {(testimonial.name || testimonial.author || '??').substring(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                <div className="flex-1">
+                  <p className="text-[#666] mb-3 italic">"{testimonial.text}"</p>
+                  <p className="text-[#aa6b5d] font-medium">
+                    — {testimonial.name || testimonial.author}
+                    {(testimonial.location || testimonial.position) && (
+                      <span className="text-[#999]">, {testimonial.location || testimonial.position}</span>
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
