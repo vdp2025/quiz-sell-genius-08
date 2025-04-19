@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import StyleEditor from '../StyleEditor';
 import GlobalStyleEditor from '../GlobalStyleEditor';
 import { ResultPageConfig } from '@/types/resultPageConfig';
-import { getEditorTitle, getSectionStyle, renderContentEditor } from '@/utils/editorUtils';
+import { getEditorTitle, getSectionStyle, renderContentEditor } from '@/utils/editorHelpers';
 
 interface EditorPanelsProps {
   editingSection: string | null;
