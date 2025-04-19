@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -93,6 +94,14 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
         onSave={handleSave}
         onReset={handleReset}
         onEditGlobalStyles={() => setGlobalStylesOpen(true)}
+        resultPageConfig={resultPageConfig}
+        onUpdateConfig={(newConfig) => {
+          if (newConfig) {
+            Object.keys(newConfig).forEach(key => {
+              updateSection(key, newConfig[key]);
+            });
+          }
+        }}
       />
       
       <div className="max-w-4xl mx-auto mt-8 px-4">

@@ -6,10 +6,10 @@ import { giseleStyleTemplate } from '@/services/templates/giseleStyleTemplate';
 import { useEditor } from '@/hooks/useEditor';
 
 export const TemplateList = () => {
-  const { config, setConfig } = useEditor();
+  const { config, updateConfig } = useEditor();
 
   const handleSelectTemplate = (template: any) => {
-    setConfig({
+    updateConfig({
       ...config,
       blocks: template
     });
@@ -30,4 +30,3 @@ export const TemplateList = () => {
     </div>
   );
 };
-

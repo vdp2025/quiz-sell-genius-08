@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -11,8 +12,13 @@ import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
 
-export const ResultPageVisualEditor: React.FC<EditorProps> = ({ 
-  selectedStyle
+interface ResultPageVisualEditorProps extends EditorProps {
+  onShowTemplates?: () => void;
+}
+
+export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
+  selectedStyle,
+  onShowTemplates
 }) => {
   const {
     resultPageConfig,
@@ -60,6 +66,7 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
               });
             }
           }}
+          onShowTemplates={onShowTemplates}
         />
         
         <ResizablePanelGroup direction="horizontal" className="flex-1">

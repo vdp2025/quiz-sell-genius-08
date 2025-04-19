@@ -32,7 +32,7 @@ export const EditorPage = () => {
         </div>
       ) : (
         <ResultPageVisualEditor 
-          selectedStyle={selectedStyle} 
+          selectedStyle={selectedStyle}
           onShowTemplates={() => setShowTemplates(true)}
         />
       )}
@@ -41,4 +41,3 @@ export const EditorPage = () => {
 };
 
 export default EditorPage;
-

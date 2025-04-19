@@ -53,7 +53,7 @@ export const giseleStyleTemplate: Block[] = [
       salePrice: "39,00",
       buttonText: "Quero meu Guia + Bônus",
       checkoutUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-      limitedTimeText: "Oferta exclusiva por tempo limitado"
+      urgencyText: "Oferta exclusiva por tempo limitado" // Changed from limitedTimeText to urgencyText
     },
     order: 4
   },
@@ -62,23 +62,8 @@ export const giseleStyleTemplate: Block[] = [
     type: "testimonials",
     content: {
       title: "Transformações reais:",
-      testimonials: [
-        {
-          author: "Renata C.",
-          role: "41 anos",
-          text: "Comprei menos, combinei mais e finalmente entendi o que comunica quem eu sou."
-        },
-        {
-          author: "Tatiane M.",
-          role: "34 anos",
-          text: "O visagismo foi revelador! Cortei o cabelo certo, acertei nos brincos e estou sendo notada."
-        },
-        {
-          author: "Luciana D.",
-          role: "38 anos",
-          text: "Me sinto mais leve, elegante e segura ao me posicionar."
-        }
-      ]
+      // Changed from testimonials property to a format that matches EditableContent
+      text: "Renata C. (41 anos): \"Comprei menos, combinei mais e finalmente entendi o que comunica quem eu sou.\"\n\nTatiane M. (34 anos): \"O visagismo foi revelador! Cortei o cabelo certo, acertei nos brincos e estou sendo notada.\"\n\nLuciana D. (38 anos): \"Me sinto mais leve, elegante e segura ao me posicionar.\""
     },
     order: 5
   },
@@ -94,4 +79,3 @@ export const giseleStyleTemplate: Block[] = [
     order: 6
   }
 ];
-
