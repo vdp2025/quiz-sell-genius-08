@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Textarea } from '@/components/ui/textarea';
 import { Download, Upload, Save } from 'lucide-react';
 import { exportProjectAsJson } from '@/utils/exportUtils';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 interface JsonConfigEditorProps {
   config: any;
@@ -18,11 +18,20 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [jsonText, setJsonText] = useState('');
-  const { toast } = useToast();
+  const [parseError, setParseError] = useState<string | null>(null);
 
   const handleOpen = () => {
-    setJsonText(JSON.stringify(config, null, 2));
-    setIsOpen(true);
+    try {
+      setJsonText(JSON.stringify(config, null, 2));
+      setIsOpen(true);
+      setParseError(null);
+    } catch (error) {
+      toast({
+        title: "Erro ao abrir JSON",
+        description: "Não foi possível carregar a configuração atual.",
+        type: 'error'
+      });
+    }
   };
 
   const handleSave = () => {
@@ -30,22 +39,23 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       const parsedConfig = JSON.parse(jsonText);
       onUpdate(parsedConfig);
       setIsOpen(false);
+      setParseError(null);
       toast({
         title: "Configuração atualizada",
         description: "As alterações foram salvas com sucesso",
+        type: 'success'
       });
     } catch (error) {
+      setParseError("JSON inválido. Verifique o formato.");
       toast({
         title: "Erro ao salvar",
         description: "JSON inválido. Verifique o formato e tente novamente.",
-        variant: "destructive"
+        type: 'error'
       });
     }
   };
 
-  const handleExport = () => {
-    exportProjectAsJson(config);
-  };
+  const handleExport = () => exportProjectAsJson(config);
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -59,12 +69,13 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           toast({
             title: "Configuração importada",
             description: "O arquivo foi importado com sucesso",
+            type: 'success'
           });
         } catch (error) {
           toast({
             title: "Erro ao importar",
             description: "Arquivo JSON inválido",
-            variant: "destructive"
+            type: 'error'
           });
         }
       };
@@ -74,39 +85,13 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
 
   return (
     <>
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleOpen}
-        >
-          Editar JSON
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleExport}
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Exportar
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => document.getElementById('import-json')?.click()}
-        >
-          <Upload className="w-4 h-4 mr-2" />
-          Importar
-        </Button>
-        <input
-          id="import-json"
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={handleImport}
-        />
-      </div>
-
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleOpen}
+      >
+        Editar JSON
+      </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
@@ -119,8 +104,32 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
               onChange={(e) => setJsonText(e.target.value)}
               className="min-h-[400px] font-mono text-sm"
             />
+            {parseError && (
+              <div className="text-red-500 text-sm">{parseError}</div>
+            )}
             
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={handleExport}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Exportar
+              </Button>
+              <Button 
+                onClick={() => document.getElementById('import-json')?.click()}
+                variant="outline"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Importar
+              </Button>
+              <input
+                id="import-json"
+                type="file"
+                accept=".json"
+                className="hidden"
+                onChange={handleImport}
+              />
               <Button onClick={handleSave}>
                 <Save className="w-4 h-4 mr-2" />
                 Salvar Alterações

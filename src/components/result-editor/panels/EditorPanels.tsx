@@ -3,18 +3,37 @@ import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import StyleEditor from '../StyleEditor';
 import GlobalStyleEditor from '../GlobalStyleEditor';
-import { getSectionStyle, getEditorTitle, renderContentEditor } from '@/utils/editorUtils';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
-interface EditorPanelsProps {
-  editingSection: string | null;
-  editingStyles: boolean;
-  resultPageConfig: ResultPageConfig;
-  globalStylesOpen: boolean;
-  updateSection: (path: string, content: any) => void;
-  setEditingSection: (section: string | null) => void;
-  setEditingStyles: (editing: boolean) => void;
-  setGlobalStylesOpen: (open: boolean) => void;
+// Local utility function to get editor title
+function getEditorTitle(sectionPath: string): string {
+  const map: Record<string, string> = {
+    'header': 'Cabeçalho',
+    'mainContent': 'Estilo Principal',
+    'secondaryStyles': 'Estilos Secundários',
+    'offer.hero': 'Oferta Principal',
+    'offer.products': 'Produtos e Bônus',
+    'offer.benefits': 'Benefícios',
+    'offer.pricing': 'Preço e Botão de Compra',
+    'offer.testimonials': 'Depoimentos',
+    'offer.guarantee': 'Garantia'
+  };
+  
+  return map[sectionPath] || sectionPath;
+}
+
+// Local utility function to get section style
+function getSectionStyle(sectionPath: string, config: ResultPageConfig): any {
+  const pathParts = sectionPath.split('.');
+  let current: any = { ...config };
+  
+  for (const part of pathParts) {
+    if (current[part]) {
+      current = current[part];
+    }
+  }
+  
+  return current.style || {};
 }
 
 export const EditorPanels: React.FC<EditorPanelsProps> = ({
