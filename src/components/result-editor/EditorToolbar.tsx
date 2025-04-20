@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
-import { JsonConfigEditor } from './JsonConfigEditor';
+import { Save, Eye, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface EditorToolbarProps {
-  onSave: () => void;
+  onSave: () => Promise<void>;
   isPreviewMode: boolean;
   onPreviewToggle: () => void;
   onReset: () => void;
@@ -19,47 +20,32 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   isPreviewMode,
   onPreviewToggle,
   onReset,
-  onEditGlobalStyles,
-  resultPageConfig,
-  onUpdateConfig,
-  onShowTemplates
+  onEditGlobalStyles
 }) => {
   return (
-    <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        {onShowTemplates && (
-          <Button
-            variant="outline"
-            onClick={onShowTemplates}
-            className="text-[#8F7A6A]"
-          >
-            Modelos de Página
+    <div className="border-b bg-white p-4 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <Link to="/resultado">
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
           </Button>
-        )}
+        </Link>
+        
+        <h1 className="text-xl font-playfair text-[#432818]">
+          Editor da Página de Resultados
+        </h1>
+      </div>
+      
+      <div className="flex items-center gap-2">
         <Button
           variant="outline"
           size="sm"
           onClick={onPreviewToggle}
         >
           <Eye className="w-4 h-4 mr-2" />
-          {isPreviewMode ? 'Modo Edição' : 'Visualizar'}
+          {isPreviewMode ? 'Editar' : 'Visualizar'}
         </Button>
-        
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onEditGlobalStyles}
-        >
-          <Palette className="w-4 h-4 mr-2" />
-          Estilos Globais
-        </Button>
-
-        {resultPageConfig && onUpdateConfig && (
-          <JsonConfigEditor 
-            config={resultPageConfig}
-            onUpdate={onUpdateConfig}
-          />
-        )}
         
         <Button
           variant="outline"

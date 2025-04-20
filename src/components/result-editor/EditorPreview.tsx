@@ -1,11 +1,7 @@
 
 import React from 'react';
-import { Block } from '@/types/editor';
-import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone, Eye } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { StyleResult } from '@/types/quiz';
-import EditableBlock from './EditableBlock';
+import { Block } from '@/types/editor';
 
 interface EditorPreviewProps {
   blocks: Block[];
@@ -13,83 +9,98 @@ interface EditorPreviewProps {
   onSelectBlock: (id: string | null) => void;
   isPreviewing: boolean;
   primaryStyle: StyleResult;
-  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
+  onReorderBlocks?: (sourceIndex: number, destinationIndex: number) => void;
 }
 
-export function EditorPreview({
+export const EditorPreview: React.FC<EditorPreviewProps> = ({
   blocks,
   selectedBlockId,
   onSelectBlock,
   isPreviewing,
   primaryStyle,
-  onReorderBlocks
-}: EditorPreviewProps) {
-  const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
-
+}) => {
   return (
-    <div className="h-full flex flex-col">
-      {/* Preview Controls */}
-      <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setViewMode('desktop')}
-            className={cn(viewMode === 'desktop' && 'bg-[#FAF9F7]')}
-          >
-            <Monitor className="w-4 h-4 mr-2" />
-            Desktop
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setViewMode('mobile')}
-            className={cn(viewMode === 'mobile' && 'bg-[#FAF9F7]')}
-          >
-            <Smartphone className="w-4 h-4 mr-2" />
-            Mobile
-          </Button>
-        </div>
-
-        <Button variant="outline" size="sm">
-          <Eye className="w-4 h-4 mr-2" />
-          {isPreviewing ? 'Editar' : 'Visualizar'}
-        </Button>
-      </div>
-
-      {/* Preview Content */}
-      <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
-        <div className={cn(
-          "min-h-full bg-white rounded-lg shadow-sm p-6",
-          viewMode === 'mobile' && 'max-w-md mx-auto'
-        )}>
+    <div className="h-full overflow-auto bg-[#FAF9F7] p-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm p-6 min-h-[500px]">
           {blocks.length === 0 ? (
-            <div className="text-center p-8 border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
-              <p className="text-[#8F7A6A] mb-4">Adicione componentes usando o painel lateral</p>
-              <Button 
-                variant="outline" 
-                className="border-[#B89B7A] text-[#B89B7A]"
-                onClick={() => {/* Add first block functionality here */}}
-              >
-                Adicionar Primeiro Componente
-              </Button>
+            <div className="h-full flex flex-col items-center justify-center text-[#8F7A6A] text-center p-10">
+              <p className="mb-4">Adicione componentes do painel lateral para começar a construir sua página de resultados.</p>
+              <p className="text-sm">Clique em um componente para adicioná-lo aqui.</p>
             </div>
           ) : (
-            blocks.map((block, index) => (
-              <EditableBlock
-                key={block.id}
-                block={block}
-                index={index}
-                isSelected={block.id === selectedBlockId}
-                onClick={() => onSelectBlock(block.id)}
-                isPreviewMode={isPreviewing}
-                onReorderBlocks={onReorderBlocks}
-                primaryStyle={primaryStyle}
-              />
-            ))
+            <div className="space-y-6">
+              {blocks.map((block) => (
+                <div
+                  key={block.id}
+                  className={`border-2 p-4 rounded-lg cursor-pointer transition-all ${
+                    selectedBlockId === block.id
+                      ? 'border-[#B89B7A]'
+                      : isPreviewing
+                      ? 'border-transparent'
+                      : 'border-dashed border-gray-300 hover:border-[#B89B7A]/50'
+                  }`}
+                  onClick={() => !isPreviewing && onSelectBlock(block.id)}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="text-sm font-medium text-[#8F7A6A]">
+                      {block.type.charAt(0).toUpperCase() + block.type.slice(1)}
+                    </div>
+                  </div>
+                  
+                  {block.type === 'header' && (
+                    <div className="text-center py-4">
+                      <h1 className="text-2xl font-bold text-[#432818]">{block.content.title || 'Título do Cabeçalho'}</h1>
+                      {block.content.subtitle && (
+                        <p className="text-[#8F7A6A] mt-2">{block.content.subtitle}</p>
+                      )}
+                    </div>
+                  )}
+                  
+                  {block.type === 'headline' && (
+                    <div className="text-center py-4">
+                      <h2 className="text-xl font-bold text-[#432818]">{block.content.title || 'Título Principal'}</h2>
+                      {block.content.subtitle && (
+                        <p className="text-[#8F7A6A] mt-2">{block.content.subtitle}</p>
+                      )}
+                    </div>
+                  )}
+                  
+                  {block.type === 'text' && (
+                    <p className="py-2">{block.content.text || 'Texto do bloco'}</p>
+                  )}
+                  
+                  {block.type === 'style-result' && (
+                    <div className="flex flex-col md:flex-row gap-4 p-4 bg-[#FAF9F7] rounded-lg">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-[#432818] mb-2">
+                          Estilo {primaryStyle.category}
+                        </h3>
+                        <p className="text-[#8F7A6A]">
+                          {block.content.description || 'Descrição personalizada do estilo predominante.'}
+                        </p>
+                      </div>
+                      <div className="w-full md:w-1/3">
+                        {block.content.customImage ? (
+                          <img 
+                            src={block.content.customImage} 
+                            alt="Imagem personalizada" 
+                            className="w-full h-auto rounded-lg" 
+                          />
+                        ) : (
+                          <div className="w-full h-40 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <span className="text-gray-400">Imagem do estilo</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
