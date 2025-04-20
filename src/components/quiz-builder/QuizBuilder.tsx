@@ -39,14 +39,6 @@ export const QuizBuilder: React.FC = () => {
     currentStepIndex
   });
 
-  useEffect(() => {
-    const saveTimeout = setTimeout(() => {
-      saveCurrentState();
-    }, 1000);
-
-    return () => clearTimeout(saveTimeout);
-  }, [steps, saveCurrentState]);
-
   const handleComponentSelect = (type: QuizComponentType) => {
     const newComponentId = addComponent(type);
     setSelectedComponentId(newComponentId);
