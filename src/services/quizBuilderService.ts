@@ -9,8 +9,9 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
   const components: QuizComponentData[] = [];
 
   // Add cover stage
+  const coverStageId = `stage-cover-${Date.now()}`;
   stages.push({
-    id: `stage-cover-${Date.now()}`,
+    id: coverStageId,
     title: 'Etapa 1: Capa do Quiz',
     order: 0,
     type: 'cover'
@@ -21,7 +22,7 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
     id: `component-cover-header-${Date.now()}`,
     type: 'header',
     order: 0,
-    stageId: stages[0].id,
+    stageId: coverStageId,
     data: {
       title: 'Descubra seu Estilo Predominante',
       subtitle: 'Responda as perguntas abaixo para descobrir seu estilo pessoal único'
@@ -43,7 +44,7 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
     
     stages.push({
       id: stageId,
-      title: `Etapa ${order + 1}: ${question.title.split('\n')[0]}`,
+      title: `Etapa ${order + 1}: ${question.title.split('\n')[0] || 'Pergunta Estratégica'}`,
       order: order++,
       type: 'strategic'
     });
@@ -116,14 +117,14 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
     order: 0,
     stageId: resultStageId,
     data: {
-      ...defaultResultTemplate.header.content
+      title: 'Seu Estilo Predominante',
+      subtitle: 'Descubra mais sobre seu estilo único'
     },
     style: {
-      ...defaultResultTemplate.header.style,
-      // Ensure borderRadius is a number, not a string
-      borderRadius: typeof defaultResultTemplate.header.style.borderRadius === 'string' 
-        ? parseInt(defaultResultTemplate.header.style.borderRadius, 10) || 0 
-        : defaultResultTemplate.header.style.borderRadius || 0
+      paddingY: '24',
+      paddingX: '16',
+      backgroundColor: '#FAF9F7',
+      textColor: '#432818',
     }
   });
 
@@ -133,7 +134,9 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
     order: 1,
     stageId: resultStageId,
     data: {
-      ...defaultResultTemplate.mainContent.content
+      ...defaultResultTemplate.mainContent.content,
+      showSecondaryStyles: true,
+      showOffer: true
     },
     style: {
       paddingY: '16',
@@ -142,4 +145,50 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
   });
 
   return { stages, components };
+};
+
+// Helper function to calculate quiz results based on answers
+export const calculatePreviewResults = (answers: Record<string, string[]>): any => {
+  const styleCounter: Record<string, number> = {
+    'Natural': 0,
+    'Clássico': 0,
+    'Contemporâneo': 0,
+    'Elegante': 0,
+    'Romântico': 0,
+    'Sexy': 0,
+    'Dramático': 0,
+    'Criativo': 0
+  };
+
+  let totalSelections = 0;
+
+  // Process answers
+  Object.entries(answers).forEach(([questionId, selectedOptionIds]) => {
+    // Find the question in either strategic or style questions
+    const question = [...quizQuestions, ...strategicQuestions].find(q => q.id === questionId);
+    if (!question) return;
+
+    selectedOptionIds.forEach(optionId => {
+      const option = question.options.find(o => o.id === optionId);
+      if (option) {
+        styleCounter[option.styleCategory]++;
+        totalSelections++;
+      }
+    });
+  });
+
+  // Calculate results
+  const styleResults = Object.entries(styleCounter)
+    .map(([category, score]) => ({
+      category,
+      score,
+      percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  return {
+    primaryStyle: styleResults[0],
+    secondaryStyles: styleResults.slice(1),
+    totalSelections
+  };
 };

@@ -7,11 +7,13 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import QuizPreview from './preview/QuizPreview';
 import BuilderToolbar from './components/BuilderToolbar';
 import BuilderLayout from './components/BuilderLayout';
+import { QuizResult } from '@/types/quiz';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
   const [isPreviewing, setIsPreviewing] = useState(false);
+  const [previewResult, setPreviewResult] = useState<QuizResult | null>(null);
   
   const { 
     components, 
@@ -36,7 +38,41 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handleSave = () => {
-    saveCurrentState();
+    const success = saveCurrentState();
+    if (success) {
+      // Could show a toast here
+    }
+  };
+
+  const handlePreviewQuizResult = () => {
+    // Generate a sample quiz result for preview
+    const previewResult: QuizResult = {
+      primaryStyle: {
+        category: 'Elegante',
+        score: 12,
+        percentage: 40
+      },
+      secondaryStyles: [
+        {
+          category: 'Romântico',
+          score: 9,
+          percentage: 30
+        },
+        {
+          category: 'Clássico',
+          score: 6,
+          percentage: 20
+        },
+        {
+          category: 'Contemporâneo',
+          score: 3,
+          percentage: 10
+        }
+      ],
+      totalSelections: 30
+    };
+    
+    setPreviewResult(previewResult);
   };
 
   const activeStage = activeStageId
@@ -60,6 +96,7 @@ export const QuizBuilder: React.FC = () => {
         onViewChange={setActiveView}
         onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
         onSave={handleSave}
+        onPreviewResultPage={handlePreviewQuizResult}
       />
       
       <div className="flex-1">
@@ -88,6 +125,7 @@ export const QuizBuilder: React.FC = () => {
             <QuizPreview 
               stages={stages}
               components={components}
+              previewResult={previewResult}
             />
           </TabsContent>
         </Tabs>

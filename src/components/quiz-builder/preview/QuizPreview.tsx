@@ -1,122 +1,127 @@
 
 import React, { useState } from 'react';
 import { QuizStage, QuizComponentData } from '@/types/quizBuilder';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
-import MultipleChoiceComponent from '../components/MultipleChoiceComponent';
-import HeaderComponent from '../components/HeaderComponent';
-import TextComponent from '../components/TextComponent';
-import ImageComponent from '../components/ImageComponent';
-import QuizResultComponent from '../components/QuizResultComponent';
+import { QuizContainer } from '@/components/quiz/QuizContainer';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { QuizResult } from '@/types/quiz';
+import ResultPreview from './ResultPreview';
+import StagePreview from './StagePreview';
 
 interface QuizPreviewProps {
   stages: QuizStage[];
   components: QuizComponentData[];
+  previewResult?: QuizResult | null;
 }
 
-const QuizPreview: React.FC<QuizPreviewProps> = ({ stages, components }) => {
+const QuizPreview: React.FC<QuizPreviewProps> = ({ 
+  stages, 
+  components,
+  previewResult
+}) => {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string[]>>({});
+  const [showingResult, setShowingResult] = useState(false);
+  
+  // Set showing result when previewResult changes
+  React.useEffect(() => {
+    if (previewResult) {
+      setShowingResult(true);
+    } else {
+      setShowingResult(false);
+    }
+  }, [previewResult]);
   
   const sortedStages = [...stages].sort((a, b) => a.order - b.order);
   const currentStage = sortedStages[currentStageIndex];
   
-  const stageComponents = currentStage
-    ? components.filter(c => c.stageId === currentStage.id).sort((a, b) => a.order - b.order)
-    : [];
+  const handleNext = () => {
+    if (currentStageIndex < sortedStages.length - 1) {
+      setCurrentStageIndex(prev => prev + 1);
+    }
+  };
   
   const handlePrevious = () => {
     if (currentStageIndex > 0) {
-      setCurrentStageIndex(currentStageIndex - 1);
+      setCurrentStageIndex(prev => prev - 1);
     }
   };
   
-  const handleNext = () => {
-    if (currentStageIndex < sortedStages.length - 1) {
-      setCurrentStageIndex(currentStageIndex + 1);
-    }
+  // Handle back from result view
+  const handleBackFromResult = () => {
+    setShowingResult(false);
   };
   
-  const renderComponent = (component: QuizComponentData) => {
-    switch (component.type) {
-      case 'header':
-        return <HeaderComponent data={component.data} style={component.style} isSelected={false} />;
-      case 'headline':
-      case 'text':
-        return <TextComponent data={component.data} style={component.style} isSelected={false} />;
-      case 'image':
-        return <ImageComponent data={component.data} style={component.style} isSelected={false} />;
-      case 'multipleChoice':
-        return <MultipleChoiceComponent data={component.data} style={component.style} isSelected={false} />;
-      case 'quizResult':
-        return <QuizResultComponent data={component.data} style={component.style} isSelected={false} />;
-      default:
-        return <div>Componente não suportado no preview</div>;
-    }
-  };
+  if (stages.length === 0) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500 mb-2">Nenhuma etapa adicionada ao quiz ainda.</p>
+          <p className="text-gray-400 text-sm">Adicione etapas no modo editor para visualizar aqui.</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (showingResult && previewResult) {
+    return (
+      <QuizContainer>
+        <div className="mb-4">
+          <Button
+            variant="outline"
+            onClick={handleBackFromResult}
+            className="border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar para o Quiz
+          </Button>
+        </div>
+        <ResultPreview result={previewResult} />
+      </QuizContainer>
+    );
+  }
+  
+  const stageComponents = components.filter(c => c.stageId === currentStage?.id)
+    .sort((a, b) => a.order - b.order);
   
   return (
-    <div className="h-full flex flex-col bg-[#FAF9F7]">
-      <div className="flex-1 overflow-auto">
-        <div className="max-w-4xl mx-auto py-4 px-4">
-          <AnimatedWrapper>
-            <div className="bg-white rounded-lg shadow-sm mb-4 p-2 flex items-center justify-between">
-              <div className="text-[#432818] font-medium">
-                {currentStage ? `Etapa ${currentStageIndex + 1}: ${currentStage.title}` : 'Preview do Quiz'}
-              </div>
-              <div className="text-[#8F7A6A] text-sm">
-                {currentStageIndex + 1} de {sortedStages.length}
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              {stageComponents.map((component) => (
-                <div key={component.id} className="mb-6">
-                  {renderComponent(component)}
-                </div>
-              ))}
-              
-              {stageComponents.length === 0 && (
-                <div className="py-8 text-center text-[#8F7A6A]">
-                  <p>Esta etapa não possui componentes.</p>
-                  <p className="text-sm mt-2">Adicione componentes no modo de edição.</p>
-                </div>
-              )}
-            </div>
-          </AnimatedWrapper>
-        </div>
-      </div>
-      
-      <div className="p-4 border-t bg-white flex justify-between">
-        <Button
-          variant="outline"
-          onClick={handlePrevious}
-          disabled={currentStageIndex === 0}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Anterior
-        </Button>
-        
-        <div className="flex items-center">
-          {sortedStages.map((_, index) => (
-            <div 
-              key={index}
-              className={`h-2 w-2 rounded-full mx-1 ${index === currentStageIndex ? 'bg-[#B89B7A]' : 'bg-[#B89B7A]/30'}`}
-            />
-          ))}
+    <QuizContainer>
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium text-[#432818]">
+            Prévia: {currentStage?.title || 'Etapa sem título'}
+          </h2>
+          <div className="text-sm text-gray-500">
+            Etapa {currentStageIndex + 1} de {sortedStages.length}
+          </div>
         </div>
         
-        <Button
-          onClick={handleNext}
-          disabled={currentStageIndex === sortedStages.length - 1}
-          className="bg-[#B89B7A] hover:bg-[#A38A69]"
-        >
-          Próximo
-          <ArrowRight className="h-4 w-4 ml-2" />
-        </Button>
+        <StagePreview 
+          stage={currentStage} 
+          components={stageComponents} 
+        />
+        
+        <div className="flex justify-between pt-8">
+          <Button
+            variant="outline"
+            onClick={handlePrevious}
+            disabled={currentStageIndex === 0}
+            className="border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Anterior
+          </Button>
+          
+          <Button
+            onClick={handleNext}
+            disabled={currentStageIndex === sortedStages.length - 1}
+            className="bg-[#B89B7A] hover:bg-[#9F836A] text-white transition-all duration-200"
+          >
+            Próxima
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
       </div>
-    </div>
+    </QuizContainer>
   );
 };
 

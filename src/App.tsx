@@ -9,6 +9,8 @@ const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const EditorPage = lazy(() => import('./pages/EditorPage'));
 const QuizBuilderPage = lazy(() => import('./pages/QuizBuilderPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const QuizEditorPage = lazy(() => import('./pages/admin/QuizEditorPage'));
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/editor" element={<EditorPage />} />
             <Route path="/editor/:style" element={<EditorPage />} />
             <Route path="/builder" element={<QuizBuilderPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
           </Routes>
         </Suspense>
         <Toaster />

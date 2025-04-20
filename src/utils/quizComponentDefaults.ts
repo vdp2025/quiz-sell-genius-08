@@ -1,75 +1,109 @@
 
-import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentType } from '@/types/quizBuilder';
 
-export const getDefaultData = (type: QuizComponentType): any => {
+export const getDefaultData = (type: QuizComponentType) => {
   switch (type) {
     case 'header':
-      return { title: 'Título do Quiz', subtitle: 'Responda às perguntas e descubra seu resultado' };
-    case 'headline':
-      return { title: 'Título da Seção', subtitle: 'Subtítulo opcional' };
+      return {
+        title: 'Título do Quiz',
+        subtitle: 'Descrição breve do quiz'
+      };
+    
     case 'text':
-      return { text: 'Insira seu texto aqui...' };
+      return {
+        text: 'Digite seu texto aqui. Este é um parágrafo de exemplo para o seu quiz.'
+      };
+    
     case 'image':
-      return { imageUrl: '', alt: 'Descrição da imagem' };
+      return {
+        imageUrl: '',
+        alt: 'Imagem do quiz',
+        caption: ''
+      };
+    
     case 'multipleChoice':
-      return { 
-        question: 'Sua pergunta aqui?', 
-        options: ['Opção 1', 'Opção 2', 'Opção 3'],
-        required: true,
+      return {
+        question: 'Digite sua pergunta aqui?',
+        options: ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4'],
+        optionImages: [],
+        optionStyleCategories: ['Natural', 'Clássico', 'Contemporâneo', 'Elegante'],
         multiSelect: 3,
-        maxSelections: 3,
-        minSelections: 3,
-        autoAdvance: true,
-        displayType: 'text',
-        imageSize: 'medium',
-        layout: {
-          columns: 2,
-          direction: 'vertical'
-        }
+        required: true,
+        displayType: 'text'
       };
+    
     case 'singleChoice':
-      return { 
-        question: 'Sua pergunta aqui?', 
-        options: ['Opção 1', 'Opção 2', 'Opção 3'],
+      return {
+        question: 'Digite sua pergunta aqui?',
+        options: ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4'],
         required: true
       };
+    
     case 'scale':
-      return { 
-        question: 'Em uma escala de 1 a 5, como você avalia...?', 
-        min: 1, 
-        max: 5, 
-        minLabel: 'Discordo Totalmente', 
-        maxLabel: 'Concordo Totalmente',
+      return {
+        question: 'Digite sua pergunta aqui?',
+        minLabel: 'Discordo totalmente',
+        maxLabel: 'Concordo totalmente',
+        steps: 5,
         required: true
       };
-    case 'stageCover':
+    
+    case 'openEnded':
       return {
-        title: 'Descubra Seu Estilo Pessoal',
-        subtitle: 'Responda às perguntas e descubra qual estilo combina mais com você',
-        backgroundImage: '',
-        logoImage: ''
+        question: 'Digite sua pergunta aqui?',
+        placeholder: 'Digite sua resposta...',
+        required: true
       };
-    case 'stageQuestion':
+    
+    case 'benefitsList':
       return {
-        question: 'Sua pergunta aqui?',
-        description: 'Descrição ou instrução opcional',
-        options: [
-          { text: 'Opção 1', imageUrl: '', styleCategory: 'Natural' },
-          { text: 'Opção 2', imageUrl: '', styleCategory: 'Clássico' },
-          { text: 'Opção 3', imageUrl: '', styleCategory: 'Contemporâneo' }
-        ],
-        multiSelect: 3,
-        required: true,
-        layout: 'grid'
+        title: 'Benefícios',
+        benefits: [
+          'Benefício 1 - Descreva o primeiro benefício',
+          'Benefício 2 - Descreva o segundo benefício',
+          'Benefício 3 - Descreva o terceiro benefício'
+        ]
       };
-    case 'stageResult':
+    
+    case 'faq':
+      return {
+        title: 'Perguntas Frequentes',
+        items: [
+          { question: 'Pergunta 1?', answer: 'Resposta para a pergunta 1.' },
+          { question: 'Pergunta 2?', answer: 'Resposta para a pergunta 2.' }
+        ]
+      };
+    
+    case 'quizResult':
       return {
         title: 'Seu Resultado',
-        description: 'Descrição do resultado',
-        showPrimaryStyle: true,
+        description: 'Descrição do resultado do quiz baseado nas respostas fornecidas.',
         showSecondaryStyles: true,
-        showOfferSection: true
+        showOffer: true
       };
+    
+    case 'stageCover':
+      return {
+        stageTitle: 'Capa do Quiz',
+        headline: 'Bem-vindo ao Quiz!',
+        subheadline: 'Descubra seu estilo respondendo às perguntas a seguir.',
+        buttonText: 'Começar'
+      };
+    
+    case 'stageQuestion':
+      return {
+        stageTitle: 'Pergunta',
+        stageNumber: 1,
+        progressText: 'Questão {current} de {total}'
+      };
+    
+    case 'stageResult':
+      return {
+        stageTitle: 'Resultado',
+        headline: 'Seu Resultado',
+        subheadline: 'Confira o resultado baseado nas suas respostas.'
+      };
+    
     default:
       return {};
   }
