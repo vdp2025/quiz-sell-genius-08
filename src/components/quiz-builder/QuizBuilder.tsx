@@ -4,17 +4,20 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { PreviewPanel } from './PreviewPanel';
+import { LoadExistingQuiz } from './LoadExistingQuiz';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+  const [isLoadingExisting, setIsLoadingExisting] = useState(true);
   const { 
     components, 
     addComponent, 
     updateComponent, 
     deleteComponent,
-    moveComponent
+    moveComponent,
+    setComponents
   } = useQuizBuilder();
 
   const handleComponentSelect = (type: QuizComponentType) => {
@@ -22,9 +25,18 @@ export const QuizBuilder: React.FC = () => {
     setSelectedComponentId(newComponentId);
   };
 
+  const handleLoadExistingQuiz = (loadedComponents: QuizComponentData[]) => {
+    setComponents(loadedComponents);
+    setIsLoadingExisting(false);
+  };
+
   const selectedComponent = selectedComponentId 
     ? components.find(c => c.id === selectedComponentId) 
     : null;
+
+  if (isLoadingExisting) {
+    return <LoadExistingQuiz onLoadQuiz={handleLoadExistingQuiz} />;
+  }
 
   return (
     <div className="h-screen flex flex-col">

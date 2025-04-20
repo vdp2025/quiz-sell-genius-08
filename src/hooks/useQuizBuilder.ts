@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
 
@@ -90,6 +89,7 @@ export const useQuizBuilder = () => {
     addComponent,
     updateComponent,
     deleteComponent,
-    moveComponent
+    moveComponent,
+    setComponents
   };
 };
