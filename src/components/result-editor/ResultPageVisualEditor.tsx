@@ -44,6 +44,15 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
     });
   };
 
+  // Fix for the parameter mismatch issues
+  const handleUpdateBlock = (id: string, content: any) => {
+    blockActions.handleUpdateBlock(id, content);
+  };
+
+  const handleDeleteBlock = (id: string) => {
+    blockActions.handleDeleteBlock(id);
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen flex flex-col overflow-hidden">
@@ -83,8 +92,16 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
               selectedBlockId={selectedBlockId}
               blocks={blocks}
               onClose={() => setSelectedBlockId(null)}
-              onUpdate={blockActions.handleUpdateBlock}
-              onDelete={blockActions.handleDeleteBlock}
+              onUpdate={(content) => {
+                if (selectedBlockId) {
+                  handleUpdateBlock(selectedBlockId, content);
+                }
+              }}
+              onDelete={() => {
+                if (selectedBlockId) {
+                  handleDeleteBlock(selectedBlockId);
+                }
+              }}
             />
           </ResizablePanel>
         </ResizablePanelGroup>
