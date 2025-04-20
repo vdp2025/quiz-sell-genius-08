@@ -18,7 +18,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
   components: [
     {
       id: generateId(),
-      type: 'stageCover',
+      type: 'stageCover' as const,
       order: 0,
       stageId: 'cover',
       data: {
@@ -40,7 +40,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     },
     ...selfPerceptionQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion',
+      type: 'stageQuestion' as const,
       order: index + 1,
       stageId: `q${index + 1}`,
       data: {
@@ -70,7 +70,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     })),
     ...styleExperienceQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion',
+      type: 'stageQuestion' as const,
       order: index + selfPerceptionQuestions.length + 1,
       stageId: `q${index + selfPerceptionQuestions.length + 1}`,
       data: {
@@ -100,7 +100,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     })),
     ...purchaseIntentQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion',
+      type: 'stageQuestion' as const,
       order: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1,
       stageId: `q${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1}`,
       data: {
@@ -130,7 +130,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     })),
     ...desiredOutcomesQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion',
+      type: 'stageQuestion' as const,
       order: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1,
       stageId: `q${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1}`,
       data: {
