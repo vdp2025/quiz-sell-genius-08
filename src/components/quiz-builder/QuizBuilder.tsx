@@ -4,20 +4,25 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { PreviewPanel } from './PreviewPanel';
+import { StepsSidebar } from './StepsSidebar';
 import { LoadExistingQuiz } from './LoadExistingQuiz';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [isLoadingExisting, setIsLoadingExisting] = useState(true);
   const { 
-    components, 
+    steps, 
+    currentStepIndex,
+    setCurrentStepIndex,
+    components,
     addComponent, 
     updateComponent, 
     deleteComponent,
     moveComponent,
-    setComponents
+    addStep,
+    setStepsFromTemplate
   } = useQuizBuilder();
 
   const handleComponentSelect = (type: QuizComponentType) => {
@@ -25,8 +30,8 @@ export const QuizBuilder: React.FC = () => {
     setSelectedComponentId(newComponentId);
   };
 
-  const handleLoadExistingQuiz = (loadedComponents: QuizComponentData[]) => {
-    setComponents(loadedComponents);
+  const handleLoadExistingQuiz = (loadedSteps: QuizStep[]) => {
+    setStepsFromTemplate(loadedSteps);
     setIsLoadingExisting(false);
   };
 
@@ -47,20 +52,33 @@ export const QuizBuilder: React.FC = () => {
       </div>
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Panel - Components Sidebar */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+        {/* Steps Sidebar */}
+        <ResizablePanel defaultSize={15} minSize={15} maxSize={20}>
+          <StepsSidebar 
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={setCurrentStepIndex}
+            onAddStep={addStep}
+          />
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        {/* Components Sidebar */}
+        <ResizablePanel defaultSize={15} minSize={15} maxSize={20}>
           <ComponentsSidebar onComponentSelect={handleComponentSelect} />
         </ResizablePanel>
         
         <ResizableHandle withHandle />
         
         {/* Center Panel - Preview */}
-        <ResizablePanel defaultSize={50}>
+        <ResizablePanel defaultSize={40}>
           <PreviewPanel 
             components={components}
             selectedComponentId={selectedComponentId}
             onSelectComponent={setSelectedComponentId}
             onMoveComponent={moveComponent}
+            currentStep={steps[currentStepIndex]}
           />
         </ResizablePanel>
         
@@ -71,7 +89,7 @@ export const QuizBuilder: React.FC = () => {
           <PropertiesPanel 
             component={selectedComponent}
             onClose={() => setSelectedComponentId(null)}
-            onUpdate={(data: Partial<QuizComponentData>) => {
+            onUpdate={(data: any) => {
               if (selectedComponentId) {
                 updateComponent(selectedComponentId, data);
               }

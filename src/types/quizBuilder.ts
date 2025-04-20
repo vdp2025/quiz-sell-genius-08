@@ -37,11 +37,25 @@ export interface QuizComponentData {
     alt?: string;
     question?: string;
     options?: string[];
+    fullOptions?: QuizOption[];
     // Add more specific data properties as needed
   };
   style?: QuizComponentStyle;
 }
 
-export interface QuizBuilderState {
+export interface QuizOption {
+  text: string;
+  imageUrl?: string;
+  styleCategory?: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
+}
+
+export interface QuizStep {
+  id: string;
+  title: string;
   components: QuizComponentData[];
+}
+
+export interface QuizBuilderState {
+  steps: QuizStep[];
+  currentStepIndex: number;
 }

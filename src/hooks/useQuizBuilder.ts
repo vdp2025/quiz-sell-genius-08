@@ -1,8 +1,14 @@
+
 import { useState, useCallback } from 'react';
-import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentType, QuizComponentData, QuizStep } from '@/types/quizBuilder';
 
 export const useQuizBuilder = () => {
-  const [components, setComponents] = useState<QuizComponentData[]>([]);
+  const [steps, setSteps] = useState<QuizStep[]>([]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  // Get current step and components
+  const currentStep = steps[currentStepIndex] || null;
+  const components = currentStep?.components || [];
 
   const getDefaultData = (type: QuizComponentType): any => {
     switch (type) {
@@ -15,7 +21,11 @@ export const useQuizBuilder = () => {
       case 'image':
         return { imageUrl: '', alt: 'Descrição da imagem' };
       case 'multipleChoice':
-        return { question: 'Sua pergunta aqui?', options: ['Opção 1', 'Opção 2', 'Opção 3'] };
+        return { 
+          question: 'Sua pergunta aqui?', 
+          options: ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4'],
+          multiSelect: 3
+        };
       case 'singleChoice':
         return { question: 'Sua pergunta aqui?', options: ['Opção 1', 'Opção 2', 'Opção 3'] };
       case 'scale':
@@ -26,6 +36,8 @@ export const useQuizBuilder = () => {
   };
 
   const addComponent = useCallback((type: QuizComponentType): string => {
+    if (!currentStep) return '';
+    
     const newComponent: QuizComponentData = {
       id: `component-${Date.now()}`,
       type,
@@ -40,56 +52,127 @@ export const useQuizBuilder = () => {
       }
     };
 
-    setComponents(prev => [...prev, newComponent]);
+    setSteps(prev => prev.map((step, index) => 
+      index === currentStepIndex
+        ? { ...step, components: [...step.components, newComponent] }
+        : step
+    ));
+    
     return newComponent.id;
-  }, [components]);
+  }, [currentStep, currentStepIndex, components.length]);
 
   const updateComponent = useCallback((id: string, updates: Partial<QuizComponentData>) => {
-    setComponents(prev => 
-      prev.map(component => 
-        component.id === id 
-          ? { 
-              ...component, 
-              ...updates,
-              data: updates.data ? { ...component.data, ...updates.data } : component.data,
-              style: updates.style ? { ...component.style, ...updates.style } : component.style
-            } 
-          : component
+    setSteps(prev => 
+      prev.map((step, stepIndex) => 
+        stepIndex === currentStepIndex
+          ? {
+              ...step,
+              components: step.components.map(component => 
+                component.id === id 
+                  ? { 
+                      ...component, 
+                      ...updates,
+                      data: updates.data ? { ...component.data, ...updates.data } : component.data,
+                      style: updates.style ? { ...component.style, ...updates.style } : component.style
+                    } 
+                  : component
+              )
+            }
+          : step
+      )
+    );
+  }, [currentStepIndex]);
+
+  const deleteComponent = useCallback((id: string) => {
+    setSteps(prev => 
+      prev.map((step, stepIndex) => 
+        stepIndex === currentStepIndex
+          ? {
+              ...step,
+              components: step.components
+                .filter(component => component.id !== id)
+                .map((component, index) => ({ ...component, order: index }))
+            }
+          : step
+      )
+    );
+  }, [currentStepIndex]);
+
+  const moveComponent = useCallback((draggedId: string, targetId: string) => {
+    setSteps(prev => {
+      const updatedSteps = [...prev];
+      const currentStep = updatedSteps[currentStepIndex];
+      if (!currentStep) return prev;
+
+      const components = [...currentStep.components];
+      const draggedIndex = components.findIndex(c => c.id === draggedId);
+      const targetIndex = components.findIndex(c => c.id === targetId);
+      
+      if (draggedIndex === -1 || targetIndex === -1) return prev;
+      
+      const [draggedComponent] = components.splice(draggedIndex, 1);
+      components.splice(targetIndex, 0, draggedComponent);
+      
+      // Update orders
+      const updatedComponents = components.map((component, index) => ({
+        ...component,
+        order: index
+      }));
+      
+      updatedSteps[currentStepIndex] = {
+        ...currentStep,
+        components: updatedComponents
+      };
+      
+      return updatedSteps;
+    });
+  }, [currentStepIndex]);
+
+  // Step management functions
+  const addStep = useCallback(() => {
+    const newStep: QuizStep = {
+      id: `step-${Date.now()}`,
+      title: `Etapa ${steps.length + 1}`,
+      components: []
+    };
+    
+    setSteps(prev => [...prev, newStep]);
+    setCurrentStepIndex(steps.length);
+  }, [steps.length]);
+
+  const updateStepTitle = useCallback((index: number, title: string) => {
+    setSteps(prev => 
+      prev.map((step, i) => 
+        i === index ? { ...step, title } : step
       )
     );
   }, []);
 
-  const deleteComponent = useCallback((id: string) => {
-    setComponents(prev => 
-      prev.filter(component => component.id !== id)
-        .map((component, index) => ({ ...component, order: index }))
-    );
-  }, []);
+  const deleteStep = useCallback((index: number) => {
+    setSteps(prev => prev.filter((_, i) => i !== index));
+    if (currentStepIndex >= index && currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    }
+  }, [currentStepIndex]);
 
-  const moveComponent = useCallback((draggedId: string, targetId: string) => {
-    setComponents(prev => {
-      const draggedIndex = prev.findIndex(c => c.id === draggedId);
-      const targetIndex = prev.findIndex(c => c.id === targetId);
-      
-      if (draggedIndex === -1 || targetIndex === -1) return prev;
-      
-      const newComponents = [...prev];
-      const [draggedComponent] = newComponents.splice(draggedIndex, 1);
-      newComponents.splice(targetIndex, 0, draggedComponent);
-      
-      return newComponents.map((component, index) => ({
-        ...component,
-        order: index
-      }));
-    });
+  const setStepsFromTemplate = useCallback((newSteps: QuizStep[]) => {
+    setSteps(newSteps);
+    setCurrentStepIndex(0);
   }, []);
 
   return {
+    steps,
+    currentStepIndex,
+    setCurrentStepIndex,
+    currentStep,
     components,
     addComponent,
     updateComponent,
     deleteComponent,
     moveComponent,
-    setComponents
+    addStep,
+    updateStepTitle,
+    deleteStep,
+    setStepsFromTemplate
   };
 };

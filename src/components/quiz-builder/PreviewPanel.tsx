@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Eye, Monitor, Smartphone, MoveVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentData, QuizStep } from '@/types/quizBuilder';
 import { ComponentRenderer } from './ComponentRenderer';
 
 interface PreviewPanelProps {
@@ -11,6 +11,7 @@ interface PreviewPanelProps {
   selectedComponentId: string | null;
   onSelectComponent: (id: string | null) => void;
   onMoveComponent: (draggedId: string, targetId: string) => void;
+  currentStep: QuizStep | null;
 }
 
 export const PreviewPanel: React.FC<PreviewPanelProps> = ({
@@ -18,6 +19,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   selectedComponentId,
   onSelectComponent,
   onMoveComponent,
+  currentStep
 }) => {
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -62,14 +64,21 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           </Button>
         </div>
         
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsPreviewing(!isPreviewing)}
-        >
-          <Eye className="w-4 h-4 mr-2" />
-          {isPreviewing ? 'Editar' : 'Visualizar'}
-        </Button>
+        <div className="flex items-center">
+          {currentStep && (
+            <span className="text-sm text-[#8F7A6A] mr-3">
+              {currentStep.title}
+            </span>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsPreviewing(!isPreviewing)}
+          >
+            <Eye className="w-4 h-4 mr-2" />
+            {isPreviewing ? 'Editar' : 'Visualizar'}
+          </Button>
+        </div>
       </div>
       
       <div className="flex-1 overflow-auto p-4">
@@ -79,9 +88,14 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             viewMode === 'mobile' && 'max-w-sm mx-auto'
           )}
         >
-          {components.length === 0 ? (
+          {!currentStep || components.length === 0 ? (
             <div className="text-center p-8 text-[#8F7A6A] border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
-              <p className="mb-4">Adicione componentes do menu lateral para começar a construir seu quiz</p>
+              <p className="mb-4">
+                {!currentStep 
+                  ? 'Selecione uma etapa no menu lateral' 
+                  : 'Adicione componentes do menu lateral para começar a construir sua etapa'
+                }
+              </p>
             </div>
           ) : (
             <div className="space-y-6">
