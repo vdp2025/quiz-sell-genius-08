@@ -26,16 +26,19 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
   const [showInstructions, setShowInstructions] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
 
+  // Atualiza o texto do JSON sempre que o config mudar ou quando o painel abrir
   useEffect(() => {
-    try {
-      setJsonText(JSON.stringify(config, null, 2));
-      setParseError(null);
-      setHasApplied(false);
-    } catch (error) {
-      console.error('Error stringifying JSON:', error);
-      setParseError('Erro ao converter configuração para JSON');
+    if (isOpen) {
+      try {
+        setJsonText(JSON.stringify(config, null, 2));
+        setParseError(null);
+        setHasApplied(false);
+      } catch (error) {
+        console.error('Error stringifying JSON:', error);
+        setParseError('Erro ao converter configuração para JSON');
+      }
     }
-  }, [config]);
+  }, [config, isOpen]);
 
   const handleSave = () => {
     try {
@@ -49,6 +52,7 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
         duration: 5000
       });
     } catch (error) {
+      console.error('Error parsing JSON:', error);
       setParseError("JSON inválido. Verifique o formato.");
       toast({
         title: "Erro ao aplicar JSON",
@@ -73,18 +77,12 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
+    <Sheet open={isOpen} onOpenChange={(open) => {
+      if (!open) onClose();
+    }}>
       <SheetContent side="right" className="w-[600px] sm:w-[540px] overflow-hidden flex flex-col">
         <SheetHeader className="mb-4">
           <SheetTitle>Editor JSON</SheetTitle>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => setShowInstructions(true)}
-            className="absolute right-4 top-4"
-          >
-            Como aplicar?
-          </Button>
         </SheetHeader>
         
         {showInstructions ? (
@@ -101,7 +99,7 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
                 Resetar
               </Button>
               <Button 
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-green-600 hover:bg-green-700 text-white"
                 size="sm"
                 onClick={handleSave}
               >

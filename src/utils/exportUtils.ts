@@ -8,7 +8,7 @@ export const exportProjectAsJson = (config: any) => {
   const downloadUrl = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = downloadUrl;
-  link.download = `project-config-${new Date().toISOString().split('T')[0]}.json`;
+  link.download = `page-config-${new Date().toISOString().split('T')[0]}.json`;
   
   document.body.appendChild(link);
   link.click();
@@ -16,4 +16,27 @@ export const exportProjectAsJson = (config: any) => {
   
   // Clean up the URL
   window.URL.revokeObjectURL(downloadUrl);
+};
+
+// Função para importar JSON de um arquivo
+export const importJsonFromFile = (file: File): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const parsed = JSON.parse(content);
+        resolve(parsed);
+      } catch (error) {
+        reject(new Error('Arquivo JSON inválido'));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error('Erro ao ler o arquivo'));
+    };
+    
+    reader.readAsText(file);
+  });
 };

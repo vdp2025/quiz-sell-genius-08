@@ -8,6 +8,7 @@ import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Block } from '@/types/editor';
 import JsonEditorPanel from './JsonEditorPanel';
+import { exportProjectAsJson } from '@/utils/exportUtils';
 
 interface EditorToolbarProps {
   onSave: () => Promise<void>;
@@ -17,7 +18,7 @@ interface EditorToolbarProps {
   onUpdateBlocks: (blocks: Block[]) => void;
   styleType: string;
   config: ResultPageConfig;
-  onUpdateConfig: (config: any) => void;
+  onUpdateConfig: (config: ResultPageConfig) => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -83,6 +84,15 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     }
   };
 
+  const handleExportJson = () => {
+    exportProjectAsJson(config);
+    toast({
+      title: "JSON exportado",
+      description: "O arquivo JSON foi baixado com sucesso",
+      variant: "default"
+    });
+  };
+
   return (
     <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
       <div className="flex items-center">
@@ -116,6 +126,16 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           className="border-green-500 text-green-500 hover:bg-green-50"
         >
           Aplicar Template de Vendas
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExportJson}
+          className="border-blue-500 text-blue-500 hover:bg-blue-50"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Exportar JSON
         </Button>
         
         <Button

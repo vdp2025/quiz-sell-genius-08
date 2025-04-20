@@ -8,6 +8,7 @@ import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { EditorToolbar } from '@/components/result-editor/EditorToolbar';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
 import { StyleResult } from '@/types/quiz';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style: string }>();
@@ -33,12 +34,39 @@ export const EditorPage = () => {
     percentage: 100
   };
 
-  const handleUpdateConfig = (newConfig: any) => {
+  const handleUpdateConfig = (newConfig: ResultPageConfig) => {
+    // Preserve the current style type when updating the config
+    const updatedConfig = {
+      ...newConfig,
+      styleType: styleCategory
+    };
+    
+    // Update blocks if they exist in the new config
     if (newConfig.blocks) {
-      // Update all blocks at once by setting them in state via the updateSection method
       actions.updateSection('blocks', newConfig.blocks);
     }
-    // Update other config sections if needed
+    
+    // If there are other changes that need to be handled separately, do that here
+    if (newConfig.globalStyles) {
+      actions.updateSection('globalStyles', newConfig.globalStyles);
+    }
+    
+    // Additional sections to update if changed
+    if (newConfig.header) {
+      actions.updateSection('header', newConfig.header);
+    }
+    
+    if (newConfig.mainContent) {
+      actions.updateSection('mainContent', newConfig.mainContent);
+    }
+    
+    if (newConfig.secondaryStyles) {
+      actions.updateSection('secondaryStyles', newConfig.secondaryStyles);
+    }
+    
+    if (newConfig.offer) {
+      actions.updateSection('offer', newConfig.offer);
+    }
   };
 
   return (
