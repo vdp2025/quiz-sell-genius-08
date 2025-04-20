@@ -1,0 +1,119 @@
+
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Eye, Monitor, Smartphone, MoveVertical } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { QuizComponentData } from '@/types/quizBuilder';
+import { ComponentRenderer } from './ComponentRenderer';
+
+interface PreviewPanelProps {
+  components: QuizComponentData[];
+  selectedComponentId: string | null;
+  onSelectComponent: (id: string | null) => void;
+  onMoveComponent: (draggedId: string, targetId: string) => void;
+}
+
+export const PreviewPanel: React.FC<PreviewPanelProps> = ({
+  components,
+  selectedComponentId,
+  onSelectComponent,
+  onMoveComponent,
+}) => {
+  const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    e.dataTransfer.setData('componentId', id);
+  };
+  
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+  
+  const handleDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    const draggedId = e.dataTransfer.getData('componentId');
+    if (draggedId && draggedId !== targetId) {
+      onMoveComponent(draggedId, targetId);
+    }
+  };
+
+  return (
+    <div className="h-full flex flex-col bg-[#FAF9F7]">
+      <div className="p-4 border-b bg-white flex items-center justify-between">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode('desktop')}
+            className={cn(viewMode === 'desktop' ? 'bg-[#FAF9F7]' : '')}
+          >
+            <Monitor className="w-4 h-4 mr-2" />
+            Desktop
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode('mobile')}
+            className={cn(viewMode === 'mobile' ? 'bg-[#FAF9F7]' : '')}
+          >
+            <Smartphone className="w-4 h-4 mr-2" />
+            Mobile
+          </Button>
+        </div>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsPreviewing(!isPreviewing)}
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          {isPreviewing ? 'Editar' : 'Visualizar'}
+        </Button>
+      </div>
+      
+      <div className="flex-1 overflow-auto p-4">
+        <div 
+          className={cn(
+            "min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6",
+            viewMode === 'mobile' && 'max-w-sm mx-auto'
+          )}
+        >
+          {components.length === 0 ? (
+            <div className="text-center p-8 text-[#8F7A6A] border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
+              <p className="mb-4">Adicione componentes do menu lateral para começar a construir seu quiz</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {components.map((component) => (
+                <div 
+                  key={component.id} 
+                  className={cn(
+                    "relative transition-all",
+                    selectedComponentId === component.id && !isPreviewing && "ring-2 ring-blue-500"
+                  )}
+                  onClick={() => !isPreviewing && onSelectComponent(component.id)}
+                  draggable={!isPreviewing}
+                  onDragStart={(e) => !isPreviewing && handleDragStart(e, component.id)}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => !isPreviewing && handleDrop(e, component.id)}
+                >
+                  {!isPreviewing && (
+                    <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 cursor-move opacity-50 hover:opacity-100">
+                      <MoveVertical className="w-4 h-4 text-[#8F7A6A]" />
+                    </div>
+                  )}
+                  <ComponentRenderer 
+                    component={component} 
+                    isPreview={isPreviewing}
+                    isSelected={selectedComponentId === component.id}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
