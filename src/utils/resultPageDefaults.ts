@@ -1,4 +1,3 @@
-
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const createDefaultConfig = (styleType: string): ResultPageConfig => {
@@ -177,7 +176,8 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       textColor: '#1A1818',
       backgroundColor: '#fffaf7',
       fontFamily: 'Playfair Display'
-    }
+    },
+    blocks: []
   };
 };
 
@@ -218,4 +218,3 @@ function getDefaultDescription(styleType: string): string {
       return 'Seu estilo pessoal reflete sua personalidade autêntica e única.';
   }
 }
-
