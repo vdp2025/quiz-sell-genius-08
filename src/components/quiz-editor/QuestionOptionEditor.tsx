@@ -98,6 +98,7 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                   imageUrl={option.imageUrl}
                   onImageUpload={(url) => handleChange('imageUrl', url)}
                   onImageRemove={() => handleChange('imageUrl', undefined)}
+                  styleCategory={option.styleCategory}
                 />
               </div>
             )}
