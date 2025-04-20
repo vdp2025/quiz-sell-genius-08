@@ -2,14 +2,15 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Block } from '@/types/editor';
 
-interface PricingBlockEditorProps {
+interface CallToActionBlockEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
 }
 
-const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate }) => {
+const CallToActionBlockEditor: React.FC<CallToActionBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
 
   return (
@@ -20,27 +21,18 @@ const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate
           id="title"
           value={content.title || ''}
           onChange={(e) => onUpdate({ title: e.target.value })}
-          placeholder="Guia de Estilo Personalizado"
+          placeholder="Transforme seu Estilo Agora!"
         />
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="price">Preço</Label>
-        <Input
-          id="price"
-          value={content.price || ''}
-          onChange={(e) => onUpdate({ price: e.target.value })}
-          placeholder="39,00"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="regularPrice">Preço Regular</Label>
-        <Input
-          id="regularPrice"
-          value={content.regularPrice || ''}
-          onChange={(e) => onUpdate({ regularPrice: e.target.value })}
-          placeholder="175,00"
+        <Label htmlFor="text">Texto</Label>
+        <Textarea
+          id="text"
+          value={content.text || ''}
+          onChange={(e) => onUpdate({ text: e.target.value })}
+          placeholder="Não perca mais tempo com roupas que não combinam com você. Descubra como expressar sua verdadeira essência através do seu estilo pessoal."
+          rows={3}
         />
       </div>
       
@@ -50,7 +42,7 @@ const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate
           id="ctaText"
           value={content.ctaText || ''}
           onChange={(e) => onUpdate({ ctaText: e.target.value })}
-          placeholder="Quero meu Guia + Bônus"
+          placeholder="Quero Transformar Meu Estilo"
         />
       </div>
       
@@ -67,4 +59,4 @@ const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate
   );
 };
 
-export default PricingBlockEditor;
+export default CallToActionBlockEditor;

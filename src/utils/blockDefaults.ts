@@ -1,148 +1,92 @@
 
-import { EditableContent } from '@/types/editor';
+import { EditableContent, BlockType } from '@/types/editor';
 
-export const getDefaultContentForType = (type: string): EditableContent => {
+export const getDefaultContentForType = (type: BlockType): EditableContent => {
   switch (type) {
     case 'header':
       return {
-        title: 'Seu estilo foi revelado',
-        subtitle: 'Descubra como aplicar esse conhecimento no seu dia a dia',
-        style: {
-          textAlign: 'center',
-          padding: '20px'
-        }
+        title: 'Seu Resultado de Estilo',
+        subtitle: 'Descubra como expressar seu estilo único'
       };
     
-    case 'headline':
-      return {
-        title: 'Título da seção',
-        subtitle: 'Subtítulo ou descrição breve',
-        style: {
-          textAlign: 'center',
-          fontSize: '24px',
-          color: '#432818'
-        }
-      };
-      
-    case 'text':
-      return {
-        text: 'Adicione seu texto aqui. Este é um parágrafo de exemplo que pode ser editado conforme necessário.',
-        style: {
-          fontSize: '16px',
-          color: '#1A1818',
-          lineHeight: '1.6'
-        }
-      };
-      
-    case 'image':
-      return {
-        imageUrl: '',
-        imageAlt: 'Imagem descritiva',
-        style: {
-          width: '100%',
-          borderRadius: '8px'
-        }
-      };
-      
-    case 'benefits':
-      return {
-        title: 'Benefícios',
-        items: [
-          'Benefício 1',
-          'Benefício 2',
-          'Benefício 3',
-          'Benefício 4'
-        ],
-        style: {
-          backgroundColor: '#fffaf7',
-          padding: '20px',
-          borderRadius: '8px'
-        }
-      };
-      
-    case 'pricing':
-      return {
-        regularPrice: '175,00',
-        salePrice: '39,00',
-        buttonText: 'Comprar agora',
-        ctaUrl: '#',
-        urgencyText: 'Oferta por tempo limitado!',
-        style: {
-          backgroundColor: '#fffaf7',
-          padding: '20px',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }
-      };
-      
-    case 'guarantee':
-      return {
-        title: 'Garantia de 7 dias',
-        text: 'Se você não ficar satisfeito, devolvemos seu dinheiro integralmente em até 7 dias, sem burocracia.',
-        image: '',
-        style: {
-          backgroundColor: '#ffefec',
-          padding: '20px',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }
-      };
-      
-    case 'hero-section':
+    case 'hero':
       return {
         title: 'VOCÊ DESCOBRIU SEU ESTILO',
         subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        heroImage: '',
-        heroImage2: '',
-        style: {
-          backgroundColor: '#fffaf7',
-          padding: '40px 20px',
-          borderRadius: '8px'
-        }
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp'
       };
-      
-    case 'products':
+    
+    case 'styleResult':
       return {
-        title: 'O que você vai receber:',
-        images: [
+        title: 'Seu Estilo Predominante',
+        description: 'Uma descrição detalhada do seu estilo principal'
+      };
+    
+    case 'secondaryStyles':
+      return {
+        title: 'Seus Estilos Secundários',
+        description: 'Uma análise dos seus estilos complementares'
+      };
+    
+    case 'benefitsList':
+      return {
+        title: 'Benefícios do Guia',
+        items: [
+          'Entenda seu tipo de corpo e o que valoriza você',
+          'Aprenda a criar looks autênticos e poderosos',
+          'Descubra as cores que harmonizam com você',
+          'Maximize seu guarda-roupa com peças versáteis'
+        ]
+      };
+    
+    case 'testimonials':
+      return {
+        title: 'O que Dizem As Alunas',
+        testimonials: [
           {
-            url: '',
-            alt: 'Produto 1'
-          },
-          {
-            url: '',
-            alt: 'Produto 2'
+            name: 'Mariana Silva',
+            text: 'O guia de estilo mudou completamente minha relação com as roupas. Agora eu sei exatamente o que combina comigo!',
+            style: 'Natural'
           }
-        ],
-        style: {
-          backgroundColor: '#fffaf7',
-          padding: '20px',
-          borderRadius: '8px'
-        }
+        ]
       };
-      
-    case 'cta':
+    
+    case 'pricing':
       return {
-        buttonText: 'Clique Aqui',
-        ctaUrl: '#',
-        style: {
-          backgroundColor: '#B89B7A',
-          color: 'white',
-          padding: '12px 24px',
-          borderRadius: '4px',
-          textAlign: 'center',
-          fontSize: '18px',
-          fontWeight: 'bold'
-        }
+        title: 'Guia de Estilo Personalizado',
+        price: '39,00',
+        regularPrice: '175,00',
+        ctaText: 'Quero meu Guia + Bônus',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
       };
-      
+    
+    case 'guarantee':
+      return {
+        title: 'Garantia de Satisfação',
+        text: 'Se você não ficar completamente satisfeita com o seu Guia de Estilo Personalizado, basta solicitar o reembolso em até 7 dias após a compra.',
+        days: 7
+      };
+    
+    case 'callToAction':
+      return {
+        title: 'Transforme seu Estilo Agora!',
+        text: 'Não perca mais tempo com roupas que não combinam com você.',
+        ctaText: 'Quero Transformar Meu Estilo',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
+      };
+    
+    case 'authorInfo':
+      return {
+        title: 'Sobre a Autora',
+        name: 'Gisele Galvão',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg',
+        bio: 'Com mais de 10 anos de experiência em consultoria de imagem e estilo pessoal, ajudei centenas de mulheres a descobrirem sua verdadeira essência através das roupas.'
+      };
+    
     default:
       return {
-        title: 'Novo componente',
-        description: 'Descrição do componente',
-        style: {
-          padding: '20px'
-        }
+        title: 'Novo Bloco',
+        text: 'Conteúdo do bloco'
       };
   }
 };

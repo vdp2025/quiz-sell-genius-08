@@ -1,9 +1,22 @@
 
-import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle,
+  DialogFooter 
+} from '@/components/ui/dialog';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
 
 interface GlobalStylesEditorProps {
   globalStyles: {
@@ -12,7 +25,6 @@ interface GlobalStylesEditorProps {
     textColor?: string;
     backgroundColor?: string;
     fontFamily?: string;
-    [key: string]: any;
   };
   onSave: (styles: any) => void;
   onCancel: () => void;
@@ -23,67 +35,56 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   onSave,
   onCancel
 }) => {
-  const [styles, setStyles] = React.useState({
-    primaryColor: globalStyles.primaryColor || '#B89B7A',
-    secondaryColor: globalStyles.secondaryColor || '#432818',
-    textColor: globalStyles.textColor || '#1A1818',
+  const [styles, setStyles] = useState({
+    primaryColor: globalStyles.primaryColor || '#aa6b5d',
+    secondaryColor: globalStyles.secondaryColor || '#B89B7A',
+    textColor: globalStyles.textColor || '#3a3a3a',
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-    fontFamily: globalStyles.fontFamily || 'Inter, sans-serif'
+    fontFamily: globalStyles.fontFamily || 'system-ui'
   });
 
   const handleChange = (key: string, value: string) => {
-    setStyles({
-      ...styles,
+    setStyles((prev) => ({
+      ...prev,
       [key]: value
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(styles);
+    }));
   };
 
   return (
     <Dialog open={true} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Estilos Globais</DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4 py-4">
+        <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="primaryColor">Cor Primária</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="primaryColor"
-                  type="color"
-                  value={styles.primaryColor}
-                  onChange={(e) => handleChange('primaryColor', e.target.value)}
-                  className="w-12 h-12 p-1"
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-8 h-8 rounded-full border"
+                  style={{ backgroundColor: styles.primaryColor }}
                 />
                 <Input
+                  id="primaryColor"
                   value={styles.primaryColor}
                   onChange={(e) => handleChange('primaryColor', e.target.value)}
-                  className="flex-1"
                 />
               </div>
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="secondaryColor">Cor Secundária</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="secondaryColor"
-                  type="color"
-                  value={styles.secondaryColor}
-                  onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                  className="w-12 h-12 p-1"
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-8 h-8 rounded-full border"
+                  style={{ backgroundColor: styles.secondaryColor }}
                 />
                 <Input
+                  id="secondaryColor"
                   value={styles.secondaryColor}
                   onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                  className="flex-1"
                 />
               </div>
             </div>
@@ -92,36 +93,30 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="textColor">Cor do Texto</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="textColor"
-                  type="color"
-                  value={styles.textColor}
-                  onChange={(e) => handleChange('textColor', e.target.value)}
-                  className="w-12 h-12 p-1"
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-8 h-8 rounded-full border"
+                  style={{ backgroundColor: styles.textColor }}
                 />
                 <Input
+                  id="textColor"
                   value={styles.textColor}
                   onChange={(e) => handleChange('textColor', e.target.value)}
-                  className="flex-1"
                 />
               </div>
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="backgroundColor"
-                  type="color"
-                  value={styles.backgroundColor}
-                  onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                  className="w-12 h-12 p-1"
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-8 h-8 rounded-full border"
+                  style={{ backgroundColor: styles.backgroundColor }}
                 />
                 <Input
+                  id="backgroundColor"
                   value={styles.backgroundColor}
                   onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                  className="flex-1"
                 />
               </div>
             </div>
@@ -129,29 +124,63 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
           
           <div className="space-y-2">
             <Label htmlFor="fontFamily">Família de Fonte</Label>
-            <Input
-              id="fontFamily"
+            <Select
               value={styles.fontFamily}
-              onChange={(e) => handleChange('fontFamily', e.target.value)}
-              placeholder="Inter, sans-serif"
-            />
-            <p className="text-xs text-[#8F7A6A]">
-              Exemplo: "Inter, sans-serif", "Playfair Display, serif"
-            </p>
+              onValueChange={(value) => handleChange('fontFamily', value)}
+            >
+              <SelectTrigger id="fontFamily">
+                <SelectValue placeholder="Selecione uma fonte" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="system-ui">Fonte do Sistema</SelectItem>
+                <SelectItem value="sans-serif">Sans Serif</SelectItem>
+                <SelectItem value="serif">Serif</SelectItem>
+                <SelectItem value="monospace">Monospace</SelectItem>
+                <SelectItem value="'Playfair Display', serif">Playfair Display</SelectItem>
+                <SelectItem value="'Montserrat', sans-serif">Montserrat</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
-          <DialogFooter className="pt-4">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              Cancelar
-            </Button>
-            <Button type="submit" className="bg-[#B89B7A] hover:bg-[#8F7A6A]">
-              Salvar Estilos
-            </Button>
-          </DialogFooter>
-        </form>
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-medium mb-2">Pré-visualização</h3>
+            <div 
+              className="p-4 rounded-lg"
+              style={{ 
+                backgroundColor: styles.backgroundColor,
+                fontFamily: styles.fontFamily,
+                color: styles.textColor
+              }}
+            >
+              <h4 
+                style={{ color: styles.primaryColor }}
+                className="text-xl font-medium mb-2"
+              >
+                Título da Seção
+              </h4>
+              <p className="mb-2">
+                Este é um exemplo de texto com suas configurações de estilo global.
+              </p>
+              <button
+                style={{ 
+                  backgroundColor: styles.primaryColor,
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  border: 'none'
+                }}
+              >
+                Botão de Exemplo
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <DialogFooter>
+          <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+          <Button onClick={() => onSave(styles)}>Salvar Estilos</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
-
-export default GlobalStylesEditor;
