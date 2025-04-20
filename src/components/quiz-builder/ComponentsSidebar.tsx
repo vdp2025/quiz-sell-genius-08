@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -15,7 +14,7 @@ import {
   Grid3X3,
   CheckCircle,
   Radio,
-  SliderHorizontal,
+  SlidersHorizontal,
   MessageCircle,
   CalendarRange
 } from 'lucide-react';
@@ -48,7 +47,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponen
       components: [
         { type: 'multipleChoice', label: 'Múltipla Escolha', icon: <CheckCircle className="h-4 w-4" /> },
         { type: 'singleChoice', label: 'Escolha Única', icon: <Radio className="h-4 w-4" /> },
-        { type: 'scale', label: 'Escala', icon: <SliderHorizontal className="h-4 w-4" /> },
+        { type: 'scale', label: 'Escala', icon: <SlidersHorizontal className="h-4 w-4" /> },
         { type: 'openEnded', label: 'Resposta Aberta', icon: <MessageCircle className="h-4 w-4" /> },
         { type: 'date', label: 'Data', icon: <CalendarRange className="h-4 w-4" /> },
       ]
