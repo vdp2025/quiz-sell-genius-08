@@ -6,6 +6,8 @@ import { PropertiesPanel } from './PropertiesPanel';
 import { PreviewPanel } from './PreviewPanel';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -14,7 +16,8 @@ export const QuizBuilder: React.FC = () => {
     addComponent, 
     updateComponent, 
     deleteComponent,
-    moveComponent
+    moveComponent,
+    loading
   } = useQuizBuilder();
 
   const handleComponentSelect = (type: QuizComponentType) => {
@@ -26,12 +29,33 @@ export const QuizBuilder: React.FC = () => {
     ? components.find(c => c.id === selectedComponentId) 
     : null;
 
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7]">
+        <Loader2 className="h-12 w-12 text-[#B89B7A] animate-spin mb-4" />
+        <p className="text-[#432818] text-lg">Carregando construtor de quiz...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col">
       <div className="p-4 border-b bg-white flex justify-between items-center">
         <h1 className="text-2xl font-playfair text-[#432818]">
           Construtor de Quiz
         </h1>
+        <div className="flex gap-2">
+          <Button 
+            className="bg-[#B89B7A] hover:bg-[#A38A69]"
+            onClick={() => {
+              // Adicionar questão de múltipla escolha como default
+              const newComponentId = addComponent('multipleChoice');
+              setSelectedComponentId(newComponentId);
+            }}
+          >
+            Adicionar Pergunta
+          </Button>
+        </div>
       </div>
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">

@@ -1,9 +1,70 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
+import { toast } from '@/components/ui/use-toast';
+
+// Chave para armazenamento no localStorage
+const STORAGE_KEY = 'quiz_builder_components';
 
 export const useQuizBuilder = () => {
   const [components, setComponents] = useState<QuizComponentData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Carregar componentes do localStorage na inicialização
+  useEffect(() => {
+    const loadComponents = () => {
+      setLoading(true);
+      try {
+        const savedComponents = localStorage.getItem(STORAGE_KEY);
+        if (savedComponents) {
+          setComponents(JSON.parse(savedComponents));
+        } else {
+          // Se não houver componentes salvos, criar um componente de cabeçalho padrão
+          const defaultHeader: QuizComponentData = {
+            id: `component-${Date.now()}`,
+            type: 'header',
+            order: 0,
+            data: { 
+              title: 'Descubra Seu Estilo Pessoal', 
+              subtitle: 'Responda às perguntas e descubra qual estilo combina mais com você' 
+            },
+            style: {
+              paddingY: '32',
+              paddingX: '16',
+              backgroundColor: '',
+              textColor: '',
+              borderRadius: 0
+            }
+          };
+          setComponents([defaultHeader]);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar componentes do quiz:', error);
+        // Iniciar com array vazio em caso de erro
+        setComponents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadComponents();
+  }, []);
+
+  // Salvar componentes no localStorage sempre que houver mudanças
+  useEffect(() => {
+    if (!loading) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(components));
+      } catch (error) {
+        console.error('Erro ao salvar componentes do quiz:', error);
+        toast({
+          title: "Erro ao salvar",
+          description: "Não foi possível salvar as alterações do quiz.",
+          variant: "destructive",
+        });
+      }
+    }
+  }, [components, loading]);
 
   const getDefaultData = (type: QuizComponentType): any => {
     switch (type) {
@@ -16,11 +77,27 @@ export const useQuizBuilder = () => {
       case 'image':
         return { imageUrl: '', alt: 'Descrição da imagem' };
       case 'multipleChoice':
-        return { question: 'Sua pergunta aqui?', options: ['Opção 1', 'Opção 2', 'Opção 3'] };
+        return { 
+          question: 'Sua pergunta aqui?', 
+          options: ['Opção 1', 'Opção 2', 'Opção 3'],
+          required: true,
+          multiSelect: 1 
+        };
       case 'singleChoice':
-        return { question: 'Sua pergunta aqui?', options: ['Opção 1', 'Opção 2', 'Opção 3'] };
+        return { 
+          question: 'Sua pergunta aqui?', 
+          options: ['Opção 1', 'Opção 2', 'Opção 3'],
+          required: true
+        };
       case 'scale':
-        return { question: 'Em uma escala de 1 a 5, como você avalia...?', min: 1, max: 5, minLabel: 'Discordo Totalmente', maxLabel: 'Concordo Totalmente' };
+        return { 
+          question: 'Em uma escala de 1 a 5, como você avalia...?', 
+          min: 1, 
+          max: 5, 
+          minLabel: 'Discordo Totalmente', 
+          maxLabel: 'Concordo Totalmente',
+          required: true
+        };
       default:
         return {};
     }
@@ -90,6 +167,7 @@ export const useQuizBuilder = () => {
     addComponent,
     updateComponent,
     deleteComponent,
-    moveComponent
+    moveComponent,
+    loading
   };
 };
