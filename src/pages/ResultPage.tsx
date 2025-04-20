@@ -147,9 +147,7 @@ const ResultPage = () => {
           
           {/* Bonus Section */}
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
-            <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
-              🎁 E ainda recebe 2 bônus poderosos:
-            </h3>
+            <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">E ainda recebe 2 bônus poderosos:</h3>
             
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white p-4 rounded-lg shadow-sm">
