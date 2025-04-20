@@ -1,3 +1,4 @@
+import { Block } from './editor';
 
 export interface StyleOptions {
   fontSize?: string;
@@ -81,12 +82,26 @@ export interface OfferSection {
   guarantee: Section;
 }
 
+export interface MentorSection {
+  visible: boolean;
+  content: {
+    title?: string;
+    name?: string;
+    image?: string;
+    beforeAfterImage?: string;
+    stylesImage?: string;
+    bio?: string[];
+  };
+  style?: StyleOptions;
+}
+
 export interface ResultPageConfig {
   styleType: string;
   header: Section;
   mainContent: Section;
   secondaryStyles?: Section;
   offer: OfferSection;
+  mentor?: MentorSection;
   globalStyles?: {
     primaryColor?: string;
     secondaryColor?: string;
@@ -100,5 +115,3 @@ export interface ResultPageConfig {
 export interface ResultPageConfigsStore {
   configs: Record<string, ResultPageConfig>;
 }
-
-import { Block } from './editor';
