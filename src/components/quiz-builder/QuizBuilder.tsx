@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
@@ -11,6 +10,7 @@ import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
 import { Button } from '@/components/ui/button';
 import { Save } from '@/components/ui/icons';
+import { useQuizAutosave } from '@/hooks/useQuizAutosave';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -32,6 +32,11 @@ export const QuizBuilder: React.FC = () => {
     setStepsFromTemplate,
     saveCurrentState
   } = useQuizBuilder();
+
+  const { lastSaved, isSaving, saveToLocalStorage } = useQuizAutosave({
+    steps,
+    currentStepIndex
+  });
 
   useEffect(() => {
     const saveTimeout = setTimeout(() => {
@@ -66,6 +71,9 @@ export const QuizBuilder: React.FC = () => {
           Construtor de Quiz
         </h1>
         <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">
+            {lastSaved ? `Último salvamento: ${new Date(lastSaved).toLocaleTimeString()}` : 'Nunca salvo'}
+          </span>
           <Button 
             variant="outline" 
             onClick={() => setShowStepsVisualization(!showStepsVisualization)}
@@ -73,11 +81,12 @@ export const QuizBuilder: React.FC = () => {
             {showStepsVisualization ? 'Ocultar Visualização' : 'Mostrar Visualização'}
           </Button>
           <Button 
-            onClick={saveCurrentState}
+            onClick={saveToLocalStorage}
             className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            disabled={isSaving}
           >
             <Save className="w-4 h-4 mr-2" />
-            Salvar Alterações
+            {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </Button>
         </div>
       </div>
