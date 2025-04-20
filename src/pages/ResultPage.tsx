@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
@@ -9,18 +8,19 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-
 const ResultPage = () => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
-  const { globalStyles } = useGlobalStyles();
-
+  const {
+    primaryStyle,
+    secondaryStyles
+  } = useQuiz();
+  const {
+    globalStyles
+  } = useGlobalStyles();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   if (!primaryStyle) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+    return <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <h1 className="text-2xl font-playfair text-[#432818] mb-4">
             Resultados não encontrados
@@ -28,19 +28,15 @@ const ResultPage = () => {
           <p className="text-[#8F7A6A] mb-6">
             Parece que você ainda não completou o quiz.
           </p>
-          <a 
-            href="/" 
-            className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
-          >
+          <a href="/" className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors">
             Fazer o Quiz
           </a>
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Get style-specific cover image based on style type
-  const getStyleCoverImage = (styleType) => {
+  const getStyleCoverImage = styleType => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
       'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
@@ -51,25 +47,17 @@ const ResultPage = () => {
       'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
       'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
     };
-    
     return styleImages[styleType] || styleImages['Natural'];
   };
-
-  return (
-    <div className="min-h-screen bg-[#fffaf7]" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
+  return <div className="min-h-screen bg-[#fffaf7]" style={{
+    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+    color: globalStyles.textColor || '#432818',
+    fontFamily: globalStyles.fontFamily || 'inherit'
+  }}>
       {/* Editor Button - Made more visible and prominent */}
       <EditorButton />
       
-      <Header 
-        primaryStyle={primaryStyle}
-        logoHeight={globalStyles.logoHeight}
-        logo={globalStyles.logo}
-        logoAlt={globalStyles.logoAlt}
-      />
+      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
       
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Style Result Section */}
@@ -89,20 +77,12 @@ const ResultPage = () => {
               </div>
             </div>
             <div className="order-first md:order-last">
-              <img 
-                src={getStyleCoverImage(primaryStyle.category)} 
-                alt={`Estilo ${primaryStyle.category}`} 
-                className="w-full h-auto rounded-lg shadow-md"
-              />
+              <img src={getStyleCoverImage(primaryStyle.category)} alt={`Estilo ${primaryStyle.category}`} className="w-full h-auto rounded-lg shadow-md" />
             </div>
           </div>
           
           <div className="mt-8">
-            <img 
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp" 
-              alt="Guia de Estilo e Imagem" 
-              className="w-full h-auto rounded-lg"
-            />
+            <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp" alt="Guia de Estilo e Imagem" className="w-full h-auto rounded-lg" />
           </div>
         </Card>
 
@@ -112,7 +92,7 @@ const ResultPage = () => {
             Você já descobriu seu Estilo e isso é muito poderoso.
           </h2>
           <p className="text-lg text-[#432818]">
-            Conhecimento é clareza.<br/>
+            Conhecimento é clareza.<br />
             E clareza muda o jeito que você se vê, se escolhe, se posiciona.
           </p>
           
@@ -123,17 +103,17 @@ const ResultPage = () => {
                 É quando você aplica o que aprendeu… que o espelho começa a contar uma nova história.</em>
               </p>
               <p className="text-[#432818] mt-4 leading-relaxed">
-                <strong>Não é sobre mudar quem você é.<br/>
+                <strong>Não é sobre mudar quem você é.<br />
                 É sobre finalmente Vestir-se de Você.</strong>
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <p className="text-[#432818] leading-relaxed">
-                E pra isso, eu preparei o caminho completo.<br/>
+                E pra isso, eu preparei o caminho completo.<br />
                 Simples. Prático. Estratégico.
               </p>
               <p className="text-[#432818] mt-4 leading-relaxed">
-                <strong>Pra você transformar estilo em presença.<br/>
+                <strong>Pra você transformar estilo em presença.<br />
                 E imagem em poder.</strong>
               </p>
             </div>
@@ -143,11 +123,9 @@ const ResultPage = () => {
         {/* Main Offer Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-              📘 O Guia de Estilo e Imagem + Bônus Exclusivos
-            </h2>
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">O Guia de Estilo e Imagem + Bônus Exclusivos</h2>
             <p className="text-[#432818]">
-              Criado para mulheres que querem muito mais do que "saber seu estilo".<br/>
+              Criado para mulheres que querem muito mais do que "saber seu estilo".<br />
               Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade.
             </p>
           </div>
@@ -156,25 +134,14 @@ const ResultPage = () => {
             <div>
               <h3 className="text-xl font-medium text-[#432818] mb-4">Você vai aprender:</h3>
               <ul className="space-y-3">
-                {[
-                  'Como montar looks com intenção (e não no improviso)',
-                  'Como usar suas cores, modelagens e tecidos a seu favor',
-                  'Como alinhar sua imagem com seus valores e objetivos',
-                  'Como parar de comprar por impulso e montar um guarda-roupa funcional'
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start">
+                {['Como montar looks com intenção (e não no improviso)', 'Como usar suas cores, modelagens e tecidos a seu favor', 'Como alinhar sua imagem com seus valores e objetivos', 'Como parar de comprar por impulso e montar um guarda-roupa funcional'].map((item, index) => <li key={index} className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" />
                     <span>{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
             <div>
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp" 
-                alt="Guia de Estilo - 3 Revistas" 
-                className="w-full h-auto rounded-lg shadow-sm"
-              />
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp" alt="Guia de Estilo - 3 Revistas" className="w-full h-auto rounded-lg shadow-sm" />
             </div>
           </div>
           
@@ -192,11 +159,7 @@ const ResultPage = () => {
                 <p className="text-sm text-[#432818]/80 mb-4">
                   Itens essenciais que descomplicam a rotina e valorizam o seu estilo pessoal.
                 </p>
-                <img 
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" 
-                  alt="Peças-chave do Guarda-Roupa" 
-                  className="w-full h-auto rounded-lg"
-                />
+                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" alt="Peças-chave do Guarda-Roupa" className="w-full h-auto rounded-lg" />
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
@@ -205,21 +168,13 @@ const ResultPage = () => {
                 <p className="text-sm text-[#432818]/80 mb-4">
                   Para alinhar seu rosto, cabelo e maquiagem com a sua identidade visual.
                 </p>
-                <img 
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" 
-                  alt="Mini Guia de Visagismo Facial" 
-                  className="w-full h-auto rounded-lg"
-                />
+                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" alt="Mini Guia de Visagismo Facial" className="w-full h-auto rounded-lg" />
               </div>
             </div>
           </div>
           
           <div className="mb-8">
-            <img 
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" 
-              alt="Todos os produtos e bônus" 
-              className="w-full h-auto rounded-lg"
-            />
+            <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" alt="Todos os produtos e bônus" className="w-full h-auto rounded-lg" />
           </div>
           
           {/* Pricing and CTA Section */}
@@ -235,10 +190,7 @@ const ResultPage = () => {
               </div>
             </div>
             
-            <Button 
-              className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md"
-              onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
-            >
+            <Button className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md" onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}>
               <ShoppingCart className="w-5 h-5 mr-2" />
               Quero meu Guia + Bônus por R$39,00
             </Button>
@@ -256,24 +208,19 @@ const ResultPage = () => {
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
-                name: "Mariangela",
-                role: "Engenheira"
-              },
-              {
-                text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
-                name: "Patrícia Paranhos",
-                role: "Advogada"
-              },
-              {
-                text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
-                name: "Sônia Spier",
-                role: "Terapeuta"
-              }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
+            {[{
+            text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+            name: "Mariangela",
+            role: "Engenheira"
+          }, {
+            text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+            name: "Patrícia Paranhos",
+            role: "Advogada"
+          }, {
+            text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+            name: "Sônia Spier",
+            role: "Terapeuta"
+          }].map((testimonial, index) => <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
                 <p className="italic text-[#432818] mb-4">"{testimonial.text}"</p>
                 <div className="flex items-center gap-2">
                   <div className="h-1 w-8 bg-[#aa6b5d]"></div>
@@ -282,16 +229,11 @@ const ResultPage = () => {
                     <p className="text-sm text-[#432818]/70">{testimonial.role}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
           
           <div className="mt-8 text-center">
-            <img 
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp" 
-              alt="Depoimentos" 
-              className="w-full max-w-2xl mx-auto h-auto rounded-lg"
-            />
+            <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp" alt="Depoimentos" className="w-full max-w-2xl mx-auto h-auto rounded-lg" />
           </div>
         </Card>
         
@@ -315,23 +257,11 @@ const ResultPage = () => {
               <p className="text-[#432818]">
                 Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata.
               </p>
-              <img 
-                src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp" 
-                alt="Antes e Depois" 
-                className="w-full h-auto rounded-lg mt-6"
-              />
+              <img src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp" alt="Antes e Depois" className="w-full h-auto rounded-lg mt-6" />
             </div>
             <div className="space-y-6">
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp" 
-                alt="Gisele Galvão" 
-                className="w-full h-auto rounded-lg shadow-md"
-              />
-              <img 
-                src="https://res.cloudinary.com/dzt2fe3ij/image/upload/e_sharpen/v1745104620/Sem_nome_1000_x_1000_px_1280_x_720_px_itv2ri.webp" 
-                alt="8 Estilos Universais" 
-                className="w-full h-auto rounded-lg shadow-md"
-              />
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp" alt="Gisele Galvão" className="w-full h-auto rounded-lg shadow-md" />
+              <img src="https://res.cloudinary.com/dzt2fe3ij/image/upload/e_sharpen/v1745104620/Sem_nome_1000_x_1000_px_1280_x_720_px_itv2ri.webp" alt="8 Estilos Universais" className="w-full h-auto rounded-lg shadow-md" />
             </div>
           </div>
         </Card>
@@ -340,11 +270,7 @@ const ResultPage = () => {
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="md:w-1/4 flex justify-center">
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp" 
-                alt="Garantia de 7 dias" 
-                className="w-32 h-32 object-contain"
-              />
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp" alt="Garantia de 7 dias" className="w-32 h-32 object-contain" />
             </div>
             <div className="md:w-3/4">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-2">
@@ -385,17 +311,12 @@ const ResultPage = () => {
             </div>
           </div>
           
-          <Button 
-            className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md"
-            onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
-          >
+          <Button className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md" onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}>
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ResultPage;
