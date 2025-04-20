@@ -19,7 +19,7 @@ interface PreviewPanelProps {
   selectedComponentId: string | null;
   onSelectComponent: (id: string) => void;
   onMoveComponent: (draggedId: string, targetId: string) => void;
-  activeStage?: QuizStage | null;
+  activeStage: QuizStage | null;
   isPreviewing: boolean;
 }
 
