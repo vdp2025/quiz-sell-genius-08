@@ -21,9 +21,16 @@ export const ResultPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <h1 className="text-2xl font-playfair text-[#432818] mb-4">Resultados não encontrados</h1>
-          <p className="text-[#8F7A6A] mb-6">Parece que você ainda não completou o quiz.</p>
-          <a href="/" className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors">
+          <h1 className="text-2xl font-playfair text-[#432818] mb-4">
+            Resultados não encontrados
+          </h1>
+          <p className="text-[#8F7A6A] mb-6">
+            Parece que você ainda não completou o quiz.
+          </p>
+          <a
+            href="/"
+            className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
+          >
             Fazer o Quiz
           </a>
         </div>
@@ -62,7 +69,41 @@ export const ResultPage = () => {
         logoAlt={globalStyles.logoAlt}
       />
 
-      {/* TODO: Adicione aqui os demais Cards e seções conforme estrutura de venda e resultado */}
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
+                Seu Estilo é {primaryStyle.category}
+              </h2>
+              <p className="text-[#432818] leading-relaxed">
+                {styleConfig[primaryStyle.category].description}
+              </p>
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                <h3 className="text-lg font-medium text-[#432818] mb-2">
+                  Seus Estilos Complementares
+                </h3>
+                <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+              </div>
+            </div>
+            <div className="order-first md:order-last">
+              <img
+                src={getStyleCoverImage(primaryStyle.category)}
+                alt={`Estilo ${primaryStyle.category}`}
+                className="w-full h-auto rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <img
+              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
+              alt="Guia de Estilo e Imagem"
+              className="w-full h-auto rounded-lg"
+            />
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
