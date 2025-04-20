@@ -1,20 +1,12 @@
 
-import React, { useRef } from 'react';
+import React from 'react';
 
-interface QuizContainerProps {
-  children: React.ReactNode;
-}
-
-const QuizContainer: React.FC<QuizContainerProps> = ({ children }) => {
-  const quizContainerRef = useRef<HTMLDivElement>(null);
-
+export const QuizContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#FAF9F7] flex flex-col">
+      <div className="flex-1 max-w-5xl mx-auto w-full p-4 md:p-8">
         {children}
       </div>
     </div>
   );
 };
-
-export { QuizContainer };
