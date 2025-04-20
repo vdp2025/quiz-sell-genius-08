@@ -96,8 +96,8 @@ export const ResultPage = () => {
 
         <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-playfair text-[#aa6b5d]">Oferta Especial</h2>
-            <p className="text-[#432818]">Garanta seu Guia de Estilo + Bônus agora mesmo com preço promocional!</p>
+            <h2 className="text-2xl font-playfair text-[#aa6b5d]">Agora é hora da ação</h2>
+            <p className="text-[#432818]">Você deu o primeiro passo ao descobrir seu estilo. Mas é aplicando esse conhecimento que a transformação acontece.</p>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <img
@@ -107,7 +107,7 @@ export const ResultPage = () => {
             />
             <div className="flex-1 space-y-4">
               <ul className="space-y-2">
-                {["Looks com intenção e não improviso","Use cores e modelagens a seu favor","Alinhe sua imagem com seus objetivos","Monte um guarda-roupa funcional e estratégico"].map((item, index) => (
+                {["Looks com intenção, não improviso","Use cores/modelagens a seu favor","Alinhe imagem e objetivos","Evite compras por impulso com estratégia"].map((item, index) => (
                   <li key={index} className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-1 mr-2" />
                     <span className="text-[#432818]">{item}</span>
@@ -130,7 +130,7 @@ export const ResultPage = () => {
 
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            💬 Depoimentos de mulheres que já viveram essa transformação:
+            💬 O que quem já passou por aqui está dizendo:
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[{
@@ -149,7 +149,7 @@ export const ResultPage = () => {
               <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
                 <p className="italic text-[#432818] mb-4">"{testimonial.text}"</p>
                 <div className="flex items-center gap-2">
-                  <div className="h-1 w-8 bg-[#aa6b5d]"></div>
+                  <div className="h-1 w-8 bg-[#aa6b5d]" />
                   <div>
                     <p className="font-medium text-[#432818]">{testimonial.name}</p>
                     <p className="text-sm text-[#432818]/70">{testimonial.role}</p>
