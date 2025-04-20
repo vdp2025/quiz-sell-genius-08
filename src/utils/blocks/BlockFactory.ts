@@ -113,7 +113,18 @@ export class BlockFactory {
         order: 4,
         content: {
           title: "O que dizem as alunas",
-          testimonialsImage: config.images.depoimentos,
+          testimonials: [
+            {
+              text: "O guia mudou completamente minha relação com a moda. Agora sei exatamente o que combina comigo!",
+              author: "Maria Silva",
+              location: "São Paulo"
+            },
+            {
+              text: "Finalmente entendi meu estilo e parei de gastar dinheiro com roupas que não uso.",
+              author: "Ana Costa",
+              location: "Rio de Janeiro"
+            }
+          ],
           style: {
             backgroundColor: "#ffffff",
             padding: "2rem",

@@ -1,37 +1,23 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { 
-  Save,
-  Eye,
-  EyeOff,
-  LayoutTemplate,
-  Plus,
-  ChevronDown,
-  FileJson
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Eye, Save, Download, Upload, Code, RefreshCw } from 'lucide-react';
 import { BlockFactory } from '@/utils/blocks/BlockFactory';
+import { resultPageStorage } from '@/services/resultPageStorage';
 import { toast } from '@/components/ui/use-toast';
-import { JsonEditorPanel } from './JsonEditorPanel';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Block } from '@/types/editor';
+import JsonEditorPanel from './JsonEditorPanel';
 
 interface EditorToolbarProps {
   onSave: () => Promise<void>;
   isPreviewMode: boolean;
   onPreviewToggle: () => void;
-  onReset?: () => void;
-  onUpdateBlocks?: (blocks: Block[]) => void;
-  styleType?: string;
-  config?: ResultPageConfig;
-  onUpdateConfig?: (config: ResultPageConfig) => void;
+  onReset: () => void;
+  onUpdateBlocks: (blocks: Block[]) => void;
+  styleType: string;
+  config: ResultPageConfig;
+  onUpdateConfig: (config: any) => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -40,25 +26,56 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onPreviewToggle,
   onReset,
   onUpdateBlocks,
-  styleType = 'Natural',
+  styleType,
   config,
   onUpdateConfig
 }) => {
+  const [isJsonPanelOpen, setIsJsonPanelOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false);
+
+  const handleReset = async () => {
+    try {
+      await resultPageStorage.reset(styleType);
+      onReset();
+      toast({
+        title: "Configuração resetada",
+        description: "A página foi resetada para o padrão",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error resetting config:', error);
+      toast({
+        title: "Erro ao resetar",
+        description: "Não foi possível resetar a configuração",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleApplySalesTemplate = () => {
+    const salesBlocks = BlockFactory.createSalesPageBlocks(styleType);
+    onUpdateBlocks(salesBlocks);
+    toast({
+      title: "Template de vendas aplicado",
+      description: "O template de vendas foi aplicado com sucesso",
+      variant: "default"
+    });
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
       await onSave();
       toast({
-        title: "Salvo com sucesso",
-        description: "Suas alterações foram salvas.",
+        title: "Configuração salva",
+        description: "As alterações foram salvas com sucesso",
+        variant: "default"
       });
     } catch (error) {
+      console.error('Error saving:', error);
       toast({
         title: "Erro ao salvar",
-        description: "Não foi possível salvar suas alterações.",
+        description: "Não foi possível salvar as alterações",
         variant: "destructive"
       });
     } finally {
@@ -66,102 +83,70 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     }
   };
 
-  const handleCreateSalesPage = () => {
-    if (onUpdateBlocks) {
-      const salesBlocks = BlockFactory.createSalesPageBlocks(styleType);
-      onUpdateBlocks(salesBlocks);
-      toast({
-        title: "Modelo de página de vendas criado",
-        description: "O modelo de página de vendas foi criado com sucesso.",
-      });
-    }
-  };
-
   return (
-    <>
-      <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <Link to="/resultado">
-            <Button variant="outline" size="sm">
-              <LayoutTemplate className="w-4 h-4 mr-2" />
-              Voltar
-            </Button>
-          </Link>
-          <h1 className="text-2xl font-playfair text-[#432818]">
-            Editor da Página de Resultados
-          </h1>
-        </div>
-        
-        <div className="flex gap-2">
-          {onUpdateBlocks && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Modelos
-                  <ChevronDown className="w-4 h-4 ml-2" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleCreateSalesPage}>
-                  Criar Página de Vendas
-                </DropdownMenuItem>
-                {onReset && (
-                  <DropdownMenuItem onClick={onReset}>
-                    Reiniciar Página
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsJsonEditorOpen(true)}
-          >
-            <FileJson className="w-4 h-4 mr-2" />
-            Editor JSON
-          </Button>
-        
+    <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
+      <div className="flex items-center">
+        <h1 className="font-playfair text-xl text-[#432818] mr-6">Editor de Página de Resultados</h1>
+        <div className="flex space-x-2">
           <Button
             variant="outline"
             size="sm"
             onClick={onPreviewToggle}
           >
-            {isPreviewMode ? (
-              <>
-                <EyeOff className="w-4 h-4 mr-2" />
-                Modo Edição
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4 mr-2" />
-                Visualizar
-              </>
-            )}
+            <Eye className="w-4 h-4 mr-2" />
+            {isPreviewMode ? "Editar" : "Visualizar"}
           </Button>
           
-          <Button 
-            onClick={handleSave}
-            disabled={isSaving}
-            className="bg-[#B89B7A] hover:bg-[#A38A69]"
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleReset}
           >
-            <Save className="w-4 h-4 mr-2" />
-            {isSaving ? 'Salvando...' : 'Salvar'}
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Resetar
           </Button>
         </div>
       </div>
-
-      {config && onUpdateConfig && (
-        <JsonEditorPanel
-          isOpen={isJsonEditorOpen}
-          onClose={() => setIsJsonEditorOpen(false)}
-          config={config}
-          onUpdate={onUpdateConfig}
-        />
-      )}
-    </>
+      
+      <div className="flex space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleApplySalesTemplate}
+          className="border-green-500 text-green-500 hover:bg-green-50"
+        >
+          Aplicar Template de Vendas
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsJsonPanelOpen(true)}
+          className="border-blue-500 text-blue-500 hover:bg-blue-50"
+        >
+          <Code className="w-4 h-4 mr-2" />
+          Editor JSON
+        </Button>
+        
+        <Button
+          variant={isSaving ? "secondary" : "default"}
+          size="sm"
+          onClick={handleSave}
+          disabled={isSaving}
+          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+        >
+          <Save className="w-4 h-4 mr-2" />
+          {isSaving ? "Salvando..." : "Salvar"}
+        </Button>
+      </div>
+      
+      <JsonEditorPanel 
+        isOpen={isJsonPanelOpen}
+        onClose={() => setIsJsonPanelOpen(false)}
+        config={config}
+        onUpdate={onUpdateConfig}
+      />
+    </div>
   );
 };
 

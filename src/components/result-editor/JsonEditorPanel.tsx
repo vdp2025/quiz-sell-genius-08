@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Save, RefreshCw } from 'lucide-react';
+import { Save, RefreshCw, Play } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import JsonApplyInstructions from './JsonApplyInstructions';
 
 interface JsonEditorPanelProps {
   isOpen: boolean;
@@ -22,11 +23,14 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
 }) => {
   const [jsonText, setJsonText] = useState('');
   const [parseError, setParseError] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false);
 
   useEffect(() => {
     try {
       setJsonText(JSON.stringify(config, null, 2));
       setParseError(null);
+      setHasApplied(false);
     } catch (error) {
       console.error('Error stringifying JSON:', error);
       setParseError('Erro ao converter configuração para JSON');
@@ -38,15 +42,16 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
       const parsedConfig = JSON.parse(jsonText);
       onUpdate(parsedConfig);
       setParseError(null);
+      setHasApplied(true);
       toast({
-        title: "Configuração atualizada",
-        description: "As alterações foram aplicadas com sucesso"
+        title: "JSON aplicado com sucesso",
+        description: "As alterações foram aplicadas. Clique em 'Salvar' na barra de ferramentas para persistir as mudanças.",
+        duration: 5000
       });
-      onClose();
     } catch (error) {
       setParseError("JSON inválido. Verifique o formato.");
       toast({
-        title: "Erro ao salvar",
+        title: "Erro ao aplicar JSON",
         description: "JSON inválido. Verifique o formato e tente novamente.",
         variant: "destructive"
       });
@@ -57,8 +62,9 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
     try {
       setJsonText(JSON.stringify(config, null, 2));
       setParseError(null);
+      setHasApplied(false);
       toast({
-        title: "Configuração resetada",
+        title: "JSON resetado",
         description: "O editor foi resetado para a última configuração salva",
       });
     } catch (error) {
@@ -71,42 +77,71 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
       <SheetContent side="right" className="w-[600px] sm:w-[540px] overflow-hidden flex flex-col">
         <SheetHeader className="mb-4">
           <SheetTitle>Editor JSON</SheetTitle>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => setShowInstructions(true)}
+            className="absolute right-4 top-4"
+          >
+            Como aplicar?
+          </Button>
         </SheetHeader>
         
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex justify-end gap-2 mb-4">
-            <Button 
-              variant="outline"
-              size="sm"
-              onClick={handleReset}
-            >
-              <RefreshCw className="w-4 h-4 mr-1" />
-              Resetar
-            </Button>
-            <Button 
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              size="sm"
-              onClick={handleSave}
-            >
-              <Save className="w-4 h-4 mr-1" />
-              Aplicar
-            </Button>
-          </div>
-          
-          <Textarea
-            value={jsonText}
-            onChange={(e) => setJsonText(e.target.value)}
-            className="flex-1 font-mono text-sm resize-none p-4 h-full"
-            placeholder="JSON da configuração da página"
-          />
-          
-          {parseError && (
-            <div className="mt-2 p-2 bg-red-50 text-red-600 text-sm rounded border border-red-200">
-              {parseError}
+        {showInstructions ? (
+          <JsonApplyInstructions onClose={() => setShowInstructions(false)} />
+        ) : (
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex justify-end gap-2 mb-4">
+              <Button 
+                variant="outline"
+                size="sm"
+                onClick={handleReset}
+              >
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Resetar
+              </Button>
+              <Button 
+                className="bg-green-600 hover:bg-green-700"
+                size="sm"
+                onClick={handleSave}
+              >
+                <Play className="w-4 h-4 mr-1" />
+                Aplicar JSON
+              </Button>
             </div>
-          )}
-        </div>
+            
+            <Textarea
+              value={jsonText}
+              onChange={(e) => {
+                setJsonText(e.target.value);
+                setHasApplied(false);
+              }}
+              className="flex-1 font-mono text-sm resize-none p-4 h-full"
+              placeholder="JSON da configuração da página"
+            />
+            
+            {parseError && (
+              <div className="mt-2 p-2 bg-red-50 text-red-600 text-sm rounded border border-red-200">
+                {parseError}
+              </div>
+            )}
+            
+            {hasApplied && !parseError && (
+              <div className="mt-2 p-2 bg-green-50 text-green-600 text-sm rounded border border-green-200">
+                JSON aplicado com sucesso! Não esqueça de salvar as alterações clicando no botão "Salvar" na barra de ferramentas.
+              </div>
+            )}
+            
+            <div className="mt-4 p-3 bg-amber-50 rounded border border-amber-200">
+              <p className="text-sm text-amber-700">
+                <strong>Importante:</strong> Após aplicar o JSON, clique no botão "Salvar" na barra de ferramentas para persistir as mudanças.
+              </p>
+            </div>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );
 };
+
+export default JsonEditorPanel;
