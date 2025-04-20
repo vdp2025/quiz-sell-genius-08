@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { User } from '@/types/auth';
-import { Question, UserResponse } from '@/types/quiz';
+import { User } from '../../types/auth';
+import { Question, UserResponse } from '../../types/quiz';
 
 interface QuizContentProps {
   user: User | null;
