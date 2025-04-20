@@ -7,6 +7,7 @@ import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
+import { QuizNavigation } from './navigation/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
 
 const QuizPage: React.FC = () => {
@@ -135,18 +136,28 @@ const QuizPage: React.FC = () => {
       />
 
       {!showingTransition && !showingFinalTransition && (
-        <QuizContent
-          user={user}
-          currentQuestionIndex={currentQuestionIndex}
-          totalQuestions={totalQuestions}
-          showingStrategicQuestions={showingStrategicQuestions}
-          currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-          currentQuestion={currentQuestion}
-          currentAnswers={currentAnswers}
-          handleAnswerSubmit={handleAnswerSubmit}
-          handleNextClick={handleNextClick}
-          handlePrevious={handlePrevious}
-        />
+        <>
+          <QuizContent
+            user={user}
+            currentQuestionIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            showingStrategicQuestions={showingStrategicQuestions}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            currentQuestion={currentQuestion}
+            currentAnswers={currentAnswers}
+            handleAnswerSubmit={handleAnswerSubmit}
+            handleNextClick={handleNextClick}
+            handlePrevious={handlePrevious}
+          />
+          
+          <QuizNavigation
+            currentStep={currentQuestionIndex + 1}
+            totalSteps={totalQuestions}
+            onNext={handleNextClick}
+            onPrevious={handlePrevious}
+            showProgress={true}
+          />
+        </>
       )}
     </QuizContainer>
   );
