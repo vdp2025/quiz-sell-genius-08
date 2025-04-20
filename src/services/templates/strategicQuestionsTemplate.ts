@@ -48,12 +48,12 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
         stageTitle: `Pergunta ${index + 1}`,
         stageNumber: index + 2,
         layout: {
-          columns: 1 as 1 | 2 | 3 | 4,
+          columns: 1,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -78,12 +78,12 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + 2,
         layout: {
-          columns: 1 as 1 | 2 | 3 | 4,
+          columns: 1,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -108,12 +108,12 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 2,
         layout: {
-          columns: 1 as 1 | 2 | 3 | 4,
+          columns: 1,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -138,12 +138,12 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 2,
         layout: {
-          columns: 1 as 1 | 2 | 3 | 4,
+          columns: 1,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',

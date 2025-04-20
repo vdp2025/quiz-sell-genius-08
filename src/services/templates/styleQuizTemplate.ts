@@ -1,4 +1,3 @@
-
 import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 
@@ -6,15 +5,16 @@ export const styleQuizTemplate: QuizBuilderState = {
   components: [
     {
       id: generateId(),
-      type: 'stageCover' as const,
+      type: 'stageCover',
       order: 0,
       stageId: 'cover',
       data: {
-        title: 'Descubra seu Estilo Pessoal',
-        subtitle: 'Responda às perguntas a seguir para descobrir o seu estilo predominante',
+        title: 'Quiz de Estilo Pessoal',
+        subtitle: 'Descubra seu estilo predominante respondendo às perguntas a seguir',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
         stageTitle: 'Início',
         stageNumber: 1,
-        buttonText: 'Começar o Quiz',
+        buttonText: 'Iniciar Quiz',
         backgroundColor: '#FFFAF0',
         textColor: '#432818'
       },
@@ -26,15 +26,14 @@ export const styleQuizTemplate: QuizBuilderState = {
         borderRadius: '8px'
       }
     },
-    // Question 1 - Text only
     {
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: 1,
       stageId: 'q1',
       data: {
         title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
-        question: 'Selecione 3 opções',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
         options: [
           'Looks confortáveis, soltos ao corpo, práticos para usar e para cuidar.',
           'Roupas discretas, com caimento clássico e que passam despercebidas.',
@@ -44,6 +43,16 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Roupas que marquem meu corpo, decotes, fendas.',
           'Peças estruturadas, assimétricas, modernas.',
           'Formas e peças marcantes, em um mix no look.'
+        ],
+        optionImages: [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp'
         ],
         optionStyleCategories: [
           'Natural',
@@ -56,12 +65,13 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Criativo'
         ],
         multiSelect: 3,
-        displayType: 'text' as 'text' | 'image' | 'both',
+        displayType: 'both',
+        imageSize: 'medium',
         required: true,
         stageTitle: 'Pergunta 1',
         stageNumber: 2,
         layout: {
-          columns: 1,
+          columns: 2,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -76,15 +86,14 @@ export const styleQuizTemplate: QuizBuilderState = {
         borderRadius: '8px'
       }
     },
-    // Question 2 - Text only
     {
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: 2,
       stageId: 'q2',
       data: {
         title: 'RESUMA A SUA PERSONALIDADE:',
-        question: 'Selecione 3 opções',
+        question: 'Selecione 3 opções que mais combinam com sua personalidade',
         options: [
           'Informal, espontânea, alegre, essencialista.',
           'Conservadora, séria, organizada.',
@@ -106,7 +115,7 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Criativo'
         ],
         multiSelect: 3,
-        displayType: 'text' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
         stageTitle: 'Pergunta 2',
         stageNumber: 3,
@@ -126,34 +135,23 @@ export const styleQuizTemplate: QuizBuilderState = {
         borderRadius: '8px'
       }
     },
-    // Question 3 - Image and Text
     {
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: 3,
       stageId: 'q3',
       data: {
-        title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
-        question: 'Selecione 3 opções',
+        title: 'QUAIS DETALHES VOCÊ GOSTA?',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
         options: [
-          'Visual leve, despojado e natural.',
-          'Visual clássico e tradicional.',
-          'Visual casual com toque atual.',
-          'Visual refinado e imponente.',
-          'Visual romântico, feminino e delicado.',
-          'Visual sensual, com saia justa e decote.',
-          'Visual marcante e urbano (jeans + jaqueta).',
-          'Visual criativo, colorido e ousado.'
-        ],
-        optionImages: [
-          '/lovable-uploads/24f7dc2c-ab37-41ba-a154-786b0626ae04.png',
-          '/lovable-uploads/0fb54364-9c71-4373-b6e7-500e6f9a2732.png',
-          '/lovable-uploads/22d18ed7-b1fc-4fb4-9538-f0ab93fe5c75.png',
-          '/lovable-uploads/e779494d-0c8d-408d-b034-1964a3b76469.png',
-          '/lovable-uploads/94638e1c-0180-4cfd-80be-26db97a1e58f.png',
-          '/lovable-uploads/919b184d-940d-4a4f-b53c-36792cbd6114.png',
-          '/lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png',
-          '/lovable-uploads/d633e490-d0f2-4429-998e-bceeeda790f8.png'
+          'Poucos detalhes, básico e prático.',
+          'Bem discretos e sutis, clean e clássico.',
+          'Básico, mas com um toque de estilo.',
+          'Detalhes refinados, chic e que deem status.',
+          'Detalhes delicados, laços, babados.',
+          'Roupas que valorizem meu corpo: couro, zíper, fendas.',
+          'Detalhes marcantes, firmeza e peso.',
+          'Detalhes diferentes do convencional, produções ousadas.'
         ],
         optionStyleCategories: [
           'Natural',
@@ -166,18 +164,10 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Criativo'
         ],
         multiSelect: 3,
-        displayType: 'both' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
         stageTitle: 'Pergunta 3',
-        stageNumber: 4,
-        layout: {
-          columns: 2,
-          direction: 'vertical'
-        },
-        backgroundColorQuestion: '#FFFAF0',
-        textColorQuestion: '#432818',
-        selectionIndicator: 'border',
-        imageSize: 'medium' as 'small' | 'medium' | 'large'
+        stageNumber: 4
       },
       style: {
         backgroundColor: '#FFFAF0',
@@ -187,35 +177,23 @@ export const styleQuizTemplate: QuizBuilderState = {
         borderRadius: '8px'
       }
     },
-    // Add more questions following the same pattern...
-    // Question 6 - Image and Text (Casacos)
     {
       id: generateId(),
-      type: 'stageQuestion' as const,
-      order: 6,
-      stageId: 'q6',
+      type: 'stageQuestion',
+      order: 4,
+      stageId: 'q4',
       data: {
-        title: 'QUAL CASACO É SEU FAVORITO?',
-        question: 'Selecione 3 opções',
+        title: 'QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
         options: [
-          'Cardigã bege confortável e casual.',
-          'Blazer verde estruturado.',
-          'Trench coat bege tradicional.',
-          'Blazer branco refinado.',
-          'Casaco pink vibrante e moderno.',
-          'Jaqueta vinho de couro estilosa.',
-          'Jaqueta preta estilo rocker.',
-          'Casaco estampado criativo e colorido.'
-        ],
-        optionImages: [
-          '/lovable-uploads/1ac66423-7712-4c33-9c28-13e8b6fe3170.png',
-          '/lovable-uploads/169fe8d0-8afd-4447-a9cc-79d917967e64.png',
-          '/lovable-uploads/0530ff81-b41d-45eb-8b47-ef88f75f7d93.png',
-          '/lovable-uploads/d9da05d3-6fdd-46d0-afea-42417af058c5.png',
-          '/lovable-uploads/5b819e5d-ca43-465a-906e-353764bdb2ec.png',
-          '/lovable-uploads/54671bc8-ed46-4e5d-a347-5c8e8fe45f8b.png',
-          '/lovable-uploads/e30cb887-b027-40ab-b112-fe8c2244d789.png',
-          '/lovable-uploads/fc8f4066-6f40-4ff8-bc55-460da133b6c2.png'
+          'Estampas clean, com poucas informações.',
+          'Estampas clássicas e atemporais.',
+          'Atemporais, mas que tenham uma pegada de atual e moderna.',
+          'Estampas clássicas e atemporais, mas sofisticadas.',
+          'Estampas florais e/ou delicadas como bolinhas, borboletas e corações.',
+          'Estampas de animal print, como onça, zebra e cobra.',
+          'Estampas geométricas, abstratas e exageradas como grandes poás.',
+          'Estampas diferentes do usual, como africanas, xadrez grandes.'
         ],
         optionStyleCategories: [
           'Natural',
@@ -228,18 +206,10 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Criativo'
         ],
         multiSelect: 3,
-        displayType: 'both' as 'text' | 'image' | 'both',
+        displayType: 'text',
         required: true,
-        stageTitle: 'Pergunta 6',
-        stageNumber: 7,
-        layout: {
-          columns: 2,
-          direction: 'vertical'
-        },
-        backgroundColorQuestion: '#FFFAF0',
-        textColorQuestion: '#432818',
-        selectionIndicator: 'border',
-        imageSize: 'medium' as 'small' | 'medium' | 'large'
+        stageTitle: 'Pergunta 4',
+        stageNumber: 5
       },
       style: {
         backgroundColor: '#FFFAF0',
@@ -249,23 +219,67 @@ export const styleQuizTemplate: QuizBuilderState = {
         borderRadius: '8px'
       }
     },
-    // Result page component
     {
       id: generateId(),
-      type: 'stageResult' as const,
-      order: 10,
+      type: 'stageQuestion',
+      order: 5,
+      stageId: 'q5',
+      data: {
+        title: 'VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
+        options: [
+          'São fáceis de cuidar.',
+          'São de excelente qualidade.',
+          'São fáceis de cuidar e modernos.',
+          'São sofisticados.',
+          'São delicados.',
+          'São perfeitos ao meu corpo.',
+          'São diferentes, e trazem um efeito para minha roupa.',
+          'São exclusivos, criam identidade no look.'
+        ],
+        optionStyleCategories: [
+          'Natural',
+          'Clássico',
+          'Contemporâneo',
+          'Elegante',
+          'Romântico',
+          'Sexy',
+          'Dramático',
+          'Criativo'
+        ],
+        multiSelect: 3,
+        displayType: 'text',
+        required: true,
+        stageTitle: 'Pergunta 5',
+        stageNumber: 6
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem',
+        borderRadius: '8px'
+      }
+    },
+    {
+      id: generateId(),
+      type: 'stageResult',
+      order: 6,
       stageId: 'result',
       data: {
-        title: 'Seu Estilo Predominante',
-        subtitle: 'Confira o resultado com base nas suas respostas',
+        title: 'Seu Resultado de Estilo Pessoal',
+        subtitle: 'Baseado nas suas escolhas, calculamos seu estilo predominante',
         stageTitle: 'Resultado',
-        stageNumber: 11,
-        primaryStyleTitle: 'Seu estilo predominante é',
-        secondaryStylesTitle: 'Seus estilos secundários são',
+        stageNumber: 7,
+        resultLayout: 'modern',
+        primaryStyleTitle: 'Olá, seu Estilo Predominante é:',
+        secondaryStylesTitle: 'Seus Estilos Complementares:',
         showPercentages: true,
         showDescriptions: true,
-        callToActionText: 'Ver meu resultado completo',
-        callToActionUrl: '/resultado-detalhado',
+        callToActionText: 'Conhecer o Guia Completo',
+        callToActionUrl: '#',
+        offerImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+        authorImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp',
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         accentColor: '#B89B7A'
@@ -305,15 +319,21 @@ export const styleQuizTemplate: QuizBuilderState = {
       type: 'question'
     },
     {
-      id: 'q6',
-      title: 'Pergunta 6',
-      order: 6,
+      id: 'q4',
+      title: 'Pergunta 4',
+      order: 4,
+      type: 'question'
+    },
+    {
+      id: 'q5',
+      title: 'Pergunta 5',
+      order: 5,
       type: 'question'
     },
     {
       id: 'result',
       title: 'Resultado',
-      order: 10,
+      order: 6,
       type: 'result'
     }
   ]
