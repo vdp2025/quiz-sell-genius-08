@@ -96,8 +96,8 @@ export const ResultPage = () => {
 
         <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-playfair text-[#aa6b5d]">Agora é hora da ação</h2>
-            <p className="text-[#432818]">Você deu o primeiro passo ao descobrir seu estilo. Mas é aplicando esse conhecimento que a transformação acontece.</p>
+            <h2 className="text-2xl font-playfair text-[#aa6b5d]">Transforme seu estilo em uma imagem com presença</h2>
+            <p className="text-[#432818]">Conhecimento gera clareza, mas é a ação que gera transformação.</p>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <img
@@ -107,7 +107,7 @@ export const ResultPage = () => {
             />
             <div className="flex-1 space-y-4">
               <ul className="space-y-2">
-                {["Looks com intenção, não improviso","Use cores/modelagens a seu favor","Alinhe imagem e objetivos","Evite compras por impulso com estratégia"].map((item, index) => (
+                {["Montar looks com intenção (sem improviso)", "Usar cores e cortes a seu favor", "Alinhar imagem e metas", "Evitar compras por impulso com estratégia"].map((item, index) => (
                   <li key={index} className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-1 mr-2" />
                     <span className="text-[#432818]">{item}</span>
@@ -130,19 +130,19 @@ export const ResultPage = () => {
 
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            💬 O que quem já passou por aqui está dizendo:
+            💬 O que mulheres reais dizem sobre essa transformação:
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[{
-              text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+              text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito.",
               name: "Mariangela",
               role: "Engenheira"
             }, {
-              text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+              text: "Aprendi a valorizar minha imagem e a me sentir segura com o que visto.",
               name: "Patrícia Paranhos",
               role: "Advogada"
             }, {
-              text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+              text: "A Gisele me ajudou a comunicar quem eu sou de verdade através do meu estilo.",
               name: "Sônia Spier",
               role: "Terapeuta"
             }].map((testimonial, index) => (
