@@ -5,7 +5,8 @@ import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption } from './quiz/QuizOption';
 import { highlightStrategicWords } from '@/utils/textHighlight';
-
+import { Button } from './ui/button';
+import { ArrowRight } from 'lucide-react';
 interface QuizQuestionProps {
   question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
@@ -14,7 +15,6 @@ interface QuizQuestionProps {
   hideTitle?: boolean;
   onNextClick?: () => void;
 }
-
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
@@ -26,7 +26,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
   const hasImageOptions = question.type !== 'text';
-
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     if (currentAnswers.includes(optionId)) {
@@ -40,23 +39,18 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         newSelectedOptions = [...currentAnswers, optionId];
       }
     }
-
     onAnswer({
       questionId: question.id,
       selectedOptions: newSelectedOptions
     });
 
-    if (
-      ((newSelectedOptions.length === question.multiSelect) || 
-      (autoAdvance && newSelectedOptions.length > 0)) && 
-      onNextClick
-    ) {
+    // If autoAdvance is true and we have selected an option, and onNextClick is provided, call it
+    if (autoAdvance && newSelectedOptions.length > 0 && onNextClick) {
       setTimeout(() => {
         onNextClick();
-      }, 500);
+      }, 300);
     }
   };
-
   const getGridColumns = () => {
     if (question.type === 'text') {
       if (isStrategicQuestion) {
@@ -66,20 +60,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     }
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
   };
-
   const handleNextButtonClick = () => {
     if (onNextClick && currentAnswers.length === question.multiSelect) {
       onNextClick();
     }
   };
-
-  return (
-    <AnimatedWrapper>
-      <div className={cn(
-        "w-full max-w-6xl mx-auto pb-5 relative transition-all duration-300 ease-out",
-        isMobile && "px-2",
-        isStrategicQuestion && "max-w-3xl"
-      )}>
+  return <AnimatedWrapper>
+      <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", isMobile && "px-2", isStrategicQuestion && "max-w-3xl")} id={`question-${question.id}`}>
         {!hideTitle && <>
             <h2 className={cn("text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal", isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line")}>
               {highlightStrategicWords(question.title)}
@@ -103,8 +90,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           </div>
         </div>
       </div>
-    </AnimatedWrapper>
-  );
+    </AnimatedWrapper>;
 };
-
 export { QuizQuestion };

@@ -8,7 +8,6 @@ import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import { QuizNavigation } from './navigation/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
-import { AnimatedWrapper } from './AnimatedWrapper';
 
 const QuizPage: React.FC = () => {
   const { user } = useAuth();
@@ -127,37 +126,37 @@ const QuizPage: React.FC = () => {
 
   return (
     <QuizContainer>
-      <AnimatedWrapper show={!showingTransition && !showingFinalTransition}>
-        <QuizContent
-          user={user}
-          currentQuestionIndex={currentQuestionIndex}
-          totalQuestions={totalQuestions}
-          showingStrategicQuestions={showingStrategicQuestions}
-          currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-          currentQuestion={currentQuestion}
-          currentAnswers={currentAnswers}
-          handleAnswerSubmit={handleAnswerSubmit}
-          handleNextClick={handleNextClick}
-          handlePrevious={handlePrevious}
-        />
-        
-        <QuizNavigation
-          currentStep={currentQuestionIndex + 1}
-          totalSteps={totalQuestions}
-          onNext={handleNextClick}
-          onPrevious={handlePrevious}
-        />
-      </AnimatedWrapper>
+      <QuizTransitionManager
+        showingTransition={showingTransition}
+        showingFinalTransition={showingFinalTransition}
+        handleStrategicAnswer={handleStrategicAnswer}
+        strategicAnswers={strategicAnswers}
+        handleShowResult={handleShowResult}
+      />
 
-      <AnimatedWrapper show={showingTransition || showingFinalTransition}>
-        <QuizTransitionManager
-          showingTransition={showingTransition}
-          showingFinalTransition={showingFinalTransition}
-          handleStrategicAnswer={handleStrategicAnswer}
-          strategicAnswers={strategicAnswers}
-          handleShowResult={handleShowResult}
-        />
-      </AnimatedWrapper>
+      {!showingTransition && !showingFinalTransition && (
+        <>
+          <QuizContent
+            user={user}
+            currentQuestionIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            showingStrategicQuestions={showingStrategicQuestions}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            currentQuestion={currentQuestion}
+            currentAnswers={currentAnswers}
+            handleAnswerSubmit={handleAnswerSubmit}
+            handleNextClick={handleNextClick}
+            handlePrevious={handlePrevious}
+          />
+          
+          <QuizNavigation
+            currentStep={currentQuestionIndex + 1}
+            totalSteps={totalQuestions}
+            onNext={handleNextClick}
+            onPrevious={handlePrevious}
+          />
+        </>
+      )}
     </QuizContainer>
   );
 };

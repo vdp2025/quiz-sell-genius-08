@@ -1,70 +1,30 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { PreviewPanel } from './PreviewPanel';
-import { StepsSidebar } from './StepsSidebar';
-import { StepsVisualization } from './StepsVisualization';
-import { LoadExistingQuiz } from './LoadExistingQuiz';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
-import { Button } from '@/components/ui/button';
-import { Save } from 'lucide-react';
-import { useQuizAutosave } from '@/hooks/useQuizAutosave';
-import { toast } from '@/components/ui/use-toast';
+import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  const [isLoadingExisting, setIsLoadingExisting] = useState(true);
-  const [showStepsVisualization, setShowStepsVisualization] = useState(true);
-  
   const { 
-    steps, 
-    currentStepIndex,
-    setCurrentStepIndex,
-    components,
+    components, 
     addComponent, 
     updateComponent, 
     deleteComponent,
-    moveComponent,
-    addStep,
-    updateStepTitle,
-    deleteStep,
-    duplicateStep,
-    setStepsFromTemplate
+    moveComponent
   } = useQuizBuilder();
-
-  const { lastSaved, isSaving, saveToLocalStorage } = useQuizAutosave({
-    steps,
-    currentStepIndex
-  });
 
   const handleComponentSelect = (type: QuizComponentType) => {
     const newComponentId = addComponent(type);
     setSelectedComponentId(newComponentId);
   };
 
-  const handleLoadExistingQuiz = (loadedSteps: QuizStep[]) => {
-    setStepsFromTemplate(loadedSteps);
-    setIsLoadingExisting(false);
-  };
-
-  const handleManualSave = () => {
-    saveToLocalStorage();
-    toast({
-      title: "Salvamento manual",
-      description: "Seu quiz foi salvo manualmente"
-    });
-  };
-
   const selectedComponent = selectedComponentId 
     ? components.find(c => c.id === selectedComponentId) 
     : null;
-
-  if (isLoadingExisting) {
-    return <LoadExistingQuiz onLoadQuiz={handleLoadExistingQuiz} />;
-  }
 
   return (
     <div className="h-screen flex flex-col">
@@ -72,67 +32,23 @@ export const QuizBuilder: React.FC = () => {
         <h1 className="text-2xl font-playfair text-[#432818]">
           Construtor de Quiz
         </h1>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">
-            {lastSaved ? `Último salvamento: ${new Date(lastSaved).toLocaleTimeString()}` : 'Nunca salvo'}
-          </span>
-          <Button 
-            variant="outline" 
-            onClick={() => setShowStepsVisualization(!showStepsVisualization)}
-          >
-            {showStepsVisualization ? 'Ocultar Visualização' : 'Mostrar Visualização'}
-          </Button>
-          <Button 
-            onClick={handleManualSave}
-            className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-            disabled={isSaving}
-          >
-            <Save className="w-4 h-4 mr-2" />
-            {isSaving ? 'Salvando...' : 'Salvar Alterações'}
-          </Button>
-        </div>
       </div>
       
-      {showStepsVisualization && (
-        <div className="bg-white border-b p-4">
-          <StepsVisualization 
-            steps={steps}
-            currentStepIndex={currentStepIndex}
-            onSelectStep={setCurrentStepIndex}
-          />
-        </div>
-      )}
-      
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Steps Sidebar */}
-        <ResizablePanel defaultSize={15} minSize={15} maxSize={20}>
-          <StepsSidebar 
-            steps={steps}
-            currentStepIndex={currentStepIndex}
-            onSelectStep={setCurrentStepIndex}
-            onAddStep={addStep}
-            onEditStepTitle={updateStepTitle}
-            onDeleteStep={deleteStep}
-          />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        {/* Components Sidebar */}
-        <ResizablePanel defaultSize={15} minSize={15} maxSize={20}>
+        {/* Left Panel - Components Sidebar */}
+        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar onComponentSelect={handleComponentSelect} />
         </ResizablePanel>
         
         <ResizableHandle withHandle />
         
         {/* Center Panel - Preview */}
-        <ResizablePanel defaultSize={40}>
+        <ResizablePanel defaultSize={50}>
           <PreviewPanel 
             components={components}
             selectedComponentId={selectedComponentId}
             onSelectComponent={setSelectedComponentId}
             onMoveComponent={moveComponent}
-            currentStep={steps[currentStepIndex]}
           />
         </ResizablePanel>
         
@@ -143,7 +59,7 @@ export const QuizBuilder: React.FC = () => {
           <PropertiesPanel 
             component={selectedComponent}
             onClose={() => setSelectedComponentId(null)}
-            onUpdate={(data: any) => {
+            onUpdate={(data: Partial<QuizComponentData>) => {
               if (selectedComponentId) {
                 updateComponent(selectedComponentId, data);
               }

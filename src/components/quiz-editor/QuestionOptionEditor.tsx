@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { QuizOption } from '@/types/quiz';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,8 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
-import ImageUploader from './ImageUploader';
+import { GripVertical, Image, Trash2 } from 'lucide-react';
 
 interface QuestionOptionEditorProps {
   option: QuizOption;
@@ -41,15 +40,15 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
   onDelete,
   index
 }) => {
+  const letterOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  const letter = index < letterOptions.length ? letterOptions[index] : `#${index + 1}`;
+  
   const handleChange = (field: keyof QuizOption, value: any) => {
     onUpdate({
       ...option,
       [field]: value
     });
   };
-
-  const letterOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  const letter = index < letterOptions.length ? letterOptions[index] : `#${index + 1}`;
 
   return (
     <Card className="shadow-sm border-[#B89B7A]/20">
@@ -93,13 +92,30 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
             
             {(questionType === 'image' || questionType === 'both') && (
               <div>
-                <Label>Imagem da opção</Label>
-                <ImageUploader
-                  imageUrl={option.imageUrl}
-                  onImageUpload={(url) => handleChange('imageUrl', url)}
-                  onImageRemove={() => handleChange('imageUrl', undefined)}
-                  styleCategory={option.styleCategory}
-                />
+                <Label htmlFor={`option-image-${option.id}`}>URL da imagem</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id={`option-image-${option.id}`}
+                    value={option.imageUrl || ''}
+                    onChange={(e) => handleChange('imageUrl', e.target.value)}
+                    placeholder="https://exemplo.com/imagem.jpg"
+                  />
+                  <Button type="button" variant="outline" size="icon" className="flex-shrink-0">
+                    <Image className="h-4 w-4" />
+                  </Button>
+                </div>
+                {option.imageUrl && (
+                  <div className="mt-2 max-w-[100px] max-h-[100px] overflow-hidden rounded border">
+                    <img 
+                      src={option.imageUrl} 
+                      alt={option.text} 
+                      className="w-full h-auto object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Erro';
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             )}
             
@@ -114,11 +130,12 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {[0, 1, 2, 3, 4, 5].map((value) => (
-                      <SelectItem key={value} value={String(value)}>
-                        {value}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="0">0</SelectItem>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="4">4</SelectItem>
+                    <SelectItem value="5">5</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -8,15 +8,7 @@ export interface QuizTemplate {
   questions: QuizQuestion[];
   createdAt: string;
   updatedAt: string;
-  settings?: {
-    allowBack?: boolean;
-    shuffleQuestions?: boolean;
-    theme?: {
-      primaryColor?: string;
-      secondaryColor?: string;
-      fontFamily?: string;
-    }
-  };
+  isDefault?: boolean;
 }
 
 export interface QuizTemplatePreview {
