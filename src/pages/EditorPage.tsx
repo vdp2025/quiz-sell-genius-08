@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
+import { defaultResultTemplate } from '@/config/resultPageTemplates';
 
 export const EditorPage = () => {
   const [showTemplates, setShowTemplates] = useState(false);
@@ -15,6 +16,11 @@ export const EditorPage = () => {
     category: styleCategory,
     score: 100,
     percentage: 100
+  };
+  
+  const initialConfig = {
+    ...defaultResultTemplate,
+    styleType: styleCategory
   };
   
   return (
@@ -34,6 +40,7 @@ export const EditorPage = () => {
         <ResultPageVisualEditor 
           selectedStyle={selectedStyle} 
           onShowTemplates={() => setShowTemplates(true)}
+          initialConfig={initialConfig}
         />
       )}
     </div>
