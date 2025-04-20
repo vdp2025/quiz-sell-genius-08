@@ -1,24 +1,16 @@
 
 import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
-import { 
-  selfPerceptionQuestions, 
-} from '@/data/questions/selfPerceptionQuestions';
-import { 
-  styleExperienceQuestions 
-} from '@/data/questions/styleExperienceQuestions';
-import { 
-  purchaseIntentQuestions 
-} from '@/data/questions/purchaseIntentQuestions';
-import { 
-  desiredOutcomesQuestions 
-} from '@/data/questions/desiredOutcomesQuestions';
+import { selfPerceptionQuestions } from '@/data/questions/selfPerceptionQuestions';
+import { styleExperienceQuestions } from '@/data/questions/styleExperienceQuestions';
+import { purchaseIntentQuestions } from '@/data/questions/purchaseIntentQuestions';
+import { desiredOutcomesQuestions } from '@/data/questions/desiredOutcomesQuestions';
 
 export const strategicQuestionsTemplate: QuizBuilderState = {
   components: [
     {
       id: generateId(),
-      type: 'stageCover' as const,
+      type: 'stageCover',
       order: 0,
       stageId: 'cover',
       data: {
@@ -48,13 +40,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text',
+        displayType: 'text' as const,
         required: true,
         stageTitle: `Pergunta ${index + 1}`,
         stageNumber: index + 2,
         layout: {
           columns: 1,
-          direction: 'vertical'
+          direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
@@ -78,13 +70,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text',
+        displayType: 'text' as const,
         required: true,
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + 2,
         layout: {
           columns: 1,
-          direction: 'vertical'
+          direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
@@ -108,13 +100,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text',
+        displayType: 'text' as const,
         required: true,
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 2,
         layout: {
           columns: 1,
-          direction: 'vertical'
+          direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
@@ -138,13 +130,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         question: 'Selecione a opção que mais se aproxima da sua realidade',
         options: question.options.map(opt => opt.text),
         multiSelect: question.multiSelect,
-        displayType: 'text',
+        displayType: 'text' as const,
         required: true,
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 2,
         layout: {
           columns: 1,
-          direction: 'vertical'
+          direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
@@ -170,7 +162,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
       id: `q${index + 1}`,
       title: `Pergunta ${index + 1}`,
       order: index + 1,
-      type: 'question' as 'cover' | 'question' | 'result' | 'strategic'
+      type: 'question' as const
     }))
   ]
 };
