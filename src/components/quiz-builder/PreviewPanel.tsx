@@ -20,6 +20,7 @@ interface PreviewPanelProps {
   onSelectComponent: (id: string) => void;
   onMoveComponent: (draggedId: string, targetId: string) => void;
   activeStage?: QuizStage | null;
+  isPreviewing?: boolean;
 }
 
 const SortableComponent = ({ component, isSelected, onSelect, children }) => {
@@ -59,7 +60,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   selectedComponentId,
   onSelectComponent,
   onMoveComponent,
-  activeStage
+  activeStage,
+  isPreviewing = false
 }) => {
   const sensors = useSensors(
     useSensor(PointerSensor),

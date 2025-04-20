@@ -7,14 +7,16 @@ interface TextComponentProps {
   data: QuizComponentData['data'];
   style: QuizComponentData['style'];
   isSelected: boolean;
+  isHeadline?: boolean;
 }
 
 const TextComponent: React.FC<TextComponentProps> = ({ 
   data, 
   style, 
-  isSelected 
+  isSelected,
+  isHeadline = false
 }) => {
-  const isHeadline = data.title !== undefined;
+  const isHeadlineContent = isHeadline || data.title !== undefined;
   
   return (
     <div 
@@ -29,7 +31,7 @@ const TextComponent: React.FC<TextComponentProps> = ({
         padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
       }}
     >
-      {isHeadline ? (
+      {isHeadlineContent ? (
         <>
           <h2 className="text-xl md:text-2xl font-medium text-[#432818] mb-2">
             {data.title}
