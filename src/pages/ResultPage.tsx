@@ -8,7 +8,8 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-const ResultPage = () => {
+
+export const ResultPage = () => {
   const {
     primaryStyle,
     secondaryStyles
@@ -16,9 +17,11 @@ const ResultPage = () => {
   const {
     globalStyles
   } = useGlobalStyles();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   if (!primaryStyle) {
     return <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
@@ -35,7 +38,6 @@ const ResultPage = () => {
       </div>;
   }
 
-  // Get style-specific cover image based on style type
   const getStyleCoverImage = styleType => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
@@ -49,18 +51,17 @@ const ResultPage = () => {
     };
     return styleImages[styleType] || styleImages['Natural'];
   };
+
   return <div className="min-h-screen bg-[#fffaf7]" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
     color: globalStyles.textColor || '#432818',
     fontFamily: globalStyles.fontFamily || 'inherit'
   }}>
-      {/* Editor Button - Made more visible and prominent */}
       <EditorButton />
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
       
       <div className="container mx-auto px-4 py-6 max-w-4xl">
-        {/* Style Result Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
@@ -86,7 +87,6 @@ const ResultPage = () => {
           </div>
         </Card>
 
-        {/* Introduction Section */}
         <div className="space-y-6 mb-10 text-center">
           <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d]">
             Você já descobriu seu Estilo e isso é muito poderoso.
@@ -120,7 +120,6 @@ const ResultPage = () => {
           </div>
         </div>
 
-        {/* Main Offer Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">O Guia de Estilo e Imagem + Bônus Exclusivos</h2>
@@ -145,7 +144,6 @@ const ResultPage = () => {
             </div>
           </div>
           
-          {/* Bonus Section */}
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
             <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">E ainda recebe 2 bônus poderosos:</h3>
             
@@ -175,7 +173,6 @@ const ResultPage = () => {
             <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" alt="Todos os produtos e bônus" className="w-full h-auto rounded-lg" />
           </div>
           
-          {/* Pricing and CTA Section */}
           <div className="bg-[#fff7f3] p-6 rounded-lg text-center">
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6">
               <div className="text-center md:text-right">
@@ -199,7 +196,6 @@ const ResultPage = () => {
           </div>
         </Card>
         
-        {/* Testimonials Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             💬 Depoimentos de mulheres que já viveram essa transformação:
@@ -235,7 +231,6 @@ const ResultPage = () => {
           </div>
         </Card>
         
-        {/* About Mentor Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             👩‍🏫 Sobre sua mentora
@@ -264,7 +259,6 @@ const ResultPage = () => {
           </div>
         </Card>
         
-        {/* Guarantee Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="md:w-1/4 flex justify-center">
@@ -286,7 +280,6 @@ const ResultPage = () => {
           </div>
         </Card>
         
-        {/* Final CTA Section */}
         <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
           <div className="text-center space-y-4 mb-6">
             <h2 className="text-2xl font-playfair text-[#aa6b5d]">
@@ -317,4 +310,5 @@ const ResultPage = () => {
       </div>
     </div>;
 };
+
 export default ResultPage;
