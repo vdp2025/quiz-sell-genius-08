@@ -1,302 +1,294 @@
 
-import { QuizQuestion } from '@/types/quiz';
+import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 
-// Helper function to create question IDs
-const createQuestionId = (category: string, index: number) => `${category}_${index}`;
-
-// Helper function to create option IDs
-const createOptionId = (questionId: string, index: number) => `${questionId}_option_${index}`;
-
-// Create the style quiz template
-export const styleQuizTemplate: QuizQuestion[] = [
-  {
-    id: createQuestionId('clothingQuestions', 1),
-    title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
-    type: 'text',
-    multiSelect: 3,
-    options: [
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 0),
-        text: 'Looks confortáveis, soltos ao corpo, práticos para usar e para cuidar.',
-        styleCategory: 'Natural',
-        points: 1
+export const styleQuizTemplate: QuizBuilderState = {
+  components: [
+    {
+      id: generateId(),
+      type: 'stageCover',
+      order: 0,
+      stageId: 'cover',
+      data: {
+        title: 'Quiz de Estilo Pessoal',
+        subtitle: 'Descubra seu estilo predominante respondendo às perguntas a seguir',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+        stageTitle: 'Início',
+        stageNumber: 1
       },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 1),
-        text: 'Roupas discretas, com caimento clássico e que passam despercebidas.',
-        styleCategory: 'Clássico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 2),
-        text: 'Roupas confortáveis mas com um toque de estilo.',
-        styleCategory: 'Contemporâneo',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 3),
-        text: 'Peças com toques refinados, caimento perfeito, atual, mas sem modismos.',
-        styleCategory: 'Elegante',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 4),
-        text: 'Roupas delicadas de cores suaves, fluídas no corpo.',
-        styleCategory: 'Romântico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 5),
-        text: 'Roupas que marquem meu corpo, decotes, fendas.',
-        styleCategory: 'Sexy',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 6),
-        text: 'Peças estruturadas, assimétricas, modernas.',
-        styleCategory: 'Dramático',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 1), 7),
-        text: 'Formas e peças marcantes, em um mix no look.',
-        styleCategory: 'Criativo',
-        points: 1
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
       }
-    ]
-  },
-  {
-    id: createQuestionId('personalityQuestions', 1),
-    title: 'RESUMA A SUA PERSONALIDADE:',
-    type: 'text',
-    multiSelect: 3,
-    options: [
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 0),
-        text: 'Informal, espontânea, alegre, essencialista.',
-        styleCategory: 'Natural',
-        points: 1
+    },
+    {
+      id: generateId(),
+      type: 'stageQuestion',
+      order: 1,
+      stageId: 'q1',
+      data: {
+        title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
+        options: [
+          'Looks confortáveis, soltos ao corpo, práticos para usar e para cuidar.',
+          'Roupas discretas, com caimento clássico e que passam despercebidas.',
+          'Roupas confortáveis mas com um toque de estilo.',
+          'Peças com toques refinados, caimento perfeito, atual, mas sem modismos.',
+          'Roupas delicadas de cores suaves, fluídas no corpo.',
+          'Roupas que marquem meu corpo, decotes, fendas.',
+          'Peças estruturadas, assimétricas, modernas.',
+          'Formas e peças marcantes, em um mix no look.'
+        ],
+        optionStyleCategories: [
+          'Natural',
+          'Clássico',
+          'Contemporâneo',
+          'Elegante',
+          'Romântico',
+          'Sexy',
+          'Dramático',
+          'Criativo'
+        ],
+        multiSelect: 3,
+        displayType: 'text',
+        required: true,
+        stageTitle: 'Pergunta 1',
+        stageNumber: 2
       },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 1),
-        text: 'Conservadora, séria, organizada.',
-        styleCategory: 'Clássico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 2),
-        text: 'Informada, ativa, prática.',
-        styleCategory: 'Contemporâneo',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 3),
-        text: 'Exigente, sofisticada, seletiva.',
-        styleCategory: 'Elegante',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 4),
-        text: 'Feminina, meiga, delicada, sensível.',
-        styleCategory: 'Romântico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 5),
-        text: 'Glamorosa, vaidosa, sensual.',
-        styleCategory: 'Sexy',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 6),
-        text: 'Sou cosmopolita, moderna e audaciosa.',
-        styleCategory: 'Dramático',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 1), 7),
-        text: 'Exótica, aventureira, livre.',
-        styleCategory: 'Criativo',
-        points: 1
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
       }
-    ]
-  },
-  {
-    id: createQuestionId('clothingQuestions', 2),
-    title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
-    type: 'both',
-    multiSelect: 3,
-    options: [
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 0),
-        text: 'Visual leve, despojado e natural.',
-        imageUrl: '/lovable-uploads/24f7dc2c-ab37-41ba-a154-786b0626ae04.png',
-        styleCategory: 'Natural',
-        points: 1
+    },
+    {
+      id: generateId(),
+      type: 'stageQuestion',
+      order: 2,
+      stageId: 'q2',
+      data: {
+        title: 'RESUMA A SUA PERSONALIDADE:',
+        question: 'Selecione 3 opções que mais combinam com sua personalidade',
+        options: [
+          'Informal, espontânea, alegre, essencialista.',
+          'Conservadora, séria, organizada.',
+          'Informada, ativa, prática.',
+          'Exigente, sofisticada, seletiva.',
+          'Feminina, meiga, delicada, sensível.',
+          'Glamorosa, vaidosa, sensual.',
+          'Sou cosmopolita, moderna e audaciosa.',
+          'Exótica, aventureira, livre.'
+        ],
+        optionStyleCategories: [
+          'Natural',
+          'Clássico',
+          'Contemporâneo',
+          'Elegante',
+          'Romântico',
+          'Sexy',
+          'Dramático',
+          'Criativo'
+        ],
+        multiSelect: 3,
+        displayType: 'text',
+        required: true,
+        stageTitle: 'Pergunta 2',
+        stageNumber: 3
       },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 1),
-        text: 'Visual clássico e tradicional.',
-        imageUrl: '/lovable-uploads/0fb54364-9c71-4373-b6e7-500e6f9a2732.png',
-        styleCategory: 'Clássico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 2),
-        text: 'Visual casual com toque atual.',
-        imageUrl: '/lovable-uploads/22d18ed7-b1fc-4fb4-9538-f0ab93fe5c75.png',
-        styleCategory: 'Contemporâneo',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 3),
-        text: 'Visual refinado e imponente.',
-        imageUrl: '/lovable-uploads/e779494d-0c8d-408d-b034-1964a3b76469.png',
-        styleCategory: 'Elegante',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 4),
-        text: 'Visual romântico, feminino e delicado.',
-        imageUrl: '/lovable-uploads/94638e1c-0180-4cfd-80be-26db97a1e58f.png',
-        styleCategory: 'Romântico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 5),
-        text: 'Visual sensual, com saia justa e decote.',
-        imageUrl: '/lovable-uploads/919b184d-940d-4a4f-b53c-36792cbd6114.png',
-        styleCategory: 'Sexy',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 6),
-        text: 'Visual marcante e urbano (jeans + jaqueta).',
-        imageUrl: '/lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png',
-        styleCategory: 'Dramático',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('clothingQuestions', 2), 7),
-        text: 'Visual criativo, colorido e ousado.',
-        imageUrl: '/lovable-uploads/d633e490-d0f2-4429-998e-bceeeda790f8.png',
-        styleCategory: 'Criativo',
-        points: 1
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
       }
-    ]
-  },
-  {
-    id: createQuestionId('personalityQuestions', 2),
-    title: 'QUAIS DETALHES VOCÊ GOSTA?',
-    type: 'text',
-    multiSelect: 3,
-    options: [
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 0),
-        text: 'Poucos detalhes, básico e prático.',
-        styleCategory: 'Natural',
-        points: 1
+    },
+    {
+      id: generateId(),
+      type: 'stageQuestion',
+      order: 3,
+      stageId: 'q3',
+      data: {
+        title: 'QUAIS DETALHES VOCÊ GOSTA?',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
+        options: [
+          'Poucos detalhes, básico e prático.',
+          'Bem discretos e sutis, clean e clássico.',
+          'Básico, mas com um toque de estilo.',
+          'Detalhes refinados, chic e que deem status.',
+          'Detalhes delicados, laços, babados.',
+          'Roupas que valorizem meu corpo: couro, zíper, fendas.',
+          'Detalhes marcantes, firmeza e peso.',
+          'Detalhes diferentes do convencional, produções ousadas.'
+        ],
+        optionStyleCategories: [
+          'Natural',
+          'Clássico',
+          'Contemporâneo',
+          'Elegante',
+          'Romântico',
+          'Sexy',
+          'Dramático',
+          'Criativo'
+        ],
+        multiSelect: 3,
+        displayType: 'text',
+        required: true,
+        stageTitle: 'Pergunta 3',
+        stageNumber: 4
       },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 1),
-        text: 'Bem discretos e sutis, clean e clássico.',
-        styleCategory: 'Clássico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 2),
-        text: 'Básico, mas com um toque de estilo.',
-        styleCategory: 'Contemporâneo',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 3),
-        text: 'Detalhes refinados, chic e que deem status.',
-        styleCategory: 'Elegante',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 4),
-        text: 'Detalhes delicados, laços, babados.',
-        styleCategory: 'Romântico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 5),
-        text: 'Roupas que valorizem meu corpo: couro, zíper, fendas.',
-        styleCategory: 'Sexy',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 6),
-        text: 'Detalhes marcantes, firmeza e peso.',
-        styleCategory: 'Dramático',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('personalityQuestions', 2), 7),
-        text: 'Detalhes diferentes do convencional, produções ousadas.',
-        styleCategory: 'Criativo',
-        points: 1
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
       }
-    ]
-  },
-  {
-    id: createQuestionId('stylePreferencesQuestions', 1),
-    title: 'QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?',
-    type: 'text',
-    multiSelect: 3,
-    options: [
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 0),
-        text: 'Estampas clean, com poucas informações.',
-        styleCategory: 'Natural',
-        points: 1
+    },
+    {
+      id: generateId(),
+      type: 'stageQuestion',
+      order: 4,
+      stageId: 'q4',
+      data: {
+        title: 'QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
+        options: [
+          'Estampas clean, com poucas informações.',
+          'Estampas clássicas e atemporais.',
+          'Atemporais, mas que tenham uma pegada de atual e moderna.',
+          'Estampas clássicas e atemporais, mas sofisticadas.',
+          'Estampas florais e/ou delicadas como bolinhas, borboletas e corações.',
+          'Estampas de animal print, como onça, zebra e cobra.',
+          'Estampas geométricas, abstratas e exageradas como grandes poás.',
+          'Estampas diferentes do usual, como africanas, xadrez grandes.'
+        ],
+        optionStyleCategories: [
+          'Natural',
+          'Clássico',
+          'Contemporâneo',
+          'Elegante',
+          'Romântico',
+          'Sexy',
+          'Dramático',
+          'Criativo'
+        ],
+        multiSelect: 3,
+        displayType: 'text',
+        required: true,
+        stageTitle: 'Pergunta 4',
+        stageNumber: 5
       },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 1),
-        text: 'Estampas clássicas e atemporais.',
-        styleCategory: 'Clássico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 2),
-        text: 'Atemporais, mas que tenham uma pegada de atual e moderna.',
-        styleCategory: 'Contemporâneo',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 3),
-        text: 'Estampas clássicas e atemporais, mas sofisticadas.',
-        styleCategory: 'Elegante',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 4),
-        text: 'Estampas florais e/ou delicadas como bolinhas, borboletas e corações.',
-        styleCategory: 'Romântico',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 5),
-        text: 'Estampas de animal print, como onça, zebra e cobra.',
-        styleCategory: 'Sexy',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 6),
-        text: 'Estampas geométricas, abstratas e exageradas como grandes poás.',
-        styleCategory: 'Dramático',
-        points: 1
-      },
-      {
-        id: createOptionId(createQuestionId('stylePreferencesQuestions', 1), 7),
-        text: 'Estampas diferentes do usual, como africanas, xadrez grandes.',
-        styleCategory: 'Criativo',
-        points: 1
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
       }
-    ]
-  }
-  // You can add more questions, but for brevity I'm limiting to these 5
-];
+    },
+    {
+      id: generateId(),
+      type: 'stageQuestion',
+      order: 5,
+      stageId: 'q5',
+      data: {
+        title: 'VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...',
+        question: 'Selecione 3 opções que mais combinam com seu estilo',
+        options: [
+          'São fáceis de cuidar.',
+          'São de excelente qualidade.',
+          'São fáceis de cuidar e modernos.',
+          'São sofisticados.',
+          'São delicados.',
+          'São perfeitos ao meu corpo.',
+          'São diferentes, e trazem um efeito para minha roupa.',
+          'São exclusivos, criam identidade no look.'
+        ],
+        optionStyleCategories: [
+          'Natural',
+          'Clássico',
+          'Contemporâneo',
+          'Elegante',
+          'Romântico',
+          'Sexy',
+          'Dramático',
+          'Criativo'
+        ],
+        multiSelect: 3,
+        displayType: 'text',
+        required: true,
+        stageTitle: 'Pergunta 5',
+        stageNumber: 6
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
+      }
+    },
+    {
+      id: generateId(),
+      type: 'stageResult',
+      order: 6,
+      stageId: 'result',
+      data: {
+        title: 'Seu Resultado de Estilo Pessoal',
+        subtitle: 'Baseado nas suas escolhas, calculamos seu estilo predominante',
+        stageTitle: 'Resultado',
+        stageNumber: 7
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem'
+      }
+    }
+  ],
+  stages: [
+    {
+      id: 'cover',
+      title: 'Início',
+      order: 0,
+      type: 'cover'
+    },
+    {
+      id: 'q1',
+      title: 'Pergunta 1',
+      order: 1,
+      type: 'question'
+    },
+    {
+      id: 'q2',
+      title: 'Pergunta 2',
+      order: 2,
+      type: 'question'
+    },
+    {
+      id: 'q3',
+      title: 'Pergunta 3',
+      order: 3,
+      type: 'question'
+    },
+    {
+      id: 'q4',
+      title: 'Pergunta 4',
+      order: 4,
+      type: 'question'
+    },
+    {
+      id: 'q5',
+      title: 'Pergunta 5',
+      order: 5,
+      type: 'question'
+    },
+    {
+      id: 'result',
+      title: 'Resultado',
+      order: 6,
+      type: 'result'
+    }
+  ]
+};

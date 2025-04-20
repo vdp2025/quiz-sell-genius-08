@@ -11,3 +11,13 @@ export interface QuizTemplate {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface QuizTemplatePreview {
+  id: string;
+  name: string;
+  description: string;
+  questionCount: number;
+  createdAt: string;
+  updatedAt: string;
+  isDefault?: boolean;
+}

@@ -16,7 +16,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { QuizTemplatePreview } from '@/types/quizTemplate';
-import { getTemplates, createNewTemplate, deleteTemplate, duplicateTemplate } from '@/services/templates/templateService';
+import { 
+  getAllTemplates, 
+  createTemplate, 
+  deleteTemplate, 
+  duplicateTemplate 
+} from '@/services/templates/templateService';
 import { toast } from '@/components/ui/use-toast';
 import {
   AlertDialog,
@@ -45,15 +50,27 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
     const loadTemplates = async () => {
       setLoading(true);
       try {
-        const templates = await getTemplates();
-        setTemplates(templates);
+        const fetchedTemplates = await getAllTemplates();
+        
+        // Transform the templates to the QuizTemplatePreview format
+        const templatePreviews: QuizTemplatePreview[] = fetchedTemplates.map(template => ({
+          id: template.id,
+          name: template.name,
+          description: template.description,
+          questionCount: template.questions.length,
+          createdAt: template.createdAt,
+          updatedAt: template.updatedAt,
+          isDefault: template.id === 'style-quiz-1'
+        }));
+        
+        setTemplates(templatePreviews);
         
         // Set the default template as selected if available
-        const defaultTemplate = templates.find(t => t.isDefault);
+        const defaultTemplate = templatePreviews.find(t => t.isDefault);
         if (defaultTemplate) {
           setSelectedTemplateId(defaultTemplate.id);
-        } else if (templates.length > 0) {
-          setSelectedTemplateId(templates[0].id);
+        } else if (templatePreviews.length > 0) {
+          setSelectedTemplateId(templatePreviews[0].id);
         }
       } catch (error) {
         console.error("Error loading templates:", error);
@@ -81,9 +98,16 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
     }
     
     try {
-      const newTemplate = createNewTemplate(
+      // Create a blank builder state
+      const emptyBuilderState = {
+        components: [],
+        stages: []
+      };
+      
+      const newTemplate = await createTemplate(
         newTemplateName.trim(),
-        newTemplateDescription.trim()
+        newTemplateDescription.trim(),
+        emptyBuilderState
       );
       
       // Reset form

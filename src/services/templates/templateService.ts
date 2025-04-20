@@ -3,6 +3,7 @@ import { styleQuizTemplate } from './styleQuizTemplate';
 import { styleQuizTemplate2 } from './styleQuizTemplate2';
 import { QuizTemplate } from '@/types/quizTemplate';
 import { QuizBuilderState } from '@/types/quizBuilder';
+import { generateId } from '@/utils/idGenerator';
 
 // Predefined templates
 const templates: Record<string, QuizTemplate> = {
@@ -107,6 +108,35 @@ export const createTemplate = async (
   return newTemplate;
 };
 
+// Duplicate template
+export const duplicateTemplate = async (id: string): Promise<QuizTemplate | null> => {
+  try {
+    const templatesData = loadTemplates();
+    const template = templatesData[id];
+    
+    if (!template) {
+      return null;
+    }
+    
+    const newId = `template-${Date.now()}`;
+    const duplicatedTemplate: QuizTemplate = {
+      ...template,
+      id: newId,
+      name: `${template.name} (cópia)`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    templatesData[newId] = duplicatedTemplate;
+    saveTemplatesLocal(templatesData);
+    
+    return duplicatedTemplate;
+  } catch (error) {
+    console.error('Error duplicating template:', error);
+    return null;
+  }
+};
+
 // Delete template
 export const deleteTemplate = async (id: string): Promise<boolean> => {
   try {
@@ -138,4 +168,45 @@ export const convertTemplateToBuilderState = async (
   template: QuizTemplate
 ): Promise<QuizBuilderState> => {
   return template.builderState;
+};
+
+// Function to get a clean list of templates for preview display
+export const getTemplates = async (): Promise<QuizTemplatePreview[]> => {
+  const templates = await getAllTemplates();
+  
+  return templates.map(template => ({
+    id: template.id,
+    name: template.name,
+    description: template.description,
+    questionCount: template.questions.length,
+    createdAt: template.createdAt,
+    updatedAt: template.updatedAt,
+    isDefault: template.id === 'style-quiz-1'
+  }));
+};
+
+// Function to create a new template with default structure
+export const createNewTemplate = (name: string, description: string): QuizTemplate => {
+  // Create a minimal builder state
+  const builderState: QuizBuilderState = {
+    components: [],
+    stages: []
+  };
+  
+  const id = `template-${Date.now()}`;
+  const newTemplate: QuizTemplate = {
+    id,
+    name,
+    description,
+    questions: [],
+    builderState,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  
+  const templatesData = loadTemplates();
+  templatesData[id] = newTemplate;
+  saveTemplatesLocal(templatesData);
+  
+  return newTemplate;
 };
