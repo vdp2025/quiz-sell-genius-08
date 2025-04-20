@@ -1,7 +1,7 @@
 
 import { styleQuizTemplate } from './styleQuizTemplate';
 import { styleQuizTemplate2 } from './styleQuizTemplate2';
-import { QuizTemplate } from '@/types/quizTemplate';
+import { QuizTemplate, QuizTemplatePreview } from '@/types/quizTemplate';
 import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 
