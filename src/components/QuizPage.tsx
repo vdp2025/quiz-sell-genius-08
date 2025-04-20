@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -155,7 +154,6 @@ const QuizPage: React.FC = () => {
             totalSteps={totalQuestions}
             onNext={handleNextClick}
             onPrevious={handlePrevious}
-            showProgress={true}
           />
         </>
       )}

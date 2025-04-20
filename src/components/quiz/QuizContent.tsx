@@ -2,7 +2,7 @@
 import React from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { QuizHeader } from './QuizHeader';
-import { QuizNavigation } from './QuizNavigation';
+import { QuizNavigation } from '../navigation/QuizNavigation';
 import { UserResponse } from '@/types/quiz';
 
 interface QuizContentProps {
