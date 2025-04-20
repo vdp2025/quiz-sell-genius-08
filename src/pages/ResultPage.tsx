@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+
 export const ResultPage = () => {
   const {
     primaryStyle,
@@ -16,9 +17,11 @@ export const ResultPage = () => {
   const {
     globalStyles
   } = useGlobalStyles();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
   if (!primaryStyle) {
     return <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
@@ -34,7 +37,8 @@ export const ResultPage = () => {
         </div>
       </div>;
   }
-  const getStyleCoverImage = styleType => {
+  
+  const getStyleCoverImage = (styleType) => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
       'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
@@ -47,6 +51,7 @@ export const ResultPage = () => {
     };
     return styleImages[styleType] || styleImages['Natural'];
   };
+  
   return <div className="min-h-screen bg-[#fffaf7]" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
     color: globalStyles.textColor || '#432818',
@@ -73,7 +78,11 @@ export const ResultPage = () => {
               </div>
             </div>
             <div className="order-first md:order-last">
-              <img src={getStyleCoverImage(primaryStyle.category)} alt={Estilo ${primaryStyle.category}} className="w-full h-auto rounded-lg shadow-md" />
+              <img 
+                src={getStyleCoverImage(primaryStyle.category)} 
+                alt={`Estilo ${primaryStyle.category}`} 
+                className="w-full h-auto rounded-lg shadow-md" 
+              />
             </div>
           </div>
           
@@ -305,4 +314,5 @@ export const ResultPage = () => {
       </div>
     </div>;
 };
+
 export default ResultPage;
