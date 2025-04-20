@@ -30,7 +30,7 @@ export const createOfferConfig = (): OfferSection => ({
     visible: true,
     content: {
       title: "📘 O Guia de Estilo e Imagem + Bônus Exclusivos",
-      subtitle: "Criado para mulheres que querem muito mais do que \"saber seu estilo\".",
+      subtitle: "Criado para mulheres que querem muito mais do que 'saber seu estilo'.",
       description: "Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade.",
       benefitsList: [
         "Como montar looks com intenção (e não no improviso)",
