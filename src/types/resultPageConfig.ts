@@ -1,4 +1,3 @@
-
 export interface StyleOptions {
   fontSize?: string;
   fontWeight?: string;
@@ -27,16 +26,36 @@ export interface SectionContent {
   images?: ImageOptions[];
 }
 
-// Define a specific interface for offer content
 export interface OfferContent {
   title?: string;
   subtitle?: string;
+  description?: string;
   price?: string;
   regularPrice?: string;
+  installments?: string;
   ctaText?: string;
   ctaUrl?: string;
+  urgencyText?: string;
   heroImage?: string;
   heroImage2?: string;
+  table?: Array<{
+    item: string;
+    value: string;
+  }>;
+  productImages?: Array<{
+    url: string;
+    alt: string;
+  }>;
+  items?: Array<{
+    title: string;
+    description: string;
+  }>;
+  testimonials?: Array<{
+    name: string;
+    role: string;
+    text: string;
+  }>;
+  image?: string;
   [key: string]: any;
 }
 
@@ -47,11 +66,10 @@ export interface Section {
   style?: StyleOptions;
 }
 
-// Extend the Section to create an OfferSection
 export interface OfferSection {
   hero: {
     visible: boolean;
-    content: OfferContent; // Use the specific content type
+    content: OfferContent;
     appearance?: Record<string, any>;
     style?: StyleOptions;
   };
@@ -75,12 +93,11 @@ export interface ResultPageConfig {
     backgroundColor?: string;
     fontFamily?: string;
   };
-  blocks?: Block[]; // Add blocks property
+  blocks?: Block[];
 }
 
 export interface ResultPageConfigsStore {
   configs: Record<string, ResultPageConfig>;
 }
 
-// Import Block type from editor.ts to use in ResultPageConfig
 import { Block } from './editor';
