@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage';
 import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
 import ResultadoEditorPage from './pages/admin/ResultadoEditorPage';
-import '@/styles/globals.css';
+import './styles/globals.css';  // Changed from '@/styles/globals.css'
 
 function App() {
   return (
