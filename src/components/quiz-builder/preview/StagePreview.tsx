@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { QuizStage, QuizComponentData } from '@/types/quizBuilder';
-import ComponentRenderer from './ComponentRenderer';
+import { ComponentRenderer } from '../ComponentRenderer';
 
 interface StagePreviewProps {
   stage: QuizStage;
@@ -10,28 +10,37 @@ interface StagePreviewProps {
 
 const StagePreview: React.FC<StagePreviewProps> = ({ stage, components }) => {
   if (!stage) {
-    return <div className="p-8 text-gray-500 text-center">Nenhuma etapa selecionada</div>;
-  }
-
-  if (components.length === 0) {
     return (
-      <div className="p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-center">
-        <p className="text-gray-500">Nenhum componente adicionado nesta etapa</p>
-        <p className="text-gray-400 text-sm mt-2">
-          Adicione componentes no editor para visualizar a etapa
-        </p>
+      <div className="text-center p-8 border border-dashed border-[#B89B7A]/40 rounded-lg">
+        <p className="text-[#8F7A6A]">Selecione uma etapa para visualizar</p>
       </div>
     );
   }
-
+  
+  // Ordenar os componentes por ordem
+  const sortedComponents = [...components].sort((a, b) => a.order - b.order);
+  
   return (
     <div className="space-y-4">
-      {components.map((component) => (
-        <ComponentRenderer 
-          key={component.id} 
-          component={component} 
+      {sortedComponents.map(component => (
+        <ComponentRenderer
+          key={component.id}
+          component={component}
+          isPreview={true}
+          isSelected={false}
         />
       ))}
+      
+      {sortedComponents.length === 0 && (
+        <div className="text-center p-8 border border-dashed border-[#B89B7A]/40 rounded-lg">
+          <p className="text-[#8F7A6A]">
+            Nenhum componente adicionado para a etapa "{stage.title}".
+          </p>
+          <p className="text-[#8F7A6A] text-sm mt-2">
+            Adicione componentes no editor para visualizá-los aqui.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

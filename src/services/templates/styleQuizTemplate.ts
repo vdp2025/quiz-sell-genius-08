@@ -1,4 +1,3 @@
-
 import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 
@@ -14,13 +13,17 @@ export const styleQuizTemplate: QuizBuilderState = {
         subtitle: 'Descubra seu estilo predominante respondendo às perguntas a seguir',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
         stageTitle: 'Início',
-        stageNumber: 1
+        stageNumber: 1,
+        buttonText: 'Iniciar Quiz',
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -41,6 +44,16 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Peças estruturadas, assimétricas, modernas.',
           'Formas e peças marcantes, em um mix no look.'
         ],
+        optionImages: [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp'
+        ],
         optionStyleCategories: [
           'Natural',
           'Clássico',
@@ -52,16 +65,25 @@ export const styleQuizTemplate: QuizBuilderState = {
           'Criativo'
         ],
         multiSelect: 3,
-        displayType: 'text',
+        displayType: 'both',
+        imageSize: 'medium',
         required: true,
         stageTitle: 'Pergunta 1',
-        stageNumber: 2
+        stageNumber: 2,
+        layout: {
+          columns: 2,
+          direction: 'vertical'
+        },
+        backgroundColorQuestion: '#FFFAF0',
+        textColorQuestion: '#432818',
+        selectionIndicator: 'border'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -96,13 +118,21 @@ export const styleQuizTemplate: QuizBuilderState = {
         displayType: 'text',
         required: true,
         stageTitle: 'Pergunta 2',
-        stageNumber: 3
+        stageNumber: 3,
+        layout: {
+          columns: 1,
+          direction: 'vertical'
+        },
+        backgroundColorQuestion: '#FFFAF0',
+        textColorQuestion: '#432818',
+        selectionIndicator: 'border'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -143,7 +173,8 @@ export const styleQuizTemplate: QuizBuilderState = {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -184,7 +215,8 @@ export const styleQuizTemplate: QuizBuilderState = {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -225,7 +257,8 @@ export const styleQuizTemplate: QuizBuilderState = {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -237,13 +270,26 @@ export const styleQuizTemplate: QuizBuilderState = {
         title: 'Seu Resultado de Estilo Pessoal',
         subtitle: 'Baseado nas suas escolhas, calculamos seu estilo predominante',
         stageTitle: 'Resultado',
-        stageNumber: 7
+        stageNumber: 7,
+        resultLayout: 'modern',
+        primaryStyleTitle: 'Olá, seu Estilo Predominante é:',
+        secondaryStylesTitle: 'Seus Estilos Complementares:',
+        showPercentages: true,
+        showDescriptions: true,
+        callToActionText: 'Conhecer o Guia Completo',
+        callToActionUrl: '#',
+        offerImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+        authorImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp',
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        accentColor: '#B89B7A'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     }
   ],

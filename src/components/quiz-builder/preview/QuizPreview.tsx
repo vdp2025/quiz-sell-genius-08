@@ -51,6 +51,9 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
     setShowingResult(false);
   };
   
+  const totalStages = sortedStages.length;
+  const progressPercent = totalStages > 1 ? (currentStageIndex / (totalStages - 1)) * 100 : 0;
+  
   if (stages.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -85,7 +88,7 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
   
   return (
     <QuizContainer>
-      <div className="space-y-8">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-medium text-[#432818]">
             Prévia: {currentStage?.title || 'Etapa sem título'}
@@ -100,7 +103,14 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
           components={stageComponents} 
         />
         
-        <div className="flex justify-between pt-8">
+        <div className="w-full h-1 bg-[#B89B7A]/20 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-[#B89B7A]" 
+            style={{ width: `${progressPercent}%` }}
+          ></div>
+        </div>
+        
+        <div className="flex justify-between pt-4">
           <Button
             variant="outline"
             onClick={handlePrevious}

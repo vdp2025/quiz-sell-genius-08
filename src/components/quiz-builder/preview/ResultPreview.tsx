@@ -1,117 +1,98 @@
 
 import React from 'react';
 import { QuizResult, StyleResult } from '@/types/quiz';
-import { StyleCategory, styleCategoryColors } from '@/types/styleTypes';
 
 interface ResultPreviewProps {
   result: QuizResult;
 }
 
 const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
-  const { primaryStyle, secondaryStyles } = result;
-
-  const StyleBar = ({ style }: { style: StyleResult }) => (
-    <div className="space-y-1 mb-4">
-      <div className="flex justify-between items-center">
-        <div className="font-medium">{style.category}</div>
-        <div className="text-sm text-gray-500">{style.percentage}%</div>
-      </div>
-      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className="h-full rounded-full"
-          style={{ 
-            width: `${style.percentage}%`,
-            backgroundColor: styleCategoryColors[style.category as StyleCategory] || '#B89B7A'
-          }}
-        ></div>
-      </div>
-    </div>
-  );
-
+  const primaryStyle = result.styles[0];
+  const secondaryStyles = result.styles.slice(1, 3);
+  
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 max-w-4xl mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-playfair text-[#432818] mb-2">Seu Estilo Predominante</h1>
-        <p className="text-gray-600">Descubra mais sobre seu estilo único e como aproveitar ao máximo suas características</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1">
-          <div className="bg-[#FAF9F7] p-6 rounded-lg">
-            <h2 className="text-2xl font-playfair text-[#432818] mb-4">
-              {primaryStyle.category}
-            </h2>
-            <StyleBar style={primaryStyle} />
-            
-            <div className="space-y-4 mt-6">
-              <h3 className="font-medium text-[#432818]">Estilos Secundários</h3>
-              {secondaryStyles.map((style, index) => (
-                <StyleBar key={index} style={style} />
-              ))}
-            </div>
-          </div>
+    <div className="w-full max-w-4xl mx-auto bg-[#FFFAF0] rounded-lg shadow-sm p-6">
+      <div className="text-center space-y-6 mb-8">
+        <h1 className="text-2xl md:text-3xl font-playfair text-[#432818]">
+          Seu Resultado de Estilo Pessoal
+        </h1>
+        
+        <h2 className="text-xl font-medium text-[#432818]">
+          Olá, seu Estilo Predominante é:
+        </h2>
+        
+        <div className="inline-block bg-[#ffefec] px-6 py-4 rounded-lg">
+          <h3 className="text-2xl font-playfair text-[#aa6b5d]">
+            {primaryStyle.category.toUpperCase()}
+          </h3>
+          <p className="text-[#432818]/80 mt-2">
+            {getStyleDescription(primaryStyle.category)}
+          </p>
         </div>
-
-        <div className="md:col-span-2">
-          <div className="bg-white p-6 rounded-lg border border-[#B89B7A]/20">
-            <h2 className="text-xl font-playfair text-[#432818] mb-4">
-              Sobre seu estilo {primaryStyle.category}
-            </h2>
-            
-            <div className="prose max-w-none">
-              <p>
-                O estilo {primaryStyle.category} reflete sua personalidade e preferências estéticas.
-                Este estilo se caracteriza por peças que valorizam sua essência e realçam sua beleza natural.
-              </p>
-              <p>
-                Com este guia personalizado, você poderá explorar melhor as possibilidades do seu estilo
-                e construir um guarda-roupa mais autêntico e funcional.
-              </p>
-            </div>
-
-            <div className="mt-8 bg-[#FAF9F7] p-6 rounded-lg border border-[#B89B7A]/20">
-              <h3 className="text-lg font-medium text-[#432818] mb-3">
-                Guia de Estilo e Imagem Personalizado
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Adquira seu guia completo com análise detalhada, paleta de cores personalizada e 
-                recomendações de peças específicas para o seu tipo de estilo.
-              </p>
-              
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#B89B7A] font-bold">✓</span>
-                  <span>Análise detalhada do seu estilo pessoal</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#B89B7A] font-bold">✓</span>
-                  <span>Paleta de cores personalizada</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#B89B7A] font-bold">✓</span>
-                  <span>Guia de peças essenciais para o seu guarda-roupa</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#B89B7A] font-bold">✓</span>
-                  <span>Dicas de tecidos e modelagens ideais</span>
-                </li>
-              </ul>
-              
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <span className="line-through text-gray-500">R$ 97,00</span>
-                  <span className="text-2xl font-bold text-[#432818] ml-2">R$ 67,00</span>
-                </div>
-                <button className="bg-[#B89B7A] text-white px-4 py-2 rounded-md hover:bg-[#A38A69] transition-colors">
-                  Adquirir meu Guia
-                </button>
+      </div>
+      
+      <div className="mb-8">
+        <h2 className="text-xl font-medium text-center mb-4 text-[#432818]">
+          Seus Estilos Complementares:
+        </h2>
+        
+        <div className="grid md:grid-cols-2 gap-4">
+          {secondaryStyles.map((style, index) => (
+            <div key={index} className="bg-white p-4 rounded-lg border border-[#B89B7A]/20">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-[#432818]">{style.category}</span>
+                <span className="text-[#B89B7A]">{Math.round(style.percentage)}%</span>
+              </div>
+              <div className="w-full h-2 bg-[#B89B7A]/20 mt-2 rounded-full">
+                <div 
+                  className="h-full bg-[#B89B7A] rounded-full" 
+                  style={{ width: `${style.percentage}%` }}
+                ></div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
+      </div>
+      
+      <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div>
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+            alt="Guia Completo de Estilo"
+            className="w-full rounded-lg shadow-lg"
+          />
+        </div>
+        <div>
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
+            alt="Gisele Galvão"
+            className="w-full rounded-lg shadow-lg"
+          />
+        </div>
+      </div>
+      
+      <div className="flex justify-center">
+        <button className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-6 py-3 rounded-md text-lg transition-colors">
+          Conhecer o Guia Completo
+        </button>
       </div>
     </div>
   );
 };
+
+function getStyleDescription(style: string): string {
+  const descriptions: Record<string, string> = {
+    'Natural': 'Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico.',
+    'Clássico': 'Você aprecia a elegância atemporal, com peças de qualidade e caimento perfeito.',
+    'Contemporâneo': 'Você busca um equilíbrio entre o clássico e o moderno, com peças práticas e atuais.',
+    'Elegante': 'Você tem um olhar refinado para detalhes sofisticados e peças de alta qualidade.',
+    'Romântico': 'Você valoriza a delicadeza e os detalhes femininos, com muita suavidade.',
+    'Sexy': 'Você gosta de valorizar suas curvas e exibir sua sensualidade com confiança.',
+    'Dramático': 'Você tem personalidade forte e gosta de causar impacto com seu visual.',
+    'Criativo': 'Você aprecia a originalidade e não tem medo de ousar em combinações únicas.'
+  };
+  
+  return descriptions[style] || 'Você tem um estilo único que combina várias características.';
+}
 
 export default ResultPreview;

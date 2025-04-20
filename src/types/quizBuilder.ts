@@ -1,3 +1,4 @@
+
 export type QuizComponentType = 
   | 'header' 
   | 'section' 
@@ -56,19 +57,37 @@ export interface QuizComponentData {
     stageTitle?: string;
     stageNumber?: number;
     
-    // New properties for enhanced functionality
+    // Question properties
     autoAdvance?: boolean;
     minSelections?: number;
     maxSelections?: number;
-    multiSelect?: number; // For backwards compatibility
+    multiSelect?: number;
     required?: boolean;
     displayType?: 'text' | 'image' | 'both';
     imageSize?: 'small' | 'medium' | 'large';
     layout?: QuizComponentLayout;
-    
-    // Options for image/multimedia support
     optionImages?: string[];
     optionStyleCategories?: string[];
+    backgroundColorQuestion?: string;
+    textColorQuestion?: string;
+    selectionIndicator?: 'border' | 'checkbox' | 'highlight';
+    
+    // Cover properties
+    buttonText?: string;
+    backgroundColor?: string;
+    textColor?: string;
+    
+    // Result properties
+    resultLayout?: 'classic' | 'modern' | 'minimal';
+    primaryStyleTitle?: string;
+    secondaryStylesTitle?: string;
+    showPercentages?: boolean;
+    showDescriptions?: boolean;
+    callToActionText?: string;
+    callToActionUrl?: string;
+    offerImageUrl?: string;
+    authorImageUrl?: string;
+    accentColor?: string;
   };
   style?: QuizComponentStyle;
 }

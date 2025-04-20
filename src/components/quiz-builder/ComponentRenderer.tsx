@@ -1,7 +1,9 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { QuizComponentData } from '@/types/quizBuilder';
+import StageCoverComponent from './components/StageCoverComponent';
+import StageQuestionComponent from './components/StageQuestionComponent';
+import StageResultComponent from './components/StageResultComponent';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
@@ -16,15 +18,17 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
 }) => {
   const { type, data, style } = component;
   
-  const componentStyles = {
-    padding: style?.paddingY && style?.paddingX ? `${style.paddingY}px ${style.paddingX}px` : undefined,
-    backgroundColor: style?.backgroundColor || undefined,
-    color: style?.textColor || undefined,
-    borderRadius: style?.borderRadius ? `${style.borderRadius}px` : undefined,
-  };
-  
   const renderComponent = () => {
     switch (type) {
+      case 'stageCover':
+        return <StageCoverComponent data={data} style={style} isSelected={isSelected && !isPreview} />;
+      
+      case 'stageQuestion':
+        return <StageQuestionComponent data={data} style={style} isSelected={isSelected && !isPreview} />;
+      
+      case 'stageResult':
+        return <StageResultComponent data={data} style={style} isSelected={isSelected && !isPreview} />;
+        
       case 'header':
         return (
           <header className="text-center py-8">
@@ -95,8 +99,6 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           </div>
         );
         
-      // Adicione mais renderizações para outros tipos de componentes conforme necessário
-        
       default:
         return (
           <div className="py-4 px-6 border border-dashed border-[#B89B7A]/40 rounded-lg text-center">
@@ -109,11 +111,11 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
   return (
     <div 
       className={cn(
-        "p-2 transition-all duration-200",
-        isSelected && !isPreview && "bg-blue-50",
-        !isPreview && "hover:bg-gray-50 cursor-pointer"
+        "transition-all duration-200",
+        !isPreview && "hover:outline-dashed hover:outline-1 hover:outline-[#B89B7A]/40",
+        isSelected && !isPreview && "outline-dashed outline-2 outline-[#B89B7A]",
+        !isPreview && "cursor-pointer"
       )}
-      style={componentStyles}
     >
       {renderComponent()}
     </div>

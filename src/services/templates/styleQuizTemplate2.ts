@@ -14,13 +14,17 @@ export const styleQuizTemplate2: QuizBuilderState = {
         subtitle: 'Descubra seu estilo predominante e como criar looks que valorizam sua personalidade',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
         stageTitle: 'Início',
-        stageNumber: 1
+        stageNumber: 1,
+        buttonText: 'Iniciar Quiz',
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -66,13 +70,21 @@ export const styleQuizTemplate2: QuizBuilderState = {
         imageSize: 'medium',
         required: true,
         stageTitle: 'Pergunta 1',
-        stageNumber: 2
+        stageNumber: 2,
+        layout: {
+          columns: 2,
+          direction: 'vertical'
+        },
+        backgroundColorQuestion: '#FFFAF0',
+        textColorQuestion: '#432818',
+        selectionIndicator: 'border'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -118,13 +130,21 @@ export const styleQuizTemplate2: QuizBuilderState = {
         imageSize: 'medium',
         required: true,
         stageTitle: 'Pergunta 2',
-        stageNumber: 3
+        stageNumber: 3,
+        layout: {
+          columns: 2,
+          direction: 'vertical'
+        },
+        backgroundColorQuestion: '#FFFAF0',
+        textColorQuestion: '#432818',
+        selectionIndicator: 'border'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -170,13 +190,21 @@ export const styleQuizTemplate2: QuizBuilderState = {
         imageSize: 'medium',
         required: true,
         stageTitle: 'Pergunta 3',
-        stageNumber: 4
+        stageNumber: 4,
+        layout: {
+          columns: 2,
+          direction: 'vertical'
+        },
+        backgroundColorQuestion: '#FFFAF0',
+        textColorQuestion: '#432818',
+        selectionIndicator: 'border'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     },
     {
@@ -188,13 +216,26 @@ export const styleQuizTemplate2: QuizBuilderState = {
         title: 'Seu Resultado de Estilo Pessoal',
         subtitle: 'Baseado nas suas escolhas, calculamos seu estilo predominante',
         stageTitle: 'Resultado',
-        stageNumber: 5
+        stageNumber: 5,
+        resultLayout: 'modern',
+        primaryStyleTitle: 'Olá, seu Estilo Predominante é:',
+        secondaryStylesTitle: 'Seus Estilos Complementares:',
+        showPercentages: true,
+        showDescriptions: true,
+        callToActionText: 'Conhecer o Guia Completo',
+        callToActionUrl: '#',
+        offerImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+        authorImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp',
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        accentColor: '#B89B7A'
       },
       style: {
         backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
-        paddingX: '1rem'
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     }
   ],
