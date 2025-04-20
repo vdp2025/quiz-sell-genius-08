@@ -7,8 +7,9 @@ interface ResultPreviewProps {
 }
 
 const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
-  const primaryStyle = result.styles[0];
-  const secondaryStyles = result.styles.slice(1, 3);
+  // Use the correct properties from QuizResult interface
+  const primaryStyle = result.primaryStyle;
+  const secondaryStyles = result.secondaryStyles.slice(0, 2); // Get first two secondary styles
   
   return (
     <div className="w-full max-w-4xl mx-auto bg-[#FFFAF0] rounded-lg shadow-sm p-6">
