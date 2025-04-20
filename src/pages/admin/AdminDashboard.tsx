@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { Link } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 
 const AdminDashboard = () => {
@@ -31,13 +31,13 @@ const AdminDashboard = () => {
         <div className="mt-10 bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
           <h2 className="text-lg font-medium text-[#432818] mb-4">Ações Rápidas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a 
-              href="/admin/quiz-editor" 
+            <Link 
+              to="/admin/quiz-editor" 
               className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
             >
               <h3 className="font-medium text-[#432818]">Editor de Quiz</h3>
               <p className="text-sm text-[#8F7A6A] mt-1">Edite perguntas e opções do seu quiz</p>
-            </a>
+            </Link>
             
             <a 
               href="/builder" 
