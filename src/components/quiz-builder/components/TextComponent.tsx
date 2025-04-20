@@ -7,15 +7,15 @@ interface TextComponentProps {
   data: QuizComponentData['data'];
   style: QuizComponentData['style'];
   isSelected: boolean;
-  isHeadline?: boolean;
 }
 
 const TextComponent: React.FC<TextComponentProps> = ({ 
   data, 
   style, 
-  isSelected,
-  isHeadline = false
+  isSelected 
 }) => {
+  const isHeadline = data.title !== undefined;
+  
   return (
     <div 
       className={cn(
@@ -31,18 +31,20 @@ const TextComponent: React.FC<TextComponentProps> = ({
     >
       {isHeadline ? (
         <>
-          <h2 className="text-xl md:text-2xl font-medium mb-2 text-[#432818]">
-            {data.title || 'Título da Seção'}
+          <h2 className="text-xl md:text-2xl font-medium text-[#432818] mb-2">
+            {data.title}
           </h2>
+          
           {data.subtitle && (
-            <p className="text-[#6b605a]">{data.subtitle}</p>
+            <p className="text-[#8F7A6A]">
+              {data.subtitle}
+            </p>
           )}
         </>
       ) : (
-        <div 
-          className="prose max-w-none text-[#6b605a]"
-          dangerouslySetInnerHTML={{ __html: data.text || 'Insira seu texto aqui...' }}
-        />
+        <div className="prose max-w-none">
+          {data.text || 'Insira seu texto aqui...'}
+        </div>
       )}
     </div>
   );

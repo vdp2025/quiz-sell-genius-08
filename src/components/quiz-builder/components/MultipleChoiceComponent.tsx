@@ -2,7 +2,7 @@
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface MultipleChoiceComponentProps {
   data: QuizComponentData['data'];
@@ -15,6 +15,29 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
   style, 
   isSelected 
 }) => {
+  const getColumnsClass = () => {
+    const columns = data.layout?.columns || 2;
+    switch (columns) {
+      case 1: return "grid-cols-1";
+      case 3: return "grid-cols-1 sm:grid-cols-3";
+      case 4: return "grid-cols-2 sm:grid-cols-4";
+      default: return "grid-cols-1 sm:grid-cols-2"; // Default to 2 columns
+    }
+  };
+
+  const getImageSize = () => {
+    switch (data.imageSize || 'medium') {
+      case 'small': return { ratio: 16 / 9, classes: "max-h-24" };
+      case 'large': return { ratio: 4 / 3, classes: "max-h-64" };
+      default: return { ratio: 4 / 3, classes: "max-h-48" }; // Medium is default
+    }
+  };
+
+  const imageConfig = getImageSize();
+  const displayType = data.displayType || 'text';
+  const showImages = displayType === 'image' || displayType === 'both';
+  const showText = displayType === 'text' || displayType === 'both';
+
   return (
     <div 
       className={cn(
@@ -33,21 +56,51 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
       </h3>
       
       <p className="text-center text-sm text-[#6b605a] mb-6">
-        {data.multiSelect > 1 
-          ? `Selecione ${data.multiSelect} opções`
+        {data.maxSelections > 1 
+          ? `Selecione ${data.maxSelections} opções`
           : 'Selecione uma opção'}
       </p>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className={cn(
+        "grid gap-3",
+        getColumnsClass()
+      )}>
         {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
           <div 
             key={index}
-            className="border border-gray-200 rounded-md p-3 hover:border-[#B89B7A]/50 hover:bg-[#FAF9F7] cursor-pointer transition-colors"
+            className={cn(
+              "border border-gray-200 rounded-md hover:border-[#B89B7A]/50 hover:bg-[#FAF9F7] cursor-pointer transition-colors",
+              showImages ? "overflow-hidden flex flex-col" : "p-3"
+            )}
           >
-            {option}
+            {showImages && (
+              <div className="w-full">
+                <AspectRatio ratio={imageConfig.ratio} className={imageConfig.classes}>
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                </AspectRatio>
+              </div>
+            )}
+            
+            {showText && (
+              <div className={cn("flex-1", showImages && "p-2")}>
+                {option}
+              </div>
+            )}
           </div>
         ))}
       </div>
+      
+      {!data.autoAdvance && data.maxSelections > 0 && (
+        <div className="flex justify-center mt-4">
+          <button className="bg-[#B89B7A]/80 hover:bg-[#B89B7A] text-white px-4 py-2 rounded-md text-sm opacity-50 cursor-not-allowed">
+            Continuar
+          </button>
+        </div>
+      )}
     </div>
   );
 };

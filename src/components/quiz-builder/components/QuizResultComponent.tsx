@@ -27,33 +27,46 @@ const QuizResultComponent: React.FC<QuizResultComponentProps> = ({
         padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
       }}
     >
-      <h2 className="text-2xl font-medium text-center mb-6 text-[#432818]">
-        {data.title || 'Seu Resultado'}
-      </h2>
-      
-      <div className="border border-[#B89B7A]/20 rounded-lg p-4 mb-6">
-        <h3 className="text-xl font-medium mb-3 text-[#432818]">Estilo Principal: Natural</h3>
-        <p className="text-[#6b605a]">
-          {data.description || 'Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia.'}
+      <div className="text-center mb-4">
+        <h2 className="text-xl md:text-2xl font-playfair text-[#432818] mb-2">
+          {data.title || 'Seu Resultado'}
+        </h2>
+        
+        <p className="text-[#8F7A6A]">
+          {data.description || 'Aqui será exibido o resultado do quiz com base nas respostas selecionadas.'}
         </p>
       </div>
       
-      <div className="mt-8">
-        <h3 className="text-lg font-medium mb-4 text-[#432818]">
-          Estilos Secundários
-        </h3>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-3 border border-[#B89B7A]/20 rounded-md">
-            <h4 className="font-medium text-[#432818]">Clássico</h4>
-            <div className="text-sm text-[#6b605a]">25%</div>
+      <div className="bg-[#FAF9F7] rounded-lg p-4 mb-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <h3 className="text-lg font-medium text-[#432818] mb-2">Estilo Predominante</h3>
+            <div className="bg-white p-3 rounded border border-[#B89B7A]/20">
+              <div className="font-bold text-[#B89B7A]">Elegante • 42%</div>
+              <p className="text-sm text-[#8F7A6A] mt-1">
+                Você valoriza a sofisticação e qualidade em suas escolhas de moda.
+              </p>
+            </div>
           </div>
           
-          <div className="p-3 border border-[#B89B7A]/20 rounded-md">
-            <h4 className="font-medium text-[#432818]">Contemporâneo</h4>
-            <div className="text-sm text-[#6b605a]">15%</div>
+          <div>
+            <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos Complementares</h3>
+            <div className="space-y-2">
+              <div className="bg-white p-2 rounded border border-[#B89B7A]/20">
+                <div className="font-medium text-[#B89B7A]">Clássico • 25%</div>
+              </div>
+              <div className="bg-white p-2 rounded border border-[#B89B7A]/20">
+                <div className="font-medium text-[#B89B7A]">Contemporâneo • 18%</div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+      
+      <div className="flex justify-center">
+        <button className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-6 py-3 rounded-md">
+          Continuar para Oferta Especial
+        </button>
       </div>
     </div>
   );

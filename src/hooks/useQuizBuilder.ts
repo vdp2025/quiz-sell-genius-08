@@ -90,6 +90,24 @@ export const useQuizBuilder = () => {
     }
   }, [components, stages, loading]);
 
+  const saveCurrentState = useCallback(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        components,
+        stages
+      }));
+      return true;
+    } catch (error) {
+      console.error('Erro ao salvar dados do quiz:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar as alterações do quiz.",
+        variant: "destructive",
+      });
+      return false;
+    }
+  }, [components, stages]);
+
   const getDefaultData = (type: QuizComponentType): any => {
     switch (type) {
       case 'header':
@@ -105,7 +123,16 @@ export const useQuizBuilder = () => {
           question: 'Sua pergunta aqui?', 
           options: ['Opção 1', 'Opção 2', 'Opção 3'],
           required: true,
-          multiSelect: 1 
+          multiSelect: 3,
+          maxSelections: 3,
+          minSelections: 3,
+          autoAdvance: true,
+          displayType: 'text',
+          imageSize: 'medium',
+          layout: {
+            columns: 2,
+            direction: 'vertical'
+          }
         };
       case 'singleChoice':
         return { 
@@ -380,6 +407,7 @@ export const useQuizBuilder = () => {
     deleteStage,
     moveStage,
     setActiveStage,
+    saveCurrentState,
     loading
   };
 };

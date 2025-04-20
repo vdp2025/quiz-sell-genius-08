@@ -31,8 +31,13 @@ export interface QuizStage {
   id: string;
   title: string;
   order: number;
-  type: 'cover' | 'question' | 'result';
+  type: 'cover' | 'question' | 'result' | 'strategic';
   componentId?: string;
+}
+
+export interface QuizComponentLayout {
+  columns: 1 | 2 | 3 | 4;
+  direction: 'vertical' | 'horizontal';
 }
 
 export interface QuizComponentData {
@@ -51,7 +56,20 @@ export interface QuizComponentData {
     options?: string[];
     stageTitle?: string;
     stageNumber?: number;
-    // Add more specific data properties as needed
+    
+    // New properties for enhanced functionality
+    autoAdvance?: boolean;
+    minSelections?: number;
+    maxSelections?: number;
+    multiSelect?: number; // For backwards compatibility
+    required?: boolean;
+    displayType?: 'text' | 'image' | 'both';
+    imageSize?: 'small' | 'medium' | 'large';
+    layout?: QuizComponentLayout;
+    
+    // Options for image/multimedia support
+    optionImages?: string[];
+    optionStyleCategories?: string[];
   };
   style?: QuizComponentStyle;
 }

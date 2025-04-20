@@ -7,13 +7,17 @@ import { PreviewPanel } from './PreviewPanel';
 import { StagesPanel } from './StagesPanel';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizComponentData, QuizStage } from '@/types/quizBuilder';
-import { Loader2, Plus } from 'lucide-react';
+import { Loader2, Plus, Copy, Eye, EyeOff, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from '@/components/ui/use-toast';
+import QuizPreview from './preview/QuizPreview';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  
   const { 
     components, 
     stages,
@@ -27,6 +31,7 @@ export const QuizBuilder: React.FC = () => {
     deleteStage,
     moveStage,
     setActiveStage,
+    saveCurrentState,
     loading
   } = useQuizBuilder();
 
@@ -51,6 +56,22 @@ export const QuizBuilder: React.FC = () => {
   const activeStage = activeStageId
     ? stages.find(s => s.id === activeStageId)
     : null;
+    
+  const handleSave = () => {
+    saveCurrentState();
+    toast({
+      title: "Quiz salvo com sucesso",
+      description: "Todas as alterações foram salvas.",
+    });
+  };
+  
+  const handleCopyCurrentQuiz = () => {
+    // Function to be implemented later
+    toast({
+      title: "Funcionalidade em desenvolvimento",
+      description: "A cópia do quiz atual será implementada em breve.",
+    });
+  };
 
   if (loading) {
     return (
@@ -67,54 +88,105 @@ export const QuizBuilder: React.FC = () => {
         <h1 className="text-2xl font-playfair text-[#432818]">
           Construtor de Quiz
         </h1>
-        <Tabs defaultValue="editor" onValueChange={(value) => setActiveView(value as 'editor' | 'preview')}>
-          <TabsList>
-            <TabsTrigger value="editor">Editor</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        <div className="flex gap-2">
+        
+        <div className="flex items-center gap-2">
+          <Tabs value={activeView} onValueChange={(value) => setActiveView(value as 'editor' | 'preview')}>
+            <TabsList>
+              <TabsTrigger value="editor">Editor</TabsTrigger>
+              <TabsTrigger value="preview">Preview</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          
           <Button 
-            variant="outline"
-            onClick={() => handleAddStage('cover')} 
-            className="text-[#B89B7A] border-[#B89B7A]"
+            variant="outline" 
+            size="sm"
+            onClick={handleCopyCurrentQuiz}
+            className="ml-4"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Capa
+            <Copy className="h-4 w-4 mr-2" />
+            Copiar Quiz Atual
           </Button>
+          
           <Button 
-            variant="outline"
-            onClick={() => handleAddStage('question')} 
-            className="text-[#B89B7A] border-[#B89B7A]"
+            variant="outline" 
+            size="sm"
+            onClick={() => setIsPreviewing(!isPreviewing)}
+            className="ml-2"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Questão
+            {isPreviewing ? (
+              <>
+                <EyeOff className="h-4 w-4 mr-2" />
+                Editar
+              </>
+            ) : (
+              <>
+                <Eye className="h-4 w-4 mr-2" />
+                Visualizar
+              </>
+            )}
           </Button>
+          
           <Button 
-            variant="outline"
-            onClick={() => handleAddStage('result')} 
-            className="text-[#B89B7A] border-[#B89B7A]"
+            size="sm"
+            onClick={handleSave}
+            className="ml-2 bg-[#B89B7A] hover:bg-[#A38A69]"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Resultado
+            <Save className="h-4 w-4 mr-2" />
+            Salvar
           </Button>
         </div>
       </div>
       
       <div className="flex-1">
-        <Tabs defaultValue="editor" value={activeView}>
+        <Tabs defaultValue={activeView} value={activeView}>
           <TabsContent value="editor" className="h-full">
             <ResizablePanelGroup direction="horizontal" className="h-full">
               {/* Left Panel - Stages Sidebar */}
               <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                <StagesPanel 
-                  stages={stages} 
-                  activeStageId={activeStageId}
-                  onStageSelect={setActiveStage}
-                  onStageMove={moveStage}
-                  onStageUpdate={updateStage}
-                  onStageDelete={deleteStage}
-                />
+                <div className="h-full flex flex-col">
+                  <div className="p-3 border-b bg-[#FAF9F7] flex justify-between items-center">
+                    <h2 className="font-medium text-[#432818]">Etapas do Quiz</h2>
+                    <div className="flex gap-2">
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddStage('cover')} 
+                        className="text-[#B89B7A] border-[#B89B7A] h-8"
+                      >
+                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        Capa
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddStage('question')} 
+                        className="text-[#B89B7A] border-[#B89B7A] h-8"
+                      >
+                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        Questão
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddStage('result')} 
+                        className="text-[#B89B7A] border-[#B89B7A] h-8"
+                      >
+                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        Resultado
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-auto">
+                    <StagesPanel 
+                      stages={stages} 
+                      activeStageId={activeStageId}
+                      onStageSelect={setActiveStage}
+                      onStageMove={moveStage}
+                      onStageUpdate={updateStage}
+                      onStageDelete={deleteStage}
+                    />
+                  </div>
+                </div>
               </ResizablePanel>
               
               <ResizableHandle withHandle />
@@ -137,6 +209,7 @@ export const QuizBuilder: React.FC = () => {
                   onSelectComponent={setSelectedComponentId}
                   onMoveComponent={moveComponent}
                   activeStage={activeStage}
+                  isPreviewing={isPreviewing}
                 />
               </ResizablePanel>
               
@@ -170,12 +243,10 @@ export const QuizBuilder: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="preview" className="h-full">
-            {/* Preview mode - show full quiz flow */}
-            <div className="h-full bg-[#FAF9F7] p-4 overflow-auto">
-              <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
-                {/* Render preview of active stage or full quiz */}
-              </div>
-            </div>
+            <QuizPreview 
+              stages={stages}
+              components={components}
+            />
           </TabsContent>
         </Tabs>
       </div>

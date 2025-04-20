@@ -9,11 +9,15 @@ interface HeaderComponentProps {
   isSelected: boolean;
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ data, style, isSelected }) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ 
+  data, 
+  style, 
+  isSelected 
+}) => {
   return (
     <div 
       className={cn(
-        "w-full p-6",
+        "w-full text-center",
         isSelected && "ring-2 ring-inset ring-[#B89B7A]/20"
       )}
       style={{
@@ -23,11 +27,12 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ data, style, isSelect
         padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
       }}
     >
-      <h1 className="text-2xl md:text-3xl text-center font-medium mb-3 text-[#432818]">
+      <h1 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-2">
         {data.title || 'Título do Quiz'}
       </h1>
+      
       {data.subtitle && (
-        <p className="text-center text-[#6b605a]">
+        <p className="text-[#8F7A6A] text-base">
           {data.subtitle}
         </p>
       )}
