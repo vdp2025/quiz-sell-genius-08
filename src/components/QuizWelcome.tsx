@@ -24,8 +24,8 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
     }
   };
 
-  const goToEditor = () => {
-    navigate('/admin/editor');
+  const goToQuizEditor = () => {
+    navigate('/admin/quiz-editor');
   };
 
   return (
@@ -61,11 +61,11 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
           
           <div className="pt-4 border-t border-[#B89B7A]/20 mt-4">
             <Button
-              onClick={goToEditor}
+              onClick={goToQuizEditor}
               variant="outline"
               className="w-full border-[#B89B7A] text-[#B89B7A] hover:bg-[#FAF9F7]"
             >
-              Acessar Editor de Página de Venda
+              Acessar Editor de Quiz
             </Button>
           </div>
         </div>
