@@ -18,7 +18,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
   components: [
     {
       id: generateId(),
-      type: 'stageCover' as const,
+      type: 'stageCover',
       order: 0,
       stageId: 'cover',
       data: {
@@ -40,7 +40,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     },
     ...selfPerceptionQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: index + 1,
       stageId: `q${index + 1}`,
       data: {
@@ -53,7 +53,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + 1}`,
         stageNumber: index + 2,
         layout: {
-          columns: 1,
+          columns: 1 as 1 | 2 | 3 | 4,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -70,7 +70,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     })),
     ...styleExperienceQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: index + selfPerceptionQuestions.length + 1,
       stageId: `q${index + selfPerceptionQuestions.length + 1}`,
       data: {
@@ -83,7 +83,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + 2,
         layout: {
-          columns: 1,
+          columns: 1 as 1 | 2 | 3 | 4,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -100,7 +100,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     })),
     ...purchaseIntentQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1,
       stageId: `q${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1}`,
       data: {
@@ -113,7 +113,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 2,
         layout: {
-          columns: 1,
+          columns: 1 as 1 | 2 | 3 | 4,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -130,7 +130,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     })),
     ...desiredOutcomesQuestions.map((question, index) => ({
       id: generateId(),
-      type: 'stageQuestion' as const,
+      type: 'stageQuestion',
       order: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1,
       stageId: `q${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1}`,
       data: {
@@ -143,7 +143,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 2,
         layout: {
-          columns: 1,
+          columns: 1 as 1 | 2 | 3 | 4,
           direction: 'vertical'
         },
         backgroundColorQuestion: '#FFFAF0',

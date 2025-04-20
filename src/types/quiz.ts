@@ -7,12 +7,18 @@ export interface QuizOption {
   points: number;
 }
 
+export interface QuizLayout {
+  columns: 1 | 2 | 3 | 4;
+  direction: 'vertical' | 'horizontal';
+}
+
 export interface QuizQuestion {
   id: string;
   title: string;
   type: 'text' | 'image' | 'both';
   multiSelect: number;
   options: QuizOption[];
+  layout?: QuizLayout;
 }
 
 export interface UserResponse {
