@@ -4,15 +4,47 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { giseleStyleTemplate } from '@/services/templates/giseleStyleTemplate';
 import { useEditor } from '@/hooks/useEditor';
+import { toast } from '@/components/ui/use-toast';
+import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 
-export const TemplateList = () => {
+interface TemplateListProps {
+  onSelectTemplate?: () => void;
+}
+
+export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) => {
   const { config, setConfig } = useEditor();
+  
+  // Use the styleType from the current config or default to "Natural"
+  const styleType = config?.styleType || "Natural";
+  const { importConfig } = useResultPageConfig(styleType);
 
   const handleSelectTemplate = (template: any) => {
-    setConfig({
-      ...config,
-      blocks: template
-    });
+    try {
+      if (importConfig) {
+        importConfig(template);
+      } else {
+        setConfig({
+          ...config,
+          blocks: template.blocks || []
+        });
+      }
+      
+      toast({
+        title: "Template aplicado",
+        description: "O template foi aplicado com sucesso",
+      });
+      
+      if (onSelectTemplate) {
+        onSelectTemplate();
+      }
+    } catch (error) {
+      console.error('Error applying template:', error);
+      toast({
+        title: "Erro ao aplicar template",
+        description: "Ocorreu um erro ao aplicar o template",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -30,4 +62,3 @@ export const TemplateList = () => {
     </div>
   );
 };
-

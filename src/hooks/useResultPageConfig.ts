@@ -4,7 +4,7 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
 import { createDefaultConfig } from '@/utils/resultPageDefaults';
 import { resultPageStorage } from '@/services/resultPageStorage';
-import { set, get } from 'lodash';
+import { set, get, merge } from 'lodash';
 
 export const useResultPageConfig = (styleType: string) => {
   const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(createDefaultConfig(styleType));
@@ -49,14 +49,51 @@ export const useResultPageConfig = (styleType: string) => {
   }, []);
 
   const saveConfig = useCallback(async () => {
-    return await resultPageStorage.save(resultPageConfig);
+    try {
+      await resultPageStorage.save(resultPageConfig);
+      toast({
+        title: 'Configuração salva',
+        description: 'A configuração da página de resultados foi salva com sucesso',
+      });
+      return true;
+    } catch (error) {
+      console.error('Error saving config:', error);
+      toast({
+        title: 'Erro ao salvar configuração',
+        description: 'Não foi possível salvar a configuração da página de resultados',
+        variant: 'destructive'
+      });
+      return false;
+    }
   }, [resultPageConfig]);
+
+  const importConfig = useCallback((importedConfig: any) => {
+    try {
+      // Ensure the imported config has the correct styleType
+      const configToImport = {
+        ...importedConfig,
+        styleType: styleType
+      };
+      
+      setResultPageConfig(configToImport);
+      return true;
+    } catch (error) {
+      console.error('Error importing config:', error);
+      toast({
+        title: 'Erro ao importar configuração',
+        description: 'O formato da configuração importada não é válido',
+        variant: 'destructive'
+      });
+      return false;
+    }
+  }, [styleType]);
 
   return {
     resultPageConfig,
     updateSection,
     resetConfig,
     saveConfig,
+    importConfig,
     loading
   };
 };

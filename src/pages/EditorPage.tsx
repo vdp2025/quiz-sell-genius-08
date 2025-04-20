@@ -28,7 +28,7 @@ export const EditorPage = () => {
           >
             Voltar ao Editor
           </Button>
-          <TemplateList />
+          <TemplateList onSelectTemplate={() => setShowTemplates(false)} />
         </div>
       ) : (
         <ResultPageVisualEditor 
@@ -41,4 +41,3 @@ export const EditorPage = () => {
 };
 
 export default EditorPage;
-

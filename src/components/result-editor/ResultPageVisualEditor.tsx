@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -10,9 +11,11 @@ import { GlobalStylesEditor } from './GlobalStylesEditor';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
+import { toast } from '@/components/ui/use-toast';
 
 export const ResultPageVisualEditor: React.FC<EditorProps> = ({ 
-  selectedStyle
+  selectedStyle,
+  onShowTemplates
 }) => {
   const {
     resultPageConfig,
@@ -24,7 +27,8 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
       handleReset,
       toggleGlobalStyles,
       togglePreview,
-      updateSection
+      updateSection,
+      importConfig
     }
   } = useResultPageEditor(selectedStyle.category);
 
@@ -32,8 +36,38 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
     blocks,
     selectedBlockId,
     setSelectedBlockId,
+    updateBlocks,
     actions: blockActions
   } = useBlockOperations();
+
+  // Sync blocks with config when needed
+  useEffect(() => {
+    if (resultPageConfig?.blocks) {
+      updateBlocks(resultPageConfig.blocks);
+    }
+  }, [resultPageConfig?.blocks, updateBlocks]);
+
+  const handleUpdateConfig = (newConfig) => {
+    if (newConfig) {
+      try {
+        importConfig(newConfig);
+        if (newConfig.blocks) {
+          updateBlocks(newConfig.blocks);
+        }
+        toast({
+          title: "Configuração atualizada",
+          description: "A configuração foi aplicada com sucesso",
+        });
+      } catch (error) {
+        console.error('Error updating config:', error);
+        toast({
+          title: "Erro ao atualizar configuração",
+          description: "Ocorreu um erro ao aplicar a configuração",
+          variant: "destructive"
+        });
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -53,13 +87,8 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
           onReset={handleReset}
           onEditGlobalStyles={toggleGlobalStyles}
           resultPageConfig={resultPageConfig}
-          onUpdateConfig={(newConfig) => {
-            if (newConfig) {
-              Object.keys(newConfig).forEach(key => {
-                updateSection(key, newConfig[key]);
-              });
-            }
-          }}
+          onUpdateConfig={handleUpdateConfig}
+          onShowTemplates={onShowTemplates}
         />
         
         <ResizablePanelGroup direction="horizontal" className="flex-1">

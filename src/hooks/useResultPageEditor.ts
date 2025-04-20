@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+
+import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
@@ -19,8 +20,19 @@ export const useResultPageEditor = (styleType: string) => {
     updateSection, 
     saveConfig,
     resetConfig,
+    importConfig,
     loading 
   } = useResultPageConfig(styleType);
+
+  // Initialize blocks from config when it's loaded
+  useEffect(() => {
+    if (resultPageConfig?.blocks && resultPageConfig.blocks.length > 0) {
+      setState(prev => ({
+        ...prev,
+        blocks: resultPageConfig.blocks
+      }));
+    }
+  }, [resultPageConfig?.blocks]);
 
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
@@ -34,33 +46,45 @@ export const useResultPageEditor = (styleType: string) => {
       order: state.blocks.length
     };
     
-    setState(prev => ({
-      ...prev,
-      blocks: [...prev.blocks, newBlock],
-      selectedBlockId: newBlock.id
-    }));
+    setState(prev => {
+      const newBlocks = [...prev.blocks, newBlock];
+      updateSection('blocks', newBlocks);
+      return {
+        ...prev,
+        blocks: newBlocks,
+        selectedBlockId: newBlock.id
+      };
+    });
     
     return newBlock.id;
-  }, [state.blocks]);
+  }, [state.blocks, updateSection]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    setState(prev => ({
-      ...prev,
-      blocks: prev.blocks.map(block =>
+    setState(prev => {
+      const updatedBlocks = prev.blocks.map(block =>
         block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-      )
-    }));
-  }, []);
+      );
+      updateSection('blocks', updatedBlocks);
+      return {
+        ...prev,
+        blocks: updatedBlocks
+      };
+    });
+  }, [updateSection]);
 
   const handleDeleteBlock = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      blocks: prev.blocks
+    setState(prev => {
+      const filteredBlocks = prev.blocks
         .filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index })),
-      selectedBlockId: null
-    }));
-  }, []);
+        .map((block, index) => ({ ...block, order: index }));
+      updateSection('blocks', filteredBlocks);
+      return {
+        ...prev,
+        blocks: filteredBlocks,
+        selectedBlockId: null
+      };
+    });
+  }, [updateSection]);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     setState(prev => {
@@ -68,15 +92,18 @@ export const useResultPageEditor = (styleType: string) => {
       const [removed] = result.splice(sourceIndex, 1);
       result.splice(destinationIndex, 0, removed);
       
+      const reorderedBlocks = result.map((block, index) => ({
+        ...block,
+        order: index
+      }));
+      
+      updateSection('blocks', reorderedBlocks);
       return {
         ...prev,
-        blocks: result.map((block, index) => ({
-          ...block,
-          order: index
-        }))
+        blocks: reorderedBlocks
       };
     });
-  }, []);
+  }, [updateSection]);
 
   const toggleGlobalStyles = useCallback(() => {
     setState(prev => ({
@@ -91,11 +118,12 @@ export const useResultPageEditor = (styleType: string) => {
     isPreviewing: state.isPreviewing,
     isGlobalStylesOpen: state.isGlobalStylesOpen,
     actions: {
-      handleSave: () => saveConfig(),
+      handleSave: saveConfig,
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,
-      updateSection
+      updateSection,
+      importConfig
     }
   };
 };

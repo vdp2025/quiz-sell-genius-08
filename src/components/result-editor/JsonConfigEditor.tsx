@@ -35,6 +35,7 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
         description: "As alterações foram salvas com sucesso",
       });
     } catch (error) {
+      console.error('Error parsing JSON:', error);
       toast({
         title: "Erro ao salvar",
         description: "JSON inválido. Verifique o formato e tente novamente.",
@@ -61,6 +62,7 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
             description: "O arquivo foi importado com sucesso",
           });
         } catch (error) {
+          console.error('Error parsing imported JSON:', error);
           toast({
             title: "Erro ao importar",
             description: "Arquivo JSON inválido",

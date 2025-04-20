@@ -5,6 +5,7 @@ import { ResultPageConfig } from './resultPageConfig';
 
 export interface EditorProps {
   selectedStyle: StyleResult;
+  onShowTemplates?: () => void;
 }
 
 export interface EditorState {

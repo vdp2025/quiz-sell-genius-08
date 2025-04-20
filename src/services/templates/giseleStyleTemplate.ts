@@ -1,97 +1,229 @@
 
-import { Block } from '@/types/editor';
-
-export const giseleStyleTemplate: Block[] = [
-  {
-    id: "logo-gisele",
-    type: "image",
-    content: {
-      imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-      imageAlt: "Logo Gisele Galvão"
+export const giseleStyleTemplate = {
+  "styleType": "Natural",
+  "header": {
+    "visible": true,
+    "content": {
+      "title": "Olá, seu estilo predominante é:",
+      "subtitle": ""
     },
-    order: 0
+    "style": {
+      "textAlign": "center",
+      "margin": "0 0 2rem 0",
+      "backgroundColor": "#fffaf7",
+      "padding": "40px 20px",
+      "fontSize": "16px",
+      "borderRadius": "8px"
+    }
   },
-  {
-    id: "headline-transformadora",
-    type: "headline",
-    content: {
-      title: "Seu estilo foi revelado. Agora é hora da transformação.",
-      subtitle: "Descubra como aplicar seu estilo com confiança, leveza e autenticidade.",
-      textColor: "#aa6b5d",
-      alignment: "center"
+  "mainContent": {
+    "visible": true,
+    "content": {
+      "description": "Você valoriza o conforto e a praticidade. seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia."
     },
-    order: 1
+    "style": {
+      "padding": "40px 20px",
+      "backgroundColor": "#fffaf7",
+      "borderRadius": "8px",
+      "textAlign": "center",
+      "fontSize": "16px"
+    }
   },
-  {
-    id: "copy-central",
-    type: "text",
-    content: {
-      text: "Você acabou de dar um passo essencial: descobrir o seu estilo predominante. Mas o verdadeiro poder dessa descoberta não está no resultado em si — e sim no que você faz com ele.\n\nSaber o que te representa é libertador. Mas viver esse estilo com intenção é o que transforma a forma como você se vê, se veste e se posiciona no mundo."
-    },
-    order: 2
+  "secondaryStyles": {
+    "visible": true,
+    "content": {},
+    "style": {
+      "padding": "40px 20px",
+      "backgroundColor": "#fffaf7",
+      "borderRadius": "8px",
+      "margin": "1.5rem 0 0 0",
+      "textAlign": "center",
+      "fontSize": "16px"
+    }
   },
-  {
-    id: "benefits-guia",
-    type: "benefits",
-    content: {
-      title: "Você vai aprender a:",
-      items: [
-        "Identificar e aplicar seus estilos com confiança",
-        "Montar looks para o dia a dia, trabalho e eventos",
-        "Usar cores, tecidos e modelagens que realçam quem você é",
-        "Transmitir sua essência com estratégia, leveza e presença",
-        "Fazer compras mais conscientes e parar de errar nas escolhas"
-      ]
+  "offer": {
+    "hero": {
+      "visible": true,
+      "content": {
+        "title": "Você descobriu seu estilo",
+        "subtitle": "Agora é hora de aplicar com clareza — e se vestir de você",
+        "price": "39,00",
+        "regularPrice": "175,00",
+        "ctaText": "Quero meu guia + bônus",
+        "ctaUrl": "Https://pay.hotmart.com/w98977034c?checkoutmode=10&bid=1744967466912"
+      },
+      "style": {
+        "backgroundColor": "#fffaf7",
+        "padding": "40px 20px",
+        "borderRadius": "8px",
+        "margin": "2rem 0 0 0",
+        "textAlign": "center",
+        "fontSize": "16px"
+      }
     },
-    order: 3
+    "products": {
+      "visible": true,
+      "content": {
+        "title": "O que você vai receber:"
+      },
+      "style": {
+        "padding": "40px 20px",
+        "backgroundColor": "#fffaf7",
+        "borderRadius": "8px",
+        "margin": "1.5rem 0 0 0",
+        "textAlign": "center",
+        "fontSize": "16px"
+      }
+    },
+    "pricing": {
+      "visible": true,
+      "content": {
+        "price": "39,00",
+        "regularPrice": "175,00",
+        "ctaText": "Quero meu guia + bônus",
+        "ctaUrl": "Https://pay.hotmart.com/w98977034c?checkoutmode=10&bid=1744967466912",
+        "urgencyText": "Oferta por tempo limitado!"
+      },
+      "style": {
+        "padding": "40px 20px",
+        "backgroundColor": "#fffaf7",
+        "borderRadius": "8px",
+        "margin": "1.5rem 0 0 0",
+        "textAlign": "center",
+        "fontSize": "16px"
+      }
+    },
+    "benefits": {
+      "visible": true,
+      "content": {
+        "title": "Benefícios",
+        "items": [
+          "Descubra seu estilo com precisão",
+          "Aprenda a criar looks autênticos",
+          "Economize tempo e dinheiro",
+          "Ganhe confiança na sua imagem"
+        ]
+      },
+      "style": {
+        "padding": "40px 20px",
+        "backgroundColor": "#fffaf7",
+        "borderRadius": "8px",
+        "margin": "1.5rem 0 0 0",
+        "textAlign": "center",
+        "fontSize": "16px"
+      }
+    },
+    "testimonials": {
+      "visible": true,
+      "content": {
+        "title": "O que estão dizendo"
+      },
+      "style": {
+        "padding": "40px 20px",
+        "backgroundColor": "#fffaf7",
+        "borderRadius": "8px",
+        "margin": "1.5rem 0 0 0",
+        "textAlign": "center",
+        "fontSize": "16px"
+      }
+    },
+    "guarantee": {
+      "visible": true,
+      "content": {
+        "title": "Garantia de 7 dias",
+        "text": "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
+      },
+      "style": {
+        "padding": "40px 20px",
+        "backgroundColor": "#fffaf7",
+        "borderRadius": "8px",
+        "margin": "1.5rem 0 0 0",
+        "textAlign": "center",
+        "fontSize": "16px"
+      }
+    }
   },
-  {
-    id: "pricing-calltoaction",
-    type: "pricing",
-    content: {
-      regularPrice: "175,00",
-      salePrice: "39,00",
-      buttonText: "Quero meu Guia + Bônus",
-      checkoutUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-      limitedTimeText: "Oferta exclusiva por tempo limitado"
-    },
-    order: 4
+  "globalStyles": {
+    "primaryColor": "#B89B7A",
+    "secondaryColor": "#432818",
+    "textColor": "#1A1818",
+    "backgroundColor": "#fffaf7",
+    "fontFamily": "Playfair Display"
   },
-  {
-    id: "bloco-depoimentos",
-    type: "testimonials",
-    content: {
-      title: "Transformações reais:",
-      testimonials: [
-        {
-          author: "Renata C.",
-          role: "41 anos",
-          text: "Comprei menos, combinei mais e finalmente entendi o que comunica quem eu sou."
-        },
-        {
-          author: "Tatiane M.",
-          role: "34 anos",
-          text: "O visagismo foi revelador! Cortei o cabelo certo, acertei nos brincos e estou sendo notada."
-        },
-        {
-          author: "Luciana D.",
-          role: "38 anos",
-          text: "Me sinto mais leve, elegante e segura ao me posicionar."
-        }
-      ]
+  "blocks": [
+    {
+      "id": "header-1",
+      "type": "header",
+      "content": {
+        "title": "Seu estilo foi revelado. Agora é hora da transformação.",
+        "subtitle": "Você acabou de dar um passo essencial: descobrir o seu estilo predominante."
+      },
+      "order": 0
     },
-    order: 5
-  },
-  {
-    id: "cta-final",
-    type: "cta",
-    content: {
-      title: "Garanta seu acesso agora mesmo",
-      buttonText: "Quero meu Guia + Bônus",
-      url: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-      alignment: "center"
+    {
+      "id": "hero-1",
+      "type": "hero-section",
+      "content": {
+        "title": "VOCÊ DESCOBRIU SEU ESTILO",
+        "subtitle": "Agora é hora de aplicar com clareza — e se vestir de você",
+        "heroImage": "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
+        "heroImage2": "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
+      },
+      "order": 1
     },
-    order: 6
-  }
-];
-
+    {
+      "id": "benefits-1",
+      "type": "benefits",
+      "content": {
+        "title": "O que você vai aprender:",
+        "items": [
+          "Aplicar seus estilos com autenticidade",
+          "Montar looks práticos para o dia a dia",
+          "Usar cores e modelagens que valorizam quem você é",
+          "Parar de errar nas compras"
+        ]
+      },
+      "order": 2
+    },
+    {
+      "id": "products-1",
+      "type": "products",
+      "content": {
+        "title": "O que você vai receber:",
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp",
+            "alt": "Guia de Estilo - 3 Revistas"
+          },
+          {
+            "url": "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp",
+            "alt": "Todos os produtos e bônus"
+          }
+        ]
+      },
+      "order": 3
+    },
+    {
+      "id": "pricing-1",
+      "type": "pricing",
+      "content": {
+        "regularPrice": "175,00",
+        "salePrice": "39,00",
+        "buttonText": "Quero meu guia + bônus",
+        "ctaUrl": "https://pay.hotmart.com/w98977034c?checkoutmode=10&bid=1744967466912",
+        "urgencyText": "Oferta por tempo limitado!"
+      },
+      "order": 4
+    },
+    {
+      "id": "guarantee-1",
+      "type": "guarantee",
+      "content": {
+        "title": "Garantia de 7 dias",
+        "text": "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.",
+        "image": "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp"
+      },
+      "order": 5
+    }
+  ]
+};
