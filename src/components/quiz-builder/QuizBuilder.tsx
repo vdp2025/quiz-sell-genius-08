@@ -101,80 +101,84 @@ export const QuizBuilder: React.FC = () => {
         </div>
       </div>
       
-      <TabsContent value="editor" className="flex-1 flex flex-col">
-        <ResizablePanelGroup direction="horizontal" className="flex-1">
-          {/* Left Panel - Stages Sidebar */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <StagesPanel 
-              stages={stages} 
-              activeStageId={activeStageId}
-              onStageSelect={setActiveStage}
-              onStageMove={moveStage}
-              onStageUpdate={updateStage}
-              onStageDelete={deleteStage}
-            />
-          </ResizablePanel>
+      <div className="flex-1">
+        <Tabs defaultValue="editor" value={activeView}>
+          <TabsContent value="editor" className="h-full">
+            <ResizablePanelGroup direction="horizontal" className="h-full">
+              {/* Left Panel - Stages Sidebar */}
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <StagesPanel 
+                  stages={stages} 
+                  activeStageId={activeStageId}
+                  onStageSelect={setActiveStage}
+                  onStageMove={moveStage}
+                  onStageUpdate={updateStage}
+                  onStageDelete={deleteStage}
+                />
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              {/* Components Sidebar */}
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <ComponentsSidebar 
+                  onComponentSelect={handleComponentSelect} 
+                  activeStage={activeStage}
+                />
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              {/* Center Panel - Preview */}
+              <ResizablePanel defaultSize={35}>
+                <PreviewPanel 
+                  components={activeStageComponents}
+                  selectedComponentId={selectedComponentId}
+                  onSelectComponent={setSelectedComponentId}
+                  onMoveComponent={moveComponent}
+                  activeStage={activeStage}
+                />
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              {/* Right Panel - Properties */}
+              <ResizablePanel defaultSize={25}>
+                <PropertiesPanel 
+                  component={selectedComponent}
+                  stage={activeStage}
+                  onClose={() => setSelectedComponentId(null)}
+                  onUpdate={(data: Partial<QuizComponentData>) => {
+                    if (selectedComponentId) {
+                      updateComponent(selectedComponentId, data);
+                    }
+                  }}
+                  onUpdateStage={(data: Partial<QuizStage>) => {
+                    if (activeStageId) {
+                      updateStage(activeStageId, data);
+                    }
+                  }}
+                  onDelete={() => {
+                    if (selectedComponentId) {
+                      deleteComponent(selectedComponentId);
+                      setSelectedComponentId(null);
+                    }
+                  }}
+                />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </TabsContent>
           
-          <ResizableHandle withHandle />
-          
-          {/* Components Sidebar */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <ComponentsSidebar 
-              onComponentSelect={handleComponentSelect} 
-              activeStage={activeStage}
-            />
-          </ResizablePanel>
-          
-          <ResizableHandle withHandle />
-          
-          {/* Center Panel - Preview */}
-          <ResizablePanel defaultSize={35}>
-            <PreviewPanel 
-              components={activeStageComponents}
-              selectedComponentId={selectedComponentId}
-              onSelectComponent={setSelectedComponentId}
-              onMoveComponent={moveComponent}
-              activeStage={activeStage}
-            />
-          </ResizablePanel>
-          
-          <ResizableHandle withHandle />
-          
-          {/* Right Panel - Properties */}
-          <ResizablePanel defaultSize={25}>
-            <PropertiesPanel 
-              component={selectedComponent}
-              stage={activeStage}
-              onClose={() => setSelectedComponentId(null)}
-              onUpdate={(data: Partial<QuizComponentData>) => {
-                if (selectedComponentId) {
-                  updateComponent(selectedComponentId, data);
-                }
-              }}
-              onUpdateStage={(data: Partial<QuizStage>) => {
-                if (activeStageId) {
-                  updateStage(activeStageId, data);
-                }
-              }}
-              onDelete={() => {
-                if (selectedComponentId) {
-                  deleteComponent(selectedComponentId);
-                  setSelectedComponentId(null);
-                }
-              }}
-            />
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </TabsContent>
-      
-      <TabsContent value="preview" className="flex-1">
-        {/* Preview mode - show full quiz flow */}
-        <div className="h-full bg-[#FAF9F7] p-4 overflow-auto">
-          <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
-            {/* Render preview of active stage or full quiz */}
-          </div>
-        </div>
-      </TabsContent>
+          <TabsContent value="preview" className="h-full">
+            {/* Preview mode - show full quiz flow */}
+            <div className="h-full bg-[#FAF9F7] p-4 overflow-auto">
+              <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
+                {/* Render preview of active stage or full quiz */}
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

@@ -13,6 +13,7 @@ import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
@@ -110,36 +111,44 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           onShowTemplates={onShowTemplates}
         />
         
-        <ResizablePanelGroup direction="horizontal" className="flex-1">
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
-          </ResizablePanel>
+        <Tabs defaultValue="editor" className="flex-1">
+          <TabsList className="hidden">
+            <TabsTrigger value="editor">Editor</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="editor" className="h-full">
+            <ResizablePanelGroup direction="horizontal" className="h-full">
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
+              </ResizablePanel>
 
-          <ResizableHandle withHandle />
+              <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={55}>
-            <EditorPreview
-              blocks={blocks}
-              selectedBlockId={selectedBlockId}
-              onSelectBlock={setSelectedBlockId}
-              isPreviewing={isPreviewing}
-              primaryStyle={selectedStyle}
-              onReorderBlocks={blockActions.handleReorderBlocks}
-            />
-          </ResizablePanel>
+              <ResizablePanel defaultSize={55}>
+                <EditorPreview
+                  blocks={blocks}
+                  selectedBlockId={selectedBlockId}
+                  onSelectBlock={setSelectedBlockId}
+                  isPreviewing={isPreviewing}
+                  primaryStyle={selectedStyle}
+                  onReorderBlocks={blockActions.handleReorderBlocks}
+                />
+              </ResizablePanel>
 
-          <ResizableHandle withHandle />
+              <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={25}>
-            <PropertiesPanel
-              selectedBlockId={selectedBlockId}
-              blocks={blocks}
-              onClose={() => setSelectedBlockId(null)}
-              onUpdate={blockActions.handleUpdateBlock}
-              onDelete={blockActions.handleDeleteBlock}
-            />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+              <ResizablePanel defaultSize={25}>
+                <PropertiesPanel
+                  selectedBlockId={selectedBlockId}
+                  blocks={blocks}
+                  onClose={() => setSelectedBlockId(null)}
+                  onUpdate={blockActions.handleUpdateBlock}
+                  onDelete={blockActions.handleDeleteBlock}
+                />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </TabsContent>
+        </Tabs>
         
         {isGlobalStylesOpen && (
           <GlobalStylesEditor
