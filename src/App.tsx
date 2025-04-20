@@ -1,22 +1,24 @@
 
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import QuizPage from './pages/QuizPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
-import ResultadoEditorPage from './pages/admin/ResultadoEditorPage';
-import './styles/globals.css';  // Changed from '@/styles/globals.css'
+import EditorPage from './pages/EditorPage';
+import { AuthProvider } from './context/AuthContext';
+import { Toaster } from './components/ui/toaster';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/quiz" element={<QuizPage />} />
-        <Route path="/resultado" element={<ResultPage />} />
-        <Route path="/admin/resultado-editor" element={<ResultadoEditorPage />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<QuizPage />} />
+          <Route path="/resultado" element={<ResultPage />} />
+          <Route path="/editor" element={<EditorPage />} />
+          <Route path="/editor/:style" element={<EditorPage />} />
+        </Routes>
+        <Toaster />
+      </Router>
+    </AuthProvider>
   );
 }
 
