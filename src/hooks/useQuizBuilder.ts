@@ -27,11 +27,11 @@ export const useQuizBuilder = () => {
   } = useQuizSteps(steps, setSteps, currentStepIndex, setCurrentStepIndex);
 
   const {
-    saveCurrentState,
     loadSavedState,
     setStepsFromTemplate
   } = useQuizPersistence(steps, currentStepIndex, setSteps, setCurrentStepIndex);
 
+  // Load saved state on mount
   useEffect(() => {
     loadSavedState();
   }, [loadSavedState]);
@@ -50,8 +50,6 @@ export const useQuizBuilder = () => {
     updateStepTitle,
     deleteStep,
     duplicateStep,
-    setStepsFromTemplate,
-    saveCurrentState,
-    loadSavedState
+    setStepsFromTemplate
   };
 };

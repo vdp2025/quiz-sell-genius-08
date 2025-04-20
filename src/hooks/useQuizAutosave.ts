@@ -13,15 +13,18 @@ export const useQuizAutosave = ({ steps, currentStepIndex }: AutosaveProps) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const saveToLocalStorage = useCallback(async () => {
-    if (isSaving) return;
+    if (isSaving || !steps.length) return;
 
     try {
       setIsSaving(true);
-      localStorage.setItem('quiz_builder_state', JSON.stringify({
+      const saveData = {
         steps,
         currentStepIndex,
         lastSaved: new Date().toISOString()
-      }));
+      };
+      
+      localStorage.setItem('quiz_builder_state', JSON.stringify(saveData));
+      console.log('Quiz builder state saved:', saveData);
       
       setLastSaved(new Date());
       toast({
@@ -40,14 +43,9 @@ export const useQuizAutosave = ({ steps, currentStepIndex }: AutosaveProps) => {
     }
   }, [steps, currentStepIndex, isSaving]);
 
-  // Auto-save every minute and when steps change
-  useEffect(() => {
-    const saveTimeout = setTimeout(saveToLocalStorage, 60000);
-    return () => clearTimeout(saveTimeout);
-  }, [steps, saveToLocalStorage]);
-
   // Save when steps change after a short delay
   useEffect(() => {
+    if (!steps.length) return;
     const debounceTimeout = setTimeout(saveToLocalStorage, 2000);
     return () => clearTimeout(debounceTimeout);
   }, [steps, saveToLocalStorage]);

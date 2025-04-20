@@ -1,7 +1,6 @@
 
 import { useCallback } from 'react';
 import { QuizStep } from '@/types/quizBuilder';
-import { toast } from '@/hooks/use-toast';
 
 export const useQuizPersistence = (
   steps: QuizStep[],
@@ -9,30 +8,6 @@ export const useQuizPersistence = (
   setSteps: React.Dispatch<React.SetStateAction<QuizStep[]>>,
   setCurrentStepIndex: React.Dispatch<React.SetStateAction<number>>
 ) => {
-  const saveCurrentState = useCallback(async () => {
-    try {
-      localStorage.setItem('quiz_builder_state', JSON.stringify({
-        steps,
-        currentStepIndex
-      }));
-      
-      toast({
-        title: "Alterações salvas",
-        description: "Suas alterações foram salvas com sucesso",
-      });
-      
-      return true;
-    } catch (error) {
-      console.error('Error saving quiz state:', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Não foi possível salvar suas alterações",
-        variant: "destructive",
-      });
-      return false;
-    }
-  }, [steps, currentStepIndex]);
-
   const loadSavedState = useCallback(() => {
     try {
       const savedState = localStorage.getItem('quiz_builder_state');
@@ -52,7 +27,6 @@ export const useQuizPersistence = (
   }, [setSteps, setCurrentStepIndex]);
 
   return {
-    saveCurrentState,
     loadSavedState,
     setStepsFromTemplate
   };

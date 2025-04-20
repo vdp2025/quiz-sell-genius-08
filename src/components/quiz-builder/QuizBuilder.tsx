@@ -10,13 +10,14 @@ import { LoadExistingQuiz } from './LoadExistingQuiz';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
 import { Button } from '@/components/ui/button';
-import { Save } from '@/components/ui/icons';
+import { Save } from 'lucide-react';
 import { useQuizAutosave } from '@/hooks/useQuizAutosave';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [isLoadingExisting, setIsLoadingExisting] = useState(true);
   const [showStepsVisualization, setShowStepsVisualization] = useState(true);
+  
   const { 
     steps, 
     currentStepIndex,
@@ -30,8 +31,7 @@ export const QuizBuilder: React.FC = () => {
     updateStepTitle,
     deleteStep,
     duplicateStep,
-    setStepsFromTemplate,
-    saveCurrentState
+    setStepsFromTemplate
   } = useQuizBuilder();
 
   const { lastSaved, isSaving, saveToLocalStorage } = useQuizAutosave({
