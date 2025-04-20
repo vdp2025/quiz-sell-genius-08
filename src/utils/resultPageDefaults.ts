@@ -1,4 +1,3 @@
-
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { createHeaderConfig } from './config/headerDefaults';
 import { getStyleDescription } from './config/styleDescriptions';
