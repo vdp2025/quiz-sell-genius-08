@@ -16,7 +16,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { X, Trash, Upload, Image, Type } from 'lucide-react';
-import { QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentData, QuizOption, StyleCategory } from '@/types/quizBuilder';
 import { ImageUploader } from './ImageUploader';
 
 interface PropertiesPanelProps {
@@ -160,7 +160,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label>Tipo de Exibição</Label>
               <Select
                 value={component.data.displayType || 'text'}
-                onValueChange={(value) => onUpdate({ data: { ...component.data, displayType: value } })}
+                onValueChange={(value) => {
+                  const displayType = value as 'text' | 'image' | 'both';
+                  onUpdate({ data: { ...component.data, displayType } });
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Tipo de Exibição" />
@@ -260,7 +263,11 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         onImageUpload={(url) => {
                           // Make sure fullOptions exists
                           const fullOptions = component.data.fullOptions || 
-                            (component.data.options || []).map(text => ({ text }));
+                            (component.data.options || []).map(text => ({ 
+                              text,
+                              styleCategory: 'Natural' as StyleCategory,
+                              points: 1
+                            }));
                           
                           const newFullOptions = [...fullOptions];
                           newFullOptions[index] = { 
@@ -293,12 +300,16 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         onValueChange={(value) => {
                           // Make sure fullOptions exists
                           const fullOptions = component.data.fullOptions || 
-                            (component.data.options || []).map(text => ({ text }));
+                            (component.data.options || []).map(text => ({ 
+                              text,
+                              styleCategory: 'Natural' as StyleCategory,
+                              points: 1
+                            }));
                           
                           const newFullOptions = [...fullOptions];
                           newFullOptions[index] = { 
                             ...newFullOptions[index],
-                            styleCategory: value as any,
+                            styleCategory: value as StyleCategory,
                             text: component.data.options?.[index] || ''
                           };
                           
@@ -332,7 +343,11 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         onChange={(e) => {
                           // Make sure fullOptions exists
                           const fullOptions = component.data.fullOptions || 
-                            (component.data.options || []).map(text => ({ text }));
+                            (component.data.options || []).map(text => ({ 
+                              text,
+                              styleCategory: 'Natural' as StyleCategory,
+                              points: 1
+                            }));
                           
                           const newFullOptions = [...fullOptions];
                           newFullOptions[index] = { 
@@ -361,7 +376,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   if (component.data.fullOptions) {
                     const newFullOptions = [...component.data.fullOptions, { 
                       text: 'Nova opção',
-                      styleCategory: 'Natural',
+                      styleCategory: 'Natural' as StyleCategory,
                       points: 1
                     }];
                     onUpdate({ data: { ...component.data, fullOptions: newFullOptions } });

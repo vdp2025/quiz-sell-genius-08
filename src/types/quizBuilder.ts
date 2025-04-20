@@ -31,10 +31,12 @@ export interface QuizComponentStyle {
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 }
 
+export type StyleCategory = 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
+
 export interface QuizOption {
   text: string;
   imageUrl?: string;
-  styleCategory?: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
+  styleCategory?: StyleCategory;
   points?: number;
   isStrategic?: boolean;
 }

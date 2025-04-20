@@ -4,6 +4,7 @@ import { QuizQuestion } from '@/types/quiz';
 import { generateId } from '@/utils/idGenerator';
 import { styleQuizTemplate } from './styleQuizTemplate';
 import { toast } from '@/components/ui/use-toast';
+import { QuizStep } from '@/types/quizBuilder';
 
 const LOCAL_STORAGE_KEY = 'quiz_templates';
 
@@ -187,7 +188,7 @@ const createDefaultTemplate = (): QuizTemplate => {
     id: generateId(),
     name: 'Quiz de Estilo Pessoal',
     description: 'Teste padrão para descobrir o estilo pessoal',
-    questions: styleQuizTemplate,
+    questions: styleQuizTemplate as unknown as QuizQuestion[],
     createdAt: now,
     updatedAt: now,
     isDefault: true

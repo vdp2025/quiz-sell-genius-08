@@ -25,7 +25,7 @@ export const LoadExistingQuiz: React.FC<LoadExistingQuizProps> = ({ onLoadQuiz }
     setIsLoading(true);
     // Simulate loading delay
     setTimeout(() => {
-      onLoadQuiz(styleQuizTemplate);
+      onLoadQuiz(styleQuizTemplate as unknown as QuizStep[]);
       setIsLoading(false);
     }, 800);
   };
