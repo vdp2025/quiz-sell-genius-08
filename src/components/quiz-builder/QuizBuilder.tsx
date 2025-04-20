@@ -12,6 +12,7 @@ import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
 import { Button } from '@/components/ui/button';
 import { Save } from 'lucide-react';
 import { useQuizAutosave } from '@/hooks/useQuizAutosave';
+import { toast } from '@/components/ui/use-toast';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -49,6 +50,14 @@ export const QuizBuilder: React.FC = () => {
     setIsLoadingExisting(false);
   };
 
+  const handleManualSave = () => {
+    saveToLocalStorage();
+    toast({
+      title: "Salvamento manual",
+      description: "Seu quiz foi salvo manualmente"
+    });
+  };
+
   const selectedComponent = selectedComponentId 
     ? components.find(c => c.id === selectedComponentId) 
     : null;
@@ -74,7 +83,7 @@ export const QuizBuilder: React.FC = () => {
             {showStepsVisualization ? 'Ocultar Visualização' : 'Mostrar Visualização'}
           </Button>
           <Button 
-            onClick={saveToLocalStorage}
+            onClick={handleManualSave}
             className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
             disabled={isSaving}
           >

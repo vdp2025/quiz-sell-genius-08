@@ -12,25 +12,37 @@ export const useQuizAutosave = ({ steps, currentStepIndex }: AutosaveProps) => {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Load last saved timestamp when the component mounts
+  useEffect(() => {
+    const storedData = localStorage.getItem('quiz_builder_state');
+    if (storedData) {
+      try {
+        const { lastSaved } = JSON.parse(storedData);
+        if (lastSaved) {
+          setLastSaved(new Date(lastSaved));
+        }
+      } catch (error) {
+        console.error('Error loading last saved timestamp:', error);
+      }
+    }
+  }, []);
+
   const saveToLocalStorage = useCallback(async () => {
     if (isSaving || !steps.length) return;
 
     try {
       setIsSaving(true);
+      const now = new Date();
       const saveData = {
         steps,
         currentStepIndex,
-        lastSaved: new Date().toISOString()
+        lastSaved: now.toISOString()
       };
       
       localStorage.setItem('quiz_builder_state', JSON.stringify(saveData));
       console.log('Quiz builder state saved:', saveData);
       
-      setLastSaved(new Date());
-      toast({
-        title: "Alterações salvas",
-        description: "O quiz foi salvo automaticamente",
-      });
+      setLastSaved(now);
     } catch (error) {
       console.error('Error saving quiz:', error);
       toast({
@@ -46,8 +58,17 @@ export const useQuizAutosave = ({ steps, currentStepIndex }: AutosaveProps) => {
   // Save when steps change after a short delay
   useEffect(() => {
     if (!steps.length) return;
-    const debounceTimeout = setTimeout(saveToLocalStorage, 2000);
-    return () => clearTimeout(debounceTimeout);
+    
+    console.log('Steps changed, scheduling autosave');
+    const debounceTimeout = setTimeout(() => {
+      console.log('Executing autosave');
+      saveToLocalStorage();
+    }, 2000);
+    
+    return () => {
+      console.log('Clearing previous autosave timeout');
+      clearTimeout(debounceTimeout);
+    };
   }, [steps, saveToLocalStorage]);
 
   return {

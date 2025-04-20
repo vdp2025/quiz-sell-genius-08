@@ -4,6 +4,7 @@ import { QuizStep } from '@/types/quizBuilder';
 import { useQuizComponents } from './quiz-builder/useQuizComponents';
 import { useQuizSteps } from './quiz-builder/useQuizSteps';
 import { useQuizPersistence } from './quiz-builder/useQuizPersistence';
+import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
 
 export const useQuizBuilder = () => {
   const [steps, setSteps] = useState<QuizStep[]>([]);
@@ -33,8 +34,16 @@ export const useQuizBuilder = () => {
 
   // Load saved state on mount
   useEffect(() => {
-    loadSavedState();
-  }, [loadSavedState]);
+    const savedState = localStorage.getItem('quiz_builder_state');
+    if (savedState) {
+      console.log('Found saved state, attempting to load');
+      loadSavedState();
+    } else {
+      console.log('No saved state found, using default template');
+      // If no saved state, use the default template
+      setStepsFromTemplate(styleQuizTemplate);
+    }
+  }, [loadSavedState, setStepsFromTemplate]);
 
   return {
     steps,
