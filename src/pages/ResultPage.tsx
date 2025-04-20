@@ -45,6 +45,20 @@ export const ResultPage = () => {
     return styleImages[styleType] || styleImages['Natural'];
   };
 
+  const getStyleExtraImage = (styleType) => {
+    const extraImages = {
+      'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+      'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+      'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+      'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+      'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+      'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+      'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+      'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp'
+    };
+    return extraImages[styleType] || extraImages['Natural'];
+  };
+
   return (
     <div
       className="min-h-screen bg-[#fffaf7]"
@@ -79,84 +93,16 @@ export const ResultPage = () => {
             </div>
             <div className="order-first md:order-last">
               <img
+                src={getStyleExtraImage(primaryStyle.category)}
+                alt={`Imagem do Estilo ${primaryStyle.category}`}
+                className="w-full h-auto rounded-lg shadow-md mb-4"
+              />
+              <img
                 src={getStyleCoverImage(primaryStyle.category)}
-                alt={`Estilo ${primaryStyle.category}`}
+                alt={`Guia do Estilo ${primaryStyle.category}`}
                 className="w-full h-auto rounded-lg shadow-md"
               />
             </div>
-          </div>
-          <div className="mt-8">
-            <img
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
-              alt="Guia de Estilo e Imagem"
-              className="w-full h-auto rounded-lg"
-            />
-          </div>
-        </Card>
-
-        <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-playfair text-[#aa6b5d]">Transforme seu estilo em uma imagem com presença</h2>
-            <p className="text-[#432818]">Conhecimento gera clareza, mas é a ação que gera transformação.</p>
-          </div>
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <img
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-              alt="Guia e Bônus"
-              className="w-full md:w-1/2 rounded-lg shadow-md"
-            />
-            <div className="flex-1 space-y-4">
-              <ul className="space-y-2">
-                {["Montar looks com intenção (sem improviso)", "Usar cores e cortes a seu favor", "Alinhar imagem e metas", "Evitar compras por impulso com estratégia"].map((item, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-1 mr-2" />
-                    <span className="text-[#432818]">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="text-center">
-                <p className="text-sm text-[#432818]/60 line-through">De R$ 175,00</p>
-                <p className="text-3xl font-bold text-[#aa6b5d]">Por R$ 39,00</p>
-                <Button
-                  onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
-                  className="mt-4 bg-[#aa6b5d] hover:bg-[#8f574a] text-white px-8 py-4 text-lg rounded-md"
-                >
-                  <ShoppingCart className="w-5 h-5 mr-2" /> Quero meu Guia + Bônus
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            💬 O que mulheres reais dizem sobre essa transformação:
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[{
-              text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito.",
-              name: "Mariangela",
-              role: "Engenheira"
-            }, {
-              text: "Aprendi a valorizar minha imagem e a me sentir segura com o que visto.",
-              name: "Patrícia Paranhos",
-              role: "Advogada"
-            }, {
-              text: "A Gisele me ajudou a comunicar quem eu sou de verdade através do meu estilo.",
-              name: "Sônia Spier",
-              role: "Terapeuta"
-            }].map((testimonial, index) => (
-              <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
-                <p className="italic text-[#432818] mb-4">"{testimonial.text}"</p>
-                <div className="flex items-center gap-2">
-                  <div className="h-1 w-8 bg-[#aa6b5d]" />
-                  <div>
-                    <p className="font-medium text-[#432818]">{testimonial.name}</p>
-                    <p className="text-sm text-[#432818]/70">{testimonial.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </Card>
       </div>
