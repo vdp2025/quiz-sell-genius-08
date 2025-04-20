@@ -1,13 +1,14 @@
 
 import { useState, useCallback } from 'react';
 import { Block } from '@/types/editor';
-import { getDefaultContentForType } from '@/utils/blockDefaults';
+import { toast } from '@/components/ui/use-toast';
 import { generateId } from '@/utils/idGenerator';
+import { getDefaultContentForType } from '@/utils/blockDefaults';
 
-export const useBlockOperations = () => {
-  const [blocks, setBlocks] = useState<Block[]>([]);
+export const useBlockOperations = (initialBlocks: Block[] = []) => {
+  const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-
+  
   const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
       id: generateId(),
@@ -18,31 +19,22 @@ export const useBlockOperations = () => {
     
     setBlocks(prev => [...prev, newBlock]);
     setSelectedBlockId(newBlock.id);
-    
     return newBlock.id;
   }, [blocks]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    setBlocks(prev => 
-      prev.map(block => 
-        block.id === id 
-          ? { ...block, content: { ...block.content, ...content } } 
-          : block
-      )
-    );
+    setBlocks(prev => prev.map(block =>
+      block.id === id ? { ...block, content: { ...block.content, ...content } } : block
+    ));
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
     setBlocks(prev => 
-      prev
-        .filter(block => block.id !== id)
+      prev.filter(block => block.id !== id)
         .map((block, index) => ({ ...block, order: index }))
     );
-    
-    if (selectedBlockId === id) {
-      setSelectedBlockId(null);
-    }
-  }, [selectedBlockId]);
+    setSelectedBlockId(null);
+  }, []);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     setBlocks(prev => {

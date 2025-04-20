@@ -6,11 +6,7 @@ import { PropertiesPanel } from './properties/PropertiesPanel';
 import { useEditor } from '@/hooks/useEditor';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 
-interface VisualEditorProps {
-  styleType: string;
-}
-
-export function VisualEditor({ styleType }: VisualEditorProps) {
+export function VisualEditor() {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const { config, addBlock, updateBlock, deleteBlock, saveConfig } = useEditor();
@@ -45,7 +41,6 @@ export function VisualEditor({ styleType }: VisualEditorProps) {
             onSelectBlock={setSelectedBlockId}
             isPreviewing={isPreviewing}
             onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-            styleType={styleType}
           />
         </ResizablePanel>
 

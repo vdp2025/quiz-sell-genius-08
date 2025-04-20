@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
-import { styleConfig } from '@/config/styleConfig';
+import { Card } from '@/components/ui/card';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface StyleResultSectionProps {
   primaryStyle: StyleResult;
@@ -16,59 +18,57 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
   image,
   secondaryStyles
 }) => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-md font-medium text-[#432818]">{primaryStyle.category}</h3>
+    <Card className="p-4 bg-white shadow-sm border border-[#B89B7A]/20">
+      <div className="w-full max-w-md mx-auto mb-4">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-sm font-medium text-[#432818]">Estilo Predominante</span>
           <span className="text-sm font-medium text-[#B89B7A]">{primaryStyle.percentage}%</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+        <div className="w-full bg-[#F3E8E6] rounded-full h-2">
           <div 
-            className="bg-[#B89B7A] h-2 rounded-full" 
-            style={{ width: `${primaryStyle.percentage}%` }}
+            className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300 ease-in-out" 
+            style={{ width: `${primaryStyle.percentage}%` }} 
           />
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-6 items-center">
-          <div className="order-2 md:order-1">
-            <p className="text-[#432818] leading-relaxed">
-              {description}
-            </p>
-          </div>
-          <div className="order-1 md:order-2 flex justify-center">
-            <img 
-              src={image} 
-              alt={`Estilo ${primaryStyle.category}`} 
-              className="h-80 object-contain"
-            />
-          </div>
         </div>
       </div>
       
-      {secondaryStyles.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-md font-medium text-[#432818] mb-3">
-            Estilos Complementares
-          </h3>
-          <div className="space-y-3">
-            {secondaryStyles.map((style) => (
-              <div key={style.category} className="flex flex-col">
-                <div className="flex justify-between items-center mb-1">
-                  <h4 className="text-sm text-[#432818]">{style.category}</h4>
-                  <span className="text-xs font-medium text-[#B89B7A]">{style.percentage}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-1.5">
-                  <div 
-                    className="bg-[#B89B7A] h-1.5 rounded-full" 
-                    style={{ width: `${style.percentage}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+      <div className="space-y-4">
+        {isMobile ? (
+          // Mobile layout - Image left, description right
+          <div className="flex gap-4">
+            <img 
+              src={image} 
+              alt={`Estilo ${primaryStyle.category}`}
+              className="w-[30%] h-min rounded-lg shadow-sm" 
+            />
+            <p className="text-base text-[#432818] leading-relaxed flex-1">
+              {description}
+            </p>
           </div>
-        </div>
-      )}
-    </div>
+        ) : (
+          // Desktop layout - Complementary styles overlay on image
+          <div className="relative">
+            <img 
+              src={image} 
+              alt={`Estilo ${primaryStyle.category}`}
+              className="w-1/2 h-auto rounded-lg shadow-sm mx-auto" 
+            />
+            <div className="absolute bottom-2 right-2 w-48 bg-white/90 rounded-lg p-2 shadow-md">
+              <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+            </div>
+          </div>
+        )}
+
+        {/* Show secondary styles below on mobile */}
+        {isMobile && (
+          <div className="bg-white rounded-lg p-3 shadow-sm border border-[#B89B7A]/10">
+            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+          </div>
+        )}
+      </div>
+    </Card>
   );
 };

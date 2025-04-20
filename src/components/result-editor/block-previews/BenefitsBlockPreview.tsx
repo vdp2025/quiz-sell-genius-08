@@ -1,73 +1,68 @@
 
 import React from 'react';
+import { Check, CheckCircle, CircleCheck, BadgeCheck, Star, Award, Shield, Sparkles } from 'lucide-react';
 
 interface BenefitsBlockPreviewProps {
   content: {
     title?: string;
-    subtitle?: string;
     items?: string[];
+    useIcons?: boolean;
+    icon?: string;
+    iconColor?: string;
     style?: any;
   };
-  styleType?: string;
-  isPreview?: boolean;
-  block?: any;
 }
 
-const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ 
-  content, 
-  styleType = 'Natural',
-  isPreview,
-  block
-}) => {
-  const getStyleColor = () => {
-    const styleColors: Record<string, string> = {
-      'Natural': '#B89B7A',
-      'Clássico': '#9F9B9D',
-      'Contemporâneo': '#3E4152',
-      'Elegante': '#9B7A6D',
-      'Romântico': '#D69BCD',
-      'Sexy': '#DF5461',
-      'Dramático': '#465362',
-      'Criativo': '#E9742B'
-    };
+const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) => {
+  const renderIcon = (iconName: string) => {
+    const iconColor = content.iconColor || '#aa6b5d';
+    const iconProps = { size: 18, color: iconColor };
     
-    return styleColors[styleType] || '#B89B7A';
+    switch (iconName) {
+      case 'check-circle':
+        return <CheckCircle {...iconProps} />;
+      case 'circle-check':
+        return <CircleCheck {...iconProps} />;
+      case 'badge-check':
+        return <BadgeCheck {...iconProps} />;
+      case 'star':
+        return <Star {...iconProps} />;
+      case 'award':
+        return <Award {...iconProps} />;
+      case 'shield':
+        return <Shield {...iconProps} />;
+      case 'sparkles':
+        return <Sparkles {...iconProps} />;
+      case 'check':
+      default:
+        return <Check {...iconProps} />;
+    }
   };
-  
-  const styleColor = getStyleColor();
-  const defaultBenefits = [
-    "Como montar looks com intenção (e não no improviso)",
-    "Como usar suas cores, modelagens e tecidos a seu favor",
-    "Como alinhar sua imagem com seus valores e objetivos",
-    "Como parar de comprar por impulso e montar um guarda-roupa funcional"
-  ];
-
-  const benefits = content.items && content.items.length > 0 ? content.items : defaultBenefits;
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden" style={content.style}>
-      <div className="p-6">
-        <h2 className="text-2xl font-playfair font-bold mb-3 text-center" style={{ color: styleColor }}>
-          {content.title || "O Guia de Estilo e Imagem + Bônus Exclusivos"}
-        </h2>
-        
-        {content.subtitle && (
-          <p className="text-[#666] mb-6 text-center">
-            {content.subtitle}
-          </p>
-        )}
-        
-        <h3 className="font-semibold text-[#432818] mb-4">Você vai aprender:</h3>
-        
-        <ul className="space-y-3">
-          {benefits.map((benefit, index) => (
-            <li key={index} className="flex items-start">
-              <span className="text-[#aa6b5d] mr-2 mt-1">✔️</span>
-              <span className="text-[#666]">{benefit}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div style={content.style}>
+      <h3 className="text-xl font-bold mb-4 text-[#aa6b5d]">
+        {content.title || 'Benefícios'}
+      </h3>
+      <ul className="space-y-3">
+        {(content.items || [
+          'Aplicar seus estilos com autenticidade',
+          'Montar looks práticos para o dia a dia, trabalho e eventos',
+          'Usar cores e modelagens que valorizam quem você é',
+          'Parar de errar nas compras e economizar tempo'
+        ]).map((item, index) => (
+          <li key={index} className="flex items-start">
+            {content.useIcons !== false ? (
+              <span className="text-[#aa6b5d] mr-2 flex-shrink-0 mt-0.5">
+                {renderIcon(content.icon || 'check')}
+              </span>
+            ) : (
+              <span className="text-[#aa6b5d] mr-2">✓</span>
+            )}
+            <span className="text-[#1A1818]/80">{item}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

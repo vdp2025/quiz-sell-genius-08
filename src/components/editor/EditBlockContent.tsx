@@ -13,8 +13,6 @@ import { GuaranteeBlockEditor } from './blocks/GuaranteeBlockEditor';
 import { CTABlockEditor } from './blocks/CTABlockEditor';
 import { StyleResultBlockEditor } from './blocks/StyleResultBlockEditor';
 import { SecondaryStylesBlockEditor } from './blocks/SecondaryStylesBlockEditor';
-import TestimonialsBlockEditor from '@/components/result-editor/block-editors/TestimonialsBlockEditor';
-import TwoColumnBlockEditor from '@/components/result-editor/block-editors/TwoColumnBlockEditor';
 
 interface EditBlockContentProps {
   block: EditorBlock;
@@ -61,18 +59,22 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
 
     case 'secondary-styles':
       return <SecondaryStylesBlockEditor block={block} onUpdate={onUpdate} />;
-    
-    case 'testimonials':
-      return <TestimonialsBlockEditor block={block} onUpdate={onUpdate} />;
-    
-    case 'two-column':
-      return <TwoColumnBlockEditor block={block} onUpdate={onUpdate} />;
       
     case 'products':
       return (
         <div className="p-4 rounded-md bg-[#FAF9F7] border border-[#B89B7A]/20">
           <p className="text-sm text-[#8F7A6A]">
             Os produtos são carregados do banco de dados. Para gerenciar produtos, 
+            acesse o painel administrativo.
+          </p>
+        </div>
+      );
+      
+    case 'testimonials':
+      return (
+        <div className="p-4 rounded-md bg-[#FAF9F7] border border-[#B89B7A]/20">
+          <p className="text-sm text-[#8F7A6A]">
+            Os depoimentos são carregados do banco de dados. Para gerenciar depoimentos, 
             acesse o painel administrativo.
           </p>
         </div>

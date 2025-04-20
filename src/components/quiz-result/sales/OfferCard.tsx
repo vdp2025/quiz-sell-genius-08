@@ -3,27 +3,19 @@ import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Edit } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import BenefitList from './BenefitList';
 import Testimonials from './Testimonials';
 import Guarantee from './Guarantee';
 import Logo from '../../ui/logo';
 import { OfferContent } from '@/types/resultPageConfig';
-import { Input } from '@/components/ui/input';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
   config?: OfferContent;
-  isEditing?: boolean;
-  onUpdate?: (value: any) => void;
 }
 
-const OfferCard: React.FC<OfferCardProps> = ({ 
-  primaryStyle, 
-  config = {},
-  isEditing = false,
-  onUpdate
-}) => {
+const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
   const defaultConfig = {
     title: "VOCÊ DESCOBRIU SEU ESTILO",
     subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
@@ -40,12 +32,6 @@ const OfferCard: React.FC<OfferCardProps> = ({
     ...config
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    if (onUpdate && isEditing) {
-      onUpdate({ ...finalConfig, [field]: value });
-    }
-  };
-
   return (
     <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
       <div className="text-center">
@@ -53,39 +39,12 @@ const OfferCard: React.FC<OfferCardProps> = ({
       </div>
 
       <div className="text-center mb-8">
-        {isEditing ? (
-          <div className="space-y-4">
-            <div className="relative">
-              <Input
-                value={finalConfig.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
-                className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] text-center border-dashed border-[#B89B7A] focus:border-[#8F7A6A]"
-              />
-              <Button variant="ghost" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2">
-                <Edit className="w-4 h-4 text-[#B89B7A]" />
-              </Button>
-            </div>
-            <div className="relative">
-              <Input
-                value={finalConfig.subtitle}
-                onChange={(e) => handleInputChange('subtitle', e.target.value)}
-                className="text-[#3a3a3a] text-center border-dashed border-[#B89B7A] focus:border-[#8F7A6A]"
-              />
-              <Button variant="ghost" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2">
-                <Edit className="w-4 h-4 text-[#B89B7A]" />
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-              {finalConfig.title}
-            </h2>
-            <p className="text-[#3a3a3a]">
-              {finalConfig.subtitle}
-            </p>
-          </>
-        )}
+        <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
+          {finalConfig.title}
+        </h2>
+        <p className="text-[#3a3a3a]">
+          {finalConfig.subtitle}
+        </p>
       </div>
 
       <img
@@ -109,65 +68,25 @@ const OfferCard: React.FC<OfferCardProps> = ({
           <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
             <div className="text-center md:text-right">
               <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
-              {isEditing ? (
-                <div className="relative">
-                  <Input
-                    value={finalConfig.regularPrice}
-                    onChange={(e) => handleInputChange('regularPrice', e.target.value)}
-                    className="text-lg line-through text-[#3a3a3a]/60 text-center border-dashed border-[#B89B7A] focus:border-[#8F7A6A]"
-                  />
-                </div>
-              ) : (
-                <p className="text-lg line-through text-[#3a3a3a]/60">R$ {finalConfig.regularPrice}</p>
-              )}
+              <p className="text-lg line-through text-[#3a3a3a]/60">
+                R$ {finalConfig.regularPrice}
+              </p>
             </div>
             <div className="text-center">
               <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-              {isEditing ? (
-                <div className="relative">
-                  <Input
-                    value={finalConfig.price}
-                    onChange={(e) => handleInputChange('price', e.target.value)}
-                    className="text-3xl font-bold text-[#aa6b5d] text-center border-dashed border-[#B89B7A] focus:border-[#8F7A6A]"
-                  />
-                </div>
-              ) : (
-                <p className="text-3xl font-bold text-[#aa6b5d]">R$ {finalConfig.price}</p>
-              )}
+              <p className="text-3xl font-bold text-[#aa6b5d]">
+                R$ {finalConfig.price}
+              </p>
             </div>
           </div>
 
-          {isEditing ? (
-            <div className="space-y-4">
-              <div className="relative">
-                <Input
-                  value={finalConfig.ctaText}
-                  onChange={(e) => handleInputChange('ctaText', e.target.value)}
-                  className="w-full text-center border-dashed border-[#B89B7A] focus:border-[#8F7A6A]"
-                />
-              </div>
-              <div className="relative">
-                <Input
-                  value={finalConfig.ctaUrl}
-                  onChange={(e) => handleInputChange('ctaUrl', e.target.value)}
-                  className="w-full text-center border-dashed border-[#B89B7A] focus:border-[#8F7A6A]"
-                  placeholder="URL do botão de compra"
-                />
-              </div>
-              <Button className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300" disabled>
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {finalConfig.ctaText}
-              </Button>
-            </div>
-          ) : (
-            <Button 
-              className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-              onClick={() => window.location.href = finalConfig.ctaUrl}
-            >
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              {finalConfig.ctaText}
-            </Button>
-          )}
+          <Button 
+            className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
+            onClick={() => window.location.href = finalConfig.ctaUrl}
+          >
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            {finalConfig.ctaText}
+          </Button>
         </div>
       </Card>
 

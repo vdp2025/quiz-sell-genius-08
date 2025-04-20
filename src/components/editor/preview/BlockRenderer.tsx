@@ -11,11 +11,6 @@ import { TestimonialsBlock } from './blocks/TestimonialsBlock';
 import { PricingBlock } from './blocks/PricingBlock';
 import { GuaranteeBlock } from './blocks/GuaranteeBlock';
 import { CTABlock } from './blocks/CTABlock';
-import { BonusBlock } from './blocks/BonusBlock';
-import { UrgencyBlock } from './blocks/UrgencyBlock';
-import MentorBlockPreview from '@/components/result-editor/block-previews/MentorBlockPreview';
-import StyleHeroBlockPreview from '@/components/result-editor/block-previews/StyleHeroBlockPreview';
-import StyleOfferBlockPreview from '@/components/result-editor/block-previews/StyleOfferBlockPreview';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -44,14 +39,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
       return <GuaranteeBlock content={block.content} onClick={onSelect} />;
     case 'cta':
       return <CTABlock content={block.content} onClick={onSelect} />;
-    case 'bonus':
-      return <BonusBlock content={block.content} onClick={onSelect} />;
-    case 'urgency':
-      return <UrgencyBlock content={block.content} onClick={onSelect} />;
-    case 'style-hero':
-      return <StyleHeroBlockPreview content={block.content} styleType={block.content.styleType || 'Natural'} />;
-    case 'offer':
-      return <StyleOfferBlockPreview content={block.content} />;
     case 'products':
       return (
         <div 
@@ -73,8 +60,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
           <p className="text-sm text-[#8F7A6A]">Clique para editar esta seção</p>
         </div>
       );
-    case 'mentor':
-      return <MentorBlockPreview content={block.content} />;
     default:
       return (
         <div 

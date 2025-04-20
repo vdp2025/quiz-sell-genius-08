@@ -6,20 +6,18 @@ interface ImageBlockPreviewProps {
     imageUrl?: string;
     imageAlt?: string;
     width?: string;
-    style?: {
-      objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
-      margin?: string;
-      marginLeft?: string;
-    };
+    height?: string;
+    borderRadius?: string;
+    style?: any;
   };
 }
 
 const ImageBlockPreview: React.FC<ImageBlockPreviewProps> = ({ content }) => {
   const imageStyle = {
     width: content.width || '100%',
-    objectFit: content.style?.objectFit || 'cover',
-    margin: content.style?.margin,
-    marginLeft: content.style?.marginLeft,
+    height: content.height || 'auto',
+    borderRadius: content.borderRadius || '0.5rem',
+    ...content.style
   };
 
   return (
@@ -29,7 +27,7 @@ const ImageBlockPreview: React.FC<ImageBlockPreviewProps> = ({ content }) => {
           src={content.imageUrl}
           alt={content.imageAlt || 'Imagem'}
           style={imageStyle}
-          className="mx-auto transition-all duration-300"
+          className="mx-auto"
         />
       ) : (
         <div className="bg-gray-100 h-48 flex items-center justify-center rounded-lg">

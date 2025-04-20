@@ -1,3 +1,4 @@
+
 import { EditableContent, EditorConfig } from '@/types/editor';
 import { generateId } from './idGenerator';
 
@@ -81,44 +82,35 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       return {
         title: 'O que você vai receber:',
         images: [
-          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
-            alt: 'Guia de Estilo - 3 Revistas' },
-          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
-            alt: 'Todos os produtos e bônus' }
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+            alt: 'Guia de Estilo - 3 Revistas'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            alt: 'Todos os produtos e bônus'
+          }
         ]
       };
     case 'testimonials':
       return { 
         title: 'O que estão dizendo',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp',
-        testimonials: [
-          {
-            text: 'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.',
-            author: 'Mariangela',
-            position: 'Engenheira'
-          },
-          {
-            text: 'Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.',
-            author: 'Patrícia Paranhos',
-            position: 'Advogada'
-          },
-          {
-            text: 'A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.',
-            author: 'Sônia Spier',
-            position: 'Terapeuta'
-          }
-        ]
+        testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
       };
     case 'bonus-carousel':
       return { 
         title: 'Você também recebe estes bônus',
         bonusImages: [
-          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
             alt: 'Bônus 1',
-            title: 'Guia de Estilo Digital' },
-          { url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            title: 'Guia de Estilo Digital'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
             alt: 'Bônus 2',
-            title: 'Templates de Looks' }
+            title: 'Templates de Looks'
+          }
         ]
       };
     default:

@@ -1,33 +1,28 @@
 
 export interface EditorConfig {
   blocks: EditorBlock[];
-  globalStyles?: {
+  globalStyles: {
     primaryColor: string;
     secondaryColor: string;
     textColor: string;
     backgroundColor: string;
     fontFamily: string;
   };
-  theme?: {
+  theme: {
     primaryColor: string;
     secondaryColor: string;
     textColor: string;
     backgroundColor: string;
     fontFamily: string;
-  };
-  meta?: {
-    title: string;
-    description: string;
   };
 }
 
 export interface EditorBlock {
   id: string;
-  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 
+  type: 'header' | 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 
          'cta' | 'style-result' | 'secondary-styles' | 'hero-section' | 'products' | 
          'testimonials' | 'bonus-carousel' | 'spacer' | 'video' | 'two-column' | 'icon' |
-         'faq' | 'carousel' | 'custom-code' | 'animation-block' | 'bonus' | 'urgency' | 'mentor' |
-         'style-hero' | 'offer' | 'guarantee';
+         'faq' | 'carousel' | 'custom-code' | 'animation-block';
   content: EditableContent;
   order: number;
 }
@@ -51,81 +46,52 @@ export interface EditableContent {
   
   // Image
   imageUrl?: string;
+  imageAlt?: string;
   width?: string;
   borderRadius?: string;
   
-  // Pricing Block Properties
+  // Benefits
+  items?: string[];
+  icon?: string;
+  iconColor?: string;
+  useIcons?: boolean;
+  
+  // Pricing
   regularPrice?: string;
   salePrice?: string;
-  price?: string;
   buttonText?: string;
   ctaUrl?: string;
-  ctaText?: string;
   urgencyText?: string;
-  installments?: {
-    number: number;
-    value: string;
-  };
-  paymentMethods?: string;
+  checkoutUrl?: string;
   
-  // Hero Section Properties
+  // Guarantee
+  image?: string;
+  
+  // Hero Section
   heroImage?: string;
   heroImage2?: string;
   heroImageAlt?: string;
   quote?: string;
   quoteAuthor?: string;
-  primaryStyle?: string;
   
-  // Description and content for various blocks
-  description?: string;
+  // Products
+  images?: {
+    url: string;
+    alt: string;
+    title?: string;
+  }[];
   
-  // Benefits Section Properties
-  items?: string[];
-  useIcons?: boolean;
-  iconColor?: string;
+  // Testimonials
+  testimonialsImage?: string;
   
-  // Style Result Properties
-  customImage?: string;
+  // Bonus Carousel
+  bonusImages?: {
+    url: string;
+    alt: string;
+    title: string;
+  }[];
   
-  // Testimonials Properties
-  testimonials?: Array<{
-    id?: string;
-    text?: string;
-    name?: string;
-    image?: string;
-    location?: string;
-    author?: string;    // For backward compatibility
-    position?: string;  // For backward compatibility
-  }>;
-  
-  // Guarantee Block Properties
-  days?: number;
-  guaranteeText?: string;
-  guaranteeImage?: string;
-  guaranteeDescription?: string;
-  
-  // CTA Properties
-  url?: string;
-  
-  // Offer Block Properties
-  bonuses?: string[];
-  bonusTitle?: string;
-  productImage?: string;
-  bonusImage?: string;
-  benefits?: string[];
-  
-  // Mentor Properties
-  name?: string;
-  bio?: string;
-  
-  // Icon Properties
-  icon?: string;
-  size?: string;
-  color?: string;
-  // Updating position to match what IconBlockPreview expects
-  position?: 'left' | 'right' | 'bottom' | 'top';
-  
-  // Video Properties 
+  // Video
   videoUrl?: string;
   videoTitle?: string;
   videoDescription?: string;
@@ -133,33 +99,69 @@ export interface EditableContent {
   videoAutoplay?: boolean;
   videoControls?: boolean;
   
-  // Two Column Block
-  leftColumn?: any;
-  rightColumn?: any;
+  // Two-Column
+  leftColumn?: {
+    content?: string;
+    width?: string;
+    style?: any;
+  };
+  rightColumn?: {
+    content?: string;
+    width?: string;
+    style?: any;
+  };
   columnGap?: string;
   
-  // Carousel & Products Properties 
-  carouselImages?: Array<{url: string; alt: string; caption?: string}>;
-  bonusImages?: Array<{url: string; alt: string; title: string}>;
-  images?: Array<{url: string; alt: string; title?: string}>;
+  // Spacer
+  height?: string;
+  
+  // Icon Block
+  size?: string;
+  color?: string;
+  position?: 'top' | 'right' | 'bottom' | 'left';
+  
+  // FAQ Block
+  faqItems?: {
+    question: string;
+    answer: string;
+  }[];
+  defaultOpen?: boolean;
+  
+  // Carousel Block
+  carouselImages?: {
+    url: string;
+    alt: string;
+    caption?: string;
+  }[];
   autoPlay?: boolean;
   interval?: number;
   showArrows?: boolean;
   showDots?: boolean;
   
-  // Image Properties
-  image?: string;
-  imageAlt?: string;
-  mainImage?: string;
+  // Custom Code Block
+  code?: string;
   
-  // Style Properties
+  // Animation Block
+  animationType?: 'fade-in' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-out';
+  animationDuration?: string;
+  animationDelay?: string;
+  animationTrigger?: 'onLoad' | 'onScroll' | 'onHover';
+  children?: EditableContent;
+  
+  // General properties
+  description?: string;
+  url?: string;
+  ctaText?: string;
+  price?: string;
+  customImage?: string;
+  
+  // Styling
   style?: {
     textAlign?: 'left' | 'center' | 'right' | 'justify';
     color?: string;
     backgroundColor?: string;
     padding?: string;
     margin?: string;
-    marginLeft?: string;
     width?: string;
     height?: string;
     borderRadius?: string;
@@ -173,7 +175,7 @@ export interface EditableContent {
     borderColor?: string;
     objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
     display?: string;
-    flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
+    flexDirection?: string;
     justifyContent?: string;
     alignItems?: string;
     gap?: string;
@@ -188,21 +190,4 @@ export interface EditableContent {
     position?: string;
     zIndex?: string;
   };
-
-  // Animation Properties
-  animationType?: 'fade-in' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-out';
-  animationDuration?: string;
-  animationDelay?: string;
-  animationTrigger?: 'onLoad' | 'onScroll' | 'onHover';
-  
-  // Additional properties
-  code?: string;
-  faqItems?: Array<{ question: string; answer: string }>;
-  defaultOpen?: boolean;
-  height?: string;
-  checkoutUrl?: string;
-
-  // Style Hero and Offer Block Properties
-  styleType?: string;
-  features?: string[];
 }

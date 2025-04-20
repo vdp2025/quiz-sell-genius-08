@@ -1,112 +1,51 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Block, EditorConfig } from '@/types/editor';
-import { BlockFactory } from '@/utils/blocks/BlockFactory';
+import { useState, useEffect } from 'react';
+import { EditorConfig } from '@/types/editor';
+import { useEditorBlocks } from './editor/useEditorBlocks';
+import { useEditorTheme } from './editor/useEditorTheme';
+import { useEditorTemplates } from './editor/useEditorTemplates';
+import { defaultConfig } from '@/utils/editorDefaults';
 
 export const useEditor = () => {
-  const [config, setConfig] = useState<EditorConfig>({
-    blocks: [],
-    globalStyles: {
-      primaryColor: '#B89B7A',
-      secondaryColor: '#432818',
-      textColor: '#1A1818',
-      backgroundColor: '#fffaf7',
-      fontFamily: 'Inter, sans-serif'
-    },
-    theme: {
-      primaryColor: '#B89B7A',
-      secondaryColor: '#432818',
-      textColor: '#1A1818',
-      backgroundColor: '#fffaf7',
-      fontFamily: 'Inter, sans-serif'
-    },
-    meta: {
-      title: 'Página de Venda',
-      description: 'Página de venda personalizada'
-    }
-  });
-
-  useEffect(() => {
+  const [config, setConfig] = useState<EditorConfig>(() => {
     const savedConfig = localStorage.getItem('editorConfig');
     if (savedConfig) {
       try {
-        setConfig(JSON.parse(savedConfig));
-      } catch (error) {
-        console.error('Error parsing saved config:', error);
+        return JSON.parse(savedConfig);
+      } catch (e) {
+        console.error('Error loading editor configuration:', e);
+        return defaultConfig;
       }
     }
-  }, []);
+    return defaultConfig;
+  });
 
-  const addBlock = useCallback((type: Block['type']) => {
-    const newBlock = BlockFactory.createBlock(type, config.blocks.length);
-    
-    setConfig(prev => ({
-      ...prev,
-      blocks: [...prev.blocks, newBlock]
-    }));
-    
-    return newBlock.id;
-  }, [config.blocks.length]);
+  useEffect(() => {
+    localStorage.setItem('editorConfig', JSON.stringify(config));
+  }, [config]);
 
-  const updateBlock = useCallback((id: string, content: any) => {
-    setConfig(prev => ({
-      ...prev,
-      blocks: prev.blocks.map(block =>
-        block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-      )
-    }));
-  }, []);
+  const blockActions = useEditorBlocks(config, setConfig);
+  const themeActions = useEditorTheme(config, setConfig);
+  const templateActions = useEditorTemplates(config, setConfig);
 
-  const deleteBlock = useCallback((id: string) => {
-    setConfig(prev => ({
-      ...prev,
-      blocks: prev.blocks
-        .filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index }))
-    }));
-  }, []);
+  const clearEditor = () => setConfig(defaultConfig);
 
-  const reorderBlocks = useCallback((startIndex: number, endIndex: number) => {
-    setConfig(prev => {
-      const newBlocks = Array.from(prev.blocks);
-      const [removed] = newBlocks.splice(startIndex, 1);
-      newBlocks.splice(endIndex, 0, removed);
-      
-      return {
-        ...prev,
-        blocks: newBlocks.map((block, index) => ({
-          ...block,
-          order: index
-        }))
-      };
-    });
-  }, []);
-
-  const saveConfig = useCallback(() => {
+  const saveConfig = async () => {
     try {
       localStorage.setItem('editorConfig', JSON.stringify(config));
       return true;
     } catch (error) {
-      console.error('Error saving config:', error);
+      console.error('Error saving editor configuration:', error);
       return false;
     }
-  }, [config]);
-
-  const updateConfig = useCallback((newConfig: Partial<EditorConfig>) => {
-    setConfig(prev => ({
-      ...prev,
-      ...newConfig
-    }));
-  }, []);
+  };
 
   return {
     config,
-    addBlock,
-    updateBlock,
-    deleteBlock,
-    reorderBlocks,
-    saveConfig,
-    updateConfig
+    updateConfig: setConfig,
+    clearEditor,
+    ...blockActions,
+    ...themeActions,
+    ...templateActions,
+    saveConfig
   };
 };
-
-export default useEditor;

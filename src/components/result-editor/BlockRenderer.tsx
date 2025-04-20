@@ -1,88 +1,122 @@
 
 import React from 'react';
-import { cn } from '@/lib/utils';
 import { Block } from '@/types/editor';
+import { cn } from '@/lib/utils';
 import { StyleResult } from '@/types/quiz';
+import { StyleControls } from '@/components/editor/controls/StyleControls';
+import HeaderBlockPreview from './block-previews/HeaderBlockPreview';
 import HeadlineBlockPreview from './block-previews/HeadlineBlockPreview';
+import TextBlockPreview from './block-previews/TextBlockPreview';
+import ImageBlockPreview from './block-previews/ImageBlockPreview';
 import BenefitsBlockPreview from './block-previews/BenefitsBlockPreview';
-import OfferBlockPreview from './block-previews/OfferBlockPreview';
-import StyleHeroBlockPreview from './block-previews/StyleHeroBlockPreview';
-import StyleResultBlockPreview from './block-previews/StyleResultBlockPreview';
+import PricingBlockPreview from './block-previews/PricingBlockPreview';
 import GuaranteeBlockPreview from './block-previews/GuaranteeBlockPreview';
+import CTABlockPreview from './block-previews/CTABlockPreview';
+import StyleResultBlockPreview from './block-previews/StyleResultBlockPreview';
+import SecondaryStylesBlockPreview from './block-previews/SecondaryStylesBlockPreview';
+import HeroSectionBlockPreview from './block-previews/HeroSectionBlockPreview';
+import ProductsBlockPreview from './block-previews/ProductsBlockPreview';
 import TestimonialsBlockPreview from './block-previews/TestimonialsBlockPreview';
-import FAQBlockPreview from './block-previews/FAQBlockPreview';
+import SpacerBlockPreview from './block-previews/SpacerBlockPreview';
+import VideoBlockPreview from './block-previews/VideoBlockPreview';
 import TwoColumnBlockPreview from './block-previews/TwoColumnBlockPreview';
+import IconBlockPreview from './block-previews/IconBlockPreview';
+import FAQBlockPreview from './block-previews/FAQBlockPreview';
+import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
+import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
+import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
 
 interface BlockRendererProps {
   block: Block;
-  isSelected?: boolean;
-  onSelect?: () => void;
-  isPreview?: boolean;
-  primaryStyle?: StyleResult;
-  styleType?: string;
+  primaryStyle: StyleResult;
+  isSelected: boolean;
+  onSelect: () => void;
+  onUpdate?: (content: any) => void;
+  isDragging?: boolean;
 }
 
-const BlockRenderer: React.FC<BlockRendererProps> = ({
+export const BlockRenderer: React.FC<BlockRendererProps> = ({
   block,
-  isSelected = false,
-  onSelect = () => {},
-  isPreview = false,
   primaryStyle,
-  styleType = 'Natural'
+  isSelected,
+  onSelect,
+  onUpdate,
+  isDragging = false
 }) => {
+  // Render different block types with their styles
   const renderBlockContent = () => {
     switch (block.type) {
+      case 'header':
+        return <HeaderBlockPreview content={block.content} />;
       case 'headline':
-        return <HeadlineBlockPreview content={block.content} styleType={styleType} />;
-        
+        return <HeadlineBlockPreview content={block.content} />;
+      case 'text':
+        return <TextBlockPreview content={block.content} />;
+      case 'image':
+        return <ImageBlockPreview content={block.content} />;
       case 'benefits':
-        return <BenefitsBlockPreview content={block.content} styleType={styleType} />;
-        
-      case 'offer':
-        return <OfferBlockPreview content={block.content} styleType={styleType} />;
-        
-      case 'style-hero':
-        return <StyleHeroBlockPreview content={block.content} styleType={styleType} />;
-        
-      case 'style-result':
-        return <StyleResultBlockPreview content={block.content} primaryStyle={primaryStyle} styleType={styleType} />;
-        
+        return <BenefitsBlockPreview content={block.content} />;
+      case 'pricing':
+        return <PricingBlockPreview content={block.content} />;
       case 'guarantee':
-        return <GuaranteeBlockPreview content={block.content} styleType={styleType} />;
-        
+        return <GuaranteeBlockPreview content={block.content} />;
+      case 'cta':
+        return <CTABlockPreview content={block.content} />;
+      case 'style-result':
+        return <StyleResultBlockPreview content={block.content} primaryStyle={primaryStyle} />;
+      case 'secondary-styles':
+        return <SecondaryStylesBlockPreview content={block.content} />;
+      case 'hero-section':
+        return <HeroSectionBlockPreview content={block.content} primaryStyle={primaryStyle} />;
+      case 'products':
+        return <ProductsBlockPreview content={block.content} />;
       case 'testimonials':
-        return <TestimonialsBlockPreview 
-          content={block.content} 
-          styleType={styleType}
-          isPreview={isPreview}
-          block={block}
-        />;
-        
-      case 'faq':
-        return <FAQBlockPreview content={block.content} styleType={styleType} />;
-        
+        return <TestimonialsBlockPreview content={block.content} />;
+      case 'spacer':
+        return <SpacerBlockPreview content={block.content} />;
+      case 'video':
+        return <VideoBlockPreview content={block.content} />;
       case 'two-column':
-        return <TwoColumnBlockPreview content={block.content} styleType={styleType} />;
-        
+        return <TwoColumnBlockPreview content={block.content} />;
+      case 'icon':
+        return <IconBlockPreview content={block.content} />;
+      case 'faq':
+        return <FAQBlockPreview content={block.content} />;
+      case 'carousel':
+        return <CarouselBlockPreview content={block.content} />;
+      case 'custom-code':
+        return <CustomCodeBlockPreview content={block.content} />;
+      case 'animation-block':
+        return <AnimationBlockPreview content={block.content} />;
       default:
-        return <div className="p-4 bg-gray-100 rounded-md">Tipo de bloco não suportado: {block.type}</div>;
+        return <p>Bloco não reconhecido: {block.type}</p>;
     }
   };
 
   return (
     <div
+      onClick={onSelect}
       className={cn(
-        "my-6 relative group",
-        !isPreview && "cursor-pointer hover:outline hover:outline-[#B89B7A] hover:outline-2 hover:outline-dashed",
-        isSelected && !isPreview && "outline outline-[#B89B7A] outline-2 outline-dashed"
+        "relative transition-all duration-200",
+        isSelected ? "ring-2 ring-[#B89B7A] bg-[#FAF9F7]" : "border-2 border-dashed border-gray-300 hover:border-[#B89B7A]/50",
+        isDragging && "opacity-50"
       )}
-      onClick={() => {
-        if (!isPreview) {
-          onSelect();
-        }
-      }}
     >
       {renderBlockContent()}
+      
+      {isSelected && onUpdate && (
+        <div className="mt-4 p-4 border-t">
+          <StyleControls
+            style={block.content.style || {}}
+            onUpdate={(newStyle) => {
+              onUpdate({
+                ...block.content,
+                style: newStyle
+              });
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

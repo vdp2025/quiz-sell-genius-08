@@ -46,14 +46,6 @@ export const giseleStyleTemplate: Block[] = [
     order: 3
   },
   {
-    id: "bonus-inclusos",
-    type: "bonus",
-    content: {
-      text: "🎁 Bônus 1: Visagismo Facial Estratégico\nAprenda a usar seu formato de rosto com inteligência estética.\n\n🎁 Bônus 2: Peças-Chave do Guarda-Roupa\nLooks funcionais com o que você já tem, com praticidade e estilo."
-    },
-    order: 4
-  },
-  {
     id: "pricing-calltoaction",
     type: "pricing",
     content: {
@@ -61,26 +53,34 @@ export const giseleStyleTemplate: Block[] = [
       salePrice: "39,00",
       buttonText: "Quero meu Guia + Bônus",
       checkoutUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-      urgencyText: "Oferta exclusiva por tempo limitado"
+      limitedTimeText: "Oferta exclusiva por tempo limitado"
     },
-    order: 5
+    order: 4
   },
   {
     id: "bloco-depoimentos",
     type: "testimonials",
     content: {
       title: "Transformações reais:",
-      text: "Renata C. (41 anos): \"Comprei menos, combinei mais e finalmente entendi o que comunica quem eu sou.\"\n\nTatiane M. (34 anos): \"O visagismo foi revelador! Cortei o cabelo certo, acertei nos brincos e estou sendo notada.\"\n\nLuciana D. (38 anos): \"Me sinto mais leve, elegante e segura ao me posicionar.\""
+      testimonials: [
+        {
+          author: "Renata C.",
+          role: "41 anos",
+          text: "Comprei menos, combinei mais e finalmente entendi o que comunica quem eu sou."
+        },
+        {
+          author: "Tatiane M.",
+          role: "34 anos",
+          text: "O visagismo foi revelador! Cortei o cabelo certo, acertei nos brincos e estou sendo notada."
+        },
+        {
+          author: "Luciana D.",
+          role: "38 anos",
+          text: "Me sinto mais leve, elegante e segura ao me posicionar."
+        }
+      ]
     },
-    order: 6
-  },
-  {
-    id: "urgency-banner",
-    type: "urgency",
-    content: {
-      text: "✨ Essa oferta especial é exclusiva para quem concluiu o teste de estilo. Aproveite antes que o valor volte ao normal!"
-    },
-    order: 7
+    order: 5
   },
   {
     id: "cta-final",
@@ -91,6 +91,7 @@ export const giseleStyleTemplate: Block[] = [
       url: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
       alignment: "center"
     },
-    order: 8
+    order: 6
   }
 ];
+

@@ -6,8 +6,6 @@ import { StyleResultSection } from '@/components/result/StyleResult';
 import OfferCard from '@/components/quiz-result/sales/OfferCard';
 import { styleConfig } from '@/config/styleConfig';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Link } from 'react-router-dom';
-import { EditorButton } from '@/components/ui/EditorButton';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -27,29 +25,32 @@ const ResultPage = () => {
           <p className="text-[#8F7A6A] mb-6">
             Parece que você ainda não completou o quiz.
           </p>
-          <Link 
-            to="/" 
+          <a 
+            href="/" 
             className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
           >
             Fazer o Quiz
-          </Link>
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#fffaf7] flex flex-col">
+    <div className="min-h-screen" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fff',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    }}>
       <Header 
+        primaryStyle={primaryStyle}
+        logoHeight={globalStyles.logoHeight}
         logo={globalStyles.logo}
         logoAlt={globalStyles.logoAlt}
-        title="Olá, seu Estilo Predominante é:"
-        primaryStyle={primaryStyle}
-        logoHeight={56}
       />
       
-      <div className="flex-1">
-        <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="container mx-auto px-3 py-2 max-w-2xl">
+        <div className="space-y-3">
           <StyleResultSection 
             primaryStyle={primaryStyle}
             description={styleConfig[primaryStyle.category].description}
@@ -60,8 +61,6 @@ const ResultPage = () => {
           <OfferCard primaryStyle={primaryStyle} />
         </div>
       </div>
-
-      <EditorButton />
     </div>
   );
 };

@@ -5,6 +5,4 @@ export interface Testimonial {
   image: string;
   text: string;
   location?: string;
-  position?: string;  // For backward compatibility
-  author?: string;    // For backward compatibility
 }

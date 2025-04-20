@@ -1,11 +1,10 @@
-
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
-import { BlockFactory } from '@/utils/blocks/BlockFactory';
-import { resultPageStorage } from '@/services/resultPageStorage';
+import { getDefaultContentForType } from '@/utils/blockDefaults';
+import { generateId } from '@/utils/idGenerator';
 
 export const useResultPageEditor = (styleType: string) => {
   const [state, setState] = useState<EditorState>({
@@ -17,37 +16,23 @@ export const useResultPageEditor = (styleType: string) => {
 
   const { 
     resultPageConfig, 
-    updateSection: updateConfigSection, 
-    saveConfig: saveConfigToDB,
+    updateSection, 
+    saveConfig,
     resetConfig,
     loading 
   } = useResultPageConfig(styleType);
-
-  useEffect(() => {
-    if (resultPageConfig && !loading) {
-      setState(prev => ({
-        ...prev,
-        blocks: resultPageConfig.blocks || []
-      }));
-    }
-  }, [resultPageConfig, loading]);
-
-  useEffect(() => {
-    if (state.blocks.length === 0) return;
-    
-    const saveTimer = setTimeout(() => {
-      handleSave();
-    }, 2000);
-    
-    return () => clearTimeout(saveTimer);
-  }, [state.blocks]);
 
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
   }, []);
 
   const handleAddBlock = useCallback((type: Block['type']) => {
-    const newBlock = BlockFactory.createBlock(type, state.blocks.length, styleType);
+    const newBlock: Block = {
+      id: generateId(),
+      type,
+      content: getDefaultContentForType(type),
+      order: state.blocks.length
+    };
     
     setState(prev => ({
       ...prev,
@@ -55,48 +40,26 @@ export const useResultPageEditor = (styleType: string) => {
       selectedBlockId: newBlock.id
     }));
     
-    setTimeout(() => handleSave(), 100);
-    
     return newBlock.id;
-  }, [state.blocks, styleType]);
+  }, [state.blocks]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    setState(prev => {
-      const updatedBlocks = prev.blocks.map(block =>
-        block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-      );
-      
-      return {
-        ...prev,
-        blocks: updatedBlocks
-      };
-    });
-  }, []);
-
-  const handleUpdateBlocks = useCallback((newBlocks: Block[]) => {
-    console.log("Atualizando blocos:", newBlocks);
     setState(prev => ({
       ...prev,
-      blocks: newBlocks
+      blocks: prev.blocks.map(block =>
+        block.id === id ? { ...block, content: { ...block.content, ...content } } : block
+      )
     }));
-    
-    setTimeout(() => handleSave(), 100);
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
-    setState(prev => {
-      const newBlocks = prev.blocks
+    setState(prev => ({
+      ...prev,
+      blocks: prev.blocks
         .filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index }));
-      
-      return {
-        ...prev,
-        blocks: newBlocks,
-        selectedBlockId: null
-      };
-    });
-    
-    setTimeout(() => handleSave(), 100);
+        .map((block, index) => ({ ...block, order: index })),
+      selectedBlockId: null
+    }));
   }, []);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
@@ -105,18 +68,14 @@ export const useResultPageEditor = (styleType: string) => {
       const [removed] = result.splice(sourceIndex, 1);
       result.splice(destinationIndex, 0, removed);
       
-      const newBlocks = result.map((block, index) => ({
-        ...block,
-        order: index
-      }));
-      
       return {
         ...prev,
-        blocks: newBlocks
+        blocks: result.map((block, index) => ({
+          ...block,
+          order: index
+        }))
       };
     });
-    
-    setTimeout(() => handleSave(), 100);
   }, []);
 
   const toggleGlobalStyles = useCallback(() => {
@@ -126,69 +85,17 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
-  const handleUpdateSection = useCallback((path: string, newContent: any) => {
-    console.log(`Atualizando seção '${path}':`, newContent);
-    updateConfigSection(path, newContent);
-
-    if (path === 'blocks') {
-      setState(prev => ({
-        ...prev,
-        blocks: newContent
-      }));
-    }
-  }, [updateConfigSection]);
-
-  const handleSave = useCallback(async (): Promise<void> => {
-    try {
-      console.log("Saving blocks:", state.blocks);
-      
-      const configToSave = {
-        ...resultPageConfig,
-        blocks: state.blocks
-      };
-      
-      await resultPageStorage.save(configToSave);
-      
-      updateConfigSection('blocks', state.blocks);
-      
-      toast({
-        title: "Configuração salva",
-        description: "As alterações foram salvas com sucesso",
-        variant: "default"
-      });
-      
-      return Promise.resolve();
-    } catch (error) {
-      console.error('Error saving result page config:', error);
-      toast({
-        title: 'Erro ao salvar configuração',
-        description: 'Não foi possível salvar a configuração da página de resultados',
-        variant: 'destructive'
-      });
-      
-      return Promise.reject(error);
-    }
-  }, [resultPageConfig, state.blocks, updateConfigSection]);
-
   return {
     resultPageConfig,
     loading,
-    blocks: state.blocks,
-    selectedBlockId: state.selectedBlockId,
     isPreviewing: state.isPreviewing,
     isGlobalStylesOpen: state.isGlobalStylesOpen,
     actions: {
-      handleSave,
+      handleSave: () => saveConfig(),
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,
-      updateSection: handleUpdateSection,
-      setSelectedBlockId: (id: string | null) => setState(prev => ({ ...prev, selectedBlockId: id })),
-      handleAddBlock,
-      handleUpdateBlock,
-      handleUpdateBlocks,
-      handleDeleteBlock,
-      handleReorderBlocks
+      updateSection
     }
   };
 };

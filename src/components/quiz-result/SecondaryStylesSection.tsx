@@ -4,32 +4,28 @@ import { StyleResult } from '@/types/quiz';
 
 interface SecondaryStylesSectionProps {
   secondaryStyles: StyleResult[];
-  isEditing?: boolean;
-  onUpdate?: (value: any) => void;
 }
 
-const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ 
-  secondaryStyles,
-  isEditing = false,
-  onUpdate
-}) => {
+const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ secondaryStyles }) => {
   return (
-    <div className="mt-8">
-      <h3 className="text-[#432818] font-medium mb-4">
+    <div className="space-y-1.5">
+      <h3 className="text-xs font-medium text-[#432818] mb-1">
         Estilos Complementares
       </h3>
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 gap-1.5">
         {secondaryStyles.slice(0, 2).map((style) => (
-          <div key={style.category} className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h4 className="text-[#432818]">{style.category}</h4>
-              <span className="text-[#B89B7A] font-medium">{style.percentage}%</span>
-            </div>
-            <div className="w-full h-2 bg-[#F3E8E6] rounded">
-              <div 
-                className="h-full bg-[#B89B7A] rounded transition-all duration-300"
-                style={{ width: `${style.percentage}%` }}
-              />
+          <div key={style.category} className="flex justify-between items-center">
+            <div className="flex-1">
+              <div className="flex justify-between items-center mb-0.5">
+                <h4 className="text-xs text-[#432818]">{style.category}</h4>
+                <span className="text-2xs font-medium text-[#8F7A6A]">{style.percentage}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1">
+                <div 
+                  className="bg-[#B89B7A] h-1 rounded-full" 
+                  style={{ width: `${style.percentage}%` }}
+                />
+              </div>
             </div>
           </div>
         ))}

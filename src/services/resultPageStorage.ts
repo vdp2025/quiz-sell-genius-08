@@ -1,63 +1,48 @@
 
 import { ResultPageConfig } from '@/types/resultPageConfig';
-import { createDefaultConfig } from '@/utils/resultPageDefaults';
+import { toast } from '@/components/ui/use-toast';
 
-// In memory storage for development - would be replaced with actual API calls
-let resultPageConfigs: Record<string, ResultPageConfig> = {};
+const LOCAL_STORAGE_KEY = 'result_page_configs';
 
 export const resultPageStorage = {
-  // Save result page config
-  save: async (config: ResultPageConfig): Promise<void> => {
-    // In a real implementation, this would be an API call
-    resultPageConfigs[config.styleType] = {...config};
-    
-    // Save to localStorage for persistence through refreshes
-    localStorage.setItem(`resultPage_${config.styleType}`, JSON.stringify(config));
-    
-    // Artificial delay to simulate network
-    await new Promise(resolve => setTimeout(resolve, 300));
-  },
-  
-  // Load result page config by style type
   load: (styleType: string): ResultPageConfig | null => {
-    // First check our in-memory cache
-    if (resultPageConfigs[styleType]) {
-      return resultPageConfigs[styleType];
+    try {
+      const configsJson = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (configsJson) {
+        const configs = JSON.parse(configsJson);
+        return configs[styleType] || null;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error loading result page config:', error);
+      return null;
     }
-    
-    // Then check localStorage
-    const storedConfig = localStorage.getItem(`resultPage_${styleType}`);
-    if (storedConfig) {
-      const config = JSON.parse(storedConfig) as ResultPageConfig;
-      resultPageConfigs[styleType] = config; // Update in-memory cache
-      return config;
+  },
+
+  save: async (config: ResultPageConfig): Promise<boolean> => {
+    try {
+      const configsJson = localStorage.getItem(LOCAL_STORAGE_KEY);
+      let configs = {};
+      
+      if (configsJson) {
+        configs = JSON.parse(configsJson);
+      }
+      
+      configs = {
+        ...configs,
+        [config.styleType]: config
+      };
+      
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(configs));
+      return true;
+    } catch (error) {
+      console.error('Error saving result page config:', error);
+      toast({
+        title: 'Erro ao salvar configuração',
+        description: 'Não foi possível salvar a configuração da página de resultados',
+        variant: 'destructive'
+      });
+      return false;
     }
-    
-    // If no saved config exists, create and save a default one
-    const defaultConfig = createDefaultConfig(styleType);
-    resultPageConfigs[styleType] = defaultConfig;
-    localStorage.setItem(`resultPage_${styleType}`, JSON.stringify(defaultConfig));
-    
-    return defaultConfig;
-  },
-  
-  // Delete result page config
-  delete: async (styleType: string): Promise<void> => {
-    // In a real implementation, this would be an API call
-    delete resultPageConfigs[styleType];
-    localStorage.removeItem(`resultPage_${styleType}`);
-    
-    // Artificial delay to simulate network
-    await new Promise(resolve => setTimeout(resolve, 300));
-  },
-  
-  // Reset result page config to default
-  reset: async (styleType: string): Promise<void> => {
-    const defaultConfig = createDefaultConfig(styleType);
-    resultPageConfigs[styleType] = defaultConfig;
-    localStorage.setItem(`resultPage_${styleType}`, JSON.stringify(defaultConfig));
-    
-    // Artificial delay to simulate network
-    await new Promise(resolve => setTimeout(resolve, 300));
   }
 };
