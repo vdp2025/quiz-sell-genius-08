@@ -49,10 +49,13 @@ const QuizContent: React.FC<QuizContentProps> = ({
         />
       )}
 
-      <QuizNavigation
-        showPrevious={!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0}
-        onPrevious={handlePrevious}
-      />
+      {!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0 && (
+        <QuizNavigation
+          currentStep={currentQuestionIndex}
+          totalSteps={totalQuestions}
+          onPrevious={handlePrevious}
+        />
+      )}
     </>
   );
 };
