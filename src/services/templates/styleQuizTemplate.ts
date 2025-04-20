@@ -1,3 +1,4 @@
+
 import { QuizStep } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 
@@ -154,14 +155,14 @@ export const styleQuizTemplate: QuizStep[] = [
             'Visual criativo, colorido e ousado.'
           ],
           fullOptions: [
-            { text: 'Visual leve, despojado e natural.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp', styleCategory: 'Natural', points: 3 },
-            { text: 'Visual clássico e tradicional.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp', styleCategory: 'Clássico', points: 3 },
-            { text: 'Visual casual com toque atual.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp', styleCategory: 'Contemporâneo', points: 3 },
-            { text: 'Visual refinado e imponente.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp', styleCategory: 'Elegante', points: 3 },
-            { text: 'Visual romântico, feminino e delicado.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp', styleCategory: 'Romântico', points: 3 },
-            { text: 'Visual sensual, com saia justa e decote.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp', styleCategory: 'Sexy', points: 3 },
-            { text: 'Visual marcante e urbano (jeans + jaqueta).', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp', styleCategory: 'Dramático', points: 3 },
-            { text: 'Visual criativo, colorido e ousado.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp', styleCategory: 'Criativo', points: 3 }
+            { text: 'Visual leve, despojado e natural.', imageUrl: '/lovable-uploads/24f7dc2c-ab37-41ba-a154-786b0626ae04.png', styleCategory: 'Natural', points: 3 },
+            { text: 'Visual clássico e tradicional.', imageUrl: '/lovable-uploads/0fb54364-9c71-4373-b6e7-500e6f9a2732.png', styleCategory: 'Clássico', points: 3 },
+            { text: 'Visual casual com toque atual.', imageUrl: '/lovable-uploads/22d18ed7-b1fc-4fb4-9538-f0ab93fe5c75.png', styleCategory: 'Contemporâneo', points: 3 },
+            { text: 'Visual refinado e imponente.', imageUrl: '/lovable-uploads/e779494d-0c8d-408d-b034-1964a3b76469.png', styleCategory: 'Elegante', points: 3 },
+            { text: 'Visual romântico, feminino e delicado.', imageUrl: '/lovable-uploads/94638e1c-0180-4cfd-80be-26db97a1e58f.png', styleCategory: 'Romântico', points: 3 },
+            { text: 'Visual sensual, com saia justa e decote.', imageUrl: '/lovable-uploads/919b184d-940d-4a4f-b53c-36792cbd6114.png', styleCategory: 'Sexy', points: 3 },
+            { text: 'Visual marcante e urbano (jeans + jaqueta).', imageUrl: '/lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png', styleCategory: 'Dramático', points: 3 },
+            { text: 'Visual criativo, colorido e ousado.', imageUrl: '/lovable-uploads/d633e490-d0f2-4429-998e-bceeeda790f8.png', styleCategory: 'Criativo', points: 3 }
           ],
           showContinueButton: true,
           buttonText: 'Continuar'
@@ -270,14 +271,14 @@ export const styleQuizTemplate: QuizStep[] = [
             'Casaco estampado criativo e colorido.'
           ],
           fullOptions: [
-            { text: 'Cardigã bege confortável e casual.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp', styleCategory: 'Natural', points: 3 },
-            { text: 'Blazer verde estruturado.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp', styleCategory: 'Clássico', points: 3 },
-            { text: 'Trench coat bege tradicional.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp', styleCategory: 'Contemporâneo', points: 3 },
-            { text: 'Blazer branco refinado.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp', styleCategory: 'Elegante', points: 3 },
-            { text: 'Casaco pink vibrante e moderno.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp', styleCategory: 'Romântico', points: 3 },
-            { text: 'Jaqueta vinho de couro estilosa.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp', styleCategory: 'Sexy', points: 3 },
-            { text: 'Jaqueta preta estilo rocker.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp', styleCategory: 'Dramático', points: 3 },
-            { text: 'Casaco estampado criativo e colorido.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp', styleCategory: 'Criativo', points: 3 }
+            { text: 'Cardigã bege confortável e casual.', imageUrl: '/lovable-uploads/1ac66423-7712-4c33-9c28-13e8b6fe3170.png', styleCategory: 'Natural', points: 3 },
+            { text: 'Blazer verde estruturado.', imageUrl: '/lovable-uploads/169fe8d0-8afd-4447-a9cc-79d917967e64.png', styleCategory: 'Clássico', points: 3 },
+            { text: 'Trench coat bege tradicional.', imageUrl: '/lovable-uploads/0530ff81-b41d-45eb-8b47-ef88f75f7d93.png', styleCategory: 'Contemporâneo', points: 3 },
+            { text: 'Blazer branco refinado.', imageUrl: '/lovable-uploads/d9da05d3-6fdd-46d0-afea-42417af058c5.png', styleCategory: 'Elegante', points: 3 },
+            { text: 'Casaco pink vibrante e moderno.', imageUrl: '/lovable-uploads/5b819e5d-ca43-465a-906e-353764bdb2ec.png', styleCategory: 'Romântico', points: 3 },
+            { text: 'Jaqueta vinho de couro estilosa.', imageUrl: '/lovable-uploads/54671bc8-ed46-4e5d-a347-5c8e8fe45f8b.png', styleCategory: 'Sexy', points: 3 },
+            { text: 'Jaqueta preta estilo rocker.', imageUrl: '/lovable-uploads/e30cb887-b027-40ab-b112-fe8c2244d789.png', styleCategory: 'Dramático', points: 3 },
+            { text: 'Casaco estampado criativo e colorido.', imageUrl: '/lovable-uploads/fc8f4066-6f40-4ff8-bc55-460da133b6c2.png', styleCategory: 'Criativo', points: 3 }
           ],
           showContinueButton: true,
           buttonText: 'Continuar'
@@ -310,14 +311,14 @@ export const styleQuizTemplate: QuizStep[] = [
             'Calça estampada floral leve e ampla.'
           ],
           fullOptions: [
-            { text: 'Calça fluida acetinada bege.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp', styleCategory: 'Natural', points: 3 },
-            { text: 'Calça de alfaiataria cinza.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp', styleCategory: 'Clássico', points: 3 },
-            { text: 'Jeans reto e básico.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp', styleCategory: 'Contemporâneo', points: 3 },
-            { text: 'Calça reta bege de tecido.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp', styleCategory: 'Elegante', points: 3 },
-            { text: 'Calça ampla rosa alfaiatada.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp', styleCategory: 'Romântico', points: 3 },
-            { text: 'Legging preta de couro.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp', styleCategory: 'Sexy', points: 3 },
-            { text: 'Calça reta preta de couro.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp', styleCategory: 'Dramático', points: 3 },
-            { text: 'Calça estampada floral leve e ampla.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp', styleCategory: 'Criativo', points: 3 }
+            { text: 'Calça fluida acetinada bege.', imageUrl: '/lovable-uploads/86053444-8589-43e6-af61-02764cf80510.png', styleCategory: 'Natural', points: 3 },
+            { text: 'Calça de alfaiataria cinza.', imageUrl: '/lovable-uploads/e2627b2e-8e68-48e0-a678-c685c5631515.png', styleCategory: 'Clássico', points: 3 },
+            { text: 'Jeans reto e básico.', imageUrl: '/lovable-uploads/ea329cbe-6455-4aca-8fa4-cf73031ca26e.png', styleCategory: 'Contemporâneo', points: 3 },
+            { text: 'Calça reta bege de tecido.', imageUrl: '/lovable-uploads/54a9ca5f-9b1f-48a3-9fd8-0aa9a240b8ae.png', styleCategory: 'Elegante', points: 3 },
+            { text: 'Calça ampla rosa alfaiatada.', imageUrl: '/lovable-uploads/061e6932-2ddc-4100-ad82-def9909cfcdc.png', styleCategory: 'Romântico', points: 3 },
+            { text: 'Legging preta de couro.', imageUrl: '/lovable-uploads/027348ed-9275-43b2-ba49-d49d5baca56a.png', styleCategory: 'Sexy', points: 3 },
+            { text: 'Calça reta preta de couro.', imageUrl: '/lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png', styleCategory: 'Dramático', points: 3 },
+            { text: 'Calça estampada floral leve e ampla.', imageUrl: '/lovable-uploads/d633e490-d0f2-4429-998e-bceeeda790f8.png', styleCategory: 'Criativo', points: 3 }
           ],
           showContinueButton: true,
           buttonText: 'Continuar'
@@ -350,14 +351,14 @@ export const styleQuizTemplate: QuizStep[] = [
             'Scarpin colorido estampado.'
           ],
           fullOptions: [
-            { text: 'Tênis nude casual e confortável.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp', styleCategory: 'Natural', points: 3 },
-            { text: 'Scarpin nude de salto baixo.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp', styleCategory: 'Clássico', points: 3 },
-            { text: 'Sandália dourada com salto bloco.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp', styleCategory: 'Contemporâneo', points: 3 },
-            { text: 'Scarpin nude salto alto e fino.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp', styleCategory: 'Elegante', points: 3 },
-            { text: 'Sandália anabela off white.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp', styleCategory: 'Romântico', points: 3 },
-            { text: 'Sandália rosa de tiras finas.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp', styleCategory: 'Sexy', points: 3 },
-            { text: 'Scarpin preto moderno com vinil transparente.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp', styleCategory: 'Dramático', points: 3 },
-            { text: 'Scarpin colorido estampado.', imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp', styleCategory: 'Criativo', points: 3 }
+            { text: 'Tênis nude casual e confortável.', imageUrl: '/lovable-uploads/745a655d-7bc5-455d-910f-1bafa159b22f.png', styleCategory: 'Natural', points: 3 },
+            { text: 'Scarpin nude de salto baixo.', imageUrl: '/lovable-uploads/8a126cdd-57cc-49c4-98f0-4d3b81e32b95.png', styleCategory: 'Clássico', points: 3 },
+            { text: 'Sandália dourada com salto bloco.', imageUrl: '/lovable-uploads/50fe376f-73d9-413c-b0d9-ff6a53abe59e.png', styleCategory: 'Contemporâneo', points: 3 },
+            { text: 'Scarpin nude salto alto e fino.', imageUrl: '/lovable-uploads/68332b46-5016-4b94-9ae0-5eb80f1aba55.png', styleCategory: 'Elegante', points: 3 },
+            { text: 'Sandália anabela off white.', imageUrl: '/lovable-uploads/83afe58a-f032-453f-ba56-d09d96cba1cd.png', styleCategory: 'Romântico', points: 3 },
+            { text: 'Sandália rosa de tiras finas.', imageUrl: '/lovable-uploads/94638e1c-0180-4cfd-80be-26db97a1e58f.png', styleCategory: 'Sexy', points: 3 },
+            { text: 'Scarpin preto moderno com vinil transparente.', imageUrl: '/lovable-uploads/05a536b0-b6ed-41b6-9401-ae24e7706a1a.png', styleCategory: 'Dramático', points: 3 },
+            { text: 'Scarpin colorido estampado.', imageUrl: '/lovable-uploads/c266ca0a-ad80-4441-8f5e-4ea4aa9ed0bd.png', styleCategory: 'Criativo', points: 3 }
           ],
           showContinueButton: true,
           buttonText: 'Continuar'
