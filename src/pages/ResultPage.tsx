@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
@@ -8,19 +9,18 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+
 export const ResultPage = () => {
-  const {
-    primaryStyle,
-    secondaryStyles
-  } = useQuiz();
-  const {
-    globalStyles
-  } = useGlobalStyles();
+  const { primaryStyle, secondaryStyles } = useQuiz();
+  const { globalStyles } = useGlobalStyles();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
   if (!primaryStyle) {
-    return <div className="min-h-screen flex items-center justify-center bg-white">
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <h1 className="text-2xl font-playfair text-[#432818] mb-4">
             Resultados não encontrados
@@ -32,9 +32,11 @@ export const ResultPage = () => {
             Fazer o Quiz
           </a>
         </div>
-      </div>;
+      </div>
+    );
   }
-  const getStyleCoverImage = styleType => {
+  
+  const getStyleCoverImage = (styleType) => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
       'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
@@ -47,11 +49,13 @@ export const ResultPage = () => {
     };
     return styleImages[styleType] || styleImages['Natural'];
   };
-  return <div className="min-h-screen bg-[#fffaf7]" style={{
-    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-    color: globalStyles.textColor || '#432818',
-    fontFamily: globalStyles.fontFamily || 'inherit'
-  }}>
+  
+  return (
+    <div className="min-h-screen bg-[#fffaf7]" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    }}>
       <EditorButton />
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
@@ -73,7 +77,11 @@ export const ResultPage = () => {
               </div>
             </div>
             <div className="order-first md:order-last">
-              <img src={getStyleCoverImage(primaryStyle.category)} alt={Estilo ${primaryStyle.category}} className="w-full h-auto rounded-lg shadow-md" />
+              <img 
+                src={getStyleCoverImage(primaryStyle.category)} 
+                alt={`Estilo ${primaryStyle.category}`} 
+                className="w-full h-auto rounded-lg shadow-md" 
+              />
             </div>
           </div>
           
@@ -128,10 +136,12 @@ export const ResultPage = () => {
             <div>
               <h3 className="text-xl font-medium text-[#432818] mb-4">Você vai aprender:</h3>
               <ul className="space-y-3">
-                {['Como montar looks com intenção (e não no improviso)', 'Como usar suas cores, modelagens e tecidos a seu favor', 'Como alinhar sua imagem com seus valores e objetivos', 'Como parar de comprar por impulso e montar um guarda-roupa funcional'].map((item, index) => <li key={index} className="flex items-start">
+                {['Como montar looks com intenção (e não no improviso)', 'Como usar suas cores, modelagens e tecidos a seu favor', 'Como alinhar sua imagem com seus valores e objetivos', 'Como parar de comprar por impulso e montar um guarda-roupa funcional'].map((item, index) => (
+                  <li key={index} className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" />
                     <span>{item}</span>
-                  </li>)}
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
@@ -180,7 +190,10 @@ export const ResultPage = () => {
               </div>
             </div>
             
-            <Button className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md" onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}>
+            <Button 
+              className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md" 
+              onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
+            >
               <ShoppingCart className="w-5 h-5 mr-2" />
               Quero meu Guia + Bônus por R$39,00
             </Button>
@@ -197,19 +210,24 @@ export const ResultPage = () => {
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            {[{
-            text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
-            name: "Mariangela",
-            role: "Engenheira"
-          }, {
-            text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
-            name: "Patrícia Paranhos",
-            role: "Advogada"
-          }, {
-            text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
-            name: "Sônia Spier",
-            role: "Terapeuta"
-          }].map((testimonial, index) => <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
+            {[
+              {
+                text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+                name: "Mariangela",
+                role: "Engenheira"
+              }, 
+              {
+                text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+                name: "Patrícia Paranhos",
+                role: "Advogada"
+              }, 
+              {
+                text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+                name: "Sônia Spier",
+                role: "Terapeuta"
+              }
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
                 <p className="italic text-[#432818] mb-4">"{testimonial.text}"</p>
                 <div className="flex items-center gap-2">
                   <div className="h-1 w-8 bg-[#aa6b5d]"></div>
@@ -218,7 +236,8 @@ export const ResultPage = () => {
                     <p className="text-sm text-[#432818]/70">{testimonial.role}</p>
                   </div>
                 </div>
-              </div>)}
+              </div>
+            ))}
           </div>
           
           <div className="mt-8 text-center">
@@ -297,12 +316,17 @@ export const ResultPage = () => {
             </div>
           </div>
           
-          <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="w-full max-w-xl bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md px-[10px] mx-[137px] text-center">
+          <Button 
+            onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} 
+            className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md"
+          >
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>
         </Card>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default ResultPage;
