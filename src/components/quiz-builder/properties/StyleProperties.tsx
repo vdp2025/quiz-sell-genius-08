@@ -79,14 +79,14 @@ const StyleProperties: React.FC<StylePropertiesProps> = ({ style, onUpdate }) =>
         <Label htmlFor="borderRadius">Borda Arredondada</Label>
         <div className="flex gap-3 items-center">
           <Slider
-            value={[style.borderRadius || 0]}
+            value={[parseInt(style.borderRadius || '0')]}
             min={0}
             max={24}
             step={1}
-            onValueChange={(values) => onUpdate({ ...style, borderRadius: values[0] })}
+            onValueChange={(values) => onUpdate({ ...style, borderRadius: String(values[0]) })}
             className="flex-1"
           />
-          <div className="w-12 text-center">{style.borderRadius || 0}px</div>
+          <div className="w-12 text-center">{style.borderRadius || '0'}px</div>
         </div>
       </div>
     </div>

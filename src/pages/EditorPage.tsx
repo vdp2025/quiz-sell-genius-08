@@ -24,7 +24,11 @@ export const EditorPage = () => {
     styleType: styleCategory,
     header: {
       ...defaultResultTemplate.header,
-      visible: true
+      visible: true,
+      style: {
+        ...defaultResultTemplate.header.style,
+        borderRadius: '0' // Changed from number to string
+      }
     },
     mainContent: {
       ...defaultResultTemplate.mainContent,

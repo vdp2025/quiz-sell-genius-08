@@ -10,7 +10,7 @@ export const defaultResultTemplate = {
       paddingX: '16',
       backgroundColor: '#FAF9F7',
       textColor: '#432818',
-      borderRadius: 0
+      borderRadius: '0' // Changed from number to string
     },
     visible: true
   },
