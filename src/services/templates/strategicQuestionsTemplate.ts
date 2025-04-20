@@ -45,7 +45,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + 1}`,
         stageNumber: index + 2,
         layout: {
-          columns: 1,
+          columns: 1 as const,
           direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -75,7 +75,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + 2,
         layout: {
-          columns: 1,
+          columns: 1 as const,
           direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -105,7 +105,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + 2,
         layout: {
-          columns: 1,
+          columns: 1 as const,
           direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
@@ -135,7 +135,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         stageTitle: `Pergunta ${index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 1}`,
         stageNumber: index + selfPerceptionQuestions.length + styleExperienceQuestions.length + purchaseIntentQuestions.length + 2,
         layout: {
-          columns: 1,
+          columns: 1 as const,
           direction: 'vertical' as const
         },
         backgroundColorQuestion: '#FFFAF0',
