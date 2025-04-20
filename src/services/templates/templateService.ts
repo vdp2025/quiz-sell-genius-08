@@ -1,7 +1,8 @@
 
-import { QuizTemplate } from '@/types/quizTemplate';
+import { QuizTemplate, QuizTemplatePreview } from '@/types/quizTemplate';
 import { StyleCategory } from '@/types/quizBuilder';
 import { toast } from '@/components/ui/use-toast';
+import { generateId } from '@/utils/idGenerator';
 
 // In-memory templates storage for now
 // In a real app, this would be saved to a database or local storage
@@ -29,6 +30,58 @@ export const getAllTemplates = async (): Promise<QuizTemplate[]> => {
   return Object.values(templates);
 };
 
+// Get all templates as previews
+export const getTemplates = async (): Promise<QuizTemplatePreview[]> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // First check localStorage for all templates
+  const storedTemplateKeys = Object.keys(localStorage)
+    .filter(key => key.startsWith('template_'));
+  
+  const templatePreviews: QuizTemplatePreview[] = [];
+  
+  // Add templates from localStorage
+  for (const key of storedTemplateKeys) {
+    try {
+      const templateId = key.replace('template_', '');
+      const storedTemplate = localStorage.getItem(key);
+      if (storedTemplate) {
+        const template = JSON.parse(storedTemplate) as QuizTemplate;
+        templatePreviews.push({
+          id: template.id,
+          name: template.name,
+          description: template.description,
+          questionCount: template.questions.length,
+          createdAt: template.createdAt,
+          updatedAt: template.updatedAt,
+          isDefault: templateId === DEFAULT_TEMPLATE_ID
+        });
+      }
+    } catch (error) {
+      console.error('Error parsing stored template:', error);
+    }
+  }
+  
+  // Add memory-only templates that aren't in localStorage
+  for (const id in templates) {
+    if (!templatePreviews.some(p => p.id === id)) {
+      const template = templates[id];
+      templatePreviews.push({
+        id: template.id,
+        name: template.name,
+        description: template.description,
+        questionCount: template.questions.length,
+        createdAt: template.createdAt,
+        updatedAt: template.updatedAt,
+        isDefault: id === DEFAULT_TEMPLATE_ID
+      });
+    }
+  }
+  
+  return templatePreviews;
+};
+
 // Get template by ID
 export const getTemplateById = async (id: string): Promise<QuizTemplate | null> => {
   // Simulate API delay
@@ -46,6 +99,61 @@ export const getTemplateById = async (id: string): Promise<QuizTemplate | null> 
   
   // If not in localStorage, check memory
   return templates[id] || null;
+};
+
+// Create a new template
+export const createNewTemplate = (name: string, description: string = ''): QuizTemplate => {
+  const id = `template_${generateId()}`;
+  const now = new Date().toISOString();
+  
+  const newTemplate: QuizTemplate = {
+    id,
+    name,
+    description,
+    questions: [],
+    createdAt: now,
+    updatedAt: now
+  };
+  
+  // Save to localStorage for persistence
+  localStorage.setItem(`template_${id}`, JSON.stringify(newTemplate));
+  
+  // Also update in-memory store
+  templates[id] = newTemplate;
+  
+  return newTemplate;
+};
+
+// Duplicate a template
+export const duplicateTemplate = async (templateId: string): Promise<QuizTemplate | null> => {
+  try {
+    const sourceTemplate = await getTemplateById(templateId);
+    if (!sourceTemplate) return null;
+    
+    const id = `template_${generateId()}`;
+    const now = new Date().toISOString();
+    
+    const duplicatedTemplate: QuizTemplate = {
+      id,
+      name: `${sourceTemplate.name} (Cópia)`,
+      description: sourceTemplate.description,
+      questions: JSON.parse(JSON.stringify(sourceTemplate.questions)), // Deep clone
+      createdAt: now,
+      updatedAt: now,
+      settings: sourceTemplate.settings ? JSON.parse(JSON.stringify(sourceTemplate.settings)) : undefined
+    };
+    
+    // Save to localStorage for persistence
+    localStorage.setItem(`template_${id}`, JSON.stringify(duplicatedTemplate));
+    
+    // Also update in-memory store
+    templates[id] = duplicatedTemplate;
+    
+    return duplicatedTemplate;
+  } catch (error) {
+    console.error('Error duplicating template:', error);
+    return null;
+  }
 };
 
 // Save template

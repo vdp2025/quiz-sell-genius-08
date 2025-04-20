@@ -18,3 +18,13 @@ export interface QuizTemplate {
     }
   };
 }
+
+export interface QuizTemplatePreview {
+  id: string;
+  name: string;
+  description: string;
+  questionCount: number;
+  createdAt: string;
+  updatedAt: string;
+  isDefault?: boolean;
+}
