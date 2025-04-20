@@ -118,7 +118,13 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
     data: {
       ...defaultResultTemplate.header.content
     },
-    style: defaultResultTemplate.header.style
+    style: {
+      ...defaultResultTemplate.header.style,
+      // Ensure borderRadius is a number, not a string
+      borderRadius: typeof defaultResultTemplate.header.style.borderRadius === 'string' 
+        ? parseInt(defaultResultTemplate.header.style.borderRadius, 10) || 0 
+        : defaultResultTemplate.header.style.borderRadius || 0
+    }
   });
 
   components.push({
