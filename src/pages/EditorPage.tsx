@@ -5,6 +5,7 @@ import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVis
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
 import { defaultResultTemplate } from '@/config/resultPageTemplates';
+import { createOfferConfig } from '@/utils/config/offerDefaults';
 
 export const EditorPage = () => {
   const [showTemplates, setShowTemplates] = useState(false);
@@ -18,26 +19,37 @@ export const EditorPage = () => {
     percentage: 100
   };
   
-  // Ensure the initialConfig follows the ResultPageConfig type structure with visible property
+  // Ensure the initialConfig follows the ResultPageConfig type structure
   const initialConfig = {
-    ...defaultResultTemplate,
     styleType: styleCategory,
     header: {
       ...defaultResultTemplate.header,
       visible: true,
       style: {
         ...defaultResultTemplate.header.style,
-        borderRadius: '0' // Changed from number to string
+        borderRadius: '0' // Using string value for borderRadius
       }
     },
     mainContent: {
       ...defaultResultTemplate.mainContent,
       visible: true
     },
-    offer: {
-      ...defaultResultTemplate.offer,
-      visible: true
-    }
+    offer: createOfferConfig(), // Using the createOfferConfig() function to create a proper OfferSection
+    secondaryStyles: {
+      visible: true,
+      content: {},
+      style: {
+        padding: '20px'
+      }
+    },
+    globalStyles: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#432818',
+      backgroundColor: '#FAF9F7',
+      fontFamily: 'Playfair Display, serif'
+    },
+    blocks: []
   };
   
   return (

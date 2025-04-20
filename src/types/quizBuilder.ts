@@ -1,4 +1,3 @@
-
 export type QuizComponentType = 
   | 'header' 
   | 'section' 
@@ -19,12 +18,12 @@ export type QuizComponentType =
   | 'stageResult';
 
 export interface QuizComponentStyle {
-  paddingY?: string;
-  paddingX?: string;
   backgroundColor?: string;
   textColor?: string;
-  borderRadius?: number;
-  // Add more style properties as needed
+  borderRadius?: string;
+  paddingY?: string;
+  paddingX?: string;
+  // Add any other style properties here
 }
 
 export interface QuizStage {

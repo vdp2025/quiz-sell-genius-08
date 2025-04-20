@@ -1,3 +1,4 @@
+
 import { OfferSection } from '@/types/resultPageConfig';
 
 export const createOfferConfig = (): OfferSection => ({
