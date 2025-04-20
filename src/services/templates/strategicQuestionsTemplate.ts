@@ -50,7 +50,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
-        selectionIndicator: 'border'
+        selectionIndicator: 'border' as const
       },
       style: {
         backgroundColor: '#FFFAF0',
@@ -80,7 +80,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
-        selectionIndicator: 'border'
+        selectionIndicator: 'border' as const
       },
       style: {
         backgroundColor: '#FFFAF0',
@@ -110,7 +110,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
-        selectionIndicator: 'border'
+        selectionIndicator: 'border' as const
       },
       style: {
         backgroundColor: '#FFFAF0',
@@ -140,7 +140,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         },
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
-        selectionIndicator: 'border'
+        selectionIndicator: 'border' as const
       },
       style: {
         backgroundColor: '#FFFAF0',
