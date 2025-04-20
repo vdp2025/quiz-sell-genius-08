@@ -1,4 +1,4 @@
- import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
