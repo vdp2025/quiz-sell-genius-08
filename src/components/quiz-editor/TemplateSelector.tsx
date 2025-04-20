@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,6 +33,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useNavigate } from 'react-router-dom';
 
 interface TemplateSelectorProps {
   onSelectTemplate: (templateId: string) => void;
@@ -45,6 +45,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
   const [newTemplateName, setNewTemplateName] = useState('');
   const [newTemplateDescription, setNewTemplateDescription] = useState('');
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadTemplates = async () => {
@@ -197,9 +198,9 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
     }
   };
 
-  const handleSelectTemplate = () => {
+  const handleSelectTemplateForEdit = () => {
     if (selectedTemplateId) {
-      onSelectTemplate(selectedTemplateId);
+      navigate(`/admin/quiz-editor/${selectedTemplateId}`);
     } else {
       toast({
         title: "Selecione um modelo",
@@ -354,8 +355,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                 className="border-[#B89B7A] text-[#B89B7A]"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedTemplateId(template.id);
-                  handleSelectTemplate();
+                  handleSelectTemplateForEdit();
                 }}
               >
                 <Edit className="h-4 w-4 mr-2" />
@@ -370,7 +370,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
         <Button 
           size="lg"
           className="bg-[#B89B7A] hover:bg-[#A38A69]"
-          onClick={handleSelectTemplate}
+          onClick={handleSelectTemplateForEdit}
           disabled={!selectedTemplateId}
         >
           Editar Modelo Selecionado

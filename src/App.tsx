@@ -26,6 +26,7 @@ function App() {
             <Route path="/builder" element={<QuizBuilderPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
+            <Route path="/admin/quiz-editor/:templateId" element={<QuizEditorPage />} />
           </Routes>
         </Suspense>
         <Toaster />
