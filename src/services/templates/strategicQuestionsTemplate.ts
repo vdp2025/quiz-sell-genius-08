@@ -3,10 +3,16 @@ import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 import { 
   selfPerceptionQuestions, 
-  styleExperienceQuestions, 
-  purchaseIntentQuestions,
+} from '@/data/questions/selfPerceptionQuestions';
+import { 
+  styleExperienceQuestions 
+} from '@/data/questions/styleExperienceQuestions';
+import { 
+  purchaseIntentQuestions 
+} from '@/data/questions/purchaseIntentQuestions';
+import { 
   desiredOutcomesQuestions 
-} from '@/data/questions';
+} from '@/data/questions/desiredOutcomesQuestions';
 
 export const strategicQuestionsTemplate: QuizBuilderState = {
   components: [
@@ -164,7 +170,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
       id: `q${index + 1}`,
       title: `Pergunta ${index + 1}`,
       order: index + 1,
-      type: 'question'
+      type: 'question' as 'cover' | 'question' | 'result' | 'strategic'
     }))
   ]
 };
