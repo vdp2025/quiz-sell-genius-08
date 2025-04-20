@@ -1,15 +1,15 @@
 
 import React from 'react';
-import { User } from '../../types/auth';
-import { Question, UserResponse } from '../../types/quiz';
+import { UserSession } from '../../types/auth';
+import { QuizQuestion, UserResponse } from '../../types/quiz';
 
 interface QuizContentProps {
-  user: User | null;
+  user: UserSession | null;
   currentQuestionIndex: number;
   totalQuestions: number;
   showingStrategicQuestions: boolean;
   currentStrategicQuestionIndex: number;
-  currentQuestion: Question;
+  currentQuestion: QuizQuestion;
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
   handleNextClick: () => void;
