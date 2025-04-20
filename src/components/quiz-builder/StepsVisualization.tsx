@@ -1,12 +1,13 @@
-
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { QuizStep } from '@/types/quizBuilder';
 import { AnimatedWrapper } from '@/components/AnimatedWrapper';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useStepSearch } from '@/hooks/quiz-builder/useStepSearch';
 
 interface StepsVisualizationProps {
   steps: QuizStep[];
@@ -19,13 +20,12 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
   currentStepIndex, 
   onSelectStep 
 }) => {
-  const [displayMode, setDisplayMode] = useState<'timeline' | 'grid'>('timeline');
-  const [showFullPreview, setShowFullPreview] = useState(false);
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: 5 });
   const isMobile = useIsMobile();
+  const { searchQuery, setSearchQuery, filteredSteps } = useStepSearch(steps);
   
-  const visibleSteps = steps.slice(visibleRange.start, visibleRange.end);
   const maxVisibleSteps = isMobile ? 3 : 5;
+  const visibleSteps = filteredSteps.slice(visibleRange.start, visibleRange.end);
   
   const navigateLeft = () => {
     if (visibleRange.start > 0) {
@@ -37,7 +37,7 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
   };
   
   const navigateRight = () => {
-    if (visibleRange.end < steps.length) {
+    if (visibleRange.end < filteredSteps.length) {
       setVisibleRange({
         start: visibleRange.start + 1,
         end: visibleRange.end + 1
@@ -53,14 +53,13 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
   };
   
   const navigateToEnd = () => {
-    const newStart = Math.max(0, steps.length - maxVisibleSteps);
+    const newStart = Math.max(0, filteredSteps.length - maxVisibleSteps);
     setVisibleRange({
       start: newStart,
-      end: steps.length
+      end: filteredSteps.length
     });
   };
   
-  // Ensure current step is visible
   React.useEffect(() => {
     if (currentStepIndex < visibleRange.start) {
       setVisibleRange({
@@ -75,9 +74,7 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
     }
   }, [currentStepIndex]);
 
-  // Generate a thumbnail preview based on step content
   const getStepPreview = (step: QuizStep) => {
-    // Check if the step has any components
     if (step.components.length === 0) {
       return (
         <div className="flex items-center justify-center h-full bg-gray-50 text-gray-400 text-xs">
@@ -86,7 +83,6 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
       );
     }
 
-    // Find the first header or text component for preview
     const previewComponent = step.components.find(c => 
       c.type === 'header' || c.type === 'text' || c.type === 'headline'
     );
@@ -114,7 +110,6 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
       }
     }
 
-    // If no suitable preview component, show component count
     return (
       <div className="flex items-center justify-center h-full bg-gray-50 text-gray-500 text-xs">
         {step.components.length} componente(s)
@@ -124,47 +119,81 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex space-x-2">
-          <Button 
-            size="icon" 
-            variant="outline" 
-            onClick={navigateToStart}
-            disabled={visibleRange.start <= 0}
-          >
-            <ChevronsLeft className="h-4 w-4" />
-          </Button>
-          <Button 
-            size="icon" 
-            variant="outline" 
-            onClick={navigateLeft}
-            disabled={visibleRange.start <= 0}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
+      <div className="flex flex-col gap-4 mb-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Buscar etapas..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
         </div>
         
-        <div className="text-sm text-[#432818] font-medium">
-          Etapa {currentStepIndex + 1} de {steps.length}
-        </div>
-        
-        <div className="flex space-x-2">
-          <Button 
-            size="icon" 
-            variant="outline" 
-            onClick={navigateRight}
-            disabled={visibleRange.end >= steps.length}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <Button 
-            size="icon" 
-            variant="outline" 
-            onClick={navigateToEnd}
-            disabled={visibleRange.end >= steps.length}
-          >
-            <ChevronsRight className="h-4 w-4" />
-          </Button>
+        <div className="flex justify-between items-center">
+          <div className="flex space-x-2">
+            <Button 
+              size="icon" 
+              variant="outline" 
+              onClick={() => setVisibleRange({ start: 0, end: maxVisibleSteps })}
+              disabled={visibleRange.start <= 0}
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <Button 
+              size="icon" 
+              variant="outline" 
+              onClick={() => {
+                if (visibleRange.start > 0) {
+                  setVisibleRange({
+                    start: visibleRange.start - 1,
+                    end: visibleRange.end - 1
+                  });
+                }
+              }}
+              disabled={visibleRange.start <= 0}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </div>
+          
+          <div className="text-sm text-[#432818] font-medium">
+            Etapa {currentStepIndex + 1} de {steps.length}
+            {searchQuery && ` (${filteredSteps.length} resultados)`}
+          </div>
+          
+          <div className="flex space-x-2">
+            <Button 
+              size="icon" 
+              variant="outline" 
+              onClick={() => {
+                if (visibleRange.end < filteredSteps.length) {
+                  setVisibleRange({
+                    start: visibleRange.start + 1,
+                    end: visibleRange.end + 1
+                  });
+                }
+              }}
+              disabled={visibleRange.end >= filteredSteps.length}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button 
+              size="icon" 
+              variant="outline" 
+              onClick={() => {
+                const newStart = Math.max(0, filteredSteps.length - maxVisibleSteps);
+                setVisibleRange({
+                  start: newStart,
+                  end: filteredSteps.length
+                });
+              }}
+              disabled={visibleRange.end >= filteredSteps.length}
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
       
@@ -172,7 +201,7 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
         <AnimatedWrapper>
           <div className="flex space-x-2 py-2">
             {visibleSteps.map((step, index) => {
-              const absoluteIndex = index + visibleRange.start;
+              const absoluteIndex = steps.findIndex(s => s.id === step.id);
               const isActive = absoluteIndex === currentStepIndex;
               
               return (
@@ -211,7 +240,9 @@ export const StepsVisualization: React.FC<StepsVisualizationProps> = ({
             
             {visibleSteps.length === 0 && (
               <div className="w-full text-center py-8 text-gray-500">
-                Nenhuma etapa criada. Adicione sua primeira etapa para começar.
+                {searchQuery
+                  ? 'Nenhuma etapa encontrada para esta busca.'
+                  : 'Nenhuma etapa criada. Adicione sua primeira etapa para começar.'}
               </div>
             )}
           </div>
