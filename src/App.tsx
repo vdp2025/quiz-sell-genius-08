@@ -4,9 +4,8 @@ import { Suspense, lazy } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
-import QuizPage from './components/QuizPage';
 
-// Only lazy load non-critical routes
+const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const EditorPage = lazy(() => import('./pages/EditorPage'));
 const QuizBuilderPage = lazy(() => import('./pages/QuizBuilderPage'));

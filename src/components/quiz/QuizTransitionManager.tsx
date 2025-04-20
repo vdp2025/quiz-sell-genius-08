@@ -1,43 +1,38 @@
 
 import React from 'react';
+import { MainTransition } from './MainTransition';
+import QuizFinalTransition from '../QuizFinalTransition';
+import { UserResponse } from '@/types/quiz';
 
 interface QuizTransitionManagerProps {
   showingTransition: boolean;
   showingFinalTransition: boolean;
-  handleStrategicAnswer: any;
+  handleStrategicAnswer: (response: UserResponse) => void;
   strategicAnswers: Record<string, string[]>;
   handleShowResult: () => void;
 }
 
-export const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
+const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   showingTransition,
   showingFinalTransition,
   handleStrategicAnswer,
   strategicAnswers,
-  handleShowResult
+  handleShowResult,
 }) => {
-  if (!showingTransition && !showingFinalTransition) {
-    return null;
+  if (showingFinalTransition) {
+    return <QuizFinalTransition onShowResult={handleShowResult} />;
   }
 
-  return (
-    <div className="flex flex-col items-center justify-center py-8 text-center">
-      <h2 className="text-2xl font-playfair text-[#432818] mb-4">
-        {showingFinalTransition ? "Preparando seu resultado..." : "Próxima etapa..."}
-      </h2>
-      
-      <p className="text-[#8F7A6A] mb-6">
-        {showingFinalTransition 
-          ? "Estamos analisando suas respostas para revelar seu estilo predominante" 
-          : "Vamos para algumas perguntas estratégicas para entender melhor suas preferências"}
-      </p>
-      
-      <button 
-        onClick={showingFinalTransition ? handleShowResult : () => {}}
-        className="px-6 py-3 bg-[#B89B7A] text-white rounded-md hover:bg-[#A38A69] transition-colors"
-      >
-        {showingFinalTransition ? "Ver meu resultado" : "Continuar"}
-      </button>
-    </div>
-  );
+  if (showingTransition) {
+    return (
+      <MainTransition
+        onAnswer={handleStrategicAnswer}
+        strategicAnswers={strategicAnswers}
+      />
+    );
+  }
+
+  return null;
 };
+
+export { QuizTransitionManager };
