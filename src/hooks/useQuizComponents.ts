@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
 import { getDefaultData } from '@/utils/quizComponentDefaults';
@@ -21,7 +22,7 @@ export const useQuizComponents = () => {
         paddingX: '16',
         backgroundColor: '',
         textColor: '',
-        borderRadius: 0
+        borderRadius: '0' // Changed from number to string to match the QuizComponentStyle interface
       }
     };
 
