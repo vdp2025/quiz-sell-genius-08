@@ -1,8 +1,8 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizStages } from './useQuizStages';
 import { useQuizComponents } from './useQuizComponents';
+import { generateInitialStages } from '@/services/quizBuilderService';
 
 const STORAGE_KEY = 'quiz_builder_data';
 
@@ -15,7 +15,8 @@ export const useQuizBuilder = () => {
     updateStage,
     deleteStage,
     moveStage,
-    setActiveStage
+    setActiveStage,
+    initializeStages
   } = useQuizStages();
   
   const {
@@ -23,7 +24,8 @@ export const useQuizBuilder = () => {
     addComponent,
     updateComponent,
     deleteComponent,
-    moveComponent
+    moveComponent,
+    initializeComponents
   } = useQuizComponents();
 
   // Load data from localStorage on initialization
@@ -34,21 +36,20 @@ export const useQuizBuilder = () => {
         const savedData = localStorage.getItem(STORAGE_KEY);
         if (savedData) {
           const parsedData = JSON.parse(savedData);
-          // Initialize stages with saved data
-          stages.push(...parsedData.stages);
-          // Initialize components with saved data
-          components.push(...parsedData.components);
+          initializeStages(parsedData.stages);
+          initializeComponents(parsedData.components);
           
-          // Set active stage to first stage if available
           if (parsedData.stages && parsedData.stages.length > 0) {
             setActiveStage(parsedData.stages[0].id);
           }
         } else {
-          // Create default cover stage if no saved data
-          const defaultStageId = `stage-${Date.now()}`;
-          addStage('cover');
-          addComponent('header', defaultStageId);
-          setActiveStage(defaultStageId);
+          // Initialize with generated stages and components
+          const { stages: initialStages, components: initialComponents } = generateInitialStages();
+          initializeStages(initialStages);
+          initializeComponents(initialComponents);
+          if (initialStages.length > 0) {
+            setActiveStage(initialStages[0].id);
+          }
         }
       } catch (error) {
         console.error('Error loading quiz data:', error);

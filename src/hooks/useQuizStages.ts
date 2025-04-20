@@ -1,10 +1,13 @@
-
 import { useState, useCallback } from 'react';
 import { QuizStage } from '@/types/quizBuilder';
 
 export const useQuizStages = () => {
   const [stages, setStages] = useState<QuizStage[]>([]);
   const [activeStageId, setActiveStageId] = useState<string | null>(null);
+
+  const initializeStages = useCallback((initialStages: QuizStage[]) => {
+    setStages(initialStages);
+  }, []);
 
   const addStage = useCallback((type: QuizStage['type']): string => {
     const stageNumber = stages.length + 1;
@@ -83,6 +86,7 @@ export const useQuizStages = () => {
     updateStage,
     deleteStage,
     moveStage,
-    setActiveStage: setActiveStageId
+    setActiveStage: setActiveStageId,
+    initializeStages
   };
 };

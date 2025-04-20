@@ -1,10 +1,13 @@
-
 import { useState, useCallback } from 'react';
 import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
 import { getDefaultData } from '@/utils/quizComponentDefaults';
 
 export const useQuizComponents = () => {
   const [components, setComponents] = useState<QuizComponentData[]>([]);
+
+  const initializeComponents = useCallback((initialComponents: QuizComponentData[]) => {
+    setComponents(initialComponents);
+  }, []);
 
   const addComponent = useCallback((type: QuizComponentType, stageId?: string): string => {
     const newComponent: QuizComponentData = {
@@ -101,6 +104,7 @@ export const useQuizComponents = () => {
     addComponent,
     updateComponent,
     deleteComponent,
-    moveComponent
+    moveComponent,
+    initializeComponents
   };
 };
