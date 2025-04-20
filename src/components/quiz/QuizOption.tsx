@@ -1,99 +1,94 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
-import { highlightStrategicWords } from '@/utils/textHighlight';
-import { QuizOptionImage } from './QuizOptionImage';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Check } from 'lucide-react';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface QuizOptionProps {
   option: QuizOptionType;
   isSelected: boolean;
   onSelect: (optionId: string) => void;
   type: 'text' | 'image' | 'both';
-  questionId?: string;
+  questionId: string;
 }
 
-const QuizOption: React.FC<QuizOptionProps> = ({
+export const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
   onSelect,
   type,
   questionId
 }) => {
-  const isMobile = useIsMobile();
-  const [isHovered, setIsHovered] = useState(false);
-  const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
-
+  const isTextOnly = type === 'text';
+  const isImageOnly = type === 'image';
+  const isBoth = type === 'both';
+  const hasImage = isImageOnly || isBoth;
+  
+  const handleClick = () => {
+    onSelect(option.id);
+  };
+  
   return (
-    <div 
+    <div
       className={cn(
-        "relative group h-full",
-        "transition-all duration-500 ease-in-out transform", 
-        !type.includes('text') && !isSelected && "hover:scale-[1.02]"
+        "relative transition-all duration-200 hover:shadow-sm cursor-pointer select-none",
+        isSelected 
+          ? "ring-2 ring-[#B89B7A] bg-[#FAF9F7]" 
+          : "hover:ring-1 hover:ring-[#B89B7A]/50",
+        hasImage 
+          ? "rounded-lg overflow-hidden flex flex-col" 
+          : "rounded-md p-3"
       )}
-      onClick={() => onSelect(option.id)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={() => setIsHovered(true)}
-      onTouchEnd={() => setIsHovered(false)}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      aria-selected={isSelected}
     >
-      <div 
-        className={cn(
-          "relative h-full flex flex-col",
-          "transition-all duration-300 ease-out cursor-pointer", 
-          type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
-          type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
-          isSelected 
-            ? type === 'text' 
-              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]" 
-              : "border-brand-gold/60 shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]"
-            : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-sm" 
-              : "hover:border-brand-gold/40 hover:shadow-sm"
-        )}
-      >
-        {type !== 'text' && option.imageUrl && (
-          <QuizOptionImage
-            imageUrl={option.imageUrl}
-            altText={option.text}
-            styleCategory={option.styleCategory}
-            isSelected={isSelected}
-            is3DQuestion={is3DQuestion}
-            questionId={questionId || ''}
-          />
-        )}
-        
-        <p className={cn(
-          "transition-all duration-300",
-          type !== 'text' 
-            ? cn(
-                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", 
-                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-xs",
-                isSelected && "font-semibold"
-              )
-            : cn(
-                isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-sm leading-relaxed desktop:text-base",
-                (questionId === '1' || questionId === '2') && (
-                  isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"
-                ),
-                isSelected && "text-brand-coffee font-semibold"
-              )
-        )}>
-          {highlightStrategicWords(option.text)}
-        </p>
-      </div>
+      {hasImage && option.imageUrl && (
+        <div className="w-full">
+          <AspectRatio ratio={4/3} className="w-full">
+            <img
+              src={option.imageUrl}
+              alt={option.text}
+              className="w-full h-full object-cover"
+            />
+          </AspectRatio>
+        </div>
+      )}
       
-      {/* Smaller Typeform-like active indicator */}
-      {isSelected && (
-        <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 animate-scale-in">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-2 w-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
+      {(isTextOnly || isBoth) && (
+        <div 
+          className={cn(
+            "flex items-start gap-2 text-[#432818]",
+            hasImage ? "p-3 border-t border-[#B89B7A]/10" : "",
+            isSelected && "font-medium"
+          )}
+        >
+          {/* Selection indicator */}
+          <div className={cn(
+            "h-5 w-5 rounded-full border-2 border-[#B89B7A] flex-shrink-0 mr-2 mt-0.5",
+            isSelected ? "bg-[#B89B7A] flex items-center justify-center" : "bg-white"
+          )}>
+            {isSelected && <Check className="h-3 w-3 text-white" />}
+          </div>
+          
+          {/* Option text */}
+          <span className={cn(
+            "text-sm sm:text-base",
+            isSelected && "font-medium"
+          )}>
+            {option.text}
+          </span>
+        </div>
+      )}
+      
+      {/* Style category label - only visible for admin or debug */}
+      {option.styleCategory && process.env.NODE_ENV === 'development' && (
+        <div className="absolute top-1 right-1 bg-[#B89B7A]/80 text-white text-xs px-1 py-0.5 rounded">
+          {option.styleCategory}
         </div>
       )}
     </div>
   );
 };
-
-export { QuizOption };

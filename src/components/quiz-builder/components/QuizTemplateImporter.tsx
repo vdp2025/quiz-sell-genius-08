@@ -1,11 +1,12 @@
 
 import React from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
-import { styleQuizTemplate2 } from '@/services/templates/styleQuizTemplate2';
+import { Check, CheckCircle } from 'lucide-react';
 import { QuizBuilderState } from '@/types/quizBuilder';
+import { strategicQuestionsTemplate } from '@/services/templates/strategicQuestionsTemplate';
+import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
 
 interface QuizTemplateImporterProps {
   isOpen: boolean;
@@ -20,50 +21,69 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
 }) => {
   const templates = [
     {
-      id: 'style-quiz-1',
-      title: 'Quiz de Estilo Pessoal',
-      description: 'Template padrão com perguntas sobre preferências de estilo e personalidade.',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+      id: 'style-quiz',
+      title: 'Quiz de Estilo',
+      description: 'Quiz para identificar o estilo pessoal predominante do participante.',
+      features: [
+        'Identificação de estilo pessoal',
+        'Opções com imagens e texto',
+        'Resultado com estilo predominante e estilos secundários'
+      ],
       template: styleQuizTemplate
     },
     {
-      id: 'style-quiz-2',
-      title: 'Quiz de Estilo Avançado',
-      description: 'Template com questões de múltipla escolha e imagens para análise de estilo detalhada.',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
-      template: styleQuizTemplate2
+      id: 'strategic-questions',
+      title: 'Perguntas Estratégicas',
+      description: 'Faça perguntas para entender melhor as necessidades do seu cliente.',
+      features: [
+        'Perguntas de autopercepção',
+        'Experiência com estilo',
+        'Intenção de compra',
+        'Resultados desejados'
+      ],
+      template: strategicQuestionsTemplate
     }
   ];
 
+  const handleImport = (template: QuizBuilderState) => {
+    onImportTemplate(template);
+    onClose();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-playfair text-[#432818]">Importar Template de Quiz</DialogTitle>
+          <DialogTitle>Escolha um Modelo de Quiz</DialogTitle>
           <DialogDescription>
-            Escolha um dos templates pré-configurados para iniciar seu quiz ou continuar editando.
+            Selecione um modelo para começar rapidamente ou como base para personalização.
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2">
           {templates.map((template) => (
-            <Card key={template.id} className="overflow-hidden border border-[#B89B7A]/30 hover:border-[#B89B7A] transition-all cursor-pointer">
-              <div className="w-full h-48 overflow-hidden">
-                <img src={template.image} alt={template.title} className="w-full h-full object-cover" />
-              </div>
-              <CardHeader>
-                <CardTitle className="font-playfair text-[#432818]">{template.title}</CardTitle>
+            <Card key={template.id} className="border border-[#B89B7A]/20">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg font-playfair text-[#432818]">{template.title}</CardTitle>
                 <CardDescription>{template.description}</CardDescription>
               </CardHeader>
+              <CardContent>
+                <ul className="space-y-1">
+                  {template.features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <CheckCircle className="w-4 h-4 text-[#B89B7A] mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
               <CardFooter>
                 <Button 
-                  className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
-                  onClick={() => {
-                    onImportTemplate(template.template);
-                    onClose();
-                  }}
+                  onClick={() => handleImport(template.template)}
+                  className="w-full bg-[#B89B7A] hover:bg-[#9F836A]"
                 >
-                  Selecionar Template
+                  <Check className="w-4 h-4 mr-2" />
+                  Usar este modelo
                 </Button>
               </CardFooter>
             </Card>
