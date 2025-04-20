@@ -44,8 +44,11 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
   useEffect(() => {
     if (resultPageConfig?.blocks) {
       updateBlocks(resultPageConfig.blocks);
+    } else {
+      // Initialize with empty blocks if not present
+      updateSection('blocks', []);
     }
-  }, [resultPageConfig?.blocks, updateBlocks]);
+  }, [resultPageConfig, updateBlocks, updateSection]);
 
   const handleUpdateConfig = (newConfig) => {
     if (newConfig) {
@@ -53,6 +56,9 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
         importConfig(newConfig);
         if (newConfig.blocks) {
           updateBlocks(newConfig.blocks);
+        } else {
+          // Initialize with empty blocks if not present
+          updateBlocks([]);
         }
         toast({
           title: "Configuração atualizada",

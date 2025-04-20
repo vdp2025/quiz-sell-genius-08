@@ -112,7 +112,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       backgroundColor: '#fffaf7',
       fontFamily: 'Playfair Display'
     },
-    blocks: []
+    blocks: []  // Initialize with empty blocks array
   };
 };
 

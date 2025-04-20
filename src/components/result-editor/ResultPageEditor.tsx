@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,9 +33,10 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
 
   const { 
     resultPageConfig, 
-    updateSection,
-    resetConfig,
+    updateSection, 
     saveConfig,
+    resetConfig,
+    importConfig,
     loading 
   } = useResultPageConfig(primaryStyle.category);
 
@@ -60,6 +62,25 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
       title: 'Configurações redefinidas',
       description: 'As configurações foram redefinidas para os valores padrão',
     });
+  };
+
+  const handleUpdateConfig = (newConfig: any) => {
+    if (newConfig) {
+      try {
+        importConfig(newConfig);
+        toast({
+          title: "Configuração atualizada",
+          description: "A configuração foi aplicada com sucesso",
+        });
+      } catch (error) {
+        console.error('Error updating config:', error);
+        toast({
+          title: "Erro ao atualizar configuração",
+          description: "Ocorreu um erro ao aplicar a configuração",
+          variant: "destructive"
+        });
+      }
+    }
   };
 
   const toggleSection = (sectionPath: string) => {
@@ -93,6 +114,8 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
         onSave={handleSave}
         onReset={handleReset}
         onEditGlobalStyles={() => setGlobalStylesOpen(true)}
+        resultPageConfig={resultPageConfig}
+        onUpdateConfig={handleUpdateConfig}
       />
       
       <div className="max-w-4xl mx-auto mt-8 px-4">

@@ -75,8 +75,12 @@ export interface ResultPageConfig {
     backgroundColor?: string;
     fontFamily?: string;
   };
+  blocks?: Block[]; // Add blocks property
 }
 
 export interface ResultPageConfigsStore {
   configs: Record<string, ResultPageConfig>;
 }
+
+// Import Block type from editor.ts to use in ResultPageConfig
+import { Block } from './editor';

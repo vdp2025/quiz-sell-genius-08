@@ -26,13 +26,16 @@ export const useResultPageEditor = (styleType: string) => {
 
   // Initialize blocks from config when it's loaded
   useEffect(() => {
-    if (resultPageConfig?.blocks && resultPageConfig.blocks.length > 0) {
+    if (resultPageConfig?.blocks) {
       setState(prev => ({
         ...prev,
         blocks: resultPageConfig.blocks
       }));
+    } else {
+      // Initialize with empty blocks array if not present
+      updateSection('blocks', []);
     }
-  }, [resultPageConfig?.blocks]);
+  }, [resultPageConfig, updateSection]);
 
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));

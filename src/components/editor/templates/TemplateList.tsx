@@ -3,30 +3,23 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { giseleStyleTemplate } from '@/services/templates/giseleStyleTemplate';
-import { useEditor } from '@/hooks/useEditor';
-import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
+import { toast } from '@/components/ui/use-toast';
 
 interface TemplateListProps {
   onSelectTemplate?: () => void;
 }
 
 export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) => {
-  const { config, setConfig } = useEditor();
+  const { resultPageConfig, importConfig } = useResultPageConfig("Natural");
   
-  // Use the styleType from the current config or default to "Natural"
-  const styleType = config?.styleType || "Natural";
-  const { importConfig } = useResultPageConfig(styleType);
+  // Use the styleType from the current config
+  const styleType = resultPageConfig?.styleType || "Natural";
 
   const handleSelectTemplate = (template: any) => {
     try {
       if (importConfig) {
         importConfig(template);
-      } else {
-        setConfig({
-          ...config,
-          blocks: template.blocks || []
-        });
       }
       
       toast({
