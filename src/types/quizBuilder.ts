@@ -13,7 +13,8 @@ export type QuizComponentType =
   | 'date' 
   | 'benefitsList' 
   | 'faq' 
-  | 'quizResult';
+  | 'quizResult'
+  | 'continueButton';
 
 export interface QuizComponentStyle {
   paddingY?: string;
@@ -21,7 +22,21 @@ export interface QuizComponentStyle {
   backgroundColor?: string;
   textColor?: string;
   borderRadius?: number;
-  // Add more style properties as needed
+  fontFamily?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  lineHeight?: string;
+  textAlign?: 'left' | 'center' | 'right';
+  imageWidth?: number;
+  objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+}
+
+export interface QuizOption {
+  text: string;
+  imageUrl?: string;
+  styleCategory?: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
+  points?: number;
+  isStrategic?: boolean;
 }
 
 export interface QuizComponentData {
@@ -38,15 +53,30 @@ export interface QuizComponentData {
     question?: string;
     options?: string[];
     fullOptions?: QuizOption[];
-    // Add more specific data properties as needed
+    
+    // Multiple choice specific
+    multiSelect?: number;
+    displayType?: 'text' | 'image' | 'both';
+    gridColumns?: number;
+    imageHeight?: number;
+    optionFontFamily?: string;
+    optionFontSize?: number;
+    optionFontWeight?: string;
+    optionTextColor?: string;
+    
+    // Navigation
+    showContinueButton?: boolean;
+    buttonText?: string;
+    buttonUrl?: string;
+    buttonColor?: string;
+    buttonTextColor?: string;
+    buttonRadius?: number;
+    buttonPadding?: string;
+    
+    // Action buttons
+    onClickAction?: 'nextQuestion' | 'submitQuiz' | 'goToUrl';
   };
   style?: QuizComponentStyle;
-}
-
-export interface QuizOption {
-  text: string;
-  imageUrl?: string;
-  styleCategory?: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
 }
 
 export interface QuizStep {

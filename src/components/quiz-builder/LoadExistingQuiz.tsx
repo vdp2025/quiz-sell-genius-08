@@ -1,138 +1,100 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { QuizStep } from '@/types/quizBuilder';
+import { PlusCircle, RefreshCw } from 'lucide-react';
 import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
-import { QuizComponentData, QuizStep } from '@/types/quizBuilder';
 
 interface LoadExistingQuizProps {
   onLoadQuiz: (steps: QuizStep[]) => void;
 }
 
 export const LoadExistingQuiz: React.FC<LoadExistingQuizProps> = ({ onLoadQuiz }) => {
-  const handleLoadStyleQuiz = () => {
-    // Create welcome step (cover)
-    const welcomeStep: QuizStep = {
-      id: `step-welcome`,
-      title: 'Capa do Quiz',
-      components: [
-        {
-          id: 'header-welcome',
-          type: 'header',
-          order: 0,
-          data: {
-            title: 'Descubra o seu Estilo',
-            subtitle: 'Responda às perguntas abaixo e descubra seu estilo pessoal'
-          },
-          style: {
-            paddingY: '24',
-            paddingX: '16',
-            backgroundColor: '',
-            textColor: '',
-            borderRadius: 0
-          }
-        },
-        {
-          id: 'text-welcome',
-          type: 'text',
-          order: 1,
-          data: {
-            text: 'Este quiz vai te ajudar a descobrir seu estilo pessoal predominante e como você pode usá-lo para escolher roupas que combinem com sua personalidade.'
-          },
-          style: {
-            paddingY: '16',
-            paddingX: '16',
-            backgroundColor: '',
-            textColor: '',
-            borderRadius: 0
-          }
-        }
-      ]
-    };
-    
-    // Create steps for each question
-    const questionSteps: QuizStep[] = styleQuizTemplate.map((question, index) => {
-      const component: QuizComponentData = {
-        id: question.id,
-        type: 'multipleChoice',
-        order: 0,
-        data: {
-          title: question.title,
-          question: question.title,
-          options: question.options.map(opt => opt.text),
-          // Store the full option objects in a separate property for later use
-          fullOptions: question.options.map(opt => ({
-            text: opt.text,
-            imageUrl: opt.imageUrl,
-            styleCategory: opt.styleCategory
-          })),
-          multiSelect: question.multiSelect,
-          questionType: question.type
-        },
-        style: {
-          paddingY: '16',
-          paddingX: '16',
-          backgroundColor: '',
-          textColor: '',
-          borderRadius: 0
-        }
-      };
-      
-      return {
-        id: `step-${index + 1}`,
-        title: `Pergunta ${index + 1}`,
-        components: [component]
-      };
-    });
-    
-    // Create results step
-    const resultsStep: QuizStep = {
-      id: `step-results`,
-      title: 'Resultados',
-      components: [
-        {
-          id: 'quizResult-main',
-          type: 'quizResult',
-          order: 0,
-          data: {
-            title: 'Seu Estilo Principal',
-            subtitle: 'Baseado nas suas respostas'
-          },
-          style: {
-            paddingY: '16',
-            paddingX: '16',
-            backgroundColor: '',
-            textColor: '',
-            borderRadius: 0
-          }
-        }
-      ]
-    };
-    
-    // Combine all steps
-    const allSteps = [welcomeStep, ...questionSteps, resultsStep];
-    
-    onLoadQuiz(allSteps);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleCreateNew = () => {
+    onLoadQuiz([{
+      id: `step-${Date.now()}`,
+      title: 'Etapa 1',
+      components: []
+    }]);
   };
-
+  
+  const handleLoadTemplate = async () => {
+    setIsLoading(true);
+    // Simulate loading delay
+    setTimeout(() => {
+      onLoadQuiz(styleQuizTemplate);
+      setIsLoading(false);
+    }, 800);
+  };
+  
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-playfair text-[#432818] mb-6">Carregar Quiz Existente</h1>
-      
-      <Card className="cursor-pointer hover:border-[#B89B7A] transition-colors"
-            onClick={handleLoadStyleQuiz}>
-        <CardHeader>
-          <CardTitle>Quiz de Estilo</CardTitle>
-          <CardDescription>
-            Quiz para descoberta do estilo pessoal com 10 perguntas
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-600">
-            10 perguntas com opções de texto e imagem
-          </p>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl">
+        <h1 className="text-3xl font-playfair text-[#432818] text-center mb-8">
+          Construtor de Quiz
+        </h1>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card className="shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle>Criar Novo Quiz</CardTitle>
+              <CardDescription>
+                Comece do zero e crie um novo quiz personalizado
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-center p-6">
+                <PlusCircle className="w-16 h-16 text-[#B89B7A]" />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button 
+                onClick={handleCreateNew}
+                className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
+              >
+                Começar do Zero
+              </Button>
+            </CardFooter>
+          </Card>
+          
+          <Card className="shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle>Carregar Template</CardTitle>
+              <CardDescription>
+                Use nosso template de Quiz de Estilo como ponto de partida
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-center p-6">
+                <img 
+                  src="/lovable-uploads/0fb54364-9c71-4373-b6e7-500e6f9a2732.png" 
+                  alt="Quiz de Estilo" 
+                  className="w-24 h-24 object-cover rounded-lg"
+                />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button 
+                onClick={handleLoadTemplate}
+                className="w-full bg-[#432818] hover:bg-[#321808]"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Carregando...
+                  </>
+                ) : (
+                  'Carregar Template de Estilo'
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };

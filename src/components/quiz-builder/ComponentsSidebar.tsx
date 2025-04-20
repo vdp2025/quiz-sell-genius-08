@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,9 @@ import {
   Radio,
   SlidersHorizontal,
   MessageCircle,
-  CalendarRange
+  CalendarRange,
+  ArrowRight,
+  ChevronRight
 } from 'lucide-react';
 import { QuizComponentType } from '@/types/quizBuilder';
 
@@ -50,6 +53,12 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponen
         { type: 'scale', label: 'Escala', icon: <SlidersHorizontal className="h-4 w-4" /> },
         { type: 'openEnded', label: 'Resposta Aberta', icon: <MessageCircle className="h-4 w-4" /> },
         { type: 'date', label: 'Data', icon: <CalendarRange className="h-4 w-4" /> },
+      ]
+    },
+    {
+      title: 'Navegação',
+      components: [
+        { type: 'continueButton', label: 'Botão de Continuar', icon: <ChevronRight className="h-4 w-4" /> },
       ]
     },
     {
