@@ -241,13 +241,13 @@ export const ResultPage = () => {
           </div>
           
           <div className="mt-8 text-center">
-            <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp" alt="Depoimentos" className="w-full max-w-2xl mx-auto h-auto rounded-lg" />
+            <img src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp" alt="Antes e Depois" className="w-full h-auto rounded-lg mt-6" />
           </div>
         </Card>
         
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            👩‍🏫 Sobre sua mentora
+            Sobre sua mentora
           </h2>
           
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -264,7 +264,6 @@ export const ResultPage = () => {
               <p className="text-[#432818]">
                 Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata.
               </p>
-              <img src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp" alt="Antes e Depois" className="w-full h-auto rounded-lg mt-6" />
             </div>
             <div className="space-y-6">
               <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp" alt="Gisele Galvão" className="w-full h-auto rounded-lg shadow-md" />  
