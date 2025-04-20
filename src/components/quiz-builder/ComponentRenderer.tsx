@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentData, QuizOption } from '@/types/quizBuilder';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
@@ -66,9 +66,15 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         );
         
       case 'multipleChoice':
-        const hasImages = data.fullOptions && data.fullOptions.some(opt => opt.imageUrl);
+        // Check if we have the fullOptions property and if it contains images
+        const fullOptions = data.fullOptions || [];
+        const hasImages = fullOptions.some(opt => opt.imageUrl);
         const optionsToDisplay = data.options || ['Opção 1', 'Opção 2', 'Opção 3'];
-        const fullOptionsToDisplay = data.fullOptions || optionsToDisplay.map(text => ({ text }));
+        
+        // Create a safe fullOptionsToDisplay array that's guaranteed to have the right properties
+        const fullOptionsToDisplay: QuizOption[] = fullOptions.length > 0 ? 
+          fullOptions : 
+          optionsToDisplay.map(text => ({ text }));
         
         return (
           <div className="w-full max-w-6xl mx-auto pb-5 relative">
@@ -94,7 +100,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
                       hasImages ? "overflow-hidden flex flex-col" : "flex items-center p-3"
                     )}
                   >
-                    {hasImages && fullOption.imageUrl && (
+                    {hasImages && fullOption && fullOption.imageUrl && (
                       <div className="w-full h-48 overflow-hidden">
                         <img 
                           src={fullOption.imageUrl} 
