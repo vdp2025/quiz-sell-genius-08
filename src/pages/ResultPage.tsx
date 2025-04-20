@@ -267,8 +267,7 @@ export const ResultPage = () => {
               <img src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp" alt="Antes e Depois" className="w-full h-auto rounded-lg mt-6" />
             </div>
             <div className="space-y-6">
-              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp" alt="Gisele Galvão" className="w-full h-auto rounded-lg shadow-md" />
-              <img src="https://res.cloudinary.com/dzt2fe3ij/image/upload/e_sharpen/v1745104620/Sem_nome_1000_x_1000_px_1280_x_720_px_itv2ri.webp" alt="8 Estilos Universais" className="w-full h-auto rounded-lg shadow-md" />
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp" alt="Gisele Galvão" className="w-full h-auto rounded-lg shadow-md" />  
             </div>
           </div>
         </Card>
