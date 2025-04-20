@@ -28,8 +28,7 @@ export type BlockType =
   | 'faq'
   | 'carousel'
   | 'custom-code'
-  | 'animation-block'
-  | 'bonus';
+  | 'animation-block';
 
 export interface EditableContent {
   title?: string;
@@ -101,6 +100,15 @@ export type EditorBlock = Block;
 
 export interface EditorConfig {
   blocks: EditorBlock[];
+  theme?: {
+    fontFamily?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    backgroundColor?: string;
+    textColor?: string;
+    headingColor?: string;
+    [key: string]: any;
+  };
   globalStyles?: {
     fontFamily?: string;
     primaryColor?: string;

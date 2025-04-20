@@ -2,10 +2,42 @@
 import { Block } from './editor';
 import { StyleResult } from './quiz';
 
+export interface StyleOptions {
+  backgroundColor?: string;
+  textColor?: string;
+  padding?: string;
+  textAlign?: 'left' | 'center' | 'right';
+  borderRadius?: string;
+  boxShadow?: string;
+  margin?: string;
+  [key: string]: any;
+}
+
 export interface SectionConfig {
   visible: boolean;
   content: Record<string, any>;
-  style: Record<string, any>;
+  style: StyleOptions;
+}
+
+export interface Section extends SectionConfig {
+  title: string;
+  description?: string;
+}
+
+export interface OfferContent {
+  title?: string;
+  subtitle?: string;
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  heroImage?: string;
+  heroImage2?: string;
+  [key: string]: any;
+}
+
+export interface OfferSection extends SectionConfig {
+  content: OfferContent;
 }
 
 export interface OfferConfig {

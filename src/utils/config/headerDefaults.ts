@@ -1,16 +1,18 @@
 
-import { Section } from '@/types/resultPageConfig';
+import { SectionConfig } from '@/types/resultPageConfig';
 
-export const createHeaderConfig = (): Section => ({
-  visible: true,
-  content: {
-    title: "VOCÊ DESCOBRIU SEU ESTILO",
-    subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
-    logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-    logoAlt: "Logo Gisele Galvão"
-  },
-  style: {
-    textAlign: 'center',
-    margin: '0 0 2rem 0'
-  }
-});
+export const getDefaultHeaderConfig = (): SectionConfig => {
+  return {
+    visible: true,
+    content: {
+      title: 'Seu Resultado Exclusivo',
+      subtitle: 'Descubra seu estilo pessoal e como aproveitá-lo ao máximo'
+    },
+    style: {
+      backgroundColor: '#ffffff',
+      textColor: '#333333',
+      padding: '40px 20px',
+      textAlign: 'center'
+    }
+  };
+};
