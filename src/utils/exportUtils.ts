@@ -27,8 +27,10 @@ export const importJsonFromFile = (file: File): Promise<any> => {
       try {
         const content = event.target?.result as string;
         const parsed = JSON.parse(content);
+        console.log("JSON importado com sucesso:", parsed);
         resolve(parsed);
       } catch (error) {
+        console.error("Erro ao importar JSON:", error);
         reject(new Error('Arquivo JSON inválido'));
       }
     };

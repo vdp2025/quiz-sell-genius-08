@@ -54,13 +54,23 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   };
 
   const handleApplySalesTemplate = () => {
-    const salesBlocks = BlockFactory.createSalesPageBlocks(styleType);
-    onUpdateBlocks(salesBlocks);
-    toast({
-      title: "Template de vendas aplicado",
-      description: "O template de vendas foi aplicado com sucesso",
-      variant: "default"
-    });
+    try {
+      const salesBlocks = BlockFactory.createSalesPageBlocks(styleType);
+      console.log("Aplicando template de vendas:", salesBlocks);
+      onUpdateBlocks(salesBlocks);
+      toast({
+        title: "Template de vendas aplicado",
+        description: "O template de vendas foi aplicado com sucesso",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Erro ao aplicar template de vendas:', error);
+      toast({
+        title: "Erro ao aplicar template",
+        description: "Não foi possível aplicar o template de vendas",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleSave = async () => {

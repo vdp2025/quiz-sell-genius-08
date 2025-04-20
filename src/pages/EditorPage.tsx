@@ -9,6 +9,7 @@ import { EditorToolbar } from '@/components/result-editor/EditorToolbar';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { toast } from '@/components/ui/use-toast';
 
 export const EditorPage = () => {
   const { style } = useParams<{ style: string }>();
@@ -35,37 +36,55 @@ export const EditorPage = () => {
   };
 
   const handleUpdateConfig = (newConfig: ResultPageConfig) => {
-    // Preserve the current style type when updating the config
-    const updatedConfig = {
-      ...newConfig,
-      styleType: styleCategory
-    };
+    console.log("Atualizando configuração", newConfig);
     
-    // Update blocks if they exist in the new config
-    if (newConfig.blocks) {
-      actions.updateSection('blocks', newConfig.blocks);
-    }
-    
-    // If there are other changes that need to be handled separately, do that here
-    if (newConfig.globalStyles) {
-      actions.updateSection('globalStyles', newConfig.globalStyles);
-    }
-    
-    // Additional sections to update if changed
-    if (newConfig.header) {
-      actions.updateSection('header', newConfig.header);
-    }
-    
-    if (newConfig.mainContent) {
-      actions.updateSection('mainContent', newConfig.mainContent);
-    }
-    
-    if (newConfig.secondaryStyles) {
-      actions.updateSection('secondaryStyles', newConfig.secondaryStyles);
-    }
-    
-    if (newConfig.offer) {
-      actions.updateSection('offer', newConfig.offer);
+    try {
+      // Preserve the current style type when updating the config
+      const updatedConfig = {
+        ...newConfig,
+        styleType: styleCategory
+      };
+      
+      // Update blocks if they exist in the new config
+      if (newConfig.blocks) {
+        actions.updateSection('blocks', newConfig.blocks);
+      }
+      
+      // If there are other changes that need to be handled separately, do that here
+      if (newConfig.globalStyles) {
+        actions.updateSection('globalStyles', newConfig.globalStyles);
+      }
+      
+      // Additional sections to update if changed
+      if (newConfig.header) {
+        actions.updateSection('header', newConfig.header);
+      }
+      
+      if (newConfig.mainContent) {
+        actions.updateSection('mainContent', newConfig.mainContent);
+      }
+      
+      if (newConfig.secondaryStyles) {
+        actions.updateSection('secondaryStyles', newConfig.secondaryStyles);
+      }
+      
+      if (newConfig.offer) {
+        actions.updateSection('offer', newConfig.offer);
+      }
+      
+      toast({
+        title: "Configuração atualizada",
+        description: "As alterações foram aplicadas com sucesso",
+        variant: "default"
+      });
+      
+    } catch (error) {
+      console.error("Erro ao atualizar configuração:", error);
+      toast({
+        title: "Erro ao atualizar configuração",
+        description: "Ocorreu um erro ao aplicar as alterações",
+        variant: "destructive"
+      });
     }
   };
 

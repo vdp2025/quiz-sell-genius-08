@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Save, RefreshCw, Play } from 'lucide-react';
+import { Save, RefreshCw, Play, HelpCircle } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import JsonApplyInstructions from './JsonApplyInstructions';
@@ -43,6 +43,7 @@ export const JsonEditorPanel: React.FC<JsonEditorPanelProps> = ({
   const handleSave = () => {
     try {
       const parsedConfig = JSON.parse(jsonText);
+      console.log("Aplicando configuração:", parsedConfig);
       onUpdate(parsedConfig);
       setParseError(null);
       setHasApplied(true);

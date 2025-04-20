@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -73,6 +74,7 @@ export const useResultPageEditor = (styleType: string) => {
   }, []);
 
   const handleUpdateBlocks = useCallback((newBlocks: Block[]) => {
+    console.log("Atualizando blocos:", newBlocks);
     setState(prev => ({
       ...prev,
       blocks: newBlocks
@@ -125,6 +127,7 @@ export const useResultPageEditor = (styleType: string) => {
   }, []);
 
   const handleUpdateSection = useCallback((path: string, newContent: any) => {
+    console.log(`Atualizando seção '${path}':`, newContent);
     updateConfigSection(path, newContent);
 
     if (path === 'blocks') {
