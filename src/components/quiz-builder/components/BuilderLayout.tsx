@@ -88,7 +88,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
         <PreviewPanel 
           components={activeStageComponents}
           selectedComponentId={selectedComponentId}
-          onSelectComponent={(id) => onStageSelect(id)}
+          onSelectComponent={onStageSelect}
           onMoveComponent={onComponentMove}
           activeStage={activeStage}
           isPreviewing={isPreviewing}

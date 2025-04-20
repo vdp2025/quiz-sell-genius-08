@@ -1,52 +1,66 @@
 
 import React from 'react';
-import { QuizComponentData } from '@/types/quizBuilder';
+import { QuizComponentStyle } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 
-interface TextComponentProps {
-  data: QuizComponentData['data'];
-  style: QuizComponentData['style'];
-  isSelected: boolean;
+export interface TextComponentProps {
+  data: {
+    title?: string;
+    subtitle?: string;
+    text?: string;
+  };
+  style?: QuizComponentStyle;
+  isSelected?: boolean;
   isHeadline?: boolean;
 }
 
-const TextComponent: React.FC<TextComponentProps> = ({ 
-  data, 
-  style, 
+const TextComponent: React.FC<TextComponentProps> = ({
+  data,
+  style,
   isSelected,
   isHeadline = false
 }) => {
-  const isHeadlineContent = isHeadline || data.title !== undefined;
+  const { title, subtitle, text } = data;
+  
+  if (isHeadline) {
+    return (
+      <div 
+        className={cn(
+          "p-4", 
+          isSelected && "outline outline-2 outline-offset-2 outline-[#B89B7A]"
+        )}
+        style={{
+          backgroundColor: style?.backgroundColor || 'transparent',
+          color: style?.textColor || 'inherit',
+          borderRadius: style?.borderRadius ? `${style.borderRadius}px` : undefined,
+          padding: `${style?.paddingY || '16px'} ${style?.paddingX || '16px'}`
+        }}
+      >
+        {title && (
+          <h2 className="text-2xl font-semibold mb-2">{title}</h2>
+        )}
+        {subtitle && (
+          <p className="text-gray-600">{subtitle}</p>
+        )}
+      </div>
+    );
+  }
   
   return (
     <div 
       className={cn(
-        "w-full",
-        isSelected && "ring-2 ring-inset ring-[#B89B7A]/20"
+        "p-4", 
+        isSelected && "outline outline-2 outline-offset-2 outline-[#B89B7A]"
       )}
       style={{
         backgroundColor: style?.backgroundColor || 'transparent',
         color: style?.textColor || 'inherit',
-        borderRadius: `${style?.borderRadius || 0}px`,
-        padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
+        borderRadius: style?.borderRadius ? `${style.borderRadius}px` : undefined,
+        padding: `${style?.paddingY || '16px'} ${style?.paddingX || '16px'}`
       }}
     >
-      {isHeadlineContent ? (
-        <>
-          <h2 className="text-xl md:text-2xl font-medium text-[#432818] mb-2">
-            {data.title}
-          </h2>
-          
-          {data.subtitle && (
-            <p className="text-[#8F7A6A]">
-              {data.subtitle}
-            </p>
-          )}
-        </>
-      ) : (
-        <div className="prose max-w-none">
-          {data.text || 'Insira seu texto aqui...'}
-        </div>
+      {text && (
+        <p className="text-base">{text}</p>
       )}
     </div>
   );

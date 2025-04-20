@@ -20,9 +20,9 @@ interface PropertiesPanelProps {
   component: QuizComponentData | null;
   stage: QuizStage | null;
   onClose: () => void;
-  onUpdate: (data: Partial<QuizComponentData>) => void;
-  onUpdateStage: (data: Partial<QuizStage>) => void;
-  onDelete: () => void;
+  onUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
+  onUpdateStage: (id: string, updates: Partial<QuizStage>) => void;
+  onDelete: (id: string) => void;
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -59,7 +59,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <Input
                   id="title"
                   value={stage.title}
-                  onChange={(e) => onUpdateStage({ title: e.target.value })}
+                  onChange={(e) => onUpdateStage(stage.id, { title: e.target.value })}
                 />
               </div>
               
@@ -127,7 +127,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   const renderComponentProperties = () => {
     const props = {
       data: component.data,
-      onUpdate: (data: any) => onUpdate({ data })
+      onUpdate: (data: any) => onUpdate(component.id, { data })
     };
 
     switch (component.type) {
@@ -156,7 +156,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <Button
             variant="ghost"
             size="icon"
-            onClick={onDelete}
+            onClick={() => onDelete(component.id)}
             className="h-8 w-8 hover:bg-red-100 hover:text-red-600"
           >
             <Trash2 className="h-4 w-4" />
@@ -187,7 +187,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             <TabsContent value="style">
               <StyleProperties 
                 style={component.style || {}} 
-                onUpdate={(style) => onUpdate({ style })}
+                onUpdate={(style) => onUpdate(component.id, { style })}
               />
             </TabsContent>
           </Tabs>

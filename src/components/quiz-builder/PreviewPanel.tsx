@@ -20,10 +20,17 @@ interface PreviewPanelProps {
   onSelectComponent: (id: string) => void;
   onMoveComponent: (draggedId: string, targetId: string) => void;
   activeStage?: QuizStage | null;
-  isPreviewing?: boolean;
+  isPreviewing: boolean;
 }
 
-const SortableComponent = ({ component, isSelected, onSelect, children }) => {
+interface SortableComponentProps {
+  component: QuizComponentData;
+  isSelected: boolean;
+  onSelect: (id: string) => void;
+  children: React.ReactNode;
+}
+
+const SortableComponent: React.FC<SortableComponentProps> = ({ component, isSelected, onSelect, children }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: component.id
   });
@@ -111,6 +118,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         return 'Questão';
       case 'result':
         return 'Página de Resultado';
+      default:
+        return type;
     }
   };
 
