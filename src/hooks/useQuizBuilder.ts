@@ -1,8 +1,12 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizStages } from './useQuizStages';
 import { useQuizComponents } from './useQuizComponents';
-import { generateInitialStages } from '@/services/quizBuilderService';
+import { generateInitialStages, createBuilderStateFromQuiz } from '@/services/quizBuilderService';
+import { clothingQuestions } from '@/data/questions/clothingQuestions';
+import { personalityQuestions } from '@/data/questions/personalityQuestions';
+import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
 
 const STORAGE_KEY = 'quiz_builder_data';
 
@@ -43,8 +47,20 @@ export const useQuizBuilder = () => {
             setActiveStage(parsedData.stages[0].id);
           }
         } else {
-          // Initialize with generated stages and components
-          const { stages: initialStages, components: initialComponents } = generateInitialStages();
+          // Initialize with existing quiz questions
+          const allQuestions = [
+            ...clothingQuestions,
+            ...personalityQuestions,
+            ...accessoriesQuestions
+          ];
+          
+          const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(
+            allQuestions,
+            'Quiz de Estilo Pessoal',
+            'Descubra seu estilo predominante respondendo às perguntas a seguir',
+            'Seu Resultado de Estilo Pessoal'
+          );
+          
           initializeStages(initialStages);
           initializeComponents(initialComponents);
           if (initialStages.length > 0) {
@@ -53,13 +69,20 @@ export const useQuizBuilder = () => {
         }
       } catch (error) {
         console.error('Error loading quiz data:', error);
+        // Fallback to generated stages if there's an error
+        const { stages: initialStages, components: initialComponents } = generateInitialStages();
+        initializeStages(initialStages);
+        initializeComponents(initialComponents);
+        if (initialStages.length > 0) {
+          setActiveStage(initialStages[0].id);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, []);
+  }, [initializeComponents, initializeStages, setActiveStage]);
 
   // Save data to localStorage on changes
   useEffect(() => {
@@ -112,6 +135,8 @@ export const useQuizBuilder = () => {
     moveStage,
     setActiveStage,
     saveCurrentState,
+    initializeStages,
+    initializeComponents,
     loading
   };
 };

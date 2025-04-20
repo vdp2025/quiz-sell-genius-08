@@ -2,7 +2,7 @@
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, EyeOff, Settings, Edit } from 'lucide-react';
+import { Save, Eye, EyeOff, Settings, Edit, Layout, Image, FileText } from 'lucide-react';
 
 interface BuilderToolbarProps {
   activeView: 'editor' | 'preview';
@@ -11,6 +11,7 @@ interface BuilderToolbarProps {
   onPreviewToggle: () => void;
   onSave: () => void;
   onPreviewResultPage?: () => void;
+  onImportQuizTemplate?: () => void;
 }
 
 const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
@@ -19,7 +20,8 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
   onViewChange,
   onPreviewToggle,
   onSave,
-  onPreviewResultPage
+  onPreviewResultPage,
+  onImportQuizTemplate
 }) => {
   return (
     <div className="border-b bg-white p-3 flex justify-between items-center">
@@ -48,24 +50,35 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
       
       <div className="flex space-x-2">
         {activeView === 'editor' && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onPreviewToggle}
-            className="border-[#B89B7A] text-[#432818]"
-          >
-            {isPreviewing ? (
-              <>
-                <EyeOff className="h-4 w-4 mr-2" />
-                Esconder Preview
-              </>
-            ) : (
-              <>
-                <Eye className="h-4 w-4 mr-2" />
-                Mostrar Preview
-              </>
-            )}
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onImportQuizTemplate}
+              className="border-[#B89B7A] text-[#432818]"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Importar Template
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onPreviewToggle}
+              className="border-[#B89B7A] text-[#432818]"
+            >
+              {isPreviewing ? (
+                <>
+                  <EyeOff className="h-4 w-4 mr-2" />
+                  Esconder Preview
+                </>
+              ) : (
+                <>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Mostrar Preview
+                </>
+              )}
+            </Button>
+          </>
         )}
         
         {activeView === 'preview' && onPreviewResultPage && (

@@ -1,117 +1,114 @@
 
 import React from 'react';
-import { QuizResult } from '@/types/quiz';
-import { styleConfig } from '@/config/styleConfig';
-import { Card } from '@/components/ui/card';
+import { QuizResult, StyleResult } from '@/types/quiz';
+import { StyleCategory, styleCategoryColors } from '@/types/styleTypes';
 
 interface ResultPreviewProps {
   result: QuizResult;
 }
 
 const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
-  const userName = localStorage.getItem('userName') || 'Usuário';
-  
+  const { primaryStyle, secondaryStyles } = result;
+
+  const StyleBar = ({ style }: { style: StyleResult }) => (
+    <div className="space-y-1 mb-4">
+      <div className="flex justify-between items-center">
+        <div className="font-medium">{style.category}</div>
+        <div className="text-sm text-gray-500">{style.percentage}%</div>
+      </div>
+      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div 
+          className="h-full rounded-full"
+          style={{ 
+            width: `${style.percentage}%`,
+            backgroundColor: styleCategoryColors[style.category as StyleCategory] || '#B89B7A'
+          }}
+        ></div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-8">
-      <div className="text-center space-y-3">
-        <h1 className="font-playfair text-lg md:text-2xl font-semibold text-[#432818] px-2">
-          {`Olá, ${userName}, seu Estilo Predominante é:`}
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-playfair font-bold text-[#B89B7A]">
-          {result.primaryStyle.category}
-        </h2>
+    <div className="bg-white rounded-lg shadow-sm p-6 max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-playfair text-[#432818] mb-2">Seu Estilo Predominante</h1>
+        <p className="text-gray-600">Descubra mais sobre seu estilo único e como aproveitar ao máximo suas características</p>
       </div>
-      
-      <Card className="p-6 bg-white mb-8">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <p className="text-[#432818] leading-relaxed">
-              {styleConfig[result.primaryStyle.category]?.description || 
-                'Descrição do estilo predominante. Esta área será preenchida com informações detalhadas sobre as características do estilo escolhido, incluindo dicas de vestuário, acessórios e combinações.'}
-            </p>
-          </div>
-          <div className="order-first md:order-last">
-            <img 
-              src={styleConfig[result.primaryStyle.category]?.image || '/placeholder-style.jpg'} 
-              alt={`Estilo ${result.primaryStyle.category}`} 
-              className="w-full h-full object-cover rounded-lg"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://placehold.co/600x400?text=Estilo+Predominante';
-              }}
-            />
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-1">
+          <div className="bg-[#FAF9F7] p-6 rounded-lg">
+            <h2 className="text-2xl font-playfair text-[#432818] mb-4">
+              {primaryStyle.category}
+            </h2>
+            <StyleBar style={primaryStyle} />
+            
+            <div className="space-y-4 mt-6">
+              <h3 className="font-medium text-[#432818]">Estilos Secundários</h3>
+              {secondaryStyles.map((style, index) => (
+                <StyleBar key={index} style={style} />
+              ))}
+            </div>
           </div>
         </div>
-      </Card>
-      
-      <div className="space-y-4">
-        <h3 className="text-xl font-playfair font-medium text-[#432818]">
-          Seus Estilos Secundários
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {result.secondaryStyles.slice(0, 3).map((style) => (
-            <Card key={style.category} className="p-4 bg-white">
-              <div className="space-y-2">
-                <h4 className="font-medium text-[#B89B7A]">{style.category}</h4>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-[#B89B7A] h-2 rounded-full" 
-                    style={{ width: `${style.percentage}%` }}
-                  ></div>
-                </div>
-                <p className="text-right text-sm text-gray-600">{style.percentage}%</p>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-      
-      <div className="space-y-4 mt-8">
-        <h3 className="text-xl font-playfair font-medium text-[#432818]">
-          Guia de Estilo e Imagem
-        </h3>
-        
-        <Card className="p-6 bg-white">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-medium text-[#B89B7A] mb-3">O que está incluído:</h4>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-[#B89B7A] mr-2">✓</span>
+
+        <div className="md:col-span-2">
+          <div className="bg-white p-6 rounded-lg border border-[#B89B7A]/20">
+            <h2 className="text-xl font-playfair text-[#432818] mb-4">
+              Sobre seu estilo {primaryStyle.category}
+            </h2>
+            
+            <div className="prose max-w-none">
+              <p>
+                O estilo {primaryStyle.category} reflete sua personalidade e preferências estéticas.
+                Este estilo se caracteriza por peças que valorizam sua essência e realçam sua beleza natural.
+              </p>
+              <p>
+                Com este guia personalizado, você poderá explorar melhor as possibilidades do seu estilo
+                e construir um guarda-roupa mais autêntico e funcional.
+              </p>
+            </div>
+
+            <div className="mt-8 bg-[#FAF9F7] p-6 rounded-lg border border-[#B89B7A]/20">
+              <h3 className="text-lg font-medium text-[#432818] mb-3">
+                Guia de Estilo e Imagem Personalizado
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Adquira seu guia completo com análise detalhada, paleta de cores personalizada e 
+                recomendações de peças específicas para o seu tipo de estilo.
+              </p>
+              
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#B89B7A] font-bold">✓</span>
                   <span>Análise detalhada do seu estilo pessoal</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="text-[#B89B7A] mr-2">✓</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#B89B7A] font-bold">✓</span>
                   <span>Paleta de cores personalizada</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="text-[#B89B7A] mr-2">✓</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#B89B7A] font-bold">✓</span>
                   <span>Guia de peças essenciais para o seu guarda-roupa</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="text-[#B89B7A] mr-2">✓</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#B89B7A] font-bold">✓</span>
                   <span>Dicas de tecidos e modelagens ideais</span>
                 </li>
               </ul>
-            </div>
-            <div>
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
-                alt="Guia de Estilo e Imagem"
-                className="rounded-lg w-full h-auto"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://placehold.co/600x400?text=Guia+de+Estilo';
-                }}
-              />
+              
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <span className="line-through text-gray-500">R$ 97,00</span>
+                  <span className="text-2xl font-bold text-[#432818] ml-2">R$ 67,00</span>
+                </div>
+                <button className="bg-[#B89B7A] text-white px-4 py-2 rounded-md hover:bg-[#A38A69] transition-colors">
+                  Adquirir meu Guia
+                </button>
+              </div>
             </div>
           </div>
-        </Card>
-      </div>
-      
-      <div className="text-center py-8">
-        <button className="bg-[#B89B7A] hover:bg-[#9F836A] text-white rounded-md px-8 py-3 text-lg font-medium transition-all duration-200">
-          Adquirir meu Guia de Estilo
-        </button>
+        </div>
       </div>
     </div>
   );

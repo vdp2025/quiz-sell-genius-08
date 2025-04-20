@@ -1,12 +1,14 @@
 
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { QuizComponentType, QuizStage } from '@/types/quizBuilder';
+import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { toast } from '@/components/ui/use-toast';
 import QuizPreview from './preview/QuizPreview';
 import BuilderToolbar from './components/BuilderToolbar';
 import BuilderLayout from './components/BuilderLayout';
+import QuizTemplateImporter from './components/QuizTemplateImporter';
 import { QuizResult } from '@/types/quiz';
 
 export const QuizBuilder: React.FC = () => {
@@ -14,6 +16,7 @@ export const QuizBuilder: React.FC = () => {
   const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [previewResult, setPreviewResult] = useState<QuizResult | null>(null);
+  const [isTemplateImporterOpen, setIsTemplateImporterOpen] = useState(false);
   
   const { 
     components, 
@@ -29,6 +32,8 @@ export const QuizBuilder: React.FC = () => {
     moveStage,
     setActiveStage,
     saveCurrentState,
+    initializeStages,
+    initializeComponents,
     loading
   } = useQuizBuilder();
 
@@ -40,7 +45,10 @@ export const QuizBuilder: React.FC = () => {
   const handleSave = () => {
     const success = saveCurrentState();
     if (success) {
-      // Could show a toast here
+      toast({
+        title: "Quiz salvo",
+        description: "Todas as alterações foram salvas com sucesso.",
+      });
     }
   };
 
@@ -75,6 +83,20 @@ export const QuizBuilder: React.FC = () => {
     setPreviewResult(previewResult);
   };
 
+  const handleImportTemplate = (template: QuizBuilderState) => {
+    initializeStages(template.stages);
+    initializeComponents(template.components);
+    
+    if (template.stages.length > 0) {
+      setActiveStage(template.stages[0].id);
+    }
+    
+    toast({
+      title: "Template importado",
+      description: "O template foi carregado com sucesso. Você pode começar a editar.",
+    });
+  };
+
   const activeStage = activeStageId
     ? stages.find(s => s.id === activeStageId)
     : null;
@@ -97,6 +119,7 @@ export const QuizBuilder: React.FC = () => {
         onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
         onSave={handleSave}
         onPreviewResultPage={handlePreviewQuizResult}
+        onImportQuizTemplate={() => setIsTemplateImporterOpen(true)}
       />
       
       <div className="flex-1">
@@ -130,6 +153,12 @@ export const QuizBuilder: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <QuizTemplateImporter 
+        isOpen={isTemplateImporterOpen}
+        onClose={() => setIsTemplateImporterOpen(false)}
+        onImportTemplate={handleImportTemplate}
+      />
     </div>
   );
 };

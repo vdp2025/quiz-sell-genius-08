@@ -1,216 +1,141 @@
 
-import { QuizTemplate, QuizTemplatePreview } from '@/types/quizTemplate';
-import { QuizQuestion } from '@/types/quiz';
-import { generateId } from '@/utils/idGenerator';
 import { styleQuizTemplate } from './styleQuizTemplate';
-import { toast } from '@/components/ui/use-toast';
+import { styleQuizTemplate2 } from './styleQuizTemplate2';
+import { QuizTemplate } from '@/types/quizTemplate';
+import { QuizBuilderState } from '@/types/quizBuilder';
 
-const LOCAL_STORAGE_KEY = 'quiz_templates';
-
-// Get templates from local storage or initialize with default
-export const getTemplates = async (): Promise<QuizTemplatePreview[]> => {
-  try {
-    // Try to get from localStorage
-    const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (templatesJson) {
-      const templates = JSON.parse(templatesJson) as QuizTemplate[];
-      return templates.map(template => ({
-        id: template.id,
-        name: template.name,
-        description: template.description,
-        questionCount: template.questions.length,
-        createdAt: template.createdAt,
-        updatedAt: template.updatedAt,
-        isDefault: template.isDefault
-      }));
-    }
-    
-    // If no templates found, initialize with default
-    const defaultTemplate = createDefaultTemplate();
-    saveTemplateToLocalStorage(defaultTemplate);
-    
-    return [{
-      id: defaultTemplate.id,
-      name: defaultTemplate.name,
-      description: defaultTemplate.description,
-      questionCount: defaultTemplate.questions.length,
-      createdAt: defaultTemplate.createdAt,
-      updatedAt: defaultTemplate.updatedAt,
-      isDefault: true
-    }];
-  } catch (error) {
-    console.error('Error getting templates:', error);
-    toast({
-      title: 'Erro ao carregar modelos',
-      description: 'Não foi possível carregar os modelos de quiz',
-      variant: 'destructive'
-    });
-    return [];
+// Predefined templates
+const templates: Record<string, QuizTemplate> = {
+  'style-quiz-1': {
+    id: 'style-quiz-1',
+    name: 'Quiz de Estilo Pessoal',
+    description: 'Template padrão com perguntas sobre preferências de estilo e personalidade.',
+    questions: [],
+    builderState: styleQuizTemplate,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  'style-quiz-2': {
+    id: 'style-quiz-2',
+    name: 'Quiz de Estilo Avançado',
+    description: 'Template com questões de múltipla escolha e imagens para análise de estilo detalhada.',
+    questions: [],
+    builderState: styleQuizTemplate2,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   }
 };
 
+// Local storage key
+const TEMPLATES_STORAGE_KEY = 'quiz_templates';
+
+// Load templates from local storage
+const loadTemplates = (): Record<string, QuizTemplate> => {
+  try {
+    const savedTemplates = localStorage.getItem(TEMPLATES_STORAGE_KEY);
+    if (savedTemplates) {
+      return JSON.parse(savedTemplates);
+    }
+    
+    // Initialize with predefined templates
+    saveTemplatesLocal(templates);
+    return templates;
+  } catch (error) {
+    console.error('Error loading templates:', error);
+    return templates;
+  }
+};
+
+// Save templates to local storage
+const saveTemplatesLocal = (templatesData: Record<string, QuizTemplate>): void => {
+  try {
+    localStorage.setItem(TEMPLATES_STORAGE_KEY, JSON.stringify(templatesData));
+  } catch (error) {
+    console.error('Error saving templates:', error);
+  }
+};
+
+// Get template by ID
 export const getTemplateById = async (id: string): Promise<QuizTemplate | null> => {
-  try {
-    // Try to load from localStorage
-    const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (templatesJson) {
-      const templates = JSON.parse(templatesJson) as QuizTemplate[];
-      return templates.find(template => template.id === id) || null;
-    }
-    
-    return null;
-  } catch (error) {
-    console.error('Error getting template by ID:', error);
-    toast({
-      title: 'Erro ao carregar modelo',
-      description: 'Não foi possível carregar o modelo de quiz',
-      variant: 'destructive'
-    });
-    return null;
-  }
+  const templatesData = loadTemplates();
+  return templatesData[id] || null;
 };
 
+// Get all templates
+export const getAllTemplates = async (): Promise<QuizTemplate[]> => {
+  const templatesData = loadTemplates();
+  return Object.values(templatesData);
+};
+
+// Save template
 export const saveTemplate = async (template: QuizTemplate): Promise<boolean> => {
   try {
-    // Save to localStorage
-    const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
-    let templates: QuizTemplate[] = [];
-    
-    if (templatesJson) {
-      templates = JSON.parse(templatesJson);
-      const index = templates.findIndex(t => t.id === template.id);
-      
-      if (index >= 0) {
-        // Update existing template
-        templates[index] = {
-          ...template,
-          updatedAt: new Date().toISOString()
-        };
-      } else {
-        // Add new template
-        templates.push({
-          ...template,
-          updatedAt: new Date().toISOString()
-        });
-      }
-    } else {
-      // First template
-      templates = [{
-        ...template,
-        updatedAt: new Date().toISOString()
-      }];
-    }
-    
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(templates));
+    const templatesData = loadTemplates();
+    templatesData[template.id] = {
+      ...template,
+      updatedAt: new Date().toISOString()
+    };
+    saveTemplatesLocal(templatesData);
     return true;
   } catch (error) {
     console.error('Error saving template:', error);
-    toast({
-      title: 'Erro ao salvar modelo',
-      description: 'Não foi possível salvar o modelo de quiz',
-      variant: 'destructive'
-    });
     return false;
   }
 };
 
-export const deleteTemplate = async (id: string): Promise<boolean> => {
-  try {
-    // Delete from localStorage
-    const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (templatesJson) {
-      let templates = JSON.parse(templatesJson) as QuizTemplate[];
-      
-      // Check if this is the only template or if it's the default
-      const template = templates.find(t => t.id === id);
-      if (template?.isDefault && templates.length === 1) {
-        toast({
-          title: 'Não é possível excluir',
-          description: 'Não é possível excluir o único modelo padrão',
-          variant: 'destructive'
-        });
-        return false;
-      }
-      
-      templates = templates.filter(template => template.id !== id);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(templates));
-      return true;
-    }
-    
-    return false;
-  } catch (error) {
-    console.error('Error deleting template:', error);
-    toast({
-      title: 'Erro ao excluir modelo',
-      description: 'Não foi possível excluir o modelo de quiz',
-      variant: 'destructive'
-    });
-    return false;
-  }
-};
-
-export const createNewTemplate = (name: string, description: string, questions: QuizQuestion[] = []): QuizTemplate => {
-  const now = new Date().toISOString();
-  return {
-    id: generateId(),
+// Create a new template
+export const createTemplate = async (
+  name: string, 
+  description: string, 
+  builderState: QuizBuilderState
+): Promise<QuizTemplate> => {
+  const id = `template-${Date.now()}`;
+  const newTemplate: QuizTemplate = {
+    id,
     name,
     description,
-    questions,
-    createdAt: now,
-    updatedAt: now
-  };
-};
-
-export const duplicateTemplate = async (id: string, newName?: string): Promise<QuizTemplate | null> => {
-  const template = await getTemplateById(id);
-  if (!template) {
-    return null;
-  }
-  
-  const duplicatedTemplate: QuizTemplate = {
-    ...template,
-    id: generateId(),
-    name: newName || `${template.name} (cópia)`,
-    isDefault: false,
+    questions: [],
+    builderState,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
   
-  const success = await saveTemplate(duplicatedTemplate);
-  return success ? duplicatedTemplate : null;
-};
-
-// Helper function to create the default template
-const createDefaultTemplate = (): QuizTemplate => {
-  const now = new Date().toISOString();
-  return {
-    id: generateId(),
-    name: 'Quiz de Estilo Pessoal',
-    description: 'Teste padrão para descobrir o estilo pessoal',
-    questions: styleQuizTemplate,
-    createdAt: now,
-    updatedAt: now,
-    isDefault: true
-  };
-};
-
-// Helper function to save template to local storage
-const saveTemplateToLocalStorage = (template: QuizTemplate) => {
-  const templatesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
-  let templates: QuizTemplate[] = [];
+  const templatesData = loadTemplates();
+  templatesData[id] = newTemplate;
+  saveTemplatesLocal(templatesData);
   
-  if (templatesJson) {
-    templates = JSON.parse(templatesJson);
-    const index = templates.findIndex(t => t.id === template.id);
-    
-    if (index >= 0) {
-      templates[index] = template;
-    } else {
-      templates.push(template);
+  return newTemplate;
+};
+
+// Delete template
+export const deleteTemplate = async (id: string): Promise<boolean> => {
+  try {
+    const templatesData = loadTemplates();
+    if (!templatesData[id]) {
+      return false;
     }
-  } else {
-    templates = [template];
+    
+    delete templatesData[id];
+    saveTemplatesLocal(templatesData);
+    return true;
+  } catch (error) {
+    console.error('Error deleting template:', error);
+    return false;
   }
-  
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(templates));
+};
+
+// Convert builder state to template
+export const convertBuilderStateToTemplate = async (
+  name: string,
+  description: string,
+  builderState: QuizBuilderState
+): Promise<QuizTemplate> => {
+  return createTemplate(name, description, builderState);
+};
+
+// Convert template to builder state
+export const convertTemplateToBuilderState = async (
+  template: QuizTemplate
+): Promise<QuizBuilderState> => {
+  return template.builderState;
 };
