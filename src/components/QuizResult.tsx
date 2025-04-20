@@ -7,9 +7,8 @@ import { QuizResultHeader } from './quiz-result/QuizResultHeader';
 import { MainContentSection } from './quiz-result/MainContentSection';
 import { OfferSection } from './quiz-result/OfferSection';
 import { styleConfig } from '@/config/styleConfig';
-import { SecondaryStylesSection } from './quiz-result/SecondaryStylesSection';
-import { useNavigation } from '@/hooks/useNavigation';
-import { OfferContent } from '@/types/resultPageConfig';
+import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
+import { useNavigate } from 'react-router-dom';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -21,7 +20,9 @@ const QuizResult: React.FC<QuizResultProps> = ({
   secondaryStyles 
 }) => {
   const { globalStyles } = useGlobalStyles();
-  const { navigateToEditor } = useNavigation();
+  const navigate = useNavigate();
+  
+  const navigateToEditor = () => navigate('/editor');
   
   if (!primaryStyle) {
     return (

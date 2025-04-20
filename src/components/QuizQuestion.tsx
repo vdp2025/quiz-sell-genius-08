@@ -10,13 +10,17 @@ interface QuizQuestionProps {
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
   onNextClick: () => void;
+  hideTitle?: boolean;
+  autoAdvance?: boolean;
 }
 
 export const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
   currentAnswers,
-  onNextClick
+  onNextClick,
+  hideTitle = false,
+  autoAdvance = false
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const { multiSelect } = question;
@@ -58,6 +62,13 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
           selectedOptions: newSelection
         });
         
+        // Auto-advance if enabled and we've reached the selection limit
+        if (autoAdvance && newSelection.length === multiSelect) {
+          setTimeout(() => {
+            onNextClick();
+          }, 500);
+        }
+        
         return newSelection;
       }
     });
@@ -70,14 +81,16 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
       transition={{ duration: 0.5 }}
       className="max-w-4xl mx-auto px-4 mb-8"
     >
-      <div className="mb-6">
-        <h2 className="text-2xl font-playfair text-[#432818] mb-4 text-center sm:text-left">
-          {question.title}
-        </h2>
-        <p className="text-[#8F7A6A] mb-4 text-center sm:text-left">
-          Selecione <span className="font-medium">{multiSelect}</span> {multiSelect === 1 ? 'opção' : 'opções'} para continuar
-        </p>
-      </div>
+      {!hideTitle && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-playfair text-[#432818] mb-4 text-center sm:text-left">
+            {question.title}
+          </h2>
+          <p className="text-[#8F7A6A] mb-4 text-center sm:text-left">
+            Selecione <span className="font-medium">{multiSelect}</span> {multiSelect === 1 ? 'opção' : 'opções'} para continuar
+          </p>
+        </div>
+      )}
 
       <div className={`grid gap-6 ${question.type === 'both' ? 'sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'sm:grid-cols-1 md:grid-cols-2'}`}>
         {question.options.map(option => (
@@ -86,12 +99,13 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
             option={option}
             isSelected={selectedOptions.includes(option.id)}
             onSelect={() => handleOptionSelect(option.id)}
-            questionType={question.type}
+            type={question.type}
+            questionId={question.id}
           />
         ))}
       </div>
 
-      {selectedOptions.length === multiSelect && (
+      {selectedOptions.length === multiSelect && !autoAdvance && (
         <div className="mt-8 text-center">
           <Button
             onClick={onNextClick}
