@@ -75,7 +75,33 @@ export const ResultPage = () => {
         logoAlt={globalStyles.logoAlt}
       />
 
-      {/* O restante da estrutura da página continua aqui como antes, com Cards e seções visuais. */}
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
+                Seu Estilo é {primaryStyle.category}
+              </h2>
+              <p className="text-[#432818] leading-relaxed">
+                {styleConfig[primaryStyle.category].description}
+              </p>
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                <h3 className="text-lg font-medium text-[#432818] mb-2">
+                  Seus Estilos Complementares
+                </h3>
+                <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+              </div>
+            </div>
+            <div className="order-first md:order-last">
+              <img
+                src={getStyleCoverImage(primaryStyle.category)}
+                alt={`Estilo ${primaryStyle.category}`}
+                className="w-full h-auto rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
