@@ -71,18 +71,31 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         const fullOptionsToDisplay = data.fullOptions || optionsToDisplay.map(text => ({ text }));
         
         return (
-          <div className="py-4">
-            <h3 className="text-xl font-medium text-[#432818] mb-4">{data.question || data.title || 'Sua pergunta aqui?'}</h3>
-            <div className={cn("grid gap-3", hasImages ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "")}>
+          <div className="w-full max-w-6xl mx-auto pb-5 relative">
+            <h2 className="text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal">
+              {data.question || data.title || 'Sua pergunta aqui?'}
+            </h2>
+            
+            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+              Selecione {data.multiSelect || 3} Opções
+            </p>
+            
+            <div className={cn(
+              "grid gap-3", 
+              hasImages ? "grid-cols-2 md:grid-cols-4" : "grid-cols-1"
+            )}>
               {optionsToDisplay.map((option, index) => {
                 const fullOption = fullOptionsToDisplay[index];
                 return (
-                  <div key={index} className={cn(
-                    "flex items-start space-x-3 p-3 border rounded-lg border-[#B89B7A]/30 hover:border-[#B89B7A]",
-                    hasImages && "flex-col"
-                  )}>
+                  <div 
+                    key={index} 
+                    className={cn(
+                      "border border-[#B89B7A]/30 rounded-lg hover:border-[#B89B7A] transition-colors",
+                      hasImages ? "overflow-hidden flex flex-col" : "flex items-center p-3"
+                    )}
+                  >
                     {hasImages && fullOption.imageUrl && (
-                      <div className="w-full h-40 mb-3 overflow-hidden rounded-md">
+                      <div className="w-full h-48 overflow-hidden">
                         <img 
                           src={fullOption.imageUrl} 
                           alt={fullOption.text}
@@ -90,9 +103,14 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
                         />
                       </div>
                     )}
-                    <div className={cn(hasImages ? "w-full" : "flex items-center space-x-3")}>
-                      {!hasImages && <input type="checkbox" className="h-5 w-5 text-[#B89B7A] focus:ring-[#B89B7A]" />}
-                      <label className="text-[#432818]">{option}</label>
+                    
+                    <div className={cn(
+                      hasImages ? "p-3 text-center w-full" : "flex items-center space-x-3"
+                    )}>
+                      {!hasImages && (
+                        <div className="flex-shrink-0 w-5 h-5 border border-[#B89B7A] rounded"></div>
+                      )}
+                      <span className="text-[#432818] text-sm">{option}</span>
                     </div>
                   </div>
                 );
@@ -108,15 +126,13 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
             <div className="space-y-2">
               {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
                 <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg border-[#B89B7A]/30 hover:border-[#B89B7A]">
-                  <input type="radio" name="singleChoice" className="h-5 w-5 text-[#B89B7A] focus:ring-[#B89B7A]" />
+                  <div className="w-5 h-5 rounded-full border border-[#B89B7A]"></div>
                   <label className="text-[#432818]">{option}</label>
                 </div>
               ))}
             </div>
           </div>
         );
-        
-      // Adicione mais renderizações para outros tipos de componentes conforme necessário
         
       default:
         return (
@@ -130,7 +146,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
   return (
     <div 
       className={cn(
-        "p-2 transition-all duration-200",
+        "transition-all duration-200",
         isSelected && !isPreview && "bg-blue-50",
         !isPreview && "hover:bg-gray-50 cursor-pointer"
       )}
