@@ -1,6 +1,7 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { QuizComponentType, QuizComponentData, QuizStep } from '@/types/quizBuilder';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/use-toast';
 
 export const useQuizBuilder = () => {
   const [steps, setSteps] = useState<QuizStep[]>([]);
