@@ -12,10 +12,16 @@ import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
-export const ResultPageVisualEditor: React.FC<EditorProps> = ({ 
+interface ResultPageVisualEditorProps extends EditorProps {
+  initialConfig?: ResultPageConfig;
+}
+
+export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
   selectedStyle,
-  onShowTemplates
+  onShowTemplates,
+  initialConfig
 }) => {
   const {
     resultPageConfig,
@@ -39,6 +45,13 @@ export const ResultPageVisualEditor: React.FC<EditorProps> = ({
     updateBlocks,
     actions: blockActions
   } = useBlockOperations();
+
+  // Apply initial config if provided
+  useEffect(() => {
+    if (initialConfig && importConfig) {
+      importConfig(initialConfig);
+    }
+  }, [initialConfig, importConfig]);
 
   // Sync blocks with config when needed
   useEffect(() => {

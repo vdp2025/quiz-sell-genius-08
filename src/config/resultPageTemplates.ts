@@ -50,6 +50,25 @@ export const defaultResultTemplate: ResultPageConfig = {
         heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp'
       }
     },
+    benefits: {
+      visible: true,
+      content: {
+        title: "O que você vai transformar com esse material",
+        items: [
+          {
+            title: "Peças que revelam sua essência",
+            description: "Descobrir as roupas e acessórios que comunicam quem você realmente é, valorizando seu corpo e sua personalidade."
+          },
+          {
+            title: "Cores e estampas em harmonia",
+            description: "Usar cores e estampas que favorecem sua imagem, criando combinações que valorizam sua beleza natural."
+          }
+        ]
+      },
+      style: {
+        padding: '20px'
+      }
+    },
     products: {
       visible: true,
       content: {

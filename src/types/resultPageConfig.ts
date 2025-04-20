@@ -1,3 +1,4 @@
+
 export interface StyleOptions {
   fontSize?: string;
   fontWeight?: string;
@@ -73,9 +74,9 @@ export interface OfferSection {
     appearance?: Record<string, any>;
     style?: StyleOptions;
   };
+  benefits: Section;
   products: Section;
   pricing: Section;
-  benefits: Section;
   testimonials: Section;
   guarantee: Section;
 }
@@ -84,7 +85,7 @@ export interface ResultPageConfig {
   styleType: string;
   header: Section;
   mainContent: Section;
-  secondaryStyles: Section;
+  secondaryStyles?: Section;
   offer: OfferSection;
   globalStyles?: {
     primaryColor?: string;
