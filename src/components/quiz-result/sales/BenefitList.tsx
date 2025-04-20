@@ -3,45 +3,56 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Check } from 'lucide-react';
 
-const benefits = [
+interface BenefitItem {
+  title: string;
+  description: string;
+}
+
+interface BenefitListProps {
+  items?: BenefitItem[];
+}
+
+const defaultBenefits = [
   {
-    title: "O que você vai aprender:",
-    items: [
-      "Aplicar seus estilos com autenticidade",
-      "Montar looks práticos para o dia a dia, trabalho e eventos",
-      "Usar cores e modelagens que valorizam quem você é",
-      "Parar de errar nas compras e economizar tempo"
-    ]
+    title: "Peças que revelam sua essência",
+    description: "Descobrir as roupas e acessórios que comunicam quem você realmente é, valorizando seu corpo e sua personalidade."
   },
   {
-    title: "Bônus Exclusivos:",
-    items: [
-      "Visagismo Facial Estratégico: descubra cortes, acessórios e formatos que valorizam seu rosto",
-      "Peças-Chave do Guarda-Roupa: construa um armário funcional com o que você já tem"
-    ]
+    title: "Compras com propósito",
+    description: "Parar de acumular peças que não combinam e investir no que faz sentido para o seu momento."
+  },
+  {
+    title: "Versatilidade sem esforço",
+    description: "Criar combinações que expressam quem você é com menos esforço e mais impacto."
+  },
+  {
+    title: "Autoconfiança visível",
+    description: "Sentir segurança no que veste porque cada escolha tem harmonia com quem você é."
   }
 ];
 
-const BenefitList = () => {
+const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
+  const benefitsToShow = items || defaultBenefits;
+  
   return (
-    <Card className="p-6 bg-white border-[#aa6b5d]/20">
-      {benefits.map((section, index) => (
-        <div key={index} className="mb-6 last:mb-0">
-          <h3 className="text-xl font-playfair text-[#aa6b5d] mb-4">
-            {section.title}
-          </h3>
-          <div className="space-y-3">
-            {section.items.map((benefit, idx) => (
-              <div key={idx} className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-5 h-5 mt-1">
-                  <Check className="w-5 h-5 text-[#aa6b5d]" />
-                </div>
-                <p className="text-[#3a3a3a]">{benefit}</p>
-              </div>
-            ))}
+    <Card className="p-6 bg-white space-y-5">
+      <h3 className="text-xl font-medium text-[#432818] mb-4">
+        O que você vai transformar com esse material:
+      </h3>
+
+      <div className="space-y-4">
+        {benefitsToShow.map((benefit, index) => (
+          <div key={index} className="flex gap-3">
+            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#fce8e3] flex items-center justify-center">
+              <Check className="w-4 h-4 text-[#aa6b5d]" />
+            </div>
+            <div>
+              <h4 className="font-medium text-[#432818] mb-1">{benefit.title}</h4>
+              <p className="text-[#6b605a] text-sm">{benefit.description}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </Card>
   );
 };

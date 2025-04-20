@@ -1,12 +1,13 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
+import { set, get } from 'lodash';
 
 interface ResultConfig {
   [key: string]: any;
 }
 
-// Função para obter a config do localStorage
+// Function to get config from localStorage
 const getStoredConfig = (styleType: string): ResultConfig | null => {
   try {
     const stored = localStorage.getItem(`quiz_result_config_${styleType}`);
@@ -17,7 +18,7 @@ const getStoredConfig = (styleType: string): ResultConfig | null => {
   }
 };
 
-// Função para salvar a config no localStorage
+// Function to save config to localStorage
 const saveStoredConfig = (styleType: string, config: ResultConfig): boolean => {
   try {
     localStorage.setItem(`quiz_result_config_${styleType}`, JSON.stringify(config));
@@ -31,49 +32,78 @@ const saveStoredConfig = (styleType: string, config: ResultConfig): boolean => {
 export const useQuizResultConfig = (styleType: string) => {
   const [config, setConfig] = useState<ResultConfig>({});
   const [loading, setLoading] = useState(true);
+  const [hasChanges, setHasChanges] = useState(false);
 
-  // Carrega a configuração ao inicializar
+  // Load configuration on initialization
   useEffect(() => {
-    const storedConfig = getStoredConfig(styleType);
-    if (storedConfig) {
-      setConfig(storedConfig);
-    } else {
-      // Configuração padrão se não existir
-      setConfig({
-        header: {
-          title: `Olá, seu Estilo Predominante é:`,
-        },
-        primaryStyle: {
-          description: getDefaultDescription(styleType),
-        },
-        offer: {
-          title: "VOCÊ DESCOBRIU SEU ESTILO",
-          subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
-          price: "39,00",
-          regularPrice: "175,00",
-          ctaText: "Quero meu Guia + Bônus",
-          ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+    const loadConfig = async () => {
+      setLoading(true);
+      try {
+        const storedConfig = getStoredConfig(styleType);
+        if (storedConfig) {
+          setConfig(storedConfig);
+        } else {
+          // Default configuration if it doesn't exist
+          setConfig({
+            header: {
+              title: `Olá, seu Estilo Predominante é:`,
+            },
+            primaryStyle: {
+              description: getDefaultDescription(styleType),
+            },
+            offer: {
+              title: "VOCÊ DESCOBRIU SEU ESTILO",
+              subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
+              price: "39,00",
+              regularPrice: "175,00",
+              ctaText: "Quero meu Guia + Bônus",
+              ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+            }
+          });
         }
-      });
-    }
-    setLoading(false);
+      } catch (error) {
+        console.error('Erro ao carregar configuração:', error);
+        toast({
+          title: "Erro ao carregar configuração",
+          description: "Não foi possível carregar as configurações da página de resultados",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadConfig();
   }, [styleType]);
 
-  // Atualiza uma seção da configuração
-  const updateConfig = (sectionKey: string, data: any) => {
-    setConfig(prev => ({
-      ...prev,
-      [sectionKey]: {
-        ...prev[sectionKey],
-        ...data
+  // Update a section of the configuration
+  const updateConfig = useCallback((sectionKey: string, data: any) => {
+    setConfig(prev => {
+      // Create a deep copy to avoid mutation
+      const newConfig = JSON.parse(JSON.stringify(prev));
+      
+      // Update the specific section
+      if (sectionKey.includes('.')) {
+        // Handle nested paths
+        set(newConfig, sectionKey, data);
+      } else {
+        // Handle top-level paths
+        newConfig[sectionKey] = {
+          ...newConfig[sectionKey],
+          ...data
+        };
       }
-    }));
-  };
+      
+      setHasChanges(true);
+      return newConfig;
+    });
+  }, []);
 
-  // Salva a configuração atual
-  const saveConfig = async (): Promise<boolean> => {
+  // Save the current configuration
+  const saveConfig = useCallback(async (): Promise<boolean> => {
     const success = saveStoredConfig(styleType, config);
     if (success) {
+      setHasChanges(false);
       return true;
     } else {
       toast({
@@ -83,17 +113,18 @@ export const useQuizResultConfig = (styleType: string) => {
       });
       return false;
     }
-  };
+  }, [config, styleType]);
 
   return {
     config,
     updateConfig,
     saveConfig,
-    loading
+    loading,
+    hasChanges
   };
 };
 
-// Descrições padrão baseadas no tipo de estilo
+// Default descriptions based on style type
 function getDefaultDescription(styleType: string): string {
   switch (styleType) {
     case 'Natural':

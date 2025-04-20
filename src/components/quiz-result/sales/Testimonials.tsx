@@ -1,36 +1,55 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { testimonials } from '@/data/testimonials';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Quote } from 'lucide-react';
 
-const Testimonials = () => {
+interface Testimonial {
+  text: string;
+  name: string;
+  role: string;
+}
+
+interface TestimonialsProps {
+  items?: Testimonial[];
+}
+
+const defaultTestimonials = [
+  {
+    text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+    name: "Mariangela",
+    role: "Engenheira"
+  },
+  {
+    text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+    name: "Patrícia Paranhos",
+    role: "Advogada"
+  },
+  {
+    text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+    name: "Sônia Spier",
+    role: "Terapeuta"
+  }
+];
+
+const Testimonials: React.FC<TestimonialsProps> = ({ items }) => {
+  const testimonialsToShow = items || defaultTestimonials;
+  
   return (
-    <Card className="p-6 bg-[#f9ede8] border-[#aa6b5d]/20">
-      <h3 className="text-2xl font-playfair text-[#aa6b5d] mb-8 text-center">
-        O que as alunas estão dizendo
+    <Card className="p-6 bg-white">
+      <h3 className="text-xl font-medium text-[#432818] mb-6 text-center">
+        O que dizem quem já transformou seu estilo:
       </h3>
-      
-      <div className="grid gap-6 md:grid-cols-3">
-        {testimonials.map((testimonial) => (
-          <Card key={testimonial.id} className="p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex flex-col items-center text-center space-y-4">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-              </Avatar>
-              
-              <div className="space-y-2">
-                <p className="text-gray-700 italic">&quot;{testimonial.text}&quot;</p>
-                <div>
-                  <h4 className="font-semibold text-[#aa6b5d]">{testimonial.name}</h4>
-                  {testimonial.location && (
-                    <p className="text-sm text-gray-500">{testimonial.location}</p>
-                  )}
-                </div>
-              </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {testimonialsToShow.map((testimonial, index) => (
+          <div key={index} className="p-4 bg-[#fef5f2] rounded-lg relative">
+            <Quote className="w-7 h-7 text-[#aa6b5d]/20 absolute -top-3 -left-3" />
+            <p className="text-[#6b605a] text-sm italic mb-4">{testimonial.text}</p>
+            <div className="text-right">
+              <p className="font-medium text-[#432818]">{testimonial.name}</p>
+              <p className="text-xs text-[#6b605a]">{testimonial.role}</p>
             </div>
-          </Card>
+          </div>
         ))}
       </div>
     </Card>

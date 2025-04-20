@@ -8,6 +8,7 @@ import { toast } from '@/components/ui/use-toast';
 import QuizResult from '../QuizResult';
 import EditableComponent from './EditableComponent';
 import { useQuizResultConfig } from '@/hooks/useQuizResultConfig';
+import { useAutosave } from '@/hooks/useAutosave';
 
 interface ResultPageEditorWithControlsProps {
   primaryStyle: StyleResult;
@@ -21,24 +22,25 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const { config, updateConfig, saveConfig } = useQuizResultConfig(primaryStyle.category);
   
-  const handleSave = async () => {
-    try {
-      await saveConfig();
-      toast({
-        title: "Alterações salvas",
-        description: "As alterações na página de resultados foram salvas com sucesso.",
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar as alterações.",
-        variant: "destructive",
-      });
-    }
-  };
+  // Use our new autosave hook
+  const { isSaving, lastSaved, saveNow } = useAutosave({
+    data: config,
+    onSave: saveConfig,
+    interval: 5000,
+    enabled: !isPreviewMode // Only enable autosave when not in preview mode
+  });
 
   const handleConfigUpdate = (sectionKey: string, data: any) => {
     updateConfig(sectionKey, data);
+    // No need to call save here, autosave will handle it
+  };
+  
+  const togglePreviewMode = () => {
+    // If we're switching from edit to preview, save immediately
+    if (!isPreviewMode) {
+      saveNow();
+    }
+    setIsPreviewMode(!isPreviewMode);
   };
 
   return (
@@ -55,10 +57,22 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
           <h1 className="text-2xl font-playfair text-[#432818]">Editor da Página de Resultados</h1>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
+          {!isPreviewMode && (
+            <div className="text-sm text-muted-foreground">
+              {isSaving ? (
+                <span>Salvando...</span>
+              ) : (
+                lastSaved && (
+                  <span>Salvo às {lastSaved.toLocaleTimeString()}</span>
+                )
+              )}
+            </div>
+          )}
+          
           <Button
             variant="outline"
-            onClick={() => setIsPreviewMode(!isPreviewMode)}
+            onClick={togglePreviewMode}
           >
             {isPreviewMode ? (
               <>
@@ -75,10 +89,11 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
           
           <Button 
             className="bg-[#B89B7A] hover:bg-[#A38A69]" 
-            onClick={handleSave}
+            onClick={saveNow}
+            disabled={isSaving}
           >
             <Save className="w-4 h-4 mr-2" />
-            Salvar
+            {isSaving ? 'Salvando...' : 'Salvar'}
           </Button>
         </div>
       </div>
