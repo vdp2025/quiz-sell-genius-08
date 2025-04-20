@@ -1,46 +1,61 @@
 
-import { ResultPageConfig } from '@/types/resultPageConfig';
+import { ResultPageConfig, ResultPageStorageService } from '@/types/resultPageConfig';
+import { createDefaultConfig } from '@/utils/resultPageDefaults';
 
-export const resultPageStorage = {
-  save: (config: ResultPageConfig): Promise<boolean> => {
-    return new Promise((resolve) => {
-      try {
-        const key = `result-page-config-${config.styleType.toLowerCase()}`;
-        localStorage.setItem(key, JSON.stringify(config));
-        console.log(`Saved config for ${config.styleType}:`, config);
-        resolve(true);
-      } catch (error) {
-        console.error('Error saving config:', error);
-        resolve(false);
-      }
-    });
+const STORAGE_KEY = 'quiz_result_page_configs';
+
+const getConfigsFromStorage = (): Record<string, ResultPageConfig> => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch (error) {
+    console.error('Error loading configs from storage:', error);
+    return {};
+  }
+};
+
+const saveConfigsToStorage = (configs: Record<string, ResultPageConfig>): void => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(configs));
+  } catch (error) {
+    console.error('Error saving configs to storage:', error);
+  }
+};
+
+export const resultPageStorage: ResultPageStorageService = {
+  save: async (config: ResultPageConfig): Promise<boolean> => {
+    try {
+      const configs = getConfigsFromStorage();
+      configs[config.styleType] = config;
+      saveConfigsToStorage(configs);
+      return true;
+    } catch (error) {
+      console.error('Error saving config:', error);
+      return false;
+    }
   },
 
   load: (styleType: string): ResultPageConfig | null => {
     try {
-      const key = `result-page-config-${styleType.toLowerCase()}`;
-      const savedConfig = localStorage.getItem(key);
-      
-      if (savedConfig) {
-        const parsedConfig = JSON.parse(savedConfig);
-        console.log(`Loaded config for ${styleType}:`, parsedConfig);
-        return parsedConfig;
-      }
-      return null;
+      const configs = getConfigsFromStorage();
+      return configs[styleType] || null;
     } catch (error) {
       console.error('Error loading config:', error);
       return null;
     }
   },
-  
-  delete: (styleType: string): boolean => {
+
+  delete: (styleType: string): void => {
     try {
-      const key = `result-page-config-${styleType.toLowerCase()}`;
-      localStorage.removeItem(key);
-      return true;
+      const configs = getConfigsFromStorage();
+      delete configs[styleType];
+      saveConfigsToStorage(configs);
     } catch (error) {
       console.error('Error deleting config:', error);
-      return false;
     }
+  },
+
+  getAll: (): Record<string, ResultPageConfig> => {
+    return getConfigsFromStorage();
   }
 };

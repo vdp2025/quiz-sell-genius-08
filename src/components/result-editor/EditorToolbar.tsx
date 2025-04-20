@@ -1,22 +1,22 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Eye, EyeOff, Save, RotateCcw, PaletteIcon, LayoutTemplate } from 'lucide-react';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle 
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { 
+  Eye, 
+  EyeOff, 
+  Save, 
+  Undo, 
+  Palette, 
+  FileDown, 
+  FileUp, 
+  LayoutTemplate
+} from 'lucide-react';
 
 interface EditorToolbarProps {
-  onSave: () => Promise<boolean>;
   isPreviewMode: boolean;
   onPreviewToggle: () => void;
+  onSave: () => Promise<boolean>;
   onReset: () => void;
   onEditGlobalStyles: () => void;
   resultPageConfig: ResultPageConfig;
@@ -25,198 +25,143 @@ interface EditorToolbarProps {
 }
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  onSave,
   isPreviewMode,
   onPreviewToggle,
+  onSave,
   onReset,
   onEditGlobalStyles,
   resultPageConfig,
   onUpdateConfig,
   onShowTemplates
 }) => {
-  const { toast } = useToast();
-  const [exportDialogOpen, setExportDialogOpen] = useState(false);
-  const [importDialogOpen, setImportDialogOpen] = useState(false);
-  const [importedConfig, setImportedConfig] = useState('');
-
   const handleExport = () => {
-    setExportDialogOpen(true);
-  };
-
-  const handleImport = () => {
-    setImportDialogOpen(true);
-  };
-
-  const handleSaveClick = async () => {
-    const success = await onSave();
-    if (success) {
-      toast({
-        title: "Salvo com sucesso",
-        description: "Suas alterações foram salvas.",
-      });
-    }
-  };
-
-  const handleImportSubmit = () => {
     try {
-      const parsedConfig = JSON.parse(importedConfig);
-      onUpdateConfig(parsedConfig);
-      setImportDialogOpen(false);
-      setImportedConfig('');
-      toast({
-        title: "Configuração importada",
-        description: "A configuração foi importada com sucesso.",
-      });
+      const dataStr = JSON.stringify(resultPageConfig, null, 2);
+      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
+      
+      const exportFileName = `${resultPageConfig.styleType}_page_config.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileName);
+      linkElement.click();
     } catch (error) {
-      toast({
-        title: "Erro ao importar",
-        description: "A configuração fornecida é inválida.",
-        variant: "destructive"
-      });
+      console.error('Error exporting config:', error);
     }
   };
 
+  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedConfig = JSON.parse(e.target?.result as string);
+        onUpdateConfig(importedConfig);
+      } catch (error) {
+        console.error('Error parsing import file:', error);
+      }
+    };
+    reader.readAsText(file);
+    
+    // Reset input value to allow importing the same file multiple times
+    event.target.value = '';
+  };
+
+  // Create a hidden file input for importing
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  
   return (
-    <div className="border-b border-[#B89B7A]/20 bg-white px-4 py-2">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onPreviewToggle}
-          >
-            {isPreviewMode ? (
-              <>
-                <EyeOff className="w-4 h-4 mr-2" />
-                Editar
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4 mr-2" />
-                Visualizar
-              </>
-            )}
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onEditGlobalStyles}
-          >
-            <PaletteIcon className="w-4 h-4 mr-2" />
-            Estilos Globais
-          </Button>
-          
-          {onShowTemplates && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onShowTemplates}
-            >
-              <LayoutTemplate className="w-4 h-4 mr-2" />
-              Templates
-            </Button>
+    <div className="border-b bg-white p-4 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onPreviewToggle}
+        >
+          {isPreviewMode ? (
+            <>
+              <EyeOff className="w-4 h-4 mr-2" />
+              Editar
+            </>
+          ) : (
+            <>
+              <Eye className="w-4 h-4 mr-2" />
+              Visualizar
+            </>
           )}
-        </div>
+        </Button>
         
-        <div className="flex items-center space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onEditGlobalStyles}
+        >
+          <Palette className="w-4 h-4 mr-2" />
+          Estilos Globais
+        </Button>
+        
+        {onShowTemplates && (
           <Button
             variant="outline"
             size="sm"
-            onClick={handleExport}
+            onClick={onShowTemplates}
           >
-            Exportar
+            <LayoutTemplate className="w-4 h-4 mr-2" />
+            Templates
           </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleImport}
-          >
-            Importar
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onReset}
-            className="text-amber-600"
-          >
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Redefinir
-          </Button>
-          
-          <Button
-            variant="default"
-            size="sm"
-            onClick={handleSaveClick}
-            className="bg-[#B89B7A] hover:bg-[#A38A69]"
-          >
-            <Save className="w-4 h-4 mr-2" />
-            Salvar
-          </Button>
-        </div>
+        )}
       </div>
       
-      {/* Export Dialog */}
-      <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Exportar Configuração</DialogTitle>
-            <DialogDescription>
-              Copie o JSON abaixo para salvar sua configuração atual.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Textarea
-            value={JSON.stringify(resultPageConfig, null, 2)}
-            readOnly
-            rows={15}
-            className="font-mono text-sm"
-          />
-          
-          <Button 
-            onClick={() => {
-              navigator.clipboard.writeText(JSON.stringify(resultPageConfig, null, 2));
-              toast({
-                title: "Copiado!",
-                description: "Configuração copiada para a área de transferência.",
-              });
-            }}
-          >
-            Copiar para Área de Transferência
-          </Button>
-        </DialogContent>
-      </Dialog>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <FileUp className="w-4 h-4 mr-2" />
+          Importar
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExport}
+        >
+          <FileDown className="w-4 h-4 mr-2" />
+          Exportar
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onReset}
+        >
+          <Undo className="w-4 h-4 mr-2" />
+          Resetar
+        </Button>
+        
+        <Button
+          size="sm"
+          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+          onClick={async () => {
+            const success = await onSave();
+            // Note: We're ignoring the returned value since the implementation of onSave has changed
+          }}
+        >
+          <Save className="w-4 h-4 mr-2" />
+          Salvar
+        </Button>
+      </div>
       
-      {/* Import Dialog */}
-      <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Importar Configuração</DialogTitle>
-            <DialogDescription>
-              Cole o JSON de configuração para importar.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Textarea
-            value={importedConfig}
-            onChange={(e) => setImportedConfig(e.target.value)}
-            placeholder="Cole o JSON aqui..."
-            rows={15}
-            className="font-mono text-sm"
-          />
-          
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setImportDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleImportSubmit}>
-              Importar
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept=".json"
+        onChange={handleImport}
+      />
     </div>
   );
 };

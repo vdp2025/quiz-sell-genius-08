@@ -1,117 +1,43 @@
+
 import { Block } from './editor';
+import { StyleResult } from './quiz';
 
-export interface StyleOptions {
-  fontSize?: string;
-  fontWeight?: string;
-  color?: string;
-  backgroundColor?: string;
-  padding?: string;
-  margin?: string;
-  width?: string;
-  borderRadius?: string;
-  textAlign?: 'left' | 'center' | 'right';
-  fontFamily?: string;
-}
-
-export interface ImageOptions {
-  url: string;
-  alt: string;
-  width?: string;
-  height?: string;
-  borderRadius?: string;
-  objectFit?: 'cover' | 'contain' | 'fill';
-}
-
-export interface SectionContent {
-  [key: string]: any;
-  style?: StyleOptions;
-  images?: ImageOptions[];
-}
-
-export interface OfferContent {
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  price?: string;
-  regularPrice?: string;
-  installments?: string;
-  ctaText?: string;
-  ctaUrl?: string;
-  urgencyText?: string;
-  heroImage?: string;
-  heroImage2?: string;
-  table?: Array<{
-    item: string;
-    value: string;
-  }>;
-  productImages?: Array<{
-    url: string;
-    alt: string;
-  }>;
-  items?: Array<{
-    title: string;
-    description: string;
-  }>;
-  testimonials?: Array<{
-    name: string;
-    role: string;
-    text: string;
-  }>;
-  image?: string;
-  [key: string]: any;
-}
-
-export interface Section {
+export interface SectionConfig {
   visible: boolean;
-  content: SectionContent;
-  appearance?: Record<string, any>;
-  style?: StyleOptions;
+  content: Record<string, any>;
+  style: Record<string, any>;
 }
 
-export interface OfferSection {
-  hero: {
-    visible: boolean;
-    content: OfferContent;
-    appearance?: Record<string, any>;
-    style?: StyleOptions;
-  };
-  benefits: Section;
-  products: Section;
-  pricing: Section;
-  testimonials: Section;
-  guarantee: Section;
-}
-
-export interface MentorSection {
-  visible: boolean;
-  content: {
-    title?: string;
-    name?: string;
-    image?: string;
-    beforeAfterImage?: string;
-    stylesImage?: string;
-    bio?: string[];
-  };
-  style?: StyleOptions;
+export interface OfferConfig {
+  hero: SectionConfig;
+  products: SectionConfig;
+  benefits: SectionConfig;
+  pricing: SectionConfig;
+  testimonials: SectionConfig;
+  guarantee: SectionConfig;
 }
 
 export interface ResultPageConfig {
   styleType: string;
-  header: Section;
-  mainContent: Section;
-  secondaryStyles?: Section;
-  offer: OfferSection;
-  mentor?: MentorSection;
-  globalStyles?: {
+  header: SectionConfig;
+  mainContent: SectionConfig;
+  secondaryStyles: SectionConfig;
+  offer: OfferConfig;
+  blocks: Block[];
+  globalStyles: {
+    fontFamily?: string;
     primaryColor?: string;
     secondaryColor?: string;
-    textColor?: string;
     backgroundColor?: string;
-    fontFamily?: string;
+    textColor?: string;
+    headingColor?: string;
+    [key: string]: any;
   };
-  blocks?: Block[];
 }
 
-export interface ResultPageConfigsStore {
-  configs: Record<string, ResultPageConfig>;
+export interface ResultPageStorageService {
+  save: (config: ResultPageConfig) => Promise<boolean>;
+  load: (styleType: string) => ResultPageConfig | null;
+  delete: (styleType: string) => void;
+  getAll: () => Record<string, ResultPageConfig>;
 }

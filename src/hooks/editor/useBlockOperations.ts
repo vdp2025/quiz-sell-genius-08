@@ -1,8 +1,8 @@
 
 import { useState, useCallback } from 'react';
 import { Block, BlockType, EditableContent } from '@/types/editor';
-import { getDefaultContentForType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
+import { getDefaultContentForType } from '@/utils/blockDefaults';
 
 export const useBlockOperations = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -19,17 +19,18 @@ export const useBlockOperations = () => {
       content: getDefaultContentForType(type),
       order: blocks.length
     };
-
+    
     setBlocks(prev => [...prev, newBlock]);
     setSelectedBlockId(newBlock.id);
+    
     return newBlock.id;
   }, [blocks]);
 
   const handleUpdateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
-    setBlocks(prev =>
-      prev.map(block =>
-        block.id === id
-          ? { ...block, content: { ...block.content, ...content } }
+    setBlocks(prev => 
+      prev.map(block => 
+        block.id === id 
+          ? { ...block, content: { ...block.content, ...content } } 
           : block
       )
     );
@@ -37,25 +38,24 @@ export const useBlockOperations = () => {
 
   const handleDeleteBlock = useCallback((id: string) => {
     setBlocks(prev => {
-      const filteredBlocks = prev
-        .filter(block => block.id !== id)
+      const filteredBlocks = prev.filter(block => block.id !== id)
         .map((block, index) => ({ ...block, order: index }));
+      
+      if (selectedBlockId === id) {
+        setSelectedBlockId(null);
+      }
       
       return filteredBlocks;
     });
-    
-    if (selectedBlockId === id) {
-      setSelectedBlockId(null);
-    }
   }, [selectedBlockId]);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     setBlocks(prev => {
-      const newBlocks = Array.from(prev);
-      const [removedBlock] = newBlocks.splice(sourceIndex, 1);
-      newBlocks.splice(destinationIndex, 0, removedBlock);
+      const result = Array.from(prev);
+      const [removed] = result.splice(sourceIndex, 1);
+      result.splice(destinationIndex, 0, removed);
       
-      return newBlocks.map((block, index) => ({
+      return result.map((block, index) => ({
         ...block,
         order: index
       }));

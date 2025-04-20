@@ -1,4 +1,4 @@
 
 export const generateId = (): string => {
-  return Math.random().toString(36).substring(2, 9);
+  return `block-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 };

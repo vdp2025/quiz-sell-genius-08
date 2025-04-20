@@ -10,7 +10,7 @@ import EditorToolbar from './EditorToolbar';
 import { GlobalStylesEditor } from './GlobalStylesEditor';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
-import { EditorProps } from '@/types/editorTypes';
+import { EditorProps } from '@/types/editor';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
@@ -63,14 +63,13 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
 
-  const handleUpdateConfig = (newConfig) => {
+  const handleUpdateConfig = (newConfig: any) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
         if (newConfig.blocks) {
           updateBlocks(newConfig.blocks);
         } else {
-          // Initialize with empty blocks if not present
           updateBlocks([]);
         }
         toast({
@@ -85,6 +84,19 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           variant: "destructive"
         });
       }
+    }
+  };
+
+  // Adapter functions to match component interfaces
+  const handleUpdateBlock = (content: any) => {
+    if (selectedBlockId) {
+      blockActions.handleUpdateBlock(selectedBlockId, content);
+    }
+  };
+
+  const handleDeleteBlock = () => {
+    if (selectedBlockId) {
+      blockActions.handleDeleteBlock(selectedBlockId);
     }
   };
 
@@ -135,8 +147,8 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
               selectedBlockId={selectedBlockId}
               blocks={blocks}
               onClose={() => setSelectedBlockId(null)}
-              onUpdate={blockActions.handleUpdateBlock}
-              onDelete={blockActions.handleDeleteBlock}
+              onUpdate={handleUpdateBlock}
+              onDelete={handleDeleteBlock}
             />
           </ResizablePanel>
         </ResizablePanelGroup>

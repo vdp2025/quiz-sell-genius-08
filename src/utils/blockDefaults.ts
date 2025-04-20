@@ -1,92 +1,156 @@
 
-import { EditableContent, BlockType } from '@/types/editor';
+import { BlockType, EditableContent } from '@/types/editor';
 
 export const getDefaultContentForType = (type: BlockType): EditableContent => {
   switch (type) {
     case 'header':
       return {
-        title: 'Seu Resultado de Estilo',
-        subtitle: 'Descubra como expressar seu estilo único'
+        title: 'Seu Resultado Exclusivo',
+        subtitle: 'Descubra seu estilo pessoal e como aproveitá-lo ao máximo'
       };
     
     case 'hero':
       return {
-        title: 'VOCÊ DESCOBRIU SEU ESTILO',
-        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp'
+        title: 'Descubra Seu Estilo',
+        subtitle: 'Transforme seu visual com nosso guia personalizado',
+        imageUrl: ''
       };
-    
+      
     case 'styleResult':
       return {
-        title: 'Seu Estilo Predominante',
-        description: 'Uma descrição detalhada do seu estilo principal'
+        title: 'Seu Estilo Principal',
+        description: 'Conheça as características do seu estilo predominante'
       };
-    
+      
     case 'secondaryStyles':
       return {
         title: 'Seus Estilos Secundários',
-        description: 'Uma análise dos seus estilos complementares'
+        description: 'Estes estilos complementam seu estilo principal'
       };
-    
+      
     case 'benefitsList':
       return {
-        title: 'Benefícios do Guia',
+        title: 'Benefícios do Seu Guia de Estilo',
         items: [
-          'Entenda seu tipo de corpo e o que valoriza você',
-          'Aprenda a criar looks autênticos e poderosos',
-          'Descubra as cores que harmonizam com você',
-          'Maximize seu guarda-roupa com peças versáteis'
+          'Conheça as cores que mais combinam com você',
+          'Descubra os cortes e modelagens ideais para seu corpo',
+          'Aprenda a criar looks harmoniosos com seu estilo pessoal',
+          'Economize tempo e dinheiro com escolhas certeiras'
         ]
       };
-    
+      
     case 'testimonials':
       return {
-        title: 'O que Dizem As Alunas',
-        testimonials: [
-          {
-            name: 'Mariana Silva',
-            text: 'O guia de estilo mudou completamente minha relação com as roupas. Agora eu sei exatamente o que combina comigo!',
-            style: 'Natural'
-          }
-        ]
+        title: 'O Que Nossas Clientes Dizem',
+        testimonials: []
       };
-    
+      
     case 'pricing':
       return {
-        title: 'Guia de Estilo Personalizado',
-        price: '39,00',
-        regularPrice: '175,00',
-        ctaText: 'Quero meu Guia + Bônus',
-        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
+        title: 'Invista no Seu Estilo',
+        price: '197',
+        regularPrice: '397',
+        ctaText: 'Quero Meu Guia de Estilo',
+        ctaUrl: '#checkout'
       };
-    
+      
     case 'guarantee':
       return {
         title: 'Garantia de Satisfação',
-        text: 'Se você não ficar completamente satisfeita com o seu Guia de Estilo Personalizado, basta solicitar o reembolso em até 7 dias após a compra.',
+        text: 'Se você não ficar satisfeita com seu guia de estilo, devolvemos seu dinheiro em até 7 dias.',
         days: 7
       };
-    
+      
     case 'callToAction':
       return {
-        title: 'Transforme seu Estilo Agora!',
-        text: 'Não perca mais tempo com roupas que não combinam com você.',
-        ctaText: 'Quero Transformar Meu Estilo',
-        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
+        title: 'Transforme Seu Guarda-Roupa Agora',
+        subtitle: 'Dê o primeiro passo para um visual que realmente expressa quem você é',
+        ctaText: 'Quero Meu Guia de Estilo',
+        ctaUrl: '#checkout'
       };
-    
+      
     case 'authorInfo':
       return {
-        title: 'Sobre a Autora',
-        name: 'Gisele Galvão',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg',
-        bio: 'Com mais de 10 anos de experiência em consultoria de imagem e estilo pessoal, ajudei centenas de mulheres a descobrirem sua verdadeira essência através das roupas.'
+        title: 'Sobre a Especialista',
+        text: 'Consultora de imagem com mais de 10 anos de experiência ajudando mulheres a encontrarem seu estilo pessoal.',
+        imageUrl: ''
       };
-    
-    default:
+      
+    // Legacy/editor specific block types
+    case 'headline':
       return {
-        title: 'Novo Bloco',
-        text: 'Conteúdo do bloco'
+        title: 'Título Principal',
+        subtitle: 'Subtítulo que complementa o título principal'
       };
+      
+    case 'text':
+      return {
+        text: 'Digite aqui o texto do seu conteúdo. Este é um parágrafo de exemplo que você pode editar conforme necessário.'
+      };
+      
+    case 'image':
+      return {
+        imageUrl: '',
+        imageAlt: 'Descrição da imagem'
+      };
+      
+    case 'benefits':
+      return {
+        title: 'Benefícios',
+        items: [
+          'Benefício 1: Descrição do primeiro benefício',
+          'Benefício 2: Descrição do segundo benefício',
+          'Benefício 3: Descrição do terceiro benefício'
+        ]
+      };
+      
+    case 'cta':
+    case 'callToAction':
+      return {
+        title: 'Chamada para Ação',
+        subtitle: 'Texto complementar que incentiva a ação',
+        ctaText: 'Clique Aqui',
+        ctaUrl: '#action'
+      };
+      
+    case 'hero-section':
+    case 'hero':
+      return {
+        title: 'Título da Seção Hero',
+        subtitle: 'Subtítulo da seção hero que complementa o título principal',
+        imageUrl: ''
+      };
+      
+    case 'bonus-carousel':
+      return {
+        title: 'Bônus Exclusivos',
+        items: [
+          { title: 'Bônus 1', description: 'Descrição do bônus 1', imageUrl: '' },
+          { title: 'Bônus 2', description: 'Descrição do bônus 2', imageUrl: '' }
+        ]
+      };
+      
+    case 'products':
+      return {
+        title: 'Produtos Recomendados',
+        products: []
+      };
+      
+    case 'style-result':
+    case 'styleResult':
+      return {
+        title: 'Seu Estilo Principal',
+        description: 'Conheça as características do seu estilo predominante'
+      };
+      
+    case 'secondary-styles':
+    case 'secondaryStyles':
+      return {
+        title: 'Seus Estilos Secundários',
+        description: 'Estes estilos complementam seu estilo principal'
+      };
+      
+    default:
+      return {};
   }
 };
