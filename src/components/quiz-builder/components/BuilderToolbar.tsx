@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Save, Eye, EyeOff, Settings, Edit } from 'lucide-react';
 
@@ -26,24 +26,24 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
       <div className="flex items-center space-x-4">
         <h1 className="text-xl font-playfair text-[#432818]">Construtor de Quiz</h1>
         
-        <TabsList>
-          <TabsTrigger 
-            value="editor" 
-            onClick={() => onViewChange('editor')}
-            className={activeView === 'editor' ? 'bg-[#B89B7A] text-white' : ''}
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Editor
-          </TabsTrigger>
-          <TabsTrigger 
-            value="preview" 
-            onClick={() => onViewChange('preview')}
-            className={activeView === 'preview' ? 'bg-[#B89B7A] text-white' : ''}
-          >
-            <Eye className="h-4 w-4 mr-2" />
-            Visualizar
-          </TabsTrigger>
-        </TabsList>
+        <Tabs value={activeView} onValueChange={(value) => onViewChange(value as 'editor' | 'preview')}>
+          <TabsList>
+            <TabsTrigger 
+              value="editor" 
+              className={activeView === 'editor' ? 'bg-[#B89B7A] text-white' : ''}
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Editor
+            </TabsTrigger>
+            <TabsTrigger 
+              value="preview" 
+              className={activeView === 'preview' ? 'bg-[#B89B7A] text-white' : ''}
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Visualizar
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       
       <div className="flex space-x-2">
