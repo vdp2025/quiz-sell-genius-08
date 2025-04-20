@@ -147,14 +147,58 @@ export const useQuizBuilder = () => {
         i === index ? { ...step, title } : step
       )
     );
+    
+    toast({
+      title: "Etapa atualizada",
+      description: `Nome da etapa alterado para "${title}"`,
+    });
   }, []);
 
   const deleteStep = useCallback((index: number) => {
+    if (steps.length <= 1) {
+      toast({
+        title: "Não é possível excluir",
+        description: "Um quiz precisa ter pelo menos uma etapa",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setSteps(prev => prev.filter((_, i) => i !== index));
+    
     if (currentStepIndex >= index && currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
-  }, [currentStepIndex]);
+    
+    toast({
+      title: "Etapa excluída",
+      description: "A etapa foi removida com sucesso",
+    });
+  }, [currentStepIndex, steps.length]);
+
+  const duplicateStep = useCallback((index: number) => {
+    const stepToDuplicate = steps[index];
+    if (!stepToDuplicate) return;
+    
+    const newStep: QuizStep = {
+      id: `step-${Date.now()}`,
+      title: `${stepToDuplicate.title} (cópia)`,
+      components: stepToDuplicate.components.map(component => ({
+        ...component,
+        id: `component-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      }))
+    };
+    
+    const newSteps = [...steps];
+    newSteps.splice(index + 1, 0, newStep);
+    setSteps(newSteps);
+    setCurrentStepIndex(index + 1);
+    
+    toast({
+      title: "Etapa duplicada",
+      description: "Uma cópia da etapa foi criada",
+    });
+  }, [steps]);
 
   const setStepsFromTemplate = useCallback((newSteps: QuizStep[]) => {
     setSteps(newSteps);
@@ -215,6 +259,7 @@ export const useQuizBuilder = () => {
     addStep,
     updateStepTitle,
     deleteStep,
+    duplicateStep,
     setStepsFromTemplate,
     saveCurrentState,
     loadSavedState

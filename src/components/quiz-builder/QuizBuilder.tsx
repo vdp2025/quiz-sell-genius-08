@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { PreviewPanel } from './PreviewPanel';
 import { StepsSidebar } from './StepsSidebar';
+import { StepsVisualization } from './StepsVisualization';
 import { LoadExistingQuiz } from './LoadExistingQuiz';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
@@ -13,6 +15,7 @@ import { Save } from '@/components/ui/icons';
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [isLoadingExisting, setIsLoadingExisting] = useState(true);
+  const [showStepsVisualization, setShowStepsVisualization] = useState(true);
   const { 
     steps, 
     currentStepIndex,
@@ -23,6 +26,9 @@ export const QuizBuilder: React.FC = () => {
     deleteComponent,
     moveComponent,
     addStep,
+    updateStepTitle,
+    deleteStep,
+    duplicateStep,
     setStepsFromTemplate,
     saveCurrentState
   } = useQuizBuilder();
@@ -59,14 +65,32 @@ export const QuizBuilder: React.FC = () => {
         <h1 className="text-2xl font-playfair text-[#432818]">
           Construtor de Quiz
         </h1>
-        <Button 
-          onClick={saveCurrentState}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar Alterações
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowStepsVisualization(!showStepsVisualization)}
+          >
+            {showStepsVisualization ? 'Ocultar Visualização' : 'Mostrar Visualização'}
+          </Button>
+          <Button 
+            onClick={saveCurrentState}
+            className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            Salvar Alterações
+          </Button>
+        </div>
       </div>
+      
+      {showStepsVisualization && (
+        <div className="bg-white border-b p-4">
+          <StepsVisualization 
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={setCurrentStepIndex}
+          />
+        </div>
+      )}
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
         {/* Steps Sidebar */}
@@ -76,6 +100,8 @@ export const QuizBuilder: React.FC = () => {
             currentStepIndex={currentStepIndex}
             onSelectStep={setCurrentStepIndex}
             onAddStep={addStep}
+            onEditStepTitle={updateStepTitle}
+            onDeleteStep={deleteStep}
           />
         </ResizablePanel>
         
