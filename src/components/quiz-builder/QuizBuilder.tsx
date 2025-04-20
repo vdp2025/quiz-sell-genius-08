@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
@@ -8,6 +7,8 @@ import { StepsSidebar } from './StepsSidebar';
 import { LoadExistingQuiz } from './LoadExistingQuiz';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { QuizComponentType, QuizStep } from '@/types/quizBuilder';
+import { Button } from '@/components/ui/button';
+import { Save } from '@/components/ui/icons';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -22,8 +23,17 @@ export const QuizBuilder: React.FC = () => {
     deleteComponent,
     moveComponent,
     addStep,
-    setStepsFromTemplate
+    setStepsFromTemplate,
+    saveCurrentState
   } = useQuizBuilder();
+
+  useEffect(() => {
+    const saveTimeout = setTimeout(() => {
+      saveCurrentState();
+    }, 1000);
+
+    return () => clearTimeout(saveTimeout);
+  }, [steps, saveCurrentState]);
 
   const handleComponentSelect = (type: QuizComponentType) => {
     const newComponentId = addComponent(type);
@@ -49,6 +59,13 @@ export const QuizBuilder: React.FC = () => {
         <h1 className="text-2xl font-playfair text-[#432818]">
           Construtor de Quiz
         </h1>
+        <Button 
+          onClick={saveCurrentState}
+          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+        >
+          <Save className="w-4 h-4 mr-2" />
+          Salvar Alterações
+        </Button>
       </div>
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">

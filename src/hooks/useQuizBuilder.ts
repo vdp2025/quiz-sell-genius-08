@@ -1,6 +1,6 @@
-
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { QuizComponentType, QuizComponentData, QuizStep } from '@/types/quizBuilder';
+import { toast } from 'react-toastify';
 
 export const useQuizBuilder = () => {
   const [steps, setSteps] = useState<QuizStep[]>([]);
@@ -160,6 +160,47 @@ export const useQuizBuilder = () => {
     setCurrentStepIndex(0);
   }, []);
 
+  const saveCurrentState = useCallback(async () => {
+    try {
+      localStorage.setItem('quiz_builder_state', JSON.stringify({
+        steps,
+        currentStepIndex
+      }));
+      
+      toast({
+        title: "Alterações salvas",
+        description: "Suas alterações foram salvas com sucesso",
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error saving quiz state:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar suas alterações",
+        variant: "destructive",
+      });
+      return false;
+    }
+  }, [steps, currentStepIndex]);
+
+  const loadSavedState = useCallback(() => {
+    try {
+      const savedState = localStorage.getItem('quiz_builder_state');
+      if (savedState) {
+        const { steps: savedSteps, currentStepIndex: savedIndex } = JSON.parse(savedState);
+        setSteps(savedSteps);
+        setCurrentStepIndex(savedIndex);
+      }
+    } catch (error) {
+      console.error('Error loading saved state:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSavedState();
+  }, [loadSavedState]);
+
   return {
     steps,
     currentStepIndex,
@@ -173,6 +214,8 @@ export const useQuizBuilder = () => {
     addStep,
     updateStepTitle,
     deleteStep,
-    setStepsFromTemplate
+    setStepsFromTemplate,
+    saveCurrentState,
+    loadSavedState
   };
 };
