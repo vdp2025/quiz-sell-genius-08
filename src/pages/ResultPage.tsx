@@ -295,7 +295,7 @@ export const ResultPage = () => {
             </div>
           </div>
           
-          <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md">
+          <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="w-full max-w-xl text-white py-6 text-lg rounded-md px-0 mx-[124px] bg-brand-gold">
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>
