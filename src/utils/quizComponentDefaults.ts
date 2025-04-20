@@ -29,7 +29,7 @@ export const getDefaultData = (type: QuizComponentType) => {
         optionStyleCategories: ['Natural', 'Clássico', 'Contemporâneo', 'Elegante'],
         multiSelect: 3,
         required: true,
-        displayType: 'text'
+        displayType: 'text' as 'text' | 'image' | 'both'
       };
     
     case 'singleChoice':

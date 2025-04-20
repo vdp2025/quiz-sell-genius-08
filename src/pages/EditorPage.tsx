@@ -18,9 +18,22 @@ export const EditorPage = () => {
     percentage: 100
   };
   
+  // Ensure the initialConfig follows the ResultPageConfig type structure with visible property
   const initialConfig = {
     ...defaultResultTemplate,
-    styleType: styleCategory
+    styleType: styleCategory,
+    header: {
+      ...defaultResultTemplate.header,
+      visible: true
+    },
+    mainContent: {
+      ...defaultResultTemplate.mainContent,
+      visible: true
+    },
+    offer: {
+      ...defaultResultTemplate.offer,
+      visible: true
+    }
   };
   
   return (

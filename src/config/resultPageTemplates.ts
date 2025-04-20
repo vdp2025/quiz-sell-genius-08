@@ -11,7 +11,8 @@ export const defaultResultTemplate = {
       backgroundColor: '#FAF9F7',
       textColor: '#432818',
       borderRadius: 0
-    }
+    },
+    visible: true
   },
   mainContent: {
     content: {
@@ -25,7 +26,8 @@ export const defaultResultTemplate = {
       padding: '20px',
       backgroundColor: '#FFFFFF',
       textColor: '#432818'
-    }
+    },
+    visible: true
   },
   offer: {
     content: {
@@ -47,6 +49,7 @@ export const defaultResultTemplate = {
       backgroundColor: '#FAF9F7',
       accentColor: '#B89B7A',
       textColor: '#432818'
-    }
+    },
+    visible: true
   }
 };
