@@ -1,32 +1,55 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { PreviewPanel } from './PreviewPanel';
+import { StagesPanel } from './StagesPanel';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder';
-import { Loader2 } from 'lucide-react';
+import { QuizComponentType, QuizComponentData, QuizStage } from '@/types/quizBuilder';
+import { Loader2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
   const { 
     components, 
+    stages,
+    activeStageId,
     addComponent, 
     updateComponent, 
     deleteComponent,
     moveComponent,
+    addStage,
+    updateStage,
+    deleteStage,
+    moveStage,
+    setActiveStage,
     loading
   } = useQuizBuilder();
 
   const handleComponentSelect = (type: QuizComponentType) => {
-    const newComponentId = addComponent(type);
+    const newComponentId = addComponent(type, activeStageId);
     setSelectedComponentId(newComponentId);
+  };
+
+  const handleAddStage = (type: QuizStage['type']) => {
+    const newStageId = addStage(type);
+    setActiveStage(newStageId);
   };
 
   const selectedComponent = selectedComponentId 
     ? components.find(c => c.id === selectedComponentId) 
+    : null;
+
+  const activeStageComponents = activeStageId 
+    ? components.filter(c => c.stageId === activeStageId)
+    : [];
+
+  const activeStage = activeStageId
+    ? stages.find(s => s.id === activeStageId)
     : null;
 
   if (loading) {
@@ -44,59 +67,114 @@ export const QuizBuilder: React.FC = () => {
         <h1 className="text-2xl font-playfair text-[#432818]">
           Construtor de Quiz
         </h1>
+        <Tabs defaultValue="editor" onValueChange={(value) => setActiveView(value as 'editor' | 'preview')}>
+          <TabsList>
+            <TabsTrigger value="editor">Editor</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <div className="flex gap-2">
           <Button 
-            className="bg-[#B89B7A] hover:bg-[#A38A69]"
-            onClick={() => {
-              // Adicionar questão de múltipla escolha como default
-              const newComponentId = addComponent('multipleChoice');
-              setSelectedComponentId(newComponentId);
-            }}
+            variant="outline"
+            onClick={() => handleAddStage('cover')} 
+            className="text-[#B89B7A] border-[#B89B7A]"
           >
-            Adicionar Pergunta
+            <Plus className="w-4 h-4 mr-2" />
+            Capa
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={() => handleAddStage('question')} 
+            className="text-[#B89B7A] border-[#B89B7A]"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Questão
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={() => handleAddStage('result')} 
+            className="text-[#B89B7A] border-[#B89B7A]"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Resultado
           </Button>
         </div>
       </div>
       
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Panel - Components Sidebar */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <ComponentsSidebar onComponentSelect={handleComponentSelect} />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        {/* Center Panel - Preview */}
-        <ResizablePanel defaultSize={50}>
-          <PreviewPanel 
-            components={components}
-            selectedComponentId={selectedComponentId}
-            onSelectComponent={setSelectedComponentId}
-            onMoveComponent={moveComponent}
-          />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        {/* Right Panel - Properties */}
-        <ResizablePanel defaultSize={30}>
-          <PropertiesPanel 
-            component={selectedComponent}
-            onClose={() => setSelectedComponentId(null)}
-            onUpdate={(data: Partial<QuizComponentData>) => {
-              if (selectedComponentId) {
-                updateComponent(selectedComponentId, data);
-              }
-            }}
-            onDelete={() => {
-              if (selectedComponentId) {
-                deleteComponent(selectedComponentId);
-                setSelectedComponentId(null);
-              }
-            }}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      <TabsContent value="editor" className="flex-1 flex flex-col">
+        <ResizablePanelGroup direction="horizontal" className="flex-1">
+          {/* Left Panel - Stages Sidebar */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <StagesPanel 
+              stages={stages} 
+              activeStageId={activeStageId}
+              onStageSelect={setActiveStage}
+              onStageMove={moveStage}
+              onStageUpdate={updateStage}
+              onStageDelete={deleteStage}
+            />
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Components Sidebar */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <ComponentsSidebar 
+              onComponentSelect={handleComponentSelect} 
+              activeStage={activeStage}
+            />
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Center Panel - Preview */}
+          <ResizablePanel defaultSize={35}>
+            <PreviewPanel 
+              components={activeStageComponents}
+              selectedComponentId={selectedComponentId}
+              onSelectComponent={setSelectedComponentId}
+              onMoveComponent={moveComponent}
+              activeStage={activeStage}
+            />
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Right Panel - Properties */}
+          <ResizablePanel defaultSize={25}>
+            <PropertiesPanel 
+              component={selectedComponent}
+              stage={activeStage}
+              onClose={() => setSelectedComponentId(null)}
+              onUpdate={(data: Partial<QuizComponentData>) => {
+                if (selectedComponentId) {
+                  updateComponent(selectedComponentId, data);
+                }
+              }}
+              onUpdateStage={(data: Partial<QuizStage>) => {
+                if (activeStageId) {
+                  updateStage(activeStageId, data);
+                }
+              }}
+              onDelete={() => {
+                if (selectedComponentId) {
+                  deleteComponent(selectedComponentId);
+                  setSelectedComponentId(null);
+                }
+              }}
+            />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </TabsContent>
+      
+      <TabsContent value="preview" className="flex-1">
+        {/* Preview mode - show full quiz flow */}
+        <div className="h-full bg-[#FAF9F7] p-4 overflow-auto">
+          <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
+            {/* Render preview of active stage or full quiz */}
+          </div>
+        </div>
+      </TabsContent>
     </div>
   );
 };

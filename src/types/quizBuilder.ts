@@ -13,7 +13,10 @@ export type QuizComponentType =
   | 'date' 
   | 'benefitsList' 
   | 'faq' 
-  | 'quizResult';
+  | 'quizResult'
+  | 'stageCover'
+  | 'stageQuestion'
+  | 'stageResult';
 
 export interface QuizComponentStyle {
   paddingY?: string;
@@ -24,10 +27,19 @@ export interface QuizComponentStyle {
   // Add more style properties as needed
 }
 
+export interface QuizStage {
+  id: string;
+  title: string;
+  order: number;
+  type: 'cover' | 'question' | 'result';
+  componentId?: string;
+}
+
 export interface QuizComponentData {
   id: string;
   type: QuizComponentType;
   order: number;
+  stageId?: string;
   data: {
     [key: string]: any;
     title?: string;
@@ -37,6 +49,8 @@ export interface QuizComponentData {
     alt?: string;
     question?: string;
     options?: string[];
+    stageTitle?: string;
+    stageNumber?: number;
     // Add more specific data properties as needed
   };
   style?: QuizComponentStyle;
@@ -44,4 +58,6 @@ export interface QuizComponentData {
 
 export interface QuizBuilderState {
   components: QuizComponentData[];
+  stages: QuizStage[];
+  activeStageId?: string;
 }
