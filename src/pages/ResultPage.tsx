@@ -107,7 +107,7 @@ export const ResultPage = () => {
             />
             <div className="flex-1 space-y-4">
               <ul className="space-y-2">
-                {["Looks com intenção e não improviso", "Use cores e modelagens a seu favor", "Alinhe sua imagem com seus objetivos", "Monte um guarda-roupa funcional e estratégico"].map((item, index) => (
+                {["Looks com intenção e não improviso","Use cores e modelagens a seu favor","Alinhe sua imagem com seus objetivos","Monte um guarda-roupa funcional e estratégico"].map((item, index) => (
                   <li key={index} className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-1 mr-2" />
                     <span className="text-[#432818]">{item}</span>
@@ -117,11 +117,46 @@ export const ResultPage = () => {
               <div className="text-center">
                 <p className="text-sm text-[#432818]/60 line-through">De R$ 175,00</p>
                 <p className="text-3xl font-bold text-[#aa6b5d]">Por R$ 39,00</p>
-                <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="mt-4 bg-[#aa6b5d] hover:bg-[#8f574a] text-white px-8 py-4 text-lg rounded-md">
+                <Button
+                  onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
+                  className="mt-4 bg-[#aa6b5d] hover:bg-[#8f574a] text-white px-8 py-4 text-lg rounded-md"
+                >
                   <ShoppingCart className="w-5 h-5 mr-2" /> Quero meu Guia + Bônus
                 </Button>
               </div>
             </div>
+          </div>
+        </Card>
+
+        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
+          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
+            💬 Depoimentos de mulheres que já viveram essa transformação:
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[{
+              text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+              name: "Mariangela",
+              role: "Engenheira"
+            }, {
+              text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+              name: "Patrícia Paranhos",
+              role: "Advogada"
+            }, {
+              text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+              name: "Sônia Spier",
+              role: "Terapeuta"
+            }].map((testimonial, index) => (
+              <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
+                <p className="italic text-[#432818] mb-4">"{testimonial.text}"</p>
+                <div className="flex items-center gap-2">
+                  <div className="h-1 w-8 bg-[#aa6b5d]"></div>
+                  <div>
+                    <p className="font-medium text-[#432818]">{testimonial.name}</p>
+                    <p className="text-sm text-[#432818]/70">{testimonial.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </Card>
       </div>
