@@ -6,6 +6,7 @@ import { StyleResultSection } from '@/components/result/StyleResult';
 import OfferCard from '@/components/quiz-result/sales/OfferCard';
 import { styleConfig } from '@/config/styleConfig';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { EditorButton } from '@/components/ui/EditorButton';
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -42,6 +43,9 @@ const ResultPage = () => {
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
+      {/* Editor Button - Made more visible and prominent */}
+      <EditorButton />
+      
       <Header 
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
