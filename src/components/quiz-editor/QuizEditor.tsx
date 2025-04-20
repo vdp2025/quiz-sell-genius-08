@@ -13,8 +13,12 @@ import TemplateSelector from './TemplateSelector';
 import { getTemplateById, saveTemplate } from '@/services/templates/templateService';
 import { QuizTemplate } from '@/types/quizTemplate';
 
-const QuizEditor: React.FC = () => {
-  const [isSelectingTemplate, setIsSelectingTemplate] = useState(true);
+interface QuizEditorProps {
+  initialTemplateId?: string;
+}
+
+const QuizEditor: React.FC<QuizEditorProps> = ({ initialTemplateId }) => {
+  const [isSelectingTemplate, setIsSelectingTemplate] = useState(!initialTemplateId);
   const [activeTab, setActiveTab] = useState<QuizCategory>('clothingQuestions');
   const [editorState, setEditorState] = useState<QuizEditorState>({
     questions: [],
@@ -22,6 +26,13 @@ const QuizEditor: React.FC = () => {
     selectedCategory: null
   });
   const [currentTemplate, setCurrentTemplate] = useState<QuizTemplate | null>(null);
+
+  // Load template when initialTemplateId is provided or when template is selected
+  useEffect(() => {
+    if (initialTemplateId) {
+      handleSelectTemplate(initialTemplateId);
+    }
+  }, [initialTemplateId]);
 
   // Handle template selection
   const handleSelectTemplate = async (templateId: string) => {
