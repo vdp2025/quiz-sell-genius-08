@@ -93,6 +93,37 @@ export const ResultPage = () => {
             />
           </div>
         </Card>
+
+        <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-playfair text-[#aa6b5d]">Oferta Especial</h2>
+            <p className="text-[#432818]">Garanta seu Guia de Estilo + Bônus agora mesmo com preço promocional!</p>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <img
+              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
+              alt="Guia e Bônus"
+              className="w-full md:w-1/2 rounded-lg shadow-md"
+            />
+            <div className="flex-1 space-y-4">
+              <ul className="space-y-2">
+                {["Looks com intenção e não improviso", "Use cores e modelagens a seu favor", "Alinhe sua imagem com seus objetivos", "Monte um guarda-roupa funcional e estratégico"].map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-1 mr-2" />
+                    <span className="text-[#432818]">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="text-center">
+                <p className="text-sm text-[#432818]/60 line-through">De R$ 175,00</p>
+                <p className="text-3xl font-bold text-[#aa6b5d]">Por R$ 39,00</p>
+                <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="mt-4 bg-[#aa6b5d] hover:bg-[#8f574a] text-white px-8 py-4 text-lg rounded-md">
+                  <ShoppingCart className="w-5 h-5 mr-2" /> Quero meu Guia + Bônus
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   );
