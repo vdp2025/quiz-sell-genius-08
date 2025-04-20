@@ -25,18 +25,13 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
 
   if (currentQuestionIndex >= strategicQuestions.length) return null;
 
-  const handleNextClick = () => {
-    // This is just a placeholder since the actual navigation is handled in the parent component
-    console.log('Next clicked in strategic questions');
-  };
-
   return (
     <AnimatedWrapper key={mountKey}>
       <QuizQuestion
         question={strategicQuestions[currentQuestionIndex]}
         onAnswer={onAnswer}
         currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
-        onNextClick={handleNextClick}
+        autoAdvance={true}
       />
     </AnimatedWrapper>
   );

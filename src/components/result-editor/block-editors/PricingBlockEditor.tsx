@@ -15,26 +15,6 @@ const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="title">Título</Label>
-        <Input
-          id="title"
-          value={content.title || ''}
-          onChange={(e) => onUpdate({ title: e.target.value })}
-          placeholder="Guia de Estilo Personalizado"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="price">Preço</Label>
-        <Input
-          id="price"
-          value={content.price || ''}
-          onChange={(e) => onUpdate({ price: e.target.value })}
-          placeholder="39,00"
-        />
-      </div>
-      
-      <div className="space-y-2">
         <Label htmlFor="regularPrice">Preço Regular</Label>
         <Input
           id="regularPrice"
@@ -45,12 +25,22 @@ const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="ctaText">Texto do Botão</Label>
+        <Label htmlFor="salePrice">Preço Promocional</Label>
         <Input
-          id="ctaText"
-          value={content.ctaText || ''}
-          onChange={(e) => onUpdate({ ctaText: e.target.value })}
-          placeholder="Quero meu Guia + Bônus"
+          id="salePrice"
+          value={content.salePrice || ''}
+          onChange={(e) => onUpdate({ salePrice: e.target.value })}
+          placeholder="39,00"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="buttonText">Texto do Botão</Label>
+        <Input
+          id="buttonText"
+          value={content.buttonText || ''}
+          onChange={(e) => onUpdate({ buttonText: e.target.value })}
+          placeholder="Quero Transformar Meu Estilo"
         />
       </div>
       
@@ -61,6 +51,16 @@ const PricingBlockEditor: React.FC<PricingBlockEditorProps> = ({ block, onUpdate
           value={content.ctaUrl || ''}
           onChange={(e) => onUpdate({ ctaUrl: e.target.value })}
           placeholder="https://pay.hotmart.com/..."
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="urgencyText">Texto de Urgência</Label>
+        <Input
+          id="urgencyText"
+          value={content.urgencyText || ''}
+          onChange={(e) => onUpdate({ urgencyText: e.target.value })}
+          placeholder="Oferta por tempo limitado!"
         />
       </div>
     </div>

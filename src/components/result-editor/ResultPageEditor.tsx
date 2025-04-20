@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -41,27 +42,17 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
 
   const handleSave = async () => {
     try {
-      const saved = await saveConfig();
-      if (saved) {
-        toast({
-          title: 'Configurações salvas',
-          description: 'As alterações foram salvas com sucesso',
-        });
-      } else {
-        toast({
-          title: 'Erro ao salvar',
-          description: 'Não foi possível salvar as alterações',
-          variant: 'destructive'
-        });
-      }
-      return saved;
+      await saveConfig();
+      toast({
+        title: 'Configurações salvas',
+        description: 'As alterações foram salvas com sucesso',
+      });
     } catch (error) {
       toast({
         title: 'Erro ao salvar',
         description: 'Não foi possível salvar as alterações',
         variant: 'destructive'
       });
-      return false;
     }
   };
 

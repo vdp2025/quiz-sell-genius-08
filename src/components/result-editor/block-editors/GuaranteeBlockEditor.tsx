@@ -21,31 +21,38 @@ const GuaranteeBlockEditor: React.FC<GuaranteeBlockEditorProps> = ({ block, onUp
           id="title"
           value={content.title || ''}
           onChange={(e) => onUpdate({ title: e.target.value })}
-          placeholder="Garantia de Satisfação"
+          placeholder="Garantia de 7 dias"
         />
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="text">Texto da Garantia</Label>
+        <Label htmlFor="text">Texto</Label>
         <Textarea
           id="text"
+          rows={3}
           value={content.text || ''}
           onChange={(e) => onUpdate({ text: e.target.value })}
-          placeholder="Se você não ficar completamente satisfeita com o seu Guia de Estilo Personalizado, basta solicitar o reembolso em até 7 dias após a compra."
-          rows={3}
+          placeholder="Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
         />
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="days">Dias de Garantia</Label>
+        <Label htmlFor="image">URL da Imagem</Label>
         <Input
-          id="days"
-          type="number"
-          min="1"
-          value={content.days || 7}
-          onChange={(e) => onUpdate({ days: parseInt(e.target.value) })}
-          placeholder="7"
+          id="image"
+          value={content.image || ''}
+          onChange={(e) => onUpdate({ image: e.target.value })}
+          placeholder="https://exemplo.com/garantia.jpg"
         />
+        {content.image && (
+          <div className="mt-2 p-2 bg-gray-50 rounded">
+            <img 
+              src={content.image} 
+              alt="Imagem de garantia" 
+              className="h-20 object-contain mx-auto"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

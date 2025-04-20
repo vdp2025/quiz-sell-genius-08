@@ -1,93 +1,51 @@
-
-import { useState, useCallback } from 'react';
-import { Block, BlockType, EditableContent } from '@/types/editor';
-import { toast } from '@/components/ui/use-toast';
-import { generateId } from '@/utils/idGenerator';
-import { getDefaultContentForType } from '@/utils/blockDefaults';
+import { useState, useEffect } from 'react';
+import { EditorConfig } from '@/types/editor';
+import { useEditorBlocks } from './editor/useEditorBlocks';
+import { useEditorTheme } from './editor/useEditorTheme';
+import { useEditorTemplates } from './editor/useEditorTemplates';
+import { defaultConfig } from '@/utils/editorDefaults';
 
 export const useEditor = () => {
-  const [config, setConfig] = useState<{ blocks: Block[] }>({
-    blocks: []
+  const [config, setConfig] = useState<EditorConfig>(() => {
+    const savedConfig = localStorage.getItem('editorConfig');
+    if (savedConfig) {
+      try {
+        return JSON.parse(savedConfig);
+      } catch (e) {
+        console.error('Error loading editor configuration:', e);
+        return defaultConfig;
+      }
+    }
+    return defaultConfig;
   });
 
-  const addBlock = useCallback((type: BlockType) => {
-    const newBlock: Block = {
-      id: generateId(),
-      type,
-      content: getDefaultContentForType(type),
-      order: config.blocks.length
-    };
+  useEffect(() => {
+    localStorage.setItem('editorConfig', JSON.stringify(config));
+  }, [config]);
 
-    setConfig(prev => ({
-      ...prev,
-      blocks: [...prev.blocks, newBlock]
-    }));
+  const blockActions = useEditorBlocks(config, setConfig);
+  const themeActions = useEditorTheme(config, setConfig);
+  const templateActions = useEditorTemplates(config, setConfig);
 
-    return newBlock.id;
-  }, [config.blocks]);
+  const clearEditor = () => setConfig(defaultConfig);
 
-  const updateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
-    setConfig(prev => ({
-      ...prev,
-      blocks: prev.blocks.map(block => 
-        block.id === id 
-          ? { ...block, content: { ...block.content, ...content } } 
-          : block
-      )
-    }));
-  }, []);
-
-  const deleteBlock = useCallback((id: string) => {
-    setConfig(prev => ({
-      ...prev,
-      blocks: prev.blocks
-        .filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index }))
-    }));
-  }, []);
-
-  const reorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
-    setConfig(prev => {
-      const newBlocks = Array.from(prev.blocks);
-      const [removedBlock] = newBlocks.splice(sourceIndex, 1);
-      newBlocks.splice(destinationIndex, 0, removedBlock);
-      
-      return {
-        ...prev,
-        blocks: newBlocks.map((block, index) => ({
-          ...block,
-          order: index
-        }))
-      };
-    });
-  }, []);
-
-  const saveConfig = useCallback(async () => {
+  const saveConfig = async () => {
     try {
-      // In a real implementation, this would save to a database
-      localStorage.setItem('editor_config', JSON.stringify(config));
-      toast({
-        title: "Configuração salva",
-        description: "Suas alterações foram salvas com sucesso",
-      });
+      localStorage.setItem('editorConfig', JSON.stringify(config));
       return true;
     } catch (error) {
-      console.error('Error saving config', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar suas alterações",
-        variant: "destructive"
-      });
+      console.error('Error saving editor configuration:', error);
       return false;
     }
-  }, [config]);
+  };
 
   return {
     config,
-    addBlock,
-    updateBlock,
-    deleteBlock,
-    reorderBlocks,
+    updateConfig: setConfig,
+    clearEditor,
+    ...blockActions,
+    ...themeActions,
+    ...templateActions,
     saveConfig
   };
 };

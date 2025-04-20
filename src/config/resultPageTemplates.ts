@@ -1,76 +1,72 @@
+
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
-export const naturalStyleTemplate: ResultPageConfig = {
-  styleType: 'Natural',
+export const defaultResultTemplate: ResultPageConfig = {
+  styleType: '',
   header: {
     visible: true,
     content: {
-      title: 'Seu Estilo Natural',
-      subtitle: 'Descubra como aproveitar ao máximo seu estilo único'
+      logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+      logoAlt: 'Logo Gisele Galvão',
+      title: 'Seu Estilo Predominante é:'
     },
     style: {
-      backgroundColor: '#f7f4f0',
-      textColor: '#3a3a3a',
-      padding: '40px 20px',
+      padding: '20px',
       textAlign: 'center'
     }
   },
   mainContent: {
     visible: true,
     content: {
-      introText: 'O estilo Natural é caracterizado pelo conforto, praticidade e simplicidade.',
+      introText: `Você já descobriu seu Estilo e isso é muito poderoso. 
+      Conhecimento é clareza. E clareza muda o jeito que você se vê, se escolhe, se posiciona.`,
       benefits: [
-        'Valoriza o conforto e a funcionalidade',
-        'Prefere tecidos naturais e fáceis de cuidar',
-        'Aprecia uma estética minimalista e descomplicada'
+        'Como montar looks com intenção (e não no improviso)',
+        'Como usar suas cores, modelagens e tecidos a seu favor',
+        'Como alinhar sua imagem com seus valores e objetivos',
+        'Como parar de comprar por impulso e montar um guarda-roupa funcional'
       ],
-      tabletImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+      tabletImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
       styleImages: {
-        'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp',
-        'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp',
-        'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp',
-        'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp',
-        'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp',
-        'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp',
-        'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp',
-        'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp'
+        'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+        'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+        'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+        'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+        'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+        'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
+        'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+        'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
       }
-    },
-    style: {
-      backgroundColor: '#ffffff',
-      textColor: '#333333',
-      padding: '40px 20px',
-      textAlign: 'left'
-    }
-  },
-  secondaryStyles: {
-    visible: true,
-    content: {
-      title: 'Estilos Complementares',
-      description: 'Estes estilos complementam seu estilo Natural'
-    },
-    style: {
-      backgroundColor: '#f7f4f0',
-      textColor: '#333333',
-      padding: '40px 20px',
-      textAlign: 'center'
     }
   },
   offer: {
     hero: {
       visible: true,
       content: {
-        title: 'DESCUBRA SEU ESTILO NATURAL',
-        subtitle: 'Aproveite ao máximo seu estilo com nosso guia personalizado',
-        description: 'Um guia completo para entender e valorizar seu estilo Natural em todas as ocasiões',
-        heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
-        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg'
+        title: '📘 O Guia de Estilo e Imagem + Bônus Exclusivos',
+        subtitle: 'Criado para mulheres que querem muito mais do que "saber seu estilo".',
+        description: 'Esse guia é pra quem está pronta pra viver seu estilo na prática — com consciência, direção e autenticidade.',
+        heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp'
+      }
+    },
+    benefits: {
+      visible: true,
+      content: {
+        title: "O que você vai transformar com esse material",
+        items: [
+          {
+            title: "Peças que revelam sua essência",
+            description: "Descobrir as roupas e acessórios que comunicam quem você realmente é, valorizando seu corpo e sua personalidade."
+          },
+          {
+            title: "Cores e estampas em harmonia",
+            description: "Usar cores e estampas que favorecem sua imagem, criando combinações que valorizam sua beleza natural."
+          }
+        ]
       },
       style: {
-        backgroundColor: '#f0e6dd',
-        textColor: '#4a3828',
-        padding: '60px 20px',
-        textAlign: 'center'
+        padding: '20px'
       }
     },
     products: {
@@ -78,23 +74,17 @@ export const naturalStyleTemplate: ResultPageConfig = {
       content: {
         bonusItems: [
           {
-            title: 'Guia de Cores Natural',
-            description: 'As cores que melhor combinam com seu estilo',
+            title: 'Peças-chave do Guarda-Roupa de Sucesso',
+            description: 'Itens essenciais que descomplicam a rotina e valorizam o seu estilo pessoal.',
             image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp'
           },
           {
-            title: 'Guia de Peças-Chave',
-            description: 'As peças essenciais para seu guarda-roupa',
-            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp'
+            title: 'Mini Guia de Visagismo Facial',
+            description: 'Para alinhar seu rosto, cabelo e maquiagem com a sua identidade visual.',
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp'
           }
         ],
         allProductsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp'
-      },
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'center'
       }
     },
     testimonials: {
@@ -102,37 +92,30 @@ export const naturalStyleTemplate: ResultPageConfig = {
       content: {
         testimonials: [
           {
-            text: 'Este guia transformou minha relação com a moda. Agora sei exatamente o que funciona para mim!',
-            name: 'Maria Silva',
-            role: 'Professora'
+            text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+            name: "Mariangela",
+            role: "Engenheira"
           },
           {
-            text: 'Economizei tempo e dinheiro depois de entender meu estilo Natural. Recomendo!',
-            name: 'Ana Costa',
-            role: 'Empresária'
+            text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+            name: "Patrícia Paranhos",
+            role: "Advogada"
+          },
+          {
+            text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+            name: "Sônia Spier",
+            role: "Terapeuta"
           }
         ],
-        testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg'
-      },
-      style: {
-        backgroundColor: '#f7f4f0',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'center'
+        testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
       }
     },
-    benefits: {
+    guarantee: {
       visible: true,
       content: {
-        title: 'Benefícios do Guia Natural',
-        text: 'Transforme sua imagem pessoal e aproveite ao máximo seu estilo natural',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp'
-      },
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'left'
+        title: '🛡️ Garantia de 7 dias',
+        text: 'Você tem uma semana para acessar o conteúdo completo, testar e aplicar. Se não fizer sentido pra você, devolvemos 100% do seu investimento. Sem burocracia.',
+        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
       }
     },
     pricing: {
@@ -140,206 +123,32 @@ export const naturalStyleTemplate: ResultPageConfig = {
       content: {
         regularPrice: '175,00',
         salePrice: '39,00',
-        ctaText: 'Quero meu Guia + Bônus',
+        ctaText: 'Quero meu Guia + Bônus por R$39,00',
         ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        urgencyText: 'Promoção por tempo limitado!'
-      },
-      style: {
-        backgroundColor: '#f0e6dd',
-        textColor: '#4a3828',
-        padding: '40px 20px',
-        textAlign: 'center'
-      }
-    },
-    guarantee: {
-      visible: true,
-      content: {
-        title: 'Garantia de Satisfação',
-        text: 'Se você não ficar satisfeita com seu guia de estilo, devolvemos seu dinheiro em até 7 dias.',
-        days: 7
-      },
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'center'
+        urgencyText: '⏳ Oferta válida apenas nesta página'
       }
     }
   },
-  blocks: [],
-  globalStyles: {
-    fontFamily: 'system-ui, sans-serif',
-    primaryColor: '#B89B7A',
-    secondaryColor: '#4A3828',
-    backgroundColor: '#FAF9F7',
-    textColor: '#333333',
-    headingColor: '#432818'
-  }
-};
-
-export const defaultResultTemplate: ResultPageConfig = {
-  styleType: 'Natural',
-  header: {
+  mentor: {
     visible: true,
     content: {
-      title: 'Seu Resultado Exclusivo',
-      subtitle: 'Descubra seu estilo pessoal e como aproveitá-lo ao máximo'
-    },
-    style: {
-      backgroundColor: '#ffffff',
-      textColor: '#333333',
-      padding: '40px 20px',
-      textAlign: 'center'
-    }
-  },
-  mainContent: {
-    visible: true,
-    content: {
-      introText: 'Descubra as características do seu estilo predominante.',
-      benefits: [
-        'Valorize seus pontos fortes',
-        'Entenda o que combina com você',
-        'Crie um guarda-roupa versátil'
+      title: 'Sobre sua mentora',
+      name: 'Gisele Galvão',
+      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp',
+      beforeAfterImage: 'https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp',
+      stylesImage: 'https://res.cloudinary.com/dzt2fe3ij/image/upload/e_sharpen/v1745104620/Sem_nome_1000_x_1000_px_1280_x_720_px_itv2ri.webp',
+      bio: [
+        'Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.',
+        'Advogada de formação. Mãe da Victória, esposa do Fabrício.',
+        'Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata.'
       ]
-    },
-    style: {
-      backgroundColor: '#ffffff',
-      textColor: '#333333',
-      padding: '40px 20px',
-      textAlign: 'left'
     }
   },
-  secondaryStyles: {
-    visible: true,
-    content: {
-      title: 'Estilos Complementares',
-      description: 'Estes estilos complementam seu estilo principal'
-    },
-    style: {
-      backgroundColor: '#f7f4f0',
-      textColor: '#333333',
-      padding: '40px 20px',
-      textAlign: 'center'
-    }
-  },
-  offer: {
-    hero: {
-      visible: true,
-      content: {
-        title: 'DESCUBRA SEU ESTILO PESSOAL',
-        subtitle: 'Aproveite ao máximo seu estilo com nosso guia personalizado',
-        description: 'Um guia completo para entender e valorizar seu estilo em todas as ocasiões',
-        heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
-        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg'
-      },
-      style: {
-        backgroundColor: '#f0e6dd',
-        textColor: '#4a3828',
-        padding: '60px 20px',
-        textAlign: 'center'
-      }
-    },
-    products: {
-      visible: true,
-      content: {
-        bonusItems: [
-          {
-            title: 'Guia de Cores',
-            description: 'As cores que melhor combinam com seu estilo',
-            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp'
-          },
-          {
-            title: 'Guia de Peças-Chave',
-            description: 'As peças essenciais para seu guarda-roupa',
-            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp'
-          }
-        ]
-      },
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'center'
-      }
-    },
-    testimonials: {
-      visible: true,
-      content: {
-        testimonials: [
-          {
-            text: 'Este guia transformou minha relação com a moda. Agora sei exatamente o que funciona para mim!',
-            name: 'Maria Silva',
-            role: 'Professora'
-          },
-          {
-            text: 'Economizei tempo e dinheiro depois de entender meu estilo. Recomendo!',
-            name: 'Ana Costa',
-            role: 'Empresária'
-          }
-        ]
-      },
-      style: {
-        backgroundColor: '#f7f4f0',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'center'
-      }
-    },
-    benefits: {
-      visible: true,
-      content: {
-        title: 'Benefícios do seu Guia de Estilo',
-        text: 'Transforme sua imagem pessoal e aproveite ao máximo seu estilo'
-      },
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'left'
-      }
-    },
-    pricing: {
-      visible: true,
-      content: {
-        regularPrice: '175,00',
-        salePrice: '39,00',
-        ctaText: 'Quero meu Guia + Bônus',
-        ctaUrl: 'https://pay.hotmart.com/W98977034C'
-      },
-      style: {
-        backgroundColor: '#f0e6dd',
-        textColor: '#4a3828',
-        padding: '40px 20px',
-        textAlign: 'center'
-      }
-    },
-    guarantee: {
-      visible: true,
-      content: {
-        title: 'Garantia de Satisfação',
-        text: 'Se você não ficar satisfeita com seu guia de estilo, devolvemos seu dinheiro em até 7 dias.',
-        days: 7
-      },
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#333333',
-        padding: '40px 20px',
-        textAlign: 'center'
-      }
-    }
-  },
-  blocks: [],
   globalStyles: {
-    fontFamily: 'system-ui, sans-serif',
     primaryColor: '#B89B7A',
-    secondaryColor: '#4A3828',
-    backgroundColor: '#FAF9F7',
-    textColor: '#333333',
-    headingColor: '#432818'
+    secondaryColor: '#432818',
+    backgroundColor: '#fffaf7',
+    textColor: '#432818',
+    fontFamily: 'Inter, sans-serif'
   }
-};
-
-export const templates = {
-  'Natural': naturalStyleTemplate,
-  // Add more templates for other styles here
 };

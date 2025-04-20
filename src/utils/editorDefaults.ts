@@ -1,185 +1,166 @@
 
-import { EditorConfig } from '@/types/editor';
+import { EditableContent, EditorConfig } from '@/types/editor';
 import { generateId } from './idGenerator';
 
-export const getDefaultEditorConfig = (): EditorConfig => {
-  return {
-    blocks: [
-      {
-        id: generateId(),
-        type: 'header',
-        content: {
-          title: 'Seu Resultado Exclusivo',
-          subtitle: 'Descubra seu estilo pessoal e como aproveitá-lo ao máximo',
-          backgroundColor: '#ffffff',
-          textColor: '#333333'
-        },
-        order: 0
-      },
-      {
-        id: generateId(),
-        type: 'style-result',
-        content: {
-          title: 'Seu Estilo Principal',
-          description: 'Conheça as características do seu estilo predominante',
-          customImage: '',
-          style: {
-            background: '#f8f8f8',
-            padding: '1.5rem',
-            borderRadius: '0.5rem'
+export const getDefaultContentForType = (type: string): EditableContent => {
+  switch (type) {
+    case 'header':
+      return { 
+        title: 'Olá, seu Estilo Predominante é:',
+        subtitle: '',
+        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo Gisele Galvão'
+      };
+    case 'headline':
+      return { 
+        title: 'VOCÊ DESCOBRIU SEU ESTILO', 
+        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
+        textColor: '#432818',
+        alignment: 'center'
+      };
+    case 'text':
+      return { 
+        text: 'Digite seu texto aqui...',
+        alignment: 'left'
+      };
+    case 'image':
+      return { 
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp', 
+        imageAlt: 'Imagem do Resultado',
+        width: '100%',
+        borderRadius: '8px'
+      };
+    case 'benefits':
+      return { 
+        title: 'O que você vai aprender:', 
+        items: [
+          'Aplicar seus estilos com autenticidade',
+          'Montar looks práticos para o dia a dia, trabalho e eventos',
+          'Usar cores e modelagens que valorizam quem você é',
+          'Parar de errar nas compras e economizar tempo'
+        ]
+      };
+    case 'pricing':
+      return { 
+        regularPrice: '175,00', 
+        salePrice: '39,00', 
+        buttonText: 'Quero Transformar Meu Estilo',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        urgencyText: 'Oferta por tempo limitado!'
+      };
+    case 'guarantee':
+      return { 
+        title: 'Garantia de 7 dias',
+        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.',
+        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
+      };
+    case 'cta':
+      return { 
+        buttonText: 'Clique Aqui', 
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        title: 'Transforme seu estilo agora',
+        url: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
+      };
+    case 'style-result':
+      return { 
+        title: 'Seu estilo predominante é {{primaryStyle}}',
+        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.'
+      };
+    case 'secondary-styles':
+      return { title: 'Seus Estilos Complementares' };
+    case 'hero-section':
+      return { 
+        title: 'VOCÊ DESCOBRIU SEU ESTILO',
+        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
+        heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp',
+        heroImageAlt: 'Guia de Estilo',
+        quote: 'Descubra como expressar sua personalidade através do seu estilo de vestir',
+        quoteAuthor: 'Gisele Galvão'
+      };
+    case 'products':
+      return {
+        title: 'O que você vai receber:',
+        images: [
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+            alt: 'Guia de Estilo - 3 Revistas'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            alt: 'Todos os produtos e bônus'
           }
-        },
-        order: 1
-      },
-      {
-        id: generateId(),
-        type: 'secondary-styles',
-        content: {
-          title: 'Seus Estilos Secundários',
-          description: 'Estes estilos complementam seu estilo principal',
-          style: {
-            background: '#ffffff',
-            padding: '1.5rem',
-            borderRadius: '0.5rem'
+        ]
+      };
+    case 'testimonials':
+      return { 
+        title: 'O que estão dizendo',
+        testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
+      };
+    case 'bonus-carousel':
+      return { 
+        title: 'Você também recebe estes bônus',
+        bonusImages: [
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
+            alt: 'Bônus 1',
+            title: 'Guia de Estilo Digital'
+          },
+          {
+            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+            alt: 'Bônus 2',
+            title: 'Templates de Looks'
           }
-        },
-        order: 2
+        ]
+      };
+    default:
+      return {};
+  }
+};
+
+export const defaultConfig: EditorConfig = {
+  blocks: [
+    {
+      id: generateId(),
+      type: 'header',
+      content: { 
+        title: 'Olá, seu Estilo Predominante é:',
+        subtitle: '',
+        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo Gisele Galvão'
       },
-      {
-        id: generateId(),
-        type: 'hero-section',
-        content: {
-          title: 'Guia Completo do Estilo',
-          subtitle: 'Transforme seu visual com nosso guia personalizado',
-          imageUrl: 'https://via.placeholder.com/800x400',
-          style: {
-            background: '#f0e6dd',
-            padding: '3rem 1.5rem',
-            textAlign: 'center',
-            borderRadius: '0.5rem'
-          }
-        },
-        order: 3
-      },
-      {
-        id: generateId(),
-        type: 'products',
-        content: {
-          title: 'O Que Você Vai Receber',
-          products: [
-            {
-              title: 'Guia de Estilo Principal',
-              description: 'Um guia completo com todas as diretrizes para seu estilo',
-              imageUrl: 'https://via.placeholder.com/300x200'
-            },
-            {
-              title: 'Guia de Combinações',
-              description: 'Aprenda a criar looks harmoniosos com seu estilo',
-              imageUrl: 'https://via.placeholder.com/300x200'
-            }
-          ],
-          style: {
-            background: '#ffffff',
-            padding: '1.5rem',
-            borderRadius: '0.5rem'
-          }
-        },
-        order: 4
-      },
-      {
-        id: generateId(),
-        type: 'benefits',
-        content: {
-          title: 'Benefícios do Seu Guia de Estilo',
-          items: [
-            'Conheça as cores que mais combinam com você',
-            'Descubra os cortes e modelagens ideais para seu corpo',
-            'Aprenda a criar looks harmoniosos com seu estilo pessoal',
-            'Economize tempo e dinheiro com escolhas certeiras'
-          ],
-          style: {
-            background: '#f8f8f8',
-            padding: '1.5rem',
-            borderRadius: '0.5rem'
-          }
-        },
-        order: 5
-      },
-      {
-        id: generateId(),
-        type: 'testimonials',
-        content: {
-          title: 'O Que Nossas Clientes Dizem',
-          testimonials: [
-            {
-              text: 'Este guia transformou minha relação com a moda!',
-              name: 'Maria Silva',
-              role: 'Professora'
-            },
-            {
-              text: 'Nunca foi tão fácil me vestir bem e com confiança.',
-              name: 'Ana Costa',
-              role: 'Empresária'
-            }
-          ],
-          style: {
-            background: '#ffffff',
-            padding: '1.5rem',
-            borderRadius: '0.5rem'
-          }
-        },
-        order: 6
-      },
-      {
-        id: generateId(),
-        type: 'pricing',
-        content: {
-          title: 'Invista no Seu Estilo',
-          regularPrice: '397',
-          price: '197',
-          ctaText: 'Quero Meu Guia de Estilo',
-          ctaUrl: '#checkout',
-          style: {
-            textAlign: 'center',
-            background: '#f0e6dd',
-            padding: '2rem',
-            borderRadius: '0.5rem'
-          }
-        },
-        order: 7
-      },
-      {
-        id: generateId(),
-        type: 'guarantee',
-        content: {
-          title: 'Garantia de Satisfação',
-          text: 'Se você não ficar satisfeita com seu guia de estilo, devolvemos seu dinheiro em até 7 dias.',
-          days: 7,
-          style: {
-            textAlign: 'center',
-            background: '#ffffff',
-            padding: '1.5rem',
-            borderRadius: '0.5rem'
-          }
-        },
-        order: 8
-      }
-    ],
-    globalStyles: {
-      fontFamily: 'system-ui, sans-serif',
-      primaryColor: '#B89B7A',
-      secondaryColor: '#4A3828',
-      backgroundColor: '#FAF9F7',
-      textColor: '#333333',
-      headingColor: '#432818'
+      order: 0
     },
-    theme: {
-      fontFamily: 'system-ui, sans-serif',
-      primaryColor: '#B89B7A',
-      secondaryColor: '#4A3828',
-      backgroundColor: '#FAF9F7',
-      textColor: '#333333',
-      headingColor: '#432818'
+    {
+      id: generateId(),
+      type: 'style-result',
+      content: { 
+        title: 'Seu estilo predominante é {{primaryStyle}}',
+        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.'
+      },
+      order: 1
+    },
+    {
+      id: generateId(),
+      type: 'secondary-styles',
+      content: { 
+        title: 'Seus Estilos Complementares' 
+      },
+      order: 2
     }
-  };
+  ],
+  globalStyles: {
+    primaryColor: '#B89B7A',
+    secondaryColor: '#432818',
+    textColor: '#1A1818',
+    backgroundColor: '#fffaf7',
+    fontFamily: 'Inter, sans-serif'
+  },
+  theme: {
+    primaryColor: '#B89B7A',
+    secondaryColor: '#432818',
+    textColor: '#1A1818',
+    backgroundColor: '#fffaf7',
+    fontFamily: 'Inter, sans-serif'
+  }
 };

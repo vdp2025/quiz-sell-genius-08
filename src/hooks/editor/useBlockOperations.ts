@@ -1,6 +1,7 @@
 
 import { useState, useCallback } from 'react';
-import { Block, BlockType, EditableContent } from '@/types/editor';
+import { Block } from '@/types/editor';
+import { BlockManipulationActions } from '@/types/editorTypes';
 import { generateId } from '@/utils/idGenerator';
 import { getDefaultContentForType } from '@/utils/blockDefaults';
 
@@ -8,11 +9,7 @@ export const useBlockOperations = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
-  const updateBlocks = useCallback((newBlocks: Block[]) => {
-    setBlocks(newBlocks);
-  }, []);
-
-  const handleAddBlock = useCallback((type: BlockType) => {
+  const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
       id: generateId(),
       type,
@@ -26,7 +23,7 @@ export const useBlockOperations = () => {
     return newBlock.id;
   }, [blocks]);
 
-  const handleUpdateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
+  const handleUpdateBlock = useCallback((id: string, content: any) => {
     setBlocks(prev => 
       prev.map(block => 
         block.id === id 
@@ -37,17 +34,13 @@ export const useBlockOperations = () => {
   }, []);
 
   const handleDeleteBlock = useCallback((id: string) => {
-    setBlocks(prev => {
-      const filteredBlocks = prev.filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index }));
-      
-      if (selectedBlockId === id) {
-        setSelectedBlockId(null);
-      }
-      
-      return filteredBlocks;
-    });
-  }, [selectedBlockId]);
+    setBlocks(prev => 
+      prev
+        .filter(block => block.id !== id)
+        .map((block, index) => ({ ...block, order: index }))
+    );
+    setSelectedBlockId(null);
+  }, []);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     setBlocks(prev => {
@@ -60,6 +53,13 @@ export const useBlockOperations = () => {
         order: index
       }));
     });
+  }, []);
+
+  // Add a function to sync blocks from config
+  const updateBlocks = useCallback((newBlocks: Block[]) => {
+    if (Array.isArray(newBlocks)) {
+      setBlocks(newBlocks);
+    }
   }, []);
 
   return {

@@ -50,7 +50,7 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
             question={strategicQuestions[0]}
             onAnswer={handleFirstStrategicAnswer}
             currentAnswers={currentAnswers}
-            onNextClick={onContinue}
+            autoAdvance={true}
           />
         </AnimatedWrapper>
       </div>

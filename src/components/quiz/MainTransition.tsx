@@ -112,8 +112,9 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   question={strategicQuestions[currentQuestionIndex]}
                   onAnswer={handleQuestionAnswer}
                   currentAnswers={currentAnswersForQuestion}
-                  onNextClick={handleNextClick}
+                  autoAdvance={true}
                   hideTitle={true}
+                  onNextClick={handleNextClick}
                 />
               </div>
             </Card>
