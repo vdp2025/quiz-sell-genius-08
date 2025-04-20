@@ -1,3 +1,7 @@
+export interface QuizImage {
+  url: string;
+  alt: string;
+}
 
 export interface QuizOption {
   id: string;
@@ -13,6 +17,8 @@ export interface QuizQuestion {
   type: 'text' | 'image' | 'both';
   multiSelect: number;
   options: QuizOption[];
+  isRequired?: boolean;
+  description?: string;
 }
 
 export interface UserResponse {
