@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -162,3 +161,5 @@ export const QuizBuilder: React.FC = () => {
     </div>
   );
 };
+
+export default QuizBuilder;

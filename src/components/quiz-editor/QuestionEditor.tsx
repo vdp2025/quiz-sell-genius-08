@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -123,13 +122,10 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle>Editar Pergunta</CardTitle>
-          <CardDescription>
-            Configure os detalhes da pergunta e suas opções
-          </CardDescription>
+          <CardDescription>Configure os detalhes da pergunta e suas opções</CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-6">
-          {/* Question details */}
           <div className="space-y-4">
             <div>
               <Label htmlFor="title">Título da Pergunta</Label>
@@ -138,7 +134,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 value={editedQuestion.title}
                 onChange={(e) => setEditedQuestion(prev => ({ ...prev, title: e.target.value }))}
                 placeholder="Digite o título da pergunta"
-                className="resize-none"
+                className="min-h-[100px] resize-none"
               />
             </div>
             
@@ -175,9 +171,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="1">1 seleção</SelectItem>
-                    <SelectItem value="2">2 seleções</SelectItem>
                     <SelectItem value="3">3 seleções</SelectItem>
-                    <SelectItem value="4">4 seleções</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -186,7 +180,6 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
           
           <Separator />
           
-          {/* Options */}
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">Opções</h3>
@@ -202,18 +195,18 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
             </div>
             
             <div className="space-y-4">
-              {editedQuestion.options.length > 0 ? (
-                editedQuestion.options.map((option, index) => (
-                  <QuestionOptionEditor
-                    key={option.id}
-                    option={option}
-                    questionType={editedQuestion.type}
-                    onUpdate={handleUpdateOption}
-                    onDelete={() => handleDeleteOption(option.id)}
-                    index={index}
-                  />
-                ))
-              ) : (
+              {editedQuestion.options.map((option, index) => (
+                <QuestionOptionEditor
+                  key={option.id}
+                  option={option}
+                  questionType={editedQuestion.type}
+                  onUpdate={handleUpdateOption}
+                  onDelete={() => handleDeleteOption(option.id)}
+                  index={index}
+                />
+              ))}
+              
+              {editedQuestion.options.length === 0 && (
                 <div className="text-center p-4 border border-dashed rounded-md">
                   <p className="text-gray-500">Nenhuma opção adicionada</p>
                   <Button 
