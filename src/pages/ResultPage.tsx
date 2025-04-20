@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-export const ResultPage = () => {
+const ResultPage = () => {
   const {
     primaryStyle,
     secondaryStyles
@@ -34,6 +34,8 @@ export const ResultPage = () => {
         </div>
       </div>;
   }
+
+  // Get style-specific cover image based on style type
   const getStyleCoverImage = styleType => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
@@ -52,11 +54,13 @@ export const ResultPage = () => {
     color: globalStyles.textColor || '#432818',
     fontFamily: globalStyles.fontFamily || 'inherit'
   }}>
+      {/* Editor Button - Made more visible and prominent */}
       <EditorButton />
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
       
       <div className="container mx-auto px-4 py-6 max-w-4xl">
+        {/* Style Result Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
@@ -73,7 +77,7 @@ export const ResultPage = () => {
               </div>
             </div>
             <div className="order-first md:order-last">
-              <img src={getStyleCoverImage(primaryStyle.category)} alt={Estilo ${primaryStyle.category}} className="w-full h-auto rounded-lg shadow-md" />
+              <img src={getStyleCoverImage(primaryStyle.category)} alt={`Estilo ${primaryStyle.category}`} className="w-full h-auto rounded-lg shadow-md" />
             </div>
           </div>
           
@@ -82,6 +86,7 @@ export const ResultPage = () => {
           </div>
         </Card>
 
+        {/* Introduction Section */}
         <div className="space-y-6 mb-10 text-center">
           <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d]">
             Você já descobriu seu Estilo e isso é muito poderoso.
@@ -115,6 +120,7 @@ export const ResultPage = () => {
           </div>
         </div>
 
+        {/* Main Offer Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">O Guia de Estilo e Imagem + Bônus Exclusivos</h2>
@@ -139,6 +145,7 @@ export const ResultPage = () => {
             </div>
           </div>
           
+          {/* Bonus Section */}
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
             <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">E ainda recebe 2 bônus poderosos:</h3>
             
@@ -168,6 +175,7 @@ export const ResultPage = () => {
             <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" alt="Todos os produtos e bônus" className="w-full h-auto rounded-lg" />
           </div>
           
+          {/* Pricing and CTA Section */}
           <div className="bg-[#fff7f3] p-6 rounded-lg text-center">
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6">
               <div className="text-center md:text-right">
@@ -191,6 +199,7 @@ export const ResultPage = () => {
           </div>
         </Card>
         
+        {/* Testimonials Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             💬 Depoimentos de mulheres que já viveram essa transformação:
@@ -226,6 +235,7 @@ export const ResultPage = () => {
           </div>
         </Card>
         
+        {/* About Mentor Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             👩‍🏫 Sobre sua mentora
@@ -254,6 +264,7 @@ export const ResultPage = () => {
           </div>
         </Card>
         
+        {/* Guarantee Section */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="md:w-1/4 flex justify-center">
@@ -275,6 +286,7 @@ export const ResultPage = () => {
           </div>
         </Card>
         
+        {/* Final CTA Section */}
         <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
           <div className="text-center space-y-4 mb-6">
             <h2 className="text-2xl font-playfair text-[#aa6b5d]">
@@ -297,7 +309,7 @@ export const ResultPage = () => {
             </div>
           </div>
           
-          <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="w-full max-w-xl bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md px-[10px] mx-[137px] text-center">
+          <Button className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md" onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}>
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>

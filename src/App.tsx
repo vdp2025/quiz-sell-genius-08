@@ -6,13 +6,8 @@ import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
 import QuizPage from './components/QuizPage';
 
-// Change the lazy loading implementation for ResultPage
-const ResultPage = lazy(() => import('./pages/ResultPage').catch(() => {
-  console.error('Failed to load ResultPage component');
-  return { default: () => <div>Failed to load the result page. Please try again.</div> };
-}));
-
 // Only lazy load components that aren't on the main route
+const ResultPage = lazy(() => import('./pages/ResultPage'));
 const EditorPage = lazy(() => import('./pages/EditorPage'));
 const QuizBuilderPage = lazy(() => import('./pages/QuizBuilderPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
