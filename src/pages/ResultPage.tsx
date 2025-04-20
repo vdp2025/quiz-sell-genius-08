@@ -21,16 +21,9 @@ export const ResultPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <h1 className="text-2xl font-playfair text-[#432818] mb-4">
-            Resultados não encontrados
-          </h1>
-          <p className="text-[#8F7A6A] mb-6">
-            Parece que você ainda não completou o quiz.
-          </p>
-          <a
-            href="/"
-            className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
-          >
+          <h1 className="text-2xl font-playfair text-[#432818] mb-4">Resultados não encontrados</h1>
+          <p className="text-[#8F7A6A] mb-6">Parece que você ainda não completou o quiz.</p>
+          <a href="/" className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors">
             Fazer o Quiz
           </a>
         </div>
@@ -77,12 +70,10 @@ export const ResultPage = () => {
                 Seu Estilo é {primaryStyle.category}
               </h2>
               <p className="text-[#432818] leading-relaxed">
-                {styleConfig[primaryStyle.category].description}
+                {styleConfig[primaryStyle.category]?.description}
               </p>
               <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#432818] mb-2">
-                  Seus Estilos Complementares
-                </h3>
+                <h3 className="text-lg font-medium text-[#432818] mb-2">Seus Estilos Complementares</h3>
                 <SecondaryStylesSection secondaryStyles={secondaryStyles} />
               </div>
             </div>
@@ -94,7 +85,6 @@ export const ResultPage = () => {
               />
             </div>
           </div>
-
           <div className="mt-8">
             <img
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
