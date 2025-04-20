@@ -8,7 +8,6 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-
 export const ResultPage = () => {
   const {
     primaryStyle,
@@ -17,11 +16,9 @@ export const ResultPage = () => {
   const {
     globalStyles
   } = useGlobalStyles();
-  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   if (!primaryStyle) {
     return <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
@@ -37,7 +34,6 @@ export const ResultPage = () => {
         </div>
       </div>;
   }
-
   const getStyleCoverImage = styleType => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
@@ -51,7 +47,6 @@ export const ResultPage = () => {
     };
     return styleImages[styleType] || styleImages['Natural'];
   };
-
   return <div className="min-h-screen bg-[#fffaf7]" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
     color: globalStyles.textColor || '#432818',
@@ -302,7 +297,7 @@ export const ResultPage = () => {
             </div>
           </div>
           
-          <Button className="w-full max-w-xl mx-auto bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md" onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}>
+          <Button onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"} className="w-full max-w-xl bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 text-lg rounded-md px-[10px] mx-[137px] text-center">
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>
@@ -310,5 +305,4 @@ export const ResultPage = () => {
       </div>
     </div>;
 };
-
 export default ResultPage;
