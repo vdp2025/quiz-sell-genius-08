@@ -66,16 +66,37 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         );
         
       case 'multipleChoice':
+        const hasImages = data.fullOptions && data.fullOptions.some(opt => opt.imageUrl);
+        const optionsToDisplay = data.options || ['Opção 1', 'Opção 2', 'Opção 3'];
+        const fullOptionsToDisplay = data.fullOptions || optionsToDisplay.map(text => ({ text }));
+        
         return (
           <div className="py-4">
-            <h3 className="text-xl font-medium text-[#432818] mb-4">{data.question || 'Sua pergunta aqui?'}</h3>
-            <div className="space-y-2">
-              {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg border-[#B89B7A]/30 hover:border-[#B89B7A]">
-                  <input type="checkbox" className="h-5 w-5 text-[#B89B7A] focus:ring-[#B89B7A]" />
-                  <label className="text-[#432818]">{option}</label>
-                </div>
-              ))}
+            <h3 className="text-xl font-medium text-[#432818] mb-4">{data.question || data.title || 'Sua pergunta aqui?'}</h3>
+            <div className={cn("grid gap-3", hasImages ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "")}>
+              {optionsToDisplay.map((option, index) => {
+                const fullOption = fullOptionsToDisplay[index];
+                return (
+                  <div key={index} className={cn(
+                    "flex items-start space-x-3 p-3 border rounded-lg border-[#B89B7A]/30 hover:border-[#B89B7A]",
+                    hasImages && "flex-col"
+                  )}>
+                    {hasImages && fullOption.imageUrl && (
+                      <div className="w-full h-40 mb-3 overflow-hidden rounded-md">
+                        <img 
+                          src={fullOption.imageUrl} 
+                          alt={fullOption.text}
+                          className="w-full h-full object-cover" 
+                        />
+                      </div>
+                    )}
+                    <div className={cn(hasImages ? "w-full" : "flex items-center space-x-3")}>
+                      {!hasImages && <input type="checkbox" className="h-5 w-5 text-[#B89B7A] focus:ring-[#B89B7A]" />}
+                      <label className="text-[#432818]">{option}</label>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         );

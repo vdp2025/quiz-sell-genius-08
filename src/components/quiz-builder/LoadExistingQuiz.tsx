@@ -17,13 +17,16 @@ export const LoadExistingQuiz: React.FC<LoadExistingQuizProps> = ({ onLoadQuiz }
       order: index,
       data: {
         title: question.title,
-        options: question.options.map(opt => ({
+        question: question.title,
+        options: question.options.map(opt => opt.text),
+        // Store the full option objects in a separate property for later use
+        fullOptions: question.options.map(opt => ({
           text: opt.text,
           imageUrl: opt.imageUrl,
           styleCategory: opt.styleCategory
         })),
         multiSelect: question.multiSelect,
-        type: question.type
+        questionType: question.type
       },
       style: {
         paddingY: '16',
