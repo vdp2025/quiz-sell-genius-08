@@ -4,7 +4,9 @@ import { Suspense, lazy } from 'react'; // Removido ErrorBoundary
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
-import QuizPage from './components/QuizPage';
+import { QuizProvider } from './context/QuizContext';
+// Importar Index em vez de QuizPage diretamente
+import Index from './pages/Index';
 // Import ResultPage normalmente to avoid lazy loading issues
 import ResultPage from './pages/ResultPage';
 // Only lazy load components that aren't on the main route
@@ -33,21 +35,23 @@ const ErrorFallback = () => (
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Suspense fallback={<LoadingState />}>
-          <Routes>
-            <Route path="/" element={<QuizPage />} />
-            <Route path="/resultado" element={<ResultPage />} />
-            <Route path="/editor" element={<EditorPage />} />
-            <Route path="/editor/:style" element={<EditorPage />} />
-            <Route path="/builder" element={<QuizBuilderPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
-            <Route path="/admin/quiz-editor/:templateId" element={<QuizEditorPage />} />
-          </Routes>
-        </Suspense>
-        <Toaster />
-      </Router>
+      <QuizProvider>
+        <Router>
+          <Suspense fallback={<LoadingState />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/resultado" element={<ResultPage />} />
+              <Route path="/editor" element={<EditorPage />} />
+              <Route path="/editor/:style" element={<EditorPage />} />
+              <Route path="/builder" element={<QuizBuilderPage />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/quiz-editor" element={<QuizEditorPage />} />
+              <Route path="/admin/quiz-editor/:templateId" element={<QuizEditorPage />} />
+            </Routes>
+          </Suspense>
+          <Toaster />
+        </Router>
+      </QuizProvider>
     </AuthProvider>
   );
 }
