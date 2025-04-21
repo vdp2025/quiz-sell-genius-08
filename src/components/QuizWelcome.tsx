@@ -1,10 +1,10 @@
 
 import { useState } from 'react';
-import { Card } from './ui/card';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Logo from './ui/logo';
 
 interface QuizWelcomeProps {
   onStart: () => void;
@@ -19,7 +19,6 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
     if (name.trim()) {
       login(name.trim());
       localStorage.setItem('userName', name.trim());
-      console.log('User name saved:', name.trim());
       onStart();
     }
   };
@@ -29,47 +28,66 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] p-4">
-      <Card className="w-full max-w-2xl p-8 space-y-6 bg-white shadow-md">
-        <div className="text-center space-y-4">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
-            alt="Logo Gisele Galvão"
-            className="h-16 mx-auto mb-8"
-          />
-          <h1 className="font-playfair text-4xl font-semibold text-[#432818]">
-            Teste de Estilo Pessoal
-          </h1>
-          <p className="text-lg text-[#1A1818]/80">
-            Descubra seu estilo único e aprenda a se vestir com mais confiança
-          </p>
+    <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center py-6 md:py-12">
+      <div className="w-full max-w-xl mx-auto bg-white shadow-none flex flex-col items-center px-0">
+        {/* Logo */}
+        <div className="w-full flex flex-col items-center pt-4 pb-2">
+          <Logo className="h-14 mb-2" />
+          <div className="w-32 h-1 rounded bg-[#B89B7A] mb-2" />
+          <div className="w-full h-1 bg-[#E5E2DE] rounded">
+            <div className="w-1/4 h-1 bg-[#B89B7A] rounded" />
+          </div>
         </div>
-        <div className="space-y-4">
+        {/* Título */}
+        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#432818] text-center mt-6 mb-8">
+          Teste de Estilo Pessoal
+        </h1>
+        {/* Imagem central estilosa */}
+        <img
+          src="/lovable-uploads/9f029fbb-cabe-48ef-9877-aad214e94c60.png"
+          alt="Mulheres estilosas"
+          className="w-full max-w-lg object-contain mb-10"
+          style={{ maxHeight: 180 }}
+        />
+        {/* Formulário nome */}
+        <form
+          onSubmit={e => { e.preventDefault(); handleStart(); }}
+          className="w-full px-4 flex flex-col items-center"
+        >
+          <label
+            className="block text-[#432818] text-base font-medium mb-1"
+            htmlFor="nome"
+            style={{ letterSpacing: 0.2 }}
+          >
+            NOME <span className="text-[#B89B7A]">*</span>
+          </label>
           <Input
-            placeholder="Digite seu nome"
+            id="nome"
+            placeholder="Digite seu nome aqui..."
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full text-lg p-4 bg-white border-[#B89B7A]/30"
+            onChange={e => setName(e.target.value)}
+            className="w-full mb-5 text-lg p-3 bg-[#ECEAE6] border-none focus:ring-2 focus:ring-[#B89B7A] rounded-md placeholder:text-[#8E9196]"
           />
           <Button
-            onClick={handleStart}
+            type="submit"
+            className="w-full py-4 text-lg rounded-md font-semibold bg-[#B89B7A] hover:bg-[#aa6b5d] transition-colors text-white shadow"
             disabled={!name.trim()}
-            className="w-full bg-[#B89B7A] hover:bg-[#B89B7A]/90 text-white py-6 text-lg rounded-full"
           >
-            Começar
+            Continuar
           </Button>
-          
-          <div className="pt-4 border-t border-[#B89B7A]/20 mt-4">
+          <div className="pt-5 w-full text-center">
             <Button
               onClick={goToQuizEditor}
               variant="outline"
-              className="w-full border-[#B89B7A] text-[#B89B7A] hover:bg-[#FAF9F7]"
+              className="w-full border-[#B89B7A] text-[#B89B7A] hover:bg-[#FAF9F7] mt-2"
+              type="button"
             >
               Acessar Editor de Quiz
             </Button>
           </div>
-        </div>
-      </Card>
+        </form>
+      </div>
     </div>
   );
 };
+
