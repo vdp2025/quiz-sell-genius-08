@@ -8,11 +8,11 @@ import { ShoppingCart } from 'lucide-react';
 // Cores da paleta definida no quiz
 const palette = {
   neutral: '#8E9196',
-  primary: '#9b87f5',
-  secondary: '#7E69AB',
-  tertiary: '#6E59A5',
+  primary: '#B89B7A',
+  secondary: '#432818',
+  tertiary: '#AA6B5D',
   dark: '#1A1F2C',
-  light: '#D6BCFA',
+  light: '#F7F5FF',
   gold: '#B89B7A',
 };
 
@@ -50,18 +50,6 @@ const styleDescriptions: Record<string, string> = {
   'Criativo': 'Originalidade é seu ponto forte. Mistura cores, texturas e estilos sem medo de ousar.',
 };
 
-// Cores sugeridas para a barrinha por estilo predominante (pode ser customizada)
-const barColors: Record<string, string> = {
-  'Natural': palette.primary,
-  'Clássico': palette.secondary,
-  'Contemporâneo': palette.tertiary,
-  'Elegante': palette.primary,
-  'Romântico': palette.light,
-  'Sexy': '#e26e99',
-  'Dramático': palette.dark,
-  'Criativo': '#F0A500'
-};
-
 const ResultPage = () => {
   const {
     primaryStyle,
@@ -81,14 +69,13 @@ const ResultPage = () => {
           <p className="text-[#8F7A6A] mb-6">
             Parece que você ainda não completou o quiz.
           </p>
-          <a href="/" className="inline-block px-6 py-3 bg-[#9b87f5] hover:bg-[#7E69AB] text-white rounded-md transition-colors">
+          <a href="/" className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#AA6B5D] text-white rounded-md transition-colors">
             Fazer o Quiz
           </a>
         </div>
       </div>;
   }
 
-  // Layout principal conforme referência recebida
   return (
     <div className="min-h-screen w-full bg-[#FAF9F7] flex flex-col items-center py-2 px-2">
       {/* Header do resultado */}
@@ -101,30 +88,28 @@ const ResultPage = () => {
               src={estiloImages[primaryStyle.category]} 
               alt={primaryStyle.category}
               className="object-cover w-full h-64 md:h-full rounded-t-xl md:rounded-t-none md:rounded-l-xl"
-              style={{ background: palette.light }}
             />
           </div>
           {/* Infos */}
-          <div className="md:w-1/2 flex flex-col justify-center p-6 bg-[#F7F5FF]">
-            <h2 className="text-2xl font-bold font-playfair mb-2 text-[#1A1F2C]">{primaryStyle.category}</h2>
+          <div className="md:w-1/2 flex flex-col justify-center p-6 bg-[#FAF9F7]">
+            <h2 className="text-2xl font-bold font-playfair mb-2 text-[#432818]">{primaryStyle.category}</h2>
             <div className="flex items-center mb-3" title="Estilo Predominante">
-              <span className="block text-[#7E69AB] text-lg font-bold mr-1">
+              <span className="block text-[#AA6B5D] text-lg font-bold mr-1">
                 {primaryStyle.percentage}%
               </span>
               <div className="flex-1 ml-3">
                 {/* Barrinha percentual */}
                 <div className="relative w-full h-3 bg-[#E5E2DE] rounded-full overflow-hidden">
                   <div 
-                    className="absolute top-0 left-0 h-3 rounded-full transition-all"
+                    className="absolute top-0 left-0 h-3 rounded-full transition-all bg-[#B89B7A]"
                     style={{
-                      width: `${primaryStyle.percentage}%`,
-                      background: barColors[primaryStyle.category] || palette.primary
+                      width: `${primaryStyle.percentage}%`
                     }}
                   />
                 </div>
               </div>
             </div>
-            <div className="mt-4 text-[#3a3a3a] text-base">
+            <div className="mt-4 text-[#432818] text-base">
               {styleDescriptions[primaryStyle.category]}
             </div>
             {secondaryStyles && secondaryStyles.length > 0 && (
@@ -135,24 +120,24 @@ const ResultPage = () => {
           </div>
         </div>
         {/* Guia ilustrado do estilo, logo abaixo da primeira section */}
-        <div className="w-full bg-[#9b87f5]/[.07] flex flex-col items-center justify-center p-5">
+        <div className="w-full bg-[#F7F5FF]/30 flex flex-col items-center justify-center p-5">
           <img 
             src={guiaImages[primaryStyle.category]}
             alt={`Guia estilo ${primaryStyle.category}`}
             className="max-w-xs w-full rounded-lg shadow-sm border border-[#eceaec] bg-[#fff]"
             style={{ maxHeight: 170, objectFit: 'cover' }}
           />
-          <span className="block mt-3 text-xs text-[#7E69AB] font-semibold uppercase tracking-wide">Guia completo do seu estilo</span>
+          <span className="block mt-3 text-xs text-[#AA6B5D] font-semibold uppercase tracking-wide">Guia completo do seu estilo</span>
         </div>
       </div>
       {/* Botão oferta com visual do quiz + destaque */}
       <div className="max-w-3xl w-full bg-white rounded-xl shadow-md border border-[#eceaec] p-8 flex flex-col items-center mb-8">
-        <h3 className="text-lg font-medium font-playfair text-[#9b87f5] mb-1 text-center">Oferta exclusiva</h3>
-        <div className="text-2xl font-bold text-[#1A1F2C] text-center mb-6">Guia Digital + Bônus de Estilo</div>
+        <h3 className="text-lg font-medium font-playfair text-[#AA6B5D] mb-1 text-center">Oferta exclusiva</h3>
+        <div className="text-2xl font-bold text-[#432818] text-center mb-6">Guia Digital + Bônus de Estilo</div>
 
         <Button 
           onClick={() => window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"}
-          className="w-full max-w-xs bg-[#9b87f5] hover:bg-[#7E69AB] text-white py-5 text-lg rounded-full shadow-lg flex items-center justify-center mb-2"
+          className="w-full max-w-xs bg-[#B89B7A] hover:bg-[#AA6B5D] text-white py-5 text-lg rounded-full shadow-lg flex items-center justify-center mb-2"
         >
           <ShoppingCart className="w-6 h-6 mr-2" /> Quero meu Guia por <span className="ml-1 font-semibold">R$ 39,00</span>
         </Button>
