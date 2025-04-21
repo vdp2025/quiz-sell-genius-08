@@ -1,14 +1,12 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Suspense, lazy, ErrorBoundary } from 'react';
+import { Suspense, lazy } from 'react'; // Removido ErrorBoundary
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
 import QuizPage from './components/QuizPage';
-
-// Import ResultPage normally to avoid lazy loading issues
+// Import ResultPage normalmente to avoid lazy loading issues
 import ResultPage from './pages/ResultPage';
-
 // Only lazy load components that aren't on the main route
 const EditorPage = lazy(() => import('./pages/EditorPage'));
 const QuizBuilderPage = lazy(() => import('./pages/QuizBuilderPage'));
