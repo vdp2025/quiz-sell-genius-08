@@ -10,6 +10,7 @@ const Index = () => {
 
   const handleStart = () => {
     setStarted(true);
+    console.log('Quiz started');
   };
 
   return (
