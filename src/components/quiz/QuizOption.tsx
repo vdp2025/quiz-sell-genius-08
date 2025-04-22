@@ -1,4 +1,6 @@
-import React from 'react';
+// ... existing code ...
+- export { QuizOption };
++ export default QuizOption;import React from 'react';
 import { QuizOptionImage } from '@/components/quiz/QuizOption';
 import { cn } from '@/lib/utils';
 
