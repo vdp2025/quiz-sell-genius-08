@@ -32,9 +32,9 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           <div className="absolute inset-0 w-1/3 bg-[#b29670] animate-loading-bar rounded-full"></div>
         </div>
 
-        {/* Título preto */}
-        <h1 className="font-playfair text-2xl md:text-3xl font-bold text-black text-center mb-6 leading-snug">
-          Teste de Estilo Pessoal
+        {/* Título */}
+        <h1 className="font-playfair text-2xl md:text-3xl font-bold text-black text-center mb-4 leading-snug">
+          Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
         </h1>
 
         {/* Imagem principal */}
