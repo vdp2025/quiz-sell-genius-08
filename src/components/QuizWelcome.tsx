@@ -79,4 +79,3 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
     </div>
   );
 };
-
