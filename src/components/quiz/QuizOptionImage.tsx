@@ -18,8 +18,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   altText,
   styleCategory,
   isSelected,
-  is3DQuestion,
-  questionId
+  is3DQuestion
 }) => {
   const isMobile = useIsMobile();
   const [imageError, setImageError] = useState(false);
@@ -33,7 +32,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   }
 
   const getImageScale = () => {
-    // mobile com zoom leve, desktop mais ajustado
+    // zoom leve em mobile, ajuste em desktop
     return isMobile ? 'scale-110' : 'scale-90';
   };
 
@@ -44,7 +43,10 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
         is3DQuestion && "transform-gpu"
       )}
     >
-      <AspectRatio ratio={imageUrl.includes('sapatos') ? 1 : 3 / 4} className="w-full h-full">
+      <AspectRatio
+        ratio={imageUrl.includes('sapatos') ? 1 : 3 / 4}
+        className="w-full h-full"
+      >
         <div className="w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={imageUrl}
@@ -57,7 +59,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             onError={() => setImageError(true)}
             style={{
               willChange: 'transform',
-              transformOrigin: 'center center',
+              transformOrigin: 'center center'
             }}
           />
         </div>
