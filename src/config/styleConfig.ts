@@ -1,7 +1,7 @@
-// quiz-sell-genius/src/config/styleConfig.ts
 export interface StyleConfig {
   [key: string]: {
-    image: string;
+    image: string;      // imagem representativa do estilo
+    guideImage: string; // mockup do Guia de Estilo
     description: string;
     characteristics: string[];
     colors: string[];
@@ -11,6 +11,7 @@ export interface StyleConfig {
 export const styleConfig: StyleConfig = {
   'Natural': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
     description: 'Seu estilo Natural valoriza o conforto e a praticidade. Você prefere roupas que não restringem seus movimentos e tecidos com toque agradável. Em seu guarda-roupa predominam peças básicas e versáteis, em uma paleta de cores neutras e terrosas.',
     characteristics: [
       'Valoriza conforto e praticidade',
@@ -22,6 +23,7 @@ export const styleConfig: StyleConfig = {
   },
   'Clássico': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
     description: 'Seu estilo Clássico aprecia a tradição e a elegância atemporal. Você valoriza roupas de qualidade e cortes refinados, que permanecem relevantes independentemente das tendências da moda. Sua paleta é frequentemente composta por cores neutras e refinadas.',
     characteristics: [
       'Valoriza qualidade e atemporalidade',
@@ -33,6 +35,7 @@ export const styleConfig: StyleConfig = {
   },
   'Contemporâneo': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
     description: 'Seu estilo Contemporâneo combina o clássico com o moderno de maneira equilibrada. Você valoriza peças atuais, mas evita modismos passageiros. Sua abordagem é sofisticada mas acessível, com uma paleta versátil que combina tons neutros e acentos coloridos.',
     characteristics: [
       'Combina elementos clássicos e modernos',
@@ -44,6 +47,7 @@ export const styleConfig: StyleConfig = {
   },
   'Elegante': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
     description: 'Seu estilo Elegante prioriza a sofisticação e o refinamento. Você aprecia peças com excelente caimento e acabamentos impecáveis. Sua imagem transmite poder e prestígio, com uma paleta predominante de cores ricas e profundas.',
     characteristics: [
       'Valoriza sofisticação e excelência',
@@ -55,6 +59,7 @@ export const styleConfig: StyleConfig = {
   },
   'Romântico': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
     description: 'Seu estilo Romântico celebra a feminilidade e a delicadeza. Você é atraída por peças com detalhes suaves como babados, laços e estampas florais. Sua paleta favorece tons pastéis e suaves que reforçam sua aura gentil e acolhedora.',
     characteristics: [
       'Valoriza feminilidade e suavidade',
@@ -66,6 +71,7 @@ export const styleConfig: StyleConfig = {
   },
   'Sexy': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
     description: 'Seu estilo Sexy valoriza a confiança e a sensualidade. Você não tem medo de mostrar suas curvas e gosta de peças que realçam sua silhueta. Sua paleta tende a incluir cores vibrantes e dramáticas que chamam a atenção.',
     characteristics: [
       'Valoriza sensualidade e autoconfiança',
@@ -77,6 +83,7 @@ export const styleConfig: StyleConfig = {
   },
   'Dramático': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
     description: 'Seu estilo Dramático é ousado e impactante. Você aprecia peças com formas estruturadas, angulares e inovadoras. Sua abordagem é contemporânea e urbana, com uma paleta que frequentemente se baseia em contrastes marcantes e cores intensas.',
     characteristics: [
       'Valoriza impacto visual e originalidade',
@@ -88,6 +95,7 @@ export const styleConfig: StyleConfig = {
   },
   'Criativo': {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp',
     description: 'Seu estilo Criativo expressa sua individualidade e originalidade. Você adora misturar elementos inesperados e criar combinações únicas. Sua paleta é eclética e colorida, refletindo sua personalidade expressiva e seu pensamento inovador.',
     characteristics: [
       'Valoriza originalidade e expressão pessoal',
