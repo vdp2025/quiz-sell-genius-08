@@ -24,14 +24,14 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         <img
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
           alt="Logo Gisele Galvão"
-          className="w-40 h-auto mb-6"
+          className="w-full rounded-xl mb-6 object-cover object-center max-h-[100px]"
         />
 
         {/* Imagem de impacto */}
         <img
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"
           alt="Mulher estilosa"
-          className="w-full rounded-xl mb-6 object-cover object-center max-h-[320px]"
+          className="w-full rounded-xl mb-6 object-cover object-center max-h-[400px]"
         />
 
         {/* Título e copy */}
