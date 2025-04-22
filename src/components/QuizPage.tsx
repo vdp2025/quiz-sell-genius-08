@@ -49,13 +49,9 @@ const QuizPage: React.FC = () => {
       saveStrategicAnswer(response.questionId, response.selectedOptions);
       
       if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
-        setTimeout(() => {
-          setShowingFinalTransition(true);
-        }, 500);
+        setTimeout(() => setShowingFinalTransition(true), 300);
       } else {
-        setTimeout(() => {
-          setCurrentStrategicQuestionIndex(prev => prev + 1);
-        }, 500);
+        setTimeout(() => setCurrentStrategicQuestionIndex(prev => prev + 1), 300);
       }
     } catch (error) {
       console.error('Error processing strategic answer:', error);
@@ -73,15 +69,13 @@ const QuizPage: React.FC = () => {
       
       if (response.selectedOptions.length === currentQuestion.multiSelect) {
         if (!isLastQuestion) {
-          setTimeout(() => {
-            handleNext();
-          }, 500);
+          setTimeout(() => handleNext(), 150);
         } else {
           console.log('Last question reached, showing transition...');
           setTimeout(() => {
             calculateResults();
             setShowingTransition(true);
-          }, 800);
+          }, 500);
         }
       }
     } catch (error) {
@@ -104,7 +98,7 @@ const QuizPage: React.FC = () => {
       setTimeout(() => {
         console.log('Navigating to /resultado page...');
         window.location.href = '/resultado';
-      }, 500);
+      }, 300);
     } catch (error) {
       console.error('Error showing result:', error);
       toast({
