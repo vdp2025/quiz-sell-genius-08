@@ -72,7 +72,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
               text-white 
               py-4 
               text-base 
-              rounded-full 
+              rounded-md
               shadow-md 
               hover:shadow-xl 
               transition-all 
