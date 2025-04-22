@@ -1,27 +1,27 @@
+-import QuizIntro from '../components/QuizIntro';
++import QuizIntro from '../components/QuizIntro';
+// ... other imports ...
 
-import { useState } from 'react';
-import QuizIntro from '../components/QuizIntro';
-import QuizPage from '../components/QuizPage';
-import { useQuizContext } from '../context/QuizContext';
+ const Index = () => {
+   const [started, setStarted] = useState(false);
+   const { quizCompleted } = useQuizContext();
 
-const Index = () => {
-  const [started, setStarted] = useState(false);
-  const { quizCompleted } = useQuizContext();
+-  const handleStart = () => {
+-    setStarted(true);
+-    console.log('Quiz started');
+-  };
++  const handleStart = (name: string) => {
++    setStarted(true);
++    console.log(`Quiz started by ${name}`);
++  };
 
-  const handleStart = () => {
-    setStarted(true);
-    console.log('Quiz started');
-  };
-
-  return (
-    <div className="min-h-screen bg-background">
-      {!started ? (
-        <QuizIntro onStart={handleStart} />
-      ) : (
-        <QuizPage />
-      )}
-    </div>
-  );
-};
-
-export default Index;
+   return (
+     <div className="min-h-screen bg-background">
+       {!started ? (
+         <QuizIntro onStart={handleStart} />
+       ) : (
+         <QuizPage />
+       )}
+     </div>
+   );
+ };
