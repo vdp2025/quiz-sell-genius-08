@@ -22,7 +22,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         
         {/* LOGO da marca */}
         <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_ti5nmf.png"
+          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
           alt="Logo Gisele Galvão"
           className="w-40 h-auto mb-6"
         />
