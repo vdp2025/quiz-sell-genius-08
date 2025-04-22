@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -33,28 +32,25 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     );
   }
 
-  // Define specific scale values based on question number and device type
   const getImageScale = () => {
-    if (!isMobile) return "scale-110";
-    return "scale-110"; // Keep consistent scale for mobile
+    // mobile com zoom leve, desktop mais ajustado
+    return isMobile ? 'scale-110' : 'scale-90';
   };
 
   return (
-    <div className={cn(
-      "w-full relative flex-grow overflow-hidden",
-      is3DQuestion && "transform-gpu"
-    )}>
-      <AspectRatio 
-        ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
-        className="w-full h-full"
-      >
+    <div
+      className={cn(
+        "w-full relative flex-grow overflow-hidden",
+        is3DQuestion && "transform-gpu"
+      )}
+    >
+      <AspectRatio ratio={imageUrl.includes('sapatos') ? 1 : 3 / 4} className="w-full h-full">
         <div className="w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={imageUrl}
             alt={altText}
             className={cn(
-              "object-cover w-full h-full",
-              "transition-all duration-300 ease-in-out",
+              "object-cover w-full h-full transition-all duration-300 ease-in-out",
               getImageScale(),
               isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
             )}
