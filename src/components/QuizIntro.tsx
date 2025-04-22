@@ -27,7 +27,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           className="w-36 md:w-44 h-auto mb-2"
         />
 
-        {/* Barra dourada carregamento */}
+        {/* Barra dourada estilo carregamento */}
         <div className="relative w-full max-w-md h-[6px] bg-[#f1e8db] rounded-full overflow-hidden mb-8">
           <div className="absolute inset-0 w-1/3 bg-[#b29670] animate-loading-bar rounded-full"></div>
         </div>
@@ -62,6 +62,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
             autoFocus
           />
 
+          {/* Botão com efeito aprimorado */}
           <Button
             type="submit"
             className="
@@ -71,12 +72,14 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
               text-white 
               py-4 
               text-base 
-              rounded-md 
-              shadow 
+              rounded-full 
+              shadow-md 
+              hover:shadow-xl 
               transition-all 
               duration-300 
               ease-in-out 
-              hover:shadow-md 
+              transform 
+              hover:-translate-y-[2px] 
               active:scale-95 
               disabled:opacity-50 
               disabled:cursor-not-allowed
