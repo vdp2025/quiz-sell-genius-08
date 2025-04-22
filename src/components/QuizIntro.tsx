@@ -17,8 +17,8 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-10">
-      <div className="w-full max-w-xl bg-white shadow-lg rounded-2xl p-6 md:p-10 flex flex-col items-center">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-12">
+      <div className="w-full max-w-5xl bg-white shadow-xl rounded-2xl p-6 md:p-12 flex flex-col items-center">
 
         {/* Logo */}
         <img
@@ -27,11 +27,13 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           className="w-40 md:w-48 h-auto mb-2"
         />
 
-        {/* Barra dourada do tamanho da imagem */}
-        <div className="h-1 bg-[#b29670] rounded-full mb-6 w-full max-w-lg"></div>
+        {/* Barra de carregamento dourada animada */}
+        <div className="relative w-full max-w-lg h-[6px] bg-[#f1e8db] rounded-full overflow-hidden mb-8">
+          <div className="absolute inset-0 w-1/3 bg-[#b29670] animate-loading-bar rounded-full"></div>
+        </div>
 
         {/* Título */}
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#b29670] text-center mb-4 leading-tight">
+        <h1 className="font-playfair text-2xl md:text-3xl font-bold text-[#b29670] text-center mb-4 leading-snug">
           Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
         </h1>
 
@@ -42,12 +44,10 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           className="w-full max-w-lg h-auto object-contain mb-6"
         />
 
-        {/* Subtítulo */}
-        <p className="text-lg md:text-xl text-[#e9b875] text-center mb-8">
+        {/* Subtítulo com destaque */}
+        <p className="text-base md:text-lg text-black text-center mb-8">
           Em poucos minutos, descubra seu <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — 
-          e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
-          <br /><br />
-          <span className="font-medium text-[#aa6b5d]">Comece agora sua evolução de estilo.</span>
+          e aprenda a montar looks que realmente refletem sua <span className="font-semibold text-[#b29670]">essência</span>, com praticidade e <span className="font-semibold text-[#aa6b5d]">confiança</span>.
         </p>
 
         {/* Formulário */}
