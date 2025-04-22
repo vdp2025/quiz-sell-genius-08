@@ -35,7 +35,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         />
 
         {/* Título e copy */}
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#aa6b5d] text-center mb-4 leading-tight">
+        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#bb9a65] text-center mb-4 leading-tight">
           Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
         </h1>
 
