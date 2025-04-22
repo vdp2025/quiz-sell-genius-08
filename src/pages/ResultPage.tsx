@@ -3,7 +3,6 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { EditorButton } from '@/components/ui/EditorButton';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
@@ -39,7 +38,7 @@ const ResultPage: React.FC = () => {
   }
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  const { guideImage, description } = styleConfig[category];
 
   return (
     <div
@@ -50,8 +49,6 @@ const ResultPage: React.FC = () => {
         fontFamily: globalStyles.fontFamily || 'inherit',
       }}
     >
-      <EditorButton />
-
       <Header
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
@@ -62,28 +59,21 @@ const ResultPage: React.FC = () => {
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* == Resultado Principal == */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
-                Seu Estilo é {category}
-              </h2>
-              <p className="text-[#432818] leading-relaxed">{description}</p>
-              <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#432818] mb-2">
-                  Seus Estilos Complementares
-                </h3>
-                <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-              </div>
-            </div>
-            <div className="order-first md:order-last">
-              <img
-                src={image}
-                alt={`Estilo ${category}`}
-                className="w-full h-auto rounded-lg shadow-md"
-              />
+          <div className="space-y-4">
+            <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
+              Seu Estilo é {category}
+            </h2>
+            <p className="text-[#432818] leading-relaxed">{description}</p>
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+              <h3 className="text-lg font-medium text-[#432818] mb-2">
+                Seus Estilos Complementares
+              </h3>
+              <SecondaryStylesSection secondaryStyles={secondaryStyles} />
             </div>
           </div>
-          <div className="mt-8">
+
+          {/* Mockup do Guia de Estilo */}
+          <div className="mt-10">
             <img
               src={guideImage}
               alt={`Guia de Estilo ${category}`}
@@ -224,109 +214,6 @@ const ResultPage: React.FC = () => {
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>
-        </Card>
-
-        {/* == Depoimentos == */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            💬 Depoimentos de mulheres que já viveram essa transformação:
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                text: 'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.',
-                name: 'Mariangela',
-                role: 'Engenheira',
-              },
-              {
-                text: 'Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.',
-                name: 'Patrícia Paranhos',
-                role: 'Advogada',
-              },
-              {
-                text: 'A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.',
-                name: 'Sônia Spier',
-                role: 'Terapeuta',
-              },
-            ].map((t, i) => (
-              <div key={i} className="bg-[#fff7f3] p-4 rounded-lg">
-                <p className="italic text-[#432818] mb-4">"{t.text}"</p>
-                <div className="flex items-center gap-2">
-                  <div className="h-1 w-8 bg-[#aa6b5d]"></div>
-                  <div>
-                    <p className="font-medium text-[#432818]">{t.name}</p>
-                    <p className="text-sm text-[#432818]/70">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <img
-              src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp"
-              alt="Antes e Depois"
-              className="w-full h-auto rounded-lg mt-6"
-            />
-          </div>
-        </Card>
-
-        {/* == Mentora == */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            Sobre sua mentora
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-xl font-medium text-[#432818] mb-2">Gisele Galvão</h3>
-              <p className="text-[#432818] mb-4">
-                Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca
-                pessoal e Especialista em coloração pessoal com Certificação internacional.
-              </p>
-              <p className="text-[#432818] mb-4">
-                Advogada de formação. Mãe da Victória, esposa do Fabrício.
-              </p>
-              <p className="text-[#432818]">
-                Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione
-                crescer como ser humano. Colérica, virginiana, paciente, pacificadora e
-                muito empata.
-              </p>
-            </div>
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp"
-                alt="Gisele Galvão"
-                className="w-full h-auto rounded-lg shadow-md"
-              />
-            </div>
-          </div>
-        </Card>
-
-        {/* == Garantia == */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="md:w-1/4 flex justify-center">
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp"
-                alt="Garantia de 7 dias"
-                className="w-32 h-32 object-contain"
-              />
-            </div>
-            <div className="md:w-3/4">
-              <h3 className="text-xl font-medium text-[#aa6b5d] mb-2">
-                🛡️ Garantia de 7 dias
-              </h3>
-              <p className="text-[#432818] mb-4">
-                Você tem uma semana para acessar, aplicar e sentir. Se não fizer sentido
-                pra você, devolvemos 100% do valor. Sem perguntas. Sem burocracia.
-              </p>
-              <div className="flex items-center">
-                <Shield className="h-5 w-5 text-[#aa6b5d] mr-2" />
-                <span className="text-[#432818] font-medium">
-                  Satisfação garantida ou seu dinheiro de volta
-                </span>
-              </div>
-            </div>
-          </div>
         </Card>
       </div>
     </div>
