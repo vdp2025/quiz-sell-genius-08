@@ -68,7 +68,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
             className="
               w-full 
               bg-[#B89B7A] 
-              hover:bg-[#aa6b5d] 
+              hover:bg-[#e8bb77] 
               text-white 
               py-4 
               text-base 
