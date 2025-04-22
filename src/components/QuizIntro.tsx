@@ -42,7 +42,6 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         <p className="text-lg md:text-xl text-[#432818] text-center mb-6">
           Em poucos minutos, descubra seu <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
           <br /><br />
-          <span className="font-medium text-[#aa6b5d]">Comece agora sua evolução de estilo.</span>
         </p>
 
         {/* Campo nome + botão */}
