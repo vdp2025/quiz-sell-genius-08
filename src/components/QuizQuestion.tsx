@@ -1,4 +1,6 @@
-import React from 'react';
+// ... existing imports ...
+- import { QuizOption } from './quiz/QuizOption';
++ import QuizOption from './quiz/QuizOption';import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
