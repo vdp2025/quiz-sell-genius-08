@@ -51,6 +51,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
           <img
             src={imageUrl}
             alt={altText}
+            loading="lazy"
             className={cn(
               "object-cover w-full h-full transition-all duration-300 ease-in-out",
               getImageScale(),
