@@ -1,70 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { QuizOptionImage } from '@/components/quiz/QuizOption';
 import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { AspectRatio } from '../ui/aspect-ratio';
-import { getFallbackStyle } from '@/utils/styleUtils';
 
-interface QuizOptionImageProps {
-  imageUrl: string;
-  altText: string;
-  styleCategory: string;
-  isSelected: boolean;
-  is3DQuestion: boolean;
+interface QuizQuestionProps {
+  question: string;
+  options: {
+    imageUrl: string;
+    altText: string;
+    styleCategory: string;
+  }[];
+  selectedOptions: string[];
+  onSelectOption: (styleCategory: string) => void;
+  is3DQuestion?: boolean;
   questionId: string;
 }
 
-export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
-  imageUrl,
-  altText,
-  styleCategory,
-  isSelected,
-  is3DQuestion
+export const QuizQuestion: React.FC<QuizQuestionProps> = ({
+  question,
+  options,
+  selectedOptions,
+  onSelectOption,
+  is3DQuestion = false,
+  questionId,
 }) => {
-  const isMobile = useIsMobile();
-  const [imageError, setImageError] = useState(false);
-
-  if (imageError) {
-    return (
-      <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
-        <span>{styleCategory}</span>
-      </div>
-    );
-  }
-
-  const getImageScale = () => {
-    // zoom leve em mobile, ajuste em desktop
-    return isMobile ? 'scale-110' : 'scale-90';
-  };
-
   return (
-    <div
-      className={cn(
-        "w-full relative flex-grow overflow-hidden",
-        is3DQuestion && "transform-gpu"
-      )}
-    >
-      <AspectRatio
-        ratio={imageUrl.includes('sapatos') ? 1 : 3 / 4}
-        className="w-full h-full"
-      >
-        <div className="w-full h-full flex items-center justify-center overflow-hidden">
-          <img
-            src={imageUrl}
-            alt={altText}
-            loading="lazy"
+    <div className="w-full">
+      <h2 className="text-xl font-semibold mb-4">{question}</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {options.map((option, index) => (
+          <div
+            key={index}
             className={cn(
-              "object-cover w-full h-full transition-all duration-300 ease-in-out",
-              getImageScale(),
-              isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
+              'cursor-pointer border rounded-md overflow-hidden transition-all',
+              selectedOptions.includes(option.styleCategory)
+                ? 'border-brand-gold/50'
+                : 'border-transparent'
             )}
-            onError={() => setImageError(true)}
-            style={{
-              willChange: 'transform',
-              transformOrigin: 'center center'
-            }}
-          />
-        </div>
-      </AspectRatio>
+            onClick={() => onSelectOption(option.styleCategory)}
+          >
+            <QuizOptionImage
+              imageUrl={option.imageUrl}
+              altText={option.altText}
+              styleCategory={option.styleCategory}
+              isSelected={selectedOptions.includes(option.styleCategory)}
+              is3DQuestion={is3DQuestion}
+              questionId={questionId}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
