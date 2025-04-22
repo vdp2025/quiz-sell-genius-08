@@ -52,7 +52,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
 
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-3">
-          <label htmlFor="name" className="text-sm font-semibold text-[#432818]">NOME *</label>
+          <label htmlFor="name" className="text-sm font-semibold text-[#e8bb77]">NOME *</label>
           <Input
             id="name"
             placeholder="Digite seu nome aqui..."
