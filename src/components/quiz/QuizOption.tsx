@@ -1,105 +1,70 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { QuizOption as QuizOptionType } from '@/types/quiz';
-import { highlightStrategicWords } from '@/utils/textHighlight';
-import { QuizOptionImage } from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { AspectRatio } from '../ui/aspect-ratio';
+import { getFallbackStyle } from '@/utils/styleUtils';
 
-interface QuizOptionProps {
-  option: QuizOptionType;
+interface QuizOptionImageProps {
+  imageUrl: string;
+  altText: string;
+  styleCategory: string;
   isSelected: boolean;
-  onSelect: (optionId: string) => void;
-  type: 'text' | 'image' | 'both';
-  questionId?: string;
+  is3DQuestion: boolean;
+  questionId: string;
 }
 
-const QuizOption: React.FC<QuizOptionProps> = ({
-  option,
+export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
+  imageUrl,
+  altText,
+  styleCategory,
   isSelected,
-  onSelect,
-  type,
-  questionId
+  is3DQuestion
 }) => {
   const isMobile = useIsMobile();
-  const [isHovered, setIsHovered] = useState(false);
-  const is3DQuestion =
-    option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+  const [imageError, setImageError] = useState(false);
+
+  if (imageError) {
+    return (
+      <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
+        <span>{styleCategory}</span>
+      </div>
+    );
+  }
+
+  const getImageScale = () => {
+    // zoom leve em mobile, ajuste em desktop
+    return isMobile ? 'scale-110' : 'scale-90';
+  };
 
   return (
     <div
       className={cn(
-        "relative group h-full transition-all duration-500 ease-in-out transform",
-        !type.includes('text') && !isSelected && "hover:scale-[1.02]"
+        "w-full relative flex-grow overflow-hidden",
+        is3DQuestion && "transform-gpu"
       )}
-      onClick={() => onSelect(option.id)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={() => setIsHovered(true)}
-      onTouchEnd={() => setIsHovered(false)}
     >
-      <div
-        className={cn(
-          "relative h-full flex flex-col transition-all duration-300 ease-out cursor-pointer",
-          type === 'text'
-            ? "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40"
-            : "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
-          isSelected
-            ? type === 'text'
-              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-sm ring-1 ring-brand-gold/30 scale-[1.01]"
-              : "border-brand-gold/60 shadow-sm ring-1 ring-brand-gold/30 scale-[1.01]"
-            : type === 'text'
-            ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-sm"
-            : "hover:border-brand-gold/40 hover:shadow-sm"
-        )}
+      <AspectRatio
+        ratio={imageUrl.includes('sapatos') ? 1 : 3 / 4}
+        className="w-full h-full"
       >
-        {type !== 'text' && option.imageUrl && (
-          <QuizOptionImage
-            imageUrl={option.imageUrl}
-            altText={option.text}
-            styleCategory={option.styleCategory}
-            isSelected={isSelected}
-            is3DQuestion={is3DQuestion}
-            questionId={questionId || ''}
+        <div className="w-full h-full flex items-center justify-center overflow-hidden">
+          <img
+            src={imageUrl}
+            alt={altText}
+            loading="lazy"
+            className={cn(
+              "object-cover w-full h-full transition-all duration-300 ease-in-out",
+              getImageScale(),
+              isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
+            )}
+            onError={() => setImageError(true)}
+            style={{
+              willChange: 'transform',
+              transformOrigin: 'center center'
+            }}
           />
-        )}
-
-        <p
-          className={cn(
-            "transition-all duration-300",
-            type !== 'text'
-              ? cn(
-                  "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative",
-                  // sempre 0.7rem em mobile, depois md: e lg:
-                  "text-[0.7rem] md:text-sm lg:text-base",
-                  isSelected && "font-semibold"
-                )
-              : cn(
-                  // texto puro: mobile 0.75rem, depois aumenta
-                  "text-[0.75rem] leading-relaxed md:text-base lg:text-lg",
-                  (questionId === '1' || questionId === '2') && "md:text-sm lg:text-base",
-                  isSelected && "text-brand-coffee font-semibold"
-                )
-          )}
-        >
-          {highlightStrategicWords(option.text)}
-        </p>
-      </div>
-
-      {isSelected && (
-        <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 animate-scale-in">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-2 w-2 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
         </div>
-      )}
+      </AspectRatio>
     </div>
   );
 };
-
-export { QuizOption };
