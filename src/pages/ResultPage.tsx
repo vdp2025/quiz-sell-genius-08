@@ -191,7 +191,7 @@ const ResultPage: React.FC = () => {
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
-                  Guia de Visagismo Facial
+                  Mini Guia de Visagismo Facial
                 </h4>
                 <p className="text-sm text-[#432818]/80 mb-4">
                   Para alinhar seu rosto, cabelo e maquiagem com a sua identidade visual.
