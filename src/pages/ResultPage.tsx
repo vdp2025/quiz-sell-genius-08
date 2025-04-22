@@ -247,7 +247,7 @@ export const ResultPage = () => {
               </p>
             </div>
             <div className="space-y-6">
-              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp" alt="Gisele Galvão" className="w-full h-auto rounded-lg shadow-md" />  
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp" alt="Gisele Galvão" className="w-full h-auto rounded-lg shadow-md" />  
             </div>
           </div>
         </Card>
