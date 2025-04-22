@@ -79,7 +79,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
               duration-300 
               ease-in-out 
               transform 
-              hover:-translate-y-[2px] 
+              hover:-translate-y-[3px] 
               active:scale-95 
               disabled:opacity-50 
               disabled:cursor-not-allowed
