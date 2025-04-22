@@ -1,7 +1,7 @@
 // quiz-sell-genius/src/components/quiz/QuizOption.tsx
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import QuizOption from '@/components/quiz/QuizOption';
+import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import QuizOptionImage from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
