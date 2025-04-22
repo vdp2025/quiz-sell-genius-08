@@ -22,7 +22,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
-  const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+  const is3DQuestion =
+    option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
 
   return (
     <div
@@ -39,8 +40,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div
         className={cn(
           "relative h-full flex flex-col transition-all duration-300 ease-out cursor-pointer",
-          type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
-          type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
+          type === 'text'
+            ? "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40"
+            : "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
           isSelected
             ? type === 'text'
               ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-sm ring-1 ring-brand-gold/30 scale-[1.01]"
@@ -67,19 +69,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             type !== 'text'
               ? cn(
                   "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative",
-                  isMobile
-                    ? "text-[0.7rem]"
-                    : "sm:text-xs md:text-sm lg:text-base",
+                  // sempre 0.7rem em mobile, depois md: e lg:
+                  "text-[0.7rem] md:text-sm lg:text-base",
                   isSelected && "font-semibold"
                 )
               : cn(
-                  isMobile
-                    ? "text-[0.75rem] leading-relaxed"
-                    : "text-[0.8rem] sm:text-sm leading-relaxed desktop:text-base",
-                  (questionId === '1' || questionId === '2') &&
-                    (isMobile
-                      ? "text-[0.7rem]"
-                      : "text-[0.6rem] sm:text-[0.7rem] desktop:text-sm"),
+                  // texto puro: mobile 0.75rem, depois aumenta
+                  "text-[0.75rem] leading-relaxed md:text-base lg:text-lg",
+                  (questionId === '1' || questionId === '2') && "md:text-sm lg:text-base",
                   isSelected && "text-brand-coffee font-semibold"
                 )
           )}
