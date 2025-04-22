@@ -76,7 +76,7 @@ export default {
           DEFAULT: '#B89B7A',
           'gold': '#C1A57B',
           'text': '#8F7A6A',
-          'coffee': '#e8bb77',
+          'coffee': '#463b29',
         }
       },
       borderRadius: {
