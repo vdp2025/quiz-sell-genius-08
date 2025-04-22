@@ -1,3 +1,4 @@
+// quiz-sell-genius/src/config/styleConfig.ts
 export interface StyleConfig {
   [key: string]: {
     image: string;      // imagem representativa do estilo
