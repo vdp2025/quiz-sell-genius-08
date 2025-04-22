@@ -20,7 +20,7 @@ const ResultPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <h1 className="text-2xl font-playfair text-[#432818] mb-4">
+          <h1 className="text-2xl font-playfair text-[#1B1411] mb-4">
             Resultados não encontrados
           </h1>
           <p className="text-[#8F7A6A] mb-6">
@@ -28,7 +28,7 @@ const ResultPage: React.FC = () => {
           </p>
           <a
             href="/"
-            className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
+            className="inline-block px-6 py-3 bg-[#C7A97C] hover:bg-[#A08361] text-white rounded-md transition-colors"
           >
             Fazer o Quiz
           </a>
@@ -38,14 +38,14 @@ const ResultPage: React.FC = () => {
   }
 
   const { category } = primaryStyle;
-  const { guideImage, description } = styleConfig[category];
+  const { image, guideImage, description } = styleConfig[category];
 
   return (
     <div
       className="min-h-screen bg-[#fffaf7]"
       style={{
         backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-        color: globalStyles.textColor || '#432818',
+        color: globalStyles.textColor || '#1B1411',
         fontFamily: globalStyles.fontFamily || 'inherit',
       }}
     >
@@ -57,97 +57,63 @@ const ResultPage: React.FC = () => {
       />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl">
-        {/* == Resultado Principal == */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
-              Seu Estilo é {category}
-            </h2>
-            <p className="text-[#432818] leading-relaxed">{description}</p>
-            <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-              <h3 className="text-lg font-medium text-[#432818] mb-2">
-                Seus Estilos Complementares
-              </h3>
-              <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+        <Card className="p-6 mb-10 bg-white shadow-lg border border-[#C7A97C]/30 rounded-2xl">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-playfair text-[#C7A97C] mb-3">
+                ✨ Seu Estilo é: {category}
+              </h2>
+              <p className="text-base text-[#1B1411] leading-relaxed">
+                {description}
+              </p>
+              <div className="bg-[#fffaf7] rounded-xl p-4 shadow border border-[#C7A97C]/20">
+                <h3 className="text-lg font-semibold text-[#1B1411] mb-2">
+                  Estilos Complementares
+                </h3>
+                <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+              </div>
+            </div>
+            <div className="order-first md:order-last">
+              <img
+                src={image}
+                alt={`Estilo ${category}`}
+                className="w-full h-auto rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+              />
             </div>
           </div>
-
-          {/* Mockup do Guia de Estilo */}
-          <div className="mt-10">
+          <div className="mt-8">
             <img
               src={guideImage}
               alt={`Guia de Estilo ${category}`}
-              className="w-full h-auto rounded-lg shadow-md"
+              className="w-full h-auto rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
             />
           </div>
         </Card>
 
-        {/* == Motivação == */}
-        <div className="space-y-6 mb-10 text-center">
-          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d]">
-            Você já descobriu seu Estilo e isso é muito poderoso.
-          </h2>
-          <p className="text-lg text-[#432818]">
-            Conhecimento é clareza.<br />
-            E clareza muda o jeito que você se vê, se escolhe, se posiciona.
-          </p>
-          <div className="grid md:grid-cols-2 gap-6 text-left mt-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <p className="text-[#432818] leading-relaxed">
-                <em>
-                  Mas é na ação que a verdadeira transformação acontece.
-                  É quando você aplica o que aprendeu… que o espelho começa a
-                  contar uma nova história.
-                </em>
-              </p>
-              <p className="text-[#432818] mt-4 leading-relaxed">
-                <strong>
-                  Não é sobre mudar quem você é.<br />
-                  É sobre finalmente Vestir-se de Você.
-                </strong>
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <p className="text-[#432818] leading-relaxed">
-                E pra isso, eu preparei o caminho completo.<br />
-                Simples. Prático. Estratégico.
-              </p>
-              <p className="text-[#432818] mt-4 leading-relaxed">
-                <strong>
-                  Pra você transformar estilo em presença.<br />
-                  E imagem em poder.
-                </strong>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* == Oferta Estruturada == */}
-        <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
+        {/* BLOCO DE OFERTA */}
+        <Card className="p-6 mb-10 bg-white shadow-lg border border-[#C7A97C]/30 rounded-2xl">
           <div className="text-center space-y-4 mb-6">
-            <h2 className="text-2xl font-playfair text-[#aa6b5d]">
-              📘 O Guia de Estilo e Imagem + Bônus Exclusivos
+            <h2 className="text-3xl font-playfair text-[#C7A97C]">
+              📘 Guia de Estilo + Bônus Exclusivos
             </h2>
-            <p className="text-[#432818]">
-              Criado para mulheres que querem muito mais do que “saber seu estilo”.<br />
-              Esse guia é pra quem está pronta pra viver seu estilo na prática — com
-              consciência, direção e autenticidade.
+            <p className="text-base text-[#1B1411]">
+              Transforme seu autoconhecimento em imagem com intenção, confiança e estratégia.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
             <div>
-              <h3 className="text-xl font-medium text-[#432818] mb-4">
+              <h3 className="text-xl font-semibold text-[#1B1411] mb-4">
                 Você vai aprender:
               </h3>
               <ul className="space-y-3">
                 {[
-                  'Como montar looks com intenção (e não no improviso)',
-                  'Como usar suas cores, modelagens e tecidos a seu favor',
-                  'Como alinhar sua imagem com seus valores e objetivos',
-                  'Como parar de comprar por impulso e montar um guarda-roupa funcional',
+                  '✔️ Como montar looks com intenção (e não no improviso)',
+                  '✔️ Usar suas cores, modelagens e tecidos a seu favor',
+                  '✔️ Alinhar sua imagem com seus valores e metas',
+                  '✔️ Criar um guarda-roupa funcional e estratégico',
                 ].map((item, i) => (
                   <li key={i} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2" />
+                    <CheckCircle className="h-5 w-5 text-[#C7A97C] mt-0.5 mr-2" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -156,52 +122,49 @@ const ResultPage: React.FC = () => {
             <div>
               <img
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp"
-                alt="Mockup Revista"
-                className="w-full h-auto rounded-lg shadow-sm"
+                alt="Mockup Guia de Estilo"
+                className="w-full h-auto rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
               />
             </div>
           </div>
-          <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
-            <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
-              🎁 E ainda recebe 2 bônus poderosos:
-            </h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-[#432818] mb-2">
-                  Peças‑chave do Guarda‑Roupa de Sucesso
-                </h4>
-                <p className="text-sm text-[#432818]/80 mb-4">
-                  Itens essenciais que descomplicam a rotina e valorizam o seu estilo pessoal.
-                </p>
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-                  alt="Peças-chave"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-[#432818] mb-2">
-                  Mini Guia de Visagismo Facial
-                </h4>
-                <p className="text-sm text-[#432818]/80 mb-4">
-                  Para alinhar seu rosto, cabelo e maquiagem com a sua identidade visual.
-                </p>
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
-                  alt="Visagismo Facial"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-[#fffaf7] p-4 rounded-xl shadow">
+              <h4 className="font-medium text-[#1B1411] mb-2">
+                🎁 Peças-chave do Guarda-Roupa de Sucesso
+              </h4>
+              <p className="text-sm text-[#1B1411]/80 mb-4">
+                Guia visual com os itens estratégicos para montar looks com autenticidade e praticidade.
+              </p>
+              <img
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
+                alt="Peças-chave"
+                className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div className="bg-[#fffaf7] p-4 rounded-xl shadow">
+              <h4 className="font-medium text-[#1B1411] mb-2">
+                🎁 Mini Guia de Visagismo Facial
+              </h4>
+              <p className="text-sm text-[#1B1411]/80 mb-4">
+                Como alinhar seu rosto, cabelo e maquiagem com sua identidade visual.
+              </p>
+              <img
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
+                alt="Visagismo Facial"
+                className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-300"
+              />
             </div>
           </div>
+
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6">
             <div className="text-center md:text-right">
-              <p className="text-sm text-[#432818]/60 mb-1">Valor Total</p>
-              <p className="text-xl line-through text-[#432818]/60">R$ 175,00</p>
+              <p className="text-sm text-[#1B1411]/60 mb-1">Valor Total</p>
+              <p className="text-xl line-through text-[#1B1411]/60">R$ 175,00</p>
             </div>
             <div className="text-center">
-              <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-              <p className="text-3xl font-bold text-[#aa6b5d]">R$ 39,00</p>
+              <p className="text-sm text-[#C7A97C] mb-1">Oferta especial</p>
+              <p className="text-3xl font-bold text-[#C7A97C]">R$ 39,00</p>
             </div>
           </div>
           <Button
@@ -209,11 +172,38 @@ const ResultPage: React.FC = () => {
               (window.location.href =
                 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912')
             }
-            className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold"
+            className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-xl bg-[#C7A97C] hover:bg-[#A08361] hover:shadow-lg hover:scale-105 transition-transform duration-300"
           >
             <ShoppingCart className="w-5 h-5 mr-2" />
             Quero meu Guia + Bônus por R$39,00
           </Button>
+        </Card>
+
+        {/* BLOCO DE GARANTIA */}
+        <Card className="p-6 mb-10 bg-white shadow-lg border border-[#C7A97C]/30 rounded-2xl">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="md:w-1/4 flex justify-center">
+              <img
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp"
+                alt="Garantia de 7 dias"
+                className="w-32 h-32 object-contain"
+              />
+            </div>
+            <div className="md:w-3/4">
+              <h3 className="text-xl font-medium text-[#C7A97C] mb-2">
+                🛡️ Garantia de 7 dias
+              </h3>
+              <p className="text-[#1B1411] mb-4">
+                Você tem uma semana para acessar, aplicar e sentir. Se não fizer sentido pra você, devolvemos 100% do valor. Sem perguntas. Sem burocracia.
+              </p>
+              <div className="flex items-center">
+                <Shield className="h-5 w-5 text-[#C7A97C] mr-2" />
+                <span className="text-[#1B1411] font-medium">
+                  Satisfação garantida ou seu dinheiro de volta
+                </span>
+              </div>
+            </div>
+          </div>
         </Card>
       </div>
     </div>
