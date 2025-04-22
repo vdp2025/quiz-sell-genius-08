@@ -90,7 +90,6 @@ const ResultPage: React.FC = () => {
           </div>
         </Card>
 
-        {/* BLOCO DE OFERTA */}
         <Card className="p-6 mb-10 bg-white shadow-lg border border-[#C7A97C]/30 rounded-2xl">
           <div className="text-center space-y-4 mb-6">
             <h2 className="text-3xl font-playfair text-[#C7A97C]">
@@ -179,7 +178,6 @@ const ResultPage: React.FC = () => {
           </Button>
         </Card>
 
-        {/* BLOCO DE GARANTIA */}
         <Card className="p-6 mb-10 bg-white shadow-lg border border-[#C7A97C]/30 rounded-2xl">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="md:w-1/4 flex justify-center">
