@@ -4,6 +4,7 @@ import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
 
 export const useQuizLogic = () => {
+  // Estados iniciais
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>(() => {
@@ -16,11 +17,13 @@ export const useQuizLogic = () => {
     return savedResult ? JSON.parse(savedResult) : null;
   });
 
+  // Valores calculados
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const currentAnswers = answers[currentQuestion?.id] || [];
   const canProceed = currentAnswers.length === (currentQuestion?.multiSelect || 0);
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
 
+  // Efeitos para salvar dados no localStorage
   useEffect(() => {
     if (quizResult) {
       localStorage.setItem('quizResult', JSON.stringify(quizResult));
@@ -35,6 +38,7 @@ export const useQuizLogic = () => {
     }
   }, [strategicAnswers]);
 
+  // Funções úteis básicas (que não dependem de outras funções)
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
     setAnswers(prev => {
       const newAnswers = {
@@ -52,12 +56,32 @@ export const useQuizLogic = () => {
         ...prev,
         [questionId]: selectedOptions
       };
-      localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers));
+      localStorage.setItem('strategicAnswers', JSON.stringify({
+        ...prev,
+        [questionId]: selectedOptions
+      }));
       return newAnswers;
     });
   }, []);
 
-  // Define calculateResults before it's used in handleNext
+  const handlePrevious = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  }, [currentQuestionIndex]);
+
+  const resetQuiz = useCallback(() => {
+    setCurrentQuestionIndex(0);
+    setAnswers({});
+    setQuizCompleted(false);
+    setQuizResult(null);
+    localStorage.removeItem('quizResult');
+    localStorage.removeItem('strategicAnswers');
+    setStrategicAnswers({});
+    console.log('Quiz reset');
+  }, []);
+
+  // Funções que dependem de cálculos complexos
   const calculateResults = useCallback(() => {
     const styleCounter: Record<string, number> = {
       'Natural': 0,
@@ -117,7 +141,7 @@ export const useQuizLogic = () => {
     return result;
   }, [answers, strategicAnswers]);
 
-  // Now we can safely use calculateResults in handleNext
+  // Funções que dependem de calculateResults
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -126,12 +150,6 @@ export const useQuizLogic = () => {
       setQuizCompleted(true);
     }
   }, [currentQuestionIndex, calculateResults]);
-
-  const handlePrevious = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-    }
-  }, [currentQuestionIndex]);
 
   const submitQuizIfComplete = useCallback(() => {
     // Calculate final results
@@ -145,17 +163,6 @@ export const useQuizLogic = () => {
     
     return results;
   }, [calculateResults, strategicAnswers]);
-
-  const resetQuiz = useCallback(() => {
-    setCurrentQuestionIndex(0);
-    setAnswers({});
-    setQuizCompleted(false);
-    setQuizResult(null);
-    localStorage.removeItem('quizResult');
-    localStorage.removeItem('strategicAnswers');
-    setStrategicAnswers({});
-    console.log('Quiz reset');
-  }, []);
 
   return {
     currentQuestion,

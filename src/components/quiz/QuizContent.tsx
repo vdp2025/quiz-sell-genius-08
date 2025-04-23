@@ -30,10 +30,13 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   handleNextClick,
   handlePrevious,
 }) => {
+  // Nome do usuário da localStorage ou do objeto user
+  const userName = user?.userName || localStorage.getItem('userName') || '';
+
   return (
     <>
       <QuizHeader 
-        userName={user?.userName || localStorage.getItem('userName') || ''} 
+        userName={userName}
         currentQuestionIndex={currentQuestionIndex}
         totalQuestions={totalQuestions}
         showingStrategicQuestions={showingStrategicQuestions}
