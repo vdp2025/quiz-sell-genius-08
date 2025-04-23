@@ -38,6 +38,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
         currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
         autoAdvance={true}
         onNextClick={onNextClick}
+        showQuestionImage={true}
       />
     </AnimatedWrapper>
   );

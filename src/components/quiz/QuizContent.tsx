@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { QuizQuestion } from '../QuizQuestion';
-import { QuizHeader } from './QuizHeader';
-import { QuizNavigation } from '../navigation/QuizNavigation';
 import { UserResponse } from '@/types/quiz';
+import { QuizHeader } from './QuizHeader';
+import { StrategicQuestions } from './StrategicQuestions';
 
 interface QuizContentProps {
-  user: { userName?: string } | null;
+  user: any;
   currentQuestionIndex: number;
   totalQuestions: number;
   showingStrategicQuestions: boolean;
@@ -18,12 +18,12 @@ interface QuizContentProps {
   handlePrevious: () => void;
 }
 
-const QuizContent: React.FC<QuizContentProps> = ({
+export const QuizContent: React.FC<QuizContentProps> = ({
   user,
   currentQuestionIndex,
   totalQuestions,
-  showingStrategicQuestions = false,
-  currentStrategicQuestionIndex = 0,
+  showingStrategicQuestions,
+  currentStrategicQuestionIndex,
   currentQuestion,
   currentAnswers,
   handleAnswerSubmit,
@@ -32,32 +32,30 @@ const QuizContent: React.FC<QuizContentProps> = ({
 }) => {
   return (
     <>
-      <QuizHeader
-        userName={user?.userName}
-        currentQuestionIndex={currentQuestionIndex}
-        totalQuestions={totalQuestions}
-        showingStrategicQuestions={showingStrategicQuestions}
-        currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+      <QuizHeader 
+        userName={user?.userName || localStorage.getItem('userName') || ''} 
+        currentStep={currentQuestionIndex + 1} 
+        totalSteps={totalQuestions} 
       />
 
-      {currentQuestion && (
-        <QuizQuestion
-          question={currentQuestion}
-          onAnswer={handleAnswerSubmit}
-          currentAnswers={currentAnswers}
-          onNextClick={handleNextClick}
-        />
-      )}
-
-      {!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0 && (
-        <QuizNavigation
-          currentStep={currentQuestionIndex}
-          totalSteps={totalQuestions}
-          onPrevious={handlePrevious}
-        />
-      )}
+      <div className="container mx-auto px-4 py-8 w-full">
+        {showingStrategicQuestions ? (
+          <StrategicQuestions
+            currentQuestionIndex={currentStrategicQuestionIndex}
+            answers={{}}
+            onAnswer={handleAnswerSubmit}
+            onNextClick={handleNextClick}
+          />
+        ) : (
+          <QuizQuestion
+            question={currentQuestion}
+            onAnswer={handleAnswerSubmit}
+            currentAnswers={currentAnswers || []}
+            onNextClick={handleNextClick}
+            showQuestionImage={true}
+          />
+        )}
+      </div>
     </>
   );
 };
-
-export { QuizContent };

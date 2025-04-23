@@ -16,6 +16,7 @@ interface QuizQuestionProps {
   autoAdvance?: boolean;
   hideTitle?: boolean;
   onNextClick?: () => void;
+  showQuestionImage?: boolean;
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -24,7 +25,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = false,
   hideTitle = false,
-  onNextClick
+  onNextClick,
+  showQuestionImage = false
 }) => {
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
@@ -83,7 +85,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             </h2>
             
             {/* Display question image for strategic questions */}
-            {isStrategicQuestion && question.imageUrl && !imageError && (
+            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
               <div className="w-full mb-6">
                 <img 
                   src={question.imageUrl} 
