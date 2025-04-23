@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -52,7 +51,6 @@ const ResultPage: React.FC = () => {
         fontFamily: globalStyles.fontFamily || 'inherit',
       }}
     >
-      <EditorButton />
       <Header
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
