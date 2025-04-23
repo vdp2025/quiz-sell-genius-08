@@ -34,8 +34,10 @@ export const QuizContent: React.FC<QuizContentProps> = ({
     <>
       <QuizHeader 
         userName={user?.userName || localStorage.getItem('userName') || ''} 
-        currentStep={currentQuestionIndex + 1} 
-        totalSteps={totalQuestions} 
+        currentQuestionIndex={currentQuestionIndex}
+        totalQuestions={totalQuestions}
+        showingStrategicQuestions={showingStrategicQuestions}
+        currentStrategicQuestionIndex={currentStrategicQuestionIndex}
       />
 
       <div className="container mx-auto px-4 py-8 w-full">
