@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-HEAD
 import { Header } from '@/components/result/Header';
 8efcf6116b39bc4018bb82499c2c0d61738f9a4b
 import { Card } from '@/components/ui/card';
