@@ -80,7 +80,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", isMobile && "px-2", isStrategicQuestion && "max-w-3xl")} id={`question-${question.id}`}>
         {!hideTitle && (
           <>
-            <h2 className={cn("text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal", isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line")}>
+            <h2 className={cn("font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal", 
+              isMobile ? "text-base" : "text-base sm:text-xl",
+              isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
+            )}>
               {highlightStrategicWords(question.title)}
             </h2>
             
@@ -101,13 +104,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             
             {!isStrategicQuestion && (
               <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-                Selecione 3 Opções
+                Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'}
               </p>
             )}
           </>
         )}
         
-        <div className={cn("grid h-full", getGridColumns(), (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3", hasImageOptions && "mb-4 relative", isStrategicQuestion && "gap-4")}>
+        <div className={cn("grid h-full", getGridColumns(), hasImageOptions && "mb-4 relative", isStrategicQuestion && "gap-4")}>
           {question.options.map(option => (
             <QuizOption 
               key={option.id} 

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -72,10 +73,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 isSelected && "font-semibold"
               )
             : cn(
-                isMobile ? "text-[0.75rem] leading-relaxed" : "text-base sm:text-xl leading-relaxed",
-                (questionId === '1' || questionId === '2') && (
-                  isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-base"
-                ),
+                "leading-relaxed",
+                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base", // Standardized text size for text-only options
                 isSelected && "text-brand-coffee font-semibold"
               )
         )}>
