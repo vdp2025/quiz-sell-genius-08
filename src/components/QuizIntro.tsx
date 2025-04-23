@@ -33,10 +33,10 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
           Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
         </h1>
 
-        {/* Imagem principal - Reduced size */}
+        {/* Imagem principal - Further reduced size */}
         <img 
           alt="Mulher elegante com roupas estilosas" 
-          className="w-full max-w-sm h-auto object-cover mb-6 rounded-lg shadow-sm" 
+          className="w-full max-w-xs h-auto object-cover mb-6 rounded-lg shadow-sm" 
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" 
         />
 
@@ -78,3 +78,4 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
 };
 
 export default QuizIntro;
+
