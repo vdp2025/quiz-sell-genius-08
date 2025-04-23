@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { XCircle, Settings } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import QuizQuestionEditor from './components/QuizQuestionEditor';
 
 interface PropertiesPanelProps {
   component: QuizComponentData | null;
@@ -83,7 +83,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     );
   }
 
-  // Component properties
   if (component) {
     return (
       <div className="h-full flex flex-col border-l border-[#333333]">
@@ -164,7 +163,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 </div>
               )}
               
-              {(component.type === 'multipleChoice' || component.type === 'singleChoice') && (
+              {component.type === 'multipleChoice' || component.type === 'singleChoice' && (
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label className="text-gray-200">Pergunta</Label>
@@ -223,7 +222,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 </div>
               )}
               
-              {/* Delete button */}
+              {component.type === 'stageQuestion' && (
+                <QuizQuestionEditor 
+                  component={component}
+                  onUpdate={(updates) => onUpdate(component.id, updates)}
+                />
+              )}
+              
               <div className="mt-6 pt-4 border-t border-[#444444]">
                 <Button 
                   variant="destructive" 

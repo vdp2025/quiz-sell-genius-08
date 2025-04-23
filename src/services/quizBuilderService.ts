@@ -1,4 +1,3 @@
-
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { QuizStage, QuizComponentData, QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
@@ -110,13 +109,18 @@ export const createBuilderStateFromQuiz = (
     
     components.push(createComponent('stageQuestion', questionStage.id, {
       question: question.title,
-      options: question.options.map(opt => opt.text),
-      optionImages: question.options.map(opt => opt.imageUrl || ''),
-      optionStyleCategories: question.options.map(opt => opt.styleCategory || ''),
-      multiSelect: question.multiSelect || 1,
+      options: question.options.map(opt => ({
+        id: opt.id || generateId(),
+        text: opt.text,
+        imageUrl: opt.imageUrl || '',
+        styleCategory: opt.styleCategory || 'Natural',
+      })),
+      multiSelect: question.multiSelect || 3,
       displayType: question.type || 'text',
       autoAdvance: true,
-      required: true
+      required: true,
+      isEditable: true,
+      originalQuestionId: question.id
     }, 0));
   });
   

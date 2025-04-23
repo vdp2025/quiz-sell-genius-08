@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { toast } from '@/components/ui/use-toast';
 import { QuizResult } from '@/types/quiz';
-import { Button } from '@/components/ui/button'; // Added missing import
+import { Button } from '@/components/ui/button';
 import BuilderLayout from './components/BuilderLayout';
 import BuilderToolbar from './components/BuilderToolbar';
 import QuizTemplateImporter from './components/QuizTemplateImporter';
@@ -41,26 +40,22 @@ export const QuizBuilder: React.FC = () => {
     loading
   } = useQuizBuilder();
 
-  // Check if we need to import from result page
   useEffect(() => {
     const currentPath = window.location.pathname;
     if (currentPath === '/resultado' && !isImportingFromResult) {
       setIsImportingFromResult(true);
       
-      // Try to load the result configuration
       const styleTypes = [
         'Elegante', 'Contemporâneo', 'Natural', 'Clássico', 
         'Romântico', 'Sexy', 'Dramático', 'Criativo'
       ];
       
-      // Try each style type until we find a saved configuration
       let foundConfig = false;
       
       for (const styleType of styleTypes) {
         const config = loadQuizResultConfig(styleType);
         
         if (config) {
-          // Ask user if they want to import the result page
           toast({
             title: "Configuração de Resultado Encontrada",
             description: `Encontramos uma configuração de página de resultado para o estilo ${styleType}. Deseja importar para o editor?`,
@@ -102,7 +97,6 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handlePreviewQuizResult = () => {
-    // Load saved result if available
     const savedResult = localStorage.getItem('quiz_result');
     if (savedResult) {
       try {
@@ -114,7 +108,6 @@ export const QuizBuilder: React.FC = () => {
       }
     }
     
-    // Generate a sample quiz result for preview
     const previewResult: QuizResult = {
       primaryStyle: {
         category: 'Elegante',
@@ -145,8 +138,17 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handleImportTemplate = (template: QuizBuilderState) => {
+    const editableComponents = template.components.map(component => ({
+      ...component,
+      data: {
+        ...component.data,
+        isEditable: true,
+        originalQuestionId: component.id
+      }
+    }));
+
     initializeStages(template.stages);
-    initializeComponents(template.components);
+    initializeComponents(editableComponents);
     
     if (template.stages.length > 0) {
       setActiveStage(template.stages[0].id);
@@ -157,7 +159,7 @@ export const QuizBuilder: React.FC = () => {
       description: "O template foi carregado com sucesso. Você pode começar a editar.",
     });
   };
-  
+
   const handleImportResultPage = (config: ResultPageConfig) => {
     const builderState = createBuilderStateFromResultPage(config);
     initializeStages(builderState.stages);
