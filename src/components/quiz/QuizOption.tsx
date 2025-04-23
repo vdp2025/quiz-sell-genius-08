@@ -1,56 +1,63 @@
-// ... existing code ...
-- export { QuizOption };
-+ export default QuizOption;import React from 'react';
-import { QuizOptionImage } from '@/components/quiz/QuizOption';
+
+import React from 'react';
 import { cn } from '@/lib/utils';
 
-interface QuizQuestionProps {
-  question: string;
-  options: {
-    imageUrl: string;
-    altText: string;
+interface QuizOptionProps {
+  option: {
+    id: string;
+    text: string;
+    imageUrl?: string;
     styleCategory: string;
-  }[];
-  selectedOptions: string[];
-  onSelectOption: (styleCategory: string) => void;
-  is3DQuestion?: boolean;
+  };
+  isSelected: boolean;
+  onSelect: (optionId: string) => void;
+  type: 'text' | 'image' | 'both';
   questionId: string;
 }
 
-export const QuizQuestion: React.FC<QuizQuestionProps> = ({
-  question,
-  options,
-  selectedOptions,
-  onSelectOption,
-  is3DQuestion = false,
-  questionId,
+export const QuizOption: React.FC<QuizOptionProps> = ({
+  option,
+  isSelected,
+  onSelect,
+  type,
+  questionId
 }) => {
+  const handleClick = () => {
+    onSelect(option.id);
+  };
+
   return (
-    <div className="w-full">
-      <h2 className="text-xl font-semibold mb-4">{question}</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {options.map((option, index) => (
-          <div
-            key={index}
+    <div 
+      className={cn(
+        "flex items-center p-3 cursor-pointer rounded-md transition-all duration-300",
+        isSelected 
+          ? "bg-brand-gold/10 border border-brand-gold/50" 
+          : "hover:bg-gray-100"
+      )}
+      onClick={handleClick}
+    >
+      {type !== 'text' && option.imageUrl && (
+        <div className="w-full h-full">
+          <img 
+            src={option.imageUrl} 
+            alt={option.text} 
             className={cn(
-              'cursor-pointer border rounded-md overflow-hidden transition-all',
-              selectedOptions.includes(option.styleCategory)
-                ? 'border-brand-gold/50'
-                : 'border-transparent'
+              "w-full h-full object-cover rounded-md",
+              isSelected && "border-2 border-brand-gold/50"
             )}
-            onClick={() => onSelectOption(option.styleCategory)}
-          >
-            <QuizOptionImage
-              imageUrl={option.imageUrl}
-              altText={option.altText}
-              styleCategory={option.styleCategory}
-              isSelected={selectedOptions.includes(option.styleCategory)}
-              is3DQuestion={is3DQuestion}
-              questionId={questionId}
-            />
-          </div>
-        ))}
-      </div>
+          />
+        </div>
+      )}
+      {(type === 'text' || type === 'both') && (
+        <span className={cn(
+          "text-sm text-brand-coffee",
+          isSelected && "font-semibold"
+        )}>
+          {option.text}
+        </span>
+      )}
     </div>
   );
 };
+
+export default QuizOption;
