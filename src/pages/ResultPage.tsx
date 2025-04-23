@@ -52,7 +52,6 @@ export const ResultPage = () => {
     color: globalStyles.textColor || '#432818',
     fontFamily: globalStyles.fontFamily || 'inherit'
   }}>
-      <EditorButton />
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
       
