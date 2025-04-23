@@ -3,10 +3,12 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
+import { Progress } from '@/components/ui/progress';
 import { EditorButton } from '@/components/ui/EditorButton';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 
 const ResultPage: React.FC = () => {
@@ -51,7 +53,6 @@ const ResultPage: React.FC = () => {
       }}
     >
       <EditorButton />
-
       <Header
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
@@ -62,35 +63,52 @@ const ResultPage: React.FC = () => {
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Estilo Principal */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
+          <AnimatedWrapper show={true}>
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
                 Seu Estilo é {category}
               </h2>
-              <p className="text-[#432818] leading-relaxed">{description}</p>
-
-              <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#432818] mb-2">
-                  Seus Estilos Complementares
-                </h3>
-                <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+              
+              <div className="max-w-md mx-auto mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-[#8F7A6A]">Porcentagem de compatibilidade</span>
+                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                </div>
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-2 bg-[#F3E8E6]"
+                  indicatorClassName="bg-[#B89B7A]"
+                />
               </div>
             </div>
-            <div>
+
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <p className="text-[#432818] leading-relaxed">{description}</p>
+
+                <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                  <h3 className="text-lg font-medium text-[#432818] mb-2">
+                    Seus Estilos Complementares
+                  </h3>
+                  <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                </div>
+              </div>
+              <div>
+                <img
+                  src={image}
+                  alt={`Estilo ${category}`}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+            <div className="mt-8">
               <img
-                src={image}
-                alt={`Estilo ${category}`}
-                className="w-full h-auto rounded-lg shadow-md"
+                src={guideImage}
+                alt={`Guia de Estilo ${category}`}
+                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
               />
             </div>
-          </div>
-          <div className="mt-8">
-            <img
-              src={guideImage}
-              alt={`Guia ${category}`}
-              className="w-full h-auto rounded-lg shadow-md"
-            />
-          </div>
+          </AnimatedWrapper>
         </Card>
 
         {/* Motivação */}
