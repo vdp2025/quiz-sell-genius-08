@@ -28,7 +28,7 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
   const ensureOptionsFormat = (): QuizOptionType[] => {
     if (!component.data.options) return [];
     
-    return component.data.options.map((option: string | QuizOptionType) => {
+    return component.data.options.map((option: any) => {
       if (typeof option === 'string') {
         return {
           id: generateId(),
@@ -52,7 +52,7 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
     onUpdate({
       data: {
         ...component.data,
-        options: [...ensureOptionsFormat(), newOption]
+        options: [...ensureOptionsFormat(), newOption] as any
       }
     });
   };
@@ -67,7 +67,7 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
     onUpdate({
       data: {
         ...component.data,
-        options
+        options: options as any
       }
     });
   };
@@ -79,7 +79,7 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
     onUpdate({
       data: {
         ...component.data,
-        options
+        options: options as any
       }
     });
   };
