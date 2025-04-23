@@ -68,11 +68,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", 
-                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-lg md:text-xl",
+                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-base md:text-lg",
                 isSelected && "font-semibold"
               )
             : cn(
-                isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-lg leading-relaxed desktop:text-xl",
+                isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-xl leading-relaxed desktop:text-2xl",
                 (questionId === '1' || questionId === '2') && (
                   isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-sm desktop:text-base"
                 ),
@@ -83,7 +83,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         </p>
       </div>
       
-      {/* Smaller Typeform-like active indicator */}
       {isSelected && (
         <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 animate-scale-in">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-2 w-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
