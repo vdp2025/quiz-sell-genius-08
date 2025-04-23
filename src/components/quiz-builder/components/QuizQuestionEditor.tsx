@@ -8,6 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import QuizOptionEditor from './QuizOptionEditor';
 import { generateId } from '@/utils/idGenerator';
 
+interface QuizOptionType {
+  id: string;
+  text: string;
+  imageUrl?: string;
+  styleCategory?: string;
+}
+
 interface QuizQuestionEditorProps {
   component: QuizComponentData;
   onUpdate: (updates: Partial<QuizComponentData>) => void;
@@ -17,8 +24,25 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
   component,
   onUpdate
 }) => {
+  // Ensure options are always in the object format
+  const ensureOptionsFormat = (): QuizOptionType[] => {
+    if (!component.data.options) return [];
+    
+    return component.data.options.map((option: string | QuizOptionType) => {
+      if (typeof option === 'string') {
+        return {
+          id: generateId(),
+          text: option,
+          imageUrl: '',
+          styleCategory: 'Natural'
+        };
+      }
+      return option as QuizOptionType;
+    });
+  };
+
   const handleAddOption = () => {
-    const newOption = {
+    const newOption: QuizOptionType = {
       id: generateId(),
       text: 'Nova opção',
       imageUrl: '',
@@ -28,34 +52,34 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
     onUpdate({
       data: {
         ...component.data,
-        options: [...(component.data.options || []), newOption]
+        options: [...ensureOptionsFormat(), newOption]
       }
     });
   };
 
   const handleOptionUpdate = (index: number, field: string, value: string) => {
-    const newOptions = [...(component.data.options || [])];
-    newOptions[index] = {
-      ...newOptions[index],
+    const options = ensureOptionsFormat();
+    options[index] = {
+      ...options[index],
       [field]: value
     };
 
     onUpdate({
       data: {
         ...component.data,
-        options: newOptions
+        options
       }
     });
   };
 
   const handleOptionRemove = (index: number) => {
-    const newOptions = [...(component.data.options || [])];
-    newOptions.splice(index, 1);
+    const options = ensureOptionsFormat();
+    options.splice(index, 1);
 
     onUpdate({
       data: {
         ...component.data,
-        options: newOptions
+        options
       }
     });
   };
@@ -78,7 +102,7 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
           <Label>Tipo de Exibição</Label>
           <Select
             value={component.data.displayType || 'text'}
-            onValueChange={(value) => onUpdate({
+            onValueChange={(value: 'text' | 'image' | 'both') => onUpdate({
               data: { ...component.data, displayType: value }
             })}
           >
@@ -125,7 +149,7 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
         </div>
 
         <div className="space-y-4">
-          {(component.data.options || []).map((option, index) => (
+          {ensureOptionsFormat().map((option, index) => (
             <QuizOptionEditor
               key={option.id || index}
               option={option}
