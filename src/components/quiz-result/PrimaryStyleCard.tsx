@@ -1,43 +1,36 @@
+
 import React from 'react';
 import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';
-import { getStyleConfig } from '@/utils/style-utils'; // atualize o caminho conforme seu projeto
+import { styleConfig } from '@/config/styleConfig';
 
 interface PrimaryStyleCardProps {
   primaryStyle: StyleResult;
   customDescription?: string;
   customImage?: string;
-  customGuideImage?: string;
 }
 
 const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   primaryStyle,
   customDescription,
-  customImage,
-  customGuideImage
+  customImage
 }) => {
-  const style = getStyleConfig(primaryStyle.category);
-
-  const imageUrl = customImage || style.image;
-  const guideImageUrl = customGuideImage || style.guideImage;
-  const description = customDescription || style.description;
-
+  const imageUrl = customImage || styleConfig[primaryStyle.category].image;
+  const description = customDescription || styleConfig[primaryStyle.category].description;
+  
   return (
     <Card className="p-6 bg-white mb-8">
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <p className="text-[#432818] leading-relaxed">{description}</p>
+          <p className="text-[#432818] leading-relaxed">
+            {description}
+          </p>
         </div>
-        <div className="order-first md:order-last space-y-4">
+        <div className="order-first md:order-last">
           <img 
             src={imageUrl} 
-            alt={`Visual do Estilo ${primaryStyle.category}`} 
-            className="w-full h-auto object-cover rounded-lg shadow-md"
-          />
-          <img 
-            src={guideImageUrl} 
-            alt={`Guia do Estilo ${primaryStyle.category}`} 
-            className="w-full h-auto object-cover rounded-lg shadow-md"
+            alt={`Estilo ${primaryStyle.category}`} 
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
       </div>

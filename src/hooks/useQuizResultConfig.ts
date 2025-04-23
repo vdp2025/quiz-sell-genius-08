@@ -1,7 +1,7 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { set, get } from 'lodash';
-import { styleConfig } from '@/config/styleConfig';
 
 interface ResultConfig {
   [key: string]: any;
@@ -50,8 +50,6 @@ export const useQuizResultConfig = (styleType: string) => {
             },
             primaryStyle: {
               description: getDefaultDescription(styleType),
-              image: styleConfig[styleType]?.image || '',
-              guideImage: styleConfig[styleType]?.guideImage || '',
             },
             offer: {
               title: "VOCÊ DESCOBRIU SEU ESTILO",
@@ -74,22 +72,28 @@ export const useQuizResultConfig = (styleType: string) => {
         setLoading(false);
       }
     };
-
+    
     loadConfig();
   }, [styleType]);
 
   // Update a section of the configuration
   const updateConfig = useCallback((sectionKey: string, data: any) => {
     setConfig(prev => {
+      // Create a deep copy to avoid mutation
       const newConfig = JSON.parse(JSON.stringify(prev));
+      
+      // Update the specific section
       if (sectionKey.includes('.')) {
+        // Handle nested paths
         set(newConfig, sectionKey, data);
       } else {
+        // Handle top-level paths
         newConfig[sectionKey] = {
           ...newConfig[sectionKey],
           ...data
         };
       }
+      
       setHasChanges(true);
       return newConfig;
     });
