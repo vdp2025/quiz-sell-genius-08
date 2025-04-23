@@ -1,31 +1,23 @@
-
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-
 interface QuizIntroProps {
   onStart: (name: string) => void;
 }
-
-export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
+export const QuizIntro: React.FC<QuizIntroProps> = ({
+  onStart
+}) => {
   const [name, setName] = useState('');
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
       onStart(name);
     }
   };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-8">
+  return <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-8">
       <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-4 md:p-8 flex flex-col items-center">
         {/* Logo */}
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-          alt="Logo Gisele Galvão"
-          className="w-32 md:w-40 h-auto mb-2"
-        />
+        <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" alt="Logo Gisele Galvão" className="w-32 md:w-40 h-auto mb-2" />
 
         {/* Barra de carregamento dourada animada */}
         <div className="relative w-full max-w-md h-[4px] bg-[#f1e8db] rounded-full overflow-hidden mb-6">
@@ -38,11 +30,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         </h1>
 
         {/* Imagem principal */}
-        <img
-          src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1740&auto=format&fit=crop"
-          alt="Mulher elegante com roupas estilosas"
-          className="w-full max-w-md h-auto object-contain mb-6 rounded-lg shadow-sm"
-        />
+        <img alt="Mulher elegante com roupas estilosas" className="w-full max-w-md h-auto object-contain mb-6 rounded-lg shadow-sm" src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" />
 
         {/* Subtítulo com destaque */}
         <p className="text-sm md:text-base text-black text-center mb-6 max-w-lg">
@@ -53,18 +41,9 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-3">
           <label htmlFor="name" className="text-sm font-semibold text-[#432818]">NOME *</label>
-          <Input
-            id="name"
-            placeholder="Digite seu nome"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full"
-            autoFocus
-          />
+          <Input id="name" placeholder="Digite seu nome" value={name} onChange={e => setName(e.target.value)} className="w-full" autoFocus />
 
-          <Button
-            type="submit"
-            className="
+          <Button type="submit" className="
               w-full 
               bg-[#B89B7A] 
               hover:bg-[#aa6b5d] 
@@ -82,15 +61,11 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
               active:scale-95 
               disabled:opacity-50 
               disabled:cursor-not-allowed
-            "
-            disabled={!name.trim()}
-          >
+            " disabled={!name.trim()}>
             Continuar
           </Button>
         </form>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default QuizIntro;
