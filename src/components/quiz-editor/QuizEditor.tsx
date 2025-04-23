@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QuizEditorState, QUIZ_CATEGORIES, QuizCategory } from '@/types/quizEditor';
@@ -17,7 +16,11 @@ interface QuizEditorProps {
   isPreviewing?: boolean;
 }
 
-const QuizEditor: React.FC<QuizEditorProps> = ({ initialTemplate, onQuestionsUpdate, isPreviewing = false }) => {
+const QuizEditor: React.FC<QuizEditorProps> = ({ 
+  initialTemplate, 
+  onQuestionsUpdate, 
+  isPreviewing = false 
+}) => {
   const [activeTab, setActiveTab] = useState<QuizCategory>('clothingQuestions');
   const [editorState, setEditorState] = useState<QuizEditorState>({
     questions: [],
@@ -61,7 +64,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({ initialTemplate, onQuestionsUpd
     
     setEditorState(prevState => ({
       ...prevState,
-      questions: [...prevState.questions, { ...newQuestion, isNew: true, isEditing: true }],
+      questions: [...prevState.questions, newQuestion],
       editingQuestionId: newQuestion.id
     }));
   };
@@ -75,7 +78,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({ initialTemplate, onQuestionsUpd
 
   const handleSaveQuestion = (updatedQuestion: QuizQuestion) => {
     const updatedQuestions = editorState.questions.map(q => 
-      q.id === updatedQuestion.id ? { ...updatedQuestion, isEditing: false } : q
+      q.id === updatedQuestion.id ? updatedQuestion : q
     );
     
     setEditorState(prevState => ({

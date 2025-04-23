@@ -12,34 +12,42 @@ import { ResultPageConfig, OfferContent } from '@/types/resultPageConfig';
 interface QuizResultProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
+  config?: any; // Added config prop that was missing
+  previewMode?: boolean; // Added previewMode prop that was missing
 }
 
 const QuizResult: React.FC<QuizResultProps> = ({
   primaryStyle,
-  secondaryStyles
+  secondaryStyles,
+  config: externalConfig,
+  previewMode = false
 }) => {
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
   
-  // Load personalized settings
+  // Load personalized settings or use provided external config
   useEffect(() => {
     try {
-      const configKey = `quiz_result_config_${primaryStyle.category}`;
-      const savedConfig = localStorage.getItem(configKey);
-      
-      if (savedConfig) {
-        setConfig(JSON.parse(savedConfig));
-        console.log("Loaded config from localStorage:", configKey);
+      if (externalConfig) {
+        setConfig(externalConfig);
       } else {
-        console.log("No saved config found for:", primaryStyle.category);
-        setConfig(null);
+        const configKey = `quiz_result_config_${primaryStyle.category}`;
+        const savedConfig = localStorage.getItem(configKey);
+        
+        if (savedConfig) {
+          setConfig(JSON.parse(savedConfig));
+          console.log("Loaded config from localStorage:", configKey);
+        } else {
+          console.log("No saved config found for:", primaryStyle.category);
+          setConfig(null);
+        }
       }
     } catch (error) {
       console.error('Error loading custom settings:', error);
       setConfig(null);
     }
-  }, [primaryStyle.category]);
+  }, [primaryStyle.category, externalConfig]);
 
   useEffect(() => {
     if (user && user.userName) {
@@ -76,7 +84,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
   // If configuration hasn't loaded yet, show default version
   if (!config) {
     return (
-      <div className="min-h-screen bg-[#fffaf7]">
+      <div className={`min-h-screen bg-[#fffaf7] ${previewMode ? 'max-h-screen overflow-auto' : ''}`}>
         <div className="max-w-4xl mx-auto p-6">
           <ResultHeader userName={userName} />
           
@@ -97,7 +105,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
   // Version with custom configurations
   return (
     <div 
-      className="min-h-screen" 
+      className={`min-h-screen ${previewMode ? 'max-h-screen overflow-auto' : ''}`}
       style={{
         ...applyGlobalStyles(),
         backgroundColor: 'var(--background-color)',

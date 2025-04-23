@@ -6,6 +6,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
 import { styleQuizTemplate2 } from '@/services/templates/styleQuizTemplate2';
 import { QuizBuilderState } from '@/types/quizBuilder';
+import { QuizTemplate } from '@/types/quizTemplate';
+import { createBuilderStateFromQuiz } from '@/services/quizBuilderService';
 
 interface QuizTemplateImporterProps {
   isOpen: boolean;
@@ -35,6 +37,19 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
     }
   ];
 
+  const handleImportTemplate = (template: QuizTemplate) => {
+    // Convert QuizTemplate to QuizBuilderState
+    const builderState = createBuilderStateFromQuiz(
+      template.questions,
+      template.name,
+      template.description,
+      `Resultado de ${template.name}`
+    );
+    
+    onImportTemplate(builderState);
+    onClose();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl">
@@ -58,10 +73,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
               <CardFooter>
                 <Button 
                   className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
-                  onClick={() => {
-                    onImportTemplate(template.template);
-                    onClose();
-                  }}
+                  onClick={() => handleImportTemplate(template.template)}
                 >
                   Selecionar Template
                 </Button>
