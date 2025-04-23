@@ -1,23 +1,22 @@
 
 import { QuizQuestion } from './quiz';
-import { QuizBuilderState } from './quizBuilder';
 
 export interface QuizTemplate {
   id: string;
   name: string;
   description: string;
   questions: QuizQuestion[];
-  builderState: QuizBuilderState;
+  resultPageSettings: {
+    styleType: string;
+    blocks: any[];
+    headerConfig: any;
+    mainContentConfig: any;
+    offerConfig: any;
+  };
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+  createdBy?: string;
 }
 
-export interface QuizTemplatePreview {
-  id: string;
-  name: string;
-  description: string;
-  questionCount: number;
-  createdAt: string;
-  updatedAt: string;
-  isDefault?: boolean;
-}
+export type TemplateListItem = Pick<QuizTemplate, 'id' | 'name' | 'description' | 'isPublished' | 'updatedAt'>;
