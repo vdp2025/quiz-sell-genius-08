@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -56,21 +57,7 @@ export const useQuizLogic = () => {
     });
   }, []);
 
-  const handleNext = useCallback(() => {
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      calculateResults();
-      setQuizCompleted(true);
-    }
-  }, [currentQuestionIndex, calculateResults]);
-
-  const handlePrevious = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-    }
-  }, [currentQuestionIndex]);
-
+  // Define calculateResults before it's used in handleNext
   const calculateResults = useCallback(() => {
     const styleCounter: Record<string, number> = {
       'Natural': 0,
@@ -129,6 +116,22 @@ export const useQuizLogic = () => {
 
     return result;
   }, [answers, strategicAnswers]);
+
+  // Now we can safely use calculateResults in handleNext
+  const handleNext = useCallback(() => {
+    if (currentQuestionIndex < quizQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      calculateResults();
+      setQuizCompleted(true);
+    }
+  }, [currentQuestionIndex, calculateResults]);
+
+  const handlePrevious = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  }, [currentQuestionIndex]);
 
   const submitQuizIfComplete = useCallback(() => {
     // Calculate final results
