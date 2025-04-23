@@ -11,7 +11,8 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF9F7] px-4 py-10">
       <div className="w-full max-w-xl bg-white shadow-lg rounded-2xl p-6 md:p-10 flex flex-col items-center">
         <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193438/6cceaaa9-9383-4890-95a4-da036f8421e3_u7tuaw.jpg"
+          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"
+"
           alt="Mulher estilosa"
           className="w-full rounded-xl mb-8 object-cover object-center"
           style={{ maxHeight: 320 }}

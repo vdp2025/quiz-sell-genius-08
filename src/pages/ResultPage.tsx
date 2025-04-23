@@ -3,7 +3,6 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { EditorButton } from '@/components/ui/EditorButton';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
@@ -34,7 +33,7 @@ export const ResultPage = () => {
         </div>
       </div>;
   }
-  const getStyleCoverImage = styleType => {
+   const getStyleCoverImage = styleType => {
     const styleImages = {
       'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
       'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
