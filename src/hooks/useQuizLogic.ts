@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -144,6 +143,10 @@ export const useQuizLogic = () => {
     
     // Save everything to localStorage before navigating
     localStorage.setItem('quizResult', JSON.stringify(results));
+    localStorage.setItem('quizResults', JSON.stringify({
+      primaryStyle: results.primaryStyle,
+      secondaryStyles: results.secondaryStyles
+    }));
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     console.log('Results saved to localStorage before redirect:', results);
     
