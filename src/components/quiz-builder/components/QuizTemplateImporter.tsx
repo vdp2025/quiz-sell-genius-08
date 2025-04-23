@@ -15,36 +15,55 @@ interface QuizTemplateImporterProps {
   onImportTemplate: (template: QuizBuilderState) => void;
 }
 
+interface TemplateItem {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  template: QuizTemplate | QuizBuilderState;
+  type: 'quizTemplate' | 'builderState';
+}
+
 const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
   isOpen,
   onClose,
   onImportTemplate
 }) => {
-  const templates = [
+  const templates: TemplateItem[] = [
     {
       id: 'style-quiz-1',
       title: 'Quiz de Estilo Pessoal',
       description: 'Template padrão com perguntas sobre preferências de estilo e personalidade.',
       image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
-      template: styleQuizTemplate
+      template: styleQuizTemplate,
+      type: 'quizTemplate'
     },
     {
       id: 'style-quiz-2',
       title: 'Quiz de Estilo Avançado',
       description: 'Template com questões de múltipla escolha e imagens para análise de estilo detalhada.',
       image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
-      template: styleQuizTemplate2
+      template: styleQuizTemplate2,
+      type: 'builderState'
     }
   ];
 
-  const handleImportTemplate = (template: QuizTemplate) => {
-    // Convert QuizTemplate to QuizBuilderState
-    const builderState = createBuilderStateFromQuiz(
-      template.questions,
-      template.name,
-      template.description,
-      `Resultado de ${template.name}`
-    );
+  const handleImportTemplate = (templateItem: TemplateItem) => {
+    let builderState: QuizBuilderState;
+    
+    if (templateItem.type === 'quizTemplate') {
+      // Convert QuizTemplate to QuizBuilderState
+      const quizTemplate = templateItem.template as QuizTemplate;
+      builderState = createBuilderStateFromQuiz(
+        quizTemplate.questions,
+        quizTemplate.name,
+        quizTemplate.description,
+        `Resultado de ${quizTemplate.name}`
+      );
+    } else {
+      // It's already a QuizBuilderState
+      builderState = templateItem.template as QuizBuilderState;
+    }
     
     onImportTemplate(builderState);
     onClose();
@@ -73,7 +92,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
               <CardFooter>
                 <Button 
                   className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
-                  onClick={() => handleImportTemplate(template.template)}
+                  onClick={() => handleImportTemplate(template)}
                 >
                   Selecionar Template
                 </Button>
