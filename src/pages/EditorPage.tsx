@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { EditorLayout } from '@/components/editor/EditorLayout';
+import EditorLayout from '@/components/editor/EditorLayout';
 import { PageEditor } from '@/components/editor/PageEditor';
 import { defaultResultTemplate } from '@/config/resultPageTemplates';
 import { useToast } from '@/components/ui/use-toast';
@@ -11,6 +11,8 @@ const EditorPage: React.FC = () => {
   const { toast } = useToast();
   const [editorData, setEditorData] = useState(defaultResultTemplate);
   const [loading, setLoading] = useState(true);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [blocks, setBlocks] = useState([]);
 
   useEffect(() => {
     // Simulação de carregamento de dados
@@ -35,6 +37,14 @@ const EditorPage: React.FC = () => {
     }, 1000);
   }, [style]);
 
+  const handleTogglePreview = () => {
+    setIsPreviewing(!isPreviewing);
+  };
+
+  const handleBlocksChange = (newBlocks) => {
+    setBlocks(newBlocks);
+  };
+
   return (
     <EditorLayout>
       {loading ? (
@@ -42,7 +52,12 @@ const EditorPage: React.FC = () => {
           <p className="text-gray-500">Carregando editor...</p>
         </div>
       ) : (
-        <PageEditor initialData={editorData} />
+        <PageEditor 
+          blocks={blocks} 
+          onBlocksChange={handleBlocksChange}
+          onPreviewToggle={handleTogglePreview}
+          isPreviewing={isPreviewing}
+        />
       )}
     </EditorLayout>
   );

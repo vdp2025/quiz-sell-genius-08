@@ -1,5 +1,16 @@
 
 // Utility functions for style-related operations
+import { StyleResult } from '@/types/quiz';
+
+export type StyleCategory =
+  | 'Natural'
+  | 'Clássico'
+  | 'Contemporâneo'
+  | 'Elegante'
+  | 'Romântico'
+  | 'Sexy'
+  | 'Dramático'
+  | 'Criativo';
 
 /**
  * Returns style properties for a fallback display when image loading fails
@@ -23,7 +34,7 @@ export const getStyleFallbackColor = (styleCategory: string): string => {
 /**
  * Returns a complete style object for fallback display
  */
-export const getStyleFallbackStyles = (styleCategory: string) => {
+export const getStyleFallbackStyles = (styleCategory: string): React.CSSProperties => {
   const backgroundColor = getStyleFallbackColor(styleCategory);
   
   return {
@@ -32,7 +43,7 @@ export const getStyleFallbackStyles = (styleCategory: string) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center',
+    textAlign: 'center' as const,
     fontWeight: 500,
     fontSize: '0.8rem',
     padding: '0.5rem'
@@ -92,6 +103,35 @@ export const getStyleConfig = (category: string) => {
 /**
  * Gets fallback style for image display
  */
-export const getFallbackStyle = (styleCategory: string) => {
+export const getFallbackStyle = (styleCategory: string): React.CSSProperties => {
   return getStyleFallbackStyles(styleCategory);
+};
+
+/**
+ * Gets style color
+ */
+export const getStyleColor = (category: StyleCategory): string => {
+  const colorMap: Record<StyleCategory, string> = {
+    'Natural': '#8F7A6A',
+    'Contemporâneo': '#B89B7A',
+    'Clássico': '#432818',
+    'Elegante': '#AA6B5D',
+    'Romântico': '#D4A5A5',
+    'Sexy': '#9E2B2B',
+    'Dramático': '#2B2B2B',
+    'Criativo': '#F0A500'
+  };
+
+  return colorMap[category] || '#B89B7A';
+};
+
+/**
+ * Gets default style
+ */
+export const getDefaultStyle = (): StyleResult => {
+  return {
+    category: 'Natural',
+    score: 100,
+    percentage: 100
+  };
 };

@@ -22,11 +22,21 @@ export const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   handleShowResult,
 }) => {
   if (showingFinalTransition) {
-    return <QuizFinalTransition onContinue={handleShowResult} />;
+    return (
+      <QuizFinalTransition 
+        onFinish={handleShowResult} 
+      />
+    );
   }
 
   if (showingTransition) {
-    return <MainTransition onContinue={handleShowResult} />;
+    return (
+      <MainTransition 
+        onContinue={handleShowResult} 
+        onAnswer={handleStrategicAnswer}
+        currentAnswers={strategicAnswers["strategic-1"] || []}
+      />
+    );
   }
 
   return null;
