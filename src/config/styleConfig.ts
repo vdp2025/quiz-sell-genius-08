@@ -41,4 +41,3 @@ export const styleConfig = {
     description: 'Você aprecia a originalidade e não tem medo de ousar em combinações únicas.'
   }
 } as const;
-

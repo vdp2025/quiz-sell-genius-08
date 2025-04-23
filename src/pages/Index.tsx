@@ -1,29 +1,28 @@
-   import { useState } from 'react';
-   import QuizIntro from '../components/QuizIntro';
-   import QuizPage from '../components/QuizPage';
-   import { useQuizContext } from '../context/QuizContext';
 
-   const Index = () => {
-     const [started, setStarted] = useState(false);
-     const { startQuiz } = useQuizContext();
+import { useState } from 'react';
+import QuizIntro from '../components/QuizIntro';
+import QuizPage from '../components/QuizPage';
+import { useQuizContext } from '../context/QuizContext';
 
-     // Recebe o nome digitado e dispara o início do quiz
-     const handleStart = async (name: string) => {
-       setStarted(true);
-       console.log(`Quiz started by ${name}`);
-       // Se quiser chamar o contexto:
-       // await startQuiz(name, /*email*/ '', /*quizId*/ '');
-     };
+const Index = () => {
+  const [started, setStarted] = useState(false);
+  const { startQuiz } = useQuizContext();
 
-     return (
-       <div className="min-h-screen bg-background">
-         {!started ? (
-           <QuizIntro onStart={handleStart} />
-         ) : (
-           <QuizPage />
-         )}
-       </div>
-     );
-   };
+  const handleStart = async (name: string) => {
+    setStarted(true);
+    console.log(`Quiz started by ${name}`);
+    localStorage.setItem('userName', name);
+  };
 
-   export default Index;
+  return (
+    <div className="min-h-screen bg-background">
+      {!started ? (
+        <QuizIntro onStart={handleStart} />
+      ) : (
+        <QuizPage />
+      )}
+    </div>
+  );
+};
+
+export default Index;
