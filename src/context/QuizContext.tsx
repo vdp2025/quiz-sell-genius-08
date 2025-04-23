@@ -4,23 +4,24 @@ import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
 import { QuizResult } from '@/types/quiz';
 
-// We'll define types for our context functions
+// Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
   startQuiz: (name: string, email: string, quizId: string) => Promise<any>;
   submitAnswers: (answers: Array<{ questionId: string; optionId: string; points: number }>) => Promise<void>;
   submitResults: (results: QuizResult) => Promise<void>;
 };
 
+// Create context with undefined default
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
+// Provider component
 export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const quizLogic = useQuizLogic();
   const { toast } = useToast();
   
-  // Simplified versions of the functions from useQuiz without router dependency
+  // Define all context functions before returning the provider
   const startQuiz = async (name: string, email: string, quizId: string) => {
     try {
-      // Mock implementation for now
       console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
       return { id: '1', name, email };
     } catch (error) {
@@ -33,11 +34,8 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const submitAnswers = async (
-    answers: Array<{ questionId: string; optionId: string; points: number }>
-  ) => {
+  const submitAnswers = async (answers: Array<{ questionId: string; optionId: string; points: number }>) => {
     try {
-      // Mock implementation for now
       console.log('Submitting answers:', answers);
     } catch (error) {
       toast({
@@ -51,9 +49,7 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const submitResults = async (results: QuizResult) => {
     try {
-      // Mock implementation without navigate
       console.log("Results submitted:", results);
-      // Redirect to results page
       window.location.href = '/resultado';
     } catch (error) {
       toast({
@@ -65,18 +61,23 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
   
+  // Spread quizLogic and add our additional functions
+  const contextValue = {
+    ...quizLogic,
+    startQuiz,
+    submitAnswers,
+    submitResults
+  };
+  
+  // Return the provider
   return (
-    <QuizContext.Provider value={{ 
-      ...quizLogic, 
-      startQuiz,
-      submitAnswers,
-      submitResults 
-    }}>
+    <QuizContext.Provider value={contextValue}>
       {children}
     </QuizContext.Provider>
   );
 };
 
+// Hook for using the context
 export const useQuizContext = () => {
   const context = useContext(QuizContext);
   if (context === undefined) {

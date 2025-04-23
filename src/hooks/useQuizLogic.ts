@@ -4,7 +4,7 @@ import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
 
 export const useQuizLogic = () => {
-  // Estados iniciais
+  // 1. State declarations (all at the top)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>(() => {
@@ -17,28 +17,14 @@ export const useQuizLogic = () => {
     return savedResult ? JSON.parse(savedResult) : null;
   });
 
-  // Valores calculados
+  // 2. Computed values
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const currentAnswers = answers[currentQuestion?.id] || [];
   const canProceed = currentAnswers.length === (currentQuestion?.multiSelect || 0);
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
+  const totalQuestions = quizQuestions.length;
 
-  // Efeitos para salvar dados no localStorage
-  useEffect(() => {
-    if (quizResult) {
-      localStorage.setItem('quizResult', JSON.stringify(quizResult));
-      console.log('QuizResult saved to localStorage:', quizResult);
-    }
-  }, [quizResult]);
-
-  useEffect(() => {
-    if (Object.keys(strategicAnswers).length > 0) {
-      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-      console.log('Strategic answers saved to localStorage:', strategicAnswers);
-    }
-  }, [strategicAnswers]);
-
-  // Funções úteis básicas (que não dependem de outras funções)
+  // 3. Simple utility functions that don't depend on other functions
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
     setAnswers(prev => {
       const newAnswers = {
@@ -81,7 +67,7 @@ export const useQuizLogic = () => {
     console.log('Quiz reset');
   }, []);
 
-  // Funções que dependem de cálculos complexos
+  // 4. Complex function that others depend on
   const calculateResults = useCallback(() => {
     const styleCounter: Record<string, number> = {
       'Natural': 0,
@@ -141,7 +127,7 @@ export const useQuizLogic = () => {
     return result;
   }, [answers, strategicAnswers]);
 
-  // Funções que dependem de calculateResults
+  // 5. Functions that depend on other complex functions
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -149,7 +135,7 @@ export const useQuizLogic = () => {
       calculateResults();
       setQuizCompleted(true);
     }
-  }, [currentQuestionIndex, calculateResults]);
+  }, [currentQuestionIndex, calculateResults, quizQuestions.length]);
 
   const submitQuizIfComplete = useCallback(() => {
     // Calculate final results
@@ -164,6 +150,22 @@ export const useQuizLogic = () => {
     return results;
   }, [calculateResults, strategicAnswers]);
 
+  // 6. Side effects
+  useEffect(() => {
+    if (quizResult) {
+      localStorage.setItem('quizResult', JSON.stringify(quizResult));
+      console.log('QuizResult saved to localStorage:', quizResult);
+    }
+  }, [quizResult]);
+
+  useEffect(() => {
+    if (Object.keys(strategicAnswers).length > 0) {
+      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      console.log('Strategic answers saved to localStorage:', strategicAnswers);
+    }
+  }, [strategicAnswers]);
+
+  // 7. Return all needed functions and values
   return {
     currentQuestion,
     currentQuestionIndex,
@@ -178,7 +180,7 @@ export const useQuizLogic = () => {
     resetQuiz,
     submitQuizIfComplete,
     calculateResults,
-    totalQuestions: quizQuestions.length,
+    totalQuestions,
     strategicAnswers,
     handleStrategicAnswer
   };

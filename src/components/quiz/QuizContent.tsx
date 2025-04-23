@@ -30,7 +30,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   handleNextClick,
   handlePrevious,
 }) => {
-  // Nome do usuário da localStorage ou do objeto user
+  // Get user name from localStorage if not provided in props
   const userName = user?.userName || localStorage.getItem('userName') || '';
 
   return (
