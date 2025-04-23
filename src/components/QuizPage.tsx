@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import QuizHeader from './quiz/QuizHeader';
+import { QuizHeader } from './quiz/QuizHeader';
 import QuestionCard from './quiz/QuestionCard';
 import QuizProgress from './quiz/QuizProgress';
 import QuizNav from './quiz/QuizNav';
