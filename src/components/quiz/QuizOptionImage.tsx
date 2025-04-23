@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -68,3 +69,6 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     </div>
   );
 };
+
+// Adding a default export for the component
+export default QuizOptionImage;
