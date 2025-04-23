@@ -142,15 +142,23 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
             <Label>Layout de Colunas</Label>
             <Select
               value={String(component.data.layout?.columns || 2)}
-              onValueChange={(value) => onUpdate({
-                data: { 
-                  ...component.data, 
-                  layout: {
-                    ...component.data.layout,
-                    columns: parseInt(value)
+              onValueChange={(value: string) => {
+                // Ensure we only pass valid column values (1, 2, 3, or 4)
+                const columnValue = parseInt(value);
+                const validColumnValue = (columnValue >= 1 && columnValue <= 4) ? 
+                  columnValue as 1 | 2 | 3 | 4 : 
+                  2;
+                
+                onUpdate({
+                  data: { 
+                    ...component.data, 
+                    layout: {
+                      ...component.data.layout,
+                      columns: validColumnValue
+                    }
                   }
-                }
-              })}
+                });
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Número de colunas" />

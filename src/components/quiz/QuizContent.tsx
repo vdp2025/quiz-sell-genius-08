@@ -4,44 +4,106 @@ import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/ui/logo';
 import { Progress } from '@/components/ui/progress';
+import { UserSession } from '@/types/auth';
+import { QuizQuestion, UserResponse } from '@/types/quiz';
 
 interface QuizContentProps {
-  question: string;
-  options: any[];
-  stage: number;
-  totalStages: number;
+  question?: string;
+  options?: any[];
+  stage?: number;
+  totalStages?: number;
   multiSelect?: number;
   displayType?: 'text' | 'image' | 'both';
   onOptionSelect?: (selectedOptions: number[]) => void;
   onNext?: () => void;
+  
+  // Additional props needed for QuizPage integration
+  user?: UserSession;
+  currentQuestionIndex?: number;
+  totalQuestions?: number;
+  showingStrategicQuestions?: boolean;
+  currentStrategicQuestionIndex?: number;
+  currentQuestion?: QuizQuestion;
+  currentAnswers?: string[];
+  handleAnswerSubmit?: (response: UserResponse) => void;
+  handleNextClick?: () => void;
+  handlePrevious?: () => void;
 }
 
 export const QuizContent: React.FC<QuizContentProps> = ({
   question,
-  options,
+  options = [],
   stage,
   totalStages,
   multiSelect = 3,
   displayType = 'both',
   onOptionSelect,
-  onNext
+  onNext,
+  
+  // Using the new props if provided (for QuizPage integration)
+  currentQuestion,
+  currentQuestionIndex,
+  totalQuestions,
+  currentAnswers = [],
+  handleAnswerSubmit
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   
+  // Determine which data to use (from direct props or from currentQuestion)
+  const activeQuestion = question || (currentQuestion?.title || '');
+  const activeOptions = options.length > 0 ? options : (currentQuestion?.options || []);
+  const activeStage = stage !== undefined ? stage : (currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 1);
+  const activeTotalStages = totalStages || totalQuestions || 1;
+  const activeMultiSelect = multiSelect || (currentQuestion?.multiSelect || 3);
+  const activeDisplayType = displayType || (currentQuestion?.type || 'both');
+  
   const handleOptionClick = (index: number) => {
-    if (selectedOptions.includes(index)) {
-      setSelectedOptions(prev => prev.filter(i => i !== index));
-    } else {
-      if (selectedOptions.length < multiSelect) {
-        setSelectedOptions(prev => [...prev, index]);
+    if (currentQuestion && handleAnswerSubmit) {
+      // For full quiz mode with currentQuestion
+      const optionId = currentQuestion.options[index].id;
+      
+      let newSelectedOptions: string[];
+      if (currentAnswers.includes(optionId)) {
+        newSelectedOptions = currentAnswers.filter(id => id !== optionId);
       } else {
-        setSelectedOptions(prev => [...prev.slice(1), index]);
+        if (currentAnswers.length >= currentQuestion.multiSelect) {
+          newSelectedOptions = [...currentAnswers.slice(1), optionId];
+        } else {
+          newSelectedOptions = [...currentAnswers, optionId];
+        }
+      }
+      
+      handleAnswerSubmit({
+        questionId: currentQuestion.id,
+        selectedOptions: newSelectedOptions
+      });
+    } else {
+      // For standalone/preview mode
+      if (selectedOptions.includes(index)) {
+        setSelectedOptions(prev => prev.filter(i => i !== index));
+      } else {
+        if (selectedOptions.length < activeMultiSelect) {
+          setSelectedOptions(prev => [...prev, index]);
+        } else {
+          setSelectedOptions(prev => [...prev.slice(1), index]);
+        }
+      }
+      
+      if (onOptionSelect) {
+        if (selectedOptions.includes(index)) {
+          onOptionSelect(selectedOptions.filter(i => i !== index));
+        } else {
+          const newSelected = selectedOptions.length < activeMultiSelect 
+            ? [...selectedOptions, index] 
+            : [...selectedOptions.slice(1), index];
+          onOptionSelect(newSelected);
+        }
       }
     }
   };
   
   const handleNext = () => {
-    if (onOptionSelect) {
+    if (onOptionSelect && selectedOptions.length > 0) {
       onOptionSelect(selectedOptions);
     }
     if (onNext) {
@@ -49,10 +111,14 @@ export const QuizContent: React.FC<QuizContentProps> = ({
     }
   };
   
-  const progressPercent = totalStages > 1 ? (stage / totalStages) * 100 : 0;
-  const showImages = displayType === 'image' || displayType === 'both';
-  const showText = displayType === 'text' || displayType === 'both';
-  const isSelectionComplete = selectedOptions.length === multiSelect;
+  const progressPercent = activeTotalStages > 1 ? (activeStage / activeTotalStages) * 100 : 0;
+  const showImages = activeDisplayType === 'image' || activeDisplayType === 'both';
+  const showText = activeDisplayType === 'text' || activeDisplayType === 'both';
+  
+  // Determine if selection is complete based on mode
+  const isSelectionComplete = currentQuestion && currentAnswers 
+    ? currentAnswers.length === currentQuestion.multiSelect
+    : selectedOptions.length === activeMultiSelect;
   
   return (
     <div className="bg-[#FAF9F7] min-h-screen py-6 px-4 sm:px-6">
@@ -63,7 +129,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         
         <div className="w-full mb-6">
           <div className="flex justify-between text-sm text-[#8F7A6A] mb-2">
-            <span>Questão {stage} de {totalStages}</span>
+            <span>Questão {activeStage} de {activeTotalStages}</span>
             <span>{Math.round(progressPercent)}% completo</span>
           </div>
           <Progress 
@@ -75,19 +141,22 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <h2 className="text-2xl font-playfair text-[#432818] text-center mb-8">
-            {question}
+            {activeQuestion}
           </h2>
           
           <p className="text-center text-[#8F7A6A] mb-6">
-            Selecione {multiSelect} {multiSelect === 1 ? 'opção' : 'opções'}
+            Selecione {activeMultiSelect} {activeMultiSelect === 1 ? 'opção' : 'opções'}
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            {options.map((option, index) => {
-              const isSelected = selectedOptions.includes(index);
+            {activeOptions.map((option, index) => {
+              const isSelected = currentQuestion && currentAnswers 
+                ? currentAnswers.includes(option.id) 
+                : selectedOptions.includes(index);
+                
               return (
                 <div
-                  key={index}
+                  key={option.id || index}
                   onClick={() => handleOptionClick(index)}
                   className={cn(
                     "border-2 rounded-lg overflow-hidden cursor-pointer transition-all",
