@@ -60,7 +60,9 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   const handleOptionClick = (index: number) => {
     if (currentQuestion && handleAnswerSubmit) {
       // For full quiz mode with currentQuestion
-      const optionId = currentQuestion.options[index].id;
+      const optionId = currentQuestion.options[index]?.id;
+      
+      if (!optionId) return; // Guard against undefined options
       
       let newSelectedOptions: string[];
       if (currentAnswers.includes(optionId)) {
@@ -120,6 +122,22 @@ export const QuizContent: React.FC<QuizContentProps> = ({
     ? currentAnswers.length === currentQuestion.multiSelect
     : selectedOptions.length === activeMultiSelect;
   
+  // Guard against undefined activeOptions
+  if (!activeOptions) {
+    return (
+      <div className="bg-[#FAF9F7] min-h-screen py-6 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-center mb-8">
+            <Logo className="h-14" />
+          </div>
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-8 text-center">
+            <p className="text-[#8F7A6A]">Carregando questões...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="bg-[#FAF9F7] min-h-screen py-6 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
@@ -169,7 +187,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
                     <div className="relative">
                       <img 
                         src={option.imageUrl} 
-                        alt={option.text} 
+                        alt={option.text || 'Opção'} 
                         className="w-full aspect-[4/3] object-cover"
                       />
                       {isSelected && (
@@ -198,7 +216,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
                             </div>
                           )}
                         </div>
-                        <span className="text-[#432818]">{option.text}</span>
+                        <span className="text-[#432818]">{option.text || 'Opção sem texto'}</span>
                       </div>
                       
                       {option.styleCategory && (
