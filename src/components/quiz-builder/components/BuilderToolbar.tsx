@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { 
   Save, Eye, EyeOff, Settings, Edit, Layout, 
-  FileText, DatabaseBackup, Share2, Play
+  FileText, DatabaseBackup, Share2, Play, Import
 } from 'lucide-react';
 
 interface BuilderToolbarProps {
@@ -62,8 +62,8 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
           onClick={onImportQuizTemplate}
           className="text-gray-300 border-[#444444] bg-[#333333] hover:bg-[#444444] hover:text-white"
         >
-          <DatabaseBackup className="w-4 h-4 mr-2" />
-          Importar
+          <FileText className="w-4 h-4 mr-2" />
+          Importar Quiz
         </Button>
 
         {activeView === 'editor' && (
