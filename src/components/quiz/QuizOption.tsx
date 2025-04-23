@@ -12,6 +12,7 @@ interface QuizOptionProps {
   onSelect: (optionId: string) => void;
   type: 'text' | 'image' | 'both';
   questionId?: string;
+  isDisabled?: boolean;
 }
 
 const QuizOption: React.FC<QuizOptionProps> = ({
@@ -19,7 +20,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   isSelected,
   onSelect,
   type,
-  questionId
+  questionId,
+  isDisabled = false
 }) => {
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
@@ -29,10 +31,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group h-full",
-        "transition-all duration-500 ease-in-out transform", 
-        !type.includes('text') && !isSelected && "hover:scale-[1.02]"
+        "transition-all duration-300 ease-in-out transform", 
+        !type.includes('text') && !isSelected && "hover:scale-[1.02]",
+        isDisabled && "opacity-50 cursor-not-allowed"
       )}
-      onClick={() => onSelect(option.id)}
+      onClick={() => !isDisabled && onSelect(option.id)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(true)}

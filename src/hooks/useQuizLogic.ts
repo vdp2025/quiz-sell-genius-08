@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -61,11 +60,10 @@ export const useQuizLogic = () => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      console.log('Last question reached, calculating results...');
       calculateResults();
       setQuizCompleted(true);
     }
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, calculateResults]);
 
   const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
