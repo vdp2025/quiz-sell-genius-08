@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-<<<<<<< HEAD
-=======
+HEAD
 import { Header } from '@/components/result/Header';
->>>>>>> 8efcf6116b39bc4018bb82499c2c0d61738f9a4b
+8efcf6116b39bc4018bb82499c2c0d61738f9a4b
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
