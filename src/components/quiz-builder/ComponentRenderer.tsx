@@ -1,123 +1,132 @@
+
 import React from 'react';
-import { cn } from '@/lib/utils';
 import { QuizComponentData } from '@/types/quizBuilder';
-import StageCoverComponent from './components/StageCoverComponent';
-import StageQuestionComponent from './components/StageQuestionComponent';
-import StageResultComponent from './components/StageResultComponent';
+import { cn } from '@/lib/utils';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
-  isPreview: boolean;
-  isSelected: boolean;
+  isPreview?: boolean;
+  isSelected?: boolean;
 }
 
 export const ComponentRenderer: React.FC<ComponentRendererProps> = ({ 
   component, 
-  isPreview,
-  isSelected
+  isPreview = false,
+  isSelected = false
 }) => {
   const { type, data, style } = component;
-  
-  const renderComponent = () => {
-    switch (type) {
-      case 'stageCover':
-        return <StageCoverComponent data={data} style={style} isSelected={isSelected && !isPreview} />;
-      
-      case 'stageQuestion':
-        return <StageQuestionComponent data={data} style={style} isSelected={isSelected && !isPreview} />;
-      
-      case 'stageResult':
-        return <StageResultComponent data={data} style={style} isSelected={isSelected && !isPreview} />;
-        
-      case 'header':
-        return (
-          <header className="text-center py-8">
-            <h1 className="text-3xl font-playfair text-[#432818]">{data.title || 'Título do Quiz'}</h1>
-            {data.subtitle && <p className="mt-2 text-[#8F7A6A]">{data.subtitle}</p>}
-          </header>
-        );
-        
-      case 'headline':
-        return (
-          <div className="py-4">
-            <h2 className="text-2xl font-playfair text-[#432818]">{data.title || 'Título da Seção'}</h2>
-            {data.subtitle && <p className="mt-1 text-[#8F7A6A]">{data.subtitle}</p>}
-          </div>
-        );
-        
-      case 'text':
-        return (
-          <div className="py-2">
-            <p className="text-[#432818]">{data.text || 'Insira seu texto aqui...'}</p>
-          </div>
-        );
-        
-      case 'image':
-        return (
-          <div className="py-4">
-            {data.imageUrl ? (
-              <img 
-                src={data.imageUrl} 
-                alt={data.alt || "Imagem"} 
-                className="mx-auto rounded-lg max-w-full h-auto"
-              />
-            ) : (
-              <div className="bg-gray-200 rounded-lg w-full h-40 flex items-center justify-center text-[#8F7A6A]">
-                Selecione uma imagem
-              </div>
-            )}
-          </div>
-        );
-        
-      case 'multipleChoice':
-        return (
-          <div className="py-4">
-            <h3 className="text-xl font-medium text-[#432818] mb-4">{data.question || 'Sua pergunta aqui?'}</h3>
-            <div className="space-y-2">
-              {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg border-[#B89B7A]/30 hover:border-[#B89B7A]">
-                  <input type="checkbox" className="h-5 w-5 text-[#B89B7A] focus:ring-[#B89B7A]" />
-                  <label className="text-[#432818]">{option}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      case 'singleChoice':
-        return (
-          <div className="py-4">
-            <h3 className="text-xl font-medium text-[#432818] mb-4">{data.question || 'Sua pergunta aqui?'}</h3>
-            <div className="space-y-2">
-              {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg border-[#B89B7A]/30 hover:border-[#B89B7A]">
-                  <input type="radio" name="singleChoice" className="h-5 w-5 text-[#B89B7A] focus:ring-[#B89B7A]" />
-                  <label className="text-[#432818]">{option}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      default:
-        return (
-          <div className="py-4 px-6 border border-dashed border-[#B89B7A]/40 rounded-lg text-center">
-            <p className="text-[#8F7A6A]">Componente {type} ainda não implementado</p>
-          </div>
-        );
-    }
+
+  const getComponentStyles = () => {
+    return {
+      backgroundColor: style?.backgroundColor || 'transparent',
+      color: style?.textColor || 'inherit',
+      borderRadius: style?.borderRadius ? {
+        'sm': '0.25rem',
+        'md': '0.5rem',
+        'lg': '1rem',
+        'full': '9999px'
+      }[style.borderRadius] : '0',
+      padding: `${style?.paddingY ? `${parseInt(style.paddingY) * 0.25}rem` : '1rem'} ${style?.paddingX ? `${parseInt(style.paddingX) * 0.25}rem` : '1rem'}`,
+    };
   };
-  
-  return (
-    <div 
-      className={cn(
-        "transition-all duration-200",
-        !isPreview && "hover:outline-dashed hover:outline-1 hover:outline-[#B89B7A]/40",
-        isSelected && !isPreview && "outline-dashed outline-2 outline-[#B89B7A]",
-        !isPreview && "cursor-pointer"
-      )}
-    >
-      {renderComponent()}
-    </div>
-  );
+
+  switch (type) {
+    case 'header': 
+      return (
+        <div style={getComponentStyles()} className={cn("py-6", isSelected && !isPreview && "bg-opacity-90")}>
+          <h1 className="text-3xl font-bold text-center">{data.stageTitle || 'Título Principal'}</h1>
+          {data.subtitle && <p className="text-xl text-center mt-2">{data.subtitle}</p>}
+        </div>
+      );
+
+    case 'headline':
+      return (
+        <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
+          <h2 className="text-2xl font-bold">{data.title || 'Título da Seção'}</h2>
+        </div>
+      );
+
+    case 'text':
+      return (
+        <div style={getComponentStyles()} className={cn("py-3", isSelected && !isPreview && "bg-opacity-90")}>
+          <p>{data.text || 'Texto do parágrafo que será exibido aqui. Edite este texto nas propriedades.'}</p>
+        </div>
+      );
+
+    case 'image':
+      return (
+        <div style={getComponentStyles()} className={cn("py-4 text-center", isSelected && !isPreview && "bg-opacity-90")}>
+          {data.imageUrl ? (
+            <img 
+              src={data.imageUrl} 
+              alt={data.alt || 'Quiz image'} 
+              className="max-w-full max-h-96 mx-auto rounded-md"
+            />
+          ) : (
+            <div className="bg-gray-200 h-48 flex items-center justify-center rounded-md">
+              <p className="text-gray-500">Imagem não configurada</p>
+            </div>
+          )}
+          {data.caption && (
+            <p className="text-sm text-gray-500 mt-2">{data.caption}</p>
+          )}
+        </div>
+      );
+
+    case 'multipleChoice':
+      return (
+        <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
+          <h3 className="text-xl font-medium mb-4">{data.question || 'Pergunta de múltipla escolha'}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => (
+              <div 
+                key={index} 
+                className="border rounded-md p-3 cursor-pointer hover:bg-gray-50"
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+          <div className="text-sm text-gray-500 mt-4">
+            {data.multiSelect > 1 ? `Selecione ${data.multiSelect} opções` : 'Selecione uma opção'}
+          </div>
+        </div>
+      );
+
+    case 'singleChoice':
+      return (
+        <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
+          <h3 className="text-xl font-medium mb-4">{data.question || 'Pergunta de escolha única'}</h3>
+          <div className="space-y-3">
+            {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
+              <div 
+                key={index} 
+                className="border rounded-md p-3 flex items-center cursor-pointer hover:bg-gray-50"
+              >
+                <div className="w-5 h-5 rounded-full border border-gray-300 mr-3 flex-shrink-0"></div>
+                <span>{option}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'quizResult':
+      return (
+        <div style={getComponentStyles()} className={cn("py-6 text-center", isSelected && !isPreview && "bg-opacity-90")}>
+          <h2 className="text-2xl font-bold mb-4">{data.resultTitle || 'Seu Estilo Predominante'}</h2>
+          <div className="inline-block bg-[#ffefec] px-4 py-2 rounded-md text-[#aa6b5d] mb-6">
+            Estilo exemplo: Natural
+          </div>
+          <p>{data.resultDescription || 'Descrição do resultado do quiz será exibida aqui.'}</p>
+        </div>
+      );
+
+    default:
+      return (
+        <div className="p-4 text-center border border-dashed border-gray-300 rounded-md">
+          <p className="text-gray-500">Componente tipo {type} não reconhecido</p>
+        </div>
+      );
+  }
 };
