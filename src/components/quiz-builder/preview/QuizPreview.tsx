@@ -51,9 +51,6 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
     setShowingResult(false);
   };
   
-  const totalStages = sortedStages.length;
-  const progressPercent = totalStages > 1 ? (currentStageIndex / (totalStages - 1)) * 100 : 0;
-  
   if (stages.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -86,52 +83,12 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
   const stageComponents = components.filter(c => c.stageId === currentStage?.id)
     .sort((a, b) => a.order - b.order);
   
+  // Render the StagePreview directly - navigate buttons appear only on toolbar
   return (
-    <QuizContainer>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium text-[#432818]">
-            Prévia: {currentStage?.title || 'Etapa sem título'}
-          </h2>
-          <div className="text-sm text-gray-500">
-            Etapa {currentStageIndex + 1} de {sortedStages.length}
-          </div>
-        </div>
-        
-        <StagePreview 
-          stage={currentStage} 
-          components={stageComponents} 
-        />
-        
-        <div className="w-full h-1 bg-[#B89B7A]/20 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-[#B89B7A]" 
-            style={{ width: `${progressPercent}%` }}
-          ></div>
-        </div>
-        
-        <div className="flex justify-between pt-4">
-          <Button
-            variant="outline"
-            onClick={handlePrevious}
-            disabled={currentStageIndex === 0}
-            className="border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Anterior
-          </Button>
-          
-          <Button
-            onClick={handleNext}
-            disabled={currentStageIndex === sortedStages.length - 1}
-            className="bg-[#B89B7A] hover:bg-[#9F836A] text-white transition-all duration-200"
-          >
-            Próxima
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
-      </div>
-    </QuizContainer>
+    <StagePreview 
+      stage={currentStage} 
+      components={stageComponents} 
+    />
   );
 };
 
