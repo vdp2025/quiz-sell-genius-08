@@ -277,24 +277,24 @@ const ResultPage: React.FC = () => {
             {[
               {
                 text:
-                  'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me  
-                  fez dar vida à mulher que sempre existiu em mim.',
-                name: 'Mariangela',
-                role: 'Engenheira',
+                  "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me " +
+                  "fez dar vida à mulher que sempre existiu em mim.",
+                name: "Mariangela",
+                role: "Engenheira",
               },
               {
                 text:
-                  'Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas  
-                  começaram a me olhar diferente — porque eu estava diferente.',
-                name: 'Patrícia Paranhos',
-                role: 'Advogada',
+                  "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas " +
+                  "começaram a me olhar diferente — porque eu estava diferente.",
+                name: "Patrícia Paranhos",
+                role: "Advogada",
               },
               {
                 text:
-                  'A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com  
-                  consciência, estilo e propósito.',
-                name: 'Sônia Spier',
-                role: 'Terapeuta',
+                  "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com " +
+                  "consciência, estilo e propósito.",
+                name: "Sônia Spier",
+                role: "Terapeuta",
               },
             ].map((testimonial, index) => (
               <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
