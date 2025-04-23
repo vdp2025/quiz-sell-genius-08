@@ -68,13 +68,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", 
-                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-base md:text-lg",
+                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm",
                 isSelected && "font-semibold"
               )
             : cn(
-                isMobile ? "text-[0.75rem] leading-relaxed" : "text-[0.8rem] sm:text-xl leading-relaxed desktop:text-2xl",
+                isMobile ? "text-[0.75rem] leading-relaxed" : "text-base sm:text-xl leading-relaxed",
                 (questionId === '1' || questionId === '2') && (
-                  isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-sm desktop:text-base"
+                  isMobile ? "text-[0.7rem]" : "text-[0.6rem] sm:text-base"
                 ),
                 isSelected && "text-brand-coffee font-semibold"
               )
