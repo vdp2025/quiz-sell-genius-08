@@ -37,17 +37,12 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
         </h1>
 
-        {/* Imagem principal - Antes e Depois */}
-        <div className="w-full max-w-md mb-6 relative">
-          <img
-            src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446"
-            alt="Transformação de estilo: antes e depois"
-            className="w-full h-auto object-cover rounded-lg shadow-sm"
-          />
-          <div className="absolute top-2 left-2 bg-[#b29670] text-white px-3 py-1 rounded-full text-sm">
-            Antes & Depois
-          </div>
-        </div>
+        {/* Imagem principal */}
+        <img
+          src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1740&auto=format&fit=crop"
+          alt="Mulher elegante com roupas estilosas"
+          className="w-full max-w-md h-auto object-contain mb-6 rounded-lg shadow-sm"
+        />
 
         {/* Subtítulo com destaque */}
         <p className="text-sm md:text-base text-black text-center mb-6 max-w-lg">
