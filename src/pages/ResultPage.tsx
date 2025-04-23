@@ -153,7 +153,7 @@ export const ResultPage = () => {
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
-                  Mini Guia de Visagismo Facial
+                  Guia de Visagismo Facial
                 </h4>
                 <p className="text-sm text-[#432818]/80 mb-4">
                   Para alinhar seu rosto, cabelo e maquiagem com a sua identidade visual.
@@ -258,7 +258,7 @@ export const ResultPage = () => {
             </div>
             <div className="md:w-3/4">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-2">
-                🛡️ Garantia de 7 dias
+                Garantia de 7 dias
               </h3>
               <p className="text-[#432818] mb-4">
                 Você tem uma semana para acessar o conteúdo completo, testar e aplicar.
@@ -275,7 +275,7 @@ export const ResultPage = () => {
         <Card className="p-6 mb-10 bg-[#fff7f3] shadow-md border border-[#B89B7A]/20">
           <div className="text-center space-y-4 mb-6">
             <h2 className="text-2xl font-playfair text-[#aa6b5d]">
-              ⏳ Oferta válida apenas nesta página
+              Oferta válida apenas nesta página
             </h2>
             <p className="text-[#432818]">
               Essa condição especial com os dois bônus é exclusiva para quem acabou de fazer o teste de estilo.
