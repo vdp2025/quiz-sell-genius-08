@@ -5,7 +5,6 @@ import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
-import { EditorButton } from '@/components/ui/EditorButton';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
@@ -368,7 +367,7 @@ const ResultPage: React.FC = () => {
             </div>
             <div className="md:w-3/4">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-2">
-                🛡️ Garantia de 7 dias
+                Garantia de 7 dias
               </h3>
               <p className="text-[#432818] mb-4">
                 Você tem uma semana para acessar o conteúdo completo, testar e  
