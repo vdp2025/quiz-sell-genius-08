@@ -1,11 +1,10 @@
-
 import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
 import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
-import QuizContent from './quiz/QuizContent';
+import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import { QuizNavigation } from './navigation/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
@@ -126,8 +125,6 @@ const QuizPage: React.FC = () => {
             handleAnswerSubmit={handleAnswerSubmit}
             handleNextClick={handleNextClick}
             handlePrevious={handlePrevious}
-            showingStrategicQuestions={false}
-            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
           />
 
           <QuizNavigation

@@ -1,42 +1,38 @@
-import React from 'react';
-import { AnimatedWrapper } from '../ui/animated-wrapper';
-import QuizQuestion from '../QuizQuestion';
-import { strategicQuestions } from '../../data/strategicQuestions';
+
+import React, { useState, useEffect } from 'react';
+import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
+import { strategicQuestions } from '@/data/strategicQuestions';
+import { AnimatedWrapper } from '../ui/animated-wrapper';
 
 interface StrategicQuestionsProps {
   currentQuestionIndex: number;
-  currentAnswers: string[];
+  answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
-  onComplete: () => void;
 }
 
-const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
+export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
-  currentAnswers,
+  answers,
   onAnswer,
-  onComplete
 }) => {
-  const handleStrategicAnswer = (response: UserResponse) => {
-    onAnswer(response);
-  };
+  const [mountKey, setMountKey] = useState(Date.now());
+  
+  // Remount component when question changes to ensure clean state
+  useEffect(() => {
+    setMountKey(Date.now());
+  }, [currentQuestionIndex]);
+
+  if (currentQuestionIndex >= strategicQuestions.length) return null;
 
   return (
-    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
-      <div className="max-w-3xl mx-auto">
-        <AnimatedWrapper>
-          <QuizQuestion
-            question={strategicQuestions[currentQuestionIndex]}
-            onAnswer={handleStrategicAnswer}
-            currentAnswers={currentAnswers}
-            autoAdvance={true}
-            hideTitle={true}
-            onNextClick={onComplete}
-          />
-        </AnimatedWrapper>
-      </div>
-    </div>
+    <AnimatedWrapper key={mountKey}>
+      <QuizQuestion
+        question={strategicQuestions[currentQuestionIndex]}
+        onAnswer={onAnswer}
+        currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
+        autoAdvance={true}
+      />
+    </AnimatedWrapper>
   );
 };
-
-export default StrategicQuestions;

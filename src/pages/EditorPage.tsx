@@ -1,65 +1,78 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import EditorLayout from '@/components/editor/EditorLayout';
-import { PageEditor } from '@/components/editor/PageEditor';
+import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
+import { TemplateList } from '@/components/editor/templates/TemplateList';
+import { Button } from '@/components/ui/button';
 import { defaultResultTemplate } from '@/config/resultPageTemplates';
-import { useToast } from '@/components/ui/use-toast';
+import { createOfferConfig } from '@/utils/config/offerDefaults';
 
-const EditorPage: React.FC = () => {
-  const { style } = useParams<{ style: string }>();
-  const { toast } = useToast();
-  const [editorData, setEditorData] = useState(defaultResultTemplate);
-  const [loading, setLoading] = useState(true);
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [blocks, setBlocks] = useState([]);
-
-  useEffect(() => {
-    // Simulação de carregamento de dados
-    setLoading(true);
-    setTimeout(() => {
-      // Aqui você carregaria dados reais do servidor
-      console.log("Editor carregado para estilo:", style);
-      
-      // Dados fictícios
-      setEditorData({
-        ...defaultResultTemplate,
-        header: {
-          ...defaultResultTemplate.header,
-          content: {
-            ...defaultResultTemplate.header.content,
-            title: `Estilo ${style || 'Personalizado'}`,
-          }
-        }
-      });
-      
-      setLoading(false);
-    }, 1000);
-  }, [style]);
-
-  const handleTogglePreview = () => {
-    setIsPreviewing(!isPreviewing);
+export const EditorPage = () => {
+  const [showTemplates, setShowTemplates] = useState(false);
+  const { style } = useParams<{ style?: string }>();
+  
+  const styleCategory = (style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo") || 'Natural';
+  
+  const selectedStyle = {
+    category: styleCategory,
+    score: 100,
+    percentage: 100
   };
-
-  const handleBlocksChange = (newBlocks) => {
-    setBlocks(newBlocks);
+  
+  // Ensure the initialConfig follows the ResultPageConfig type structure
+  const initialConfig = {
+    styleType: styleCategory,
+    header: {
+      ...defaultResultTemplate.header,
+      visible: true,
+      style: {
+        ...defaultResultTemplate.header.style,
+        borderRadius: '0' // Using string value for borderRadius
+      }
+    },
+    mainContent: {
+      ...defaultResultTemplate.mainContent,
+      visible: true
+    },
+    offer: createOfferConfig(), // Using the createOfferConfig() function to create a proper OfferSection
+    secondaryStyles: {
+      visible: true,
+      content: {},
+      style: {
+        padding: '20px'
+      }
+    },
+    globalStyles: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#432818',
+      backgroundColor: '#FAF9F7',
+      fontFamily: 'Playfair Display, serif'
+    },
+    blocks: []
   };
-
+  
   return (
-    <EditorLayout>
-      {loading ? (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-gray-500">Carregando editor...</p>
+    <div className="h-screen">
+      {showTemplates ? (
+        <div className="p-8 max-w-4xl mx-auto">
+          <Button
+            onClick={() => setShowTemplates(false)}
+            variant="outline"
+            className="mb-4"
+          >
+            Voltar ao Editor
+          </Button>
+          <TemplateList onSelectTemplate={() => setShowTemplates(false)} />
         </div>
       ) : (
-        <PageEditor 
-          blocks={blocks} 
-          onBlocksChange={handleBlocksChange}
-          onPreviewToggle={handleTogglePreview}
-          isPreviewing={isPreviewing}
+        <ResultPageVisualEditor 
+          selectedStyle={selectedStyle} 
+          onShowTemplates={() => setShowTemplates(true)}
+          initialConfig={initialConfig}
         />
       )}
-    </EditorLayout>
+    </div>
   );
 };
 

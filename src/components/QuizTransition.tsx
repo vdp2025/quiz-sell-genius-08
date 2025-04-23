@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from './ui/card';
 import { AnimatedWrapper } from './ui/animated-wrapper';
-import QuizQuestion from './QuizQuestion';
+import { QuizQuestion } from './QuizQuestion';
 import { strategicQuestions } from '../data/strategicQuestions';
 import { UserResponse } from '@/types/quiz';
 

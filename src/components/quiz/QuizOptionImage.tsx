@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AspectRatio } from '../ui/aspect-ratio';
+import { getFallbackStyle } from '@/utils/styleUtils';
 
 interface QuizOptionImageProps {
   imageUrl: string;
@@ -25,17 +25,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   if (imageError) {
     return (
-      <div className="w-full h-full" style={{
-        backgroundColor: getStyleFallbackColor(styleCategory),
-        color: styleCategory === 'Dramático' ? '#FFFFFF' : '#432818',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center' as const,
-        fontWeight: 500,
-        fontSize: '0.8rem',
-        padding: '0.5rem'
-      }}>
+      <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
         <span>{styleCategory}</span>
       </div>
     );
@@ -78,22 +68,3 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     </div>
   );
 };
-
-// Helper function for fallback color
-const getStyleFallbackColor = (styleCategory: string): string => {
-  const colorMap: Record<string, string> = {
-    'Natural': '#D2C5B0',
-    'Clássico': '#8C9AAF',
-    'Contemporâneo': '#B0C5D2',
-    'Elegante': '#C5B0D2',
-    'Romântico': '#F4D0DC',
-    'Sexy': '#D2B0B0',
-    'Dramático': '#303030',
-    'Criativo': '#D2B0C5',
-    'default': '#F5F5F5'
-  };
-  
-  return colorMap[styleCategory] || colorMap.default;
-};
-
-export default QuizOptionImage;

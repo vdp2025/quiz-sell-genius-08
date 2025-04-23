@@ -1,9 +1,7 @@
 
 import React from 'react';
-import QuizTransition from '../QuizTransition';
-import MainTransition from './MainTransition';
+import { MainTransition } from './MainTransition';
 import QuizFinalTransition from '../QuizFinalTransition';
-import StrategicQuestions from './StrategicQuestions';
 import { UserResponse } from '@/types/quiz';
 
 interface QuizTransitionManagerProps {
@@ -14,7 +12,7 @@ interface QuizTransitionManagerProps {
   handleShowResult: () => void;
 }
 
-export const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
+const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   showingTransition,
   showingFinalTransition,
   handleStrategicAnswer,
@@ -22,22 +20,19 @@ export const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   handleShowResult,
 }) => {
   if (showingFinalTransition) {
-    return (
-      <QuizFinalTransition 
-        onFinish={handleShowResult} 
-      />
-    );
+    return <QuizFinalTransition onShowResult={handleShowResult} />;
   }
 
   if (showingTransition) {
     return (
-      <MainTransition 
-        onContinue={handleShowResult} 
+      <MainTransition
         onAnswer={handleStrategicAnswer}
-        currentAnswers={strategicAnswers["strategic-1"] || []}
+        strategicAnswers={strategicAnswers}
       />
     );
   }
 
   return null;
 };
+
+export { QuizTransitionManager };
