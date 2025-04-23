@@ -5,23 +5,43 @@ import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { Progress } from '../ui/progress';
 
 interface QuizHeaderProps {
-  question: QuizQuestion;
-  questionIndex: number;
+  question?: QuizQuestion;
+  questionIndex?: number;
   totalQuestions: number;
+  // Adding new props to match what's being passed in QuizContent.tsx
+  userName?: string;
+  currentQuestionIndex?: number;
+  showingStrategicQuestions?: boolean;
+  currentStrategicQuestionIndex?: number;
 }
 
 const QuizHeader: React.FC<QuizHeaderProps> = ({
   question,
   questionIndex,
-  totalQuestions
+  totalQuestions,
+  userName: userNameProp,
+  currentQuestionIndex,
+  showingStrategicQuestions,
+  currentStrategicQuestionIndex
 }) => {
-  const userName = localStorage.getItem('userName') || 'Visitante';
+  // Use either provided userName prop or get from localStorage
+  const userName = userNameProp || localStorage.getItem('userName') || 'Visitante';
+  
+  // Use appropriate question index depending on what's provided
+  const displayIndex = questionIndex !== undefined 
+    ? questionIndex 
+    : currentQuestionIndex !== undefined 
+      ? currentQuestionIndex 
+      : 0;
+  
+  // Calculate progress percentage
+  const progressPercentage = Math.round(((displayIndex + 1) / totalQuestions) * 100);
   
   return (
     <>
       <AnimatedWrapper>
         <Progress 
-          value={Math.round(((questionIndex + 1) / totalQuestions) * 100)} 
+          value={progressPercentage} 
           className="w-full h-2 bg-[#B89B7A]/20" 
           indicatorClassName="bg-[#B89B7A]" 
         />
@@ -32,18 +52,19 @@ const QuizHeader: React.FC<QuizHeaderProps> = ({
           Olá, {userName}!
         </h1>
         <div className="text-sm text-[#1A1818]/60">
-          {questionIndex + 1} de {totalQuestions}
+          {displayIndex + 1} de {totalQuestions}
         </div>
       </AnimatedWrapper>
       
-      <AnimatedWrapper>
-        <h2 className="text-xl md:text-2xl font-playfair text-[#432818] mb-6">
-          {question.title}
-        </h2>
-      </AnimatedWrapper>
+      {question && (
+        <AnimatedWrapper>
+          <h2 className="text-xl md:text-2xl font-playfair text-[#432818] mb-6">
+            {question.title}
+          </h2>
+        </AnimatedWrapper>
+      )}
     </>
   );
 };
 
 export { QuizHeader };
-
