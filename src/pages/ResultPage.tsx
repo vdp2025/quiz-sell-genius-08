@@ -4,7 +4,6 @@ import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { EditorButton } from '@/components/ui/EditorButton';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 
