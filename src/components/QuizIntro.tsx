@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+
 interface QuizIntroProps {
   onStart: (name: string) => void;
 }
+
 export const QuizIntro: React.FC<QuizIntroProps> = ({
   onStart
 }) => {
@@ -14,6 +17,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
       onStart(name);
     }
   };
+
   return <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-8">
       <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-4 md:p-8 flex flex-col items-center">
         {/* Logo */}
@@ -29,8 +33,12 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
           Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
         </h1>
 
-        {/* Imagem principal */}
-        <img alt="Mulher elegante com roupas estilosas" className="w-full max-w-md h-auto object-contain mb-6 rounded-lg shadow-sm" src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" />
+        {/* Imagem principal - Reduced size */}
+        <img 
+          alt="Mulher elegante com roupas estilosas" 
+          className="w-full max-w-sm h-auto object-cover mb-6 rounded-lg shadow-sm" 
+          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" 
+        />
 
         {/* Subtítulo com destaque */}
         <p className="text-sm md:text-base text-black text-center mb-6 max-w-lg">
@@ -68,4 +76,5 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
       </div>
     </div>;
 };
+
 export default QuizIntro;
