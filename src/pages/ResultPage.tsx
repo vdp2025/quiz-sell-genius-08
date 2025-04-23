@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -40,6 +41,42 @@ const styleImages: Record<string, { image: string; guideImage: string }> = {
   Criativo: {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
     guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp',
+  },
+};
+
+// Style configuration with descriptions
+const styleConfig: Record<string, { description: string; color: string; }> = {
+  Natural: {
+    description: 'Você valoriza o conforto, a praticidade e a simplicidade. Prefere looks descomplicados, tecidos naturais e cores neutras. Sua beleza está na autenticidade e no visual despretensioso.',
+    color: '#D2C5B0',
+  },
+  Clássico: {
+    description: 'Você valoriza a tradição, a elegância atemporal e a discrição. Investe em peças de alta qualidade que permanecem no guarda-roupa por muitas temporadas.',
+    color: '#8C9AAF',
+  },
+  Contemporâneo: {
+    description: 'Você combina o melhor dos dois mundos: praticidade com um toque de estilo atual. Busca looks versáteis que funcionam em diferentes contextos, com cortes bem definidos.',
+    color: '#B0C5D2',
+  },
+  Elegante: {
+    description: 'Você valoriza a sofisticação, o refinamento e a qualidade. Prefere peças com excelente caimento, tecidos nobres e detalhes bem acabados que elevam seu visual.',
+    color: '#C5B0D2',
+  },
+  Romântico: {
+    description: 'Você valoriza a delicadeza, a feminilidade e o charme. Seu guarda-roupa tem peças com detalhes delicados, estampas florais e cores suaves que transmitem sensibilidade.',
+    color: '#F4D0DC',
+  },
+  Sexy: {
+    description: 'Você valoriza o poder da sedução e gosta de destacar seus atributos físicos. Prefere peças que valorizam suas curvas, com decotes, transparências e fendas estratégicas.',
+    color: '#D2B0B0',
+  },
+  Dramático: {
+    description: 'Você valoriza o impacto visual e a individualidade. Seu guarda-roupa tem peças marcantes, estruturadas e com detalhes arquitetônicos que expressam força e confiança.',
+    color: '#303030',
+  },
+  Criativo: {
+    description: 'Você valoriza a originalidade, a expressão pessoal e a liberdade. Seu estilo é único, com combinações inusitadas de cores, estampas e acessórios que refletem sua personalidade.',
+    color: '#D2B0C5',
   },
 };
 

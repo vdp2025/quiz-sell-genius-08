@@ -1,63 +1,53 @@
 
 import React from 'react';
-import { QuizQuestion } from '../QuizQuestion';
-import { QuizHeader } from './QuizHeader';
-import { QuizNavigation } from '../navigation/QuizNavigation';
-import { UserResponse } from '@/types/quiz';
+import { UserSession } from '@/types/auth';
+import QuizQuestion from '../QuizQuestion';
+import QuizHeader from './QuizHeader';
+import { AnimatedWrapper } from '../ui/animated-wrapper';
+import { QuizQuestion as QuizQuestionType, UserResponse } from '@/types/quiz';
 
-interface QuizContentProps {
-  user: { userName?: string } | null;
+export interface QuizContentProps {
+  user?: UserSession;
   currentQuestionIndex: number;
   totalQuestions: number;
-  showingStrategicQuestions: boolean;
-  currentStrategicQuestionIndex: number;
-  currentQuestion: any;
+  currentQuestion: QuizQuestionType;
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
   handleNextClick: () => void;
   handlePrevious: () => void;
+  showingStrategicQuestions?: boolean;
+  currentStrategicQuestionIndex?: number;
 }
 
-const QuizContent: React.FC<QuizContentProps> = ({
+export const QuizContent: React.FC<QuizContentProps> = ({
   user,
   currentQuestionIndex,
   totalQuestions,
-  showingStrategicQuestions,
-  currentStrategicQuestionIndex,
   currentQuestion,
   currentAnswers,
   handleAnswerSubmit,
   handleNextClick,
   handlePrevious,
+  showingStrategicQuestions = false,
+  currentStrategicQuestionIndex = 0
 }) => {
   return (
-    <>
-      <QuizHeader
-        userName={user?.userName}
-        currentQuestionIndex={currentQuestionIndex}
-        totalQuestions={totalQuestions}
-        showingStrategicQuestions={showingStrategicQuestions}
-        currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-      />
-
-      {currentQuestion && (
+    <AnimatedWrapper>
+      <div className="pt-2 pb-4 px-3 mx-auto max-w-6xl">
+        <QuizHeader 
+          progress={(currentQuestionIndex + 1) / totalQuestions * 100}
+          userName={user?.userName || ''}
+        />
+        
         <QuizQuestion
           question={currentQuestion}
           onAnswer={handleAnswerSubmit}
           currentAnswers={currentAnswers}
           onNextClick={handleNextClick}
         />
-      )}
-
-      {!showingStrategicQuestions && currentQuestion && currentQuestionIndex > 0 && (
-        <QuizNavigation
-          currentStep={currentQuestionIndex}
-          totalSteps={totalQuestions}
-          onPrevious={handlePrevious}
-        />
-      )}
-    </>
+      </div>
+    </AnimatedWrapper>
   );
 };
 
-export { QuizContent };
+export default QuizContent;

@@ -70,5 +70,5 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   );
 };
 
-// Adding a default export for the component
+// Export as default too
 export default QuizOptionImage;
