@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -18,7 +19,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   altText,
   styleCategory,
   isSelected,
-  is3DQuestion
+  is3DQuestion,
+  questionId
 }) => {
   const isMobile = useIsMobile();
   const [imageError, setImageError] = useState(false);
@@ -31,36 +33,35 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     );
   }
 
+  // Define specific scale values based on question number and device type
   const getImageScale = () => {
-    // zoom leve em mobile, ajuste em desktop
-    return isMobile ? 'scale-110' : 'scale-90';
+    if (!isMobile) return "scale-110";
+    return "scale-110"; // Keep consistent scale for mobile
   };
 
   return (
-    <div
-      className={cn(
-        "w-full relative flex-grow overflow-hidden",
-        is3DQuestion && "transform-gpu"
-      )}
-    >
-      <AspectRatio
-        ratio={imageUrl.includes('sapatos') ? 1 : 3 / 4}
+    <div className={cn(
+      "w-full relative flex-grow overflow-hidden",
+      is3DQuestion && "transform-gpu"
+    )}>
+      <AspectRatio 
+        ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
         className="w-full h-full"
       >
         <div className="w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={imageUrl}
             alt={altText}
-            loading="lazy"
             className={cn(
-              "object-cover w-full h-full transition-all duration-300 ease-in-out",
+              "object-cover w-full h-full",
+              "transition-all duration-300 ease-in-out",
               getImageScale(),
               isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
             )}
             onError={() => setImageError(true)}
             style={{
               willChange: 'transform',
-              transformOrigin: 'center center'
+              transformOrigin: 'center center',
             }}
           />
         </div>

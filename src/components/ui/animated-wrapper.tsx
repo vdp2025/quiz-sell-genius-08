@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -17,7 +18,7 @@ export const AnimatedWrapper = ({
   return (
     <div
       className={cn(
-        "transition-all duration-200 ease-out",
+        "transition-all duration-300",
         show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
         className
       )}

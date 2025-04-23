@@ -8,11 +8,10 @@ import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import { QuizNavigation } from './navigation/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
-import { useNavigate } from 'react-router-dom';
 
 const QuizPage: React.FC = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
+  const [showingStrategicQuestions, setShowingStrategicQuestions] = React.useState(false);
   const [showingTransition, setShowingTransition] = React.useState(false);
   const [showingFinalTransition, setShowingFinalTransition] = React.useState(false);
   const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = React.useState(0);
@@ -35,27 +34,34 @@ const QuizPage: React.FC = () => {
   useEffect(() => {
     if (user?.userName) {
       localStorage.setItem('userName', user.userName);
+      console.log('User name saved:', user.userName);
     }
   }, [user]);
 
   const handleStrategicAnswer = (response: UserResponse) => {
     try {
+      console.log('Strategic Answer Received:', response);
       setStrategicAnswers(prev => ({
         ...prev,
         [response.questionId]: response.selectedOptions
       }));
+      
       saveStrategicAnswer(response.questionId, response.selectedOptions);
-
-      // Avança imediatamente
+      
       if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
-        setShowingFinalTransition(true);
+        setTimeout(() => {
+          setShowingFinalTransition(true);
+        }, 500);
       } else {
-        setCurrentStrategicQuestionIndex(prev => prev + 1);
+        setTimeout(() => {
+          setCurrentStrategicQuestionIndex(prev => prev + 1);
+        }, 500);
       }
     } catch (error) {
+      console.error('Error processing strategic answer:', error);
       toast({
         title: "Erro no processamento da resposta",
-        description: "Por favor, tente novamente.",
+        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
@@ -64,17 +70,25 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmit = (response: UserResponse) => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
-      // Avança ou mostra transição imediatamente
-      if (!isLastQuestion) {
-        handleNext();
-      } else {
-        calculateResults();
-        setShowingTransition(true);
+      
+      if (response.selectedOptions.length === currentQuestion.multiSelect) {
+        if (!isLastQuestion) {
+          setTimeout(() => {
+            handleNext();
+          }, 500);
+        } else {
+          console.log('Last question reached, showing transition...');
+          setTimeout(() => {
+            calculateResults();
+            setShowingTransition(true);
+          }, 800);
+        }
       }
     } catch (error) {
+      console.error('Error submitting answer:', error);
       toast({
         title: "Erro na submissão da resposta",
-        description: "Por favor, tente novamente.",
+        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
@@ -82,14 +96,20 @@ const QuizPage: React.FC = () => {
 
   const handleShowResult = () => {
     try {
-      submitQuizIfComplete();
+      const results = submitQuizIfComplete();
+      console.log('Final results being saved:', results);
+      
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-      // navegação imediata sem timeout
-      navigate('/resultado');
+      
+      setTimeout(() => {
+        console.log('Navigating to /resultado page...');
+        window.location.href = '/resultado';
+      }, 500);
     } catch (error) {
+      console.error('Error showing result:', error);
       toast({
         title: "Erro ao mostrar resultado",
-        description: "Por favor, tente novamente.",
+        description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
@@ -120,17 +140,19 @@ const QuizPage: React.FC = () => {
             user={user}
             currentQuestionIndex={currentQuestionIndex}
             totalQuestions={totalQuestions}
+            showingStrategicQuestions={showingStrategicQuestions}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
             currentQuestion={currentQuestion}
             currentAnswers={currentAnswers}
             handleAnswerSubmit={handleAnswerSubmit}
             handleNextClick={handleNextClick}
             handlePrevious={handlePrevious}
           />
-
+          
           <QuizNavigation
             currentStep={currentQuestionIndex + 1}
             totalSteps={totalQuestions}
-            onNext={() => handleAnswerSubmit({ questionId: currentQuestion.id, selectedOptions: currentAnswers })}
+            onNext={handleNextClick}
             onPrevious={handlePrevious}
           />
         </>
