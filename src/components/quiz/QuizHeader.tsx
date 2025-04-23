@@ -46,3 +46,4 @@ const QuizHeader: React.FC<QuizHeaderProps> = ({
 };
 
 export { QuizHeader };
+
