@@ -42,6 +42,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
+      "md:mx-auto", // Center on desktop
+      !isMobile && "md:max-w-[50%]", // 50% width on desktop only
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -69,3 +71,4 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     </div>
   );
 };
+
