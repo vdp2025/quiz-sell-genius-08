@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -7,6 +8,7 @@ import { QuizOption } from './quiz/QuizOption';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
+
 interface QuizQuestionProps {
   question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
@@ -15,6 +17,7 @@ interface QuizQuestionProps {
   hideTitle?: boolean;
   onNextClick?: () => void;
 }
+
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
@@ -26,6 +29,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
   const hasImageOptions = question.type !== 'text';
+  
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     if (currentAnswers.includes(optionId)) {
@@ -51,6 +55,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       }, 300);
     }
   };
+  
   const getGridColumns = () => {
     if (question.type === 'text') {
       if (isStrategicQuestion) {
@@ -60,36 +65,68 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     }
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
   };
+  
   const handleNextButtonClick = () => {
     if (onNextClick && currentAnswers.length === question.multiSelect) {
       onNextClick();
     }
   };
-  return <AnimatedWrapper>
+
+  return (
+    <AnimatedWrapper>
       <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", isMobile && "px-2", isStrategicQuestion && "max-w-3xl")} id={`question-${question.id}`}>
-        {!hideTitle && <>
+        {!hideTitle && (
+          <>
             <h2 className={cn("text-base sm:text-xl font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal", isStrategicQuestion && "text-[#432818] text-xl sm:text-2xl mb-6 font-medium whitespace-pre-line")}>
               {highlightStrategicWords(question.title)}
             </h2>
-            {!isStrategicQuestion && <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+            
+            {/* Display question image for strategic questions */}
+            {isStrategicQuestion && question.imageUrl && (
+              <div className="w-full mb-6">
+                <img 
+                  src={question.imageUrl} 
+                  alt="Question visual" 
+                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                />
+              </div>
+            )}
+            
+            {!isStrategicQuestion && (
+              <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
                 Selecione 3 Opções
-              </p>}
-          </>}
+              </p>
+            )}
+          </>
+        )}
         
         <div className={cn("grid h-full", getGridColumns(), (question.id === '1' || question.id === '2') && isMobile && "grid-rows-4 auto-rows-fr gap-y-3", hasImageOptions && "mb-4 relative", isStrategicQuestion && "gap-4")}>
-          {question.options.map(option => <QuizOption key={option.id} option={option} isSelected={currentAnswers.includes(option.id)} onSelect={handleOptionSelect} type={question.type} questionId={question.id} />)}
+          {question.options.map(option => (
+            <QuizOption 
+              key={option.id} 
+              option={option} 
+              isSelected={currentAnswers.includes(option.id)} 
+              onSelect={handleOptionSelect} 
+              type={question.type} 
+              questionId={question.id} 
+            />
+          ))}
         </div>
         
         <div className="flex justify-between items-center gap-3 mt-6">
-          {!autoAdvance && <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
+          {!autoAdvance && (
+            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
               Selecione 3 Opções para avançar
-            </p>}
+            </p>
+          )}
           
           <div className="ml-auto">
             
           </div>
         </div>
       </div>
-    </AnimatedWrapper>;
+    </AnimatedWrapper>
+  );
 };
+
 export { QuizQuestion };
