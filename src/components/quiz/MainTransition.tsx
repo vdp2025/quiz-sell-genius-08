@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { Card } from '../ui/card';
 import { QuizQuestion } from '../QuizQuestion';
@@ -123,5 +124,3 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     </div>
   );
 };
-
-export { MainTransition };
