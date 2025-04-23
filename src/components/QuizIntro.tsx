@@ -39,7 +39,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
 
         {/* Imagem principal */}
         <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/fashion-quiz-cover_ukw0me.webp"
+          src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1740&auto=format&fit=crop"
           alt="Mulher elegante com roupas estilosas"
           className="w-full max-w-md h-auto object-contain mb-6 rounded-lg shadow-sm"
         />
