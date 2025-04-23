@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { Header } from '@/components/result/Header';
