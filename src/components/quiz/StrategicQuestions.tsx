@@ -9,14 +9,19 @@ interface StrategicQuestionsProps {
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
+  onNextClick?: () => void;
 }
 
 export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
   onAnswer,
+  onNextClick
 }) => {
   const [mountKey, setMountKey] = useState(Date.now());
+  
+  console.log('Rendering strategic question:', strategicQuestions[currentQuestionIndex]?.id);
+  console.log('Question has image:', !!strategicQuestions[currentQuestionIndex]?.imageUrl);
   
   // Remount component when question changes to ensure clean state
   useEffect(() => {
@@ -32,6 +37,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
         onAnswer={onAnswer}
         currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
         autoAdvance={true}
+        onNextClick={onNextClick}
       />
     </AnimatedWrapper>
   );

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
@@ -29,6 +29,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const isMobile = useIsMobile();
   const isStrategicQuestion = question.id.startsWith('strategic');
   const hasImageOptions = question.type !== 'text';
+  const [imageError, setImageError] = useState(false);
   
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
@@ -82,12 +83,16 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             </h2>
             
             {/* Display question image for strategic questions */}
-            {isStrategicQuestion && question.imageUrl && (
+            {isStrategicQuestion && question.imageUrl && !imageError && (
               <div className="w-full mb-6">
                 <img 
                   src={question.imageUrl} 
                   alt="Question visual" 
                   className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                  onError={() => {
+                    console.error(`Failed to load image: ${question.imageUrl}`);
+                    setImageError(true);
+                  }}
                 />
               </div>
             )}
@@ -116,7 +121,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <div className="flex justify-between items-center gap-3 mt-6">
           {!autoAdvance && (
             <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-              Selecione 3 Opções para avançar
+              Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
             </p>
           )}
           
