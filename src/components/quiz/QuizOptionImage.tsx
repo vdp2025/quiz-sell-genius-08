@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AspectRatio } from '../ui/aspect-ratio';
-import { getFallbackStyle } from '@/utils/styleUtils';
+import { getStyleFallbackStyles } from '@/utils/style-utils';
 
 interface QuizOptionImageProps {
   imageUrl: string;
@@ -26,7 +26,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   if (imageError) {
     return (
-      <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
+      <div className="w-full h-full" style={getStyleFallbackStyles(styleCategory)}>
         <span>{styleCategory}</span>
       </div>
     );
