@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';
-import { styleConfig } from '@/config/styleConfig';
+import { getStyleConfig } from '@/utils/style-utils'; // atualize o caminho conforme seu projeto
 
 interface PrimaryStyleCardProps {
   primaryStyle: StyleResult;
@@ -16,7 +16,7 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   customImage,
   customGuideImage
 }) => {
-  const style = styleConfig[primaryStyle.category] || styleConfig['Natural'];
+  const style = getStyleConfig(primaryStyle.category);
 
   const imageUrl = customImage || style.image;
   const guideImageUrl = customGuideImage || style.guideImage;
