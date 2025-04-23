@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -19,7 +20,6 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-12">
       <div className="w-full max-w-5xl bg-white shadow-xl rounded-2xl p-6 md:p-12 flex flex-col items-center">
-
         {/* Logo */}
         <img
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
@@ -71,7 +71,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
               text-white 
               py-5 
               text-lg 
-              rounded-full 
+              rounded-md 
               shadow 
               transition-all 
               duration-300 
