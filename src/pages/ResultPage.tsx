@@ -7,46 +7,43 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 
-const getStyleConfig = (styleType: string) => {
-  const config: Record<string, { image: string; guideImage: string }> = {
-    Natural: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp'
-    },
-    Clássico: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp'
-    },
-    Contemporâneo: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp'
-    },
-    Elegante: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp'
-    },
-    Romântico: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp'
-    },
-    Sexy: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp'
-    },
-    Dramático: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp'
-    },
-    Criativo: {
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
-      guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
-    }
-  };
-
-  return config[styleType] || config.Natural;
+// Mapeamento com as duas imagens por estilo
+const styleImages: Record<string, { image: string; guideImage: string }> = {
+  Natural: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+  },
+  Clássico: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+  },
+  Contemporâneo: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+  },
+  Elegante: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+  },
+  Romântico: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+  },
+  Sexy: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
+  },
+  Dramático: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+  },
+  Criativo: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp',
+  },
 };
 
-export const ResultPage = () => {
+export const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
 
@@ -72,7 +69,7 @@ export const ResultPage = () => {
   }
 
   const { category } = primaryStyle;
-  const { image, guideImage } = getStyleConfig(category);
+  const styleImagesData = styleImages[category] || styleImages['Natural'];
   const description = styleConfig[category]?.description || '';
 
   return (
@@ -81,11 +78,9 @@ export const ResultPage = () => {
       style={{
         backgroundColor: globalStyles.backgroundColor || '#fffaf7',
         color: globalStyles.textColor || '#432818',
-        fontFamily: globalStyles.fontFamily || 'inherit'
+        fontFamily: globalStyles.fontFamily || 'inherit',
       }}
     >
-      <EditorButton />
-
       <Header
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
@@ -101,20 +96,23 @@ export const ResultPage = () => {
                 Seu Estilo é {category}
               </h2>
               <p className="text-[#432818] leading-relaxed">{description}</p>
+
               <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#432818] mb-2">Seus Estilos Complementares</h3>
+                <h3 className="text-lg font-medium text-[#432818] mb-2">
+                  Seus Estilos Complementares
+                </h3>
                 <SecondaryStylesSection secondaryStyles={secondaryStyles} />
               </div>
             </div>
 
             <div className="order-first md:order-last space-y-4">
               <img
-                src={image}
+                src={styleImagesData.image}
                 alt={`Visual do Estilo ${category}`}
                 className="w-full h-auto rounded-lg shadow-md"
               />
               <img
-                src={guideImage}
+                src={styleImagesData.guideImage}
                 alt={`Guia do Estilo ${category}`}
                 className="w-full h-auto rounded-lg shadow-md"
               />
@@ -122,9 +120,7 @@ export const ResultPage = () => {
           </div>
         </Card>
 
-        {/* A partir daqui segue a estrutura da sua página normalmente */}
-        {/* ... cards de oferta, bônus, depoimentos, CTA etc. */}
-
+        {/* AQUI você pode continuar com os cards de oferta, CTA e bônus como já estruturado anteriormente */}
       </div>
     </div>
   );
