@@ -5,6 +5,7 @@ import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuil
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { toast } from '@/components/ui/use-toast';
 import { QuizResult } from '@/types/quiz';
+import { Button } from '@/components/ui/button'; // Added missing import
 import BuilderLayout from './components/BuilderLayout';
 import BuilderToolbar from './components/BuilderToolbar';
 import QuizTemplateImporter from './components/QuizTemplateImporter';

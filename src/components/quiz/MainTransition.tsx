@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { Card } from '../ui/card';
@@ -83,10 +82,10 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
 
               <div className="flex justify-center mt-6">
                 <Button 
-                  variant="golden" 
+                  variant="default" 
                   size="lg"
                   onClick={() => setShowIntro(false)}
-                  className="transition-all duration-300 hover:scale-105 active:scale-95"
+                  className="bg-gradient-to-r from-[#B89B7A] to-[#432818] text-white transition-all duration-300 hover:scale-105 active:scale-95"
                 >
                   Continuar
                 </Button>
@@ -124,3 +123,5 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     </div>
   );
 };
+
+export { MainTransition };
