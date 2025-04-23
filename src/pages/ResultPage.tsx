@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -6,9 +7,16 @@ import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import ErrorState from '@/components/result/ErrorState';
+import MotivationSection from '@/components/result/MotivationSection';
+import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import ProductShowcase from '@/components/quiz-result/sales/ProductShowcase';
+import BenefitList from '@/components/quiz-result/sales/BenefitList';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -19,24 +27,7 @@ const ResultPage: React.FC = () => {
   }, []);
 
   if (!primaryStyle) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-center">
-          <h1 className="text-2xl font-playfair text-[#432818] mb-4">
-            Resultados não encontrados
-          </h1>
-          <p className="text-[#8F7A6A] mb-6">
-            Parece que você ainda não completou o quiz.
-          </p>
-          <a
-            href="/"
-            className="inline-block px-6 py-3 bg-[#B89B7A] hover:bg-[#8F7A6A] text-white rounded-md transition-colors"
-          >
-            Fazer o Quiz
-          </a>
-        </div>
-      </div>
-    );
+    return <ErrorState />;
   }
 
   const { category } = primaryStyle;
@@ -109,46 +100,7 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         </Card>
 
-        {/* Motivação */}
-        <div className="text-center mb-10 space-y-4">
-          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d]">
-            Você já descobriu seu Estilo e isso é muito poderoso.
-          </h2>
-          <p className="text-lg text-[#432818]">
-            Conhecimento é clareza.<br />
-            E clareza muda o jeito que você se vê, se escolhe, se posiciona.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-6 text-left mt-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <p className="text-[#432818] leading-relaxed">
-                <em>
-                  Mas é na ação que a verdadeira transformação acontece.
-                  É quando você aplica o que aprendeu… que o espelho começa a
-                  contar uma nova história.
-                </em>
-              </p>
-              <p className="text-[#432818] mt-4 leading-relaxed">
-                <strong>
-                  Não é sobre mudar quem você é.<br />
-                  É sobre finalmente Vestir-se de Você.
-                </strong>
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <p className="text-[#432818] leading-relaxed">
-                E pra isso, eu preparei o caminho completo.<br />
-                Simples. Prático. Estratégico.
-              </p>
-              <p className="text-[#432818] mt-4 leading-relaxed">
-                <strong>
-                  Pra você transformar estilo em presença.<br />
-                  E imagem em poder.
-                </strong>
-              </p>
-            </div>
-          </div>
-        </div>
+        <MotivationSection />
 
         {/* Oferta + Bônus */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
@@ -164,33 +116,7 @@ const ResultPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
-            <div>
-              <h3 className="text-xl font-medium text-[#432818] mb-4">
-                Você vai aprender:
-              </h3>
-              <ul className="space-y-3">
-                {[
-                  'Como montar looks com intenção (e não no improviso)',
-                  'Como usar suas cores, modelagens e tecidos a seu favor',
-                  'Como alinhar sua imagem com seus valores e objetivos',
-                  'Como parar de comprar por impulso e montar um guarda-roupa funcional',
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp"
-                alt="Guia de Estilo - 3 Revistas"
-                className="w-full h-auto rounded-lg shadow-sm"
-              />
-            </div>
-          </div>
+          <ProductShowcase />
 
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
             <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
@@ -266,121 +192,9 @@ const ResultPage: React.FC = () => {
           </div>
         </Card>
 
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            💬 Depoimentos de mulheres que já viveram essa transformação:
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                text:
-                  "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me " +
-                  "fez dar vida à mulher que sempre existiu em mim.",
-                name: "Mariangela",
-                role: "Engenheira",
-              },
-              {
-                text:
-                  "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas " +
-                  "começaram a me olhar diferente — porque eu estava diferente.",
-                name: "Patrícia Paranhos",
-                role: "Advogada",
-              },
-              {
-                text:
-                  "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com " +
-                  "consciência, estilo e propósito.",
-                name: "Sônia Spier",
-                role: "Terapeuta",
-              },
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-[#fff7f3] p-4 rounded-lg">
-                <p className="italic text-[#432818] mb-4">
-                  "{testimonial.text}"
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="h-1 w-8 bg-[#aa6b5d]"></div>
-                  <div>
-                    <p className="font-medium text-[#432818]">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-sm text-[#432818]/70">
-                      {testimonial.role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <img
-              src="https://res.cloudinary.com/dzt2fe3ij/image/upload/v1745104587/Captura_de_tela_2025-03-31_034319_peuoc8.webp"
-              alt="Antes e Depois"
-              className="w-full h-auto rounded-lg mt-6"
-            />
-          </div>
-        </Card>
-
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            Sobre sua mentora
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-xl font-medium text-[#432818] mb-2">
-                Gisele Galvão
-              </h3>
-              <p className="text-[#432818] mb-4">
-                Consultora de Imagem e Estilo, Personal Branding, Estrategista de  
-                Marca pessoal e Especialista em coloração pessoal com Certificação  
-                internacional.
-              </p>
-              <p className="text-[#432818] mb-4">
-                Advogada de formação. Mãe da Victória, esposa do Fabrício.
-              </p>
-              <p className="text-[#432818]">
-                Apaixonada pela vida, pelos detalhes, viagens e tudo que me  
-                proporcione crescer como ser humano. Colérica, virginiana, paciente,  
-                pacificadora e muito empata.
-              </p>
-            </div>
-            <div className="space-y-6">
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp"
-                alt="Gisele Galvão"
-                className="w-full h-auto rounded-lg shadow-md"
-              />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="md:w-1/4 flex justify-center">
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp"
-                alt="Garantia de 7 dias"
-                className="w-32 h-32 object-contain"
-              />
-            </div>
-            <div className="md:w-3/4">
-              <h3 className="text-xl font-medium text-[#aa6b5d] mb-2">
-                Garantia de 7 dias
-              </h3>
-              <p className="text-[#432818] mb-4">
-                Você tem uma semana para acessar o conteúdo completo, testar e  
-                aplicar. Se não fizer sentido pra você, devolvemos 100% do seu  
-                investimento. Sem burocracia.
-              </p>
-              <div className="flex items-center">
-                <Shield className="h-5 w-5 text-[#aa6b5d] mr-2" />
-                <span className="text-[#432818] font-medium">
-                  Satisfação garantida ou seu dinheiro de volta
-                </span>
-              </div>
-            </div>
-          </div>
-        </Card>
+        <Testimonials />
+        <MentorSection />
+        <GuaranteeSection />
       </div>
     </div>
   );
