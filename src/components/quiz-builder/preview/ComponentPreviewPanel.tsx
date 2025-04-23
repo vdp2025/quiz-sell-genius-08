@@ -47,13 +47,17 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
       >
         <div className="space-y-4">
           {components.map((component) => (
-            <ComponentRenderer
-              key={component.id}
-              component={component}
-              isSelected={component.id === selectedComponentId}
-              isPreview={isPreviewing}
+            <div 
+              key={component.id} 
               onClick={() => !isPreviewing && onSelectComponent(component.id)}
-            />
+            >
+              <ComponentRenderer
+                key={component.id}
+                component={component}
+                isSelected={component.id === selectedComponentId}
+                isPreview={isPreviewing}
+              />
+            </div>
           ))}
           
           {components.length === 0 && (

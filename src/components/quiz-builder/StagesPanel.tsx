@@ -139,9 +139,9 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
   };
 
   const stageTypes = [
-    { type: 'cover', label: 'Capa', icon: BookOpen },
-    { type: 'question', label: 'Questão', icon: FileQuestion },
-    { type: 'result', label: 'Resultado', icon: Award },
+    { type: 'cover' as const, label: 'Capa', icon: BookOpen },
+    { type: 'question' as const, label: 'Questão', icon: FileQuestion },
+    { type: 'result' as const, label: 'Resultado', icon: Award },
   ];
 
   return (
