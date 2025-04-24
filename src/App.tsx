@@ -8,17 +8,12 @@ import { QuizProvider } from './context/QuizContext';
 import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import EditorPage from './pages/admin/EditorPage';
-import QuizEditorPage from './pages/admin/QuizEditorPage';
-import TemplatesPage from './pages/admin/TemplatesPage';
 import QuizBuilderPage from './pages/QuizBuilderPage';
 
 // Componente para rotas protegidas administrativas
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   // Aqui você pode verificar se o usuário está autenticado e é um administrador
   // Por enquanto, apenas renderizamos diretamente para fins de desenvolvimento
-  // Em produção, você deve verificar as permissões do usuário
-  
   const isAdmin = true; // Implementar lógica real de verificação
   
   if (!isAdmin) {
@@ -41,9 +36,6 @@ function App() {
               
               {/* Rotas administrativas protegidas */}
               <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
-              <Route path="/admin/editor" element={<ProtectedAdminRoute><EditorPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/quiz-editor" element={<ProtectedAdminRoute><TemplatesPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/quiz-editor/:templateId" element={<ProtectedAdminRoute><QuizEditorPage /></ProtectedAdminRoute>} />
               <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
             </Routes>
           </Suspense>

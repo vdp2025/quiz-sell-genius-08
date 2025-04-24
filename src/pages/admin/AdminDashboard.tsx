@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -32,31 +33,17 @@ const AdminDashboard = () => {
           <h2 className="text-lg font-medium text-[#432818] mb-4">Ações Rápidas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link 
-              to="/admin/quiz-editor" 
+              to="/admin/quiz-builder" 
               className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
             >
-              <h3 className="font-medium text-[#432818]">Editor de Quiz</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Edite perguntas e opções do seu quiz</p>
+              <h3 className="font-medium text-[#432818]">Editor do Quiz</h3>
+              <p className="text-sm text-[#8F7A6A] mt-1">Edite e configure seu quiz</p>
             </Link>
             
             <a 
-              href="/builder" 
-              className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
-            >
-              <h3 className="font-medium text-[#432818]">Construtor de Quiz</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Construa o fluxo visual do seu quiz</p>
-            </a>
-            
-            <a 
-              href="/editor" 
-              className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
-            >
-              <h3 className="font-medium text-[#432818]">Editor de Página de Resultado</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Personalize a página de resultados</p>
-            </a>
-            
-            <a 
               href="/" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
             >
               <h3 className="font-medium text-[#432818]">Visualizar Quiz</h3>

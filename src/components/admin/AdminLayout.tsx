@@ -3,7 +3,7 @@ import React from 'react';
 import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar, SidebarProvider } from '../ui/sidebar';
-import { FileText, Layers, Home, Settings, LayoutGrid, ClipboardList } from 'lucide-react';
+import { Home, Settings, ClipboardList } from 'lucide-react';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -14,13 +14,8 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const location = useLocation();
 
   // Para aplicações em produção, você deve verificar se o usuário tem permissão de administrador
-  // Por enquanto, para fins de desenvolvimento, estamos permitindo acesso para facilitar testes
-  // Mas para produção, você deve implementar um sistema real de autenticação e autorização
   const isAuthenticated = true; 
-  // Em produção, algo como:
-  // const isAuthenticated = user?.isAuthenticated && user?.roles?.includes('admin');
 
-  // Protect admin routes - redirect to home if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
@@ -49,31 +44,19 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               </Link>
               
               <Link 
-                to="/admin/quiz-editor" 
+                to="/admin/quiz-builder" 
                 className={`flex items-center px-3 py-2 text-sm rounded-md ${
-                  location.pathname.includes('/admin/quiz-editor') 
+                  location.pathname.includes('/admin/quiz-builder') 
                     ? 'bg-[#FAF9F7] text-[#432818] font-medium' 
                     : 'text-[#8F7A6A] hover:bg-[#FAF9F7] hover:text-[#432818]'
                 }`}
               >
                 <ClipboardList className="w-4 h-4 mr-3" />
-                Templates de Quiz
-              </Link>
-              
-              <Link 
-                to="/admin/editor" 
-                className={`flex items-center px-3 py-2 text-sm rounded-md ${
-                  location.pathname === '/admin/editor' 
-                    ? 'bg-[#FAF9F7] text-[#432818] font-medium' 
-                    : 'text-[#8F7A6A] hover:bg-[#FAF9F7] hover:text-[#432818]'
-                }`}
-              >
-                <LayoutGrid className="w-4 h-4 mr-3" />
-                Editor de Páginas
+                Editor do Quiz
               </Link>
               
               <p className="px-3 pt-5 pb-2 text-xs font-medium text-[#B89B7A] uppercase">
-                Conteúdo
+                Configurações
               </p>
               
               <Link 
@@ -86,10 +69,12 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               
               <a 
                 href="/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center px-3 py-2 text-sm text-[#8F7A6A] rounded-md hover:bg-[#FAF9F7] hover:text-[#432818]"
               >
-                <FileText className="w-4 h-4 mr-3" />
-                Ver Site
+                <ClipboardList className="w-4 h-4 mr-3" />
+                Ver Quiz
               </a>
             </div>
           </div>
