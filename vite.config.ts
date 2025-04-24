@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' && {
       name: 'inject-gptengineer-script',
-      transformIndexHtml(html) {
+      transformIndexHtml(html: string) {
         return html.replace(
           '</body>',
           `<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></body>`
