@@ -21,20 +21,26 @@ export const TrackingConfigForm = () => {
   const { data: configData, isLoading } = useQuery({
     queryKey: ['tracking-config'],
     queryFn: async () => {
-      // Using a more generic approach to handle tables not in TypeScript definitions
-      const { data, error } = await supabase
-        .from('tracking_config')
-        .select('*')
-        .limit(1)
-        .single();
+      try {
+        // Using any to bypass TypeScript constraints for tables not in the schema
+        const { data, error } = await (supabase as any)
+          .from('tracking_config')
+          .select('*')
+          .limit(1)
+          .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
-      return data as {
-        id: string;
-        facebook_pixel_id: string;
-        google_analytics_id: string;
-        active: boolean;
-      } | null;
+        if (error && error.code !== 'PGRST116') throw error;
+        
+        return data as {
+          id: string;
+          facebook_pixel_id: string | null;
+          google_analytics_id: string | null;
+          active: boolean | null;
+        } | null;
+      } catch (error) {
+        console.error("Error fetching tracking config:", error);
+        return null;
+      }
     },
   });
 
@@ -50,8 +56,8 @@ export const TrackingConfigForm = () => {
 
   const onSubmit = async (data: TrackingConfig) => {
     try {
-      // Using a more generic approach to handle tables not in TypeScript definitions
-      const { error } = await supabase
+      // Using any to bypass TypeScript constraints for tables not in the schema
+      const { error } = await (supabase as any)
         .from('tracking_config')
         .upsert({
           id: configData?.id,

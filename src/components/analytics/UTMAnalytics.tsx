@@ -16,20 +16,26 @@ export const UTMAnalytics = () => {
   const { data: utmData, isLoading } = useQuery({
     queryKey: ['utm-analytics'],
     queryFn: async () => {
-      // Using a more generic approach to handle tables not in TypeScript definitions
-      const { data, error } = await supabase
-        .from('utm_analytics')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        // Using any to bypass TypeScript constraints for tables not in the schema
+        const { data, error } = await (supabase as any)
+          .from('utm_analytics')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      return data as Array<{
-        id: string;
-        utm_source: string | null;
-        utm_medium: string | null;
-        utm_campaign: string | null;
-        created_at: string;
-      }>;
+        if (error) throw error;
+        
+        return data as Array<{
+          id: string;
+          utm_source: string | null;
+          utm_medium: string | null;
+          utm_campaign: string | null;
+          created_at: string;
+        }>;
+      } catch (error) {
+        console.error("Error fetching UTM data:", error);
+        return [];
+      }
     },
   });
 
@@ -37,16 +43,17 @@ export const UTMAnalytics = () => {
     return <div>Loading...</div>;
   }
 
-  const sourceData = utmData?.reduce((acc: any[], curr) => {
+  const sourceData = (utmData || []).reduce<Array<{source: string, count: number}>>((acc, curr) => {
     const source = curr.utm_source || 'Direct';
     const existingSource = acc.find(item => item.source === source);
+    
     if (existingSource) {
       existingSource.count += 1;
     } else {
       acc.push({ source, count: 1 });
     }
     return acc;
-  }, []) || [];
+  }, []);
 
   return (
     <div className="space-y-6">
