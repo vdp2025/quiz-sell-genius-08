@@ -107,7 +107,9 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({
           </TabsContent>
           
           <TabsContent value="result" className="h-full m-0">
-            <ResultPageVisualEditor />
+            <ResultPageVisualEditor 
+              selectedStyle={initialResultStyle}
+            />
           </TabsContent>
           
           <TabsContent value="sales" className="h-full m-0 p-4 bg-[#FAF9F7]">
