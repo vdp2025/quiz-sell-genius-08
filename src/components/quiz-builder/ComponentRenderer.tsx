@@ -12,6 +12,17 @@ interface ComponentRendererProps {
   isSelected?: boolean;
 }
 
+// Define interface for option objects
+interface OptionObject {
+  text: string;
+  imageUrl?: string;
+  styleCategory?: string;
+  id?: string;
+}
+
+// Define a type that can be either a string or an option object
+type Option = string | OptionObject;
+
 export const ComponentRenderer: React.FC<ComponentRendererProps> = ({ 
   component, 
   isPreview = false,
@@ -31,6 +42,16 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       }[style.borderRadius] : '0',
       padding: `${style?.paddingY ? `${parseInt(style.paddingY) * 0.25}rem` : '1rem'} ${style?.paddingX ? `${parseInt(style.paddingX) * 0.25}rem` : '1rem'}`,
     };
+  };
+
+  // Helper function to safely extract text from an option
+  const getOptionText = (option: Option): string => {
+    if (typeof option === 'string') {
+      return option;
+    } else if (option && typeof option === 'object') {
+      return option.text || '';
+    }
+    return '';
   };
 
   switch (type) {
@@ -82,16 +103,12 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           <h3 className="text-xl font-medium mb-4">{data.question || 'Pergunta de múltipla escolha'}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
-              // Handle both string and object options
-              let optionText = typeof option === 'string' ? option : 
-                typeof option === 'object' && option !== null ? option.text || '' : '';
-                
               return (
                 <div 
                   key={index} 
                   className="border rounded-md p-3 cursor-pointer hover:bg-gray-50"
                 >
-                  {optionText}
+                  {getOptionText(option)}
                 </div>
               );
             })}
@@ -108,17 +125,13 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           <h3 className="text-xl font-medium mb-4">{data.question || 'Pergunta de escolha única'}</h3>
           <div className="space-y-3">
             {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => {
-              // Handle both string and object options
-              let optionText = typeof option === 'string' ? option : 
-                typeof option === 'object' && option !== null ? option.text || '' : '';
-              
               return (
                 <div 
                   key={index} 
                   className="border rounded-md p-3 flex items-center cursor-pointer hover:bg-gray-50"
                 >
                   <div className="w-5 h-5 rounded-full border border-gray-300 mr-3 flex-shrink-0"></div>
-                  <span>{optionText}</span>
+                  <span>{getOptionText(option)}</span>
                 </div>
               );
             })}
