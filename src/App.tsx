@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import QuizResult from './components/quiz-result/QuizResult';
 import Quiz from './components/quiz/Quiz';
 import { styleConfig } from './config/styleConfig';
 import QuizBuilderPage from './pages/QuizBuilderPage';
+import ResultPageEditorPage from './pages/ResultPageEditorPage'; // New import
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
           }
         />
         <Route path="/admin/quiz-builder" element={<QuizBuilderPage />} />
+        <Route path="/admin/resultado-editor" element={<ResultPageEditorPage />} /> {/* New route */}
       </Routes>
     </Router>
   );
