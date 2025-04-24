@@ -1,10 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { UTMAnalytics } from '@/components/analytics/UTMAnalytics';
 import { QuizMetrics } from '@/components/analytics/QuizMetrics';
 
 const UTMAnalyticsPage = () => {
+  useEffect(() => {
+    console.log('UTMAnalyticsPage mounted');
+  }, []);
+
   return (
     <AdminLayout>
       <div className="p-6 bg-[#FAF9F7]">
