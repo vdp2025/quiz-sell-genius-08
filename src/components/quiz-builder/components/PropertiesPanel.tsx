@@ -46,7 +46,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     }
   };
 
-  const handleStyleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, field: string) => {
+  // Fixed: Updated the function parameter type to include HTMLSelectElement
+  const handleStyleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, field: string) => {
     if (component) {
       onUpdate(component.id, { 
         style: { ...component.style, [field]: e.target.value } 
