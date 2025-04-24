@@ -21,11 +21,7 @@ const EditorResultadoPage: React.FC = () => {
       | 'Dramático'
       | 'Criativo') || 'Natural';
 
-  const selectedStyle = {
-    category: styleCategory,
-    score: 100,
-    percentage: 100,
-  };
+  const selectedStyle = { category: styleCategory, score: 100, percentage: 100 };
 
   const initialConfig = {
     styleType: styleCategory,
