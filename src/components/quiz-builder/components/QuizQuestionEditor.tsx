@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import QuizOptionEditor from './QuizOptionEditor';
 import { generateId } from '@/utils/idGenerator';
+import { Plus } from 'lucide-react';
 
 interface QuizOptionType {
   id: string;

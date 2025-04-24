@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -16,6 +17,7 @@ interface QuizQuestionProps {
   autoAdvance?: boolean;
   hideTitle?: boolean;
   onNextClick?: () => void;
+  onPreviousClick?: () => void;
   showQuestionImage?: boolean;
 }
 
@@ -26,6 +28,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   autoAdvance = false,
   hideTitle = false,
   onNextClick,
+  onPreviousClick,
   showQuestionImage = false
 }) => {
   const isMobile = useIsMobile();
