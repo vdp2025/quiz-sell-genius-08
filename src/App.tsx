@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
@@ -8,6 +8,18 @@ import { QuizProvider } from './context/QuizContext';
 import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import ResultPageEditorPage from './pages/admin/ResultPageEditorPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import { useAuth } from './context/AuthContext';
+
+const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isAdmin } = useAuth();
+  
+  if (!user || !isAdmin) {
+    return <Navigate to="/" />;
+  }
+
+  return <>{children}</>;
+};
 
 function App() {
   return (
@@ -18,7 +30,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/admin/resultado-editor" element={<ResultPageEditorPage />} />
+              <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+              <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
             </Routes>
           </Suspense>
           <Toaster />
@@ -29,4 +42,3 @@ function App() {
 }
 
 export default App;
-
