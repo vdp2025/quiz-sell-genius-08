@@ -16,7 +16,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 
 export const QuizMetrics = () => {
-  const { data: participantsData, isLoading: isLoadingParticipants } = useQuery({
+  const { data: participantsData, isLoading: isLoadingParticipants, error: participantsError } = useQuery({
     queryKey: ['participants-metrics'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -24,12 +24,15 @@ export const QuizMetrics = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
+      console.log('Participants Data:', data);
+      console.log('Participants Error:', error);
+
       if (error) throw error;
       return data;
     },
   });
 
-  const { data: analyticsData, isLoading: isLoadingAnalytics } = useQuery({
+  const { data: analyticsData, isLoading: isLoadingAnalytics, error: analyticsError } = useQuery({
     queryKey: ['quiz-analytics'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -37,13 +40,22 @@ export const QuizMetrics = () => {
         .select('*')
         .order('created_at', { ascending: true });
 
+      console.log('Analytics Data:', data);
+      console.log('Analytics Error:', error);
+
       if (error) throw error;
       return data;
     },
   });
 
   if (isLoadingParticipants || isLoadingAnalytics) {
+    console.log('Loading metrics...');
     return <div className="p-4">Carregando métricas...</div>;
+  }
+
+  if (participantsError || analyticsError) {
+    console.error('Error fetching metrics:', participantsError || analyticsError);
+    return <div className="p-4 text-red-500">Erro ao carregar métricas</div>;
   }
 
   const completionRate = participantsData ? {
