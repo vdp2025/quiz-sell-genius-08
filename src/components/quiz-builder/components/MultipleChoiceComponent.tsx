@@ -9,6 +9,7 @@ interface OptionObject {
   text: string;
   imageUrl?: string;
   styleCategory?: string;
+  id?: string;
 }
 
 type Option = string | OptionObject;
@@ -46,6 +47,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
   const displayType = data.displayType || 'text';
   const showImages = displayType === 'image' || displayType === 'both';
   const showText = displayType === 'text' || displayType === 'both';
+  const maxSelections = data.maxSelections || data.multiSelect || 3;
 
   return (
     <div 
@@ -65,8 +67,8 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
       </h3>
       
       <p className="text-center text-sm text-[#6b605a] mb-6">
-        {data.maxSelections > 1 
-          ? `Selecione ${data.maxSelections} opções`
+        {maxSelections > 1 
+          ? `Selecione ${maxSelections} opções`
           : 'Selecione uma opção'}
       </p>
       
@@ -76,9 +78,20 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
       )}>
         {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => {
           // Handle both string options and object options with proper type checking
-          const optionValue = option as Option;
-          const optionText = typeof optionValue === 'string' ? optionValue : optionValue.text;
-          const optionImage = typeof optionValue === 'object' && optionValue?.imageUrl ? optionValue.imageUrl : null;
+          let optionText: string;
+          let optionImage: string | null = null;
+          
+          if (typeof option === 'string') {
+            optionText = option;
+          } else if (typeof option === 'object' && option !== null) {
+            // We need to cast option to OptionObject to access its properties safely
+            const optionObj = option as OptionObject;
+            optionText = optionObj.text || '';
+            optionImage = optionObj.imageUrl || null;
+          } else {
+            // Fallback for any other type
+            optionText = String(option);
+          }
           
           return (
             <div 
@@ -104,7 +117,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
                 </div>
               )}
               
-              {showImages && !optionImage && (
+              {showImages && !optionImage && showImages && (
                 <div className="w-full">
                   <AspectRatio ratio={imageConfig.ratio} className={imageConfig.classes}>
                     <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
@@ -126,7 +139,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
         })}
       </div>
       
-      {!data.autoAdvance && data.maxSelections > 0 && (
+      {!data.autoAdvance && maxSelections > 0 && (
         <div className="flex justify-center mt-4">
           <button className="bg-[#B89B7A]/80 hover:bg-[#B89B7A] text-white px-4 py-2 rounded-md text-sm opacity-50 cursor-not-allowed">
             Continuar

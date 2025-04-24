@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 import StageResultComponent from './components/StageResultComponent';
 import StageCoverComponent from './components/StageCoverComponent';
+import StageQuestionComponent from './components/StageQuestionComponent';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
@@ -79,14 +81,20 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
           <h3 className="text-xl font-medium mb-4">{data.question || 'Pergunta de múltipla escolha'}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => (
-              <div 
-                key={index} 
-                className="border rounded-md p-3 cursor-pointer hover:bg-gray-50"
-              >
-                {option}
-              </div>
-            ))}
+            {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
+              // Handle both string and object options
+              let optionText = typeof option === 'string' ? option : 
+                typeof option === 'object' && option !== null ? option.text || '' : '';
+                
+              return (
+                <div 
+                  key={index} 
+                  className="border rounded-md p-3 cursor-pointer hover:bg-gray-50"
+                >
+                  {optionText}
+                </div>
+              );
+            })}
           </div>
           <div className="text-sm text-gray-500 mt-4">
             {data.multiSelect > 1 ? `Selecione ${data.multiSelect} opções` : 'Selecione uma opção'}
@@ -99,15 +107,21 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
           <h3 className="text-xl font-medium mb-4">{data.question || 'Pergunta de escolha única'}</h3>
           <div className="space-y-3">
-            {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
-              <div 
-                key={index} 
-                className="border rounded-md p-3 flex items-center cursor-pointer hover:bg-gray-50"
-              >
-                <div className="w-5 h-5 rounded-full border border-gray-300 mr-3 flex-shrink-0"></div>
-                <span>{option}</span>
-              </div>
-            ))}
+            {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => {
+              // Handle both string and object options
+              let optionText = typeof option === 'string' ? option : 
+                typeof option === 'object' && option !== null ? option.text || '' : '';
+              
+              return (
+                <div 
+                  key={index} 
+                  className="border rounded-md p-3 flex items-center cursor-pointer hover:bg-gray-50"
+                >
+                  <div className="w-5 h-5 rounded-full border border-gray-300 mr-3 flex-shrink-0"></div>
+                  <span>{optionText}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       );
@@ -126,6 +140,15 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     case 'stageCover':
       return (
         <StageCoverComponent 
+          data={data}
+          style={style}
+          isSelected={isSelected && !isPreview}
+        />
+      );
+      
+    case 'stageQuestion':
+      return (
+        <StageQuestionComponent
           data={data}
           style={style}
           isSelected={isSelected && !isPreview}

@@ -122,9 +122,13 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
         <div className="space-y-2">
           <Label className="text-[#432818]">Número de Seleções</Label>
           <Select
-            value={String(component.data.multiSelect || 3)}
+            value={String(component.data.multiSelect || component.data.maxSelections || 3)}
             onValueChange={(value) => onUpdate({
-              data: { ...component.data, multiSelect: parseInt(value) }
+              data: { 
+                ...component.data, 
+                multiSelect: parseInt(value),
+                maxSelections: parseInt(value) 
+              }
             })}
           >
             <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]">

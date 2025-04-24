@@ -6,6 +6,14 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
+interface OptionObject {
+  text: string;
+  imageUrl?: string;
+  styleCategory?: string;
+}
+
+type Option = string | OptionObject;
+
 interface StageQuestionComponentProps {
   data: QuizComponentData['data'];
   style: QuizComponentData['style'];
@@ -58,38 +66,56 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         getGridColumns(),
         showImages && "mb-4 relative"
       )}>
-        {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => (
-          <div
-            key={index}
-            className={cn(
-              "relative rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md border-2 border-transparent hover:border-[#B89B7A]/60 cursor-pointer",
-              showImages ? "flex flex-col" : "p-4"
-            )}
-          >
-            {showImages && data.optionImages && data.optionImages[index] && (
-              <div className="w-full">
-                <AspectRatio ratio={4 / 3} className="max-h-48">
-                  <img 
-                    src={data.optionImages[index]} 
-                    alt={option}
-                    className="w-full h-full object-cover rounded-t-lg"
-                  />
-                </AspectRatio>
-              </div>
-            )}
-            
-            {showText && (
-              <div className={cn(
-                "flex-1 p-3 text-[#432818]",
-                showImages ? "border-t border-[#B89B7A]/10" : ""
-              )}>
-                {option}
-              </div>
-            )}
-            
-            <div className="absolute top-2 right-2 w-6 h-6 border-2 border-[#B89B7A] rounded-full bg-white/80 hidden"></div>
-          </div>
-        ))}
+        {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
+          // Extract text and image from option
+          let optionText: string;
+          let optionImage: string | null = null;
+          
+          if (typeof option === 'string') {
+            optionText = option;
+            optionImage = data.optionImages && data.optionImages[index] || null;
+          } else if (typeof option === 'object' && option !== null) {
+            const optionObj = option as OptionObject;
+            optionText = optionObj.text || '';
+            optionImage = optionObj.imageUrl || null;
+          } else {
+            optionText = String(option);
+            optionImage = data.optionImages && data.optionImages[index] || null;
+          }
+          
+          return (
+            <div
+              key={index}
+              className={cn(
+                "relative rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md border-2 border-transparent hover:border-[#B89B7A]/60 cursor-pointer",
+                showImages ? "flex flex-col" : "p-4"
+              )}
+            >
+              {showImages && optionImage && (
+                <div className="w-full">
+                  <AspectRatio ratio={4 / 3} className="max-h-48">
+                    <img 
+                      src={optionImage} 
+                      alt={optionText}
+                      className="w-full h-full object-cover rounded-t-lg"
+                    />
+                  </AspectRatio>
+                </div>
+              )}
+              
+              {showText && (
+                <div className={cn(
+                  "flex-1 p-3 text-[#432818]",
+                  showImages && optionImage ? "border-t border-[#B89B7A]/10" : ""
+                )}>
+                  {optionText}
+                </div>
+              )}
+              
+              <div className="absolute top-2 right-2 w-6 h-6 border-2 border-[#B89B7A] rounded-full bg-white/80 hidden"></div>
+            </div>
+          );
+        })}
       </div>
       
       <div className="flex justify-between items-center mt-6">
