@@ -7,15 +7,12 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
     title: 'QUE TIPO DE ACESSÓRIOS VOCÊ GOSTA?',
     type: 'both',
     multiSelect: 3,
-    orderIndex: 8,
     options: [
       {
         id: '9a',
         text: 'Pequenos e discretos, às vezes nem uso.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/56_htzoxy.webp',
         styleCategory: 'Natural',
-        styleCode: 'N',
-        styleTypeId: 'natural',
         points: 1
       },
       {
@@ -23,8 +20,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Brincos pequenos e discretos. Corrente fininha.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
         styleCategory: 'Clássico',
-        styleCode: 'C',
-        styleTypeId: 'classico',
         points: 1
       },
       {
@@ -32,8 +27,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Acessórios que elevem meu look com um toque moderno.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/61_joafud.webp',
         styleCategory: 'Contemporâneo',
-        styleCode: 'CT',
-        styleTypeId: 'contemporaneo',
         points: 1
       },
       {
@@ -41,8 +34,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Acessórios sofisticados, joias ou semijoias.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/60_vzsnps.webp',
         styleCategory: 'Elegante',
-        styleCode: 'E',
-        styleTypeId: 'elegante',
         points: 1
       },
       {
@@ -50,8 +41,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Peças delicadas e com um toque feminino.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/59_dwaqrx.webp',
         styleCategory: 'Romântico',
-        styleCode: 'R',
-        styleTypeId: 'romantico',
         points: 1
       },
       {
@@ -59,8 +48,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Brincos longos, colares que valorizem minha beleza.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735487/63_lwgokn.webp',
         styleCategory: 'Sexy',
-        styleCode: 'S',
-        styleTypeId: 'sexy',
         points: 1
       },
       {
@@ -68,8 +55,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Acessórios pesados, que causem um impacto.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735485/62_mno8wg.webp',
         styleCategory: 'Dramático',
-        styleCode: 'D',
-        styleTypeId: 'dramatico',
         points: 1
       },
       {
@@ -77,8 +62,6 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         text: 'Acessórios diferentes, grandes e marcantes.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735480/58_njdjoh.webp',
         styleCategory: 'Criativo',
-        styleCode: 'CR',
-        styleTypeId: 'criativo',
         points: 1
       }
     ]

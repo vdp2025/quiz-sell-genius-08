@@ -52,5 +52,3 @@ export interface Block {
   content: EditableContent;
   order: number;
 }
-
-export type EditorBlock = Block;

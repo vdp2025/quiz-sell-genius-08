@@ -1,12 +1,23 @@
 
-export function generateId(prefix: string = 'id'): string {
-  return `${prefix}_${Math.random().toString(36).substring(2, 9)}${Date.now().toString(36)}`;
-}
+import { v4 as uuidv4 } from 'uuid';
 
-export function generateComponentId(): string {
-  return generateId('component');
-}
+/**
+ * Gera um ID único
+ */
+export const generateId = (): string => {
+  return `id-${uuidv4().substring(0, 8)}`;
+};
 
-export function generateStageId(): string {
-  return generateId('stage');
-}
+/**
+ * Gera um ID único para o estágio do quiz
+ */
+export const generateStageId = (): string => {
+  return `stage-${uuidv4().substring(0, 8)}`;
+};
+
+/**
+ * Gera um ID único para um componente do quiz
+ */
+export const generateComponentId = (): string => {
+  return `component-${uuidv4().substring(0, 8)}`;
+};

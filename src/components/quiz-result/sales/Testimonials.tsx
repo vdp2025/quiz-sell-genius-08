@@ -1,59 +1,58 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { QuoteIcon } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Quote } from 'lucide-react';
 
 interface Testimonial {
+  text: string;
   name: string;
   role: string;
-  text: string;
 }
 
 interface TestimonialsProps {
   items?: Testimonial[];
 }
 
-const Testimonials: React.FC<TestimonialsProps> = ({ items = [] }) => {
-  const defaultTestimonials: Testimonial[] = [
-    {
-      name: 'Ana Carolina',
-      role: 'Cliente',
-      text: 'O guia de estilo mudou completamente a forma como me visto. Agora entendo porque algumas peças me favoreciam e outras não. Consegui enxugar meu guarda-roupa e hoje tenho muito mais opções de combinação com menos peças!'
-    },
-    {
-      name: 'Mariana Silva',
-      role: 'Cliente',
-      text: 'Eu sempre gastava dinheiro com roupas que acabavam esquecidas no fundo do armário. Com o guia, descobri meu estilo predominante e agora compro com muito mais consciência. Todo mundo percebeu a diferença!'
-    }
-  ];
+const defaultTestimonials = [
+  {
+    text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+    name: "Mariangela",
+    role: "Engenheira"
+  },
+  {
+    text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+    name: "Patrícia Paranhos",
+    role: "Advogada"
+  },
+  {
+    text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+    name: "Sônia Spier",
+    role: "Terapeuta"
+  }
+];
 
-  const testimonialItems = items.length > 0 ? items : defaultTestimonials;
-
+const Testimonials: React.FC<TestimonialsProps> = ({ items }) => {
+  const testimonialsToShow = items || defaultTestimonials;
+  
   return (
-    <div className="mb-8">
-      <h2 className="font-playfair text-xl text-[#432818] mb-4">
-        O que dizem nossos clientes
-      </h2>
-      
-      <div className="grid gap-4">
-        {testimonialItems.map((testimonial, index) => (
-          <Card key={index} className="bg-white border-[#B89B7A]/10">
-            <CardContent className="p-6">
-              <div className="flex flex-col space-y-3">
-                <div className="text-[#B89B7A]">
-                  <QuoteIcon className="h-5 w-5" />
-                </div>
-                <p className="text-[#8F7A6A] italic">{testimonial.text}</p>
-                <div>
-                  <p className="font-medium text-[#432818]">{testimonial.name}</p>
-                  <p className="text-sm text-[#8F7A6A]">{testimonial.role}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+    <Card className="p-6 bg-white">
+      <h3 className="text-xl font-medium text-[#432818] mb-6 text-center">
+        O que dizem quem já transformou seu estilo:
+      </h3>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {testimonialsToShow.map((testimonial, index) => (
+          <div key={index} className="p-4 bg-[#fef5f2] rounded-lg relative">
+            <Quote className="w-7 h-7 text-[#aa6b5d]/20 absolute -top-3 -left-3" />
+            <p className="text-[#6b605a] text-sm italic mb-4">{testimonial.text}</p>
+            <div className="text-right">
+              <p className="font-medium text-[#432818]">{testimonial.name}</p>
+              <p className="text-xs text-[#6b605a]">{testimonial.role}</p>
+            </div>
+          </div>
         ))}
       </div>
-    </div>
+    </Card>
   );
 };
 

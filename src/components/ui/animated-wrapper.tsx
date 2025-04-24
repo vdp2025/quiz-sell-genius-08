@@ -1,22 +1,28 @@
 
-import React from 'react';
-import { cn } from '@/lib/utils';
+"use client";
 
-interface AnimatedWrapperProps {
+import React from "react";
+import { cn } from "@/lib/utils";
+
+interface AnimatedWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
+  show?: boolean;
 }
 
-export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
+export const AnimatedWrapper = ({
   children,
-  className
-}) => {
+  show = true,
+  className,
+  ...props
+}: AnimatedWrapperProps) => {
   return (
-    <div 
+    <div
       className={cn(
-        "animate-fadeIn transition-opacity",
+        "transition-all duration-300",
+        show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
         className
       )}
+      {...props}
     >
       {children}
     </div>

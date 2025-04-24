@@ -1,62 +1,46 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { UserSession } from '../types/auth';
 
-// Define User type
-export interface User {
-  name: string;
-  email?: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  login: (name: string, email?: string) => void;
+type AuthContextType = {
+  user: UserSession;
+  login: (name: string) => void;
   logout: () => void;
-  isAuthenticated: boolean;
-}
+};
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  login: () => {},
-  logout: () => {},
-  isAuthenticated: false,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const savedName = localStorage.getItem('userName');
-    if (savedName) {
-      return { name: savedName, email: localStorage.getItem('userEmail') || undefined };
-    }
-    return null;
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<UserSession>({
+    userName: '',
+    isAuthenticated: false
   });
 
-  const login = (name: string, email?: string) => {
-    const userObj = { name, email };
-    setUser(userObj);
-    localStorage.setItem('userName', name);
-    if (email) localStorage.setItem('userEmail', email);
+  const login = (name: string) => {
+    setUser({
+      userName: name,
+      isAuthenticated: true
+    });
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
+    setUser({
+      userName: '',
+      isAuthenticated: false
+    });
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      login, 
-      logout,
-      isAuthenticated: !!user
-    }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
