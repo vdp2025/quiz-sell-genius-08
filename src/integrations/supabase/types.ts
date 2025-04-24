@@ -172,16 +172,51 @@ export type Database = {
           },
         ]
       }
+      quiz_analytics: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          participant_id: string
+          question_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          id?: string
+          participant_id: string
+          question_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          participant_id?: string
+          question_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_analytics_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz_participants: {
         Row: {
           additional_info: Json | null
           completed: boolean | null
           completed_at: string | null
           created_at: string
+          current_question_id: string | null
           email: string | null
           id: string
           ip_address: string | null
+          last_activity_at: string | null
           name: string
+          progress_percentage: number | null
           quiz_id: string
           referrer: string | null
           started_at: string
@@ -192,10 +227,13 @@ export type Database = {
           completed?: boolean | null
           completed_at?: string | null
           created_at?: string
+          current_question_id?: string | null
           email?: string | null
           id?: string
           ip_address?: string | null
+          last_activity_at?: string | null
           name: string
+          progress_percentage?: number | null
           quiz_id: string
           referrer?: string | null
           started_at?: string
@@ -206,10 +244,13 @@ export type Database = {
           completed?: boolean | null
           completed_at?: string | null
           created_at?: string
+          current_question_id?: string | null
           email?: string | null
           id?: string
           ip_address?: string | null
+          last_activity_at?: string | null
           name?: string
+          progress_percentage?: number | null
           quiz_id?: string
           referrer?: string | null
           started_at?: string
@@ -409,6 +450,30 @@ export type Database = {
           description?: string
           id?: string
           name?: string
+        }
+        Relationships: []
+      }
+      utm_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: []
       }

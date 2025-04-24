@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { QuizQuestion, StyleResult } from '@/types/quiz';
 
