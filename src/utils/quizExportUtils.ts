@@ -4,6 +4,7 @@ import { strategicQuestions } from '@/data/strategicQuestions';
 import { v4 as uuidv4 } from 'uuid';
 import { QuizBuilderState, QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { loadQuizResultConfig } from '@/services/quizBuilderService';
+import { StyleOptions } from '@/types/resultPageConfig';
 
 // Função para exportar os dados do quiz atual para o formato de builder
 export const exportCurrentQuizToBuilderFormat = (): QuizBuilderState => {
@@ -164,9 +165,9 @@ export const exportResultPageToBuilderFormat = (styleType: string): QuizBuilderS
         },
         style: {
           backgroundColor: resultConfig.header?.style?.backgroundColor || '#FAF9F7',
-          textColor: resultConfig.header?.style?.textColor || '#432818',
-          paddingY: resultConfig.header?.style?.paddingY || '24',
-          paddingX: resultConfig.header?.style?.paddingX || '16',
+          textColor: resultConfig.header?.style?.color || '#432818',
+          paddingY: '24',
+          paddingX: '16',
           borderRadius: resultConfig.header?.style?.borderRadius || '0'
         }
       });
@@ -188,7 +189,7 @@ export const exportResultPageToBuilderFormat = (styleType: string): QuizBuilderS
       },
       style: {
         backgroundColor: resultConfig.mainContent?.style?.backgroundColor || '#FFFFFF',
-        textColor: resultConfig.mainContent?.style?.textColor || '#432818',
+        textColor: resultConfig.mainContent?.style?.color || '#432818',
         paddingY: '24',
         paddingX: '16',
         borderRadius: '0'
@@ -214,7 +215,7 @@ export const exportResultPageToBuilderFormat = (styleType: string): QuizBuilderS
         },
         style: {
           backgroundColor: resultConfig.offer?.hero?.style?.backgroundColor || '#FAF9F7',
-          textColor: resultConfig.offer?.hero?.style?.textColor || '#432818',
+          textColor: resultConfig.offer?.hero?.style?.color || '#432818',
           paddingY: '24',
           paddingX: '16',
           borderRadius: '0'
