@@ -1,40 +1,36 @@
 
 import React from 'react';
-import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 
 interface HeaderComponentProps {
-  data: QuizComponentData['data'];
-  style: QuizComponentData['style'];
-  isSelected: boolean;
+  data: {
+    title?: string;
+    subtitle?: string;
+    [key: string]: any;
+  };
+  style?: {
+    backgroundColor?: string;
+    textColor?: string;
+    [key: string]: any;
+  };
+  isSelected?: boolean;
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ 
-  data, 
-  style, 
-  isSelected 
-}) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ data, style, isSelected }) => {
   return (
     <div 
       className={cn(
-        "w-full text-center",
-        isSelected && "ring-2 ring-inset ring-[#B89B7A]/20"
+        "p-4 text-center",
+        isSelected && "outline-dashed outline-1 outline-blue-400"
       )}
       style={{
         backgroundColor: style?.backgroundColor || 'transparent',
-        color: style?.textColor || 'inherit',
-        borderRadius: `${style?.borderRadius || 0}px`,
-        padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
+        color: style?.textColor || 'inherit'
       }}
     >
-      <h1 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-2">
-        {data.title || 'Título do Quiz'}
-      </h1>
-      
+      <h1 className="text-2xl md:text-3xl font-bold mb-2">{data.title || "Título Principal"}</h1>
       {data.subtitle && (
-        <p className="text-[#8F7A6A] text-base">
-          {data.subtitle}
-        </p>
+        <p className="text-sm md:text-base opacity-75">{data.subtitle}</p>
       )}
     </div>
   );

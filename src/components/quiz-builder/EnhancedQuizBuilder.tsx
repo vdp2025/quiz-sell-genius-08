@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { ComponentsSidebar } from './ComponentsSidebar';
-import { PreviewPanel } from './PreviewPanel';
-import { PropertiesPanel } from './PropertiesPanel';
+import { ComponentsSidebar } from '@/components/quiz-builder/ComponentsSidebar';
+import { PreviewPanel } from '@/components/quiz-builder/PreviewPanel';
+import { PropertiesPanel } from '@/components/quiz-builder/PropertiesPanel';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff, Save, ArrowLeft } from 'lucide-react';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';

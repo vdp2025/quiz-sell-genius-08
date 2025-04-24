@@ -1,66 +1,37 @@
 
 import React from 'react';
-import { QuizComponentStyle } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 
-export interface TextComponentProps {
+interface TextComponentProps {
   data: {
-    title?: string;
-    subtitle?: string;
     text?: string;
+    [key: string]: any;
   };
-  style?: QuizComponentStyle;
+  style?: {
+    backgroundColor?: string;
+    textColor?: string;
+    [key: string]: any;
+  };
   isSelected?: boolean;
   isHeadline?: boolean;
 }
 
-const TextComponent: React.FC<TextComponentProps> = ({
-  data,
-  style,
-  isSelected,
-  isHeadline = false
-}) => {
-  const { title, subtitle, text } = data;
-  
-  if (isHeadline) {
-    return (
-      <div 
-        className={cn(
-          "p-4", 
-          isSelected && "outline outline-2 outline-offset-2 outline-[#B89B7A]"
-        )}
-        style={{
-          backgroundColor: style?.backgroundColor || 'transparent',
-          color: style?.textColor || 'inherit',
-          borderRadius: style?.borderRadius ? `${style.borderRadius}px` : undefined,
-          padding: `${style?.paddingY || '16px'} ${style?.paddingX || '16px'}`
-        }}
-      >
-        {title && (
-          <h2 className="text-2xl font-semibold mb-2">{title}</h2>
-        )}
-        {subtitle && (
-          <p className="text-gray-600">{subtitle}</p>
-        )}
-      </div>
-    );
-  }
-  
+const TextComponent: React.FC<TextComponentProps> = ({ data, style, isSelected, isHeadline = false }) => {
   return (
     <div 
       className={cn(
-        "p-4", 
-        isSelected && "outline outline-2 outline-offset-2 outline-[#B89B7A]"
+        "p-4",
+        isSelected && "outline-dashed outline-1 outline-blue-400"
       )}
       style={{
         backgroundColor: style?.backgroundColor || 'transparent',
-        color: style?.textColor || 'inherit',
-        borderRadius: style?.borderRadius ? `${style.borderRadius}px` : undefined,
-        padding: `${style?.paddingY || '16px'} ${style?.paddingX || '16px'}`
+        color: style?.textColor || 'inherit'
       }}
     >
-      {text && (
-        <p className="text-base">{text}</p>
+      {isHeadline ? (
+        <h2 className="text-xl md:text-2xl font-medium mb-1">{data.text || "Título da Seção"}</h2>
+      ) : (
+        <p className="text-base leading-relaxed">{data.text || "Texto do parágrafo"}</p>
       )}
     </div>
   );
