@@ -17,7 +17,6 @@ interface QuizContentProps {
   onOptionSelect?: (selectedOptions: number[]) => void;
   onNext?: () => void;
   
-  // Additional props needed for QuizPage integration
   user?: UserSession;
   currentQuestionIndex?: number;
   totalQuestions?: number;
@@ -40,7 +39,6 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   onOptionSelect,
   onNext,
   
-  // Using the new props if provided (for QuizPage integration)
   currentQuestion,
   currentQuestionIndex,
   totalQuestions,
@@ -49,7 +47,6 @@ export const QuizContent: React.FC<QuizContentProps> = ({
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   
-  // Determine which data to use (from direct props or from currentQuestion)
   const activeQuestion = question || (currentQuestion?.title || '');
   const activeOptions = options.length > 0 ? options : (currentQuestion?.options || []);
   const activeStage = stage !== undefined ? stage : (currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 1);
@@ -59,10 +56,8 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   
   const handleOptionClick = (index: number) => {
     if (currentQuestion && handleAnswerSubmit) {
-      // For full quiz mode with currentQuestion
       const optionId = currentQuestion.options[index]?.id;
-      
-      if (!optionId) return; // Guard against undefined options
+      if (!optionId) return;
       
       let newSelectedOptions: string[];
       if (currentAnswers.includes(optionId)) {
@@ -80,7 +75,6 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         selectedOptions: newSelectedOptions
       });
     } else {
-      // For standalone/preview mode
       if (selectedOptions.includes(index)) {
         setSelectedOptions(prev => prev.filter(i => i !== index));
       } else {
@@ -117,12 +111,10 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   const showImages = activeDisplayType === 'image' || activeDisplayType === 'both';
   const showText = activeDisplayType === 'text' || activeDisplayType === 'both';
   
-  // Determine if selection is complete based on mode
   const isSelectionComplete = currentQuestion && currentAnswers 
     ? currentAnswers.length === currentQuestion.multiSelect
     : selectedOptions.length === activeMultiSelect;
   
-  // Guard against undefined activeOptions
   if (!activeOptions) {
     return (
       <div className="bg-[#FAF9F7] min-h-screen py-6 px-4 sm:px-6">
@@ -166,7 +158,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             Selecione {activeMultiSelect} {activeMultiSelect === 1 ? 'opção' : 'opções'}
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {activeOptions.map((option, index) => {
               const isSelected = currentQuestion && currentAnswers 
                 ? currentAnswers.includes(option.id) 
