@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -46,10 +45,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     }
   };
 
-  // Fixed: Use a generic approach for all HTML elements
-  const handleStyleChange = (e: React.ChangeEvent<HTMLElement>, field: string) => {
+  const handleStyleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, field: string) => {
     if (component) {
-      const value = (e.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).value;
+      const value = e.target.value;
       onUpdate(component.id, { 
         style: { ...component.style, [field]: value } 
       });
@@ -164,7 +162,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 className="w-full p-2 border rounded-md"
                 value={component.data.displayType || 'text'}
                 onChange={(e) => {
-                  // Use the generic onUpdate method directly with a cast to ensure type safety
                   onUpdate(component.id, { 
                     data: { ...component.data, displayType: e.target.value as 'text' | 'image' | 'both' } 
                   });
