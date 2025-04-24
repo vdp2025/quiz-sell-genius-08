@@ -24,7 +24,10 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
     ctaText: "Quero meu Guia + Bônus por R$39,00",
     ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
     heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-    heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
+    heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg",
+    benefitItems: [],
+    testimonials: [],
+    guaranteeText: ""
   };
 
   const finalConfig = {
@@ -90,7 +93,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
         </div>
       </Card>
 
-      <BenefitList />
+      <BenefitList items={finalConfig.benefitItems} />
 
       <div className="grid md:grid-cols-2 gap-6">
         <img
@@ -105,8 +108,8 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
         />
       </div>
 
-      <Testimonials />
-      <Guarantee />
+      <Testimonials items={finalConfig.testimonials} />
+      <Guarantee text={finalConfig.guaranteeText} />
     </div>
   );
 };

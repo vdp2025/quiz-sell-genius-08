@@ -7,12 +7,15 @@ export const accessoriesQuestions: QuizQuestion[] = [
     title: 'QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 7,
     options: [
       {
         id: '8a',
         text: 'Tênis nude casual e confortável.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp',
         styleCategory: 'Natural',
+        styleCode: 'N',
+        styleTypeId: 'natural',
         points: 1
       },
       {
@@ -20,6 +23,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Scarpin nude de salto baixo.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp',
         styleCategory: 'Clássico',
+        styleCode: 'C',
+        styleTypeId: 'classico',
         points: 1
       },
       {
@@ -27,6 +32,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Sandália dourada com salto bloco.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp',
         styleCategory: 'Contemporâneo',
+        styleCode: 'CT',
+        styleTypeId: 'contemporaneo',
         points: 1
       },
       {
@@ -34,6 +41,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Scarpin nude salto alto e fino.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp',
         styleCategory: 'Elegante',
+        styleCode: 'E',
+        styleTypeId: 'elegante',
         points: 1
       },
       {
@@ -41,6 +50,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Sandália anabela off white.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp',
         styleCategory: 'Romântico',
+        styleCode: 'R',
+        styleTypeId: 'romantico',
         points: 1
       },
       {
@@ -48,6 +59,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Sandália rosa de tiras finas.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp',
         styleCategory: 'Sexy',
+        styleCode: 'S',
+        styleTypeId: 'sexy',
         points: 1
       },
       {
@@ -55,6 +68,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Scarpin preto moderno com vinil transparente.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp',
         styleCategory: 'Dramático',
+        styleCode: 'D',
+        styleTypeId: 'dramatico',
         points: 1
       },
       {
@@ -62,6 +77,8 @@ export const accessoriesQuestions: QuizQuestion[] = [
         text: 'Scarpin colorido estampado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp',
         styleCategory: 'Criativo',
+        styleCode: 'CR',
+        styleTypeId: 'criativo',
         points: 1
       }
     ]

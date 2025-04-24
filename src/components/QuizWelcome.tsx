@@ -16,7 +16,6 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const handleStart = () => {
     if (name.trim()) {
       login(name.trim());
-      localStorage.setItem('userName', name.trim());
       onStart();
     }
   };
@@ -78,3 +77,5 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
     </div>
   );
 };
+
+export default QuizWelcome;

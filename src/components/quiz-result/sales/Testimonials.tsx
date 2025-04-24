@@ -1,49 +1,55 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { QuoteIcon } from 'lucide-react';
 
-const Testimonials: React.FC = () => {
-  const testimonials = [
+interface Testimonial {
+  name: string;
+  role: string;
+  text: string;
+}
+
+interface TestimonialsProps {
+  items?: Testimonial[];
+}
+
+const Testimonials: React.FC<TestimonialsProps> = ({ items = [] }) => {
+  const defaultTestimonials: Testimonial[] = [
     {
-      name: 'Ana Clara',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
-      text: 'O guia transformou minha relação com meu estilo. Finalmente entendo como montar looks que realmente combinam comigo e me fazem sentir confiante!'
+      name: 'Ana Carolina',
+      role: 'Cliente',
+      text: 'O guia de estilo mudou completamente a forma como me visto. Agora entendo porque algumas peças me favoreciam e outras não. Consegui enxugar meu guarda-roupa e hoje tenho muito mais opções de combinação com menos peças!'
     },
     {
-      name: 'Patricia Mendes',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg',
-      text: 'Antes eu comprava muitas roupas erradas. Com o guia, tenho um guarda-roupa menor, mas muito mais funcional e alinhado com quem eu sou.'
-    },
-    {
-      name: 'Juliana Soares',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
-      text: 'As dicas são práticas e fáceis de implementar. Minha imagem profissional melhorou muito e as pessoas notaram a diferença!'
+      name: 'Mariana Silva',
+      role: 'Cliente',
+      text: 'Eu sempre gastava dinheiro com roupas que acabavam esquecidas no fundo do armário. Com o guia, descobri meu estilo predominante e agora compro com muito mais consciência. Todo mundo percebeu a diferença!'
     }
   ];
-  
+
+  const testimonialItems = items.length > 0 ? items : defaultTestimonials;
+
   return (
-    <div className="py-8">
-      <h2 className="font-playfair text-2xl text-center text-[#432818] mb-8">
-        O que dizem sobre o Guia de Estilo
+    <div className="mb-8">
+      <h2 className="font-playfair text-xl text-[#432818] mb-4">
+        O que dizem nossos clientes
       </h2>
       
-      <div className="grid md:grid-cols-3 gap-6">
-        {testimonials.map((testimonial, index) => (
-          <Card key={index} className="p-6 bg-white border-[#B89B7A]/10">
-            <div className="flex flex-col h-full">
-              <p className="text-[#432818] italic mb-4">"{testimonial.text}"</p>
-              
-              <div className="flex items-center mt-auto">
-                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-[#F9F6F2] flex-shrink-0">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="object-cover w-full h-full"
-                  />
+      <div className="grid gap-4">
+        {testimonialItems.map((testimonial, index) => (
+          <Card key={index} className="bg-white border-[#B89B7A]/10">
+            <CardContent className="p-6">
+              <div className="flex flex-col space-y-3">
+                <div className="text-[#B89B7A]">
+                  <QuoteIcon className="h-5 w-5" />
                 </div>
-                <span className="font-medium text-[#432818]">{testimonial.name}</span>
+                <p className="text-[#8F7A6A] italic">{testimonial.text}</p>
+                <div>
+                  <p className="font-medium text-[#432818]">{testimonial.name}</p>
+                  <p className="text-sm text-[#8F7A6A]">{testimonial.role}</p>
+                </div>
               </div>
-            </div>
+            </CardContent>
           </Card>
         ))}
       </div>

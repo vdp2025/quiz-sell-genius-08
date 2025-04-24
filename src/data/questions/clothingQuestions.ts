@@ -7,12 +7,15 @@ export const clothingQuestions: QuizQuestion[] = [
     title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 0,
     options: [
       {
         id: '1a',
         text: 'Conforto, leveza e praticidade no vestir.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
         styleCategory: 'Natural',
+        styleCode: 'N',
+        styleTypeId: 'natural',
         points: 1
       },
       {
@@ -20,6 +23,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Discrição, caimento clássico e sobriedade.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
         styleCategory: 'Clássico',
+        styleCode: 'C',
+        styleTypeId: 'classico',
         points: 1
       },
       {
@@ -27,6 +32,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Praticidade com um toque de estilo atual.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
         styleCategory: 'Contemporâneo',
+        styleCode: 'CT',
+        styleTypeId: 'contemporaneo',
         points: 1
       },
       {
@@ -34,6 +41,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Elegância refinada, moderna e sem exageros.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
         styleCategory: 'Elegante',
+        styleCode: 'E',
+        styleTypeId: 'elegante',
         points: 1
       },
       {
@@ -41,6 +50,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Delicadeza em tecidos suaves e fluidos.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
         styleCategory: 'Romântico',
+        styleCode: 'R',
+        styleTypeId: 'romantico',
         points: 1
       },
       {
@@ -48,6 +59,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Sensualidade com destaque para o corpo.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
         styleCategory: 'Sexy',
+        styleCode: 'S',
+        styleTypeId: 'sexy',
         points: 1
       },
       {
@@ -55,6 +68,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Impacto visual com peças estruturadas e assimétricas.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
         styleCategory: 'Dramático',
+        styleCode: 'D',
+        styleTypeId: 'dramatico',
         points: 1
       },
       {
@@ -62,6 +77,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Mix criativo com formas ousadas e originais.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp',
         styleCategory: 'Criativo',
+        styleCode: 'CR',
+        styleTypeId: 'criativo',
         points: 1
       }
     ]
@@ -71,12 +88,15 @@ export const clothingQuestions: QuizQuestion[] = [
     title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 2,
     options: [
       {
         id: '3a',
         text: 'Visual leve, despojado e natural.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
         styleCategory: 'Natural',
+        styleCode: 'N',
+        styleTypeId: 'natural',
         points: 1
       },
       {
@@ -84,6 +104,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual clássico e tradicional.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp',
         styleCategory: 'Clássico',
+        styleCode: 'C',
+        styleTypeId: 'classico',
         points: 1
       },
       {
@@ -91,6 +113,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual casual com toque atual.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
         styleCategory: 'Contemporâneo',
+        styleCode: 'CT',
+        styleTypeId: 'contemporaneo',
         points: 1
       },
       {
@@ -98,6 +122,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual refinado e imponente.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
         styleCategory: 'Elegante',
+        styleCode: 'E',
+        styleTypeId: 'elegante',
         points: 1
       },
       {
@@ -105,6 +131,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual romântico, feminino e delicado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
         styleCategory: 'Romântico',
+        styleCode: 'R',
+        styleTypeId: 'romantico',
         points: 1
       },
       {
@@ -112,6 +140,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual sensual, com saia justa e decote.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
         styleCategory: 'Sexy',
+        styleCode: 'S',
+        styleTypeId: 'sexy',
         points: 1
       },
       {
@@ -119,6 +149,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual marcante e urbano (jeans + jaqueta).',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
         styleCategory: 'Dramático',
+        styleCode: 'D',
+        styleTypeId: 'dramatico',
         points: 1
       },
       {
@@ -126,6 +158,8 @@ export const clothingQuestions: QuizQuestion[] = [
         text: 'Visual criativo, colorido e ousado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
         styleCategory: 'Criativo',
+        styleCode: 'CR',
+        styleTypeId: 'criativo',
         points: 1
       }
     ]

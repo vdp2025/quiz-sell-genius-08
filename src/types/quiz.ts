@@ -17,11 +17,11 @@ export interface QuizQuestion {
   title: string;
   subtitle?: string;
   options: QuizOption[];
-  type: 'text' | 'image' | 'text-image';
+  type: 'text' | 'image' | 'both';
   requiredSelections?: number;
   columnsCount?: number;
   imageSize?: 'small' | 'medium' | 'large';
-  orderIndex: number;
+  orderIndex?: number;
   multiSelect: number;
   imageUrl?: string;
 }
@@ -30,8 +30,8 @@ export interface QuizOption {
   id: string;
   text: string;
   imageUrl?: string;
-  styleCode: string;
-  styleTypeId: string;
+  styleCode?: string;
+  styleTypeId?: string;
   points: number;
   styleCategory?: StyleCategory;
 }

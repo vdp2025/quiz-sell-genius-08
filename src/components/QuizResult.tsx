@@ -1,71 +1,61 @@
 
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
-import { Card } from '@/components/ui/card';
-import { StyleResultSection } from '@/components/result/StyleResult';
-import OfferCard from '@/components/quiz-result/sales/OfferCard';
-import { getStyleDescription, getStyleImage } from '@/utils/styleUtils';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
-interface QuizResultProps {
+export interface QuizResultProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
+  config?: ResultPageConfig;
+  previewMode?: boolean;
 }
 
 const QuizResult: React.FC<QuizResultProps> = ({ 
   primaryStyle, 
-  secondaryStyles 
+  secondaryStyles,
+  config,
+  previewMode = false
 }) => {
-  const userName = localStorage.getItem('userName') || 'Visitante';
+  // Use config if provided, otherwise use default content
+  // This makes the component work both with and without config
   
   return (
-    <div className="min-h-screen bg-[#FFFAF7]">
-      {/* Header */}
-      <header className="bg-white shadow-sm py-4 px-6 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <img 
-            src="/lovable-uploads/d9da05d3-6fdd-46d0-afea-42417af058c5.png" 
-            alt="Quiz de Estilo Pessoal"
-            className="h-12" 
-          />
-          <div className="text-[#432818]">
-            Olá, <span className="font-medium">{userName}</span>
-          </div>
-        </div>
-      </header>
-      
-      <main className="max-w-6xl mx-auto py-8 px-4">
-        {/* Result Announcement */}
-        <div className="text-center mb-12">
-          <h1 className="font-playfair text-3xl md:text-4xl text-[#432818] mb-4">
-            Seu Resultado: Estilo {primaryStyle.category}
+    <div className="min-h-screen bg-[#FAF9F7] py-8">
+      <div className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-playfair text-[#432818] mb-6 text-center">
+            {primaryStyle?.category || "Seu Estilo Pessoal"}
           </h1>
-          <p className="text-[#8F7A6A] max-w-2xl mx-auto">
-            Vamos descobrir como o estilo {primaryStyle.category} pode valorizar sua imagem e transformar a maneira como você se apresenta ao mundo.
-          </p>
+          
+          {/* Aqui estaria o conteúdo detalhado do resultado */}
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <p className="text-[#8F7A6A] mb-4">
+              Seu estilo predominante é <strong className="text-[#B89B7A]">{primaryStyle?.category}</strong>, 
+              representando <strong className="text-[#B89B7A]">{primaryStyle?.percentage}%</strong> do seu perfil de estilo pessoal.
+            </p>
+            
+            <p className="text-[#8F7A6A]">
+              Isso significa que você tem afinidade com roupas e acessórios que possuem estas características...
+              {previewMode && " (Este é um texto de exemplo para visualização)"}
+            </p>
+          </div>
+          
+          <h2 className="text-xl md:text-2xl font-playfair text-[#432818] mb-4 text-center">
+            Estilos Secundários
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-4 mb-8">
+            {secondaryStyles.map((style, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-sm p-4">
+                <h3 className="font-medium text-[#B89B7A] mb-2">{style.category}</h3>
+                <p className="text-sm text-[#8F7A6A]">{style.percentage}% de influência</p>
+              </div>
+            ))}
+          </div>
+          
+          {/* Aqui seguiriam mais seções de conteúdo */}
         </div>
-        
-        {/* Style Result Section */}
-        <div className="mb-12">
-          <StyleResultSection
-            primaryStyle={primaryStyle}
-            description={getStyleDescription(primaryStyle.category)}
-            image={getStyleImage(primaryStyle.category)}
-            secondaryStyles={secondaryStyles}
-          />
-        </div>
-        
-        {/* Offer Card */}
-        <OfferCard 
-          primaryStyle={primaryStyle}
-        />
-      </main>
-      
-      {/* Footer */}
-      <footer className="py-6 bg-[#432818] text-white text-center text-sm">
-        <div className="max-w-6xl mx-auto px-4">
-          <p>© {new Date().getFullYear()} Quiz de Estilo Pessoal. Todos os direitos reservados.</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };

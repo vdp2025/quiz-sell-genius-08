@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QuizEditorState, QUIZ_CATEGORIES, QuizCategory } from '@/types/quizEditor';
@@ -59,7 +60,8 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       title: 'Nova Pergunta',
       type: 'text',
       multiSelect: 3,
-      options: []
+      options: [],
+      orderIndex: editorState.questions.length
     };
     
     setEditorState(prevState => ({

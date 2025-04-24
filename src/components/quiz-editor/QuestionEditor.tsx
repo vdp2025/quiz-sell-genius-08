@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -49,14 +50,17 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
   onCancel,
   onDelete
 }) => {
+  const defaultQuestion: QuizQuestion = {
+    id: generateId(),
+    title: '',
+    type: 'text',
+    multiSelect: 3,
+    options: [],
+    orderIndex: 0
+  };
+  
   const [editedQuestion, setEditedQuestion] = useState<QuizQuestion>(
-    question || {
-      id: generateId(),
-      title: '',
-      type: 'text',
-      multiSelect: 3,
-      options: []
-    }
+    question || defaultQuestion
   );
 
   const handleAddOption = () => {
@@ -64,6 +68,8 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
       id: generateId(),
       text: 'Nova opção',
       styleCategory: 'Natural',
+      styleCode: '',
+      styleTypeId: '',
       points: 1
     };
 
