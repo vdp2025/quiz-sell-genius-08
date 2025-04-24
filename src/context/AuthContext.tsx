@@ -1,7 +1,6 @@
 
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { User } from '@supabase/supabase-js';
-import { supabase } from '../integrations/supabase/client';
 
 type AuthContextType = {
   user: (User & { userName?: string }) | null;
@@ -14,74 +13,24 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<(User & { userName?: string }) | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState<(User & { userName?: string }) | null>({ 
+    id: '1',
+    userName: localStorage.getItem('userName') || '',
+    // Add minimal required User properties
+    aud: 'authenticated',
+    created_at: new Date().toISOString(),
+    role: 'authenticated',
+    app_metadata: {},
+    user_metadata: {},
+  });
+  const [isAdmin] = useState(true); // Always true for now
 
-  useEffect(() => {
-    // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const currentUser = session?.user ?? null;
-      if (currentUser) {
-        // Load username from localStorage if available
-        const storedName = localStorage.getItem('userName');
-        if (storedName) {
-          setUser({...currentUser, userName: storedName});
-        } else {
-          setUser(currentUser);
-        }
-      } else {
-        setUser(null);
-      }
-      checkAdminStatus(session?.user?.id);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      const currentUser = session?.user ?? null;
-      if (currentUser) {
-        // Load username from localStorage if available
-        const storedName = localStorage.getItem('userName');
-        if (storedName) {
-          setUser({...currentUser, userName: storedName});
-        } else {
-          setUser(currentUser);
-        }
-      } else {
-        setUser(null);
-      }
-      checkAdminStatus(session?.user?.id);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  const checkAdminStatus = async (userId: string | undefined) => {
-    if (!userId) {
-      setIsAdmin(false);
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', userId)
-      .single();
-
-    if (!error && data) {
-      setIsAdmin(data.is_admin);
-    }
-  };
-
-  const login = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+  const login = async () => {
+    // No-op for now
   };
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    // No-op for now
   };
 
   const setUsername = (name: string) => {
