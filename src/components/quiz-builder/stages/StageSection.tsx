@@ -13,31 +13,22 @@ export interface StageSectionProps {
 }
 
 export const StageSection: React.FC<StageSectionProps> = ({
-  title,
-  isExpanded,
-  stages,
-  activeStageId,
-  onToggle,
-  onStageSelect,
-  onStageEdit,
-  onStageDelete,
+  title, isExpanded, stages, activeStageId,
+  onToggle, onStageSelect, onStageEdit, onStageDelete
 }) => (
   <div className="mb-4">
-    <h3 
-      className="cursor-pointer font-semibold" 
-      onClick={onToggle}
-    >
+    <h3 className="cursor-pointer font-semibold" onClick={onToggle}>
       {title}
     </h3>
     {isExpanded && (
       <ul className="ml-4 mt-2 space-y-1">
         {stages.map((stage) => (
-          <li 
-            key={stage.id} 
-            className={\lex items-center justify-between \\}
+          <li
+            key={stage.id}
+            className={lex items-center justify-between }
           >
-            <span 
-              className="flex-1 cursor-pointer" 
+            <span
+              className="flex-1 cursor-pointer"
               onClick={() => onStageSelect(stage.id)}
             >
               {stage.title || stage.id}

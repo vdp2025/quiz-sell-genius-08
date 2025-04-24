@@ -1,6 +1,6 @@
 import React from 'react';
 import { QuizStage } from '@/types/quizBuilder';
-import { ComponentsSidebar } from '..\/ComponentsSidebar';
+import { ComponentsSidebar } from '../ComponentsSidebar';
 
 interface ComponentToolbarProps {
   activeStage: QuizStage | null;
@@ -8,7 +8,7 @@ interface ComponentToolbarProps {
   isPreviewing: boolean;
 }
 
-export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
+const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
   activeStage,
   onComponentSelect,
   isPreviewing,
