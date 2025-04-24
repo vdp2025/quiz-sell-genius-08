@@ -1,8 +1,7 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { QuizComponentData, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
-import { generateStageId, generateComponentId } from '@/utils/idGenerator';
+import { generateId, generateStageId, generateComponentId } from '@/utils/idGenerator';
 
 // Generate initial stages for a new quiz
 export const generateInitialStages = (): QuizBuilderState => {
