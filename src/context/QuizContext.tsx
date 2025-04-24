@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
@@ -72,8 +73,8 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
   
-  // Spread quizLogic and add our additional functions
-  const contextValue = {
+  // Create a new object that matches the expected type structure
+  const contextValue: QuizContextType = {
     ...quizLogic,
     startQuiz,
     submitAnswers,
