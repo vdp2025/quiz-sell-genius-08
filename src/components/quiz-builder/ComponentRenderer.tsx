@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 import StageResultComponent from './components/StageResultComponent';
+import StageCoverComponent from './components/StageCoverComponent';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
@@ -128,6 +128,15 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         <StageResultComponent 
           data={data}
           style={style}
+          isSelected={isSelected && !isPreview}
+        />
+      );
+
+    case 'stageCover':
+      return (
+        <StageCoverComponent 
+          data={data} 
+          style={style} 
           isSelected={isSelected && !isPreview}
         />
       );
