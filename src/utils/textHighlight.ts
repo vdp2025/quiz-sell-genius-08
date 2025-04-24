@@ -2,26 +2,25 @@
 import React from 'react';
 
 export function highlightStrategicWords(text: string): React.ReactNode {
-  // Check if there are any special characters for highlighting
+  // Se não houver marcadores especiais, retorne o texto original
   if (!text.includes('**')) {
     return text;
   }
 
-  // Split by ** markers and process
-  const parts = text.split(/(\*\*.*?\*\*)/g);
+  // Dividir o texto nos marcadores ** e processar cada parte
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
   
+  // Mapear as partes, destacando as que estão entre **
   return parts.map((part, index) => {
-    // Check if this part is a highlighted term
     if (part.startsWith('**') && part.endsWith('**')) {
-      // Extract the text without the markers
-      const highlightedText = part.slice(2, -2);
+      // Extrair o texto sem os marcadores
+      const highlightedText = part.substring(2, part.length - 2);
       return (
         <span key={index} className="font-medium text-[#B89B7A]">
           {highlightedText}
         </span>
       );
     }
-    
     return part;
   });
 }
