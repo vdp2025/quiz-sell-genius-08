@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +10,7 @@ import { generateId } from '@/utils/idGenerator';
 
 interface QuestionEditorProps {
   question: QuizQuestion;
-  onUpdate: (updatedQuestion: QuizQuestion) => void;
+  onUpdate: (updatedQuestion: Partial<QuizQuestion>) => void;
   onDelete: (questionId: string) => void;
 }
 
@@ -54,16 +55,8 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpdate, onD
   }, [localQuestion, onUpdate]);
 
   const handleReset = useCallback(() => {
-    const defaultQuestion: QuizQuestion = {
-      id: generateId(),
-      title: 'Nova Pergunta',
-      type: 'text',
-      multiSelect: 3,
-      options: [],
-      orderIndex: 0
-    };
-    setQuestion(defaultQuestion);
-  }, []);
+    setQuestion(question);
+  }, [question]);
 
   const handleDelete = useCallback(() => {
     onDelete(question.id);

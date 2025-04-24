@@ -1,87 +1,103 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Check, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+export type ProductCardInfo = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  originalPrice?: number;
+  isInstallments?: boolean;
+  installmentsCount?: number;
+  isBestSeller?: boolean;
+};
 
 interface SalesProductCardProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  imageAlt?: string;
-  regularPrice?: string;
-  salePrice?: string;
-  ctaText?: string;
-  ctaUrl?: string;
-  backgroundColor?: string;
-  accentColor?: string;
-  textColor?: string;
+  product: ProductCardInfo;
+  onAddToCart: (productId: string) => void;
+  isSelected?: boolean;
 }
 
-export const SalesProductCard: React.FC<SalesProductCardProps> = ({
-  title = "Guia de Estilo e Imagem + Bônus Exclusivos",
-  description,
-  image = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp",
-  imageAlt = "Produto e bônus mockup",
-  regularPrice = "175,00",
-  salePrice = "39,00",
-  ctaText = "Quero meu Guia + Bônus",
-  ctaUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-  backgroundColor = "white",
-  accentColor = "#aa6b5d",
-  textColor = "#432818"
-}) => {
+export function SalesProductCard({ product, onAddToCart, isSelected = false }: SalesProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const formattedPrice = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(product.price);
+  
+  const formattedOriginalPrice = product.originalPrice
+    ? new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(product.originalPrice)
+    : null;
+  
+  const installmentsText = product.isInstallments && product.installmentsCount
+    ? `em ${product.installmentsCount}x de ${new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(product.price / product.installmentsCount)}`
+    : '';
+  
   return (
-    <Card 
-      className="p-6 border-[#aa6b5d]/20 mb-8"
-      style={{ backgroundColor }}
+    <Card
+      className={`overflow-hidden transition-all duration-300 ${
+        isSelected ? 'ring-2 ring-[#B89B7A] scale-105' : ''
+      } ${isHovered ? 'shadow-lg' : 'shadow-md'}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <h2 
-        className="text-2xl font-playfair mb-4"
-        style={{ color: accentColor }}
-      >
-        {title}
-      </h2>
-
-      {description && (
-        <p className="mb-4" style={{ color: textColor }}>
-          {description}
-        </p>
-      )}
+      <div className="relative">
+        {product.isBestSeller && (
+          <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full">
+            Mais Vendido
+          </div>
+        )}
+        <AspectRatio ratio={16 / 9}>
+          <img
+            src={product.imageUrl}
+            alt={product.title}
+            className="object-cover w-full h-full"
+            style={{ transition: 'transform 0.3s ease' }}
+          />
+        </AspectRatio>
+      </div>
       
-      <img
-        src={image}
-        alt={imageAlt}
-        className="w-full rounded-lg mb-6"
-      />
-
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
-          <div className="text-center md:text-right">
-            <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
-            <p className="text-lg line-through text-[#3a3a3a]/60">
-              R$ {regularPrice}
-            </p>
+      <div className="p-4 space-y-3">
+        <h3 className="text-lg font-semibold line-clamp-2 text-[#432818]">{product.title}</h3>
+        <p className="text-sm text-[#8F7A6A] line-clamp-2">{product.description}</p>
+        
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-xl text-[#432818]">{formattedPrice}</span>
+            {formattedOriginalPrice && (
+              <span className="text-sm text-[#8F7A6A] line-through">{formattedOriginalPrice}</span>
+            )}
           </div>
-          <div className="text-center">
-            <p className="text-sm mb-1" style={{ color: accentColor }}>Oferta especial</p>
-            <p className="text-3xl font-bold" style={{ color: accentColor }}>
-              R$ {salePrice}
-            </p>
-          </div>
+          {installmentsText && (
+            <p className="text-xs text-[#8F7A6A]">{installmentsText}</p>
+          )}
         </div>
-
+        
         <Button 
-          className="w-full py-6 rounded-md text-lg transition-colors duration-300 text-white hover:opacity-90"
-          style={{ backgroundColor: accentColor }}
-          onClick={() => window.location.href = ctaUrl}
+          className="w-full bg-[#B89B7A] hover:bg-[#8F7A6A] mt-2" 
+          onClick={() => onAddToCart(product.id)}
         >
-          <ShoppingCart className="w-5 h-5 mr-2" />
-          {ctaText}
+          <ShoppingCart className="w-4 h-4 mr-2" />
+          {isSelected ? (
+            <span className="flex items-center"><Check className="w-4 h-4 mr-1" /> Adicionado</span>
+          ) : (
+            'Adicionar ao Carrinho'
+          )}
         </Button>
       </div>
     </Card>
   );
-};
-
-export default SalesProductCard;
+}

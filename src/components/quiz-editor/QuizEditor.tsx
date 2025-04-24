@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -132,6 +133,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({ questions: initialQuestions, on
           <QuestionEditor
             question={activeQuestion}
             onUpdate={(updatedFields) => handleUpdateQuestion(activeQuestion.id, updatedFields)}
+            onDelete={() => handleDeleteQuestion(activeQuestion.id)}
           />
         ) : (
           <div className="p-6 border border-dashed border-gray-300 rounded-md">

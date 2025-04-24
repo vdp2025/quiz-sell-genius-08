@@ -9,9 +9,11 @@ interface EditableBlockProps {
   isSelected: boolean;
   onClick: () => void;
   onDelete?: () => void;
-  isPreviewing?: boolean;
+  isPreviewMode?: boolean;
   primaryStyle?: StyleResult;
   secondaryStyles?: StyleResult[];
+  onReorderBlocks?: (sourceIndex: number, destinationIndex: number) => void;
+  index?: number;
 }
 
 export const EditableBlock: React.FC<EditableBlockProps> = ({
@@ -19,20 +21,22 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
   isSelected,
   onClick,
   onDelete,
-  isPreviewing = false,
+  isPreviewMode = false,
   primaryStyle,
-  secondaryStyles
+  secondaryStyles,
+  onReorderBlocks,
+  index
 }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'BLOCK',
-    item: { id: block.id },
+    item: { id: block.id, index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   }));
 
   // Don't show editing controls in preview mode
-  if (isPreviewing) {
+  if (isPreviewMode) {
     return (
       <div className="relative mb-4">
         {renderBlockContent()}

@@ -2,7 +2,8 @@
 export interface EditorBlock {
   id: string;
   type: 'header' | 'hero-section' | 'bonus-carousel' | 'headline' | 'text' | 'image' | 'benefits' | 
-        'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'products' | 'testimonials';
+        'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'products' | 'testimonials' |
+        'spacer' | 'video' | 'two-column' | 'icon' | 'faq' | 'carousel' | 'custom-code' | 'animation-block';
   content: EditableContent;
   order: number;
 }
@@ -30,6 +31,9 @@ export type EditableContent = {
   textColor?: string;
   backgroundColor?: string;
   bonusImages?: Array<{ url: string; alt: string; title?: string }>;
+  height?: string | number;
+  videoUrl?: string;
+  code?: string;
 };
 
 export interface EditorConfig {
@@ -60,4 +64,3 @@ export interface EditorConfig {
 
 // Alias Block to EditorBlock for compatibility
 export type Block = EditorBlock;
-
