@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -70,14 +71,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "transition-all duration-300",
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-text relative", 
+                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", 
                 isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm",
                 isSelected && "font-semibold"
               )
             : cn(
                 "leading-relaxed",
                 isMobile ? "text-[0.75rem]" : "text-sm sm:text-base",
-                isSelected && "text-brand-text font-semibold"
+                isSelected && "text-brand-coffee font-semibold"
               )
         )}>
           {highlightStrategicWords(option.text)}
