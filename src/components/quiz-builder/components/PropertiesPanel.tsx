@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -191,7 +192,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="color"
             className="w-10 h-10 p-1 border rounded-md"
             value={component.style.backgroundColor || '#ffffff'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'backgroundColor')}
+            onChange={(e) => handleStyleChange(e, 'backgroundColor')}
           />
         </div>
         <div>
@@ -200,7 +201,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="color"
             className="w-10 h-10 p-1 border rounded-md"
             value={component.style.textColor || '#000000'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'textColor')}
+            onChange={(e) => handleStyleChange(e, 'textColor')}
           />
         </div>
         <div>
@@ -209,7 +210,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="number"
             className="w-full p-2 border rounded-md"
             value={component.style.borderRadius || '0'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'borderRadius')}
+            onChange={(e) => handleStyleChange(e, 'borderRadius')}
           />
         </div>
         <div>
@@ -218,7 +219,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="number"
             className="w-full p-2 border rounded-md"
             value={component.style.paddingY || '16'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'paddingY')}
+            onChange={(e) => handleStyleChange(e, 'paddingY')}
           />
         </div>
         <div>
@@ -227,7 +228,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="number"
             className="w-full p-2 border rounded-md"
             value={component.style.paddingX || '16'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'paddingX')}
+            onChange={(e) => handleStyleChange(e, 'paddingX')}
           />
         </div>
       </div>
