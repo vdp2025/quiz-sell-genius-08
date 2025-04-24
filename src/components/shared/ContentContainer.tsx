@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 interface ContentContainerProps {
   size?: 'sm' | 'md' | 'lg';
@@ -17,7 +17,7 @@ export const ContentContainer: React.FC<ContentContainerProps> = ({
 }) => {
   const maxWidthClass = sizeClassMap[size] || 'max-w-md';
   return (
-    <div className={w-full  mx-auto}>
+    <div className={`w-full ${maxWidthClass} mx-auto`}>
       {children}
     </div>
   );
