@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { QuizBuilder } from '@/components/quiz-builder/QuizBuilder';
+import { QuizBuilderContainer } from '@/components/quiz-builder/QuizBuilderContainer';
 
 const QuizBuilderPage: React.FC = () => {
-  return <QuizBuilder />;
+  return <QuizBuilderContainer />;
 };
 
 export default QuizBuilderPage;
