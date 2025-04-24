@@ -36,8 +36,8 @@ export const Header: React.FC<HeaderProps> = ({
           
           {primaryStyle && (
             <h2 className="text-xl font-bold text-[#B89B7A] mt-2">
-              {primaryStyle.category}
-            </h2>
+              
+            
           )}
         </div>
       </div>

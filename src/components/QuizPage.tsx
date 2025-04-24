@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -32,7 +32,7 @@ const QuizPage: React.FC = () => {
     calculateResults,
     handleStrategicAnswer: saveStrategicAnswer,
     submitQuizIfComplete
-  } = useQuizLogic();
+  } = , canProceed } = useQuizLogic();
 
   // Handle strategic answer
   const handleStrategicAnswer = (response: UserResponse) => {
@@ -58,7 +58,7 @@ const QuizPage: React.FC = () => {
       console.error('Error processing strategic answer:', error);
       toast({
         title: "Erro no processamento da resposta",
-        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
+        description: "NÃ£o foi possÃ­vel processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
@@ -85,8 +85,8 @@ const QuizPage: React.FC = () => {
     } catch (error) {
       console.error('Error submitting answer:', error);
       toast({
-        title: "Erro na submissão da resposta",
-        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
+        title: "Erro na submissÃ£o da resposta",
+        description: "NÃ£o foi possÃ­vel processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
@@ -108,21 +108,14 @@ const QuizPage: React.FC = () => {
       console.error('Error showing result:', error);
       toast({
         title: "Erro ao mostrar resultado",
-        description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
+        description: "NÃ£o foi possÃ­vel carregar o resultado. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
   };
 
   // Handle next click
-  const handleNextClick = () => {
-    if (!isLastQuestion) {
-      handleNext();
-    } else {
-      calculateResults();
-      setShowingTransition(true);
-    }
-  };
+  const handleNextClick = () => {`n  if (!canProceed) {`n    toast({ title: "Selecione as opções antes de continuar", variant: "destructive" });`n    return;`n  }`n  if (!isLastQuestion) {`n    handleNext();`n  } else {`n    calculateResults();`n    setShowingTransition(true);`n  }`n};
 
   // Save user name to localStorage
   useEffect(() => {
@@ -170,3 +163,4 @@ const QuizPage: React.FC = () => {
 };
 
 export default QuizPage;
+

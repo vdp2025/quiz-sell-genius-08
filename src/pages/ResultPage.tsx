@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -54,7 +54,7 @@ const ResultPage: React.FC = () => {
           <AnimatedWrapper show={true}>
             <div className="text-center mb-8">
               <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-                Seu Estilo é {category}
+                Seu Estilo Ã© {category}
               </h2>
               
               <div className="max-w-md mx-auto mb-6">
@@ -101,17 +101,17 @@ const ResultPage: React.FC = () => {
 
         <MotivationSection />
 
-        {/* Oferta + Bônus */}
+        {/* Oferta + BÃ´nus */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-              O Guia de Estilo e Imagem + Bônus Exclusivos
+              O Guia de Estilo e Imagem + BÃ´nus Exclusivos
             </h2>
             <p className="text-[#432818]">
               Criado para mulheres que querem muito mais do que "saber seu
               estilo".<br />
-              Esse guia é pra quem está pronta pra viver seu estilo na prática
-              — com consciência, direção e autenticidade.
+              Esse guia Ã© pra quem estÃ¡ pronta pra viver seu estilo na prÃ¡tica
+              â€” com consciÃªncia, direÃ§Ã£o e autenticidade.
             </p>
           </div>
 
@@ -119,20 +119,20 @@ const ResultPage: React.FC = () => {
 
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
             <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
-              E ainda recebe 2 bônus poderosos:
+              E ainda recebe 2 bÃ´nus poderosos:
             </h3>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
-                  Peças-chave do Guarda-Roupa de Sucesso
+                  PeÃ§as-chave do Guarda-Roupa de Sucesso
                 </h4>
                 <p className="text-sm text-[#432818]/80 mb-4">
                   Itens essenciais que descomplicam a rotina e valorizam o seu
                   estilo pessoal.
                 </p>
                 <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-                  alt="Peças-chave do Guarda-Roupa"
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp"
+                  alt="PeÃ§as-chave do Guarda-Roupa"
                   className="w-full h-auto rounded-lg"
                 />
               </div>
@@ -145,7 +145,7 @@ const ResultPage: React.FC = () => {
                   identidade visual.
                 </p>
                 <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
                   alt="Mini Guia de Visagismo Facial"
                   className="w-full h-auto rounded-lg"
                 />
@@ -156,7 +156,7 @@ const ResultPage: React.FC = () => {
           <div className="mb-8">
             <img
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-              alt="Todos os produtos e bônus"
+              alt="Todos os produtos e bÃ´nus"
               className="w-full h-auto rounded-lg"
             />
           </div>
@@ -183,10 +183,10 @@ const ResultPage: React.FC = () => {
               className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
             >
               <ShoppingCart className="w-5 h-5 mr-2" />
-              Quero meu Guia + Bônus por R$39,00
+              Quero meu Guia + BÃ´nus por R$39,00
             </Button>
             <p className="text-sm text-[#aa6b5d] mt-4">
-              ⏳ Oferta válida apenas nesta página
+              â³ Oferta vÃ¡lida apenas nesta pÃ¡gina
             </p>
           </div>
         </Card>
