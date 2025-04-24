@@ -1,16 +1,17 @@
 
 import React from 'react';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
+import { StyleResult } from '@/types/quiz';
 
 const ResultPageEditorPage: React.FC = () => {
   // Hardcoded style for now, can be made dynamic later
-  const primaryStyle = {
-    category: 'Elegante',
+  const primaryStyle: StyleResult = {
+    category: 'Elegante', // This is now properly typed as a valid StyleCategory
     score: 12,
     percentage: 40
   };
 
-  const secondaryStyles = [
+  const secondaryStyles: StyleResult[] = [
     {
       category: 'Romântico',
       score: 9,
