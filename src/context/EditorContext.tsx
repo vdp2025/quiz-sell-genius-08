@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { Block, EditableContent } from '@/types/editor';
+import { Block, EditableContent, EditorBlock } from '@/types/editor';
 import { useToast } from '@/hooks/use-toast';
 import { getDefaultContentForType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
@@ -9,7 +8,7 @@ interface EditorContextType {
   blocks: Block[];
   selectedBlockId: string | null;
   isPreviewing: boolean;
-  addBlock: (type: string) => void;
+  addBlock: (type: EditorBlock['type']) => void;
   updateBlock: (id: string, content: Partial<EditableContent>) => void;
   deleteBlock: (id: string) => void;
   selectBlock: (id: string | null) => void;
@@ -25,7 +24,7 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isPreviewing, setIsPreviewing] = useState(false);
   const { toast } = useToast();
 
-  const addBlock = useCallback((type: string) => {
+  const addBlock = useCallback((type: EditorBlock['type']) => {
     const newBlock: Block = {
       id: generateId(),
       type,

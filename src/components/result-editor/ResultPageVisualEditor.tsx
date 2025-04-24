@@ -9,13 +9,15 @@ import { PropertiesPanel } from './PropertiesPanel';
 import { EditorToolbar } from './EditorToolbar';
 import { StyleResult } from '@/types/quiz';
 import { EditorProvider, useEditor } from '@/context/EditorContext';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 interface ResultPageVisualEditorProps {
   selectedStyle: StyleResult;
   onShowTemplates: () => void;
+  initialConfig?: ResultPageConfig;
 }
 
-const EditorContent = ({ selectedStyle, onShowTemplates }: ResultPageVisualEditorProps) => {
+const EditorContent = ({ selectedStyle, onShowTemplates, initialConfig }: ResultPageVisualEditorProps) => {
   const {
     blocks,
     selectedBlockId,
