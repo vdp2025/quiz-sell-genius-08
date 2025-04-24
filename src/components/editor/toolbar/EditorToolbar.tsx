@@ -7,12 +7,20 @@ interface EditorToolbarProps {
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   isPreviewing,
   onPreviewToggle,
   onSave,
+  onUndo,
+  onRedo,
+  canUndo = false,
+  canRedo = false,
 }) => {
   return (
     <div className="border-b bg-white p-4 flex items-center justify-between">
@@ -29,7 +37,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => {/* Implement undo */}}
+          onClick={onUndo}
+          disabled={!canUndo}
         >
           <Undo className="w-4 h-4" />
         </Button>
@@ -37,7 +46,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => {/* Implement redo */}}
+          onClick={onRedo}
+          disabled={!canRedo}
         >
           <Redo className="w-4 h-4" />
         </Button>

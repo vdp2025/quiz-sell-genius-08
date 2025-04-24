@@ -8,7 +8,7 @@ import { EditorState, EditorSection } from '@/types/editor/visualEditor';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
 import { EditorPreview } from './preview/EditorPreview';
-import { PropertiesPanel } from './properties/PropertiesPanel';
+import PropertiesPanel from './properties/PropertiesPanel';
 
 export const VisualEditor = () => {
   const [editorState, setEditorState] = useState<EditorState>({
@@ -48,9 +48,9 @@ export const VisualEditor = () => {
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel defaultSize={20} minSize={15}>
                 <ComponentsSidebar 
-                  type="quiz"
-                  onSelect={(componentType) => {
+                  onComponentSelect={(componentType) => {
                     // Implement component selection
+                    console.log('Selected component:', componentType);
                   }}
                 />
               </ResizablePanel>
@@ -69,7 +69,7 @@ export const VisualEditor = () => {
 
               <ResizablePanel defaultSize={25}>
                 <PropertiesPanel
-                  selectedBlockId={editorState.selectedBlockId}
+                  selectedComponentId={editorState.selectedBlockId}
                   onClose={() => setEditorState(prev => ({ ...prev, selectedBlockId: null }))}
                 />
               </ResizablePanel>
