@@ -1,24 +1,38 @@
-
 import React from 'react';
 import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar, SidebarProvider } from '../ui/sidebar';
-import { Home, Settings, ClipboardList } from 'lucide-react';
+import { Home, Settings, ClipboardList, LogOut } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const { user } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const location = useLocation();
 
-  // Para aplicações em produção, você deve verificar se o usuário tem permissão de administrador
-  const isAuthenticated = true; 
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" state={{ from: location }} replace />;
+  if (!user || !isAdmin) {
+    toast({
+      title: "Access Denied",
+      description: "You must be logged in as an admin to access this area.",
+      variant: "destructive"
+    });
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -77,6 +91,15 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 Ver Quiz
               </a>
             </div>
+          </div>
+          <div className="mt-auto p-4">
+            <button
+              onClick={handleLogout}
+              className="flex items-center px-3 py-2 text-sm text-[#8F7A6A] rounded-md hover:bg-[#FAF9F7] hover:text-[#432818] w-full"
+            >
+              <LogOut className="w-4 h-4 mr-3" />
+              Sign Out
+            </button>
           </div>
         </Sidebar>
         <main className="flex-1 overflow-auto bg-[#FAF9F7]">

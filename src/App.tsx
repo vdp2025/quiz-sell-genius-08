@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
@@ -9,12 +8,10 @@ import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import QuizBuilderPage from './pages/QuizBuilderPage';
+import AuthPage from './pages/auth/AuthPage';
 
-// Componente para rotas protegidas administrativas
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-  // Aqui você pode verificar se o usuário está autenticado e é um administrador
-  // Por enquanto, apenas renderizamos diretamente para fins de desenvolvimento
-  const isAdmin = true; // Implementar lógica real de verificação
+  const isAdmin = true;
   
   if (!isAdmin) {
     return <Navigate to="/" replace />;
@@ -30,11 +27,10 @@ function App() {
         <Router>
           <Suspense fallback={<LoadingState />}>
             <Routes>
-              {/* Rotas públicas */}
               <Route path="/" element={<Index />} />
               <Route path="/resultado" element={<ResultPage />} />
+              <Route path="/auth" element={<AuthPage />} />
               
-              {/* Rotas administrativas protegidas */}
               <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
               <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
             </Routes>

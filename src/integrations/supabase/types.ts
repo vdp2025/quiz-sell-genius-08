@@ -91,6 +91,30 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          created_at: string
+          first_name: string | null
+          id: string
+          is_admin: boolean | null
+          last_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          first_name?: string | null
+          id: string
+          is_admin?: boolean | null
+          last_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_admin?: boolean | null
+          last_name?: string | null
+        }
+        Relationships: []
+      }
       question_options: {
         Row: {
           active: boolean | null

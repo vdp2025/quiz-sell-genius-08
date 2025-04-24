@@ -1,37 +1,68 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { UserSession } from '../types/auth';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { User } from '@supabase/supabase-js';
+import { supabase } from '../integrations/supabase/client';
 
 type AuthContextType = {
-  user: UserSession;
-  login: (name: string) => void;
-  logout: () => void;
+  user: User | null;
+  isAdmin: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserSession>({
-    userName: '',
-    isAuthenticated: false
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const login = (name: string) => {
-    setUser({
-      userName: name,
-      isAuthenticated: true
+  useEffect(() => {
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      checkAdminStatus(session?.user?.id);
     });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      checkAdminStatus(session?.user?.id);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const checkAdminStatus = async (userId: string | undefined) => {
+    if (!userId) {
+      setIsAdmin(false);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', userId)
+      .single();
+
+    if (!error && data) {
+      setIsAdmin(data.is_admin);
+    }
   };
 
-  const logout = () => {
-    setUser({
-      userName: '',
-      isAuthenticated: false
-    });
+  const login = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+  };
+
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
