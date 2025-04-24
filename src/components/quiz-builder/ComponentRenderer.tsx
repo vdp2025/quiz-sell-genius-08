@@ -123,20 +123,20 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         </div>
       );
 
-    case 'stageResult':
+    case 'stageCover':
       return (
-        <StageResultComponent 
+        <StageCoverComponent 
           data={data}
           style={style}
           isSelected={isSelected && !isPreview}
         />
       );
 
-    case 'stageCover':
+    case 'stageResult':
       return (
-        <StageCoverComponent 
-          data={data} 
-          style={style} 
+        <StageResultComponent 
+          data={data}
+          style={style}
           isSelected={isSelected && !isPreview}
         />
       );

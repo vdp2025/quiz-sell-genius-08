@@ -1,12 +1,9 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizStages } from './useQuizStages';
 import { useQuizComponents } from './useQuizComponents';
 import { generateInitialStages, createBuilderStateFromQuiz } from '@/services/quizBuilderService';
-import { clothingQuestions } from '@/data/questions/clothingQuestions';
-import { personalityQuestions } from '@/data/questions/personalityQuestions';
-import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
+import { strategicQuestionsTemplate } from '@/services/templates/strategicQuestionsTemplate';
 
 const STORAGE_KEY = 'quiz_builder_data';
 
@@ -47,19 +44,8 @@ export const useQuizBuilder = () => {
             setActiveStage(parsedData.stages[0].id);
           }
         } else {
-          // Initialize with existing quiz questions
-          const allQuestions = [
-            ...clothingQuestions,
-            ...personalityQuestions,
-            ...accessoriesQuestions
-          ];
-          
-          const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(
-            allQuestions,
-            'Quiz de Estilo Pessoal',
-            'Descubra seu estilo predominante respondendo às perguntas a seguir',
-            'Seu Resultado de Estilo Pessoal'
-          );
+          // Initialize with strategic questions template
+          const { stages: initialStages, components: initialComponents } = strategicQuestionsTemplate;
           
           initializeStages(initialStages);
           initializeComponents(initialComponents);
@@ -69,8 +55,8 @@ export const useQuizBuilder = () => {
         }
       } catch (error) {
         console.error('Error loading quiz data:', error);
-        // Fallback to generated stages if there's an error
-        const { stages: initialStages, components: initialComponents } = generateInitialStages();
+        // Fallback to strategic questions template if there's an error
+        const { stages: initialStages, components: initialComponents } = strategicQuestionsTemplate;
         initializeStages(initialStages);
         initializeComponents(initialComponents);
         if (initialStages.length > 0) {
