@@ -1,81 +1,99 @@
 
 import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface QuizIntroProps {
   onStart: (name: string) => void;
 }
 
-export const QuizIntro: React.FC<QuizIntroProps> = ({
-  onStart
-}) => {
+const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
   const [name, setName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim()) {
-      onStart(name);
-    }
+    if (!name.trim()) return;
+    
+    setIsSubmitting(true);
+    onStart(name.trim());
   };
-
-  return <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7] px-4 py-8">
-      <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-4 md:p-8 flex flex-col items-center">
-        {/* Logo */}
-        <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" alt="Logo Gisele Galvão" className="w-32 md:w-40 h-auto mb-2" />
-
-        {/* Barra de carregamento dourada animada */}
-        <div className="relative w-full max-w-md h-[4px] bg-[#f1e8db] rounded-full overflow-hidden mb-6">
-          <div className="absolute inset-0 w-1/3 bg-[#b29670] animate-loading-bar rounded-full"></div>
+  
+  return (
+    <div className="min-h-screen bg-[#FFFAF7] flex flex-col">
+      {/* Header with logo */}
+      <header className="p-4 bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto">
+          <img 
+            src="/lovable-uploads/d9da05d3-6fdd-46d0-afea-42417af058c5.png" 
+            alt="Quiz de Estilo Pessoal"
+            className="h-12 mx-auto md:mx-0" 
+          />
         </div>
-
-        {/* Título */}
-        <h1 className="font-playfair text-xl md:text-2xl font-bold text-[#b29670] text-center mb-4 leading-snug">
-          Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
-        </h1>
-
-        {/* Imagem principal - Further reduced size */}
-        <img 
-          alt="Mulher elegante com roupas estilosas" 
-          className="w-full max-w-xs h-auto object-cover mb-6 rounded-lg shadow-sm" 
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" 
-        />
-
-        {/* Subtítulo com destaque */}
-        <p className="text-sm md:text-base text-black text-center mb-6 max-w-lg">
-          Em poucos minutos, descubra seu <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — 
-          e aprenda a montar looks que realmente refletem sua <span className="font-semibold text-[#b29670]">essência</span>, com praticidade e <span className="font-semibold text-[#aa6b5d]">confiança</span>.
-        </p>
-
-        {/* Formulário */}
-        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-3">
-          <label htmlFor="name" className="text-sm font-semibold text-[#432818]">NOME *</label>
-          <Input id="name" placeholder="Digite seu nome" value={name} onChange={e => setName(e.target.value)} className="w-full" autoFocus />
-
-          <Button type="submit" className="
-              w-full 
-              bg-[#B89B7A] 
-              hover:bg-[#aa6b5d] 
-              text-white 
-              py-4 
-              text-base 
-              rounded-md 
-              shadow 
-              transition-all 
-              duration-300 
-              ease-in-out 
-              transform 
-              hover:-translate-y-1 
-              hover:shadow-lg 
-              active:scale-95 
-              disabled:opacity-50 
-              disabled:cursor-not-allowed
-            " disabled={!name.trim()}>
-            Continuar
-          </Button>
-        </form>
-      </div>
-    </div>;
+      </header>
+      
+      {/* Main content */}
+      <main className="flex-1 flex flex-col items-center justify-center p-6 max-w-4xl mx-auto">
+        <div className="w-full max-w-xl bg-white rounded-lg shadow-lg overflow-hidden">
+          {/* Image area */}
+          <div className="relative h-60 bg-[#B89B7A]/10">
+            <img
+              src="/lovable-uploads/84341867-0bff-402e-a89f-be5747b706ba.png"
+              alt="Estilo pessoal"
+              className="object-cover w-full h-full"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#432818]/40 to-transparent"></div>
+          </div>
+          
+          {/* Content area */}
+          <div className="p-8">
+            <h1 className="font-playfair text-3xl md:text-4xl text-[#432818] text-center mb-6">
+              Descubra seu Estilo Pessoal
+            </h1>
+            
+            <p className="text-[#8F7A6A] text-center mb-8">
+              Responda às perguntas para descobrir qual estilo mais combina com a sua personalidade e aprenda a valorizar sua imagem.
+            </p>
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label 
+                  htmlFor="name" 
+                  className="block text-sm font-medium text-[#432818] mb-2"
+                >
+                  Como podemos te chamar?
+                </label>
+                <Input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Digite seu nome"
+                  className="w-full p-3 border border-[#B89B7A]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]"
+                  required
+                />
+              </div>
+              
+              <Button 
+                type="submit"
+                className="w-full bg-[#B89B7A] hover:bg-[#B89B7A]/90 text-white py-3 rounded-md font-medium transition-all duration-200 flex items-center justify-center"
+                disabled={!name.trim() || isSubmitting}
+              >
+                Continuar
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </form>
+          </div>
+        </div>
+      </main>
+      
+      {/* Footer */}
+      <footer className="py-4 text-center text-[#8F7A6A] text-sm">
+        <p>© {new Date().getFullYear()} Quiz de Estilo Pessoal. Todos os direitos reservados.</p>
+      </footer>
+    </div>
+  );
 };
 
 export default QuizIntro;
-

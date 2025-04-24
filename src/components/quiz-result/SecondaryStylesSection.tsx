@@ -1,35 +1,43 @@
 
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
+import { getStyleColor } from '@/utils/styleUtils';
 
 interface SecondaryStylesSectionProps {
   secondaryStyles: StyleResult[];
 }
 
-const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ secondaryStyles }) => {
+const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({
+  secondaryStyles
+}) => {
+  // Display only the top 3 secondary styles
+  const topStyles = secondaryStyles.slice(0, 3);
+  
   return (
-    <div className="space-y-1.5">
-      <h3 className="text-xs font-medium text-[#432818] mb-1">
-        Estilos Complementares
-      </h3>
-      <div className="grid grid-cols-1 gap-1.5">
-        {secondaryStyles.slice(0, 2).map((style) => (
-          <div key={style.category} className="flex justify-between items-center">
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-0.5">
-                <h4 className="text-xs text-[#432818]">{style.category}</h4>
-                <span className="text-2xs font-medium text-[#8F7A6A]">{style.percentage}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-1">
-                <div 
-                  className="bg-[#B89B7A] h-1 rounded-full" 
-                  style={{ width: `${style.percentage}%` }}
-                />
-              </div>
-            </div>
+    <div className="space-y-3">
+      <h3 className="text-sm font-medium text-[#432818]">Estilos Complementares:</h3>
+      
+      {topStyles.map((style, index) => (
+        <div key={index} className="space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-sm">{style.category}</span>
+            <span className="text-xs text-[#8F7A6A]">{Math.round(style.percentage)}%</span>
           </div>
-        ))}
-      </div>
+          <div className="w-full bg-[#F3E8E6] h-2 rounded-full">
+            <div 
+              className="h-2 rounded-full transition-all duration-500 ease-out"
+              style={{ 
+                width: `${style.percentage}%`,
+                backgroundColor: getStyleColor(style.category)
+              }} 
+            />
+          </div>
+        </div>
+      ))}
+      
+      <p className="text-xs text-[#8F7A6A] mt-2">
+        Combine seu estilo principal com estes complementares para uma expressão pessoal única.
+      </p>
     </div>
   );
 };

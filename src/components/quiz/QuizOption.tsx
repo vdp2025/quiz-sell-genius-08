@@ -1,21 +1,19 @@
 
-import React, { useState } from 'react';
-import { cn } from '@/lib/utils';
+import React from 'react';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
-import { highlightStrategicWords } from '@/utils/textHighlight';
-import { QuizOptionImage } from './QuizOptionImage';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 
 interface QuizOptionProps {
   option: QuizOptionType;
   isSelected: boolean;
-  onSelect: (optionId: string) => void;
-  type: 'text' | 'image' | 'both';
-  questionId?: string;
+  onSelect: (id: string) => void;
+  type: 'text' | 'image' | 'text-image';
+  questionId: string;
   isDisabled?: boolean;
 }
 
-const QuizOption: React.FC<QuizOptionProps> = ({
+export const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
   onSelect,
@@ -23,77 +21,61 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   questionId,
   isDisabled = false
 }) => {
-  const isMobile = useIsMobile();
-  const [isHovered, setIsHovered] = useState(false);
-  const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+  const hasImage = type === 'image' || type === 'text-image';
+  
+  const handleClick = () => {
+    if (!isDisabled) {
+      onSelect(option.id);
+    }
+  };
 
   return (
-    <div 
+    <div
       className={cn(
-        "relative group h-full",
-        "transition-all duration-300 ease-in-out transform", 
-        !type.includes('text') && !isSelected && "hover:scale-[1.02]",
-        isDisabled && "opacity-50 cursor-not-allowed"
+        "group cursor-pointer rounded-lg transition-all duration-300 flex flex-col",
+        isSelected ? "ring-2 ring-[#B89B7A] bg-[#B89B7A]/5" : "hover:bg-[#F9F6F2] border border-[#B89B7A]/10",
+        isDisabled && !isSelected && "opacity-50 cursor-not-allowed",
+        hasImage ? "overflow-hidden h-full" : "p-3"
       )}
-      onClick={() => !isDisabled && onSelect(option.id)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={() => setIsHovered(true)}
-      onTouchEnd={() => setIsHovered(false)}
+      onClick={handleClick}
     >
-      <div 
-        className={cn(
-          "relative h-full flex flex-col",
-          "transition-all duration-300 ease-out cursor-pointer", 
-          type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
-          type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
-          isSelected 
-            ? type === 'text' 
-              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]" 
-              : "border-brand-gold/60 shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]"
-            : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-sm" 
-              : "hover:border-brand-gold/40 hover:shadow-sm"
-        )}
-      >
-        {type !== 'text' && option.imageUrl && (
-          <QuizOptionImage
-            imageUrl={option.imageUrl}
-            altText={option.text}
-            styleCategory={option.styleCategory}
-            isSelected={isSelected}
-            is3DQuestion={is3DQuestion}
-            questionId={questionId || ''}
+      {hasImage && option.imageUrl && (
+        <div className="relative flex-1 bg-[#F9F6F2] overflow-hidden">
+          <img
+            src={option.imageUrl}
+            alt={option.text}
+            className={cn(
+              "object-cover transition-transform duration-500 w-full h-full",
+              isSelected ? "scale-105" : "group-hover:scale-105"
+            )}
+            loading="lazy"
           />
-        )}
-        
+          {isSelected && (
+            <div className="absolute top-2 right-2 bg-[#B89B7A] text-white rounded-full p-1">
+              <Check className="h-4 w-4" />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className={cn(
+        "flex-shrink-0",
+        hasImage ? "p-3 bg-white/95" : "",
+        isSelected && hasImage && "bg-[#B89B7A]/10"
+      )}>
         <p className={cn(
-          "transition-all duration-300",
-          type !== 'text' 
-            ? cn(
-                "leading-tight font-medium bg-transparent py-0 px-2 mt-auto text-brand-coffee relative", 
-                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm",
-                isSelected && "font-semibold"
-              )
-            : cn(
-                "leading-relaxed",
-                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base", // Standardized text size for text-only options
-                isSelected && "text-brand-coffee font-semibold"
-              )
+          "text-sm",
+          isSelected ? "text-[#432818] font-medium" : "text-[#432818]/90",
         )}>
-          {highlightStrategicWords(option.text)}
+          {option.text}
         </p>
       </div>
       
-      {isSelected && (
-        <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 animate-scale-in">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-2 w-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
+      {isSelected && !hasImage && (
+        <div className="absolute top-2 right-2 text-[#B89B7A]">
+          <Check className="h-4 w-4" />
         </div>
       )}
     </div>
   );
 };
-
-export { QuizOption };

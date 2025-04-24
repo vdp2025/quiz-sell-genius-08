@@ -1,6 +1,11 @@
 
 export type StyleCategory = "Elegante" | "Contemporâneo" | "Natural" | "Clássico" | "Romântico" | "Sexy" | "Dramático" | "Criativo";
 
+export interface UserResponse {
+  questionId: string;
+  selectedOptions: string[];
+}
+
 export interface StyleResult {
   category: StyleCategory;
   score: number;
@@ -17,6 +22,8 @@ export interface QuizQuestion {
   columnsCount?: number;
   imageSize?: 'small' | 'medium' | 'large';
   orderIndex: number;
+  multiSelect: number;
+  imageUrl?: string;
 }
 
 export interface QuizOption {
@@ -26,6 +33,7 @@ export interface QuizOption {
   styleCode: string;
   styleTypeId: string;
   points: number;
+  styleCategory?: StyleCategory;
 }
 
 export interface QuizResult {
@@ -35,6 +43,7 @@ export interface QuizResult {
     name: string;
     email: string;
   };
+  totalSelections?: number;
 }
 
 export interface QuizSettings {

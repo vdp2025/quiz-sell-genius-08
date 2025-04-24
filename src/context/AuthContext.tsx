@@ -1,37 +1,43 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { UserSession } from '../types/auth';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 
-type AuthContextType = {
-  user: UserSession;
-  login: (name: string) => void;
+interface User {
+  id?: string;
+  userName?: string;
+  email?: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
   logout: () => void;
-};
+  isAuthenticated: boolean;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserSession>({
-    userName: '',
-    isAuthenticated: false
-  });
-
-  const login = (name: string) => {
-    setUser({
-      userName: name,
-      isAuthenticated: true
-    });
+  const [user, setUser] = useState<User | null>(null);
+  
+  const login = (userData: User) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
-
+  
   const logout = () => {
-    setUser({
-      userName: '',
-      isAuthenticated: false
-    });
+    setUser(null);
+    localStorage.removeItem('user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        login, 
+        logout,
+        isAuthenticated: user !== null
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

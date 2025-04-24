@@ -1,92 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { StyleResult } from '../types/quiz';
-import { useAuth } from '../context/AuthContext';
-import { ContentContainer } from './shared/ContentContainer';
-import { GridLayout } from './shared/GridLayout';
-import ResultHeader from './quiz-result/ResultHeader';
-import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
-import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
-import OfferCard from './quiz-result/OfferCard';
-import { sharedStyles } from '@/styles/sharedStyles';
-import { ResultPageConfig } from '@/types/resultPageConfig';
-import { cn } from '@/lib/utils';
+
+import React from 'react';
+import { StyleResult } from '@/types/quiz';
+import { Card } from '@/components/ui/card';
+import { StyleResultSection } from '@/components/result/StyleResult';
+import OfferCard from '@/components/quiz-result/sales/OfferCard';
+import { getStyleDescription, getStyleImage } from '@/utils/styleUtils';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
-  config?: ResultPageConfig;
-  previewMode?: boolean;
 }
 
-const QuizResult: React.FC<QuizResultProps> = ({
-  primaryStyle,
-  secondaryStyles,
-  config: externalConfig,
-  previewMode = false
+const QuizResult: React.FC<QuizResultProps> = ({ 
+  primaryStyle, 
+  secondaryStyles 
 }) => {
-  const { user } = useAuth();
-  const [userName, setUserName] = useState<string>('Visitante');
+  const userName = localStorage.getItem('userName') || 'Visitante';
   
-  useEffect(() => {
-    if (user && user.userName) {
-      setUserName(user.userName);
-    } else {
-      const storedName = localStorage.getItem('userName');
-      if (storedName) {
-        setUserName(storedName);
-      }
-    }
-  }, [user]);
-
-  const [config, setConfig] = useState<ResultPageConfig | null>(null);
-  
-  useEffect(() => {
-    try {
-      if (externalConfig) {
-        setConfig(externalConfig);
-      } else {
-        const configKey = `quiz_result_config_${primaryStyle.category}`;
-        const savedConfig = localStorage.getItem(configKey);
-        
-        if (savedConfig) {
-          setConfig(JSON.parse(savedConfig));
-          console.log("Loaded config from localStorage:", configKey);
-        } else {
-          console.log("No saved config found for:", primaryStyle.category);
-          setConfig(null);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading custom settings:', error);
-      setConfig(null);
-    }
-  }, [primaryStyle.category, externalConfig]);
-
-  if (!primaryStyle || !secondaryStyles) {
-    console.error('Missing required props:', { primaryStyle, secondaryStyles });
-    return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
-  }
-
   return (
-    <div 
-      className={cn(
-        "min-h-screen",
-        previewMode ? 'max-h-screen overflow-auto' : ''
-      )}
-      style={{
-        backgroundColor: config?.globalStyles?.backgroundColor || sharedStyles.colors.background,
-        color: config?.globalStyles?.textColor || sharedStyles.colors.textPrimary,
-      }}
-    >
-      <ContentContainer size="md">
-        <ResultHeader userName={userName} />
-        
-        <div className="space-y-8">
-          <PrimaryStyleCard primaryStyle={primaryStyle} />
-          <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-          <OfferCard primaryStyle={primaryStyle} config={config?.offer?.hero?.content || {}} />
+    <div className="min-h-screen bg-[#FFFAF7]">
+      {/* Header */}
+      <header className="bg-white shadow-sm py-4 px-6 sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <img 
+            src="/lovable-uploads/d9da05d3-6fdd-46d0-afea-42417af058c5.png" 
+            alt="Quiz de Estilo Pessoal"
+            className="h-12" 
+          />
+          <div className="text-[#432818]">
+            Olá, <span className="font-medium">{userName}</span>
+          </div>
         </div>
-      </ContentContainer>
+      </header>
+      
+      <main className="max-w-6xl mx-auto py-8 px-4">
+        {/* Result Announcement */}
+        <div className="text-center mb-12">
+          <h1 className="font-playfair text-3xl md:text-4xl text-[#432818] mb-4">
+            Seu Resultado: Estilo {primaryStyle.category}
+          </h1>
+          <p className="text-[#8F7A6A] max-w-2xl mx-auto">
+            Vamos descobrir como o estilo {primaryStyle.category} pode valorizar sua imagem e transformar a maneira como você se apresenta ao mundo.
+          </p>
+        </div>
+        
+        {/* Style Result Section */}
+        <div className="mb-12">
+          <StyleResultSection
+            primaryStyle={primaryStyle}
+            description={getStyleDescription(primaryStyle.category)}
+            image={getStyleImage(primaryStyle.category)}
+            secondaryStyles={secondaryStyles}
+          />
+        </div>
+        
+        {/* Offer Card */}
+        <OfferCard 
+          primaryStyle={primaryStyle}
+        />
+      </main>
+      
+      {/* Footer */}
+      <footer className="py-6 bg-[#432818] text-white text-center text-sm">
+        <div className="max-w-6xl mx-auto px-4">
+          <p>© {new Date().getFullYear()} Quiz de Estilo Pessoal. Todos os direitos reservados.</p>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -1,58 +1,53 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Quote } from 'lucide-react';
 
-interface Testimonial {
-  text: string;
-  name: string;
-  role: string;
-}
-
-interface TestimonialsProps {
-  items?: Testimonial[];
-}
-
-const defaultTestimonials = [
-  {
-    text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
-    name: "Mariangela",
-    role: "Engenheira"
-  },
-  {
-    text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
-    name: "Patrícia Paranhos",
-    role: "Advogada"
-  },
-  {
-    text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
-    name: "Sônia Spier",
-    role: "Terapeuta"
-  }
-];
-
-const Testimonials: React.FC<TestimonialsProps> = ({ items }) => {
-  const testimonialsToShow = items || defaultTestimonials;
+const Testimonials: React.FC = () => {
+  const testimonials = [
+    {
+      name: 'Ana Clara',
+      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+      text: 'O guia transformou minha relação com meu estilo. Finalmente entendo como montar looks que realmente combinam comigo e me fazem sentir confiante!'
+    },
+    {
+      name: 'Patricia Mendes',
+      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg',
+      text: 'Antes eu comprava muitas roupas erradas. Com o guia, tenho um guarda-roupa menor, mas muito mais funcional e alinhado com quem eu sou.'
+    },
+    {
+      name: 'Juliana Soares',
+      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
+      text: 'As dicas são práticas e fáceis de implementar. Minha imagem profissional melhorou muito e as pessoas notaram a diferença!'
+    }
+  ];
   
   return (
-    <Card className="p-6 bg-white">
-      <h3 className="text-xl font-medium text-[#432818] mb-6 text-center">
-        O que dizem quem já transformou seu estilo:
-      </h3>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {testimonialsToShow.map((testimonial, index) => (
-          <div key={index} className="p-4 bg-[#fef5f2] rounded-lg relative">
-            <Quote className="w-7 h-7 text-[#aa6b5d]/20 absolute -top-3 -left-3" />
-            <p className="text-[#6b605a] text-sm italic mb-4">{testimonial.text}</p>
-            <div className="text-right">
-              <p className="font-medium text-[#432818]">{testimonial.name}</p>
-              <p className="text-xs text-[#6b605a]">{testimonial.role}</p>
+    <div className="py-8">
+      <h2 className="font-playfair text-2xl text-center text-[#432818] mb-8">
+        O que dizem sobre o Guia de Estilo
+      </h2>
+      
+      <div className="grid md:grid-cols-3 gap-6">
+        {testimonials.map((testimonial, index) => (
+          <Card key={index} className="p-6 bg-white border-[#B89B7A]/10">
+            <div className="flex flex-col h-full">
+              <p className="text-[#432818] italic mb-4">"{testimonial.text}"</p>
+              
+              <div className="flex items-center mt-auto">
+                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-[#F9F6F2] flex-shrink-0">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <span className="font-medium text-[#432818]">{testimonial.name}</span>
+              </div>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
-    </Card>
+    </div>
   );
 };
 

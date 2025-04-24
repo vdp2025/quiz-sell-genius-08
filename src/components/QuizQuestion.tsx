@@ -2,13 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
-import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
+import { QuizQuestion as QuizQuestionType, UserResponse } from '@/types/quiz';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption } from './quiz/QuizOption';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
-import { useQuestionScroll } from '@/hooks/useQuestionScroll';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -20,6 +19,18 @@ interface QuizQuestionProps {
   onPreviousClick?: () => void;
   showQuestionImage?: boolean;
 }
+
+// Create a custom hook for scrolling to questions
+export const useQuestionScroll = () => {
+  const scrollToQuestion = (id: string) => {
+    const element = document.getElementById(`question-${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+  
+  return { scrollToQuestion };
+};
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
@@ -144,7 +155,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           )}
           
           <div className="ml-auto">
-            
+            {currentAnswers.length >= question.multiSelect && (
+              <Button 
+                onClick={onNextClick}
+                className="bg-[#B89B7A] hover:bg-[#B89B7A]/90"
+              >
+                Próxima <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
       </div>
