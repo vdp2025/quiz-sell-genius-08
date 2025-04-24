@@ -1,109 +1,75 @@
 
 import React, { useState } from 'react';
-import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { QuizStage, QuizComponentType } from '@/types/quizBuilder';
-import BuilderLayout from './layout/BuilderLayout';
-import BuilderToolbar from './toolbar/BuilderToolbar';
-import QuizPreview from './preview/QuizPreview';
-import { toast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
+import { ComponentPreview } from './preview/ComponentPreview';
+import { PropertiesPanel } from './properties/PropertiesPanel';
+import { QuizComponentType, QuizComponentData } from '@/types/quizBuilder/componentTypes';
+import { useToast } from '@/components/ui/use-toast';
 
 export const QuizBuilderContainer: React.FC = () => {
-  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  
-  const { 
-    components, 
-    stages,
-    activeStageId,
-    addComponent, 
-    updateComponent, 
-    deleteComponent,
-    moveComponent,
-    addStage,
-    updateStage,
-    deleteStage,
-    moveStage,
-    setActiveStage,
-    saveCurrentState,
-    loading
-  } = useQuizBuilder();
+  const [selectedComponent, setSelectedComponent] = useState<QuizComponentData | null>(null);
+  const { toast } = useToast();
 
-  const handleComponentSelect = (type: QuizComponentType) => {
-    if (!activeStageId) {
-      toast({
-        title: "Nenhuma etapa selecionada",
-        description: "Selecione uma etapa antes de adicionar componentes.",
-      });
-      return;
-    }
-    
-    const newComponentId = addComponent(type, activeStageId);
-    setSelectedComponentId(newComponentId);
+  const handleSelectComponent = (type: QuizComponentType) => {
+    // Create a new component with default layout and style
+    const newComponent: QuizComponentData = {
+      id: `component-${Date.now()}`,
+      type,
+      order: 0,
+      layout: {
+        columns: 1,
+        spacing: 'medium',
+        alignment: 'left',
+        direction: 'vertical',
+        containerWidth: 'full'
+      },
+      style: {
+        padding: 'medium',
+        margin: 'none',
+        shadow: 'none'
+      },
+      content: {}
+    };
+
+    setSelectedComponent(newComponent);
+    toast({
+      title: "Componente adicionado",
+      description: "O novo componente foi criado com sucesso."
+    });
   };
-
-  const handleSave = () => {
-    const success = saveCurrentState();
-    if (success) {
-      toast({
-        title: "Quiz salvo",
-        description: "Todas as alterações foram salvas com sucesso.",
-      });
-    }
-  };
-
-  const activeStage = activeStageId
-    ? stages.find(s => s.id === activeStageId)
-    : null;
-
-  if (loading) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center bg-[#1A1F2C]">
-        <Loader2 className="h-12 w-12 text-[#9b87f5] animate-spin mb-4" />
-        <p className="text-white text-lg">Carregando construtor de quiz...</p>
-      </div>
-    );
-  }
 
   return (
-    <div className="h-screen flex flex-col bg-[#1A1F2C]">
-      <BuilderToolbar
-        activeView={activeView}
-        isPreviewing={isPreviewing}
-        onViewChange={setActiveView}
-        onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-        onSave={handleSave}
-      />
-      
-      <div className="flex-1 overflow-hidden">
-        {activeView === 'editor' ? (
-          <BuilderLayout
-            components={components}
-            stages={stages}
-            activeStageId={activeStageId}
-            selectedComponentId={selectedComponentId}
-            activeStage={activeStage}
-            isPreviewing={isPreviewing}
-            onComponentSelect={handleComponentSelect}
-            onStageAdd={addStage}
-            onStageSelect={setActiveStage}
-            onComponentMove={moveComponent}
-            onStageMove={moveStage}
-            onStageUpdate={updateStage}
-            onStageDelete={deleteStage}
-            onComponentUpdate={updateComponent}
-            onComponentDelete={deleteComponent}
-            onSelectComponent={setSelectedComponentId}
-          />
-        ) : (
-          <QuizPreview 
-            stages={stages}
-            components={components}
-          />
-        )}
-      </div>
-    </div>
+    <ResizablePanelGroup direction="horizontal" className="h-full">
+      {/* Left Panel - Components Sidebar */}
+      <ResizablePanel defaultSize={20} minSize={15} maxSize={25}>
+        <ComponentsSidebar onSelectComponent={handleSelectComponent} />
+      </ResizablePanel>
+
+      <ResizableHandle />
+
+      {/* Center Panel - Preview */}
+      <ResizablePanel defaultSize={55}>
+        <ComponentPreview 
+          selectedComponent={selectedComponent}
+          onSelectComponent={setSelectedComponent}
+        />
+      </ResizablePanel>
+
+      <ResizableHandle />
+
+      {/* Right Panel - Properties */}
+      <ResizablePanel defaultSize={25}>
+        <PropertiesPanel 
+          component={selectedComponent}
+          onUpdate={(updates) => {
+            if (selectedComponent) {
+              setSelectedComponent({ ...selectedComponent, ...updates });
+            }
+          }}
+        />
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 
