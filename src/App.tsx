@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
@@ -11,6 +10,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import QuizBuilderPage from './pages/QuizBuilderPage';
 import ResultPageEditorPage from './pages/admin/ResultPageEditorPage';
 import AuthPage from './pages/auth/AuthPage';
+import EditorPage from './pages/admin/EditorPage';
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
@@ -30,6 +30,7 @@ function App() {
               <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
               <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
               <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
+              <Route path="/editor" element={<ProtectedAdminRoute><EditorPage /></ProtectedAdminRoute>} />
             </Routes>
           </Suspense>
           <Toaster />
