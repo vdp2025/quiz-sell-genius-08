@@ -16,13 +16,20 @@ export const UTMAnalytics = () => {
   const { data: utmData, isLoading } = useQuery({
     queryKey: ['utm-analytics'],
     queryFn: async () => {
+      // Using a more generic approach to handle tables not in TypeScript definitions
       const { data, error } = await supabase
         .from('utm_analytics')
-        .select('utm_source, utm_medium, utm_campaign')
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as Array<{
+        id: string;
+        utm_source: string | null;
+        utm_medium: string | null;
+        utm_campaign: string | null;
+        created_at: string;
+      }>;
     },
   });
 
@@ -31,14 +38,15 @@ export const UTMAnalytics = () => {
   }
 
   const sourceData = utmData?.reduce((acc: any[], curr) => {
-    const existingSource = acc.find(item => item.source === curr.utm_source);
+    const source = curr.utm_source || 'Direct';
+    const existingSource = acc.find(item => item.source === source);
     if (existingSource) {
       existingSource.count += 1;
     } else {
-      acc.push({ source: curr.utm_source || 'Direct', count: 1 });
+      acc.push({ source, count: 1 });
     }
     return acc;
-  }, []);
+  }, []) || [];
 
   return (
     <div className="space-y-6">

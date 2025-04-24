@@ -9,6 +9,8 @@ import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import ResultPageEditorPage from './pages/admin/ResultPageEditorPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import SettingsPage from './pages/admin/SettingsPage';
+import UTMAnalyticsPage from './pages/admin/UTMAnalyticsPage';
 import { useAuth } from './context/AuthContext';
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
