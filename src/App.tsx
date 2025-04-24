@@ -1,6 +1,7 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense } from 'react';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
 import { QuizProvider } from './context/QuizContext';
@@ -11,10 +12,10 @@ import QuizBuilderPage from './pages/QuizBuilderPage';
 import AuthPage from './pages/auth/AuthPage';
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-  const isAdmin = true;
+  const { user, isAdmin } = useAuth();
   
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
+  if (!user || !isAdmin) {
+    return <Navigate to="/auth" replace />;
   }
   
   return <>{children}</>;

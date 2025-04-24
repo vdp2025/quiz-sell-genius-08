@@ -11,11 +11,11 @@ interface QuizWelcomeProps {
 
 export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const [name, setName] = useState('');
-  const { login } = useAuth();
+  const { setUsername } = useAuth();
 
   const handleStart = () => {
     if (name.trim()) {
-      login(name.trim());
+      setUsername(name.trim());
       localStorage.setItem('userName', name.trim());
       onStart();
     }
