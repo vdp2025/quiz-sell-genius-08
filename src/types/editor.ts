@@ -1,21 +1,19 @@
 
 export type BlockType = 
   | 'header'
+  | 'headline'
   | 'text'
   | 'image'
+  | 'hero-section'
   | 'benefits'
-  | 'testimonial'
+  | 'testimonials'
   | 'pricing'
   | 'guarantee'
-  | 'divider'
-  | 'styleResult'
-  | 'headline'
   | 'cta'
+  | 'bonus-carousel'
+  | 'products'
   | 'style-result'
   | 'secondary-styles'
-  | 'hero-section'
-  | 'products'
-  | 'testimonials'
   | 'spacer'
   | 'video'
   | 'two-column'
@@ -23,29 +21,34 @@ export type BlockType =
   | 'faq'
   | 'carousel'
   | 'custom-code'
-  | 'animation-block'
-  | 'bonus-carousel'
-  | 'hero';
+  | 'animation-block';
+
+export interface EditableContent {
+  [key: string]: any;
+  title?: string;
+  subtitle?: string;
+  text?: string;
+  logo?: string;
+  logoAlt?: string;
+  buttonText?: string;
+  items?: string[];
+  heroImage?: string;
+  heroImageAlt?: string;
+  salePrice?: string;
+  quote?: string;
+  quoteAuthor?: string;
+  textColor?: string;
+  alignment?: 'left' | 'center' | 'right';
+  bonusImages?: Array<{
+    url: string;
+    alt: string;
+    title?: string;
+  }>;
+}
 
 export interface Block {
   id: string;
   type: BlockType;
-  content: any;
+  content: EditableContent;
   order: number;
-}
-
-// Aliases for backward compatibility with existing components
-export type EditorBlock = Block;
-export type EditableContent = any;
-
-export interface EditorConfig {
-  blocks: EditorBlock[];
-  globalStyles?: {
-    primaryColor?: string;
-    secondaryColor?: string;
-    textColor?: string;
-    backgroundColor?: string;
-    fontFamily?: string;
-  };
-  theme?: Record<string, any>;
 }

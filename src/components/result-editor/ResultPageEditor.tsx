@@ -32,7 +32,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
   const [globalStylesOpen, setGlobalStylesOpen] = useState(false);
 
   const { 
-    resultPageConfig, 
+    config, 
     updateSection, 
     saveConfig,
     resetConfig,
@@ -42,11 +42,13 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
 
   const handleSave = async () => {
     try {
-      await saveConfig();
-      toast({
-        title: 'Configurações salvas',
-        description: 'As alterações foram salvas com sucesso',
-      });
+      if (config) {
+        await saveConfig(config);
+        toast({
+          title: 'Configurações salvas',
+          description: 'As alterações foram salvas com sucesso',
+        });
+      }
     } catch (error) {
       toast({
         title: 'Erro ao salvar',
@@ -87,18 +89,23 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
     const pathParts = sectionPath.split('.');
     const sectionName = pathParts[pathParts.length - 1];
     
-    let currentSection = { ...resultPageConfig };
+    if (!config) return;
+    let currentSection = { ...config };
     pathParts.forEach((part, index) => {
       if (index < pathParts.length - 1) {
-        currentSection = currentSection[part];
+        if (currentSection[part]) {
+          currentSection = currentSection[part];
+        }
       }
     });
     
     const section = currentSection[sectionName];
-    updateSection(sectionPath, { ...section, visible: !section.visible });
+    if (section) {
+      updateSection(sectionPath, { ...section, visible: !section.visible });
+    }
   };
 
-  if (loading) {
+  if (loading || !config) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -114,7 +121,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
         onSave={handleSave}
         onReset={handleReset}
         onEditGlobalStyles={() => setGlobalStylesOpen(true)}
-        resultPageConfig={resultPageConfig}
+        resultPageConfig={config}
         onUpdateConfig={handleUpdateConfig}
       />
       
@@ -124,9 +131,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Cabeçalho"
             sectionPath="header"
-            content={resultPageConfig.header.content}
-            style={resultPageConfig.header.style}
-            visible={resultPageConfig.header.visible}
+            content={config.header.content}
+            style={config.header.style}
+            visible={config.header.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('header')}
             onToggleVisibility={() => toggleSection('header')}
@@ -141,9 +148,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Estilo Principal"
             sectionPath="mainContent"
-            content={resultPageConfig.mainContent.content}
-            style={resultPageConfig.mainContent.style}
-            visible={resultPageConfig.mainContent.visible}
+            content={config.mainContent.content}
+            style={config.mainContent.style}
+            visible={config.mainContent.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('mainContent')}
             onToggleVisibility={() => toggleSection('mainContent')}
@@ -155,124 +162,138 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           />
           
           {/* Secondary Styles Section */}
-          <EditableSection
-            title="Estilos Secundários"
-            sectionPath="secondaryStyles"
-            content={resultPageConfig.secondaryStyles.content}
-            style={resultPageConfig.secondaryStyles.style}
-            visible={resultPageConfig.secondaryStyles.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('secondaryStyles')}
-            onToggleVisibility={() => toggleSection('secondaryStyles')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('secondaryStyles');
-            }}
-            primaryStyle={primaryStyle}
-            secondaryStyles={secondaryStyles}
-          />
+          {config.secondaryStyles && (
+            <EditableSection
+              title="Estilos Secundários"
+              sectionPath="secondaryStyles"
+              content={config.secondaryStyles.content}
+              style={config.secondaryStyles.style}
+              visible={config.secondaryStyles.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('secondaryStyles')}
+              onToggleVisibility={() => toggleSection('secondaryStyles')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('secondaryStyles');
+              }}
+              primaryStyle={primaryStyle}
+              secondaryStyles={secondaryStyles}
+            />
+          )}
           
           {/* Offer Section */}
-          <EditableSection
-            title="Oferta Principal"
-            sectionPath="offer.hero"
-            content={resultPageConfig.offer.hero.content}
-            style={resultPageConfig.offer.hero.style}
-            visible={resultPageConfig.offer.hero.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('offer.hero')}
-            onToggleVisibility={() => toggleSection('offer.hero')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('offer.hero');
-            }}
-            primaryStyle={primaryStyle}
-          />
+          {config.offer && config.offer.hero && (
+            <EditableSection
+              title="Oferta Principal"
+              sectionPath="offer.hero"
+              content={config.offer.hero.content}
+              style={config.offer.hero.style}
+              visible={config.offer.hero.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('offer.hero')}
+              onToggleVisibility={() => toggleSection('offer.hero')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('offer.hero');
+              }}
+              primaryStyle={primaryStyle}
+            />
+          )}
           
           {/* Products Section */}
-          <EditableSection
-            title="Produtos e Bônus"
-            sectionPath="offer.products"
-            content={resultPageConfig.offer.products.content}
-            style={resultPageConfig.offer.products.style}
-            visible={resultPageConfig.offer.products.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('offer.products')}
-            onToggleVisibility={() => toggleSection('offer.products')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('offer.products');
-            }}
-            primaryStyle={primaryStyle}
-          />
+          {config.offer && config.offer.products && (
+            <EditableSection
+              title="Produtos e Bônus"
+              sectionPath="offer.products"
+              content={config.offer.products.content}
+              style={config.offer.products.style}
+              visible={config.offer.products.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('offer.products')}
+              onToggleVisibility={() => toggleSection('offer.products')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('offer.products');
+              }}
+              primaryStyle={primaryStyle}
+            />
+          )}
           
           {/* Benefits Section */}
-          <EditableSection
-            title="Benefícios"
-            sectionPath="offer.benefits"
-            content={resultPageConfig.offer.benefits.content}
-            style={resultPageConfig.offer.benefits.style}
-            visible={resultPageConfig.offer.benefits.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('offer.benefits')}
-            onToggleVisibility={() => toggleSection('offer.benefits')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('offer.benefits');
-            }}
-            primaryStyle={primaryStyle}
-          />
+          {config.offer && config.offer.benefits && (
+            <EditableSection
+              title="Benefícios"
+              sectionPath="offer.benefits"
+              content={config.offer.benefits.content}
+              style={config.offer.benefits.style}
+              visible={config.offer.benefits.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('offer.benefits')}
+              onToggleVisibility={() => toggleSection('offer.benefits')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('offer.benefits');
+              }}
+              primaryStyle={primaryStyle}
+            />
+          )}
           
           {/* Pricing Section */}
-          <EditableSection
-            title="Preço e Botão de Compra"
-            sectionPath="offer.pricing"
-            content={resultPageConfig.offer.pricing.content}
-            style={resultPageConfig.offer.pricing.style}
-            visible={resultPageConfig.offer.pricing.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('offer.pricing')}
-            onToggleVisibility={() => toggleSection('offer.pricing')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('offer.pricing');
-            }}
-            primaryStyle={primaryStyle}
-          />
+          {config.offer && config.offer.pricing && (
+            <EditableSection
+              title="Preço e Botão de Compra"
+              sectionPath="offer.pricing"
+              content={config.offer.pricing.content}
+              style={config.offer.pricing.style}
+              visible={config.offer.pricing.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('offer.pricing')}
+              onToggleVisibility={() => toggleSection('offer.pricing')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('offer.pricing');
+              }}
+              primaryStyle={primaryStyle}
+            />
+          )}
           
           {/* Testimonials Section */}
-          <EditableSection
-            title="Depoimentos"
-            sectionPath="offer.testimonials"
-            content={resultPageConfig.offer.testimonials.content}
-            style={resultPageConfig.offer.testimonials.style}
-            visible={resultPageConfig.offer.testimonials.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('offer.testimonials')}
-            onToggleVisibility={() => toggleSection('offer.testimonials')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('offer.testimonials');
-            }}
-            primaryStyle={primaryStyle}
-          />
+          {config.offer && config.offer.testimonials && (
+            <EditableSection
+              title="Depoimentos"
+              sectionPath="offer.testimonials"
+              content={config.offer.testimonials.content}
+              style={config.offer.testimonials.style}
+              visible={config.offer.testimonials.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('offer.testimonials')}
+              onToggleVisibility={() => toggleSection('offer.testimonials')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('offer.testimonials');
+              }}
+              primaryStyle={primaryStyle}
+            />
+          )}
           
           {/* Guarantee Section */}
-          <EditableSection
-            title="Garantia"
-            sectionPath="offer.guarantee"
-            content={resultPageConfig.offer.guarantee.content}
-            style={resultPageConfig.offer.guarantee.style}
-            visible={resultPageConfig.offer.guarantee.visible}
-            isPreview={previewMode}
-            onEdit={() => setEditingSection('offer.guarantee')}
-            onToggleVisibility={() => toggleSection('offer.guarantee')}
-            onStyleEdit={() => {
-              setEditingStyles(true);
-              setEditingSection('offer.guarantee');
-            }}
-            primaryStyle={primaryStyle}
-          />
+          {config.offer && config.offer.guarantee && (
+            <EditableSection
+              title="Garantia"
+              sectionPath="offer.guarantee"
+              content={config.offer.guarantee.content}
+              style={config.offer.guarantee.style}
+              visible={config.offer.guarantee.visible}
+              isPreview={previewMode}
+              onEdit={() => setEditingSection('offer.guarantee')}
+              onToggleVisibility={() => toggleSection('offer.guarantee')}
+              onStyleEdit={() => {
+                setEditingStyles(true);
+                setEditingSection('offer.guarantee');
+              }}
+              primaryStyle={primaryStyle}
+            />
+          )}
         </div>
       </div>
       
@@ -287,7 +308,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <div className="py-6">
             {editingSection && renderContentEditor(
               editingSection, 
-              resultPageConfig, 
+              config, 
               updateSection
             )}
           </div>
@@ -308,7 +329,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <div className="py-6">
             {editingSection && (
               <StyleEditor 
-                style={getSectionStyle(editingSection, resultPageConfig)}
+                style={getSectionStyle(editingSection, config)}
                 onUpdate={(style) => {
                   updateSection(`${editingSection}.style`, style);
                 }}
@@ -326,7 +347,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           </SheetHeader>
           <div className="py-6">
             <GlobalStyleEditor 
-              globalStyles={resultPageConfig.globalStyles || {}}
+              globalStyles={config.globalStyles || {}}
               onUpdate={(styles) => {
                 updateSection('globalStyles', styles);
               }}
@@ -411,7 +432,7 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
     default:
       return (
         <div className="space-y-4">
-          {Object.entries(current.content).map(([key, value]) => {
+          {Object.entries(current.content || {}).map(([key, value]) => {
             if (typeof value === 'string') {
               return (
                 <div key={key} className="space-y-2">

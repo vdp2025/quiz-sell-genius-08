@@ -11,10 +11,10 @@ interface TemplateListProps {
 }
 
 export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) => {
-  const { resultPageConfig, importConfig } = useResultPageConfig("Natural");
+  const { config, importConfig } = useResultPageConfig("Natural");
   
   // Use the styleType from the current config
-  const styleType = resultPageConfig?.styleType || "Natural";
+  const styleType = config?.styleType || "Natural";
 
   const handleSelectTemplate = (template: any) => {
     try {

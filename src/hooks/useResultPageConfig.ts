@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from '@/services/resultPageStorage';
 import { toast } from '@/components/ui/use-toast';
+import { createDefaultConfig } from '@/utils/resultPageDefaults';
 
 export const useResultPageConfig = (styleType: string) => {
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
@@ -15,7 +16,7 @@ export const useResultPageConfig = (styleType: string) => {
       setLoading(true);
       try {
         const loadedConfig = resultPageStorage.loadConfig(styleType);
-        setConfig(loadedConfig);
+        setConfig(loadedConfig || createDefaultConfig(styleType));
       } catch (err) {
         console.error('Error loading config:', err);
         setError(err instanceof Error ? err : new Error('Failed to load config'));
@@ -48,6 +49,30 @@ export const useResultPageConfig = (styleType: string) => {
     }
   }, [styleType]);
   
+  // Reset config function
+  const resetConfig = useCallback((styleType: string) => {
+    const defaultConfig = createDefaultConfig(styleType);
+    setConfig(defaultConfig);
+    resultPageStorage.saveConfig(styleType, defaultConfig);
+    toast({
+      title: "Configuração redefinida",
+      description: "A configuração foi redefinida para os valores padrão",
+    });
+  }, []);
+  
+  // Import config function
+  const importConfig = useCallback((updatedConfig: ResultPageConfig) => {
+    try {
+      setConfig(updatedConfig);
+      resultPageStorage.saveConfig(styleType, updatedConfig);
+      return true;
+    } catch (err) {
+      console.error('Error importing config:', err);
+      setError(err instanceof Error ? err : new Error('Failed to import config'));
+      return false;
+    }
+  }, [styleType]);
+  
   // Update section of the config
   const updateSection = useCallback((path: string, value: any) => {
     setConfig((prevConfig) => {
@@ -76,7 +101,10 @@ export const useResultPageConfig = (styleType: string) => {
     loading,
     error,
     saveConfig,
-    updateSection
+    updateSection,
+    resetConfig,
+    importConfig,
+    resultPageConfig: config // Added for backward compatibility
   };
 };
 

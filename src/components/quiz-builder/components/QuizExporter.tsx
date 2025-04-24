@@ -14,15 +14,25 @@ interface QuizExporterProps {
     stages: QuizStage[];
     components: any[];
   };
+  onOpenChange?: (open: boolean) => void;
 }
 
 const QuizExporter: React.FC<QuizExporterProps> = ({ 
   isOpen, 
   onClose,
-  quizData
+  quizData,
+  onOpenChange
 }) => {
   const [activeTab, setActiveTab] = useState('json');
   const [isExporting, setIsExporting] = useState(false);
+  
+  const handleDialogOpenChange = (open: boolean) => {
+    if (onOpenChange) {
+      onOpenChange(open);
+    } else {
+      onClose();
+    }
+  };
   
   const handleExportJson = () => {
     setIsExporting(true);
@@ -70,7 +80,7 @@ const QuizExporter: React.FC<QuizExporterProps> = ({
   };
   
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Exportar Quiz</DialogTitle>

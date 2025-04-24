@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResultPagePreview } from '../preview/ResultPagePreview';
 import PropertiesPanel from '../properties/PropertiesPanel';
 import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
-import { EditorBlock } from '@/types/editor';
+import { Block, BlockType } from '@/types/editor';
 import { useEditor } from '@/hooks/useEditor';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 import { StyleResult } from '@/types/quiz';
@@ -18,9 +18,9 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({ primar
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
-  const { resultPageConfig, updateSection } = useResultPageConfig(primaryStyle.category);
+  const { config: resultPageConfig, updateSection } = useResultPageConfig(primaryStyle.category);
 
-  const handleComponentSelect = (type: EditorBlock['type']) => {
+  const handleComponentSelect = (type: BlockType) => {
     const newBlockId = addBlock(type);
     setSelectedBlock(newBlockId);
   };
