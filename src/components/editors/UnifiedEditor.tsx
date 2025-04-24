@@ -109,7 +109,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({
           <TabsContent value="result" className="h-full m-0">
             <ResultPageVisualEditor
               selectedStyle={initialResultStyle}
-              isPreviewing={isPreviewing}
+              // Não passamos a propriedade isPreviewing aqui, pois ela não é aceita no tipo
             />
           </TabsContent>
           

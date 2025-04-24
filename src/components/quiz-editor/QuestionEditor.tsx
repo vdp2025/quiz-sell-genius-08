@@ -5,8 +5,24 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Trash2Icon, PlusIcon, GripVerticalIcon } from 'lucide-react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { generateId } from '@/utils/idGenerator';
+import { 
+  DndContext, 
+  closestCenter, 
+  KeyboardSensor, 
+  PointerSensor, 
+  useSensor, 
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface QuestionEditorProps {
   question: QuizQuestion;
@@ -14,8 +30,69 @@ interface QuestionEditorProps {
   onDelete: (questionId: string) => void;
 }
 
+// Componente de Item Sortable para opções
+const SortableOptionItem = ({ option, index, onOptionChange, onOptionDelete }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: option.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1 : 0
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center space-x-2 p-3 rounded-md bg-gray-50 border border-gray-200"
+    >
+      <div {...attributes} {...listeners}>
+        <GripVerticalIcon className="h-5 w-5 text-gray-400 cursor-grab" />
+      </div>
+      <Input
+        type="text"
+        value={option.text}
+        onChange={(e) => onOptionChange(option.id, 'text', e.target.value)}
+        placeholder="Texto da opção"
+        className="flex-grow border-[#B89B7A]/20"
+      />
+      <Input
+        type="number"
+        value={option.points}
+        onChange={(e) => onOptionChange(option.id, 'points', parseInt(e.target.value))}
+        placeholder="Pontos"
+        className="w-20 border-[#B89B7A]/20"
+      />
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={() => onOptionDelete(option.id)}
+        className="text-red-500"
+      >
+        <Trash2Icon className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+};
+
 const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpdate, onDelete }) => {
   const [localQuestion, setQuestion] = useState<QuizQuestion>(question);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -62,20 +139,21 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpdate, onD
     onDelete(question.id);
   }, [onDelete, question.id]);
 
-  const onDragEnd = useCallback((result: any) => {
-    if (!result.destination) {
-      return;
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      setQuestion(prevQuestion => {
+        const oldIndex = prevQuestion.options.findIndex(option => option.id === active.id);
+        const newIndex = prevQuestion.options.findIndex(option => option.id === over.id);
+        
+        return {
+          ...prevQuestion,
+          options: arrayMove(prevQuestion.options, oldIndex, newIndex)
+        };
+      });
     }
-
-    const items = Array.from(localQuestion.options);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setQuestion(prevQuestion => ({
-      ...prevQuestion,
-      options: items
-    }));
-  }, [localQuestion.options]);
+  }, []);
 
   return (
     <div className="bg-white p-6 rounded-md shadow-sm space-y-4">
@@ -124,53 +202,28 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpdate, onD
 
       <div>
         <Label>Opções</Label>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="options">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                {localQuestion.options.map((option, index) => (
-                  <Draggable key={option.id} draggableId={option.id} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className="flex items-center space-x-2 p-3 rounded-md bg-gray-50 border border-gray-200"
-                      >
-                        <div {...provided.dragHandleProps}>
-                          <GripVerticalIcon className="h-5 w-5 text-gray-400 cursor-grab" />
-                        </div>
-                        <Input
-                          type="text"
-                          value={option.text}
-                          onChange={(e) => handleOptionChange(option.id, 'text', e.target.value)}
-                          placeholder="Texto da opção"
-                          className="flex-grow border-[#B89B7A]/20"
-                        />
-                        <Input
-                          type="number"
-                          value={option.points}
-                          onChange={(e) => handleOptionChange(option.id, 'points', parseInt(e.target.value))}
-                          placeholder="Pontos"
-                          className="w-20 border-[#B89B7A]/20"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleOptionDelete(option.id)}
-                          className="text-red-500"
-                        >
-                          <Trash2Icon className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <DndContext 
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext 
+            items={localQuestion.options.map(option => option.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-2">
+              {localQuestion.options.map((option, index) => (
+                <SortableOptionItem
+                  key={option.id}
+                  option={option}
+                  index={index}
+                  onOptionChange={handleOptionChange}
+                  onOptionDelete={handleOptionDelete}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
         <Button
           type="button"
           variant="outline"
