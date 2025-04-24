@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext } from 'react';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
+import { QuizQuestion } from '@/types/quiz';
 
 type QuizContextType = ReturnType<typeof useQuizLogic>;
 
@@ -23,3 +24,6 @@ export const useQuiz = () => {
   }
   return context;
 };
+
+// Alias for useQuiz for backward compatibility
+export const useQuizContext = useQuiz;

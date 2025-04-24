@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useQuizLogic } from '../hooks/useQuizLogic';
+import { useQuiz } from '../context/QuizContext';
 import { UserResponse } from '@/types/quiz';
 import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
@@ -32,7 +32,7 @@ const QuizPage: React.FC = () => {
     calculateResults,
     handleStrategicAnswer: saveStrategicAnswer,
     submitQuizIfComplete
-  } = useQuizLogic();
+  } = useQuiz();
 
   // Handle strategic answer
   const handleStrategicAnswer = (response: UserResponse) => {

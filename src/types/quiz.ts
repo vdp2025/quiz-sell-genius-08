@@ -21,6 +21,11 @@ export interface UserResponse {
   selectedOptions: string[];
 }
 
+export interface QuizAnswer {
+  questionId: string;
+  selectedOptions: string[];
+}
+
 export interface StyleResult {
   category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
   score: number;
