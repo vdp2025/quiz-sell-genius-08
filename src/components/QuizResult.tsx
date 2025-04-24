@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +10,7 @@ import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { cn } from '@/lib/utils';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;

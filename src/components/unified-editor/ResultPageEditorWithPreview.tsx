@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import EditableComponent from '@/components/result-editor/EditableComponent';
 import QuizResult from '@/components/QuizResult';
 import { StyleResult } from '@/types/quiz';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 interface ResultPageEditorWithPreviewProps {
   template: QuizTemplate;
@@ -48,24 +49,75 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
   
   const handleConfigUpdate = (sectionKey: string, data: any) => {
     if (!template.resultPageSettings) {
+      // Create a proper ResultPageConfig structure
       template.resultPageSettings = {
         styleType: mockPrimaryStyle.category,
-        blocks: [],
-        headerConfig: {},
-        mainContentConfig: {},
-        offerConfig: {}
+        header: {
+          visible: true,
+          content: {},
+          style: {}
+        },
+        mainContent: {
+          visible: true,
+          content: {},
+          style: {}
+        },
+        secondaryStyles: {
+          visible: true,
+          content: {},
+          style: {}
+        },
+        offer: {
+          hero: {
+            visible: true,
+            content: {},
+            style: {}
+          },
+          benefits: {
+            visible: true,
+            content: {},
+            style: {}
+          },
+          products: {
+            visible: true,
+            content: {},
+            style: {}
+          },
+          pricing: {
+            visible: true,
+            content: {},
+            style: {}
+          },
+          testimonials: {
+            visible: true,
+            content: {},
+            style: {}
+          },
+          guarantee: {
+            visible: true,
+            content: {},
+            style: {}
+          }
+        },
+        blocks: []
       };
     }
     
     // Atualizar a configuração específica com base na chave da seção
-    const updatedSettings = { ...template.resultPageSettings };
+    const updatedSettings = { ...template.resultPageSettings } as ResultPageConfig;
     
     if (sectionKey === 'header.content') {
-      updatedSettings.headerConfig = data;
+      if (updatedSettings.header) {
+        updatedSettings.header.content = { ...updatedSettings.header.content, ...data };
+      }
     } else if (sectionKey === 'mainContent.content') {
-      updatedSettings.mainContentConfig = data;
+      if (updatedSettings.mainContent) {
+        updatedSettings.mainContent.content = { ...updatedSettings.mainContent.content, ...data };
+      }
     } else if (sectionKey === 'offer.hero.content') {
-      updatedSettings.offerConfig = data;
+      if (updatedSettings.offer?.hero) {
+        updatedSettings.offer.hero.content = { ...updatedSettings.offer.hero.content, ...data };
+      }
     } else {
       // Para outras seções, atualizar a propriedade específica
       const parts = sectionKey.split('.');
@@ -91,7 +143,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
         <QuizResult 
           primaryStyle={mockPrimaryStyle} 
           secondaryStyles={mockSecondaryStyles} 
-          config={template.resultPageSettings}
+          config={template.resultPageSettings as ResultPageConfig}
         />
       </ScrollArea>
     );
@@ -107,9 +159,19 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
                 primaryStyle: mockPrimaryStyle,
                 secondaryStyles: mockSecondaryStyles,
                 config: template.resultPageSettings || {
-                  header: { content: {} },
-                  mainContent: { content: {} },
-                  offer: { hero: { content: {} } }
+                  styleType: mockPrimaryStyle.category,
+                  header: { visible: true, content: {}, style: {} },
+                  mainContent: { visible: true, content: {}, style: {} },
+                  secondaryStyles: { visible: true, content: {}, style: {} },
+                  offer: {
+                    hero: { visible: true, content: {}, style: {} },
+                    benefits: { visible: true, content: {}, style: {} },
+                    products: { visible: true, content: {}, style: {} },
+                    pricing: { visible: true, content: {}, style: {} },
+                    testimonials: { visible: true, content: {}, style: {} },
+                    guarantee: { visible: true, content: {}, style: {} }
+                  },
+                  blocks: []
                 }
               }}
               onUpdate={handleConfigUpdate}
@@ -135,7 +197,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
                 <QuizResult 
                   primaryStyle={mockPrimaryStyle}
                   secondaryStyles={mockSecondaryStyles}
-                  config={template.resultPageSettings}
+                  config={template.resultPageSettings as ResultPageConfig}
                   previewMode={true}
                 />
               </div>
