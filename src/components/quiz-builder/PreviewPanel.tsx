@@ -77,7 +77,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
     })
   );
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
     const { active, over } = event;
     
     if (active.id !== over.id) {
