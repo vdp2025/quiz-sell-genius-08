@@ -1,260 +1,141 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { QuizEditorState, QUIZ_CATEGORIES, QuizCategory } from '@/types/quizEditor';
-import { QuizQuestion } from '@/types/quiz';
-import { QuizTemplate } from '@/types/quizTemplate';
-import QuizCategoryTab from './QuizCategoryTab';
-import QuestionEditor from './QuestionEditor';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Plus, Save } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+import { QuizQuestion } from '@/types/quiz';
+import QuestionEditor from './QuestionEditor';
 import { generateId } from '@/utils/idGenerator';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { SortableItem } from './SortableItem';
+import { Trash2 } from 'lucide-react';
 
 interface QuizEditorProps {
-  initialTemplate?: QuizTemplate;
-  onQuestionsUpdate?: (questions: QuizQuestion[]) => void;
-  isPreviewing?: boolean;
+  questions: QuizQuestion[];
+  onQuestionsChange: (questions: QuizQuestion[]) => void;
 }
 
-const QuizEditor: React.FC<QuizEditorProps> = ({ 
-  initialTemplate, 
-  onQuestionsUpdate, 
-  isPreviewing = false 
-}) => {
-  const [activeTab, setActiveTab] = useState<QuizCategory>('clothingQuestions');
-  const [editorState, setEditorState] = useState<QuizEditorState>({
-    questions: [],
-    editingQuestionId: null,
-    selectedCategory: null
-  });
+const QuizEditor: React.FC<QuizEditorProps> = ({ questions: initialQuestions, onQuestionsChange }) => {
+  const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
 
-  // Inicializar com as perguntas do template, se fornecido
   useEffect(() => {
-    if (initialTemplate?.questions) {
-      setEditorState(prevState => ({
-        ...prevState,
-        questions: initialTemplate.questions,
-        editingQuestionId: null
-      }));
-    }
-  }, [initialTemplate]);
+    setQuestions(initialQuestions);
+  }, [initialQuestions]);
 
-  // Carregar perguntas quando a categoria muda
   useEffect(() => {
-    if (initialTemplate) {
-      // Filtrar as perguntas pela categoria ativa
-      setEditorState(prevState => ({
-        ...prevState,
-        questions: initialTemplate.questions.filter(q => 
-          q.id.includes(activeTab) || activeTab === 'clothingQuestions'
-        ),
-        editingQuestionId: null
-      }));
-    }
-  }, [activeTab, initialTemplate]);
+    onQuestionsChange(questions);
+  }, [questions, onQuestionsChange]);
 
-  const handleAddQuestion = () => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleAddQuestion = useCallback(() => {
     const newQuestion: QuizQuestion = {
       id: generateId(),
-      title: 'Nova Pergunta',
+      title: `Nova Pergunta ${questions.length + 1}`,
       type: 'text',
-      multiSelect: 3,
-      options: []
+      multiSelect: 1,
+      options: [],
+      orderIndex: questions.length // Add the orderIndex property
     };
-    
-    setEditorState(prevState => ({
-      ...prevState,
-      questions: [...prevState.questions, newQuestion],
-      editingQuestionId: newQuestion.id
-    }));
-  };
+    setQuestions([...questions, newQuestion]);
+    setSelectedQuestionId(newQuestion.id);
+  }, [questions, setQuestions, setSelectedQuestionId]);
 
-  const handleEditQuestion = (questionId: string) => {
-    setEditorState(prevState => ({
-      ...prevState,
-      editingQuestionId: questionId
-    }));
-  };
+  const handleSelectQuestion = useCallback((id: string) => {
+    setSelectedQuestionId(id);
+  }, []);
 
-  const handleSaveQuestion = (updatedQuestion: QuizQuestion) => {
-    const updatedQuestions = editorState.questions.map(q => 
-      q.id === updatedQuestion.id ? updatedQuestion : q
+  const handleUpdateQuestion = useCallback((id: string, updatedFields: Partial<QuizQuestion>) => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(question =>
+        question.id === id ? { ...question, ...updatedFields } : question
+      )
     );
-    
-    setEditorState(prevState => ({
-      ...prevState,
-      questions: updatedQuestions,
-      editingQuestionId: null
-    }));
-    
-    // Atualizar todas as perguntas do template
-    if (initialTemplate && onQuestionsUpdate) {
-      const allQuestions = [...initialTemplate.questions];
-      const questionIndex = allQuestions.findIndex(q => q.id === updatedQuestion.id);
-      
-      if (questionIndex >= 0) {
-        allQuestions[questionIndex] = updatedQuestion;
-      } else {
-        allQuestions.push(updatedQuestion);
+  }, []);
+
+  const handleDeleteQuestion = useCallback((id: string) => {
+    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
+    setSelectedQuestionId(null);
+  }, []);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over) {
+      const activeIndex = questions.findIndex(question => question.id === active.id);
+      const overIndex = questions.findIndex(question => question.id === over.id);
+
+      if (activeIndex !== overIndex) {
+        const newQuestions = arrayMove(questions, activeIndex, overIndex).map((question, index) => ({
+          ...question,
+          orderIndex: index
+        }));
+        setQuestions(newQuestions);
       }
-      
-      onQuestionsUpdate(allQuestions);
     }
-    
-    toast({
-      title: 'Pergunta salva com sucesso',
-      description: 'As alterações foram salvas.',
-    });
-  };
+  }, [questions]);
 
-  const handleDeleteQuestion = (questionId: string) => {
-    const updatedQuestions = editorState.questions.filter(q => q.id !== questionId);
-    
-    setEditorState(prevState => ({
-      ...prevState,
-      questions: updatedQuestions,
-      editingQuestionId: null
-    }));
-    
-    // Atualizar todas as perguntas do template
-    if (initialTemplate && onQuestionsUpdate) {
-      const allQuestions = initialTemplate.questions.filter(q => q.id !== questionId);
-      onQuestionsUpdate(allQuestions);
-    }
-    
-    toast({
-      title: 'Pergunta removida',
-      description: 'A pergunta foi removida com sucesso.',
-    });
-  };
-
-  const currentQuestion = editorState.editingQuestionId 
-    ? editorState.questions.find(q => q.id === editorState.editingQuestionId)
-    : null;
-
-  const isEditingQuestion = !!currentQuestion;
-
-  // Modo de visualização
-  if (isPreviewing) {
-    return (
-      <div className="p-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-semibold mb-6 text-[#432818]">Prévia do Quiz</h2>
-          
-          <div className="space-y-8">
-            {editorState.questions.map((question, index) => (
-              <div key={question.id} className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-medium mb-4">
-                  {index + 1}. {question.title}
-                </h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {question.options.map(option => (
-                    <div 
-                      key={option.id} 
-                      className="border p-4 rounded-lg hover:bg-[#FAF9F7] cursor-pointer transition-colors"
-                    >
-                      {option.imageUrl && (
-                        <div className="mb-3 rounded overflow-hidden h-32 flex items-center justify-center bg-gray-100">
-                          <img 
-                            src={option.imageUrl} 
-                            alt={option.text} 
-                            className="object-cover h-full w-full" 
-                          />
-                        </div>
-                      )}
-                      <p>{option.text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const activeQuestion = questions.find(question => question.id === selectedQuestionId);
 
   return (
-    <div className="flex flex-1 overflow-hidden">
-      {/* Left side - Category selection and question list */}
-      <div className="w-1/3 border-r overflow-auto p-4">
-        <Tabs defaultValue={activeTab} onValueChange={(value) => setActiveTab(value as QuizCategory)}>
-          <TabsList className="grid grid-cols-2 mb-4">
-            <TabsTrigger value="styleQuestions">Estilo</TabsTrigger>
-            <TabsTrigger value="strategicQuestions">Estratégicas</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="styleQuestions" className="space-y-4">
-            {QUIZ_CATEGORIES.filter(cat => !cat.isStrategic).map(category => (
-              <QuizCategoryTab 
-                key={category.id}
-                category={category}
-                isActive={activeTab === category.id}
-                onClick={() => setActiveTab(category.id)}
-                questions={
-                  category.id === activeTab 
-                    ? editorState.questions 
-                    : initialTemplate?.questions.filter(
-                        q => q.id.includes(category.id)
-                      ) || []
-                }
-                onEditQuestion={handleEditQuestion}
-              />
-            ))}
-          </TabsContent>
-          
-          <TabsContent value="strategicQuestions" className="space-y-4">
-            {QUIZ_CATEGORIES.filter(cat => cat.isStrategic).map(category => (
-              <QuizCategoryTab 
-                key={category.id}
-                category={category}
-                isActive={activeTab === category.id}
-                onClick={() => setActiveTab(category.id)}
-                questions={
-                  category.id === activeTab 
-                    ? editorState.questions 
-                    : initialTemplate?.questions.filter(
-                        q => q.id.includes(category.id)
-                      ) || []
-                }
-                onEditQuestion={handleEditQuestion}
-              />
-            ))}
-          </TabsContent>
-        </Tabs>
-        
-        <div className="mt-6">
-          <Button 
-            onClick={handleAddQuestion} 
-            className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Question List */}
+      <div className="space-y-4">
+        <Label>Lista de Perguntas</Label>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={questions.map(question => question.id)}
+            strategy={verticalListSortingStrategy}
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Adicionar Pergunta
-          </Button>
-        </div>
+            <div className="space-y-2">
+              {questions.map((question) => (
+                <SortableItem
+                  key={question.id}
+                  id={question.id}
+                  title={question.title}
+                  isSelected={question.id === selectedQuestionId}
+                  onSelect={() => handleSelectQuestion(question.id)}
+                  onDelete={() => handleDeleteQuestion(question.id)}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+        <Button onClick={handleAddQuestion}>Adicionar Pergunta</Button>
       </div>
-      
-      {/* Right side - Question editor */}
-      <div className="flex-1 overflow-auto p-4">
-        {isEditingQuestion ? (
-          <QuestionEditor 
-            question={currentQuestion}
-            onSave={handleSaveQuestion}
-            onCancel={() => setEditorState(prev => ({...prev, editingQuestionId: null}))}
-            onDelete={() => currentQuestion && handleDeleteQuestion(currentQuestion.id)}
+
+      {/* Question Editor */}
+      <div>
+        {activeQuestion ? (
+          <QuestionEditor
+            question={activeQuestion}
+            onUpdate={(updatedFields) => handleUpdateQuestion(activeQuestion.id, updatedFields)}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
-            <p className="text-lg mb-4">Selecione uma pergunta para editar ou crie uma nova.</p>
-            <Button 
-              variant="outline" 
-              onClick={handleAddQuestion}
-              className="border-[#B89B7A] text-[#B89B7A]"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Nova Pergunta
-            </Button>
+          <div className="p-6 border border-dashed border-gray-300 rounded-md">
+            Selecione uma pergunta para editar ou adicione uma nova.
           </div>
         )}
       </div>

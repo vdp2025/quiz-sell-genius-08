@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResultPagePreview } from '../preview/ResultPagePreview';
 import PropertiesPanel from '../properties/PropertiesPanel';
 import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
-import { Block, BlockType } from '@/types/editor';
+import { Block, BlockType } from '../BlockTypes'; // Updated import path
 import { useEditor } from '@/hooks/useEditor';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 import { StyleResult } from '@/types/quiz';
