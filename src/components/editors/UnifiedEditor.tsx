@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -108,7 +109,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({
           <TabsContent value="result" className="h-full m-0">
             <ResultPageVisualEditor 
               selectedStyle={initialResultStyle}
-              initialResultPageConfig={config}
+              initialConfig={config}
             />
           </TabsContent>
           
@@ -131,7 +132,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({
                 <PageEditor 
                   blocks={config.blocks}
                   onBlocksChange={(blocks) => {
-                    saveConfig({ ...config, blocks });
+                    saveConfig();
                   }}
                   onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
                   isPreviewing={isPreviewing}
