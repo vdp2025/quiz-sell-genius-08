@@ -24,6 +24,7 @@ export interface QuizComponentStyle {
   borderRadius?: string;
   paddingY?: string;
   paddingX?: string;
+  selectionIndicator?: 'border' | 'checkbox' | 'highlight';
   // Add any other style properties here
 }
 
@@ -33,6 +34,10 @@ export interface QuizStage {
   order: number;
   type: 'cover' | 'question' | 'result' | 'strategic';
   componentId?: string;
+  data?: {
+    requiredSelections?: number;
+    [key: string]: any;
+  };
 }
 
 export interface QuizComponentLayout {

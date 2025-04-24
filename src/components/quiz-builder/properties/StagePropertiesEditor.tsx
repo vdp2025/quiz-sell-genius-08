@@ -52,7 +52,7 @@ const StagePropertiesEditor: React.FC<StagePropertiesEditorProps> = ({
               value={stage.data?.requiredSelections?.toString() || '3'}
               onValueChange={(value) => onUpdate({ 
                 data: { 
-                  ...stage.data, 
+                  ...(stage.data || {}), 
                   requiredSelections: parseInt(value)
                 }
               })}

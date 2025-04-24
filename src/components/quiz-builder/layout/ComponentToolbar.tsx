@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Type,
   Image,
   Layout,
-  ListUl,
+  List,
   FileText,
   LayoutGrid,
   CheckSquare,
@@ -49,10 +48,9 @@ const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
   
   const resultComponents = [
     { type: 'quizResult', icon: LayoutGrid, label: 'Resultado' },
-    { type: 'benefitsList', icon: ListUl, label: 'Benefícios' },
+    { type: 'benefitsList', icon: List, label: 'Benefícios' },
   ];
 
-  // Filter components based on stage type
   const getAvailableComponents = () => {
     let availableComponents = [...commonComponents];
     
