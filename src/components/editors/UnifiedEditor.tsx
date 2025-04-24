@@ -9,9 +9,10 @@ import { useEditor } from '@/hooks/useEditor';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import QuizEditor from '@/components/quiz-editor/QuizEditor';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, EyeOff, Undo, Redo } from 'lucide-react';
+import { Save, Eye, EyeOff } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
+import { createDefaultConfig } from '@/utils/resultPageDefaults';
 
 interface UnifiedEditorProps {
   initialQuizQuestions?: any[];
@@ -29,6 +30,9 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({
   const [questions, setQuestions] = useState(initialQuizQuestions);
   const { config, addBlock, updateBlock, deleteBlock, saveConfig } = useEditor();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  
+  // Criamos um objeto ResultPageConfig a partir do initialResultStyle
+  const resultPageConfig = createDefaultConfig(initialResultStyle.category);
   
   const handleSave = () => {
     if (onSave) {
@@ -109,7 +113,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({
           <TabsContent value="result" className="h-full m-0">
             <ResultPageVisualEditor 
               selectedStyle={initialResultStyle}
-              initialConfig={config}
+              initialConfig={resultPageConfig}
             />
           </TabsContent>
           
