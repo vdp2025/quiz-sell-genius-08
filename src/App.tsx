@@ -7,15 +7,7 @@ import { LoadingState } from './components/ui/loading-state';
 import { QuizProvider } from './context/QuizContext';
 import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import QuizBuilderPage from './pages/QuizBuilderPage';
 import ResultPageEditorPage from './pages/admin/ResultPageEditorPage';
-import AuthPage from './pages/auth/AuthPage';
-import EditorPage from './pages/editor/EditorPage';
-
-const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
-};
 
 function App() {
   return (
@@ -26,13 +18,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/auth" element={<AuthPage />} />
-              
-              <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
-              <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
-              <Route path="/editor" element={<ProtectedAdminRoute><EditorPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/editor" element={<ProtectedAdminRoute><EditorPage /></ProtectedAdminRoute>} />
+              <Route path="/admin/resultado-editor" element={<ResultPageEditorPage />} />
             </Routes>
           </Suspense>
           <Toaster />
@@ -43,3 +29,4 @@ function App() {
 }
 
 export default App;
+
