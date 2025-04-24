@@ -38,7 +38,12 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
           styleCategory: 'Natural'
         };
       }
-      return option as QuizOptionType;
+      return {
+        id: option.id || generateId(),
+        text: option.text || '',
+        imageUrl: option.imageUrl || '',
+        styleCategory: option.styleCategory || 'Natural'
+      };
     });
   };
 
@@ -120,6 +125,51 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
         </div>
 
         <div className="space-y-2">
+          <Label className="text-[#432818]">Tamanho das Imagens</Label>
+          <Select
+            value={component.data.imageSize || 'medium'}
+            onValueChange={(value: 'small' | 'medium' | 'large') => onUpdate({
+              data: { ...component.data, imageSize: value }
+            })}
+          >
+            <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]">
+              <SelectValue placeholder="Tamanho das imagens" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="small">Pequeno</SelectItem>
+              <SelectItem value="medium">Médio</SelectItem>
+              <SelectItem value="large">Grande</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-[#432818]">Layout das Opções</Label>
+          <Select
+            value={String(component.data.layout?.columns || 2)}
+            onValueChange={(value) => onUpdate({
+              data: { 
+                ...component.data, 
+                layout: {
+                  ...component.data.layout,
+                  columns: parseInt(value) as 1 | 2 | 3 | 4
+                }
+              }
+            })}
+          >
+            <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]">
+              <SelectValue placeholder="Colunas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1 Coluna</SelectItem>
+              <SelectItem value="2">2 Colunas</SelectItem>
+              <SelectItem value="3">3 Colunas</SelectItem>
+              <SelectItem value="4">4 Colunas</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
           <Label className="text-[#432818]">Número de Seleções</Label>
           <Select
             value={String(component.data.multiSelect || component.data.maxSelections || 3)}
@@ -137,6 +187,25 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
             <SelectContent>
               <SelectItem value="1">1 seleção</SelectItem>
               <SelectItem value="3">3 seleções</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-[#432818]">Indicador de Seleção</Label>
+          <Select
+            value={component.data.selectionIndicator || 'border'}
+            onValueChange={(value: 'border' | 'checkbox' | 'highlight') => onUpdate({
+              data: { ...component.data, selectionIndicator: value }
+            })}
+          >
+            <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]">
+              <SelectValue placeholder="Tipo de indicador" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="border">Borda</SelectItem>
+              <SelectItem value="checkbox">Checkbox</SelectItem>
+              <SelectItem value="highlight">Destaque</SelectItem>
             </SelectContent>
           </Select>
         </div>

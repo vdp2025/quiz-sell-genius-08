@@ -85,6 +85,8 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
             displayType: data.displayType || 'text',
             multiSelect: type === 'multipleChoice' ? (data.multiSelect || 3) : 1,
             layout: data.layout || { columns: 2, direction: 'vertical' },
+            imageSize: data.imageSize || 'medium',
+            selectionIndicator: data.selectionIndicator || 'border',
           }}
           style={style || {}}
           isSelected={isSelected && !isPreview}
@@ -114,8 +116,15 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     case 'stageQuestion':
       return (
         <StageQuestionComponent
-          data={data}
-          style={style}
+          data={{
+            ...data,
+            displayType: data.displayType || 'text',
+            multiSelect: data.multiSelect || 3,
+            layout: data.layout || { columns: 2, direction: 'vertical' },
+            imageSize: data.imageSize || 'medium',
+            selectionIndicator: data.selectionIndicator || 'border',
+          }}
+          style={style || {}}
           isSelected={isSelected && !isPreview}
         />
       );
