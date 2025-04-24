@@ -1,267 +1,252 @@
-import React, { useState } from 'react';
-import { QuizQuestion, QuizOption } from '@/types/quiz';
-import { Button } from '@/components/ui/button';
+
+import React, { useState, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Plus, Save, Trash2, X } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Trash2Icon, PlusIcon, GripVerticalIcon } from 'lucide-react';
+import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { generateId } from '@/utils/idGenerator';
-import QuestionOptionEditor from './QuestionOptionEditor';
-import { toast } from '@/components/ui/use-toast';
+import { 
+  DndContext, 
+  closestCenter, 
+  KeyboardSensor, 
+  PointerSensor, 
+  useSensor, 
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface QuestionEditorProps {
-  question: QuizQuestion | null;
-  onSave: (question: QuizQuestion) => void;
-  onCancel: () => void;
-  onDelete: () => void;
+  question: QuizQuestion;
+  onUpdate: (updatedQuestion: Partial<QuizQuestion>) => void;
+  onDelete: (questionId: string) => void;
 }
 
-const QuestionEditor: React.FC<QuestionEditorProps> = ({
-  question,
-  onSave,
-  onCancel,
-  onDelete
-}) => {
-  const [editedQuestion, setEditedQuestion] = useState<QuizQuestion>(
-    question || {
-      id: generateId(),
-      title: '',
-      type: 'text',
-      multiSelect: 3,
-      options: []
-    }
-  );
+// Componente de Item Sortable para opções
+const SortableOptionItem = ({ option, index, onOptionChange, onOptionDelete }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: option.id });
 
-  const handleAddOption = () => {
-    const newOption: QuizOption = {
-      id: generateId(),
-      text: 'Nova opção',
-      styleCategory: 'Natural',
-      points: 1
-    };
-
-    setEditedQuestion(prev => ({
-      ...prev,
-      options: [...prev.options, newOption]
-    }));
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1 : 0
   };
-
-  const handleUpdateOption = (updatedOption: QuizOption) => {
-    setEditedQuestion(prev => ({
-      ...prev,
-      options: prev.options.map(opt => 
-        opt.id === updatedOption.id ? updatedOption : opt
-      )
-    }));
-  };
-
-  const handleDeleteOption = (optionId: string) => {
-    setEditedQuestion(prev => ({
-      ...prev,
-      options: prev.options.filter(opt => opt.id !== optionId)
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!editedQuestion.title.trim()) {
-      toast({
-        title: "Título obrigatório",
-        description: "Por favor, adicione um título para a pergunta.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    if (editedQuestion.options.length < 2) {
-      toast({
-        title: "Opções insuficientes",
-        description: "Adicione pelo menos duas opções para a pergunta.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    onSave(editedQuestion);
-  };
-
-  if (!question) {
-    return null;
-  }
 
   return (
-    <Card className="shadow-sm">
-      <form onSubmit={handleSubmit}>
-        <CardHeader>
-          <CardTitle>Editar Pergunta</CardTitle>
-          <CardDescription>Configure os detalhes da pergunta e suas opções</CardDescription>
-        </CardHeader>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center space-x-2 p-3 rounded-md bg-gray-50 border border-gray-200"
+    >
+      <div {...attributes} {...listeners}>
+        <GripVerticalIcon className="h-5 w-5 text-gray-400 cursor-grab" />
+      </div>
+      <Input
+        type="text"
+        value={option.text}
+        onChange={(e) => onOptionChange(option.id, 'text', e.target.value)}
+        placeholder="Texto da opção"
+        className="flex-grow border-[#B89B7A]/20"
+      />
+      <Input
+        type="number"
+        value={option.points}
+        onChange={(e) => onOptionChange(option.id, 'points', parseInt(e.target.value))}
+        placeholder="Pontos"
+        className="w-20 border-[#B89B7A]/20"
+      />
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={() => onOptionDelete(option.id)}
+        className="text-red-500"
+      >
+        <Trash2Icon className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+};
+
+const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpdate, onDelete }) => {
+  const [localQuestion, setQuestion] = useState<QuizQuestion>(question);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setQuestion(prevQuestion => ({ ...prevQuestion, [name]: value }));
+  }, []);
+
+  const handleAddOption = useCallback(() => {
+    const newOption: QuizOption = {
+      id: generateId(),
+      text: 'Nova Opção',
+      points: 0
+    };
+    setQuestion(prevQuestion => ({
+      ...prevQuestion,
+      options: [...prevQuestion.options, newOption]
+    }));
+  }, []);
+
+  const handleOptionChange = useCallback((optionId: string, field: string, value: string | number) => {
+    setQuestion(prevQuestion => ({
+      ...prevQuestion,
+      options: prevQuestion.options.map(option =>
+        option.id === optionId ? { ...option, [field]: value } : option
+      )
+    }));
+  }, []);
+
+  const handleOptionDelete = useCallback((optionId: string) => {
+    setQuestion(prevQuestion => ({
+      ...prevQuestion,
+      options: prevQuestion.options.filter(option => option.id !== optionId)
+    }));
+  }, []);
+
+  const handleSave = useCallback(() => {
+    onUpdate(localQuestion);
+  }, [localQuestion, onUpdate]);
+
+  const handleReset = useCallback(() => {
+    setQuestion(question);
+  }, [question]);
+
+  const handleDelete = useCallback(() => {
+    onDelete(question.id);
+  }, [onDelete, question.id]);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      setQuestion(prevQuestion => {
+        const oldIndex = prevQuestion.options.findIndex(option => option.id === active.id);
+        const newIndex = prevQuestion.options.findIndex(option => option.id === over.id);
         
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="title">Título da Pergunta</Label>
-              <Textarea
-                id="title"
-                value={editedQuestion.title}
-                onChange={(e) => setEditedQuestion(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="Digite o título da pergunta"
-                className="min-h-[100px] resize-none"
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="type">Tipo de Pergunta</Label>
-                <Select
-                  value={editedQuestion.type}
-                  onValueChange={(value: 'text' | 'image' | 'both') => 
-                    setEditedQuestion(prev => ({ ...prev, type: value }))
-                  }
-                >
-                  <SelectTrigger id="type">
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="text">Apenas texto</SelectItem>
-                    <SelectItem value="image">Apenas imagem</SelectItem>
-                    <SelectItem value="both">Texto e imagem</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <Label htmlFor="multiSelect">Número de seleções</Label>
-                <Select
-                  value={String(editedQuestion.multiSelect)}
-                  onValueChange={(value) => 
-                    setEditedQuestion(prev => ({ ...prev, multiSelect: parseInt(value) }))
-                  }
-                >
-                  <SelectTrigger id="multiSelect">
-                    <SelectValue placeholder="Selecione o número" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1 seleção</SelectItem>
-                    <SelectItem value="3">3 seleções</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-          
-          <Separator />
-          
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">Opções</h3>
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={handleAddOption}
-                className="border-[#B89B7A] text-[#B89B7A]"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Opção
-              </Button>
-            </div>
-            
-            <div className="space-y-4">
-              {editedQuestion.options.map((option, index) => (
-                <QuestionOptionEditor
+        return {
+          ...prevQuestion,
+          options: arrayMove(prevQuestion.options, oldIndex, newIndex)
+        };
+      });
+    }
+  }, []);
+
+  return (
+    <div className="bg-white p-6 rounded-md shadow-sm space-y-4">
+      <h3 className="text-xl font-semibold text-[#432818] mb-4">
+        Editar Pergunta
+      </h3>
+
+      <div>
+        <Label htmlFor="title">Título da Pergunta</Label>
+        <Input
+          type="text"
+          id="title"
+          name="title"
+          value={localQuestion.title}
+          onChange={handleInputChange}
+          placeholder="Digite a pergunta..."
+          className="border-[#B89B7A]/20"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="type">Tipo de Pergunta</Label>
+        <Input
+          type="text"
+          id="type"
+          name="type"
+          value={localQuestion.type}
+          onChange={handleInputChange}
+          placeholder="Tipo da pergunta"
+          className="border-[#B89B7A]/20"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="multiSelect">Número de Seleções Permitidas</Label>
+        <Input
+          type="number"
+          id="multiSelect"
+          name="multiSelect"
+          value={localQuestion.multiSelect}
+          onChange={handleInputChange}
+          placeholder="Número de seleções"
+          className="border-[#B89B7A]/20"
+        />
+      </div>
+
+      <div>
+        <Label>Opções</Label>
+        <DndContext 
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext 
+            items={localQuestion.options.map(option => option.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-2">
+              {localQuestion.options.map((option, index) => (
+                <SortableOptionItem
                   key={option.id}
                   option={option}
-                  questionType={editedQuestion.type}
-                  onUpdate={handleUpdateOption}
-                  onDelete={() => handleDeleteOption(option.id)}
                   index={index}
+                  onOptionChange={handleOptionChange}
+                  onOptionDelete={handleOptionDelete}
                 />
               ))}
-              
-              {editedQuestion.options.length === 0 && (
-                <div className="text-center p-4 border border-dashed rounded-md">
-                  <p className="text-gray-500">Nenhuma opção adicionada</p>
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
-                    onClick={handleAddOption}
-                    className="mt-2 text-[#B89B7A]"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Opção
-                  </Button>
-                </div>
-              )}
             </div>
-          </div>
-        </CardContent>
-        
-        <CardFooter className="flex justify-between">
-          <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              <X className="w-4 h-4 mr-2" />
-              Cancelar
-            </Button>
+          </SortableContext>
+        </DndContext>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleAddOption}
+          className="mt-2 border-[#B89B7A] text-[#B89B7A]"
+        >
+          <PlusIcon className="h-4 w-4 mr-2" />
+          Adicionar Opção
+        </Button>
+      </div>
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button type="button" variant="destructive">
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Excluir
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Excluir pergunta?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta ação não pode ser desfeita. Esta pergunta será permanentemente removida do quiz.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction onClick={onDelete}>
-                    Continuar
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-          
-          <Button type="submit" className="bg-[#B89B7A] hover:bg-[#A38A69]">
-            <Save className="w-4 h-4 mr-2" />
-            Salvar Pergunta
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+      <div className="flex justify-end space-x-2">
+        <Button variant="secondary" onClick={handleReset}>
+          Resetar
+        </Button>        
+        <Button variant="destructive" onClick={handleDelete}>
+          Excluir
+        </Button>
+        <Button onClick={handleSave} className="bg-[#B89B7A] hover:bg-[#8F7A6A]">
+          Salvar
+        </Button>
+      </div>
+    </div>
   );
 };
 

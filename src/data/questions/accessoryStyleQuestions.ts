@@ -7,6 +7,7 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
     title: 'QUE TIPO DE ACESSÓRIOS VOCÊ GOSTA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 8,
     options: [
       {
         id: '9a',

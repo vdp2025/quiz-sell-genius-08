@@ -27,14 +27,14 @@ export const EditorPage = () => {
       visible: true,
       style: {
         ...defaultResultTemplate.header.style,
-        borderRadius: '0' // Using string value for borderRadius
+        borderRadius: '0'
       }
     },
     mainContent: {
       ...defaultResultTemplate.mainContent,
       visible: true
     },
-    offer: createOfferConfig(), // Using the createOfferConfig() function to create a proper OfferSection
+    offer: createOfferConfig(),
     secondaryStyles: {
       visible: true,
       content: {},

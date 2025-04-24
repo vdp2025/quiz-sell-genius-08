@@ -5,7 +5,7 @@ import { styleExperienceQuestions } from './questions/styleExperienceQuestions';
 import { purchaseIntentQuestions } from './questions/purchaseIntentQuestions';
 import { desiredOutcomesQuestions } from './questions/desiredOutcomesQuestions';
 
-// Concatenate all strategic questions in the correct order
+// Combine all strategic questions in the correct order
 export const strategicQuestions: QuizQuestion[] = [
   ...selfPerceptionQuestions,
   ...styleExperienceQuestions,
@@ -13,4 +13,5 @@ export const strategicQuestions: QuizQuestion[] = [
   ...desiredOutcomesQuestions
 ];
 
-console.log('Strategic questions loaded:', strategicQuestions.length);
+// Log the number of questions loaded for debugging
+console.info(`Strategic questions loaded: ${strategicQuestions.length}`);

@@ -1,41 +1,51 @@
 
-export const exportProjectAsJson = (config: any) => {
-  try {
-    // Create a blob with the JSON data
-    const jsonString = JSON.stringify(config, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    
-    // Create a download link and trigger it
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    
-    // Use the styleType or a default name for the file
-    const fileName = config.styleType 
-      ? `${config.styleType.toLowerCase()}-config-${new Date().toISOString().split('T')[0]}.json`
-      : `project-config-${new Date().toISOString().split('T')[0]}.json`;
-    
-    link.download = fileName;
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Clean up the URL
-    window.URL.revokeObjectURL(downloadUrl);
-    
-    return true;
-  } catch (error) {
-    console.error('Error exporting JSON:', error);
-    return false;
-  }
+import { saveAs } from 'file-saver';
+
+export const exportProjectAsJson = (data: any): boolean => {
+    try {
+        // Convert project data to JSON string
+        const jsonData = JSON.stringify(data, null, 2);
+        
+        // Create a blob from the JSON string
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        
+        // Generate a filename with current date and time
+        const now = new Date();
+        const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+        const filename = `quiz_project_${timestamp}.json`;
+        
+        // Save the blob as a file
+        saveAs(blob, filename);
+        
+        return true;
+    } catch (error) {
+        console.error('Error exporting project:', error);
+        return false;
+    }
 };
 
-export const parseJsonConfig = (jsonText: string): any => {
-  try {
-    return JSON.parse(jsonText);
-  } catch (error) {
-    console.error('Error parsing JSON:', error);
-    throw new Error('Invalid JSON format');
-  }
+export const importProjectFromJson = async (file: File): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+            try {
+                if (event.target?.result) {
+                    const jsonData = JSON.parse(event.target.result as string);
+                    resolve(jsonData);
+                } else {
+                    reject(new Error('Failed to read file content'));
+                }
+            } catch (error) {
+                reject(error);
+            }
+        };
+        
+        reader.onerror = () => {
+            reject(new Error('Error reading file'));
+        };
+        
+        reader.readAsText(file);
+    });
 };
+
