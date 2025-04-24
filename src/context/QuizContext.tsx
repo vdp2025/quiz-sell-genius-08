@@ -1,8 +1,8 @@
-
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
 import { QuizResult } from '@/types/quiz';
+import { saveParticipant } from '@/services/quizService';
 
 // Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
@@ -19,11 +19,22 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const quizLogic = useQuizLogic();
   const { toast } = useToast();
   
-  // Define all context functions before returning the provider
   const startQuiz = async (name: string, email: string, quizId: string) => {
     try {
+      // Capture UTM parameters from useQuizLogic
+      const { utmParams } = quizLogic;
+      
       console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
-      return { id: '1', name, email };
+      
+      // Save participant with UTM parameters
+      const participant = await saveParticipant(name, email, quizId, utmParams);
+      
+      return { 
+        id: participant.id, 
+        name, 
+        email,
+        utmParams 
+      };
     } catch (error) {
       toast({
         title: "Erro ao iniciar o quiz",

@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -16,6 +15,27 @@ export const useQuizLogic = () => {
     const savedResult = localStorage.getItem('quizResult');
     return savedResult ? JSON.parse(savedResult) : null;
   });
+  // New state for UTM parameters
+  const [utmParams, setUtmParams] = useState<Record<string, string>>(() => {
+    // Try to get UTM params from URL or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const storedUtmParams = localStorage.getItem('utmParams');
+    
+    const params: Record<string, string> = {};
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    
+    utmKeys.forEach(key => {
+      const value = urlParams.get(key) || (storedUtmParams ? JSON.parse(storedUtmParams)[key] : '');
+      if (value) params[key] = value;
+    });
+
+    // Save to localStorage for persistence
+    if (Object.keys(params).length > 0) {
+      localStorage.setItem('utmParams', JSON.stringify(params));
+    }
+
+    return params;
+  });
 
   // 2. Computed values
   const currentQuestion = quizQuestions[currentQuestionIndex];
@@ -23,6 +43,23 @@ export const useQuizLogic = () => {
   const canProceed = currentAnswers.length === (currentQuestion?.multiSelect || 0);
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
   const totalQuestions = quizQuestions.length;
+
+  // Method to update UTM params
+  const updateUtmParams = useCallback(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const params: Record<string, string> = {};
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    
+    utmKeys.forEach(key => {
+      const value = urlParams.get(key);
+      if (value) params[key] = value;
+    });
+
+    if (Object.keys(params).length > 0) {
+      setUtmParams(params);
+      localStorage.setItem('utmParams', JSON.stringify(params));
+    }
+  }, []);
 
   // 3. Simple utility functions that don't depend on other functions
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
@@ -150,6 +187,24 @@ export const useQuizLogic = () => {
     return results;
   }, [calculateResults, strategicAnswers]);
 
+  // Modify existing methods to include UTM params
+  const startQuiz = useCallback((name: string, email: string, quizId: string) => {
+    const additionalInfo = {
+      ...utmParams,
+      // Keep any existing additional info
+    };
+
+    // Log UTM params
+    console.log('Quiz started with UTM params:', additionalInfo);
+
+    return {
+      name, 
+      email, 
+      quizId,
+      additionalInfo
+    };
+  }, [utmParams]);
+
   // 6. Side effects
   useEffect(() => {
     if (quizResult) {
@@ -164,6 +219,11 @@ export const useQuizLogic = () => {
       console.log('Strategic answers saved to localStorage:', strategicAnswers);
     }
   }, [strategicAnswers]);
+
+  // Add UTM param tracking to existing useEffect hooks
+  useEffect(() => {
+    updateUtmParams();
+  }, [updateUtmParams]);
 
   // 7. Return all needed functions and values
   return {
@@ -182,6 +242,9 @@ export const useQuizLogic = () => {
     calculateResults,
     totalQuestions,
     strategicAnswers,
-    handleStrategicAnswer
+    handleStrategicAnswer,
+    utmParams,
+    updateUtmParams,
+    startQuiz
   };
 };
