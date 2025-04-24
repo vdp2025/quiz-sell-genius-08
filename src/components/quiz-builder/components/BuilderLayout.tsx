@@ -55,7 +55,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       {/* Left Panel - Stages Sidebar */}
-      <ResizablePanel defaultSize={18} minSize={15} maxSize={25} className="bg-[#222222]">
+      <ResizablePanel defaultSize={18} minSize={15} maxSize={25} className="bg-[#F9F6F2]">
         <StagesPanel 
           stages={stages} 
           activeStageId={activeStageId}
@@ -77,7 +77,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
             onComponentSelect={onComponentSelect}
             isPreviewing={isPreviewing}
           />
-          <div className="flex-1">
+          <div className="flex-1 bg-[#FAF9F7]">
             <ComponentPreviewPanel 
               components={activeStageComponents}
               selectedComponentId={selectedComponentId}
@@ -93,7 +93,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
       <ResizableHandle withHandle />
       
       {/* Right Panel - Properties */}
-      <ResizablePanel defaultSize={25} className="bg-[#222222]">
+      <ResizablePanel defaultSize={25} className="bg-[#F9F6F2]">
         <PropertiesPanel 
           component={selectedComponent}
           stage={activeStage}

@@ -43,7 +43,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         currentStrategicQuestionIndex={currentStrategicQuestionIndex}
       />
 
-      <div className="container mx-auto px-4 py-8 w-full">
+      <div className="container mx-auto px-4 py-8 w-full max-w-5xl">
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
@@ -58,6 +58,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             currentAnswers={currentAnswers || []}
             onNextClick={handleNextClick}
             showQuestionImage={true}
+            onPreviousClick={handlePrevious}
           />
         )}
       </div>

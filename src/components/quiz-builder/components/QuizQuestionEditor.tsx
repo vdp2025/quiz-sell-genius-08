@@ -85,28 +85,29 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 p-4 bg-white rounded-lg">
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label>Título da Pergunta</Label>
+          <Label className="text-[#432818]">Título da Pergunta</Label>
           <Input
             value={component.data.question || ''}
             onChange={(e) => onUpdate({
               data: { ...component.data, question: e.target.value }
             })}
             placeholder="Digite a pergunta"
+            className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]"
           />
         </div>
 
         <div className="space-y-2">
-          <Label>Tipo de Exibição</Label>
+          <Label className="text-[#432818]">Tipo de Exibição</Label>
           <Select
             value={component.data.displayType || 'text'}
             onValueChange={(value: 'text' | 'image' | 'both') => onUpdate({
               data: { ...component.data, displayType: value }
             })}
           >
-            <SelectTrigger>
+            <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]">
               <SelectValue placeholder="Selecione o tipo" />
             </SelectTrigger>
             <SelectContent>
@@ -118,14 +119,14 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
         </div>
 
         <div className="space-y-2">
-          <Label>Número de Seleções</Label>
+          <Label className="text-[#432818]">Número de Seleções</Label>
           <Select
             value={String(component.data.multiSelect || 3)}
             onValueChange={(value) => onUpdate({
               data: { ...component.data, multiSelect: parseInt(value) }
             })}
           >
-            <SelectTrigger>
+            <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]">
               <SelectValue placeholder="Número de seleções" />
             </SelectTrigger>
             <SelectContent>
@@ -138,17 +139,18 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
 
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <Label>Opções</Label>
+          <Label className="text-[#432818] text-lg">Opções</Label>
           <Button 
             variant="outline" 
             onClick={handleAddOption}
-            className="text-[#B89B7A] border-[#B89B7A]"
+            className="text-[#B89B7A] border-[#B89B7A] hover:bg-[#B89B7A]/10 hover:text-[#432818]"
           >
+            <Plus className="h-4 w-4 mr-2" />
             Adicionar Opção
           </Button>
         </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {ensureOptionsFormat().map((option, index) => (
             <QuizOptionEditor
               key={option.id || index}

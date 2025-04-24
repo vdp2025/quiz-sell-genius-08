@@ -12,8 +12,8 @@ import { ResultPageConfig, OfferContent } from '@/types/resultPageConfig';
 interface QuizResultProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
-  config?: any; // Added config prop that was missing
-  previewMode?: boolean; // Added previewMode prop that was missing
+  config?: any;
+  previewMode?: boolean;
 }
 
 const QuizResult: React.FC<QuizResultProps> = ({

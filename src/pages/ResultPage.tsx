@@ -181,7 +181,7 @@ const ResultPage: React.FC = () => {
                 (window.location.href =
                   'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912')
               }
-              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold"
+              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
             >
               <ShoppingCart className="w-5 h-5 mr-2" />
               Quero meu Guia + Bônus por R$39,00
