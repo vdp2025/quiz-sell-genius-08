@@ -16,21 +16,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<(User & { userName?: string }) | null>({ 
     id: '1',
     userName: localStorage.getItem('userName') || '',
-    // Add minimal required User properties
     aud: 'authenticated',
     created_at: new Date().toISOString(),
     role: 'authenticated',
     app_metadata: {},
     user_metadata: {},
   });
-  const [isAdmin] = useState(true); // Always true for now
+  const [isAdmin] = useState(true); // Always true to allow access
 
   const login = async () => {
-    // No-op for now
+    // No-op since authentication is disabled
   };
 
   const logout = async () => {
-    // No-op for now
+    // No-op since authentication is disabled
   };
 
   const setUsername = (name: string) => {

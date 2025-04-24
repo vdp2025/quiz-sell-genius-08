@@ -12,7 +12,7 @@ import QuizBuilderPage from './pages/QuizBuilderPage';
 import AuthPage from './pages/auth/AuthPage';
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-  // Temporarily disable auth check - always allow access
+  // Allow access to all users without authentication
   return <>{children}</>;
 };
 
