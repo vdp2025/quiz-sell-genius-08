@@ -9,13 +9,11 @@ interface ComponentToolbarProps {
 }
 
 const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
-  activeStage,
-  onComponentSelect,
-  isPreviewing,
+  activeStage, onComponentSelect, isPreviewing
 }) => {
   if (isPreviewing) return null;
   return (
-    <div className="h-full border-r">
+    <div className='h-full border-r'>
       <ComponentsSidebar
         activeStage={activeStage}
         onComponentSelect={onComponentSelect}

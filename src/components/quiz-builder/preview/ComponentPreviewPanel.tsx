@@ -15,7 +15,7 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
   components, selectedComponentId, onSelectComponent,
   onMoveComponent, activeStage, isPreviewing
 }) => (
-  <div className="h-full overflow-auto p-4 space-y-4">
+  <div className='h-full overflow-auto p-4 space-y-4'>
     {components.map((comp) => (
       <div
         key={comp.id}
