@@ -1,54 +1,52 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { User } from '@supabase/supabase-js';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { UserSession } from '@/types/auth';
 
-type AuthContextType = {
-  user: (User & { userName?: string }) | null;
-  isAdmin: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  setUsername: (name: string) => void;
-};
+interface AuthContextType {
+  user: UserSession | null;
+  isAuthenticated: boolean;
+  login: (userName: string) => void;
+  logout: () => void;
+}
 
+// Criar o contexto com um valor padrão
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Provider component
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<(User & { userName?: string }) | null>({ 
-    id: '1',
-    userName: localStorage.getItem('userName') || '',
-    aud: 'authenticated',
-    created_at: new Date().toISOString(),
-    role: 'authenticated',
-    app_metadata: {},
-    user_metadata: {},
-  });
-  const [isAdmin] = useState(true); // Always true to allow access
+  const [user, setUser] = useState<UserSession | null>(null);
 
-  const login = async () => {
-    // No-op since authentication is disabled
+  const login = (userName: string) => {
+    setUser({
+      userName,
+      isAuthenticated: true
+    });
+    localStorage.setItem('userName', userName);
   };
 
-  const logout = async () => {
-    // No-op since authentication is disabled
-  };
-
-  const setUsername = (name: string) => {
-    if (user) {
-      localStorage.setItem('userName', name);
-      setUser({...user, userName: name});
-    }
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('userName');
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAdmin, login, logout, setUsername }}>
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        isAuthenticated: !!user?.isAuthenticated,
+        login,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
+// Hook para acessar o contexto
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
