@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
+import StageResultComponent from './components/StageResultComponent';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
@@ -120,6 +120,15 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           </div>
           <p>{data.resultDescription || 'Descrição do resultado do quiz será exibida aqui.'}</p>
         </div>
+      );
+
+    case 'stageResult':
+      return (
+        <StageResultComponent 
+          data={data} 
+          style={style} 
+          isSelected={isSelected}
+        />
       );
 
     default:
