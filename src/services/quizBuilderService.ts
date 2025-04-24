@@ -76,9 +76,6 @@ export const generateInitialStages = (): { stages: QuizStage[], components: Quiz
   };
 };
 
-/**
- * Converts existing quiz questions to quiz builder format
- */
 export const createBuilderStateFromQuiz = (
   questions: QuizQuestion[],
   title: string,
@@ -95,7 +92,13 @@ export const createBuilderStateFromQuiz = (
   components.push(createComponent('stageCover', coverStage.id, {
     title: title,
     subtitle: description,
-    buttonText: 'Começar o Quiz'
+    buttonText: 'Começar Quiz',
+    backgroundColor: '#FFFAF0',
+    textColor: '#432818',
+    stageTitle: 'Início',
+    stageNumber: 1,
+    totalStages: questions.length + 2, // Cover + Questions + Result
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
   }, 0));
   
   // Create question stages
@@ -107,20 +110,19 @@ export const createBuilderStateFromQuiz = (
     );
     stages.push(questionStage);
     
-    components.push(createComponent('stageQuestion', questionStage.id, {
+    components.push(createComponent('multipleChoice', questionStage.id, {
       question: question.title,
       options: question.options.map(opt => ({
-        id: opt.id || generateId(),
         text: opt.text,
-        imageUrl: opt.imageUrl || '',
-        styleCategory: opt.styleCategory || 'Natural',
+        imageUrl: opt.imageUrl,
+        styleCategory: opt.styleCategory
       })),
-      multiSelect: question.multiSelect || 3,
-      displayType: question.type || 'text',
+      multiSelect: question.multiSelect,
+      displayType: question.type,
       autoAdvance: true,
-      required: true,
-      isEditable: true,
-      originalQuestionId: question.id
+      stageTitle: `Questão ${index + 1}`,
+      stageNumber: index + 2,
+      totalStages: questions.length + 2
     }, 0));
   });
   
@@ -128,36 +130,14 @@ export const createBuilderStateFromQuiz = (
   const resultStage = createStage('Resultado do Quiz', 'result', questions.length + 1);
   stages.push(resultStage);
   
-  // Try to load saved result configurations from localStorage
-  let resultConfig = null;
-  const styleTypes = [
-    'Natural', 'Clássico', 'Contemporâneo', 'Elegante', 
-    'Romântico', 'Sexy', 'Dramático', 'Criativo'
-  ];
-  
-  // Try to find any saved result configuration
-  for (const styleType of styleTypes) {
-    const config = resultPageStorage.load(styleType);
-    if (config) {
-      resultConfig = config;
-      console.log(`Found saved result configuration for ${styleType}`);
-      break;
-    }
-  }
-  
-  // Create result component with configuration if available
   components.push(createComponent('stageResult', resultStage.id, {
     title: resultTitle,
     subtitle: 'Baseado nas suas respostas',
-    resultLayout: resultConfig ? 'custom' : 'classic',
-    primaryStyleTitle: resultConfig?.header?.content?.title || 'Seu Estilo Predominante',
-    secondaryStylesTitle: resultConfig?.secondaryStyles?.visible !== false ? 'Seus Estilos Complementares' : '',
     showPercentages: true,
     showDescriptions: true,
-    callToActionText: resultConfig?.offer?.hero?.content?.ctaText || 'Conhecer o Guia Completo',
-    callToActionUrl: resultConfig?.offer?.hero?.content?.ctaUrl || '#',
-    accentColor: resultConfig?.globalStyles?.primaryColor || '#B89B7A',
-    savedResultConfig: resultConfig ? JSON.stringify(resultConfig) : null
+    stageTitle: 'Resultado',
+    stageNumber: questions.length + 2,
+    totalStages: questions.length + 2
   }, 0));
   
   return { stages, components };
