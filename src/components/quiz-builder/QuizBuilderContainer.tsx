@@ -62,7 +62,7 @@ export const QuizBuilderContainer: React.FC = () => {
       <ResizablePanel defaultSize={25}>
         <PropertiesPanel 
           component={selectedComponent}
-          onUpdate={(updates) => {
+          onUpdate={(updates: Partial<QuizComponentData>) => {
             if (selectedComponent) {
               setSelectedComponent({ ...selectedComponent, ...updates });
             }

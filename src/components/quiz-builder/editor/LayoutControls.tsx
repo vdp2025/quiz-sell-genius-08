@@ -3,7 +3,7 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { QuizComponentLayout } from '@/types/quizBuilder/componentTypes';
-import { Grid, AlignLeft, AlignCenter, AlignRight, Column, Row } from 'lucide-react';
+import { Grid, AlignLeft, AlignCenter, AlignRight, Columns, Rows } from 'lucide-react';
 
 interface LayoutControlsProps {
   layout: QuizComponentLayout;
@@ -83,13 +83,13 @@ export const LayoutControls: React.FC<LayoutControlsProps> = ({
             className={`p-2 rounded ${layout.direction === 'horizontal' ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
             onClick={() => onLayoutChange({ direction: 'horizontal' })}
           >
-            <Row className="w-4 h-4" />
+            <Rows className="w-4 h-4" />
           </button>
           <button
             className={`p-2 rounded ${layout.direction === 'vertical' ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
             onClick={() => onLayoutChange({ direction: 'vertical' })}
           >
-            <Column className="w-4 h-4" />
+            <Columns className="w-4 h-4" />
           </button>
         </div>
       </div>

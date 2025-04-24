@@ -1,110 +1,175 @@
 
 import React from 'react';
-import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { QuizComponentData } from '@/types/quizBuilder/componentTypes';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Settings, XCircle } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import StagePropertiesEditor from './StagePropertiesEditor';
-import ComponentContentEditor from './ComponentContentEditor';
-import ComponentStyleEditor from './ComponentStyleEditor';
+import { LayoutControls } from '../editor/LayoutControls';
 
 interface PropertiesPanelProps {
   component: QuizComponentData | null;
-  stage: QuizStage | null;
-  onClose: () => void;
-  onUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
-  onUpdateStage: (id: string, updates: Partial<QuizStage>) => void;
-  onDelete: (id: string) => void;
+  onUpdate: (updates: Partial<QuizComponentData>) => void;
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   component,
-  stage,
-  onClose,
-  onUpdate,
-  onUpdateStage,
-  onDelete
+  onUpdate
 }) => {
-  if (!component && !stage) {
+  if (!component) {
     return (
-      <div className="h-full flex flex-col text-gray-400 p-6 items-center justify-center text-center">
-        <Settings className="h-12 w-12 mb-4 text-gray-500" />
-        <h3 className="text-lg font-medium mb-2">Nenhum item selecionado</h3>
-        <p className="text-gray-400">
-          Selecione um componente ou uma etapa para editar suas propriedades
-        </p>
+      <div className="h-full flex items-center justify-center p-4 text-center">
+        <div>
+          <p className="text-gray-500">
+            Selecione um componente para editar suas propriedades
+          </p>
+        </div>
       </div>
     );
   }
 
-  if (stage && !component) {
-    return (
-      <div className="h-full flex flex-col text-white">
-        <div className="p-4 border-b border-[#333333] flex items-center justify-between">
-          <h2 className="font-medium">Propriedades da Etapa</h2>
-          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" onClick={onClose}>
-            <XCircle className="h-5 w-5" />
-          </Button>
-        </div>
-        
-        <ScrollArea className="flex-1 p-4">
-          <StagePropertiesEditor 
-            stage={stage}
-            onUpdate={(updates) => onUpdateStage(stage.id, updates)}
-          />
-        </ScrollArea>
-      </div>
-    );
-  }
+  const handleContentChange = (key: string, value: any) => {
+    onUpdate({
+      content: {
+        ...component.content,
+        [key]: value
+      }
+    });
+  };
 
-  if (component) {
-    return (
-      <div className="h-full flex flex-col text-white">
-        <div className="p-4 border-b border-[#333333] flex items-center justify-between">
-          <h2 className="font-medium">Propriedades do Componente</h2>
-          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" onClick={onClose}>
-            <XCircle className="h-5 w-5" />
-          </Button>
-        </div>
+  const handleLayoutChange = (updates: Partial<typeof component.layout>) => {
+    onUpdate({
+      layout: {
+        ...component.layout,
+        ...updates
+      }
+    });
+  };
+
+  const handleStyleChange = (updates: Partial<typeof component.style>) => {
+    onUpdate({
+      style: {
+        ...component.style,
+        ...updates
+      }
+    });
+  };
+
+  return (
+    <div className="h-full border-l">
+      <Tabs defaultValue="content" className="h-full flex flex-col">
+        <TabsList className="w-full rounded-none border-b">
+          <TabsTrigger value="content" className="flex-1">
+            Conteúdo
+          </TabsTrigger>
+          <TabsTrigger value="layout" className="flex-1">
+            Layout
+          </TabsTrigger>
+          <TabsTrigger value="style" className="flex-1">
+            Estilo
+          </TabsTrigger>
+        </TabsList>
         
-        <Tabs defaultValue="content" className="flex-1 flex flex-col">
-          <div className="border-b border-[#333333]">
-            <TabsList className="w-full bg-[#262939]">
-              <TabsTrigger value="content" className="flex-1 text-white data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white">
-                Conteúdo
-              </TabsTrigger>
-              <TabsTrigger value="style" className="flex-1 text-white data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white">
-                Estilo
-              </TabsTrigger>
-            </TabsList>
-          </div>
-          
-          <ScrollArea className="flex-1">
-            <TabsContent value="content" className="mt-0 p-4">
-              <ComponentContentEditor 
-                component={component} 
-                onUpdate={(updates) => onUpdate(component.id, updates)}
-                onDelete={() => onDelete(component.id)}
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            <TabsContent value="content" className="mt-0">
+              <div className="space-y-4">
+                {component.type === 'header' && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="title">Título</Label>
+                      <Input
+                        id="title"
+                        value={component.content.title || ''}
+                        onChange={(e) => handleContentChange('title', e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="subtitle">Subtítulo</Label>
+                      <Input
+                        id="subtitle"
+                        value={component.content.subtitle || ''}
+                        onChange={(e) => handleContentChange('subtitle', e.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {component.type === 'text' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="text">Texto</Label>
+                    <Input
+                      id="text"
+                      value={component.content.text || ''}
+                      onChange={(e) => handleContentChange('text', e.target.value)}
+                    />
+                  </div>
+                )}
+
+                {component.type === 'image' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="imageUrl">URL da Imagem</Label>
+                    <Input
+                      id="imageUrl"
+                      value={component.content.imageUrl || ''}
+                      onChange={(e) => handleContentChange('imageUrl', e.target.value)}
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="layout" className="mt-0">
+              <LayoutControls 
+                layout={component.layout}
+                onLayoutChange={handleLayoutChange}
               />
             </TabsContent>
             
-            <TabsContent value="style" className="mt-0 p-4">
-              <ComponentStyleEditor 
-                component={component} 
-                onUpdate={(updates) => onUpdate(component.id, updates)}
-              />
+            <TabsContent value="style" className="mt-0">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="padding">Padding</Label>
+                  <Select
+                    value={component.style.padding}
+                    onValueChange={(value: any) => handleStyleChange({ padding: value })}
+                  >
+                    <SelectTrigger id="padding">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nenhum</SelectItem>
+                      <SelectItem value="small">Pequeno</SelectItem>
+                      <SelectItem value="medium">Médio</SelectItem>
+                      <SelectItem value="large">Grande</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="margin">Margem</Label>
+                  <Select
+                    value={component.style.margin}
+                    onValueChange={(value: any) => handleStyleChange({ margin: value })}
+                  >
+                    <SelectTrigger id="margin">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nenhum</SelectItem>
+                      <SelectItem value="small">Pequeno</SelectItem>
+                      <SelectItem value="medium">Médio</SelectItem>
+                      <SelectItem value="large">Grande</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </TabsContent>
-          </ScrollArea>
-        </Tabs>
-      </div>
-    );
-  }
-
-  return null;
+          </div>
+        </ScrollArea>
+      </Tabs>
+    </div>
+  );
 };
-
-export default PropertiesPanel;
