@@ -18,7 +18,7 @@ interface SingleChoiceComponentProps {
   style?: {
     textColor?: string;
     backgroundColor?: string;
-    selectionIndicator?: 'border' | 'radio' | 'highlight';
+    selectionIndicator?: 'border' | 'checkbox' | 'highlight';
   };
   isEditing?: boolean;
   isSelected?: boolean;
@@ -68,8 +68,8 @@ const SingleChoiceComponent: React.FC<SingleChoiceComponentProps> = ({
               )}
             >
               <div className="flex items-start gap-3">
-                {selectionIndicator === 'radio' && (
-                  <div className="w-5 h-5 border border-gray-300 rounded-full flex-shrink-0 mt-1" />
+                {selectionIndicator === 'checkbox' && (
+                  <div className="w-5 h-5 border border-gray-300 rounded flex-shrink-0 mt-1" />
                 )}
                 
                 <div className="flex-1">
