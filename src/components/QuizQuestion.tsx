@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -78,35 +77,43 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   return (
     <AnimatedWrapper>
-      <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-        isMobile && "px-2", 
-        isStrategicQuestion && "max-w-3xl"
-      )} id={`question-${question.id}`}>
+      <div 
+        className={cn(
+          "w-full max-w-6xl mx-auto pb-5 relative",
+          "transition-all duration-500 ease-in-out",
+          isMobile && "px-2",
+          isStrategicQuestion && "max-w-3xl bg-gradient-to-b from-white via-white to-[#FFFAF7] rounded-xl shadow-sm",
+        )} 
+        id={`question-${question.id}`}
+      >
         {!hideTitle && (
           <>
             <h2 className={cn(
-              "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-              isMobile ? "text-base" : "text-base sm:text-xl",
-              isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
+              "font-playfair text-center px-3 pt-6 pb-3 text-brand-coffee font-semibold tracking-normal",
+              isMobile ? "text-lg" : "text-xl sm:text-2xl",
+              isStrategicQuestion && "text-[#432818] whitespace-pre-line leading-relaxed"
             )}>
               {highlightStrategicWords(question.title)}
             </h2>
             
             {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-              <div className="w-full mb-6">
-                <img 
-                  src={question.imageUrl} 
-                  alt="Question visual" 
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                  onError={() => {
-                    console.error(`Failed to load image: ${question.imageUrl}`);
-                    setImageError(true);
-                  }}
-                />
+              <div className="w-full mb-6 px-4 transform transition-transform duration-500 hover:scale-[1.02]">
+                <div className="relative w-full max-w-2xl mx-auto overflow-hidden rounded-lg shadow-lg">
+                  <img 
+                    src={question.imageUrl} 
+                    alt="Question visual" 
+                    className="w-full h-auto object-cover transition-all duration-500"
+                    onError={() => {
+                      console.error(`Failed to load image: ${question.imageUrl}`);
+                      setImageError(true);
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-50"></div>
+                </div>
               </div>
             )}
             
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+            <p className="text-sm sm:text-base text-[#1A1818]/70 px-2 py-2 mb-6 text-center font-medium">
               {isStrategicQuestion 
                 ? "Selecione 1 opção para avançar"
                 : `Selecione ${question.multiSelect} opções para avançar`
@@ -119,7 +126,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           "grid h-full",
           getGridColumns(),
           hasImageOptions && "mb-4 relative",
-          isStrategicQuestion && "gap-4"
+          isStrategicQuestion && "gap-4 px-4"
         )}>
           {question.options.map(option => (
             <QuizOption 
@@ -136,15 +143,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           ))}
         </div>
         
-        <div className="flex justify-between items-center gap-3 mt-6">
-          {!autoAdvance && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-              Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
-            </p>
-          )}
-          
-          <div className="ml-auto">
-            
+        <div className="flex justify-between items-center gap-3 mt-8 px-4">
+          <div className="w-full h-1 bg-[#B89B7A]/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-[#B89B7A] transition-all duration-300 ease-out" 
+              style={{ width: currentAnswers.length > 0 ? '100%' : '0%' }}
+            ></div>
           </div>
         </div>
       </div>
