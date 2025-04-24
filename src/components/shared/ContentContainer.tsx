@@ -5,7 +5,7 @@ interface ContentContainerProps {
   children: React.ReactNode;
 }
 
-const sizeClassMap: Record<'sm'|'md'|'lg', string> = {
+const sizeClassMap: Record<'sm' | 'md' | 'lg', string> = {
   sm: 'max-w-sm',
   md: 'max-w-md',
   lg: 'max-w-lg',
