@@ -166,7 +166,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 onChange={(e) => {
                   // Use the generic onUpdate method directly with a cast to ensure type safety
                   onUpdate(component.id, { 
-                    data: { ...component.data, displayType: e.target.value } 
+                    data: { ...component.data, displayType: e.target.value as 'text' | 'image' | 'both' } 
                   });
                 }}
               >
