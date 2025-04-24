@@ -1,4 +1,3 @@
-
 export interface SalesPageBenefitItem {
   title: string;
   description: string;

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -72,8 +71,8 @@ export const SalesProductCard: React.FC<SalesProductCardProps> = ({
         </div>
 
         <Button 
-          className="w-full py-6 rounded-md text-lg transition-colors duration-300 text-white"
-          style={{ backgroundColor: accentColor, hover: { backgroundColor: 'darken(accentColor, 10%)' } }}
+          className="w-full py-6 rounded-md text-lg transition-colors duration-300 text-white hover:opacity-90"
+          style={{ backgroundColor: accentColor }}
           onClick={() => window.location.href = ctaUrl}
         >
           <ShoppingCart className="w-5 h-5 mr-2" />
