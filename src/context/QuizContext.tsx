@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
@@ -7,7 +6,11 @@ import { saveParticipant } from '@/services/quizService';
 
 // Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
-  startQuiz: (name: string, email: string, quizId: string) => Promise<any>;
+  startQuiz: (name: string, quizId: string) => Promise<{ 
+    id: string; 
+    name: string; 
+    utmParams: Record<string, string> 
+  }>;
   submitAnswers: (answers: Array<{ questionId: string; optionId: string; points: number }>) => Promise<void>;
   submitResults: (results: QuizResult) => Promise<void>;
 };
@@ -20,20 +23,19 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const quizLogic = useQuizLogic();
   const { toast } = useToast();
   
-  const startQuiz = async (name: string, email: string, quizId: string) => {
+  const startQuiz = async (name: string, quizId: string) => {
     try {
       // Capture UTM parameters from useQuizLogic
       const { utmParams } = quizLogic;
       
-      console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
+      console.log(`Starting quiz for ${name} with quiz ID ${quizId}`);
       
       // Save participant with UTM parameters
-      const participant = await saveParticipant(name, email, quizId, utmParams);
+      const participant = await saveParticipant(name, null, quizId, utmParams);
       
       return { 
         id: participant.id, 
         name, 
-        email,
         utmParams 
       };
     } catch (error) {
@@ -103,10 +105,10 @@ export const useQuiz = () => {
   const { toast } = useToast();
   
   return {
-    startQuiz: async (name: string, email: string, quizId: string) => {
+    startQuiz: async (name: string, quizId: string) => {
       try {
-        console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
-        return { id: '1', name, email };
+        console.log(`Starting quiz for ${name} with quiz ID ${quizId}`);
+        return { id: '1', name };
       } catch (error) {
         toast({
           title: "Erro ao iniciar o quiz",
@@ -147,3 +149,5 @@ export const useQuiz = () => {
     }
   };
 };
+
+export { QuizContext };

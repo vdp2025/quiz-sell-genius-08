@@ -188,7 +188,7 @@ export const useQuizLogic = () => {
   }, [calculateResults, strategicAnswers]);
 
   // Modify existing methods to include UTM params
-  const startQuiz = useCallback((name: string, email: string, quizId: string) => {
+  const startQuiz = useCallback((name: string, quizId: string) => {
     const additionalInfo = {
       ...utmParams,
       // Keep any existing additional info
@@ -199,7 +199,6 @@ export const useQuizLogic = () => {
 
     return {
       name, 
-      email, 
       quizId,
       additionalInfo
     };

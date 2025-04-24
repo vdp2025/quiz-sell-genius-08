@@ -154,7 +154,7 @@ export type Database = {
           completed: boolean | null
           completed_at: string | null
           created_at: string
-          email: string
+          email: string | null
           id: string
           ip_address: string | null
           name: string
@@ -168,7 +168,7 @@ export type Database = {
           completed?: boolean | null
           completed_at?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           id?: string
           ip_address?: string | null
           name: string
@@ -182,7 +182,7 @@ export type Database = {
           completed?: boolean | null
           completed_at?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           id?: string
           ip_address?: string | null
           name?: string

@@ -18,7 +18,7 @@ export const fetchQuizQuestions = async (quizId: string) => {
 
 export const saveParticipant = async (
   name: string, 
-  email: string, 
+  email: string | null, 
   quizId: string, 
   additionalInfo?: Record<string, any>
 ) => {
