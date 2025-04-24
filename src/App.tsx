@@ -1,6 +1,8 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
@@ -25,23 +27,25 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <QuizProvider>
-        <Router>
-          <Suspense fallback={<LoadingState />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
-              <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/settings" element={<ProtectedAdminRoute><SettingsPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/utm-analytics" element={<ProtectedAdminRoute><UTMAnalyticsPage /></ProtectedAdminRoute>} />
-            </Routes>
-          </Suspense>
-          <Toaster />
-        </Router>
-      </QuizProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <QuizProvider>
+          <Router>
+            <Suspense fallback={<LoadingState />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+                <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
+                <Route path="/admin/settings" element={<ProtectedAdminRoute><SettingsPage /></ProtectedAdminRoute>} />
+                <Route path="/admin/utm-analytics" element={<ProtectedAdminRoute><UTMAnalyticsPage /></ProtectedAdminRoute>} />
+              </Routes>
+            </Suspense>
+            <Toaster />
+          </Router>
+        </QuizProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
