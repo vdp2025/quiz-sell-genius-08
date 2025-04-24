@@ -46,11 +46,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     }
   };
 
-  // Fixed: Updated the function parameter type to include HTMLSelectElement
-  const handleStyleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, field: string) => {
+  // The problem is here. We need to create a more generic event handler that works with any HTML element
+  const handleStyleChange = (e: React.ChangeEvent<HTMLElement>, field: string) => {
     if (component) {
+      const value = (e.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).value;
       onUpdate(component.id, { 
-        style: { ...component.style, [field]: e.target.value } 
+        style: { ...component.style, [field]: value } 
       });
     }
   };
