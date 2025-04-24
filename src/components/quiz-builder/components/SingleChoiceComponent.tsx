@@ -1,13 +1,12 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Check, HelpCircle } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 
-interface MultipleChoiceComponentProps {
+interface SingleChoiceComponentProps {
   data: {
     question?: string;
     options?: string[];
-    multiSelect?: number;
     imageSize?: 'small' | 'medium' | 'large';
     optionImages?: string[];
     displayType?: 'text' | 'image' | 'both';
@@ -19,13 +18,13 @@ interface MultipleChoiceComponentProps {
   style?: {
     textColor?: string;
     backgroundColor?: string;
-    selectionIndicator?: 'border' | 'checkbox' | 'highlight';
+    selectionIndicator?: 'border' | 'radio' | 'highlight';
   };
   isEditing?: boolean;
   isSelected?: boolean;
 }
 
-const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
+const SingleChoiceComponent: React.FC<SingleChoiceComponentProps> = ({
   data,
   style,
   isEditing = false,
@@ -49,12 +48,6 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
         {data.question || 'Pergunta do Quiz'}
       </h3>
       
-      {data.multiSelect && data.multiSelect > 0 && (
-        <p className="text-sm text-gray-500 mb-4">
-          Selecione {data.multiSelect} opções
-        </p>
-      )}
-      
       <div 
         className={cn(
           "grid gap-4",
@@ -75,8 +68,8 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
               )}
             >
               <div className="flex items-start gap-3">
-                {selectionIndicator === 'checkbox' && (
-                  <div className="w-5 h-5 border border-gray-300 rounded flex-shrink-0 mt-1" />
+                {selectionIndicator === 'radio' && (
+                  <div className="w-5 h-5 border border-gray-300 rounded-full flex-shrink-0 mt-1" />
                 )}
                 
                 <div className="flex-1">
@@ -119,4 +112,4 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
   );
 };
 
-export default MultipleChoiceComponent;
+export default SingleChoiceComponent;
