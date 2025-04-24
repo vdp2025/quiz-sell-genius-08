@@ -187,20 +187,16 @@ export const useQuizLogic = () => {
     return results;
   }, [calculateResults, strategicAnswers]);
 
-  // Modify existing methods to include UTM params
-  const startQuiz = useCallback((name: string, quizId: string) => {
-    const additionalInfo = {
-      ...utmParams,
-      // Keep any existing additional info
-    };
-
+  // Modify startQuiz to return Promise<{ id: string; name: string; utmParams: Record<string, string> }>
+  const startQuiz = useCallback(async (name: string, quizId: string) => {
     // Log UTM params
-    console.log('Quiz started with UTM params:', additionalInfo);
+    console.log('Quiz started with UTM params:', utmParams);
 
     return {
+      id: '1', // Mock ID for now
       name, 
       quizId,
-      additionalInfo
+      utmParams
     };
   }, [utmParams]);
 

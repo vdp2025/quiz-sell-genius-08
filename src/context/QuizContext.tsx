@@ -1,19 +1,20 @@
+
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
 import { QuizResult } from '@/types/quiz';
 import { saveParticipant } from '@/services/quizService';
 
-// Define the context type
-type QuizContextType = ReturnType<typeof useQuizLogic> & {
-  startQuiz: (name: string, quizId: string) => Promise<{ 
-    id: string; 
-    name: string; 
-    utmParams: Record<string, string> 
+// Define the context type with a corrected return type for startQuiz
+type QuizContextType = {
+  startQuiz: (name: string, quizId: string) => Promise<{
+    id: string;
+    name: string;
+    utmParams: Record<string, string>;
   }>;
   submitAnswers: (answers: Array<{ questionId: string; optionId: string; points: number }>) => Promise<void>;
   submitResults: (results: QuizResult) => Promise<void>;
-};
+} & Omit<ReturnType<typeof useQuizLogic>, 'startQuiz'>;
 
 // Create context with undefined default
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -75,7 +76,7 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
   
-  // Create a new object that matches the expected type structure
+  // Create a context value with the modified type structure
   const contextValue: QuizContextType = {
     ...quizLogic,
     startQuiz,
@@ -108,7 +109,7 @@ export const useQuiz = () => {
     startQuiz: async (name: string, quizId: string) => {
       try {
         console.log(`Starting quiz for ${name} with quiz ID ${quizId}`);
-        return { id: '1', name };
+        return { id: '1', name, utmParams: {} };
       } catch (error) {
         toast({
           title: "Erro ao iniciar o quiz",
