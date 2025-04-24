@@ -130,19 +130,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             <Tabs defaultValue="content">
               <TabsList className="w-full">
                 <TabsTrigger value="content" className="flex-1">Conteúdo</TabsTrigger>
-                <TabsTrigger value="style" className="flex-1">Estilo</TabsTrigger>
               </TabsList>
               
               <TabsContent value="content">
-                <p className="italic text-gray-500">Propriedades não disponíveis para esta etapa.</p>
-              </TabsContent>
-              
-              <TabsContent value="style">
-                <ComponentStyleProperties
-                  style={stage.style || {}}
-                  onUpdate={onUpdateStage}
-                  componentId={stage.id}
-                />
+                <p className="italic text-gray-500">Propriedades da etapa {stage.type}</p>
               </TabsContent>
             </Tabs>
           </div>

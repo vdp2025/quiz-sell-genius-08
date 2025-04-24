@@ -15,8 +15,8 @@ export default defineConfig(({ mode }) => ({
       name: 'inject-gptengineer-script',
       transformIndexHtml(html: string) {
         return html.replace(
-          '</body>',
-          `<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></body>`
+          '</head>',
+          `<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></head>`
         );
       }
     },
