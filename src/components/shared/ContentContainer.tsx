@@ -5,16 +5,17 @@ interface ContentContainerProps {
   children: React.ReactNode;
 }
 
+const sizeClassMap: Record<'sm'|'md'|'lg', string> = {
+  sm: 'max-w-sm',
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+};
+
 export const ContentContainer: React.FC<ContentContainerProps> = ({
   size = 'md',
   children,
 }) => {
-  const maxWidth = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-  }[size];
-
+  const maxWidthClass = sizeClassMap[size] || 'max-w-md';
   return (
     <div className={w-full  mx-auto}>
       {children}
