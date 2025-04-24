@@ -33,7 +33,7 @@ const EditorContent = ({ selectedStyle, onShowTemplates, initialConfig }: Result
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
-        isPreviewing={isPreviewing}
+        isPreviewMode={isPreviewing}
         onPreviewToggle={togglePreview}
         onShowTemplates={onShowTemplates}
       />
