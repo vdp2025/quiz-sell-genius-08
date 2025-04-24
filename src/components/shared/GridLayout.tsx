@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface GridLayoutProps {
   columns?: number;
@@ -14,7 +15,7 @@ export const GridLayout: React.FC<GridLayoutProps> = ({
   className = '',
   children,
 }) => (
-  <div className={`grid grid-cols-${columns} ${gap} ${className}`}>
+  <div className={cn(`grid grid-cols-${columns}`, gap, className)}>
     {children}
   </div>
 );

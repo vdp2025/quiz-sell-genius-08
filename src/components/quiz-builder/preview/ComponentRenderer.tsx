@@ -81,8 +81,8 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
   
   const renderStageResult = () => (
     <div className="text-center py-8">
-      <h1 className="text-3xl font-playfair mb-3">{data.headline}</h1>
-      <p className="mb-6 text-gray-700">{data.subheadline}</p>
+      <h1 className="text-3xl font-playfair mb-3">{data.headline || ''}</h1>
+      <p className="mb-6 text-gray-700">{data.subheadline || ''}</p>
     </div>
   );
 
