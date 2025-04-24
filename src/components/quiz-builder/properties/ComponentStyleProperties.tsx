@@ -2,11 +2,11 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { QuizComponentStyle } from '@/types/quizBuilder';
+import { QuizComponentStyle, QuizComponentData } from '@/types/quizBuilder';
 
 interface ComponentStylePropertiesProps {
   style: QuizComponentStyle;
-  onUpdate: (id: string, updates: Partial<QuizComponentStyle>) => void;
+  onUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
   componentId: string;
 }
 
@@ -15,6 +15,10 @@ export const ComponentStyleProperties: React.FC<ComponentStylePropertiesProps> =
   onUpdate,
   componentId
 }) => {
+  const handleStyleUpdate = (styleUpdates: Partial<QuizComponentStyle>) => {
+    onUpdate(componentId, { style: styleUpdates });
+  };
+  
   return (
     <div className="space-y-4">
       <div>
@@ -22,7 +26,7 @@ export const ComponentStyleProperties: React.FC<ComponentStylePropertiesProps> =
         <Input 
           type="color"
           value={style.backgroundColor || '#ffffff'} 
-          onChange={(e) => onUpdate(componentId, { backgroundColor: e.target.value })}
+          onChange={(e) => handleStyleUpdate({ backgroundColor: e.target.value })}
           className="w-10 h-10 p-1 border rounded-md"
         />
       </div>
@@ -32,7 +36,7 @@ export const ComponentStyleProperties: React.FC<ComponentStylePropertiesProps> =
         <Input 
           type="color"
           value={style.textColor || '#000000'} 
-          onChange={(e) => onUpdate(componentId, { textColor: e.target.value })}
+          onChange={(e) => handleStyleUpdate({ textColor: e.target.value })}
           className="w-10 h-10 p-1 border rounded-md"
         />
       </div>
@@ -42,7 +46,7 @@ export const ComponentStyleProperties: React.FC<ComponentStylePropertiesProps> =
         <Input 
           type="number"
           value={style.borderRadius || '0'} 
-          onChange={(e) => onUpdate(componentId, { borderRadius: e.target.value })}
+          onChange={(e) => handleStyleUpdate({ borderRadius: e.target.value })}
           className="w-full p-2 border rounded-md"
         />
       </div>
@@ -52,7 +56,7 @@ export const ComponentStyleProperties: React.FC<ComponentStylePropertiesProps> =
         <Input 
           type="number"
           value={style.paddingY || '16'} 
-          onChange={(e) => onUpdate(componentId, { paddingY: e.target.value })}
+          onChange={(e) => handleStyleUpdate({ paddingY: e.target.value })}
           className="w-full p-2 border rounded-md"
         />
       </div>
@@ -62,10 +66,11 @@ export const ComponentStyleProperties: React.FC<ComponentStylePropertiesProps> =
         <Input 
           type="number"
           value={style.paddingX || '16'} 
-          onChange={(e) => onUpdate(componentId, { paddingX: e.target.value })}
+          onChange={(e) => handleStyleUpdate({ paddingX: e.target.value })}
           className="w-full p-2 border rounded-md"
         />
       </div>
     </div>
   );
 };
+

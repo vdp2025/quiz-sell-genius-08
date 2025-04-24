@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -104,9 +103,45 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               
               <TabsContent value="style">
                 <ComponentStyleProperties
-                  style={component.style}
+                  style={component.style || {}}
                   onUpdate={onUpdate}
                   componentId={component.id}
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  }
+
+  if (stage) {
+    return (
+      <div className="h-full flex flex-col border-l">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h2 className="font-semibold">{stage.type}</h2>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+        
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            <Tabs defaultValue="content">
+              <TabsList className="w-full">
+                <TabsTrigger value="content" className="flex-1">Conteúdo</TabsTrigger>
+                <TabsTrigger value="style" className="flex-1">Estilo</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="content">
+                <p className="italic text-gray-500">Propriedades não disponíveis para esta etapa.</p>
+              </TabsContent>
+              
+              <TabsContent value="style">
+                <ComponentStyleProperties
+                  style={stage.style || {}}
+                  onUpdate={onUpdateStage}
+                  componentId={stage.id}
                 />
               </TabsContent>
             </Tabs>
