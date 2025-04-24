@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface GlobalStyles {
   backgroundColor?: string;
@@ -11,25 +11,23 @@ interface GlobalStyles {
 }
 
 export const useGlobalStyles = () => {
-  const [globalStyles, setGlobalStyles] = useState<GlobalStyles>(() => {
-    const saved = localStorage.getItem('global_styles');
-    return saved ? JSON.parse(saved) : {
-      backgroundColor: '#fff',
-      textColor: '#432818',
-      fontFamily: 'inherit',
-      logoHeight: 56,
-      logo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-      logoAlt: "Logo Gisele Galvão"
-    };
+  const [globalStyles, setGlobalStyles] = useState<GlobalStyles>({
+    backgroundColor: '#fffaf7',
+    textColor: '#432818',
+    fontFamily: 'inherit',
+    logoHeight: 60,
+    logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg',
+    logoAlt: 'Logo do Quiz de Estilo'
   });
 
   useEffect(() => {
-    localStorage.setItem('global_styles', JSON.stringify(globalStyles));
-  }, [globalStyles]);
+    // Futuramente poderia carregar estilos de uma configuração
+    const loadGlobalStyles = async () => {
+      // Por enquanto, apenas usamos os valores padrão
+    };
 
-  const updateGlobalStyles = (newStyles: Partial<GlobalStyles>) => {
-    setGlobalStyles(prev => ({ ...prev, ...newStyles }));
-  };
+    loadGlobalStyles();
+  }, []);
 
-  return { globalStyles, updateGlobalStyles };
+  return { globalStyles, setGlobalStyles };
 };

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -19,19 +18,25 @@ import BenefitList from '@/components/quiz-result/sales/BenefitList';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 
 const ResultPage: React.FC = () => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
+  const { primaryStyle, secondaryStyles, quizResult } = useQuiz();
   const { globalStyles } = useGlobalStyles();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    console.log("ResultPage mounted. Quiz result:", quizResult);
+  }, [quizResult]);
 
-  if (!primaryStyle) {
+  if (!quizResult) {
+    console.log("No quiz result found, showing error state");
     return <ErrorState />;
   }
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  const { image, guideImage, description } = styleConfig[category] || {
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
+    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
+    description: "Descrição não disponível para este estilo."
+  };
 
   return (
     <div
