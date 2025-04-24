@@ -21,9 +21,10 @@ export function highlightStrategicWords(text: string): React.ReactNode {
       
       // Add a styled span for highlighted text
       result.push(
-        <span key={index} className="font-medium text-[#B89B7A]">
-          {highlightedText}
-        </span>
+        React.createElement('span', {
+          key: index,
+          className: "font-medium text-[#B89B7A]"
+        }, highlightedText)
       );
     } else if (part) {
       // Add regular text
