@@ -1,6 +1,6 @@
-﻿import React from 'react';
+import React from 'react';
 import { QuizStage } from '@/types/quizBuilder';
-import { ComponentsSidebar } from './ComponentsSidebar';
+import { ComponentsSidebar } from '..\/ComponentsSidebar';
 
 interface ComponentToolbarProps {
   activeStage: QuizStage | null;
