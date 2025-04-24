@@ -32,6 +32,8 @@ function App() {
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
               <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
+              <Route path="/admin/settings" element={<ProtectedAdminRoute><SettingsPage /></ProtectedAdminRoute>} />
+              <Route path="/admin/utm-analytics" element={<ProtectedAdminRoute><UTMAnalyticsPage /></ProtectedAdminRoute>} />
             </Routes>
           </Suspense>
           <Toaster />
