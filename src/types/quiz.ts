@@ -12,8 +12,10 @@ export interface QuizQuestion {
   title: string;
   subtitle?: string;
   options: QuizOption[];
-  type: 'text' | 'image' | 'text-image';
+  type: 'text' | 'image' | 'both';  // Changed from 'text-image' to 'both' to match usage
   requiredSelections?: number;
+  multiSelect: number;  // Added this property that was missing
+  imageUrl?: string;    // Added this property that was missing
   columnsCount?: number;
   imageSize?: 'small' | 'medium' | 'large';
   orderIndex: number;
@@ -23,8 +25,9 @@ export interface QuizOption {
   id: string;
   text: string;
   imageUrl?: string;
-  styleCode: string;
-  styleTypeId: string;
+  styleCode?: string;
+  styleTypeId?: string;
+  styleCategory?: StyleCategory; // Added this property that was missing
   points: number;
 }
 
@@ -35,6 +38,7 @@ export interface QuizResult {
     name: string;
     email: string;
   };
+  totalSelections?: number; // Added this property that was missing
 }
 
 export interface QuizSettings {
@@ -50,4 +54,10 @@ export interface QuizSettings {
     background: string;
     text: string;
   };
+}
+
+// Add missing UserResponse interface
+export interface UserResponse {
+  questionId: string;
+  selectedOptions: string[];
 }

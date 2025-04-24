@@ -7,6 +7,7 @@ export const outerwearQuestions: QuizQuestion[] = [
     title: 'QUAL CASACO É SEU FAVORITO?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 5,
     options: [
       {
         id: '6a',
@@ -71,6 +72,7 @@ export const outerwearQuestions: QuizQuestion[] = [
     title: 'QUAL SUA CALÇA FAVORITA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 6,
     options: [
       {
         id: '7a',

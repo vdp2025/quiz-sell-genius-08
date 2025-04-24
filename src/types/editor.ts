@@ -1,54 +1,17 @@
 
-export type BlockType = 
-  | 'header'
-  | 'headline'
-  | 'text'
-  | 'image'
-  | 'hero-section'
-  | 'benefits'
-  | 'testimonials'
-  | 'pricing'
-  | 'guarantee'
-  | 'cta'
-  | 'bonus-carousel'
-  | 'products'
-  | 'style-result'
-  | 'secondary-styles'
-  | 'spacer'
-  | 'video'
-  | 'two-column'
-  | 'icon'
-  | 'faq'
-  | 'carousel'
-  | 'custom-code'
-  | 'animation-block';
-
-export interface EditableContent {
-  [key: string]: any;
-  title?: string;
-  subtitle?: string;
-  text?: string;
-  logo?: string;
-  logoAlt?: string;
-  buttonText?: string;
-  items?: string[];
-  heroImage?: string;
-  heroImageAlt?: string;
-  salePrice?: string;
-  quote?: string;
-  quoteAuthor?: string;
-  textColor?: string;
-  alignment?: 'left' | 'center' | 'right';
-  bonusImages?: Array<{
-    url: string;
-    alt: string;
-    title?: string;
-  }>;
+export interface EditorBlock {
+  id: string;
+  type: 'header' | 'hero-section' | 'bonus-carousel' | 'headline' | 'text' | 'image' | 'benefits' | 
+        'pricing' | 'guarantee' | 'cta' | 'style-result' | 'secondary-styles' | 'products' | 'testimonials';
+  content: any;
+  order: number;
 }
 
-export interface Block {
-  id: string;
-  type: BlockType;
-  content: EditableContent;
-  order: number;
+export interface EditorConfig {
+  blocks: EditorBlock[];
+  settings: {
+    theme: string;
+    layout: string;
+    fontFamily: string;
+  };
 }

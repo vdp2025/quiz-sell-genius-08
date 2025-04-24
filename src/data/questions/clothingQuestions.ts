@@ -7,6 +7,7 @@ export const clothingQuestions: QuizQuestion[] = [
     title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 0,
     options: [
       {
         id: '1a',
@@ -71,6 +72,7 @@ export const clothingQuestions: QuizQuestion[] = [
     title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
     type: 'both',
     multiSelect: 3,
+    orderIndex: 2,
     options: [
       {
         id: '3a',
@@ -96,35 +98,35 @@ export const clothingQuestions: QuizQuestion[] = [
       {
         id: '3d',
         text: 'Visual refinado e imponente.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_hrmwfw.webp',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '3e',
-        text: 'Visual romântico, feminino e delicado.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+        text: 'Visual romântico e feminino.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_vkzvfs.webp',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '3f',
-        text: 'Visual sensual, com saia justa e decote.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+        text: 'Visual sensual e marcante.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/6_faf4nk.webp',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '3g',
-        text: 'Visual marcante e urbano (jeans + jaqueta).',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+        text: 'Visual dramático e impactante.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/7_fccmbl.webp',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '3h',
-        text: 'Visual criativo, colorido e ousado.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
+        text: 'Visual criativo e diferenciado.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/8_k7v9ja.webp',
         styleCategory: 'Criativo',
         points: 1
       }
