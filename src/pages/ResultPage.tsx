@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -50,11 +49,10 @@ const ResultPage: React.FC = () => {
       />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl">
-        {/* Estilo Principal */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <AnimatedWrapper show={true}>
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
+              <h2 className="text-2xl font-playfair text-brand-text mb-4">
                 Seu Estilo é {category}
               </h2>
               
@@ -73,10 +71,10 @@ const ResultPage: React.FC = () => {
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <p className="text-[#432818] leading-relaxed">{description}</p>
+                <p className="text-brand-text leading-relaxed">{description}</p>
 
                 <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                  <h3 className="text-lg font-medium text-[#432818] mb-2">
+                  <h3 className="text-lg font-medium text-brand-text mb-2">
                     Seus Estilos Complementares
                   </h3>
                   <SecondaryStylesSection secondaryStyles={secondaryStyles} />
