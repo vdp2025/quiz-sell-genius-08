@@ -22,6 +22,7 @@ const UnifiedQuizEditor: React.FC<UnifiedQuizEditorProps> = ({ templateId, onBac
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+  // Carregar template
   useEffect(() => {
     if (templateId) {
       loadTemplate(templateId);
@@ -55,6 +56,7 @@ const UnifiedQuizEditor: React.FC<UnifiedQuizEditorProps> = ({ templateId, onBac
     }
   };
 
+  // Salvar template
   const handleSave = async () => {
     if (!template) return;
     
@@ -78,6 +80,7 @@ const UnifiedQuizEditor: React.FC<UnifiedQuizEditorProps> = ({ templateId, onBac
     }
   };
 
+  // Atualizar partes específicas do template
   const updateQuestions = (questions: any[]) => {
     if (!template) return;
     
@@ -184,8 +187,8 @@ const UnifiedQuizEditor: React.FC<UnifiedQuizEditorProps> = ({ templateId, onBac
         <div className="flex-1 overflow-hidden">
           <TabsContent value="questions" className="h-full m-0">
             <QuizEditor 
-              questions={template.questions}
-              onQuestionsChange={updateQuestions}
+              initialTemplate={template}
+              onQuestionsUpdate={updateQuestions}
               isPreviewing={isPreviewMode}
             />
           </TabsContent>

@@ -6,7 +6,6 @@ import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
 import { getDefaultContentForType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
-import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const useResultPageEditor = (styleType: string) => {
   const [state, setState] = useState<EditorState>({
@@ -17,13 +16,12 @@ export const useResultPageEditor = (styleType: string) => {
   });
 
   const { 
-    config, 
+    resultPageConfig, 
     updateSection, 
     saveConfig,
     resetConfig,
     importConfig,
-    loading,
-    resultPageConfig 
+    loading 
   } = useResultPageConfig(styleType);
 
   // Initialize blocks from config when it's loaded
@@ -33,16 +31,11 @@ export const useResultPageEditor = (styleType: string) => {
         ...prev,
         blocks: resultPageConfig.blocks
       }));
-    } else if (config?.blocks) {
-      setState(prev => ({
-        ...prev,
-        blocks: config.blocks
-      }));
     } else {
       // Initialize with empty blocks array if not present
       updateSection('blocks', []);
     }
-  }, [resultPageConfig, config, updateSection]);
+  }, [resultPageConfig, updateSection]);
 
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
@@ -122,17 +115,13 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
-  const handleSave = useCallback((updatedConfig: ResultPageConfig) => {
-    return saveConfig(updatedConfig);
-  }, [saveConfig]);
-
   return {
-    resultPageConfig: config || resultPageConfig,
+    resultPageConfig,
     loading,
     isPreviewing: state.isPreviewing,
     isGlobalStylesOpen: state.isGlobalStylesOpen,
     actions: {
-      handleSave,
+      handleSave: saveConfig,
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,

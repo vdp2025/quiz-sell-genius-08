@@ -7,7 +7,6 @@ export const accessoriesQuestions: QuizQuestion[] = [
     title: 'QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?',
     type: 'both',
     multiSelect: 3,
-    orderIndex: 7,
     options: [
       {
         id: '8a',

@@ -149,11 +149,6 @@ export const defaultConfig: EditorConfig = {
       order: 2
     }
   ],
-  settings: {
-    theme: 'light',
-    layout: 'default',
-    fontFamily: 'Inter, sans-serif'
-  },
   globalStyles: {
     primaryColor: '#B89B7A',
     secondaryColor: '#432818',

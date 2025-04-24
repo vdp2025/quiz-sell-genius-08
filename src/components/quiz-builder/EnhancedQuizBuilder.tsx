@@ -165,9 +165,8 @@ const EnhancedQuizBuilder: React.FC = () => {
       
       <QuizExporter 
         isOpen={isExporterOpen}
-        onClose={() => setIsExporterOpen(false)}
-        quizData={{ stages, components }}
         onOpenChange={setIsExporterOpen}
+        onImportData={handleImportData}
       />
     </div>
   );

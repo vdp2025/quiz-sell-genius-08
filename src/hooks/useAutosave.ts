@@ -1,89 +1,114 @@
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from '@/components/ui/use-toast';
 
-interface UseAutosaveProps<T> {
+interface UseAutosaveOptions<T> {
   data: T;
-  onSave: (data: T) => Promise<boolean> | boolean;
+  onSave: (data: T) => Promise<boolean>;
   interval?: number;
   enabled?: boolean;
+  showToast?: boolean;
 }
 
-interface UseAutosaveReturn {
-  isSaving: boolean;
-  lastSaved: Date | null;
-  saveNow: () => Promise<boolean>;
-}
-
-export const useAutosave = <T>({
+export function useAutosave<T>({
   data,
   onSave,
   interval = 5000,
-  enabled = true
-}: UseAutosaveProps<T>): UseAutosaveReturn => {
+  enabled = true,
+  showToast = false
+}: UseAutosaveOptions<T>) {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const lastDataRef = useRef<T>(data);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const hasChanges = useRef(false);
+  const lastDataRef = useRef<T>(data);
+  const pendingSaveRef = useRef<boolean>(false);
 
-  // Detect changes in data
-  useEffect(() => {
-    if (JSON.stringify(data) !== JSON.stringify(lastDataRef.current)) {
-      hasChanges.current = true;
-      lastDataRef.current = data;
+  const save = async (forceShowToast = false) => {
+    if (!enabled) return;
+    
+    // Compare JSON stringified versions to detect changes
+    const currentDataStr = JSON.stringify(data);
+    const lastDataStr = JSON.stringify(lastDataRef.current);
+    
+    // Don't save if the data hasn't changed
+    if (currentDataStr === lastDataStr && !forceShowToast) {
+      return;
     }
-  }, [data]);
-
-  const saveData = useCallback(async (): Promise<boolean> => {
-    if (!hasChanges.current) {
-      return true; // No changes to save
+    
+    // If already saving, mark as pending and return
+    if (isSaving) {
+      pendingSaveRef.current = true;
+      return;
     }
-
+    
     setIsSaving(true);
     try {
-      const result = await onSave(data);
-      if (result) {
-        setLastSaved(new Date());
-        hasChanges.current = false;
+      const success = await onSave(data);
+      if (success) {
+        lastDataRef.current = JSON.parse(currentDataStr);
+        const now = new Date();
+        setLastSaved(now);
+        
+        if (showToast || forceShowToast) {
+          toast({
+            title: "Alterações salvas",
+            description: `Suas alterações foram salvas às ${now.toLocaleTimeString()}`,
+          });
+        }
       }
-      return result;
     } catch (error) {
-      console.error('Error during autosave:', error);
-      return false;
+      console.error('Erro ao salvar:', error);
+      if (showToast || forceShowToast) {
+        toast({
+          title: "Erro ao salvar",
+          description: "Suas alterações não puderam ser salvas. Tente novamente.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSaving(false);
+      
+      // If a pending save was requested during this save operation, trigger a new save
+      if (pendingSaveRef.current) {
+        pendingSaveRef.current = false;
+        setTimeout(() => save(false), 100);
+      }
     }
-  }, [data, onSave]);
+  };
 
-  const saveNow = useCallback(async (): Promise<boolean> => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-    return saveData();
-  }, [saveData]);
-
-  // Setup autosave timer
+  // Setup autosave
   useEffect(() => {
     if (!enabled) return;
-
-    const setupTimeout = () => {
-      timeoutRef.current = setTimeout(async () => {
-        if (hasChanges.current) {
-          await saveData();
-        }
-        setupTimeout();
-      }, interval);
-    };
-
-    setupTimeout();
-
+    
+    // Clear existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    // Set new timeout
+    timeoutRef.current = setTimeout(() => {
+      save(false);
+    }, interval);
+    
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [enabled, interval, saveData]);
+  }, [data, enabled, interval]);
 
-  return { isSaving, lastSaved, saveNow };
-};
+  // Save immediately when component unmounts
+  useEffect(() => {
+    return () => {
+      if (enabled && JSON.stringify(data) !== JSON.stringify(lastDataRef.current)) {
+        save(false);
+      }
+    };
+  }, [data, enabled]);
+
+  return {
+    isSaving,
+    lastSaved,
+    saveNow: () => save(true),
+  };
+}

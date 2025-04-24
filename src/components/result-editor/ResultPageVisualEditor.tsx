@@ -14,15 +14,8 @@ import { EditorProps } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { StyleResult, StyleCategory } from '@/types/quiz';
 
 interface ResultPageVisualEditorProps extends EditorProps {
-  selectedStyle: {
-    category: string;
-    score: number;
-    percentage: number;
-  };
-  onShowTemplates?: () => void;
   initialConfig?: ResultPageConfig;
 }
 
@@ -71,8 +64,8 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
 
-  const handleUpdateConfig = (newConfig: ResultPageConfig) => {
-    if (newConfig && importConfig) {
+  const handleUpdateConfig = (newConfig) => {
+    if (newConfig) {
       try {
         importConfig(newConfig);
         if (newConfig.blocks) {
@@ -96,14 +89,6 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   };
 
-  // Convert the string category to a valid StyleCategory type
-  const styleCategory = selectedStyle.category as StyleCategory;
-  const validStyleResult: StyleResult = {
-    category: styleCategory,
-    score: selectedStyle.score,
-    percentage: selectedStyle.percentage
-  };
-
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -116,7 +101,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen flex flex-col overflow-hidden">
         <EditorToolbar 
-          onSave={() => handleSave(resultPageConfig!)}
+          onSave={handleSave}
           isPreviewMode={isPreviewing}
           onPreviewToggle={togglePreview}
           onReset={handleReset}
@@ -145,7 +130,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                   selectedBlockId={selectedBlockId}
                   onSelectBlock={setSelectedBlockId}
                   isPreviewing={isPreviewing}
-                  primaryStyle={validStyleResult}
+                  primaryStyle={selectedStyle}
                   onReorderBlocks={blockActions.handleReorderBlocks}
                 />
               </ResizablePanel>
@@ -165,7 +150,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           </TabsContent>
         </Tabs>
         
-        {isGlobalStylesOpen && resultPageConfig && (
+        {isGlobalStylesOpen && (
           <GlobalStylesEditor
             globalStyles={resultPageConfig.globalStyles || {}}
             onSave={(styles) => {
