@@ -4,9 +4,9 @@ import { generateId } from "./idGenerator";
 
 export const createDefaultConfig = (styleType: string): ResultPageConfig => {
   return {
+    styleType: styleType,
     header: {
-      id: generateId(),
-      type: 'header',
+      visible: true,
       content: {
         logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
         logoAlt: 'Logo Marca',
@@ -15,12 +15,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       style: {
         backgroundColor: '#FFFFFF',
         padding: '24px',
-        maxWidth: '1200px',
       }
     },
     mainContent: {
-      id: generateId(),
-      type: 'main-content',
+      visible: true,
       content: {
         title: 'Descubra Seu Estilo Pessoal',
         description: 'Entenda como aplicar seu estilo predominante no dia a dia',
@@ -33,8 +31,7 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
     },
     offer: {
       hero: {
-        id: generateId(),
-        type: 'hero',
+        visible: true,
         content: {
           headline: 'Guia Completo de Estilo',
           subheadline: 'Revolucione seu guarda-roupa com nosso guia personalizado',
@@ -47,18 +44,27 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           padding: '32px'
         }
       },
+      benefits: {
+        visible: true,
+        content: {},
+        style: {}
+      },
+      products: {
+        visible: true,
+        content: {},
+        style: {}
+      },
       pricing: {
-        id: generateId(),
-        type: 'pricing',
+        visible: true,
         content: {
           price: '39,90',
           originalPrice: '149,90',
           installments: '12x de R$3,99',
-        }
+        },
+        style: {}
       },
       testimonials: {
-        id: generateId(),
-        type: 'testimonials',
+        visible: true,
         content: {
           items: [
             {
@@ -72,7 +78,13 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
               image: ""
             }
           ]
-        }
+        },
+        style: {}
+      },
+      guarantee: {
+        visible: true,
+        content: {},
+        style: {}
       }
     },
     blocks: [],

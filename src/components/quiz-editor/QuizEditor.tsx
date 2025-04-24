@@ -27,9 +27,10 @@ import { Trash2 } from 'lucide-react';
 interface QuizEditorProps {
   questions: QuizQuestion[];
   onQuestionsChange: (questions: QuizQuestion[]) => void;
+  isPreviewing?: boolean;
 }
 
-const QuizEditor: React.FC<QuizEditorProps> = ({ questions: initialQuestions, onQuestionsChange }) => {
+const QuizEditor: React.FC<QuizEditorProps> = ({ questions: initialQuestions, onQuestionsChange, isPreviewing = false }) => {
   const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
 
@@ -95,6 +96,28 @@ const QuizEditor: React.FC<QuizEditorProps> = ({ questions: initialQuestions, on
   }, [questions]);
 
   const activeQuestion = questions.find(question => question.id === selectedQuestionId);
+
+  if (isPreviewing) {
+    return (
+      <div className="p-4">
+        <h2 className="text-lg font-medium mb-4">Visualização do Quiz</h2>
+        <div className="border rounded p-4 space-y-4">
+          {questions.map((question, index) => (
+            <div key={question.id} className="border-b pb-4 last:border-0">
+              <h3 className="font-medium">{index + 1}. {question.title}</h3>
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                {question.options.map(option => (
+                  <div key={option.id} className="border p-2 rounded">
+                    {option.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

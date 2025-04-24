@@ -63,18 +63,20 @@ const SalesPageContainer: React.FC<SalesPageContainerProps> = ({ config = {} }) 
         />
 
         {/* Product Card */}
-        <SalesProductCard
-          title={product.title}
-          description={product.description}
-          image={product.image}
-          imageAlt={product.imageAlt}
-          regularPrice={product.regularPrice}
-          salePrice={product.salePrice}
-          ctaText={product.ctaText}
-          ctaUrl={product.ctaUrl}
-          backgroundColor={style.cardBackgroundColor}
-          accentColor={style.accentColor}
-          textColor={style.primaryColor}
+        <SalesProductCard 
+          product={{
+            id: "default-product",
+            title: product.title,
+            description: product.description,
+            imageUrl: product.image,
+            price: parseFloat(product.salePrice) || 39.00,
+            originalPrice: parseFloat(product.regularPrice) || 175.00,
+            isInstallments: true,
+            installmentsCount: 12,
+            isBestSeller: true
+          }}
+          onAddToCart={() => {}}
+          isSelected={false}
         />
 
         {/* Benefits List */}

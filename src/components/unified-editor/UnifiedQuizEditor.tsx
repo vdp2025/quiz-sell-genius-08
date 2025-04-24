@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QuizTemplate } from '@/types/quizTemplate';
@@ -183,8 +184,8 @@ const UnifiedQuizEditor: React.FC<UnifiedQuizEditorProps> = ({ templateId, onBac
         <div className="flex-1 overflow-hidden">
           <TabsContent value="questions" className="h-full m-0">
             <QuizEditor 
-              template={template}
-              onQuestionsUpdate={updateQuestions}
+              questions={template.questions}
+              onQuestionsChange={updateQuestions}
               isPreviewing={isPreviewMode}
             />
           </TabsContent>

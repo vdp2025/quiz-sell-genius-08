@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -57,7 +58,18 @@ const QuizEditorPage = () => {
   return (
     <AdminLayout>
       <div className="h-full bg-[#FAF9F7] p-6">
-        {template && <QuizEditor template={template} />}
+        {template && (
+          <QuizEditor 
+            questions={template.questions}
+            onQuestionsChange={(updatedQuestions) => {
+              setTemplate({
+                ...template,
+                questions: updatedQuestions,
+                updatedAt: new Date().toISOString()
+              });
+            }}
+          />
+        )}
       </div>
     </AdminLayout>
   );
