@@ -4,6 +4,15 @@ import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
+// Define the option type to handle both string and object options
+interface OptionObject {
+  text: string;
+  imageUrl?: string;
+  styleCategory?: string;
+}
+
+type Option = string | OptionObject;
+
 interface MultipleChoiceComponentProps {
   data: QuizComponentData['data'];
   style: QuizComponentData['style'];
@@ -66,9 +75,10 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({
         getColumnsClass()
       )}>
         {(data.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => {
-          // Handle both string options and object options
-          const optionText = typeof option === 'string' ? option : option.text;
-          const optionImage = typeof option === 'object' && option.imageUrl ? option.imageUrl : null;
+          // Handle both string options and object options with proper type checking
+          const optionValue = option as Option;
+          const optionText = typeof optionValue === 'string' ? optionValue : optionValue.text;
+          const optionImage = typeof optionValue === 'object' && optionValue?.imageUrl ? optionValue.imageUrl : null;
           
           return (
             <div 
