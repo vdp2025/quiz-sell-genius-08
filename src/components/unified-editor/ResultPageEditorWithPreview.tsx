@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QuizTemplate } from '@/types/quizTemplate';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import EditableComponent from '@/components/result-editor/EditableComponent';
 import QuizResult from '@/components/QuizResult';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { createDefaultConfig } from '@/utils/resultPageDefaults';
 
 interface ResultPageEditorWithPreviewProps {
   template: QuizTemplate;
@@ -46,65 +47,70 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
       percentage: 10
     }
   ];
+
+  // Convert template.resultPageSettings to ResultPageConfig if needed
+  const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(
+    template.resultPageSettings && 
+    'header' in template.resultPageSettings ? 
+    template.resultPageSettings as ResultPageConfig : 
+    createDefaultConfig(mockPrimaryStyle.category)
+  );
+
+  // Initialize resultPageConfig when component mounts or template changes
+  useEffect(() => {
+    if (template.resultPageSettings) {
+      // Check if the resultPageSettings already has the required structure
+      if ('header' in template.resultPageSettings && 
+          'mainContent' in template.resultPageSettings && 
+          'offer' in template.resultPageSettings) {
+        setResultPageConfig(template.resultPageSettings as ResultPageConfig);
+      } else {
+        // Convert from old format to new format
+        const defaultConfig = createDefaultConfig(mockPrimaryStyle.category);
+        
+        // Try to map old properties to new structure
+        if (template.resultPageSettings.headerConfig) {
+          defaultConfig.header.content = {
+            ...defaultConfig.header.content,
+            ...template.resultPageSettings.headerConfig
+          };
+        }
+        
+        if (template.resultPageSettings.mainContentConfig) {
+          defaultConfig.mainContent.content = {
+            ...defaultConfig.mainContent.content,
+            ...template.resultPageSettings.mainContentConfig
+          };
+        }
+        
+        if (template.resultPageSettings.offerConfig) {
+          defaultConfig.offer.hero.content = {
+            ...defaultConfig.offer.hero.content,
+            ...template.resultPageSettings.offerConfig
+          };
+        }
+        
+        // Preserve blocks if they exist
+        if (template.resultPageSettings.blocks) {
+          defaultConfig.blocks = template.resultPageSettings.blocks;
+        }
+        
+        setResultPageConfig(defaultConfig);
+        
+        // Update the parent with the new structure
+        onResultSettingsUpdate(defaultConfig);
+      }
+    } else {
+      // Create a new default config if none exists
+      const defaultConfig = createDefaultConfig(mockPrimaryStyle.category);
+      setResultPageConfig(defaultConfig);
+      onResultSettingsUpdate(defaultConfig);
+    }
+  }, [template.resultPageSettings, mockPrimaryStyle.category, onResultSettingsUpdate]);
   
   const handleConfigUpdate = (sectionKey: string, data: any) => {
-    if (!template.resultPageSettings) {
-      // Create a proper ResultPageConfig structure
-      template.resultPageSettings = {
-        styleType: mockPrimaryStyle.category,
-        header: {
-          visible: true,
-          content: {},
-          style: {}
-        },
-        mainContent: {
-          visible: true,
-          content: {},
-          style: {}
-        },
-        secondaryStyles: {
-          visible: true,
-          content: {},
-          style: {}
-        },
-        offer: {
-          hero: {
-            visible: true,
-            content: {},
-            style: {}
-          },
-          benefits: {
-            visible: true,
-            content: {},
-            style: {}
-          },
-          products: {
-            visible: true,
-            content: {},
-            style: {}
-          },
-          pricing: {
-            visible: true,
-            content: {},
-            style: {}
-          },
-          testimonials: {
-            visible: true,
-            content: {},
-            style: {}
-          },
-          guarantee: {
-            visible: true,
-            content: {},
-            style: {}
-          }
-        },
-        blocks: []
-      };
-    }
-    
-    // Atualizar a configuração específica com base na chave da seção
-    const updatedSettings = { ...template.resultPageSettings } as ResultPageConfig;
+    // Update the configuration specific to the section key
+    const updatedSettings = { ...resultPageConfig };
     
     if (sectionKey === 'header.content') {
       if (updatedSettings.header) {
@@ -119,7 +125,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
         updatedSettings.offer.hero.content = { ...updatedSettings.offer.hero.content, ...data };
       }
     } else {
-      // Para outras seções, atualizar a propriedade específica
+      // For other sections, update the specific property
       const parts = sectionKey.split('.');
       let current: any = updatedSettings;
       
@@ -133,6 +139,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
       current[parts[parts.length - 1]] = data;
     }
     
+    setResultPageConfig(updatedSettings);
     onResultSettingsUpdate(updatedSettings);
   };
   
@@ -143,7 +150,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
         <QuizResult 
           primaryStyle={mockPrimaryStyle} 
           secondaryStyles={mockSecondaryStyles} 
-          config={template.resultPageSettings as ResultPageConfig}
+          config={resultPageConfig}
         />
       </ScrollArea>
     );
@@ -158,21 +165,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
               components={{
                 primaryStyle: mockPrimaryStyle,
                 secondaryStyles: mockSecondaryStyles,
-                config: template.resultPageSettings || {
-                  styleType: mockPrimaryStyle.category,
-                  header: { visible: true, content: {}, style: {} },
-                  mainContent: { visible: true, content: {}, style: {} },
-                  secondaryStyles: { visible: true, content: {}, style: {} },
-                  offer: {
-                    hero: { visible: true, content: {}, style: {} },
-                    benefits: { visible: true, content: {}, style: {} },
-                    products: { visible: true, content: {}, style: {} },
-                    pricing: { visible: true, content: {}, style: {} },
-                    testimonials: { visible: true, content: {}, style: {} },
-                    guarantee: { visible: true, content: {}, style: {} }
-                  },
-                  blocks: []
-                }
+                config: resultPageConfig
               }}
               onUpdate={handleConfigUpdate}
             />
@@ -197,7 +190,7 @@ export const ResultPageEditorWithPreview: React.FC<ResultPageEditorWithPreviewPr
                 <QuizResult 
                   primaryStyle={mockPrimaryStyle}
                   secondaryStyles={mockSecondaryStyles}
-                  config={template.resultPageSettings as ResultPageConfig}
+                  config={resultPageConfig}
                   previewMode={true}
                 />
               </div>

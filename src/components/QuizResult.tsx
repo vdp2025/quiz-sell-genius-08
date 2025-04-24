@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
@@ -27,6 +26,18 @@ const QuizResult: React.FC<QuizResultProps> = ({
 }) => {
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
+  
+  useEffect(() => {
+    if (user && user.userName) {
+      setUserName(user.userName);
+    } else {
+      const storedName = localStorage.getItem('userName');
+      if (storedName) {
+        setUserName(storedName);
+      }
+    }
+  }, [user]);
+
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
   
   useEffect(() => {
@@ -50,17 +61,6 @@ const QuizResult: React.FC<QuizResultProps> = ({
       setConfig(null);
     }
   }, [primaryStyle.category, externalConfig]);
-
-  useEffect(() => {
-    if (user && user.userName) {
-      setUserName(user.userName);
-    } else {
-      const storedName = localStorage.getItem('userName');
-      if (storedName) {
-        setUserName(storedName);
-      }
-    }
-  }, [user]);
 
   if (!primaryStyle || !secondaryStyles) {
     console.error('Missing required props:', { primaryStyle, secondaryStyles });

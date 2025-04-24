@@ -1,12 +1,13 @@
 
 import { QuizQuestion } from './quiz';
+import { ResultPageConfig } from './resultPageConfig';
 
 export interface QuizTemplate {
   id: string;
   name: string;
   description: string;
   questions: QuizQuestion[];
-  resultPageSettings: {
+  resultPageSettings: ResultPageConfig | {
     styleType: string;
     blocks: any[];
     headerConfig: any;
