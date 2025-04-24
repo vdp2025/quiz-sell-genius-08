@@ -32,20 +32,6 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
     }
   };
   
-  // Helper to get formatted options
-  const getFormattedOptions = () => {
-    if (!data.options) return [];
-    
-    return data.options.map((option: any) => {
-      if (typeof option === 'string') {
-        return { text: option, imageUrl: '', styleCategory: 'Natural' };
-      }
-      return option;
-    });
-  };
-  
-  const options = getFormattedOptions();
-  
   return (
     <div 
       className={cn(
@@ -60,11 +46,11 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
       }}
     >
       <h2 className="text-xl sm:text-2xl font-playfair text-center mb-5 px-3 pt-3 font-semibold tracking-normal">
-        {data.question || 'Pergunta do Quiz'}
+        {data.title || 'Pergunta do Quiz'}
       </h2>
       
       <p className="text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-        {`Selecione ${multiSelect} ${multiSelect === 1 ? 'opção' : 'opções'}`}
+        {data.question || `Selecione ${multiSelect} opções`}
       </p>
       
       <div className={cn(
@@ -72,7 +58,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         getGridColumns(),
         showImages && "mb-4 relative"
       )}>
-        {options.map((option, index) => (
+        {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => (
           <div
             key={index}
             className={cn(
@@ -80,12 +66,12 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
               showImages ? "flex flex-col" : "p-4"
             )}
           >
-            {showImages && option.imageUrl && (
+            {showImages && data.optionImages && data.optionImages[index] && (
               <div className="w-full">
                 <AspectRatio ratio={4 / 3} className="max-h-48">
                   <img 
-                    src={option.imageUrl} 
-                    alt={option.text}
+                    src={data.optionImages[index]} 
+                    alt={option}
                     className="w-full h-full object-cover rounded-t-lg"
                   />
                 </AspectRatio>
@@ -97,16 +83,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                 "flex-1 p-3 text-[#432818]",
                 showImages ? "border-t border-[#B89B7A]/10" : ""
               )}>
-                <div className="flex items-center">
-                  <div className="w-5 h-5 border-2 border-[#B89B7A] rounded-full flex-shrink-0 mr-3"></div>
-                  <span>{option.text}</span>
-                </div>
-                
-                {option.styleCategory && (
-                  <div className="ml-8 mt-1 text-xs text-[#8F7A6A]">
-                    Estilo: {option.styleCategory}
-                  </div>
-                )}
+                {option}
               </div>
             )}
             
@@ -137,7 +114,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         <div 
           className="h-full bg-[#B89B7A]" 
           style={{ 
-            width: `${(data.stageNumber || 1) / 7 * 100}%` 
+            width: `${(data.stageNumber || 0) / 7 * 100}%` 
           }}
         ></div>
       </div>

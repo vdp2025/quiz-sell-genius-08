@@ -98,110 +98,41 @@ const QuizQuestionEditor: React.FC<QuizQuestionEditorProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label>Tipo de Exibição</Label>
-            <Select
-              value={component.data.displayType || 'both'}
-              onValueChange={(value: 'text' | 'image' | 'both') => onUpdate({
-                data: { ...component.data, displayType: value }
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="text">Apenas texto</SelectItem>
-                <SelectItem value="image">Apenas imagem</SelectItem>
-                <SelectItem value="both">Texto e imagem</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Número de Seleções</Label>
-            <Select
-              value={String(component.data.multiSelect || 3)}
-              onValueChange={(value) => onUpdate({
-                data: { ...component.data, multiSelect: parseInt(value) }
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Número de seleções" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1 seleção</SelectItem>
-                <SelectItem value="3">3 seleções</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label>Layout de Colunas</Label>
-            <Select
-              value={String(component.data.layout?.columns || 2)}
-              onValueChange={(value: string) => {
-                // Ensure we only pass valid column values (1, 2, 3, or 4)
-                const columnValue = parseInt(value);
-                const validColumnValue = (columnValue >= 1 && columnValue <= 4) ? 
-                  columnValue as 1 | 2 | 3 | 4 : 
-                  2;
-                
-                onUpdate({
-                  data: { 
-                    ...component.data, 
-                    layout: {
-                      ...component.data.layout,
-                      columns: validColumnValue
-                    }
-                  }
-                });
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Número de colunas" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1 coluna</SelectItem>
-                <SelectItem value="2">2 colunas</SelectItem>
-                <SelectItem value="3">3 colunas</SelectItem>
-                <SelectItem value="4">4 colunas</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label>Tamanho das Imagens</Label>
-            <Select
-              value={component.data.imageSize || 'medium'}
-              onValueChange={(value: 'small' | 'medium' | 'large') => onUpdate({
-                data: { ...component.data, imageSize: value }
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Tamanho da imagem" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="small">Pequeno</SelectItem>
-                <SelectItem value="medium">Médio</SelectItem>
-                <SelectItem value="large">Grande</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
         <div className="space-y-2">
-          <Label>Número da Pergunta (para progressão)</Label>
-          <Input
-            type="number"
-            min="1"
-            value={component.data.stageNumber || 1}
-            onChange={(e) => onUpdate({
-              data: { ...component.data, stageNumber: parseInt(e.target.value) }
+          <Label>Tipo de Exibição</Label>
+          <Select
+            value={component.data.displayType || 'text'}
+            onValueChange={(value: 'text' | 'image' | 'both') => onUpdate({
+              data: { ...component.data, displayType: value }
             })}
-          />
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione o tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="text">Apenas texto</SelectItem>
+              <SelectItem value="image">Apenas imagem</SelectItem>
+              <SelectItem value="both">Texto e imagem</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Número de Seleções</Label>
+          <Select
+            value={String(component.data.multiSelect || 3)}
+            onValueChange={(value) => onUpdate({
+              data: { ...component.data, multiSelect: parseInt(value) }
+            })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Número de seleções" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1 seleção</SelectItem>
+              <SelectItem value="3">3 seleções</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
