@@ -14,6 +14,7 @@ interface EditorPreviewProps {
   onDeleteBlock?: (id: string) => void;
   onReorderBlocks?: (startIndex: number, endIndex: number) => void;
   isPreviewMode?: boolean;
+  isPreviewing?: boolean;
   primaryStyle: StyleResult;
 }
 
@@ -25,6 +26,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   onDeleteBlock,
   onReorderBlocks,
   isPreviewMode = false,
+  isPreviewing = false,
   primaryStyle
 }) => {
   const handleSelectBlock = useCallback((id: string) => {
@@ -41,7 +43,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
             index={index}
             isSelected={selectedBlockId === block.id}
             onClick={() => handleSelectBlock(block.id)}
-            isPreviewMode={isPreviewMode}
+            isPreviewMode={isPreviewMode || isPreviewing}
             onReorderBlocks={onReorderBlocks}
             primaryStyle={primaryStyle}
             onDelete={onDeleteBlock ? () => onDeleteBlock(block.id) : undefined}

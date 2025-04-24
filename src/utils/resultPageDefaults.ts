@@ -1,199 +1,86 @@
 
-import { ResultPageConfig } from '@/types/resultPageConfig';
+import { ResultPageConfig } from "@/types/resultPageConfig";
+import { generateId } from "./idGenerator";
 
 export const createDefaultConfig = (styleType: string): ResultPageConfig => {
   return {
-    styleType,
     header: {
+      id: generateId(),
+      type: 'header',
       content: {
-        title: 'Seu Estilo Predominante',
-        subtitle: 'Descubra mais sobre seu estilo único e como aproveitar ao máximo suas características'
+        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo Marca',
+        title: 'Seu Resultado: Estilo ' + styleType,
       },
       style: {
-        paddingY: '24',
-        paddingX: '16',
-        backgroundColor: '#FAF9F7',
-        textColor: '#432818',
-        borderRadius: '0'
-      },
-      visible: true
+        backgroundColor: '#FFFFFF',
+        padding: '24px',
+        maxWidth: '1200px',
+      }
     },
     mainContent: {
+      id: generateId(),
+      type: 'main-content',
       content: {
-        description: 'Aqui será exibida uma descrição detalhada do seu estilo predominante, com características, recomendações e dicas personalizadas.',
-        mainImage: 'https://placehold.co/600x400?text=Estilo+Predominante',
-        tabletImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
-        showSecondaryStyles: true,
-        showOffer: true
+        title: 'Descubra Seu Estilo Pessoal',
+        description: 'Entenda como aplicar seu estilo predominante no dia a dia',
+        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
       },
       style: {
-        padding: '20px',
-        backgroundColor: '#FFFFFF',
-        textColor: '#432818'
-      },
-      visible: true
+        backgroundColor: '#FAF9F7',
+        padding: '32px',
+      }
     },
     offer: {
       hero: {
+        id: generateId(),
+        type: 'hero',
         content: {
-          title: 'Guia de Estilo e Imagem Personalizado',
-          description: 'Adquira seu guia completo com análise detalhada, paleta de cores personalizada e recomendações de peças específicas para o seu tipo de estilo.',
-          ctaText: 'Adquirir meu Guia de Estilo',
-          ctaUrl: '#',
-          price: 'R$ 97,00',
-          regularPrice: 'R$ 147,00'
+          headline: 'Guia Completo de Estilo',
+          subheadline: 'Revolucione seu guarda-roupa com nosso guia personalizado',
+          image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+          buttonText: 'Quero meu guia agora',
+          buttonUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10'
         },
         style: {
-          padding: '24px',
-          backgroundColor: '#FAF9F7',
-          color: '#432818'
-        },
-        visible: true
-      },
-      benefits: {
-        visible: true,
-        content: {
-          title: 'Benefícios',
-          items: [
-            'Análise detalhada do seu estilo pessoal',
-            'Paleta de cores personalizada',
-            'Guia de peças essenciais para o seu guarda-roupa',
-            'Dicas de tecidos e modelagens ideais'
-          ]
-        },
-        style: {
-          padding: '20px',
-        }
-      },
-      products: {
-        visible: true,
-        content: {
-          title: 'O que você vai receber'
-        },
-        style: {
-          padding: '20px',
+          backgroundColor: '#FFFFFF',
+          padding: '32px'
         }
       },
       pricing: {
-        visible: true,
+        id: generateId(),
+        type: 'pricing',
         content: {
-          price: 'R$ 97,00',
-          regularPrice: 'R$ 147,00',
-          buttonText: 'Comprar Agora'
-        },
-        style: {
-          padding: '20px',
+          price: '39,90',
+          originalPrice: '149,90',
+          installments: '12x de R$3,99',
         }
       },
       testimonials: {
-        visible: true,
+        id: generateId(),
+        type: 'testimonials',
         content: {
-          title: 'Depoimentos'
-        },
-        style: {
-          padding: '20px',
-        }
-      },
-      guarantee: {
-        visible: true,
-        content: {
-          title: 'Garantia',
-          text: 'Satisfação garantida ou seu dinheiro de volta em até 7 dias.'
-        },
-        style: {
-          padding: '20px',
+          items: [
+            {
+              text: "Este guia transformou completamente meu estilo!",
+              author: "Maria Silva",
+              image: ""
+            },
+            {
+              text: "Agora entendo como valorizar minha personalidade através das roupas.",
+              author: "Ana Oliveira",
+              image: ""
+            }
+          ]
         }
       }
     },
-    secondaryStyles: {
-      visible: true,
-      content: {},
-      style: {
-        padding: '20px'
-      }
-    },
+    blocks: [],
     globalStyles: {
       primaryColor: '#B89B7A',
       secondaryColor: '#432818',
-      textColor: '#432818',
       backgroundColor: '#FAF9F7',
-      fontFamily: 'Playfair Display, serif'
-    },
-    blocks: []
-  };
-};
-
-export const createOfferConfig = () => {
-  return {
-    hero: {
-      content: {
-        title: 'Guia de Estilo e Imagem Personalizado',
-        description: 'Adquira seu guia completo com análise detalhada, paleta de cores personalizada e recomendações de peças específicas para o seu tipo de estilo.',
-        ctaText: 'Adquirir meu Guia de Estilo',
-        ctaUrl: '#',
-        price: 'R$ 97,00',
-        regularPrice: 'R$ 147,00'
-      },
-      style: {
-        padding: '24px',
-        backgroundColor: '#FAF9F7',
-        color: '#432818'
-      },
-      visible: true
-    },
-    benefits: {
-      visible: true,
-      content: {
-        title: 'Benefícios',
-        items: [
-          'Análise detalhada do seu estilo pessoal',
-          'Paleta de cores personalizada',
-          'Guia de peças essenciais para o seu guarda-roupa',
-          'Dicas de tecidos e modelagens ideais'
-        ]
-      },
-      style: {
-        padding: '20px',
-      }
-    },
-    products: {
-      visible: true,
-      content: {
-        title: 'O que você vai receber'
-      },
-      style: {
-        padding: '20px',
-      }
-    },
-    pricing: {
-      visible: true,
-      content: {
-        price: 'R$ 97,00',
-        regularPrice: 'R$ 147,00',
-        buttonText: 'Comprar Agora'
-      },
-      style: {
-        padding: '20px',
-      }
-    },
-    testimonials: {
-      visible: true,
-      content: {
-        title: 'Depoimentos'
-      },
-      style: {
-        padding: '20px',
-      }
-    },
-    guarantee: {
-      visible: true,
-      content: {
-        title: 'Garantia',
-        text: 'Satisfação garantida ou seu dinheiro de volta em até 7 dias.'
-      },
-      style: {
-        padding: '20px',
-      }
+      fontFamily: 'Inter, sans-serif'
     }
   };
 };

@@ -10,7 +10,7 @@ export const getDefaultContentForType = (type: Block['type']): any => {
         alignment: 'center'
       };
       
-    case 'styleResult':
+    case 'style-result':
       return {
         description: '',
         customImage: ''
@@ -41,7 +41,7 @@ export const getDefaultContentForType = (type: Block['type']): any => {
         ]
       };
       
-    case 'testimonial':
+    case 'testimonials':
       return {
         items: [
           {
@@ -67,11 +67,12 @@ export const getDefaultContentForType = (type: Block['type']): any => {
         text: 'Se você não ficar completamente satisfeita com o seu Guia de Estilo Personalizado, basta solicitar o reembolso em até 7 dias após a compra.'
       };
       
-    case 'divider':
+    case 'spacer':
       return {
         style: 'solid',
         color: '#E5E7EB',
-        spacing: 'medium'
+        spacing: 'medium',
+        height: '40px'
       };
       
     default:

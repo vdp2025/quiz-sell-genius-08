@@ -12,7 +12,8 @@ interface SpacerBlockEditorProps {
 
 const SpacerBlockEditor: React.FC<SpacerBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
-  const spacerHeight = parseInt(content.height?.replace('px', '') || '40');
+  const heightValue = content.height?.toString() || '40px';
+  const spacerHeight = parseInt(typeof heightValue === 'string' ? heightValue.replace('px', '') : '40');
 
   const handleSliderChange = (value: number[]) => {
     onUpdate({ height: `${value[0]}px` });

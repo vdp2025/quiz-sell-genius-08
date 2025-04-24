@@ -3,7 +3,7 @@ import React from 'react';
 import { SalesPageConfig, defaultSalesPageConfig } from '@/types/salesPageConfig';
 import SalesPageHeader from './SalesPageHeader';
 import SalesHeroSection from './SalesHeroSection';
-import SalesProductCard from './SalesProductCard';
+import { SalesProductCard } from './SalesProductCard';
 import SalesBenefitList from './SalesBenefitList';
 import SalesBonusSection from './SalesBonusSection';
 import SalesTestimonials from './SalesTestimonials';

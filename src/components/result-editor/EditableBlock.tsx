@@ -13,7 +13,7 @@ interface EditableBlockProps {
   primaryStyle?: StyleResult;
   secondaryStyles?: StyleResult[];
   onReorderBlocks?: (sourceIndex: number, destinationIndex: number) => void;
-  index?: number;
+  index: number;
 }
 
 export const EditableBlock: React.FC<EditableBlockProps> = ({
