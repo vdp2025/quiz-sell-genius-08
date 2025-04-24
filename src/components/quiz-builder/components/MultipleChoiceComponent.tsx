@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 interface MultipleChoiceComponentProps {
   data: {
     question?: string;
-    options?: string[];
+    options?: string[] | Array<{text: string; imageUrl?: string; styleCategory?: string}>;
     optionImages?: string[];
     displayType?: 'text' | 'image' | 'both';
     minSelections?: number;
@@ -21,8 +21,42 @@ interface MultipleChoiceComponentProps {
 }
 
 const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data, style, isSelected }) => {
-  const options = data.options || ['Opção 1', 'Opção 2', 'Opção 3'];
+  // Safely handle options - ensure we're dealing with an array and normalize data format
+  const normalizeOptions = () => {
+    if (!data.options) return ['Opção 1', 'Opção 2', 'Opção 3'];
+    
+    if (!Array.isArray(data.options)) {
+      console.warn('Expected options to be an array');
+      return ['Opção 1', 'Opção 2', 'Opção 3'];
+    }
+    
+    return data.options;
+  };
+  
+  const options = normalizeOptions();
   const displayType = data.displayType || 'text';
+  
+  // Helper function to safely get option text
+  const getOptionText = (option: any, index: number): string => {
+    if (typeof option === 'string') {
+      return option;
+    }
+    if (option && typeof option === 'object' && 'text' in option) {
+      return option.text || `Opção ${index + 1}`;
+    }
+    return `Opção ${index + 1}`;
+  };
+  
+  // Helper function to safely get option image
+  const getOptionImage = (option: any, index: number): string | null => {
+    if (typeof option === 'object' && option && 'imageUrl' in option) {
+      return option.imageUrl || null;
+    }
+    if (data.optionImages && Array.isArray(data.optionImages) && data.optionImages[index]) {
+      return data.optionImages[index];
+    }
+    return null;
+  };
   
   return (
     <div 
@@ -52,10 +86,10 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data,
           >
             {(displayType === 'image' || displayType === 'both') && (
               <div className="mb-2">
-                {data.optionImages && data.optionImages[index] ? (
+                {getOptionImage(option, index) ? (
                   <img 
-                    src={data.optionImages[index]} 
-                    alt={option}
+                    src={getOptionImage(option, index) || ''} 
+                    alt={getOptionText(option, index)}
                     className="w-full h-32 object-cover rounded-md"
                   />
                 ) : (
@@ -69,7 +103,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data,
             {(displayType === 'text' || displayType === 'both') && (
               <div className="flex items-center">
                 <div className="w-5 h-5 border border-gray-300 rounded mr-3"></div>
-                <span>{option}</span>
+                <span>{getOptionText(option, index)}</span>
               </div>
             )}
           </div>

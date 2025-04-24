@@ -77,7 +77,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               )
             : cn(
                 "leading-relaxed",
-                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base", // Standardized text size for text-only options
+                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base",
                 isSelected && "text-brand-coffee font-semibold"
               )
         )}>

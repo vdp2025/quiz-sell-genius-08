@@ -21,14 +21,14 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
   
   const renderHeader = () => (
     <div className="text-center mb-6">
-      <h1 className="text-2xl md:text-3xl font-playfair mb-2">{data.title}</h1>
+      <h1 className="text-2xl md:text-3xl font-playfair mb-2">{data.title || ''}</h1>
       {data.subtitle && <p className="text-sm md:text-base">{data.subtitle}</p>}
     </div>
   );
   
   const renderText = () => (
     <div className="prose max-w-none">
-      <p>{data.text}</p>
+      <p>{data.text || ''}</p>
     </div>
   );
   
@@ -61,8 +61,8 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
   
   const renderStageCover = () => (
     <div className="text-center py-8">
-      <h1 className="text-3xl font-playfair mb-6">{data.headline}</h1>
-      <p className="mb-8 text-gray-700">{data.subheadline}</p>
+      <h1 className="text-3xl font-playfair mb-6">{data.headline || ''}</h1>
+      <p className="mb-8 text-gray-700">{data.subheadline || ''}</p>
       <button className="bg-[#B89B7A] text-white px-6 py-2 rounded-md hover:bg-[#A38A69] transition-colors">
         {data.buttonText || 'Começar'}
       </button>
@@ -72,10 +72,10 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
   const renderStageQuestion = () => (
     <div className="text-center mb-6">
       <div className="mb-2 text-sm text-gray-500">
-        {data.progressText?.replace('{current}', String(data.stageNumber))
+        {data.progressText?.replace('{current}', String(data.stageNumber || 1))
           .replace('{total}', '10') || `Questão ${data.stageNumber || 1} de 10`}
       </div>
-      <h2 className="text-xl font-playfair">{data.stageTitle}</h2>
+      <h2 className="text-xl font-playfair">{data.stageTitle || ''}</h2>
     </div>
   );
   
