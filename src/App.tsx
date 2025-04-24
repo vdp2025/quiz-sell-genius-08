@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import QuizResult from './components/quiz-result/QuizResult';
-import Quiz from './components/QuizWelcome'; // Fixed import path
+import { QuizWelcome } from './components/QuizWelcome'; // Changed to named import
 import { styleConfig } from './config/styleConfig';
 import QuizBuilderPage from './pages/QuizBuilderPage';
 import ResultPageEditorPage from './pages/ResultPageEditorPage';
@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Quiz />} />
+        <Route path="/" element={<QuizWelcome onStart={() => {}} />} /> {/* Added required onStart prop */}
         <Route
           path="/resultado"
           element={
