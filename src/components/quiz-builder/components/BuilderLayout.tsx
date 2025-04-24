@@ -4,7 +4,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { StagesPanel } from '../StagesPanel';
 import { PropertiesPanel } from '../PropertiesPanel';
 import { ComponentPreviewPanel } from '../preview/ComponentPreviewPanel';
-import { ComponentToolbar } from './ComponentToolbar';
+import ComponentToolbar from './ComponentToolbar';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 
 interface BuilderLayoutProps {
