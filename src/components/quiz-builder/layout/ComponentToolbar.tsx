@@ -1,156 +1,64 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Type,
-  Image,
-  Layout,
-  List,
-  FileText,
-  LayoutGrid,
-  CheckSquare,
-  CircleSlash
-} from 'lucide-react';
-import { QuizStage, QuizComponentType } from '@/types/quizBuilder';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { QuizStage, QuizComponentType } from '@/types/quizBuilder/componentTypes';
+import { FileText, Image, Type, AlignLeft, CheckSquare, SquareStack, Clock, Eye, EyeOff } from 'lucide-react';
 
 interface ComponentToolbarProps {
   activeStage: QuizStage | null;
-  isPreviewing: boolean;
   onComponentSelect: (type: string) => void;
+  isPreviewing: boolean;
 }
 
 const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
   activeStage,
-  isPreviewing,
-  onComponentSelect
+  onComponentSelect,
+  isPreviewing
 }) => {
-  if (!activeStage) {
-    return (
-      <div className="p-4 border-b text-center text-gray-400">
-        Selecione uma etapa para adicionar componentes
-      </div>
-    );
-  }
-
-  const commonComponents = [
-    { type: 'header', icon: Layout, label: 'Cabeçalho' },
-    { type: 'text', icon: FileText, label: 'Texto' },
-    { type: 'headline', icon: Type, label: 'Título' },
-    { type: 'image', icon: Image, label: 'Imagem' },
+  const components = [
+    { type: 'header', label: 'Cabeçalho', icon: <Type className="w-4 h-4" /> },
+    { type: 'text', label: 'Texto', icon: <AlignLeft className="w-4 h-4" /> },
+    { type: 'image', label: 'Imagem', icon: <Image className="w-4 h-4" /> },
+    { type: 'multipleChoice', label: 'Múltipla Escolha', icon: <CheckSquare className="w-4 h-4" /> },
+    { type: 'singleChoice', label: 'Escolha Única', icon: <SquareStack className="w-4 h-4" /> },
+    { type: 'countdown', label: 'Contagem', icon: <Clock className="w-4 h-4" /> }
   ];
-  
-  const questionComponents = [
-    { type: 'multipleChoice', icon: CheckSquare, label: 'Múltipla Escolha' },
-    { type: 'singleChoice', icon: CircleSlash, label: 'Escolha Única' },
-  ];
-  
-  const resultComponents = [
-    { type: 'quizResult', icon: LayoutGrid, label: 'Resultado' },
-    { type: 'benefitsList', icon: List, label: 'Benefícios' },
-  ];
-
-  const getAvailableComponents = () => {
-    let availableComponents = [...commonComponents];
-    
-    if (activeStage.type === 'question') {
-      availableComponents = [...availableComponents, ...questionComponents];
-    }
-    
-    if (activeStage.type === 'result') {
-      availableComponents = [...availableComponents, ...resultComponents];
-    }
-    
-    return availableComponents;
-  };
 
   return (
-    <div className="p-2 border-b flex items-center justify-between bg-white">
-      <div className="flex items-center">
-        <span className="text-sm font-medium mr-3">
-          {activeStage.title || `Etapa ${activeStage.id.substring(0, 4)}`}
-        </span>
-        
-        <span className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">
-          {activeStage.type === 'cover' && 'Capa'}
-          {activeStage.type === 'question' && 'Questão'}
-          {activeStage.type === 'result' && 'Resultado'}
-        </span>
+    <div className="p-3 bg-white border-b flex justify-between items-center">
+      <div className="flex space-x-2">
+        {activeStage && components.map((component) => (
+          <Button
+            key={component.type}
+            variant="outline"
+            size="sm"
+            className="flex items-center space-x-1"
+            onClick={() => onComponentSelect(component.type)}
+            disabled={isPreviewing}
+          >
+            {component.icon}
+            <span className="text-xs">{component.label}</span>
+          </Button>
+        ))}
       </div>
       
-      {!isPreviewing && (
-        <div className="flex items-center gap-1">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-xs"
-              >
-                Adicionar Componente
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-2" align="end">
-              <ScrollArea className="h-72">
-                <div className="space-y-2">
-                  <div className="text-xs font-semibold text-gray-500 px-2">Componentes Básicos</div>
-                  {commonComponents.map((component) => (
-                    <Button
-                      key={component.type}
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm"
-                      onClick={() => onComponentSelect(component.type)}
-                    >
-                      <component.icon className="h-4 w-4 mr-2" />
-                      {component.label}
-                    </Button>
-                  ))}
-                  
-                  {activeStage.type === 'question' && (
-                    <>
-                      <Separator className="my-2" />
-                      <div className="text-xs font-semibold text-gray-500 px-2">Componentes de Questão</div>
-                      {questionComponents.map((component) => (
-                        <Button
-                          key={component.type}
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start text-sm"
-                          onClick={() => onComponentSelect(component.type)}
-                        >
-                          <component.icon className="h-4 w-4 mr-2" />
-                          {component.label}
-                        </Button>
-                      ))}
-                    </>
-                  )}
-                  
-                  {activeStage.type === 'result' && (
-                    <>
-                      <Separator className="my-2" />
-                      <div className="text-xs font-semibold text-gray-500 px-2">Componentes de Resultado</div>
-                      {resultComponents.map((component) => (
-                        <Button
-                          key={component.type}
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start text-sm"
-                          onClick={() => onComponentSelect(component.type)}
-                        >
-                          <component.icon className="h-4 w-4 mr-2" />
-                          {component.label}
-                        </Button>
-                      ))}
-                    </>
-                  )}
-                </div>
-              </ScrollArea>
-            </PopoverContent>
-          </Popover>
-        </div>
-      )}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="flex items-center space-x-1"
+        onClick={() => {/* Toggle preview mode */}}
+      >
+        {isPreviewing ? (
+          <>
+            <EyeOff className="w-4 h-4" />
+            <span className="text-xs">Editar</span>
+          </>
+        ) : (
+          <>
+            <Eye className="w-4 h-4" />
+            <span className="text-xs">Visualizar</span>
+          </>
+        )}
+      </Button>
     </div>
   );
 };

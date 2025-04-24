@@ -30,6 +30,13 @@ export type QuizComponentType =
   | 'progress'
   | 'divider';
 
+export interface QuizStage {
+  id: string;
+  title: string;
+  order: number;
+  type: 'cover' | 'question' | 'result';
+}
+
 export interface QuizComponentData {
   id: string;
   type: QuizComponentType;

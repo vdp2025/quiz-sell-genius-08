@@ -5,7 +5,7 @@ import { StagesPanel } from '../stages/StagesPanel';
 import { PropertiesPanel } from '../properties/PropertiesPanel';
 import { ComponentsPreviewPanel } from '../preview/ComponentsPreviewPanel';
 import ComponentToolbar from './ComponentToolbar';
-import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
+import { QuizComponentData, QuizStage } from '@/types/quizBuilder/componentTypes';
 
 interface BuilderLayoutProps {
   components: QuizComponentData[];
@@ -96,11 +96,11 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
       <ResizablePanel defaultSize={25} className="bg-[#1A1F2C]">
         <PropertiesPanel 
           component={selectedComponent}
-          stage={activeStage}
-          onClose={() => onSelectComponent('')}
-          onUpdate={onComponentUpdate}
-          onUpdateStage={onStageUpdate}
-          onDelete={onComponentDelete}
+          onUpdate={(updates) => {
+            if (selectedComponentId) {
+              onComponentUpdate(selectedComponentId, updates);
+            }
+          }}
         />
       </ResizablePanel>
     </ResizablePanelGroup>
