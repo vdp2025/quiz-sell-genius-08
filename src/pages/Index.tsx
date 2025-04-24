@@ -2,14 +2,15 @@
 import { useState } from 'react';
 import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';
-import { useQuizContext } from '../context/QuizContext';
+import { useQuiz } from '../context/QuizContext';
 
 const Index = () => {
   const [started, setStarted] = useState(false);
-  const { startQuiz } = useQuizContext();
+  const { resetQuiz } = useQuiz();
 
   const handleStart = async (name: string) => {
     setStarted(true);
+    resetQuiz();
     console.log(`Quiz started by ${name}`);
     localStorage.setItem('userName', name);
   };

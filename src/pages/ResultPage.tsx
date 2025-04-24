@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 ﻿
+=======
+>>>>>>> 1536c934da19267d874eb3db76aa0734c71d7cd9
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -10,6 +13,7 @@ import { Progress } from '@/components/ui/progress';
 import { EditorButton } from '@/components/ui/EditorButton';
 >>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
@@ -25,15 +29,21 @@ import Testimonials from '@/components/quiz-result/sales/Testimonials';
 >>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 
 const ResultPage: React.FC = () => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
+  const { primaryStyle, secondaryStyles, quizResult } = useQuiz();
   const { globalStyles } = useGlobalStyles();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    console.log("ResultPage mounted. Quiz result:", quizResult);
+  }, [quizResult]);
 
+<<<<<<< HEAD
   if (!primaryStyle) {
 <<<<<<< HEAD
+=======
+  if (!quizResult) {
+    console.log("No quiz result found, showing error state");
+>>>>>>> 1536c934da19267d874eb3db76aa0734c71d7cd9
     return <ErrorState />;
 =======
     return (
@@ -58,7 +68,11 @@ const ResultPage: React.FC = () => {
   }
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  const { image, guideImage, description } = styleConfig[category] || {
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp",
+    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
+    description: "Descrição não disponível para este estilo."
+  };
 
   return (
     <div

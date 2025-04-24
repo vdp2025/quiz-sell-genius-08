@@ -29,7 +29,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         'lg': '1rem',
         'full': '9999px'
       }[style.borderRadius] : '0',
-      padding: `${style?.paddingY ? `${parseInt(style.paddingY) * 0.25}rem` : '1rem'} ${style?.paddingX ? `${parseInt(style.paddingX) * 0.25}rem` : '1rem'}`,
+      padding: `${style?.paddingY ? `${parseInt(style.paddingY.toString()) * 0.25}rem` : '1rem'} ${style?.paddingX ? `${parseInt(style.paddingX.toString()) * 0.25}rem` : '1rem'}`,
     };
   };
 
@@ -146,4 +146,3 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       );
   }
 };
-

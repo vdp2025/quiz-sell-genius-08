@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const highlightStrategicWords = (text: string): React.ReactNode => {
@@ -39,10 +38,9 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
     if (uniqueSortedWords.some(word => part.toLowerCase() === word.toLowerCase())) {
       return React.createElement('strong', { 
         key: index, 
-        className: 'text-[#432818] font-medium'  // Changed to match the coffee color theme
+        className: 'text-brand-text font-medium'
       }, part);
     }
     return part;
   });
 };
-

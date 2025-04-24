@@ -100,7 +100,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         getGridColumns(),
         showImages && "mb-4 relative"
       )}>
-        {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
+        {(Array.isArray(data.options) ? data.options : ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
           const { text, imageUrl } = extractOptionData(option, index);
           
           return (

@@ -1,88 +1,89 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
-import { JsonConfigEditor } from './JsonConfigEditor';
+import { Eye, LayoutTemplate, Save, Undo, Settings } from 'lucide-react';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 interface EditorToolbarProps {
-  onSave: () => void;
-  isPreviewMode: boolean;
+  isPreviewMode?: boolean; // Changed from isPreviewing to isPreviewMode
   onPreviewToggle: () => void;
-  onReset: () => void;
-  onEditGlobalStyles: () => void;
-  resultPageConfig: any;
-  onUpdateConfig: (config: any) => void;
   onShowTemplates?: () => void;
+  onSave?: () => void;
+  onReset?: () => void;
+  onEditGlobalStyles?: () => void;
+  resultPageConfig?: ResultPageConfig;
+  onUpdateConfig?: (newConfig: any) => void;
 }
 
-const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  onSave,
-  isPreviewMode,
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({
+  isPreviewMode = false, // Default value and renamed from isPreviewing
   onPreviewToggle,
+  onShowTemplates,
+  onSave,
   onReset,
   onEditGlobalStyles,
   resultPageConfig,
   onUpdateConfig,
-  onShowTemplates
 }) => {
   return (
     <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        {onShowTemplates && (
+      <h1 className="text-xl font-semibold text-[#432818]">Editor de Página de Resultados</h1>
+      
+      <div className="flex gap-2">
+        {onEditGlobalStyles && (
           <Button
             variant="outline"
-            onClick={onShowTemplates}
-            className="text-[#8F7A6A]"
+            size="sm"
+            onClick={onEditGlobalStyles}
           >
-            Modelos de Página
+            <Settings className="w-4 h-4 mr-2" />
+            Estilos Globais
           </Button>
         )}
+
         <Button
           variant="outline"
           size="sm"
           onClick={onPreviewToggle}
         >
           <Eye className="w-4 h-4 mr-2" />
-          {isPreviewMode ? 'Modo Edição' : 'Visualizar'}
+          {isPreviewMode ? "Editar" : "Visualizar"}
         </Button>
         
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onEditGlobalStyles}
-        >
-          <Palette className="w-4 h-4 mr-2" />
-          Estilos Globais
-        </Button>
+        {onShowTemplates && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onShowTemplates}
+          >
+            <LayoutTemplate className="w-4 h-4 mr-2" />
+            Templates
+          </Button>
+        )}
 
-        {resultPageConfig && onUpdateConfig && (
-          <JsonConfigEditor 
-            config={resultPageConfig}
-            onUpdate={onUpdateConfig}
-          />
+        {onReset && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onReset}
+          >
+            <Undo className="w-4 h-4 mr-2" />
+            Redefinir
+          </Button>
         )}
         
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onReset}
-          className="text-amber-600 hover:text-amber-700"
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Resetar
-        </Button>
-        
-        <Button
-          variant="default"
-          size="sm"
-          onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar
-        </Button>
+        {onSave && (
+          <Button
+            variant="default"
+            size="sm"
+            onClick={onSave}
+            className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            Salvar
+          </Button>
+        )}
       </div>
     </div>
   );
 };
-
-export default EditorToolbar;

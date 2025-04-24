@@ -1,3 +1,4 @@
+
 ﻿import React from 'react';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import ComponentRenderer from './ComponentRenderer';
@@ -31,6 +32,7 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
         <ComponentRenderer
           component={comp}
           isEditing={!isPreviewing && comp.id === selectedComponentId}
+          isSelected={comp.id === selectedComponentId}
         />
       </div>
     ))}
