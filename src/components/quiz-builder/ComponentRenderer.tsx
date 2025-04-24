@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
@@ -125,9 +126,9 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     case 'stageResult':
       return (
         <StageResultComponent 
-          data={data} 
-          style={style} 
-          isSelected={isSelected}
+          data={data}
+          style={style}
+          isSelected={isSelected && !isPreview}
         />
       );
 

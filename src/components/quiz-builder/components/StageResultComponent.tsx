@@ -69,4 +69,3 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({
 };
 
 export default StageResultComponent;
-
