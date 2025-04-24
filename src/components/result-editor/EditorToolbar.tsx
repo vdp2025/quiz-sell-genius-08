@@ -1,88 +1,42 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
-import { JsonConfigEditor } from './JsonConfigEditor';
+import { Eye, LayoutTemplate } from 'lucide-react';
 
 interface EditorToolbarProps {
-  onSave: () => void;
-  isPreviewMode: boolean;
+  isPreviewing: boolean;
   onPreviewToggle: () => void;
-  onReset: () => void;
-  onEditGlobalStyles: () => void;
-  resultPageConfig: any;
-  onUpdateConfig: (config: any) => void;
-  onShowTemplates?: () => void;
+  onShowTemplates: () => void;
 }
 
-const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  onSave,
-  isPreviewMode,
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({
+  isPreviewing,
   onPreviewToggle,
-  onReset,
-  onEditGlobalStyles,
-  resultPageConfig,
-  onUpdateConfig,
-  onShowTemplates
+  onShowTemplates,
 }) => {
   return (
     <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        {onShowTemplates && (
-          <Button
-            variant="outline"
-            onClick={onShowTemplates}
-            className="text-[#8F7A6A]"
-          >
-            Modelos de Página
-          </Button>
-        )}
+      <h1 className="text-xl font-semibold text-[#432818]">Editor de Página de Resultados</h1>
+      
+      <div className="flex gap-2">
         <Button
           variant="outline"
           size="sm"
           onClick={onPreviewToggle}
         >
           <Eye className="w-4 h-4 mr-2" />
-          {isPreviewMode ? 'Modo Edição' : 'Visualizar'}
+          {isPreviewing ? "Editar" : "Visualizar"}
         </Button>
         
         <Button
           variant="outline"
           size="sm"
-          onClick={onEditGlobalStyles}
+          onClick={onShowTemplates}
         >
-          <Palette className="w-4 h-4 mr-2" />
-          Estilos Globais
-        </Button>
-
-        {resultPageConfig && onUpdateConfig && (
-          <JsonConfigEditor 
-            config={resultPageConfig}
-            onUpdate={onUpdateConfig}
-          />
-        )}
-        
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onReset}
-          className="text-amber-600 hover:text-amber-700"
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Resetar
-        </Button>
-        
-        <Button
-          variant="default"
-          size="sm"
-          onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar
+          <LayoutTemplate className="w-4 h-4 mr-2" />
+          Templates
         </Button>
       </div>
     </div>
   );
 };
-
-export default EditorToolbar;
