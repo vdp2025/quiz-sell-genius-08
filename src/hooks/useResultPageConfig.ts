@@ -1,33 +1,29 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
-import { toast } from '@/components/ui/use-toast';
-import { createDefaultConfig } from '@/utils/resultPageDefaults';
 import { resultPageStorage } from '@/services/resultPageStorage';
-import { set, get, merge } from 'lodash';
+import { toast } from '@/components/ui/use-toast';
 
 export const useResultPageConfig = (styleType: string) => {
-  const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(createDefaultConfig(styleType));
+  const [config, setConfig] = useState<ResultPageConfig | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState<Error | null>(null);
+  
+  // Load config on init
   useEffect(() => {
     const loadConfig = async () => {
       setLoading(true);
       try {
-        const savedConfig = resultPageStorage.load(styleType);
-        if (savedConfig) {
-          setResultPageConfig(savedConfig);
-        } else {
-          setResultPageConfig(createDefaultConfig(styleType));
-        }
-      } catch (error) {
-        console.error('Error loading result page config:', error);
+        const loadedConfig = resultPageStorage.loadConfig(styleType);
+        setConfig(loadedConfig);
+      } catch (err) {
+        console.error('Error loading config:', err);
+        setError(err instanceof Error ? err : new Error('Failed to load config'));
         toast({
-          title: 'Erro ao carregar configuração',
-          description: 'Não foi possível carregar a configuração da página de resultados',
-          variant: 'destructive'
+          title: "Erro ao carregar configuração",
+          description: "Não foi possível carregar a configuração da página de resultado",
+          variant: "destructive",
         });
-        setResultPageConfig(createDefaultConfig(styleType));
       } finally {
         setLoading(false);
       }
@@ -35,65 +31,53 @@ export const useResultPageConfig = (styleType: string) => {
     
     loadConfig();
   }, [styleType]);
-
-  const updateSection = useCallback((path: string, newContent: any) => {
-    setResultPageConfig(prevConfig => {
-      const newConfig = { ...prevConfig };
-      set(newConfig, path, newContent);
-      return newConfig;
-    });
-  }, []);
-
-  const resetConfig = useCallback((styleType: string) => {
-    setResultPageConfig(createDefaultConfig(styleType));
-  }, []);
-
-  const saveConfig = useCallback(async () => {
+  
+  // Save config function
+  const saveConfig = useCallback((updatedConfig: ResultPageConfig) => {
     try {
-      await resultPageStorage.save(resultPageConfig);
-      toast({
-        title: 'Configuração salva',
-        description: 'A configuração da página de resultados foi salva com sucesso',
-      });
-      return true;
-    } catch (error) {
-      console.error('Error saving config:', error);
-      toast({
-        title: 'Erro ao salvar configuração',
-        description: 'Não foi possível salvar a configuração da página de resultados',
-        variant: 'destructive'
-      });
+      const success = resultPageStorage.saveConfig(styleType, updatedConfig);
+      if (success) {
+        setConfig(updatedConfig);
+        return true;
+      }
       return false;
-    }
-  }, [resultPageConfig]);
-
-  const importConfig = useCallback((importedConfig: any) => {
-    try {
-      // Ensure the imported config has the correct styleType
-      const configToImport = {
-        ...importedConfig,
-        styleType: styleType
-      };
-      
-      setResultPageConfig(configToImport);
-      return true;
-    } catch (error) {
-      console.error('Error importing config:', error);
-      toast({
-        title: 'Erro ao importar configuração',
-        description: 'O formato da configuração importada não é válido',
-        variant: 'destructive'
-      });
+    } catch (err) {
+      console.error('Error saving config:', err);
+      setError(err instanceof Error ? err : new Error('Failed to save config'));
       return false;
     }
   }, [styleType]);
-
+  
+  // Update section of the config
+  const updateSection = useCallback((path: string, value: any) => {
+    setConfig((prevConfig) => {
+      if (!prevConfig) return null;
+      
+      const newConfig = { ...prevConfig };
+      const pathParts = path.split('.');
+      
+      let current: any = newConfig;
+      for (let i = 0; i < pathParts.length - 1; i++) {
+        if (!current[pathParts[i]]) {
+          current[pathParts[i]] = {};
+        }
+        current = current[pathParts[i]];
+      }
+      
+      current[pathParts[pathParts.length - 1]] = value;
+      
+      resultPageStorage.saveConfig(styleType, newConfig);
+      return newConfig;
+    });
+  }, [styleType]);
+  
   return {
-    resultPageConfig,
-    updateSection,
-    resetConfig,
+    config,
+    loading,
+    error,
     saveConfig,
-    importConfig,
-    loading
+    updateSection
   };
 };
+
+export default useResultPageConfig;

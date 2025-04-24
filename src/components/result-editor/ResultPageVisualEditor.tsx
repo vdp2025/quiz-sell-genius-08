@@ -16,6 +16,12 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ResultPageVisualEditorProps extends EditorProps {
+  selectedStyle: {
+    category: string;
+    score: number;
+    percentage: number;
+  };
+  onShowTemplates?: () => void;
   initialConfig?: ResultPageConfig;
 }
 

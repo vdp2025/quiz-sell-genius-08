@@ -1,13 +1,197 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { QuizComponentData, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { generateStageId, generateComponentId } from '@/utils/idGenerator';
+
+// Generate initial stages for a new quiz
+export const generateInitialStages = (): QuizBuilderState => {
+  const coverStageId = generateStageId();
+  const resultStageId = generateStageId();
+  
+  const stages: QuizStage[] = [
+    {
+      id: coverStageId,
+      title: 'Capa do Quiz',
+      order: 0,
+      type: 'cover'
+    },
+    {
+      id: resultStageId,
+      title: 'Resultado do Quiz',
+      order: 1,
+      type: 'result'
+    }
+  ];
+
+  const components: QuizComponentData[] = [
+    {
+      id: generateComponentId(),
+      type: 'stageCover',
+      order: 0,
+      stageId: coverStageId,
+      data: {
+        stageTitle: 'Descubra seu Estilo Pessoal',
+        headline: 'Quiz de Estilo',
+        subheadline: 'Responda às perguntas e descubra seu estilo predominante',
+        buttonText: 'Começar',
+      },
+      style: {
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818',
+        paddingY: '32',
+        paddingX: '16',
+        borderRadius: '0'
+      }
+    },
+    {
+      id: generateComponentId(),
+      type: 'stageResult',
+      order: 0,
+      stageId: resultStageId,
+      data: {
+        primaryStyleTitle: 'Seu Estilo Predominante é',
+        secondaryStylesTitle: 'Seus Estilos Complementares',
+        showPercentages: true,
+        showDescriptions: true,
+        callToActionText: 'Conhecer Mais',
+        callToActionUrl: '#',
+      },
+      style: {
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818',
+        paddingY: '32',
+        paddingX: '16',
+        borderRadius: '0'
+      }
+    }
+  ];
+  
+  return {
+    stages,
+    components,
+    activeStageId: coverStageId
+  };
+};
 
 // Create builder state from quiz data
-export const createBuilderStateFromQuiz = (quizData: any): QuizBuilderState => {
-  // Implementation here
+export const createBuilderStateFromQuiz = (
+  quizData: any,
+  title: string = 'Quiz de Estilo Pessoal',
+  subtitle: string = 'Descubra seu estilo predominante',
+  resultTitle: string = 'Seu Resultado de Estilo Pessoal'
+): QuizBuilderState => {
+  const coverStageId = generateStageId();
+  const resultStageId = generateStageId();
+  
+  // Create initial stages
+  const stages: QuizStage[] = [
+    {
+      id: coverStageId,
+      title: 'Capa do Quiz',
+      order: 0,
+      type: 'cover'
+    }
+  ];
+  
+  // Create components for cover stage
+  const components: QuizComponentData[] = [
+    {
+      id: generateComponentId(),
+      type: 'stageCover',
+      order: 0,
+      stageId: coverStageId,
+      data: {
+        stageTitle: 'Capa do Quiz',
+        headline: title,
+        subheadline: subtitle,
+        buttonText: 'Começar',
+      },
+      style: {
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818',
+        paddingY: '32',
+        paddingX: '16',
+        borderRadius: '0'
+      }
+    }
+  ];
+  
+  // Add question stages if quizData has questions
+  if (quizData && Array.isArray(quizData)) {
+    quizData.forEach((question, index) => {
+      const questionStageId = generateStageId();
+      
+      // Add question stage
+      stages.push({
+        id: questionStageId,
+        title: `Pergunta ${index + 1}`,
+        order: index + 1,
+        type: 'question'
+      });
+      
+      // Add question component
+      components.push({
+        id: generateComponentId(),
+        type: 'stageQuestion',
+        order: 0,
+        stageId: questionStageId,
+        data: {
+          question: question.text || `Pergunta ${index + 1}`,
+          options: question.options || [],
+          optionImages: question.optionImages || [],
+          optionStyleCategories: question.styleCategories || [],
+          displayType: question.displayType || 'text',
+          multiSelect: question.multiSelect || 3,
+          required: true,
+          autoAdvance: true
+        },
+        style: {
+          backgroundColor: '#FAF9F7',
+          textColor: '#432818',
+          paddingY: '32',
+          paddingX: '16',
+          borderRadius: '0'
+        }
+      });
+    });
+  }
+  
+  // Add result stage at the end
+  stages.push({
+    id: resultStageId,
+    title: resultTitle,
+    order: stages.length,
+    type: 'result'
+  });
+  
+  // Add result component
+  components.push({
+    id: generateComponentId(),
+    type: 'stageResult',
+    order: 0,
+    stageId: resultStageId,
+    data: {
+      primaryStyleTitle: 'Seu Estilo Predominante é',
+      secondaryStylesTitle: 'Seus Estilos Complementares',
+      showPercentages: true,
+      showDescriptions: true,
+      callToActionText: 'Conhecer Mais',
+      callToActionUrl: '#',
+    },
+    style: {
+      backgroundColor: '#FAF9F7',
+      textColor: '#432818',
+      paddingY: '32',
+      paddingX: '16',
+      borderRadius: '0'
+    }
+  });
+  
   return {
-    stages: [],
-    components: []
+    stages,
+    components,
+    activeStageId: coverStageId
   };
 };
 
