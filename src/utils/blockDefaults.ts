@@ -1,81 +1,148 @@
 
-import { Block } from '@/types/editor';
+import { EditableContent } from '@/types/editor';
 
-export const getDefaultContentForType = (type: Block['type']): any => {
+export const getDefaultContentForType = (type: string): EditableContent => {
   switch (type) {
     case 'header':
       return {
-        title: 'Seu Resultado de Estilo',
-        subtitle: 'Descubra como expressar sua autenticidade',
-        alignment: 'center'
+        title: 'Seu estilo foi revelado',
+        subtitle: 'Descubra como aplicar esse conhecimento no seu dia a dia',
+        style: {
+          textAlign: 'center',
+          padding: '20px'
+        }
       };
-      
-    case 'style-result':
+    
+    case 'headline':
       return {
-        description: '',
-        customImage: ''
+        title: 'Título da seção',
+        subtitle: 'Subtítulo ou descrição breve',
+        style: {
+          textAlign: 'center',
+          fontSize: '24px',
+          color: '#432818'
+        }
       };
       
     case 'text':
       return {
-        content: 'Adicione aqui o conteúdo do seu texto. Este bloco permite formatação rica.',
-        alignment: 'left'
+        text: 'Adicione seu texto aqui. Este é um parágrafo de exemplo que pode ser editado conforme necessário.',
+        style: {
+          fontSize: '16px',
+          color: '#1A1818',
+          lineHeight: '1.6'
+        }
       };
       
     case 'image':
       return {
-        url: '',
-        alt: 'Imagem ilustrativa',
-        caption: '',
-        width: 'full'
+        imageUrl: '',
+        imageAlt: 'Imagem descritiva',
+        style: {
+          width: '100%',
+          borderRadius: '8px'
+        }
       };
       
     case 'benefits':
       return {
-        title: 'O que você vai receber',
+        title: 'Benefícios',
         items: [
-          'Análise detalhada do seu estilo pessoal',
-          'Paleta de cores personalizada',
-          'Guia de peças essenciais para o seu guarda-roupa',
-          'Dicas de tecidos e modelagens ideais'
-        ]
-      };
-      
-    case 'testimonials':
-      return {
-        items: [
-          {
-            name: 'Maria Silva',
-            text: 'Este guia mudou completamente a forma como me visto! Agora entendo meu estilo e minhas escolhas fazem muito mais sentido.',
-            role: 'Cliente'
-          }
-        ]
+          'Benefício 1',
+          'Benefício 2',
+          'Benefício 3',
+          'Benefício 4'
+        ],
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '20px',
+          borderRadius: '8px'
+        }
       };
       
     case 'pricing':
       return {
         regularPrice: '175,00',
         salePrice: '39,00',
-        installments: '1x de R$ 39,00',
-        ctaText: 'Quero meu Guia de Estilo',
-        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10'
+        buttonText: 'Comprar agora',
+        ctaUrl: '#',
+        urgencyText: 'Oferta por tempo limitado!',
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '20px',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }
       };
       
     case 'guarantee':
       return {
-        days: 7,
-        text: 'Se você não ficar completamente satisfeita com o seu Guia de Estilo Personalizado, basta solicitar o reembolso em até 7 dias após a compra.'
+        title: 'Garantia de 7 dias',
+        text: 'Se você não ficar satisfeito, devolvemos seu dinheiro integralmente em até 7 dias, sem burocracia.',
+        image: '',
+        style: {
+          backgroundColor: '#ffefec',
+          padding: '20px',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }
       };
       
-    case 'spacer':
+    case 'hero-section':
       return {
-        style: 'solid',
-        color: '#E5E7EB',
-        spacing: 'medium',
-        height: '40px'
+        title: 'VOCÊ DESCOBRIU SEU ESTILO',
+        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
+        heroImage: '',
+        heroImage2: '',
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '40px 20px',
+          borderRadius: '8px'
+        }
+      };
+      
+    case 'products':
+      return {
+        title: 'O que você vai receber:',
+        images: [
+          {
+            url: '',
+            alt: 'Produto 1'
+          },
+          {
+            url: '',
+            alt: 'Produto 2'
+          }
+        ],
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '20px',
+          borderRadius: '8px'
+        }
+      };
+      
+    case 'cta':
+      return {
+        buttonText: 'Clique Aqui',
+        ctaUrl: '#',
+        style: {
+          backgroundColor: '#B89B7A',
+          color: 'white',
+          padding: '12px 24px',
+          borderRadius: '4px',
+          textAlign: 'center',
+          fontSize: '18px',
+          fontWeight: 'bold'
+        }
       };
       
     default:
-      return {};
+      return {
+        title: 'Novo componente',
+        description: 'Descrição do componente',
+        style: {
+          padding: '20px'
+        }
+      };
   }
 };

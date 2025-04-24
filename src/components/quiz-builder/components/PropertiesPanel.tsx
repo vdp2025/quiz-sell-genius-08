@@ -46,12 +46,11 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     }
   };
 
-  // Fixed: Use a generic approach for all HTML elements
-  const handleStyleChange = (e: React.ChangeEvent<HTMLElement>, field: string) => {
+  // Fixed: Updated the function parameter type to include HTMLSelectElement
+  const handleStyleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, field: string) => {
     if (component) {
-      const value = (e.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).value;
       onUpdate(component.id, { 
-        style: { ...component.style, [field]: value } 
+        style: { ...component.style, [field]: e.target.value } 
       });
     }
   };
@@ -163,12 +162,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <select
                 className="w-full p-2 border rounded-md"
                 value={component.data.displayType || 'text'}
-                onChange={(e) => {
-                  // Use the generic onUpdate method directly with a cast to ensure type safety
-                  onUpdate(component.id, { 
-                    data: { ...component.data, displayType: e.target.value as 'text' | 'image' | 'both' } 
-                  });
-                }}
+                onChange={(e) => handleTextChange(e, 'displayType')}
               >
                 <option value="text">Apenas texto</option>
                 <option value="image">Apenas imagem</option>
@@ -194,7 +188,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="color"
             className="w-10 h-10 p-1 border rounded-md"
             value={component.style.backgroundColor || '#ffffff'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'backgroundColor')}
+            onChange={(e) => handleStyleChange(e, 'backgroundColor')}
           />
         </div>
         <div>
@@ -203,7 +197,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="color"
             className="w-10 h-10 p-1 border rounded-md"
             value={component.style.textColor || '#000000'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'textColor')}
+            onChange={(e) => handleStyleChange(e, 'textColor')}
           />
         </div>
         <div>
@@ -212,7 +206,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="number"
             className="w-full p-2 border rounded-md"
             value={component.style.borderRadius || '0'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'borderRadius')}
+            onChange={(e) => handleStyleChange(e, 'borderRadius')}
           />
         </div>
         <div>
@@ -221,7 +215,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="number"
             className="w-full p-2 border rounded-md"
             value={component.style.paddingY || '16'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'paddingY')}
+            onChange={(e) => handleStyleChange(e, 'paddingY')}
           />
         </div>
         <div>
@@ -230,7 +224,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             type="number"
             className="w-full p-2 border rounded-md"
             value={component.style.paddingX || '16'}
-            onChange={(e) => handleStyleChange(e as React.ChangeEvent<HTMLElement>, 'paddingX')}
+            onChange={(e) => handleStyleChange(e, 'paddingX')}
           />
         </div>
       </div>

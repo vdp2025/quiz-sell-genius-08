@@ -3,18 +3,16 @@ import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '@/components/quiz-builder/ComponentsSidebar';
 import { PreviewPanel } from '@/components/quiz-builder/PreviewPanel';
-import { PropertiesPanel } from '@/components/quiz-builder/components/PropertiesPanel';
+import { PropertiesPanel } from '@/components/quiz-builder/PropertiesPanel';
 import { Button } from '@/components/ui/button';
-import { Eye, EyeOff, Save, ArrowLeft, Import } from 'lucide-react';
+import { Eye, EyeOff, Save, ArrowLeft } from 'lucide-react';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { QuizComponentType, QuizBuilderState } from '@/types/quizBuilder';
+import { QuizComponentType } from '@/types/quizBuilder';
 import { toast } from '@/components/ui/use-toast';
-import QuizExporter from './components/QuizExporter';
 
 const EnhancedQuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [isExporterOpen, setIsExporterOpen] = useState(false);
   
   const { 
     components, 
@@ -26,8 +24,6 @@ const EnhancedQuizBuilder: React.FC = () => {
     moveComponent,
     setActiveStage,
     saveCurrentState,
-    initializeStages,
-    initializeComponents,
     loading
   } = useQuizBuilder();
 
@@ -58,20 +54,6 @@ const EnhancedQuizBuilder: React.FC = () => {
       });
     }
   };
-  
-  const handleImportData = (data: QuizBuilderState) => {
-    initializeStages(data.stages);
-    initializeComponents(data.components);
-    
-    if (data.stages.length > 0) {
-      setActiveStage(data.stages[0].id);
-    }
-    
-    toast({
-      title: "Dados importados",
-      description: "Os dados foram importados com sucesso.",
-    });
-  };
 
   return (
     <div className="h-screen flex flex-col bg-white">
@@ -86,15 +68,6 @@ const EnhancedQuizBuilder: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            className="flex items-center gap-2"
-            onClick={() => setIsExporterOpen(true)}
-          >
-            <Import className="w-4 h-4" />
-            <span>Importar Quiz</span>
-          </Button>
-          
           <Button
             variant="outline"
             className="flex items-center gap-2"
@@ -162,13 +135,6 @@ const EnhancedQuizBuilder: React.FC = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-      
-      <QuizExporter 
-        isOpen={isExporterOpen}
-        onClose={() => setIsExporterOpen(false)}
-        quizData={{ stages, components }}
-        onOpenChange={setIsExporterOpen}
-      />
     </div>
   );
 };

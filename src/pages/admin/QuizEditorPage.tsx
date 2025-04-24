@@ -58,18 +58,7 @@ const QuizEditorPage = () => {
   return (
     <AdminLayout>
       <div className="h-full bg-[#FAF9F7] p-6">
-        {template && (
-          <QuizEditor 
-            questions={template.questions}
-            onQuestionsChange={(updatedQuestions) => {
-              setTemplate({
-                ...template,
-                questions: updatedQuestions,
-                updatedAt: new Date().toISOString()
-              });
-            }}
-          />
-        )}
+        {template && <QuizEditor initialTemplate={template} />}
       </div>
     </AdminLayout>
   );

@@ -46,7 +46,12 @@ export const useQuizBuilder = () => {
           }
         } else {
           // Initialize with existing quiz questions
-          const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(quizQuestions);
+          const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(
+            quizQuestions,
+            'Quiz de Estilo Pessoal',
+            'Descubra seu estilo predominante',
+            'Seu Resultado de Estilo Pessoal'
+          );
           
           initializeStages(initialStages);
           initializeComponents(initialComponents);

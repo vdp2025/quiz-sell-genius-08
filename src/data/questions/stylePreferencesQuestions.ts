@@ -7,7 +7,6 @@ export const stylePreferencesQuestions: QuizQuestion[] = [
     title: 'QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?',
     type: 'both',
     multiSelect: 3,
-    orderIndex: 4,
     options: [
       {
         id: '5a',
@@ -72,7 +71,6 @@ export const stylePreferencesQuestions: QuizQuestion[] = [
     title: 'VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...',
     type: 'text',
     multiSelect: 3,
-    orderIndex: 9,
     options: [
       {
         id: '10a',
