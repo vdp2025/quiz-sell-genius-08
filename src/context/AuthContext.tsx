@@ -5,9 +5,9 @@ import { User } from '@supabase/supabase-js';
 type AuthContextType = {
   user: (User & { userName?: string }) | null;
   isAdmin: boolean;
+  setUsername: (name: string) => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  setUsername: (name: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     app_metadata: {},
     user_metadata: {},
   });
-  const [isAdmin] = useState(true); // Always true to allow access
+  const [isAdmin] = useState(true);
 
   const login = async () => {
     // No-op since authentication is disabled

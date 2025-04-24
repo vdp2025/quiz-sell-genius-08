@@ -9,10 +9,10 @@ import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import QuizBuilderPage from './pages/QuizBuilderPage';
+import ResultPageEditorPage from './pages/admin/ResultPageEditorPage';
 import AuthPage from './pages/auth/AuthPage';
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-  // Allow access to all users without authentication
   return <>{children}</>;
 };
 
@@ -29,6 +29,7 @@ function App() {
               
               <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
               <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
+              <Route path="/admin/resultado-editor" element={<ProtectedAdminRoute><ResultPageEditorPage /></ProtectedAdminRoute>} />
             </Routes>
           </Suspense>
           <Toaster />

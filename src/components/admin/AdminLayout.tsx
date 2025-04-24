@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Sidebar, SidebarProvider } from '../ui/sidebar';
-import { Home, Settings, ClipboardList, LogOut } from 'lucide-react';
+import { Home, Settings, ClipboardList, Edit, LogOut } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
 interface AdminLayoutProps {
@@ -67,6 +68,18 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               >
                 <ClipboardList className="w-4 h-4 mr-3" />
                 Editor do Quiz
+              </Link>
+
+              <Link 
+                to="/admin/resultado-editor" 
+                className={`flex items-center px-3 py-2 text-sm rounded-md ${
+                  location.pathname.includes('/admin/resultado-editor') 
+                    ? 'bg-[#FAF9F7] text-[#432818] font-medium' 
+                    : 'text-[#8F7A6A] hover:bg-[#FAF9F7] hover:text-[#432818]'
+                }`}
+              >
+                <Edit className="w-4 h-4 mr-3" />
+                Editor de Resultado
               </Link>
               
               <p className="px-3 pt-5 pb-2 text-xs font-medium text-[#B89B7A] uppercase">
