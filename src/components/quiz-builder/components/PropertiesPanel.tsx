@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -46,8 +45,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     }
   };
 
-  // Updated type definition to include HTMLSelectElement
-  const handleStyleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, field: string) => {
+  const handleStyleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, 
+    field: string
+  ) => {
     if (component) {
       onUpdate(component.id, { 
         style: { ...component.style, [field]: e.target.value } 
