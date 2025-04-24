@@ -1,9 +1,9 @@
-ï»¿import React from 'react';
+import React from 'react';
 
 const GuaranteeSection: React.FC = () => (
-  <section className=""guarantee-section p-6 text-center"">
-    <h3 className=""text-xl mb-2"">Garantia de SatisfaÃ§Ã£o</h3>
-    <p>Se nÃ£o ficar satisfeita, devolvemos seu investimento.</p>
+  <section className="guarantee-section p-6 text-center">
+    <h3 className="text-xl mb-2">Garantia de Satisfação</h3>
+    <p>Se não ficar satisfeita, devolvemos seu investimento.</p>
   </section>
 );
 
