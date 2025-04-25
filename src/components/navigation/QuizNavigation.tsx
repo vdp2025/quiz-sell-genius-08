@@ -42,10 +42,10 @@ export const QuizNavigation: React.FC<QuizNavigationProps> = ({
                 onClick={onNext}
                 disabled={!hasEnoughSelections}
                 className={cn(
-                  "transition-all duration-300",
+                  "transition-all duration-300 ease-in-out", // Transição suave
                   !hasEnoughSelections
-                    ? "bg-[#B89B7A]/30 text-white/70 cursor-not-allowed"
-                    : "bg-[#B89B7A] hover:bg-[#9F836A] text-white"
+                    ? "bg-[#B89B7A]/30 text-white/70 cursor-not-allowed blur-sm"
+                    : "bg-[#B89B7A] hover:bg-[#9F836A] text-white blur-0"
                 )}
               >
                 {currentStep >= totalSteps ? 'Ver Resultado' : 'Próxima'}

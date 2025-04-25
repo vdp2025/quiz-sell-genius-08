@@ -72,23 +72,23 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
 
           <Button 
             type="submit" 
-            className="
+            className={`
               w-full 
-              py-3 sm:py-4
-              text-[14px] sm:text-[16px]
+              py-4
+              text-lg
               font-semibold
               rounded-md 
               shadow-md
-              transition-transform 
+              transition-all
               duration-300
-              hover:animate-subtle-pulse
               active:scale-[0.98] 
               disabled:opacity-50 
               disabled:cursor-not-allowed
               mt-2
               border-0
               text-white
-            " 
+              ${name.trim() ? 'animate-subtle-pulse' : ''}
+            `}
             style={{
               background: 'linear-gradient(45deg, #B89B7A, #b29670)'
             }}
