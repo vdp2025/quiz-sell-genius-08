@@ -7,6 +7,7 @@ import { ComponentsSidebar } from './ComponentsSidebar';
 import { EditorPreview } from './EditorPreview';
 import { PropertiesPanel } from './PropertiesPanel';
 import { EditorToolbar } from './EditorToolbar';
+import { JsonConfigEditor } from './JsonConfigEditor';
 import { StyleResult } from '@/types/quiz';
 import { EditorProvider, useEditor } from '@/context/EditorContext';
 import { ResultPageConfig } from '@/types/resultPageConfig';
@@ -36,6 +37,8 @@ const EditorContent = ({ selectedStyle, onShowTemplates, initialConfig }: Result
         isPreviewMode={isPreviewing}
         onPreviewToggle={togglePreview}
         onShowTemplates={onShowTemplates}
+        resultPageConfig={initialConfig}
+        onUpdateConfig={updateBlock}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">

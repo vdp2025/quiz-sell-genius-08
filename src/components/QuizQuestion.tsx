@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
@@ -75,46 +74,23 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     }
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
   };
-  
+
   return (
     <AnimatedWrapper>
-      <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-        isMobile && "px-2", 
-        isStrategicQuestion && "max-w-3xl"
-      )} id={`question-${question.id}`}>
+      <div className="space-y-6">
         {!hideTitle && (
-          <>
-            <h2 className={cn(
-              "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-              isMobile ? "text-base" : "text-base sm:text-xl",
-              isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
-            )}>
-              {highlightStrategicWords(question.title)}
-            </h2>
-            
-            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-              <div className="w-full mb-6">
-                <img 
-                  src={question.imageUrl} 
-                  alt="Question visual" 
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                  onError={() => {
-                    console.error(`Failed to load image: ${question.imageUrl}`);
-                    setImageError(true);
-                  }}
-                />
-              </div>
+          <div className="text-center space-y-2">
+            <h3 className="text-xl sm:text-2xl font-playfair text-[#432818]">
+              {question.title || question.text}
+            </h3>
+            {!isStrategicQuestion && (
+              <p className="text-xs sm:text-sm text-[#1A1818]/50">
+                {currentAnswers.length}/{question.multiSelect} selecionadas
+              </p>
             )}
-            
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-              {isStrategicQuestion 
-                ? "Selecione 1 opção para avançar"
-                : `Selecione ${question.multiSelect} opções para avançar`
-              }
-            </p>
-          </>
+          </div>
         )}
-        
+
         <div className={cn(
           "grid h-full",
           getGridColumns(),
@@ -138,14 +114,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         
         <div className="flex justify-between items-center gap-3 mt-6">
           {!autoAdvance && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-              Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
+            <p className="text-xs sm:text-sm text-[#1A1818]/50 px-2 py-2 text-center font-medium">
+              {currentAnswers.length}/{question.multiSelect} selecionadas
             </p>
           )}
-          
-          <div className="ml-auto">
-            
-          </div>
         </div>
       </div>
     </AnimatedWrapper>
