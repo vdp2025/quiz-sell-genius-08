@@ -36,12 +36,12 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           <img
             src="https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes e Depois - de Descobrir seu Estilo/v1745193439/2dd7e159-43a1-40b0-8075-ba6f591074c1_gpsauh.webp"
             alt="Mulher estilosa"
-            className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] h-auto object-cover rounded-xl"
+            className="w-full max-w-[280px] sm:max-w-[330px] md:max-w-[500px] h-auto object-cover rounded-xl"
           />
         </div>
 
         {/* Título */}
-        <h1 className="font-playfair text-[18px] sm:text-[20px] md:text-[24px] font-bold text-black text-center mb-4 sm:mb-5 leading-tight max-w-[280px] sm:max-w-[400px] md:max-w-lg">
+        <h1 className="font-playfair text-[18px] sm:text-[22px] md:text-[26px] font-bold text-black text-center mb-4 sm:mb-5 leading-tight max-w-[280px] sm:max-w-[400px] md:max-w-lg">
           Transforme seu Guarda-Roupa em um Reflexo Autêntico do Seu Estilo
         </h1>
 
