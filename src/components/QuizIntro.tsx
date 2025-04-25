@@ -36,7 +36,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           <img
             src="https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes e Depois - de Descobrir seu Estilo/v1745193439/2dd7e159-43a1-40b0-8075-ba6f591074c1_gpsauh.webp"
             alt="Mulher estilosa"
-            className="w-full max-w-[280px] sm:max-w-[330px] md:max-w-[500px] h-auto object-cover rounded-xl"
+            className="w-full max-w-[250px] sm:max-w-[330px] md:max-w-[500px] h-auto object-cover rounded-xl"
           />
         </div>
 
