@@ -3,9 +3,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Eye, LayoutTemplate, Save, Undo, Settings } from 'lucide-react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
+import { JsonConfigEditor } from './JsonConfigEditor';
 
 interface EditorToolbarProps {
-  isPreviewMode?: boolean; // Changed from isPreviewing to isPreviewMode
+  isPreviewMode?: boolean;
   onPreviewToggle: () => void;
   onShowTemplates?: () => void;
   onSave?: () => void;
@@ -16,7 +17,7 @@ interface EditorToolbarProps {
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  isPreviewMode = false, // Default value and renamed from isPreviewing
+  isPreviewMode = false,
   onPreviewToggle,
   onShowTemplates,
   onSave,
@@ -30,6 +31,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
       <h1 className="text-xl font-semibold text-[#432818]">Editor de Página de Resultados</h1>
       
       <div className="flex gap-2">
+        {resultPageConfig && onUpdateConfig && (
+          <JsonConfigEditor
+            config={resultPageConfig}
+            onUpdate={onUpdateConfig}
+          />
+        )}
+
         {onEditGlobalStyles && (
           <Button
             variant="outline"

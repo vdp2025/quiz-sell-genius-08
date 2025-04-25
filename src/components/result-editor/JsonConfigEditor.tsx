@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Download, Upload, Save } from 'lucide-react';
-import { exportProjectAsJson } from '@/utils/exportUtils';
+import { Download, Upload, Code } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 interface JsonConfigEditorProps {
@@ -45,7 +44,15 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
   };
 
   const handleExport = () => {
-    exportProjectAsJson(config);
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'editor-config.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +89,8 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           size="sm"
           onClick={handleOpen}
         >
-          Editar JSON
+          <Code className="w-4 h-4 mr-2" />
+          JSON
         </Button>
         <Button
           variant="outline"
@@ -112,7 +120,7 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Configuração JSON</DialogTitle>
+            <DialogTitle>Editor JSON</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">
@@ -124,7 +132,6 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
             
             <div className="flex justify-end">
               <Button onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
                 Salvar Alterações
               </Button>
             </div>
