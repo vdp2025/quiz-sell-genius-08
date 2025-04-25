@@ -1,24 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
-import { AnimatedWrapper } from './ui/animated-wrapper';
-import { cn } from '@/lib/utils';
-import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { QuizOption } from './quiz/QuizOption';
-import { highlightStrategicWords } from '@/utils/textHighlight';
-import { Button } from './ui/button';
-import { ArrowRight } from 'lucide-react';
-import { useQuestionScroll } from '@/hooks/useQuestionScroll';
+import { QuizOption } from './QuizOption';
+import { Question, UserResponse } from '@/types/quiz';
+import { Card } from './ui/card';
 
 interface QuizQuestionProps {
-  question: QuizQuestionType;
+  question: Question;
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
   autoAdvance?: boolean;
-  hideTitle?: boolean;
-  onNextClick?: () => void;
-  onPreviousClick?: () => void;
-  showQuestionImage?: boolean;
+  isStrategic?: boolean; // Nova prop para identificar se é pergunta estratégica
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -26,129 +16,99 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onAnswer,
   currentAnswers,
   autoAdvance = false,
-  hideTitle = false,
-  onNextClick,
-  onPreviousClick,
-  showQuestionImage = false
+  isStrategic = false
 }) => {
-  const isMobile = useIsMobile();
-  const isStrategicQuestion = question.id.startsWith('strategic');
-  const hasImageOptions = question.type !== 'text';
-  const [imageError, setImageError] = useState(false);
-  const { scrollToQuestion } = useQuestionScroll();
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(currentAnswers || []);
   
+  // Constantes para controle de seleções
+  const MAX_SELECTIONS = isStrategic ? 1 : 3;
+  const MIN_SELECTIONS = isStrategic ? 1 : 3;
+
+  // Efeito para sincronizar com respostas externas
   useEffect(() => {
-    scrollToQuestion(question.id);
-  }, [question.id, scrollToQuestion]);
-  
+    setSelectedOptions(currentAnswers || []);
+  }, [currentAnswers]);
+
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
-    
-    if (currentAnswers.includes(optionId)) {
-      newSelectedOptions = currentAnswers.filter(id => id !== optionId);
-    } else {
-      if (isStrategicQuestion || autoAdvance) {
-        newSelectedOptions = [optionId];
-      } else if (currentAnswers.length >= question.multiSelect) {
-        newSelectedOptions = [...currentAnswers.slice(1), optionId];
-      } else {
-        newSelectedOptions = [...currentAnswers, optionId];
-      }
-    }
-    
-    onAnswer({
-      questionId: question.id,
-      selectedOptions: newSelectedOptions
-    });
 
-    if ((isStrategicQuestion || autoAdvance) && newSelectedOptions.length > 0 && onNextClick) {
-      onNextClick();
-    }
-  };
-  
-  const getGridColumns = () => {
-    if (question.type === 'text') {
-      if (isStrategicQuestion) {
-        return "grid-cols-1 gap-3 px-2";
+    if (selectedOptions.includes(optionId)) {
+      // Remove a opção se já estiver selecionada
+      newSelectedOptions = selectedOptions.filter(id => id !== optionId);
+    } else {
+      // Adiciona a opção se ainda não atingiu o limite
+      if (selectedOptions.length < MAX_SELECTIONS) {
+        newSelectedOptions = [...selectedOptions, optionId];
+      } else {
+        return; // Não faz nada se já atingiu o limite
       }
-      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
     }
-    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
+
+    setSelectedOptions(newSelectedOptions);
+
+    // Se autoAdvance está ativado e atingimos o número necessário de seleções
+    if (autoAdvance && newSelectedOptions.length === MIN_SELECTIONS) {
+      onAnswer({
+        questionId: question.id,
+        selectedOptions: newSelectedOptions
+      });
+    } else {
+      // Sempre notifica o componente pai sobre a mudança
+      onAnswer({
+        questionId: question.id,
+        selectedOptions: newSelectedOptions
+      });
+    }
   };
-  
+
   return (
-    <AnimatedWrapper>
-      <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-        isMobile && "px-2", 
-        isStrategicQuestion && "max-w-3xl"
-      )} id={`question-${question.id}`}>
-        {!hideTitle && (
-          <>
-            <h2 className={cn(
-              "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-              isMobile ? "text-base" : "text-base sm:text-xl",
-              isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
-            )}>
-              {highlightStrategicWords(question.title)}
-            </h2>
-            
-            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-              <div className="w-full mb-6">
-                <img 
-                  src={question.imageUrl} 
-                  alt="Question visual" 
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                  onError={() => {
-                    console.error(`Failed to load image: ${question.imageUrl}`);
-                    setImageError(true);
-                  }}
-                />
-              </div>
-            )}
-            
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-              {isStrategicQuestion 
-                ? "Selecione 1 opção para avançar"
-                : `Selecione ${question.multiSelect} opções para avançar`
-              }
-            </p>
-          </>
-        )}
-        
-        <div className={cn(
-          "grid h-full",
-          getGridColumns(),
-          hasImageOptions && "mb-4 relative",
-          isStrategicQuestion && "gap-4"
-        )}>
-          {question.options.map(option => (
-            <QuizOption 
-              key={option.id} 
-              option={option} 
-              isSelected={currentAnswers.includes(option.id)} 
-              onSelect={handleOptionSelect}
-              type={question.type}
-              questionId={question.id}
-              isDisabled={!currentAnswers.includes(option.id) && 
-                !isStrategicQuestion && 
-                currentAnswers.length >= question.multiSelect}
-            />
-          ))}
-        </div>
-        
-        <div className="flex justify-between items-center gap-3 mt-6">
-          {!autoAdvance && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-              Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
-            </p>
-          )}
-          
-          <div className="ml-auto">
-            
-          </div>
-        </div>
+    <Card className="p-6 bg-white/80 backdrop-blur-sm shadow-md border-[#B89B7A]/20">
+      {/* Título da Questão */}
+      <h3 className="text-xl md:text-2xl font-playfair text-[#432818] mb-6 text-center">
+        {question.text}
+      </h3>
+
+      {/* Mensagem de instrução */}
+      <p className="text-sm text-[#432818]/80 mb-4 text-center">
+        {isStrategic 
+          ? "Selecione uma opção que mais combina com você"
+          : `Selecione ${MAX_SELECTIONS} opções que mais combinam com você`
+        }
+      </p>
+
+      {/* Contador de seleções */}
+      <div className="text-center mb-4 text-sm font-medium text-[#B89B7A]">
+        {selectedOptions.length} de {MAX_SELECTIONS} {isStrategic ? "opção" : "opções"} selecionada{selectedOptions.length !== 1 ? "s" : ""}
       </div>
-    </AnimatedWrapper>
+
+      {/* Grid de opções */}
+      <div className={`grid gap-4 ${
+        question.options.length > 6 
+          ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4' 
+          : 'grid-cols-2 sm:grid-cols-3'
+      }`}>
+        {question.options.map((option) => (
+          <QuizOption
+            key={option.id}
+            option={option}
+            isSelected={selectedOptions.includes(option.id)}
+            onSelect={handleOptionSelect}
+            type={option.imageUrl ? 'both' : 'text'}
+            questionId={question.id}
+            selectedCount={selectedOptions.length}
+            maxSelections={MAX_SELECTIONS}
+            isStrategic={isStrategic}
+          />
+        ))}
+      </div>
+
+      {/* Mensagem de progresso */}
+      {!isStrategic && selectedOptions.length < MAX_SELECTIONS && (
+        <p className="text-sm text-[#432818]/60 mt-4 text-center">
+          Selecione mais {MAX_SELECTIONS - selectedOptions.length} {MAX_SELECTIONS - selectedOptions.length === 1 ? 'opção' : 'opções'}
+        </p>
+      )}
+    </Card>
   );
 };
 

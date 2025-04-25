@@ -36,12 +36,12 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Cores personalizadas do projeto */
-    --quiz-primary: 35 31% 60%; /* #B89B7A */
-    --quiz-secondary: 35 31% 70%; /* #b29670 */
-    --quiz-accent: 11 29% 52%; /* #aa6b5d */
-    --quiz-background: 40 67% 97%; /* #FAF9F7 */
-    --quiz-text: 23 33% 20%; /* #432818 */
+    /* Cores personalizadas do quiz */
+    --quiz-primary: #B89B7A;
+    --quiz-secondary: #b29670;
+    --quiz-accent: #aa6b5d;
+    --quiz-text: #432818;
+    --quiz-background: #FAF9F7;
   }
 
   .dark {
@@ -58,13 +58,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Configuração da fonte Playfair */
   .font-playfair {
     font-family: 'Playfair Display', serif;
   }
 }
 
-/* Animação do botão CTA */
+/* Animações */
 @keyframes subtle-pulse {
   0%, 100% {
     transform: scale(1);
@@ -75,30 +74,45 @@
   }
 }
 
-.hover\:animate-subtle-pulse:hover {
+@keyframes scale-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Classes de animação */
+.animate-subtle-pulse {
   animation: subtle-pulse 1.5s infinite ease-in-out;
 }
 
-/* Estilos de input personalizados */
-input::placeholder {
-  @apply text-gray-400 opacity-80;
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out forwards;
 }
 
-/* Melhorias de responsividade */
-@media (max-width: 640px) {
-  html {
-    font-size: 14px;
-  }
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
 }
 
-@media (min-width: 641px) and (max-width: 1024px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-@media (min-width: 1025px) {
-  html {
-    font-size: 16px;
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
