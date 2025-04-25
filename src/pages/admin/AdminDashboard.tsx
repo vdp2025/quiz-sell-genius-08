@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { BarChart3, PenTool, Eye } from 'lucide-react';
@@ -84,10 +84,10 @@ const AdminDashboard = () => {
 
             <Link
               to="/admin/results"
-              className="bg-white p-6 rounded-lg shadow-sm border border[#B89B7A]/20 hover:bg[#FAF9F7] transition-colors flex flex-col"
+              className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20 hover:bg-[#FAF9F7] transition-colors flex flex-col"
             >
               <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-full bg[#B89B7A]/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-[#B89B7A]/10 flex items-center justify-center">
                   <BarChart3 className="w-5 h-5 text-[#B89B7A]" />
                 </div>
                 <h3 className="font-medium text-[#432818] ml-3">
