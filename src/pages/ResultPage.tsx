@@ -10,7 +10,7 @@ import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSect
 
 const ResultPage: React.FC = () => {
   // 1. Estado para dados editados
-  const [editedResult, setEditedResult] = useState(null);
+  const [editedResult, setEditedResult] = useState<any>(null);
 
   // 2. Hooks originais
   const { primaryStyle, secondaryStyles, quizResult } = useQuiz();
@@ -108,8 +108,39 @@ const ResultPage: React.FC = () => {
   };
 
   return (
-    // ... (todo o seu código original permanece aqui)
-    // ... existing code ...
+    <div className="min-h-screen bg-[#fffaf7]" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit',
+    }}>
+      <Header
+        primaryStyle={primaryStyle}
+        logoHeight={globalStyles.logoHeight}
+        logo={globalStyles.logo}
+        logoAlt={globalStyles.logoAlt}
+      />
+
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
+                {category}
+              </h2>
+              <p className="text-[#432818] leading-relaxed">{description}</p>
+            </div>
+            <div>
+              <img
+                src={image}
+                alt="Imagem do estilo"
+                className="w-full h-auto rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        </Card>
+        {/* Se quiser, adicione mais seções aqui, como SecondaryStylesSection */}
+      </div>
+    </div>
   );
 };
 
