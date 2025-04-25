@@ -1,32 +1,13 @@
-<<<<<<< HEAD
-﻿
-=======
->>>>>>> 1536c934da19267d874eb3db76aa0734c71d7cd9
+
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-<<<<<<< HEAD
-import { Progress } from '@/components/ui/progress';
-=======
-import { EditorButton } from '@/components/ui/EditorButton';
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import { ShoppingCart, Shield, CheckCircle } from 'lucide-react';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-<<<<<<< HEAD
-import ErrorState from '@/components/result/ErrorState';
-import MotivationSection from '@/components/result/MotivationSection';
-import MentorSection from '@/components/result/MentorSection';
-import GuaranteeSection from '@/components/result/GuaranteeSection';
-import ProductShowcase from '@/components/quiz-result/sales/ProductShowcase';
-import BenefitList from '@/components/quiz-result/sales/BenefitList';
-import Testimonials from '@/components/quiz-result/sales/Testimonials';
-=======
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles, quizResult } = useQuiz();
@@ -37,15 +18,7 @@ const ResultPage: React.FC = () => {
     console.log("ResultPage mounted. Quiz result:", quizResult);
   }, [quizResult]);
 
-<<<<<<< HEAD
   if (!primaryStyle) {
-<<<<<<< HEAD
-=======
-  if (!quizResult) {
-    console.log("No quiz result found, showing error state");
->>>>>>> 1536c934da19267d874eb3db76aa0734c71d7cd9
-    return <ErrorState />;
-=======
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
@@ -64,7 +37,6 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
     );
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
   }
 
   const { category } = primaryStyle;
@@ -83,11 +55,6 @@ const ResultPage: React.FC = () => {
         fontFamily: globalStyles.fontFamily || 'inherit',
       }}
     >
-<<<<<<< HEAD
-=======
-      <EditorButton />
-
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
       <Header
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
@@ -98,63 +65,6 @@ const ResultPage: React.FC = () => {
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Estilo Principal */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-<<<<<<< HEAD
-          <AnimatedWrapper show={true}>
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-                Seu Estilo Ã© {category}
-              </h2>
-              
-              <div className="max-w-md mx-auto mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#8F7A6A]">Porcentagem de compatibilidade</span>
-                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
-                </div>
-                <Progress 
-                  value={primaryStyle.percentage} 
-                  className="h-2 bg-[#F3E8E6]"
-                  indicatorClassName="bg-[#B89B7A]"
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-4">
-                <p className="text-[#432818] leading-relaxed">{description}</p>
-
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                  <h3 className="text-lg font-medium text-[#432818] mb-2">
-                    Seus Estilos Complementares
-                  </h3>
-                  <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-                </div>
-              </div>
-              <div>
-                <img
-                  src={image}
-                  alt={`Estilo ${category}`}
-                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            </div>
-            <div className="mt-8">
-              <img
-                src={guideImage}
-                alt={`Guia de Estilo ${category}`}
-                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          </AnimatedWrapper>
-        </Card>
-
-        <MotivationSection />
-
-        {/* Oferta + BÃ´nus */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-              O Guia de Estilo e Imagem + BÃ´nus Exclusivos
-=======
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
               <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
@@ -232,23 +142,10 @@ const ResultPage: React.FC = () => {
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
               O Guia de Estilo e Imagem + Bônus Exclusivos
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
             </h2>
             <p className="text-[#432818]">
               Criado para mulheres que querem muito mais do que "saber seu
               estilo".<br />
-<<<<<<< HEAD
-              Esse guia Ã© pra quem estÃ¡ pronta pra viver seu estilo na prÃ¡tica
-              â€” com consciÃªncia, direÃ§Ã£o e autenticidade.
-            </p>
-          </div>
-
-          <ProductShowcase />
-
-          <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
-            <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
-              E ainda recebe 2 bÃ´nus poderosos:
-=======
               Esse guia é pra quem está pronta pra viver seu estilo na prática
               — com consciência, direção e autenticidade.
             </p>
@@ -285,25 +182,19 @@ const ResultPage: React.FC = () => {
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
             <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
               E ainda recebe 2 bônus poderosos:
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
             </h3>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
-                  PeÃ§as-chave do Guarda-Roupa de Sucesso
+                  Peças-chave do Guarda-Roupa de Sucesso
                 </h4>
                 <p className="text-sm text-[#432818]/80 mb-4">
                   Itens essenciais que descomplicam a rotina e valorizam o seu
                   estilo pessoal.
                 </p>
                 <img
-<<<<<<< HEAD
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp"
-                  alt="PeÃ§as-chave do Guarda-Roupa"
-=======
                   src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
                   alt="Peças-chave do Guarda-Roupa"
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
                   className="w-full h-auto rounded-lg"
                 />
               </div>
@@ -316,11 +207,7 @@ const ResultPage: React.FC = () => {
                   identidade visual.
                 </p>
                 <img
-<<<<<<< HEAD
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
-=======
                   src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
                   alt="Mini Guia de Visagismo Facial"
                   className="w-full h-auto rounded-lg"
                 />
@@ -331,11 +218,7 @@ const ResultPage: React.FC = () => {
           <div className="mb-8">
             <img
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-<<<<<<< HEAD
-              alt="Todos os produtos e bÃ´nus"
-=======
               alt="Todos os produtos e bônus"
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
               className="w-full h-auto rounded-lg"
             />
           </div>
@@ -359,26 +242,17 @@ const ResultPage: React.FC = () => {
                 (window.location.href =
                   'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912')
               }
-<<<<<<< HEAD
-              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
-=======
               className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold"
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
             >
               <ShoppingCart className="w-5 h-5 mr-2" />
-              Quero meu Guia + BÃ´nus por R$39,00
+              Quero meu Guia + Bônus por R$39,00
             </Button>
             <p className="text-sm text-[#aa6b5d] mt-4">
-              â³ Oferta vÃ¡lida apenas nesta pÃ¡gina
+              ⏳ Oferta válida apenas nesta página
             </p>
           </div>
         </Card>
 
-<<<<<<< HEAD
-        <Testimonials />
-        <MentorSection />
-        <GuaranteeSection />
-=======
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             💬 Depoimentos de mulheres que já viveram essa transformação:
@@ -387,22 +261,22 @@ const ResultPage: React.FC = () => {
             {[
               {
                 text:
-                  'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me  
-                  fez dar vida à mulher que sempre existiu em mim.',
+                  'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me  ' +
+                  'fez dar vida à mulher que sempre existiu em mim.',
                 name: 'Mariangela',
                 role: 'Engenheira',
               },
               {
                 text:
-                  'Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas  
-                  começaram a me olhar diferente — porque eu estava diferente.',
+                  'Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas  ' +
+                  'começaram a me olhar diferente — porque eu estava diferente.',
                 name: 'Patrícia Paranhos',
                 role: 'Advogada',
               },
               {
                 text:
-                  'A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com  
-                  consciência, estilo e propósito.',
+                  'A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com  ' +
+                  'consciência, estilo e propósito.',
                 name: 'Sônia Spier',
                 role: 'Terapeuta',
               },
@@ -494,7 +368,6 @@ const ResultPage: React.FC = () => {
             </div>
           </div>
         </Card>
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
       </div>
     </div>
   );
