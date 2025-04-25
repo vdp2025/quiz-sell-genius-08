@@ -25,21 +25,15 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           className="w-full rounded-xl mb-8 object-cover object-center"
           style={{ maxHeight: 320 }}
         />
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#aa6b5d] text-center mb-4 leading-tight">
-          Chega de um guarda-roupa lotado<br className="hidden md:block"/> e da sensação de que nada combina com você.
+        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-black text-center mb-4 leading-tight">
+          Transforme seu Guarda-Roupa em um Reflexo Autêntico do Seu Estilo
         </h1>
-
-        {/* Imagem principal - Further reduced size */}
-        <img 
-          alt="Mulher elegante com roupas estilosas" 
-          className="w-full max-w-xs h-auto object-cover mb-6 rounded-lg shadow-sm" 
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" 
-        />
 
         {/* Subtítulo com destaque */}
         <p className="text-sm md:text-base text-black text-center mb-6 max-w-lg">
-          Em poucos minutos, descubra seu <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — 
-          e aprenda a montar looks que realmente refletem sua <span className="font-semibold text-[#b29670]">essência</span>, com praticidade e <span className="font-semibold text-[#aa6b5d]">confiança</span>.
+          Em apenas 3 minutos, descubra seu <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> e 
+          desbloqueie o segredo para criar looks incríveis que expressam sua verdadeira <span className="font-semibold text-[#b29670]">personalidade</span>, 
+          com total <span className="font-semibold text-[#aa6b5d]">confiança</span> e sem esforço.
         </p>
 
         {/* Formulário */}
@@ -47,7 +41,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           <label htmlFor="name" className="text-sm font-semibold text-[#432818]">NOME *</label>
           <Input 
             id="name" 
-            placeholder="Digite seu nome" 
+            placeholder="Digite seu nome para descobrir seu estilo" 
             value={name} 
             onChange={e => setName(e.target.value)} 
             className="w-full" 
@@ -64,20 +58,28 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
               py-4 
               text-base 
               rounded-md 
-              shadow 
+              shadow-lg
               transition-all 
-              duration-300 
+              duration-500
               ease-in-out 
               transform 
               hover:-translate-y-1 
-              hover:shadow-lg 
+              hover:shadow-2xl
+              hover:scale-[1.02]
               active:scale-95 
               disabled:opacity-50 
               disabled:cursor-not-allowed
+              relative
+              overflow-hidden
+              group
             " 
             disabled={!name.trim()}
           >
-            Continuar
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              DESCOBRIR MEU ESTILO AGORA
+              <span className="text-xs">{name && `→`}</span>
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </Button>
         </form>
       </div>
