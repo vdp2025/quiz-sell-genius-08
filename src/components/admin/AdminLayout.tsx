@@ -1,38 +1,16 @@
 import React from 'react';
-import { Navigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useLocation, Link } from 'react-router-dom';
 import { Sidebar, SidebarProvider } from '../ui/sidebar';
 import { Home, Settings, ClipboardList, Edit, LogOut, BarChart3 } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const { user, isAdmin, logout } = useAuth();
   const location = useLocation();
 
-  if (!user || !isAdmin) {
-    toast({
-      title: "Access Denied",
-      description: "You must be logged in as an admin to access this area.",
-      variant: "destructive"
-    });
-    return <Navigate to="/auth" state={{ from: location }} replace />;
-  }
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: "Failed to log out. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
+  // Removido: autenticação e logout
 
   return (
     <SidebarProvider>
@@ -110,15 +88,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               </Link>
             </div>
           </div>
-          <div className="mt-auto p-4">
-            <button
-              onClick={handleLogout}
-              className="flex items-center px-3 py-2 text-sm text-[#8F7A6A] rounded-md hover:bg-[#FAF9F7] hover:text-[#432818] w-full"
-            >
-              <LogOut className="w-4 h-4 mr-3" />
-              Sign Out
-            </button>
-          </div>
+          {/* Removido: botão de logout */}
         </Sidebar>
         <main className="flex-1 overflow-auto bg-[#FAF9F7]">
           {children}
