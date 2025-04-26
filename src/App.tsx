@@ -24,9 +24,64 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   return (
-    <div className="bg-blue-500 text-white p-8 rounded-lg text-2xl">
-      Tailwind está funcionando! 🚀
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <QuizProvider>
+          <Router>
+            <Suspense fallback={<LoadingState />}>
+              <Routes>
+                {/* Rotas públicas */}
+                <Route path="/" element={<Index />} />
+                <Route path="/resultado" element={<ResultPage />} />
+
+                {/* Rotas admin protegidas */}
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedAdminRoute>
+                      <AdminDashboard />
+                    </ProtectedAdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/quiz-builder"
+                  element={
+                    <ProtectedAdminRoute>
+                      <QuizEditorPage />
+                    </ProtectedAdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/editor-resultado"
+                  element={
+                    <ProtectedAdminRoute>
+                      <EditorResultadoPage />
+                    </ProtectedAdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/settings"
+                  element={
+                    <ProtectedAdminRoute>
+                      <SettingsPage />
+                    </ProtectedAdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/utm-analytics"
+                  element={
+                    <ProtectedAdminRoute>
+                      <UTMAnalyticsPage />
+                    </ProtectedAdminRoute>
+                  }
+                />
+              </Routes>
+            </Suspense>
+            <Toaster />
+          </Router>
+        </QuizProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

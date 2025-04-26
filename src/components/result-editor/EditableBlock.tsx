@@ -1,8 +1,8 @@
-
-import React, { useRef } from 'react';
+import React from 'react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
-import { useDrag, useDrop } from 'react-dnd';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
 import { GripVertical, Edit, Copy, Trash } from 'lucide-react';
 import HeaderBlockPreview from './block-previews/HeaderBlockPreview';
@@ -27,12 +27,6 @@ import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
 
-interface DragItem {
-  index: number;
-  id: string;
-  type: string;
-}
-
 interface EditableBlockProps {
   block: Block;
   index: number;
@@ -52,47 +46,32 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
   onReorderBlocks,
   primaryStyle
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  
-  const [{ isDragging }, drag, preview] = useDrag({
-    type: 'BLOCK',
-    item: { index, id: block.id, type: 'BLOCK' },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({
+    id: block.id,
+    data: {
+      index,
+      type: 'BLOCK'
+    }
   });
-  
-  const [{ isOver }, drop] = useDrop({
-    accept: 'BLOCK',
-    hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
-      
-      const dragIndex = item.index;
-      const hoverIndex = index;
-      
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-      
-      // Time to actually perform the action
-      onReorderBlocks(dragIndex, hoverIndex);
-      
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  });
-  
-  // Initialize drag and drop refs
-  drag(drop(ref));
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: isPreviewMode ? 'default' : 'pointer',
+    border: isSelected && !isPreviewMode ? '2px solid #B89B7A' : isPreviewMode ? 'none' : '2px dashed #e2e2e2',
+    borderRadius: '0.5rem',
+    backgroundColor: isPreviewMode ? 'transparent' : isDragging ? '#f9f3e9' : 'white',
+    position: 'relative' as const,
+    zIndex: isSelected ? 1 : 0
+  };
   
   // Render the appropriate block preview based on type
   const renderBlockPreview = () => {
@@ -144,17 +123,6 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
     }
   };
   
-  // Styles for the block container
-  const blockStyle = {
-    opacity: isDragging ? 0.5 : 1,
-    cursor: isPreviewMode ? 'default' : 'pointer',
-    border: isSelected && !isPreviewMode ? '2px solid #B89B7A' : isPreviewMode ? 'none' : '2px dashed #e2e2e2',
-    borderRadius: '0.5rem',
-    backgroundColor: isPreviewMode ? 'transparent' : isOver ? '#f9f3e9' : 'white',
-    position: 'relative' as 'relative',
-    zIndex: isSelected ? 1 : 0
-  };
-  
   if (isPreviewMode) {
     return (
       <div style={{ opacity: isDragging ? 0.5 : 1 }}>
@@ -165,10 +133,11 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
   
   return (
     <div
-      ref={ref}
-      style={blockStyle}
+      ref={setNodeRef}
+      style={style}
       onClick={onClick}
       className="p-3 group transition-all duration-200"
+      {...attributes}
     >
       {!isPreviewMode && (
         <div className="absolute right-2 top-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -183,7 +152,7 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
           </Button>
           <div
             className="h-8 w-8 flex items-center justify-center cursor-move"
-            ref={drag}
+            {...listeners}
           >
             <GripVertical className="h-4 w-4 text-[#8F7A6A]" />
           </div>

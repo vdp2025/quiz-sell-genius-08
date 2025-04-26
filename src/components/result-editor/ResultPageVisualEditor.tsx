@@ -1,7 +1,4 @@
-
 import React from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { EditorPreview } from './EditorPreview';
@@ -31,6 +28,13 @@ const EditorContent = ({ selectedStyle, onShowTemplates, initialConfig }: Result
     togglePreview
   } = useEditor();
 
+  // Adaptador para compatibilidade de tipos
+  const handleUpdateConfig = (newConfig: any) => {
+    if (newConfig && typeof newConfig === 'object') {
+      updateBlock(newConfig.id || 'config', newConfig);
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
@@ -38,7 +42,7 @@ const EditorContent = ({ selectedStyle, onShowTemplates, initialConfig }: Result
         onPreviewToggle={togglePreview}
         onShowTemplates={onShowTemplates}
         resultPageConfig={initialConfig}
-        onUpdateConfig={updateBlock}
+        onUpdateConfig={handleUpdateConfig}
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
@@ -77,10 +81,8 @@ const EditorContent = ({ selectedStyle, onShowTemplates, initialConfig }: Result
 
 export const ResultPageVisualEditor = (props: ResultPageVisualEditorProps) => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <EditorProvider>
-        <EditorContent {...props} />
-      </EditorProvider>
-    </DndProvider>
+    <EditorProvider>
+      <EditorContent {...props} />
+    </EditorProvider>
   );
 };

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Block } from '@/types/editor';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,8 @@ import { Monitor, Smartphone, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StyleResult } from '@/types/quiz';
 import EditableBlock from './EditableBlock';
+import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 interface EditorPreviewProps {
   blocks: Block[];
@@ -25,6 +26,22 @@ export function EditorPreview({
   onReorderBlocks
 }: EditorPreviewProps) {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = blocks.findIndex(block => block.id === active.id);
+      const newIndex = blocks.findIndex(block => block.id === over.id);
+      onReorderBlocks(oldIndex, newIndex);
+    }
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -75,18 +92,28 @@ export function EditorPreview({
               </Button>
             </div>
           ) : (
-            blocks.map((block, index) => (
-              <EditableBlock
-                key={block.id}
-                block={block}
-                index={index}
-                isSelected={block.id === selectedBlockId}
-                onClick={() => onSelectBlock(block.id)}
-                isPreviewMode={isPreviewing}
-                onReorderBlocks={onReorderBlocks}
-                primaryStyle={primaryStyle}
-              />
-            ))
+            <DndContext 
+              sensors={sensors}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext 
+                items={blocks.map(block => block.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {blocks.map((block, index) => (
+                  <EditableBlock
+                    key={block.id}
+                    block={block}
+                    index={index}
+                    isSelected={block.id === selectedBlockId}
+                    onClick={() => onSelectBlock(block.id)}
+                    isPreviewMode={isPreviewing}
+                    onReorderBlocks={onReorderBlocks}
+                    primaryStyle={primaryStyle}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
           )}
         </div>
       </div>
