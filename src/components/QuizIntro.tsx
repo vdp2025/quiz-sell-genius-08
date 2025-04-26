@@ -19,7 +19,6 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
         {/* Logo */}
         <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" alt="Logo Gisele Galvão" className="w-32 md:w-40 h-auto mb-2" />
 
-<<<<<<< HEAD
         {/* Barra de carregamento dourada animada */}
         <div className="relative w-full max-w-md h-[4px] bg-[#f1e8db] rounded-full overflow-hidden mb-6">
           <div className="absolute inset-0 w-1/3 bg-[#b29670] animate-loading-bar rounded-full"></div>
@@ -28,21 +27,6 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
         {/* Título */}
         <h1 className="font-playfair text-xl md:text-2xl font-bold text-center mb-4 leading-snug text-gray-950">
           Chega de um guarda-roupa lotado<br className="hidden md:block" /> e da sensação de que nada combina com você.
-=======
-export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF9F7] px-4 py-10">
-      <div className="w-full max-w-xl bg-white shadow-lg rounded-2xl p-6 md:p-10 flex flex-col items-center">
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"
-"
-          alt="Mulher estilosa"
-          className="w-full rounded-xl mb-8 object-cover object-center"
-          style={{ maxHeight: 320 }}
-        />
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#aa6b5d] text-center mb-4 leading-tight">
-          Chega de um guarda-roupa lotado<br className="hidden md:block"/> e da sensação de que nada combina com você.
->>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
         </h1>
 
         {/* Imagem principal - Further reduced size */}
