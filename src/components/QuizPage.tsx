@@ -1,6 +1,4 @@
-
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useQuiz } from '../context/QuizContext';
 import { UserResponse } from '@/types/quiz';
 import { toast } from './ui/use-toast';
@@ -11,7 +9,6 @@ import { QuizNavigation } from './navigation/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
 
 const QuizPage: React.FC = () => {
-  const { user } = useAuth();
   // State declarations
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [showingTransition, setShowingTransition] = useState(false);
@@ -31,8 +28,7 @@ const QuizPage: React.FC = () => {
     totalQuestions,
     calculateResults,
     handleStrategicAnswer: saveStrategicAnswer,
-    submitQuizIfComplete,
-    canProceed
+    submitQuizIfComplete
   } = useQuiz();
 
   // Handle strategic answer
@@ -63,6 +59,11 @@ const QuizPage: React.FC = () => {
         variant: "destructive",
       });
     }
+  };
+
+  // Função wrapper para adaptar resposta
+  const handleQuizAnswer = (response: UserResponse) => {
+    handleAnswer(response.questionId, response.selectedOptions);
   };
 
   // Handle answer submission
@@ -117,10 +118,6 @@ const QuizPage: React.FC = () => {
 
   // Handle next click
   const handleNextClick = () => {
-    if (!canProceed) {
-      toast({ title: "Selecione as opções antes de continuar", variant: "destructive" });
-      return;
-    }
     if (!isLastQuestion) {
       handleNext();
     } else {
@@ -128,14 +125,6 @@ const QuizPage: React.FC = () => {
       setShowingTransition(true);
     }
   };
-
-  // Save user name to localStorage
-  useEffect(() => {
-    if (user?.userName) {
-      localStorage.setItem('userName', user.userName);
-      console.log('User name saved:', user.userName);
-    }
-  }, [user]);
 
   return (
     <QuizContainer>
@@ -150,15 +139,14 @@ const QuizPage: React.FC = () => {
       {!showingTransition && !showingFinalTransition && (
         <>
           <QuizContent
-            user={user}
             currentQuestionIndex={currentQuestionIndex}
             totalQuestions={totalQuestions}
             showingStrategicQuestions={showingStrategicQuestions}
             currentStrategicQuestionIndex={currentStrategicQuestionIndex}
             currentQuestion={currentQuestion}
             currentAnswers={currentAnswers}
-            handleAnswerSubmit={handleAnswerSubmit}
-            handleNextClick={handleNextClick}
+            handleAnswerSubmit={handleQuizAnswer}
+            handleNextClick={handleNext}
             handlePrevious={handlePrevious}
           />
           

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { BarChart3, PenTool, Eye } from 'lucide-react';
+import { BarChart3, PenTool, Eye, Layers } from 'lucide-react';
 
 const AdminDashboard = () => {
   return (
@@ -48,6 +48,23 @@ const AdminDashboard = () => {
             Ações Rápidas
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link
+              to="/admin/editor-unificado"
+              className="bg-white p-6 rounded-lg shadow-sm border-2 border-[#9b87f5] hover:bg-[#9b87f5]/5 transition-colors flex flex-col"
+            >
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 rounded-full bg-[#9b87f5]/10 flex items-center justify-center">
+                  <Layers className="w-5 h-5 text-[#9b87f5]" />
+                </div>
+                <h3 className="font-medium text-[#432818] ml-3">
+                  Editor Unificado <span className="text-xs font-normal text-[#9b87f5] px-1 py-0.5 bg-[#9b87f5]/10 rounded">Novo</span>
+                </h3>
+              </div>
+              <p className="text-sm text-[#8F7A6A]">
+                Nova experiência: edite todo o fluxo do quiz e página de resultados em um único lugar
+              </p>
+            </Link>
+            
             <Link
               to="/admin/quiz-builder"
               className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20 hover:bg-[#FAF9F7] transition-colors flex flex-col"

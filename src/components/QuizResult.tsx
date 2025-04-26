@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
-import { useAuth } from '../context/AuthContext';
 import { ContentContainer } from './shared/ContentContainer';
 import { GridLayout } from './shared/GridLayout';
 import ResultHeader from './quiz-result/ResultHeader';
@@ -24,20 +23,8 @@ const QuizResult: React.FC<QuizResultProps> = ({
   config: externalConfig,
   previewMode = false
 }) => {
-  const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
   
-  useEffect(() => {
-    if (user && user.userName) {
-      setUserName(user.userName);
-    } else {
-      const storedName = localStorage.getItem('userName');
-      if (storedName) {
-        setUserName(storedName);
-      }
-    }
-  }, [user]);
-
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
   
   useEffect(() => {
