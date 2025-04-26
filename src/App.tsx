@@ -1,10 +1,10 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import { LoadingState } from './components/ui/loading-state';
 import { QuizProvider } from './context/QuizContext';
+import { TooltipProvider } from './components/ui/tooltip'; // Adicione esta importação
 import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -26,25 +26,27 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <QuizProvider>
-        <Router>
-          <Suspense fallback={<LoadingState />}>
-            <Routes>
-              {/* Rotas públicas */}
-              <Route path="/" element={<Index />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              
-              {/* Rotas administrativas protegidas */}
-              <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
-              <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/editor" element={<ProtectedAdminRoute><UnifiedEditorPage /></ProtectedAdminRoute>} />
-            </Routes>
-          </Suspense>
-          <Toaster />
-        </Router>
-      </QuizProvider>
-    </AuthProvider>
+    <TooltipProvider> {/* Adicione este provider como wrapper mais externo */}
+      <AuthProvider>
+        <QuizProvider>
+          <Router>
+            <Suspense fallback={<LoadingState />}>
+              <Routes>
+                {/* Rotas públicas */}
+                <Route path="/" element={<Index />} />
+                <Route path="/resultado" element={<ResultPage />} />
+                
+                {/* Rotas administrativas protegidas */}
+                <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+                <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
+                <Route path="/admin/editor" element={<ProtectedAdminRoute><UnifiedEditorPage /></ProtectedAdminRoute>} />
+              </Routes>
+            </Suspense>
+            <Toaster />
+          </Router>
+        </QuizProvider>
+      </AuthProvider>
+    </TooltipProvider>
   );
 }
 
