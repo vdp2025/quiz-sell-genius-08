@@ -6,10 +6,21 @@ import MultipleChoiceComponent from '../components/MultipleChoiceComponent';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
+  isSelected?: boolean;
+  onSelect?: () => void;
+  onMove?: (draggedId: string, targetId: string) => void;
+  isPreviewing?: boolean;
   isEditing?: boolean;
 }
 
-const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEditing = false }) => {
+const ComponentRenderer: React.FC<ComponentRendererProps> = ({ 
+  component, 
+  isSelected = false, 
+  onSelect = () => {}, 
+  onMove = () => {}, 
+  isPreviewing = false,
+  isEditing = false 
+}) => {
   const { type, data, style } = component;
   
   const containerStyles = {
@@ -101,10 +112,11 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
 
   return (
     <div 
-      className={cn("relative rounded-md overflow-hidden", isEditing && "border-2 border-[#B89B7A]")}
+      className={cn("relative rounded-md overflow-hidden", isSelected && "border-2 border-[#B89B7A]")}
       style={containerStyles}
+      onClick={onSelect}
     >
-      {isEditing && (
+      {isSelected && (
         <div className="absolute top-0 right-0 bg-[#B89B7A] text-white px-2 py-1 text-xs z-10">
           {type}
         </div>
