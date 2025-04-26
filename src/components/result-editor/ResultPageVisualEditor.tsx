@@ -1,7 +1,4 @@
-
 import React, { useState, useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
 import { EditorPreview } from './EditorPreview';
@@ -98,69 +95,67 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="h-screen flex flex-col overflow-hidden">
-        <EditorToolbar 
-          onSave={handleSave}
-          isPreviewMode={isPreviewing}
-          onPreviewToggle={togglePreview}
-          onReset={handleReset}
-          onEditGlobalStyles={toggleGlobalStyles}
-          resultPageConfig={resultPageConfig}
-          onUpdateConfig={handleUpdateConfig}
-          onShowTemplates={onShowTemplates}
+    <div className="h-screen flex flex-col overflow-hidden">
+      <EditorToolbar 
+        onSave={handleSave}
+        isPreviewMode={isPreviewing}
+        onPreviewToggle={togglePreview}
+        onReset={handleReset}
+        onEditGlobalStyles={toggleGlobalStyles}
+        resultPageConfig={resultPageConfig}
+        onUpdateConfig={handleUpdateConfig}
+        onShowTemplates={onShowTemplates}
+      />
+      
+      <Tabs defaultValue="editor" className="flex-1">
+        <TabsList className="hidden">
+          <TabsTrigger value="editor">Editor</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="editor" className="h-full">
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+              <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
+            <ResizablePanel defaultSize={55}>
+              <EditorPreview
+                blocks={blocks}
+                selectedBlockId={selectedBlockId}
+                onSelectBlock={setSelectedBlockId}
+                isPreviewing={isPreviewing}
+                primaryStyle={selectedStyle}
+                onReorderBlocks={blockActions.handleReorderBlocks}
+              />
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
+            <ResizablePanel defaultSize={25}>
+              <PropertiesPanel
+                selectedBlockId={selectedBlockId}
+                blocks={blocks}
+                onClose={() => setSelectedBlockId(null)}
+                onUpdate={blockActions.handleUpdateBlock}
+                onDelete={blockActions.handleDeleteBlock}
+              />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </TabsContent>
+      </Tabs>
+      
+      {isGlobalStylesOpen && (
+        <GlobalStylesEditor
+          globalStyles={resultPageConfig.globalStyles || {}}
+          onSave={(styles) => {
+            updateSection('globalStyles', styles);
+            toggleGlobalStyles();
+          }}
+          onCancel={toggleGlobalStyles}
         />
-        
-        <Tabs defaultValue="editor" className="flex-1">
-          <TabsList className="hidden">
-            <TabsTrigger value="editor">Editor</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="editor" className="h-full">
-            <ResizablePanelGroup direction="horizontal" className="h-full">
-              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
-              </ResizablePanel>
-
-              <ResizableHandle withHandle />
-
-              <ResizablePanel defaultSize={55}>
-                <EditorPreview
-                  blocks={blocks}
-                  selectedBlockId={selectedBlockId}
-                  onSelectBlock={setSelectedBlockId}
-                  isPreviewing={isPreviewing}
-                  primaryStyle={selectedStyle}
-                  onReorderBlocks={blockActions.handleReorderBlocks}
-                />
-              </ResizablePanel>
-
-              <ResizableHandle withHandle />
-
-              <ResizablePanel defaultSize={25}>
-                <PropertiesPanel
-                  selectedBlockId={selectedBlockId}
-                  blocks={blocks}
-                  onClose={() => setSelectedBlockId(null)}
-                  onUpdate={blockActions.handleUpdateBlock}
-                  onDelete={blockActions.handleDeleteBlock}
-                />
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </TabsContent>
-        </Tabs>
-        
-        {isGlobalStylesOpen && (
-          <GlobalStylesEditor
-            globalStyles={resultPageConfig.globalStyles || {}}
-            onSave={(styles) => {
-              updateSection('globalStyles', styles);
-              toggleGlobalStyles();
-            }}
-            onCancel={toggleGlobalStyles}
-          />
-        )}
-      </div>
-    </DndProvider>
+      )}
+    </div>
   );
 };
