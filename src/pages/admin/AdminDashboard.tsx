@@ -1,144 +1,83 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { BarChart3, PenTool, Eye, Layers } from 'lucide-react';
+import { 
+  PencilRuler, 
+  PanelTop, 
+  BarChart4, 
+  Settings, 
+  Target, 
+  SlidersHorizontal,
+  Layers
+} from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
+  const menuItems = [
+    {
+      title: 'Editor Unificado',
+      description: 'Edite todo o fluxo: Quiz, Perguntas e Página de Resultado',
+      icon: <Layers className="h-8 w-8 text-[#9b87f5]" />,
+      link: '/admin/editor-unificado',
+      highlight: true
+    },
+    {
+      title: 'Construtor de Quiz',
+      description: 'Crie e edite as perguntas do seu quiz',
+      icon: <PencilRuler className="h-8 w-8 text-[#9b87f5]" />,
+      link: '/admin/quiz-builder'
+    },
+    {
+      title: 'Editor de Resultado',
+      description: 'Personalize a página de resultado e oferta',
+      icon: <PanelTop className="h-8 w-8 text-[#9b87f5]" />,
+      link: '/admin/editor-resultado'
+    },
+    {
+      title: 'Análise UTM',
+      description: 'Acompanhe conversões por canal',
+      icon: <BarChart4 className="h-8 w-8 text-[#9b87f5]" />,
+      link: '/admin/utm-analytics'
+    },
+    {
+      title: 'Configurações',
+      description: 'Ajuste as configurações da sua conta',
+      icon: <Settings className="h-8 w-8 text-[#9b87f5]" />,
+      link: '/admin/settings'
+    }
+  ];
+
   return (
-    <AdminLayout>
-      <div className="p-6 bg-[#FAF9F7]">
-        <h1 className="text-2xl font-playfair text-[#432818] mb-6">
-          Dashboard
-        </h1>
-
+    <div className="min-h-screen bg-[#FAF9F7] p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-[#1A1818] mb-8">Painel de Administração</h1>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-            <h2 className="text-lg font-medium text-[#432818] mb-3">
-              Quizzes Ativos
-            </h2>
-            <p className="text-3xl font-bold text-[#B89B7A]">1</p>
-            <p className="text-sm text-[#8F7A6A] mt-2">
-              Último quiz criado em 20/04/2025
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-            <h2 className="text-lg font-medium text-[#432818] mb-3">
-              Respostas Coletadas
-            </h2>
-            <p className="text-3xl font-bold text-[#B89B7A]">842</p>
-            <p className="text-sm text-[#8F7A6A] mt-2">
-              Última resposta há 2 horas atrás
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-            <h2 className="text-lg font-medium text-[#432818] mb-3">
-              Taxa de Conversão
-            </h2>
-            <p className="text-3xl font-bold text-[#B89B7A]">23.5%</p>
-            <p className="text-sm text-[#8F7A6A] mt-2">
-              +2.7% em relação ao mês anterior
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-10">
-          <h2 className="text-lg font-medium text-[#432818] mb-4">
-            Ações Rápidas
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link
-              to="/admin/editor-unificado"
-              className="bg-white p-6 rounded-lg shadow-sm border-2 border-[#9b87f5] hover:bg-[#9b87f5]/5 transition-colors flex flex-col"
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#9b87f5]/10 flex items-center justify-center">
-                  <Layers className="w-5 h-5 text-[#9b87f5]" />
-                </div>
-                <h3 className="font-medium text-[#432818] ml-3">
-                  Editor Unificado <span className="text-xs font-normal text-[#9b87f5] px-1 py-0.5 bg-[#9b87f5]/10 rounded">Novo</span>
-                </h3>
-              </div>
-              <p className="text-sm text-[#8F7A6A]">
-                Nova experiência: edite todo o fluxo do quiz e página de resultados em um único lugar
-              </p>
+          {menuItems.map((item, index) => (
+            <Link to={item.link} key={index}>
+              <Card className={`cursor-pointer transition-all hover:shadow-md ${
+                item.highlight ? 'border-[#9b87f5] bg-[#f9f7ff]' : ''
+              }`}>
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between">
+                    {item.icon}
+                    {item.highlight && (
+                      <span className="bg-[#9b87f5] text-white text-xs px-2 py-1 rounded-full">
+                        Recomendado
+                      </span>
+                    )}
+                  </div>
+                  <CardTitle className="text-xl mt-2">{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-sm text-gray-600">
+                    {item.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </Link>
-            
-            <Link
-              to="/admin/quiz-builder"
-              className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20 hover:bg-[#FAF9F7] transition-colors flex flex-col"
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#B89B7A]/10 flex items-center justify-center">
-                  <PenTool className="w-5 h-5 text-[#B89B7A]" />
-                </div>
-                <h3 className="font-medium text-[#432818] ml-3">
-                  Editor do Quiz
-                </h3>
-              </div>
-              <p className="text-sm text-[#8F7A6A]">
-                Crie e edite o conteúdo do seu quiz com nosso editor intuitivo
-              </p>
-            </Link>
-
-            <Link
-              to="/admin/editor-resultado"
-              className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20 hover:bg-[#FAF9F7] transition-colors flex flex-col"
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#B89B7A]/10 flex items-center justify-center">
-                  <PenTool className="w-5 h-5 text-[#B89B7A]" />
-                </div>
-                <h3 className="font-medium text-[#432818] ml-3">
-                  Editor de Resultado
-                </h3>
-              </div>
-              <p className="text-sm text-[#8F7A6A]">
-                Edite a página de resultados
-              </p>
-            </Link>
-
-            <Link
-              to="/admin/results"
-              className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20 hover:bg-[#FAF9F7] transition-colors flex flex-col"
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#B89B7A]/10 flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5 text-[#B89B7A]" />
-                </div>
-                <h3 className="font-medium text-[#432818] ml-3">
-                  Resultados
-                </h3>
-              </div>
-              <p className="text-sm text-[#8F7A6A]">
-                Veja estatísticas e análise de respostas do seu quiz
-              </p>
-            </Link>
-
-            <a
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20 hover:bg-[#FAF9F7] transition-colors flex flex-col"
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#B89B7A]/10 flex items-center justify-center">
-                  <Eye className="w-5 h-5 text-[#B89B7A]" />
-                </div>
-                <h3 className="font-medium text-[#432818] ml-3">
-                  Visualizar Quiz
-                </h3>
-              </div>
-              <p className="text-sm text-[#8F7A6A]">
-                Veja como seu quiz aparece para seus usuários
-              </p>
-            </a>
-          </div>
+          ))}
         </div>
       </div>
-    </AdminLayout>
+    </div>
   );
-};
-
-export default AdminDashboard;
+}
