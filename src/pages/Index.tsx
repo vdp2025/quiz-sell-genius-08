@@ -6,11 +6,12 @@ import { useQuizContext } from '../context/QuizContext';
 
 const Index = () => {
   const [started, setStarted] = useState(false);
-  const { quizCompleted } = useQuizContext();
+  const { startQuiz } = useQuizContext();
 
-  const handleStart = () => {
+  const handleStart = async (name: string) => {
     setStarted(true);
-    console.log('Quiz started');
+    console.log(`Quiz started by ${name}`);
+    localStorage.setItem('userName', name);
   };
 
   return (

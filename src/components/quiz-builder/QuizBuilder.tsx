@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { toast } from '@/components/ui/use-toast';
-import QuizPreview from './preview/QuizPreview';
-import BuilderToolbar from './components/BuilderToolbar';
-import BuilderLayout from './components/BuilderLayout';
-import QuizTemplateImporter from './components/QuizTemplateImporter';
 import { QuizResult } from '@/types/quiz';
+import { Button } from '@/components/ui/button';
+import BuilderLayout from './components/BuilderLayout';
+import BuilderToolbar from './components/BuilderToolbar';
+import QuizTemplateImporter from './components/QuizTemplateImporter';
+import QuizPreview from './preview/QuizPreview';
+import { ResultPageConfig } from '@/types/resultPageConfig';
+import { resultPageStorage } from '@/services/resultPageStorage';
+import { createBuilderStateFromResultPage, loadQuizResultConfig } from '@/services/quizBuilderService';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -16,6 +19,7 @@ export const QuizBuilder: React.FC = () => {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [previewResult, setPreviewResult] = useState<QuizResult | null>(null);
   const [isTemplateImporterOpen, setIsTemplateImporterOpen] = useState(false);
+  const [isImportingFromResult, setIsImportingFromResult] = useState(false);
   
   const { 
     components, 
@@ -36,6 +40,47 @@ export const QuizBuilder: React.FC = () => {
     loading
   } = useQuizBuilder();
 
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    if (currentPath === '/resultado' && !isImportingFromResult) {
+      setIsImportingFromResult(true);
+      
+      const styleTypes = [
+        'Elegante', 'Contemporâneo', 'Natural', 'Clássico', 
+        'Romântico', 'Sexy', 'Dramático', 'Criativo'
+      ];
+      
+      let foundConfig = false;
+      
+      for (const styleType of styleTypes) {
+        const config = loadQuizResultConfig(styleType);
+        
+        if (config) {
+          toast({
+            title: "Configuração de Resultado Encontrada",
+            description: `Encontramos uma configuração de página de resultado para o estilo ${styleType}. Deseja importar para o editor?`,
+            action: (
+              <Button 
+                onClick={() => handleImportResultPage(config)}
+                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
+              >
+                Importar
+              </Button>
+            ),
+            duration: 10000
+          });
+          
+          foundConfig = true;
+          break;
+        }
+      }
+      
+      if (!foundConfig) {
+        setIsImportingFromResult(false);
+      }
+    }
+  }, []);
+
   const handleComponentSelect = (type: QuizComponentType) => {
     const newComponentId = addComponent(type, activeStageId);
     setSelectedComponentId(newComponentId);
@@ -52,7 +97,17 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handlePreviewQuizResult = () => {
-    // Generate a sample quiz result for preview
+    const savedResult = localStorage.getItem('quiz_result');
+    if (savedResult) {
+      try {
+        const parsedResult = JSON.parse(savedResult);
+        setPreviewResult(parsedResult);
+        return;
+      } catch (error) {
+        console.error('Error parsing saved quiz result:', error);
+      }
+    }
+    
     const previewResult: QuizResult = {
       primaryStyle: {
         category: 'Elegante',
@@ -83,8 +138,17 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handleImportTemplate = (template: QuizBuilderState) => {
+    const editableComponents = template.components.map(component => ({
+      ...component,
+      data: {
+        ...component.data,
+        isEditable: true,
+        originalQuestionId: component.id
+      }
+    }));
+
     initializeStages(template.stages);
-    initializeComponents(template.components);
+    initializeComponents(editableComponents);
     
     if (template.stages.length > 0) {
       setActiveStage(template.stages[0].id);
@@ -96,21 +160,38 @@ export const QuizBuilder: React.FC = () => {
     });
   };
 
+  const handleImportResultPage = (config: ResultPageConfig) => {
+    const builderState = createBuilderStateFromResultPage(config);
+    initializeStages(builderState.stages);
+    initializeComponents(builderState.components);
+    
+    if (builderState.stages.length > 0) {
+      setActiveStage(builderState.stages[0].id);
+    }
+    
+    toast({
+      title: "Página de resultado importada",
+      description: "A configuração da página de resultado foi importada com sucesso.",
+    });
+    
+    setIsImportingFromResult(false);
+  };
+
   const activeStage = activeStageId
     ? stages.find(s => s.id === activeStageId)
     : null;
 
   if (loading) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7]">
-        <Loader2 className="h-12 w-12 text-[#B89B7A] animate-spin mb-4" />
-        <p className="text-[#432818] text-lg">Carregando construtor de quiz...</p>
+      <div className="h-screen flex flex-col items-center justify-center bg-[#1A1F2C]">
+        <Loader2 className="h-12 w-12 text-[#9b87f5] animate-spin mb-4" />
+        <p className="text-white text-lg">Carregando construtor de quiz...</p>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-[#1A1F2C]">
       <BuilderToolbar
         activeView={activeView}
         isPreviewing={isPreviewing}
@@ -121,36 +202,33 @@ export const QuizBuilder: React.FC = () => {
         onImportQuizTemplate={() => setIsTemplateImporterOpen(true)}
       />
       
-      <div className="flex-1">
-        <Tabs defaultValue={activeView} value={activeView}>
-          <TabsContent value="editor" className="h-full">
-            <BuilderLayout
-              components={components}
-              stages={stages}
-              activeStageId={activeStageId}
-              selectedComponentId={selectedComponentId}
-              activeStage={activeStage}
-              isPreviewing={isPreviewing}
-              onComponentSelect={handleComponentSelect}
-              onStageAdd={addStage}
-              onStageSelect={setActiveStage}
-              onComponentMove={moveComponent}
-              onStageMove={moveStage}
-              onStageUpdate={updateStage}
-              onStageDelete={deleteStage}
-              onComponentUpdate={updateComponent}
-              onComponentDelete={deleteComponent}
-            />
-          </TabsContent>
-          
-          <TabsContent value="preview" className="h-full">
-            <QuizPreview 
-              stages={stages}
-              components={components}
-              previewResult={previewResult}
-            />
-          </TabsContent>
-        </Tabs>
+      <div className="flex-1 overflow-hidden">
+        {activeView === 'editor' ? (
+          <BuilderLayout
+            components={components}
+            stages={stages}
+            activeStageId={activeStageId}
+            selectedComponentId={selectedComponentId}
+            activeStage={activeStage}
+            isPreviewing={isPreviewing}
+            onComponentSelect={handleComponentSelect}
+            onStageAdd={addStage}
+            onStageSelect={setActiveStage}
+            onComponentMove={moveComponent}
+            onStageMove={moveStage}
+            onStageUpdate={updateStage}
+            onStageDelete={deleteStage}
+            onComponentUpdate={updateComponent}
+            onComponentDelete={deleteComponent}
+            onSelectComponent={setSelectedComponentId}
+          />
+        ) : (
+          <QuizPreview 
+            stages={stages}
+            components={components}
+            previewResult={previewResult}
+          />
+        )}
       </div>
       
       <QuizTemplateImporter 

@@ -3,11 +3,29 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
+<<<<<<< HEAD
+import { Progress } from '@/components/ui/progress';
+=======
 import { EditorButton } from '@/components/ui/EditorButton';
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ShoppingCart, CheckCircle, Shield } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+<<<<<<< HEAD
+import ErrorState from '@/components/result/ErrorState';
+import MotivationSection from '@/components/result/MotivationSection';
+import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import ProductShowcase from '@/components/quiz-result/sales/ProductShowcase';
+import BenefitList from '@/components/quiz-result/sales/BenefitList';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+<<<<<<< HEAD
+=======
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
+=======
+import { Button } from '@/components/ui/button';
+>>>>>>> d3568a460a8bd98629bc199d6bf66dea024044c9
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -18,6 +36,9 @@ const ResultPage: React.FC = () => {
   }, []);
 
   if (!primaryStyle) {
+<<<<<<< HEAD
+    return <ErrorState />;
+=======
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
@@ -36,6 +57,7 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
     );
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
   }
 
   const { category } = primaryStyle;
@@ -50,8 +72,11 @@ const ResultPage: React.FC = () => {
         fontFamily: globalStyles.fontFamily || 'inherit',
       }}
     >
+<<<<<<< HEAD
+=======
       <EditorButton />
 
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
       <Header
         primaryStyle={primaryStyle}
         logoHeight={globalStyles.logoHeight}
@@ -62,6 +87,57 @@ const ResultPage: React.FC = () => {
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Estilo Principal */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
+<<<<<<< HEAD
+          <AnimatedWrapper show={true}>
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
+                Seu Estilo é {category}
+              </h2>
+              
+              <div className="max-w-md mx-auto mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-[#8F7A6A]">Porcentagem de compatibilidade</span>
+                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                </div>
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-2 bg-[#F3E8E6]"
+                  indicatorClassName="bg-[#B89B7A]"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <p className="text-[#432818] leading-relaxed">{description}</p>
+
+                <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                  <h3 className="text-lg font-medium text-[#432818] mb-2">
+                    Seus Estilos Complementares
+                  </h3>
+                  <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                </div>
+              </div>
+              <div>
+                <img
+                  src={image}
+                  alt={`Estilo ${category}`}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+            <div className="mt-8">
+              <img
+                src={guideImage}
+                alt={`Guia de Estilo ${category}`}
+                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          </AnimatedWrapper>
+        </Card>
+
+        <MotivationSection />
+=======
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
               <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-2">
@@ -133,6 +209,7 @@ const ResultPage: React.FC = () => {
             </div>
           </div>
         </div>
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 
         {/* Oferta + Bônus */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
@@ -148,6 +225,9 @@ const ResultPage: React.FC = () => {
             </p>
           </div>
 
+<<<<<<< HEAD
+          <ProductShowcase />
+=======
           <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
             <div>
               <h3 className="text-xl font-medium text-[#432818] mb-4">
@@ -175,6 +255,7 @@ const ResultPage: React.FC = () => {
               />
             </div>
           </div>
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
 
           <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
             <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
@@ -239,7 +320,11 @@ const ResultPage: React.FC = () => {
                 (window.location.href =
                   'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912')
               }
+<<<<<<< HEAD
+              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
+=======
               className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold"
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
             >
               <ShoppingCart className="w-5 h-5 mr-2" />
               Quero meu Guia + Bônus por R$39,00
@@ -250,6 +335,11 @@ const ResultPage: React.FC = () => {
           </div>
         </Card>
 
+<<<<<<< HEAD
+        <Testimonials />
+        <MentorSection />
+        <GuaranteeSection />
+=======
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             💬 Depoimentos de mulheres que já viveram essa transformação:
@@ -365,6 +455,7 @@ const ResultPage: React.FC = () => {
             </div>
           </div>
         </Card>
+>>>>>>> 4d31a4e3180b07eda5f6207bf7f618722a91b0e6
       </div>
     </div>
   );

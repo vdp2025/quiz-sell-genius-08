@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import Logo from './ui/logo';
 
 interface QuizWelcomeProps {
@@ -13,7 +12,6 @@ interface QuizWelcomeProps {
 export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const [name, setName] = useState('');
   const { login } = useAuth();
-  const navigate = useNavigate();
 
   const handleStart = () => {
     if (name.trim()) {
@@ -23,71 +21,60 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
     }
   };
 
-  const goToQuizEditor = () => {
-    navigate('/admin/quiz-editor');
-  };
-
   return (
-    <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center py-6 md:py-12">
-      <div className="w-full max-w-xl mx-auto bg-white shadow-none flex flex-col items-center px-0">
-        {/* Logo */}
-        <div className="w-full flex flex-col items-center pt-4 pb-2">
-          <Logo className="h-14 mb-2" />
-          <div className="w-32 h-1 rounded bg-[#B89B7A] mb-2" />
-          <div className="w-full h-1 bg-[#E5E2DE] rounded">
-            <div className="w-1/4 h-1 bg-[#B89B7A] rounded" />
-          </div>
-        </div>
-        {/* Título */}
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-[#432818] text-center mt-6 mb-8">
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="w-full max-w-xl mx-auto flex flex-col items-center px-4 py-8">
+        {/* Logo and Progress Bar */}
+        <Logo className="h-16 mb-4" />
+        <div className="w-full max-w-[140px] h-[3px] bg-brand-gold mb-2" />
+        <div className="w-full max-w-[500px] h-[1px] bg-[#E5E2DE]" />
+
+        {/* Title */}
+        <h1 className="font-playfair text-3xl font-medium text-[#1A1818] text-center mt-8 mb-10">
           Teste de Estilo Pessoal
         </h1>
-        {/* Imagem central estilosa */}
-        <img
-          src="/lovable-uploads/9f029fbb-cabe-48ef-9877-aad214e94c60.png"
-          alt="Mulheres estilosas"
-          className="w-full max-w-lg object-contain mb-10"
-          style={{ maxHeight: 180 }}
-        />
-        {/* Formulário nome */}
-        <form
-          onSubmit={e => { e.preventDefault(); handleStart(); }}
-          className="w-full px-4 flex flex-col items-center"
-        >
-          <label
-            className="block text-[#432818] text-base font-medium mb-1"
-            htmlFor="nome"
-            style={{ letterSpacing: 0.2 }}
-          >
-            NOME <span className="text-[#B89B7A]">*</span>
-          </label>
-          <Input
-            id="nome"
-            placeholder="Digite seu nome aqui..."
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="w-full mb-5 text-lg p-3 bg-[#ECEAE6] border-none focus:ring-2 focus:ring-[#B89B7A] rounded-md placeholder:text-[#8E9196]"
+
+        {/* Main Image */}
+        <div className="w-full max-w-2xl mb-12">
+          <img
+            src="/lovable-uploads/9f029fbb-cabe-48ef-9877-aad214e94c60.png"
+            alt="Mulheres estilosas"
+            className="w-full h-auto"
           />
-          <Button
-            type="submit"
-            className="w-full py-4 text-lg rounded-md font-semibold bg-[#B89B7A] hover:bg-[#aa6b5d] transition-colors text-white shadow"
-            disabled={!name.trim()}
+        </div>
+
+        {/* Form */}
+        <div className="w-full max-w-md">
+          <form
+            onSubmit={e => { e.preventDefault(); handleStart(); }}
+            className="space-y-4"
           >
-            Continuar
-          </Button>
-          <div className="pt-5 w-full text-center">
+            <div className="space-y-2">
+              <label
+                htmlFor="name"
+                className="block text-[#1A1818] text-sm font-medium"
+              >
+                NOME <span className="text-brand-gold">*</span>
+              </label>
+              <Input
+                id="name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                placeholder="Digite seu nome aqui..."
+                className="w-full h-12 px-4 bg-[#F5F5F5] border-none rounded-md text-[#1A1818] placeholder:text-[#8E9196]"
+              />
+            </div>
+            
             <Button
-              onClick={goToQuizEditor}
-              variant="outline"
-              className="w-full border-[#B89B7A] text-[#B89B7A] hover:bg-[#FAF9F7] mt-2"
-              type="button"
+              type="submit"
+              disabled={!name.trim()}
+              className="w-full h-12 bg-[#C1A57B] hover:bg-[#B89B7A] text-white font-medium rounded-md transition-colors"
             >
-              Acessar Editor de Quiz
+              Continuar
             </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
-

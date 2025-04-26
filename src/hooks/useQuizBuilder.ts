@@ -4,9 +4,7 @@ import { toast } from '@/components/ui/use-toast';
 import { useQuizStages } from './useQuizStages';
 import { useQuizComponents } from './useQuizComponents';
 import { generateInitialStages, createBuilderStateFromQuiz } from '@/services/quizBuilderService';
-import { clothingQuestions } from '@/data/questions/clothingQuestions';
-import { personalityQuestions } from '@/data/questions/personalityQuestions';
-import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
+import { quizQuestions } from '@/data/quizQuestions';
 
 const STORAGE_KEY = 'quiz_builder_data';
 
@@ -48,16 +46,10 @@ export const useQuizBuilder = () => {
           }
         } else {
           // Initialize with existing quiz questions
-          const allQuestions = [
-            ...clothingQuestions,
-            ...personalityQuestions,
-            ...accessoriesQuestions
-          ];
-          
           const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(
-            allQuestions,
+            quizQuestions,
             'Quiz de Estilo Pessoal',
-            'Descubra seu estilo predominante respondendo às perguntas a seguir',
+            'Descubra seu estilo predominante',
             'Seu Resultado de Estilo Pessoal'
           );
           

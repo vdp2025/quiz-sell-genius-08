@@ -1,40 +1,39 @@
 
 import React from 'react';
-import { QuizComponentData } from '@/types/quizBuilder';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { QuizComponentData } from '@/types/quizBuilder';
 
 interface HeaderPropertiesProps {
   data: QuizComponentData['data'];
-  onUpdate: (data: any) => void;
+  onUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
+  componentId: string;
 }
 
-const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ data, onUpdate }) => {
+export const HeaderProperties: React.FC<HeaderPropertiesProps> = ({
+  data,
+  onUpdate,
+  componentId
+}) => {
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="title">Título</Label>
+      <div>
+        <Label>Título</Label>
         <Input
-          id="title"
           value={data.title || ''}
-          onChange={(e) => onUpdate({ ...data, title: e.target.value })}
+          onChange={(e) => onUpdate(componentId, { data: { ...data, title: e.target.value } })}
           placeholder="Título do Quiz"
         />
       </div>
       
-      <div className="space-y-2">
-        <Label htmlFor="subtitle">Subtítulo</Label>
-        <Textarea
-          id="subtitle"
+      <div>
+        <Label>Subtítulo</Label>
+        <Input
           value={data.subtitle || ''}
-          onChange={(e) => onUpdate({ ...data, subtitle: e.target.value })}
+          onChange={(e) => onUpdate(componentId, { data: { ...data, subtitle: e.target.value } })}
           placeholder="Descrição ou instruções do quiz"
-          rows={3}
         />
       </div>
     </div>
   );
 };
-
-export default HeaderProperties;

@@ -1,100 +1,41 @@
 
-import { QuizQuestion, QuizOption } from './quiz';
+import { QuizQuestion } from './quiz';
 
-export interface EditableQuizQuestion extends QuizQuestion {
-  isEditing?: boolean;
-  isNew?: boolean;
-}
-
-export interface EditableQuizOption extends QuizOption {
-  isEditing?: boolean;
-  isNew?: boolean;
-}
-
-export interface QuizEditorState {
-  questions: EditableQuizQuestion[];
-  editingQuestionId: string | null;
-  selectedCategory: string | null;
-}
-
-export type QuizCategory = 
-  | 'clothingQuestions'
-  | 'personalityQuestions'
-  | 'accessoriesQuestions'
-  | 'stylePreferencesQuestions'
-  | 'outerwearQuestions'
-  | 'accessoryStyleQuestions'
-  | 'selfPerceptionQuestions'
-  | 'styleExperienceQuestions'
-  | 'purchaseIntentQuestions'
-  | 'desiredOutcomesQuestions';
-
-export interface QuizCategoryInfo {
-  id: QuizCategory;
-  name: string;
-  description: string;
-  isStrategic: boolean;
-}
-
-export const QUIZ_CATEGORIES: QuizCategoryInfo[] = [
+export const QUIZ_CATEGORIES = [
   {
     id: 'clothingQuestions',
-    name: 'Questões de Vestuário',
-    description: 'Perguntas sobre preferências de roupas e estilo pessoal',
+    name: 'Roupas',
+    icon: '👚',
+    description: 'Perguntas sobre preferências de roupas',
     isStrategic: false
   },
   {
     id: 'personalityQuestions',
-    name: 'Questões de Personalidade',
-    description: 'Perguntas sobre traços de personalidade e auto-percepção',
+    name: 'Personalidade',
+    icon: '😊',
+    description: 'Perguntas sobre traços de personalidade',
     isStrategic: false
   },
   {
     id: 'accessoriesQuestions',
-    name: 'Questões de Acessórios',
-    description: 'Perguntas sobre preferências de sapatos e acessórios',
+    name: 'Acessórios',
+    icon: '💍',
+    description: 'Perguntas sobre preferências de acessórios',
     isStrategic: false
   },
   {
-    id: 'stylePreferencesQuestions',
-    name: 'Preferências de Estilo',
-    description: 'Perguntas sobre tecidos e estampas preferidas',
-    isStrategic: false
-  },
-  {
-    id: 'outerwearQuestions',
-    name: 'Questões de Casacos e Calças',
-    description: 'Perguntas sobre preferências de casacos e calças',
-    isStrategic: false
-  },
-  {
-    id: 'accessoryStyleQuestions',
-    name: 'Estilo de Acessórios',
-    description: 'Perguntas sobre o estilo de acessórios preferidos',
-    isStrategic: false
-  },
-  {
-    id: 'selfPerceptionQuestions',
-    name: 'Auto-Percepção',
-    description: 'Perguntas estratégicas sobre como a pessoa se vê',
-    isStrategic: true
-  },
-  {
-    id: 'styleExperienceQuestions',
-    name: 'Experiência com Estilo',
-    description: 'Perguntas estratégicas sobre experiências anteriores com moda',
-    isStrategic: true
-  },
-  {
-    id: 'purchaseIntentQuestions',
-    name: 'Intenção de Compra',
-    description: 'Perguntas estratégicas sobre disposição para comprar',
-    isStrategic: true
-  },
-  {
-    id: 'desiredOutcomesQuestions',
-    name: 'Resultados Desejados',
-    description: 'Perguntas estratégicas sobre os objetivos desejados',
+    id: 'strategicQuestions',
+    name: 'Perguntas Estratégicas',
+    icon: '🎯',
+    description: 'Perguntas para coleta de informações direcionadas',
     isStrategic: true
   }
 ];
+
+export type QuizCategory = typeof QUIZ_CATEGORIES[number]['id'];
+
+export interface QuizEditorState {
+  questions: QuizQuestion[];
+  editingQuestionId: string | null;
+  selectedCategory: string | null;
+}

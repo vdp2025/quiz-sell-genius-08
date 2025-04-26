@@ -2,13 +2,25 @@
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
+import MultipleChoiceComponent from '../components/MultipleChoiceComponent';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
+  isSelected?: boolean;
+  onSelect?: () => void;
+  onMove?: (draggedId: string, targetId: string) => void;
+  isPreviewing?: boolean;
   isEditing?: boolean;
 }
 
-const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEditing = false }) => {
+const ComponentRenderer: React.FC<ComponentRendererProps> = ({ 
+  component, 
+  isSelected = false, 
+  onSelect = () => {}, 
+  onMove = () => {}, 
+  isPreviewing = false,
+  isEditing = false 
+}) => {
   const { type, data, style } = component;
   
   const containerStyles = {
@@ -49,69 +61,12 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
   );
   
   const renderMultipleChoice = () => {
-    const optionsLayout = data.layout || { columns: 1, direction: 'vertical' };
-    const isImageOption = data.displayType === 'image' || data.displayType === 'both';
-    const imageSize = data.imageSize || 'medium';
-    
-    const getImageSizeClass = (size: string) => {
-      switch (size) {
-        case 'small': return 'h-24';
-        case 'large': return 'h-48';
-        default: return 'h-36';
-      }
-    };
-    
-    const getGridClass = () => {
-      const cols = optionsLayout.columns;
-      switch (cols) {
-        case 1: return 'grid-cols-1';
-        case 2: return 'grid-cols-1 md:grid-cols-2';
-        case 3: return 'grid-cols-1 md:grid-cols-3';
-        case 4: return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-4';
-        default: return 'grid-cols-1';
-      }
-    };
-    
     return (
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium text-center mb-4">{data.question}</h3>
-        
-        {data.multiSelect && (
-          <p className="text-sm text-center text-gray-600 mb-4">
-            Selecione {data.multiSelect} {data.multiSelect === 1 ? 'opção' : 'opções'}
-          </p>
-        )}
-        
-        <div className={cn("grid gap-4", getGridClass())}>
-          {(data.options || []).map((option: string, index: number) => {
-            const optionImage = data.optionImages && data.optionImages[index];
-            const styleCategory = data.optionStyleCategories && data.optionStyleCategories[index];
-            
-            return (
-              <div key={index} className="border rounded-md overflow-hidden hover:shadow-md transition-shadow">
-                {isImageOption && optionImage && (
-                  <div className={cn("w-full overflow-hidden", getImageSizeClass(imageSize))}>
-                    <img 
-                      src={optionImage} 
-                      alt={`Opção ${index + 1}`} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="p-3">
-                  <div className="flex items-start">
-                    <div className="h-5 w-5 rounded-full border-2 border-[#B89B7A] flex-shrink-0 mr-3 mt-0.5"></div>
-                    <div>
-                      <p>{option}</p>
-                      {styleCategory && <span className="text-xs text-gray-500">({styleCategory})</span>}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <MultipleChoiceComponent
+        data={data}
+        style={style || {}}
+        isSelected={isEditing}
+      />
     );
   };
   
@@ -157,10 +112,11 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component, isEdit
 
   return (
     <div 
-      className={cn("relative rounded-md overflow-hidden", isEditing && "border-2 border-[#B89B7A]")}
+      className={cn("relative rounded-md overflow-hidden", isSelected && "border-2 border-[#B89B7A]")}
       style={containerStyles}
+      onClick={onSelect}
     >
-      {isEditing && (
+      {isSelected && (
         <div className="absolute top-0 right-0 bg-[#B89B7A] text-white px-2 py-1 text-xs z-10">
           {type}
         </div>

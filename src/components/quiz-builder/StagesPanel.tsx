@@ -1,102 +1,40 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { QuizStage } from '@/types/quizBuilder';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Edit2, Trash2, GripVertical, ChevronDown, ChevronUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { BookOpen, FileQuestion, Award, PlusCircle } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { StageSection } from './stages/StageSection';
 
 interface StagesPanelProps {
   stages: QuizStage[];
   activeStageId: string | null;
   onStageSelect: (stageId: string) => void;
+  onStageAdd: (type: QuizStage['type']) => void;
   onStageMove: (draggedId: string, targetId: string) => void;
   onStageUpdate: (id: string, updates: Partial<QuizStage>) => void;
   onStageDelete: (id: string) => void;
 }
 
-const SortableStage = ({ stage, isActive, onSelect, onEdit, onDelete }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: stage.id
-  });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition
-  };
-
-  const getStageIcon = (type: QuizStage['type']) => {
-    switch (type) {
-      case 'cover':
-        return <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs">C</div>;
-      case 'question':
-        return <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs">Q</div>;
-      case 'result':
-        return <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xs">R</div>;
-    }
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={cn(
-        "p-2 mb-2 border rounded-md cursor-pointer",
-        isActive ? "border-[#B89B7A] bg-[#B89B7A]/10" : "border-gray-200 hover:bg-gray-50"
-      )}
-      onClick={() => onSelect(stage.id)}
-    >
-      <div className="flex items-center gap-2">
-        <div {...attributes} {...listeners} className="cursor-grab">
-          <GripVertical className="w-4 h-4 text-gray-400" />
-        </div>
-        
-        {getStageIcon(stage.type)}
-        
-        <div className="flex-1 truncate">
-          <div className="text-sm font-medium">{stage.title}</div>
-          <div className="text-xs text-gray-500">
-            {stage.type === 'cover' ? 'Capa' : stage.type === 'question' ? 'Questão' : 'Resultado'}
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => {
-            e.stopPropagation();
-            onEdit(stage.id);
-          }}>
-            <Edit2 className="w-3.5 h-3.5 text-gray-500" />
-          </Button>
-          
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => {
-            e.stopPropagation();
-            onDelete(stage.id);
-          }}>
-            <Trash2 className="w-3.5 h-3.5 text-gray-500" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const StagesPanel: React.FC<StagesPanelProps> = ({
   stages,
   activeStageId,
   onStageSelect,
+  onStageAdd,
   onStageMove,
   onStageUpdate,
   onStageDelete
 }) => {
-  const [expandedTypes, setExpandedTypes] = React.useState({
+  const [expandedTypes, setExpandedTypes] = useState({
     cover: true,
     question: true,
     result: true
   });
+  
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -113,6 +51,11 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
     }
   };
 
+  const handleAddStage = (type: QuizStage['type']) => {
+    onStageAdd(type);
+    setPopoverOpen(false);
+  };
+
   const coverStages = stages.filter(stage => stage.type === 'cover');
   const questionStages = stages.filter(stage => stage.type === 'question');
   const resultStages = stages.filter(stage => stage.type === 'result');
@@ -121,122 +64,76 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
     setExpandedTypes(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
+  const stageTypes = [
+    { type: 'cover' as const, label: 'Capa', icon: BookOpen },
+    { type: 'question' as const, label: 'Questão', icon: FileQuestion },
+    { type: 'result' as const, label: 'Resultado', icon: Award },
+  ];
+
   return (
-    <div className="h-full flex flex-col border-r overflow-hidden">
-      <div className="p-4 border-b">
-        <h2 className="font-semibold text-[#432818]">Etapas do Quiz</h2>
+    <div className="h-full flex flex-col border-r border-[#333333] text-white">
+      <div className="p-4 border-b border-[#333333] flex items-center justify-between">
+        <h2 className="font-semibold text-white">Etapas do Quiz</h2>
+        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-[#333333]">
+              <PlusCircle className="w-5 h-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-56 p-2 bg-[#333333] border-[#444444]" align="end">
+            <div className="grid gap-1">
+              {stageTypes.map((stageType) => (
+                <Button
+                  key={stageType.type}
+                  variant="ghost"
+                  className="w-full justify-start text-white hover:bg-[#444444]"
+                  onClick={() => handleAddStage(stageType.type)}
+                >
+                  <stageType.icon className="w-4 h-4 mr-2" />
+                  <span>Nova {stageType.label}</span>
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
       
       <ScrollArea className="flex-1">
         <div className="p-4">
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={stages.map(s => s.id)} strategy={verticalListSortingStrategy}>
+              <StageSection
+                title="Capas"
+                isExpanded={expandedTypes.cover}
+                stages={coverStages}
+                activeStageId={activeStageId}
+                onToggle={() => toggleSection('cover')}
+                onStageSelect={onStageSelect}
+                onStageEdit={(id) => {}}
+                onStageDelete={onStageDelete}
+              />
               
-              {/* Cover Stages */}
-              <div className="mb-4">
-                <div 
-                  className="flex items-center justify-between p-2 bg-gray-100 rounded-md cursor-pointer mb-2"
-                  onClick={() => toggleSection('cover')}
-                >
-                  <div className="font-medium text-sm">Capas</div>
-                  {expandedTypes.cover ? 
-                    <ChevronUp className="w-4 h-4" /> : 
-                    <ChevronDown className="w-4 h-4" />
-                  }
-                </div>
-                
-                {expandedTypes.cover && (
-                  <div className="pl-2">
-                    {coverStages.length > 0 ? (
-                      coverStages.map(stage => (
-                        <SortableStage 
-                          key={stage.id}
-                          stage={stage}
-                          isActive={stage.id === activeStageId}
-                          onSelect={onStageSelect}
-                          onEdit={() => {}}
-                          onDelete={onStageDelete}
-                        />
-                      ))
-                    ) : (
-                      <div className="text-sm text-gray-500 italic p-2">
-                        Nenhuma capa adicionada
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+              <StageSection
+                title="Questões"
+                isExpanded={expandedTypes.question}
+                stages={questionStages}
+                activeStageId={activeStageId}
+                onToggle={() => toggleSection('question')}
+                onStageSelect={onStageSelect}
+                onStageEdit={(id) => {}}
+                onStageDelete={onStageDelete}
+              />
               
-              {/* Question Stages */}
-              <div className="mb-4">
-                <div 
-                  className="flex items-center justify-between p-2 bg-gray-100 rounded-md cursor-pointer mb-2"
-                  onClick={() => toggleSection('question')}
-                >
-                  <div className="font-medium text-sm">Questões</div>
-                  {expandedTypes.question ? 
-                    <ChevronUp className="w-4 h-4" /> : 
-                    <ChevronDown className="w-4 h-4" />
-                  }
-                </div>
-                
-                {expandedTypes.question && (
-                  <div className="pl-2">
-                    {questionStages.length > 0 ? (
-                      questionStages.map(stage => (
-                        <SortableStage 
-                          key={stage.id}
-                          stage={stage}
-                          isActive={stage.id === activeStageId}
-                          onSelect={onStageSelect}
-                          onEdit={() => {}}
-                          onDelete={onStageDelete}
-                        />
-                      ))
-                    ) : (
-                      <div className="text-sm text-gray-500 italic p-2">
-                        Nenhuma questão adicionada
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              
-              {/* Result Stages */}
-              <div className="mb-4">
-                <div 
-                  className="flex items-center justify-between p-2 bg-gray-100 rounded-md cursor-pointer mb-2"
-                  onClick={() => toggleSection('result')}
-                >
-                  <div className="font-medium text-sm">Resultados</div>
-                  {expandedTypes.result ? 
-                    <ChevronUp className="w-4 h-4" /> : 
-                    <ChevronDown className="w-4 h-4" />
-                  }
-                </div>
-                
-                {expandedTypes.result && (
-                  <div className="pl-2">
-                    {resultStages.length > 0 ? (
-                      resultStages.map(stage => (
-                        <SortableStage 
-                          key={stage.id}
-                          stage={stage}
-                          isActive={stage.id === activeStageId}
-                          onSelect={onStageSelect}
-                          onEdit={() => {}}
-                          onDelete={onStageDelete}
-                        />
-                      ))
-                    ) : (
-                      <div className="text-sm text-gray-500 italic p-2">
-                        Nenhuma página de resultado adicionada
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              
+              <StageSection
+                title="Resultados"
+                isExpanded={expandedTypes.result}
+                stages={resultStages}
+                activeStageId={activeStageId}
+                onToggle={() => toggleSection('result')}
+                onStageSelect={onStageSelect}
+                onStageEdit={(id) => {}}
+                onStageDelete={onStageDelete}
+              />
             </SortableContext>
           </DndContext>
         </div>

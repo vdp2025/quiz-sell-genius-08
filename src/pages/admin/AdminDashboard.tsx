@@ -1,71 +1,100 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AdminLayout from '@/components/admin/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ContentContainer } from '@/components/shared/ContentContainer';
+import { GridLayout } from '@/components/shared/GridLayout';
+import { Edit, FileText, BarChart, Settings, Users, Box } from 'lucide-react';
 
-const AdminDashboard = () => {
+const AdminDashboard: React.FC = () => {
   return (
-    <AdminLayout>
-      <div className="p-6 bg-[#FAF9F7]">
-        <h1 className="text-2xl font-playfair text-[#432818] mb-6">Dashboard</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-            <h2 className="text-lg font-medium text-[#432818] mb-3">Quizzes Ativos</h2>
-            <p className="text-3xl font-bold text-[#B89B7A]">1</p>
-            <p className="text-sm text-[#8F7A6A] mt-2">Último quiz criado em 20/04/2025</p>
-          </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-            <h2 className="text-lg font-medium text-[#432818] mb-3">Respostas Coletadas</h2>
-            <p className="text-3xl font-bold text-[#B89B7A]">842</p>
-            <p className="text-sm text-[#8F7A6A] mt-2">Última resposta há 2 horas atrás</p>
-          </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-            <h2 className="text-lg font-medium text-[#432818] mb-3">Taxa de Conversão</h2>
-            <p className="text-3xl font-bold text-[#B89B7A]">23.5%</p>
-            <p className="text-sm text-[#8F7A6A] mt-2">+2.7% em relação ao mês anterior</p>
-          </div>
+    <div className="bg-[#FAF9F7] min-h-screen p-6">
+      <ContentContainer>
+        <div className="mb-8">
+          <h1 className="text-3xl font-playfair text-[#432818] mb-2">Dashboard Administrativo</h1>
+          <p className="text-[#8F7A6A]">Gerencie seu quiz, páginas de resultado e vendas</p>
         </div>
-        
-        <div className="mt-10 bg-white p-6 rounded-lg shadow-sm border border-[#B89B7A]/20">
-          <h2 className="text-lg font-medium text-[#432818] mb-4">Ações Rápidas</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link 
-              to="/admin/quiz-editor" 
-              className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
-            >
-              <h3 className="font-medium text-[#432818]">Editor de Quiz</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Edite perguntas e opções do seu quiz</p>
-            </Link>
-            
-            <a 
-              href="/builder" 
-              className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
-            >
-              <h3 className="font-medium text-[#432818]">Construtor de Quiz</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Construa o fluxo visual do seu quiz</p>
-            </a>
-            
-            <a 
-              href="/editor" 
-              className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
-            >
-              <h3 className="font-medium text-[#432818]">Editor de Página de Resultado</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Personalize a página de resultados</p>
-            </a>
-            
-            <a 
-              href="/" 
-              className="p-4 border border-[#B89B7A]/30 rounded-lg hover:bg-[#FAF9F7] transition-colors"
-            >
-              <h3 className="font-medium text-[#432818]">Visualizar Quiz</h3>
-              <p className="text-sm text-[#8F7A6A] mt-1">Veja como seu quiz aparece para o usuário</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </AdminLayout>
+
+        <GridLayout columns={3} gap="lg" className="mb-8">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[#432818] flex items-center">
+                <Edit className="w-5 h-5 mr-2 text-[#B89B7A]" />
+                Editores
+              </CardTitle>
+              <CardDescription>Construa e edite o conteúdo</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2 pt-2">
+              <Button asChild variant="outline" className="w-full justify-start">
+                <Link to="/admin/quiz-builder">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Editor de Quiz
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full justify-start text-[#432818] bg-[#FAF9F7] border-[#B89B7A]">
+                <Link to="/admin/editor">
+                  <Edit className="w-4 h-4 mr-2 text-[#B89B7A]" />
+                  Editor Visual Unificado
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[#432818] flex items-center">
+                <BarChart className="w-5 h-5 mr-2 text-[#B89B7A]" />
+                Análise
+              </CardTitle>
+              <CardDescription>Acompanhe o desempenho</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2 pt-2">
+              <Button variant="outline" className="w-full justify-start" disabled>
+                <BarChart className="w-4 h-4 mr-2" />
+                Estatísticas
+              </Button>
+              <Button variant="outline" className="w-full justify-start" disabled>
+                <Users className="w-4 h-4 mr-2" />
+                Usuários
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[#432818] flex items-center">
+                <Settings className="w-5 h-5 mr-2 text-[#B89B7A]" />
+                Configurações
+              </CardTitle>
+              <CardDescription>Ajuste as configurações do sistema</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2 pt-2">
+              <Button variant="outline" className="w-full justify-start" disabled>
+                <Settings className="w-4 h-4 mr-2" />
+                Configurações Gerais
+              </Button>
+              <Button variant="outline" className="w-full justify-start" disabled>
+                <Box className="w-4 h-4 mr-2" />
+                Integrações
+              </Button>
+            </CardContent>
+          </Card>
+        </GridLayout>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-[#432818] flex items-center">
+              <Box className="w-5 h-5 mr-2 text-[#B89B7A]" />
+              Visão Geral
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Bem-vindo ao painel administrativo. Selecione uma opção acima para começar.</p>
+          </CardContent>
+        </Card>
+      </ContentContainer>
+    </div>
   );
 };
 

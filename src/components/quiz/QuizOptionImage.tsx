@@ -33,15 +33,11 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     );
   }
 
-  // Define specific scale values based on question number and device type
-  const getImageScale = () => {
-    if (!isMobile) return "scale-110";
-    return "scale-110"; // Keep consistent scale for mobile
-  };
-
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
+      "md:mx-auto", // Center on desktop
+      !isMobile && "md:max-w-[40%]", // Reduced from 50% to 40% on desktop
       is3DQuestion && "transform-gpu"
     )}>
       <AspectRatio 
@@ -55,7 +51,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             className={cn(
               "object-cover w-full h-full",
               "transition-all duration-300 ease-in-out",
-              getImageScale(),
+              "scale-110",
               isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
             )}
             onError={() => setImageError(true)}

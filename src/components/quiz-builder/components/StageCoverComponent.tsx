@@ -20,7 +20,7 @@ const StageCoverComponent: React.FC<StageCoverComponentProps> = ({ data, style, 
       style={{
         backgroundColor: style?.backgroundColor || data.backgroundColor || '#FFFAF0',
         color: style?.textColor || data.textColor || '#432818',
-        borderRadius: `${style?.borderRadius || 0}px`,
+        borderRadius: style?.borderRadius ? `${style.borderRadius}px` : '0',
         padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
       }}
     >
@@ -28,7 +28,7 @@ const StageCoverComponent: React.FC<StageCoverComponentProps> = ({ data, style, 
         <div className="mb-6">
           <img 
             src={data.imageUrl} 
-            alt="Quiz cover" 
+            alt={data.title || 'Quiz cover'} 
             className="max-w-full mx-auto rounded-lg shadow-lg max-h-64 object-cover"
           />
         </div>
@@ -49,7 +49,7 @@ const StageCoverComponent: React.FC<StageCoverComponentProps> = ({ data, style, 
       </Button>
       
       <div className="mt-8 text-sm text-[#432818]/60">
-        {data.stageTitle || 'Início'} • {data.stageNumber || 1} de 7
+        {data.stageTitle || 'Início'} • {data.stageNumber || 1} de {data.totalStages || 7}
       </div>
     </div>
   );
