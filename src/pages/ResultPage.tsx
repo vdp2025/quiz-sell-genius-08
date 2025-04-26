@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -16,6 +15,7 @@ import GuaranteeSection from '@/components/result/GuaranteeSection';
 import ProductShowcase from '@/components/quiz-result/sales/ProductShowcase';
 import BenefitList from '@/components/quiz-result/sales/BenefitList';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import { Button } from '@/components/ui/button';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
