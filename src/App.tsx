@@ -9,6 +9,7 @@ import Index from './pages/Index';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import QuizBuilderPage from './pages/QuizBuilderPage';
+import UnifiedEditorPage from './pages/UnifiedEditorPage';
 
 // Componente para rotas protegidas administrativas
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
@@ -37,6 +38,7 @@ function App() {
               {/* Rotas administrativas protegidas */}
               <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
               <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
+              <Route path="/admin/editor" element={<ProtectedAdminRoute><UnifiedEditorPage /></ProtectedAdminRoute>} />
             </Routes>
           </Suspense>
           <Toaster />
