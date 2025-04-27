@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Button } from '@/components/ui/button';
 import { QuizStage, QuizComponentData, QuizComponentType } from '@/types/quizBuilder';
 import { ExportButton } from './ExportButton';
+import { ImportButton } from './ImportButton';
 
 interface UnifiedEditorProps {
   primaryStyle?: StyleResult;
@@ -302,6 +303,7 @@ export const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ primaryStyle }) =>
           >
             Salvar
           </button>
+          <ImportButton />
           <ExportButton />
         </div>
       </div>
