@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { StyleResult } from '@/types/quiz';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 import { toast } from '@/components/ui/use-toast';
-import { EditorToolbar } from './EditorToolbar';
+import EditorToolbar from './EditorToolbar';
 import EditableSection from './EditableSection';
 import { Eye, EyeOff, Save, Undo } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';

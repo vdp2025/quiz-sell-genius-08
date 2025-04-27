@@ -6,57 +6,33 @@ interface HeaderComponentProps {
   data: {
     title?: string;
     subtitle?: string;
-    buttonText?: string;
+    [key: string]: any;
   };
   style?: {
-    textColor?: string;
     backgroundColor?: string;
+    textColor?: string;
+    [key: string]: any;
   };
-  isEditing?: boolean;
   isSelected?: boolean;
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({
-  data,
-  style,
-  isEditing = false,
-  isSelected = false
-}) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ data, style, isSelected }) => {
   return (
-    <header className="text-center py-8">
-      <h1 
-        className={cn(
-          "text-3xl md:text-4xl font-bold mb-4",
-          isEditing && !data.title && "opacity-50"
-        )}
-        style={{ color: style?.textColor || 'inherit' }}
-      >
-        {data.title || 'Título do Quiz'}
-      </h1>
-      
-      {(data.subtitle || isEditing) && (
-        <p 
-          className={cn(
-            "text-lg md:text-xl mb-6",
-            isEditing && !data.subtitle && "opacity-50"
-          )}
-          style={{ color: style?.textColor || 'inherit' }}
-        >
-          {data.subtitle || 'Subtítulo ou descrição do quiz'}
-        </p>
+    <div 
+      className={cn(
+        "p-4 text-center",
+        isSelected && "outline-dashed outline-1 outline-blue-400"
       )}
-      
-      {(data.buttonText || isEditing) && (
-        <button 
-          className={cn(
-            "bg-[#9b87f5] hover:bg-[#7E69AB] text-white px-6 py-2 rounded-md font-medium",
-            isEditing && "pointer-events-none"
-          )}
-        >
-          {data.buttonText || 'Iniciar Quiz'}
-        </button>
+      style={{
+        backgroundColor: style?.backgroundColor || 'transparent',
+        color: style?.textColor || 'inherit'
+      }}
+    >
+      <h1 className="text-2xl md:text-3xl font-bold mb-2">{data.title || "Título Principal"}</h1>
+      {data.subtitle && (
+        <p className="text-sm md:text-base opacity-75">{data.subtitle}</p>
       )}
-    </header>
+    </div>
   );
 };
 

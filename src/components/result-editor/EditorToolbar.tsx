@@ -1,97 +1,88 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Eye, LayoutTemplate, Save, Undo, Settings } from 'lucide-react';
-import { ResultPageConfig } from '@/types/resultPageConfig';
+import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
 import { JsonConfigEditor } from './JsonConfigEditor';
 
 interface EditorToolbarProps {
-  isPreviewMode?: boolean;
+  onSave: () => void;
+  isPreviewMode: boolean;
   onPreviewToggle: () => void;
+  onReset: () => void;
+  onEditGlobalStyles: () => void;
+  resultPageConfig: any;
+  onUpdateConfig: (config: any) => void;
   onShowTemplates?: () => void;
-  onSave?: () => void;
-  onReset?: () => void;
-  onEditGlobalStyles?: () => void;
-  resultPageConfig?: ResultPageConfig;
-  onUpdateConfig?: (newConfig: any) => void;
 }
 
-export const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  isPreviewMode = false,
-  onPreviewToggle,
-  onShowTemplates,
+const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onSave,
+  isPreviewMode,
+  onPreviewToggle,
   onReset,
   onEditGlobalStyles,
   resultPageConfig,
   onUpdateConfig,
+  onShowTemplates
 }) => {
   return (
     <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <h1 className="text-xl font-semibold text-[#432818]">Editor de Página de Resultados</h1>
-      
-      <div className="flex gap-2">
-        {resultPageConfig && onUpdateConfig && (
-          <JsonConfigEditor
-            config={resultPageConfig}
-            onUpdate={onUpdateConfig}
-          />
-        )}
-
-        {onEditGlobalStyles && (
+      <div className="flex items-center gap-2">
+        {onShowTemplates && (
           <Button
             variant="outline"
-            size="sm"
-            onClick={onEditGlobalStyles}
+            onClick={onShowTemplates}
+            className="text-[#8F7A6A]"
           >
-            <Settings className="w-4 h-4 mr-2" />
-            Estilos Globais
+            Modelos de Página
           </Button>
         )}
-
         <Button
           variant="outline"
           size="sm"
           onClick={onPreviewToggle}
         >
           <Eye className="w-4 h-4 mr-2" />
-          {isPreviewMode ? "Editar" : "Visualizar"}
+          {isPreviewMode ? 'Modo Edição' : 'Visualizar'}
         </Button>
         
-        {onShowTemplates && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onShowTemplates}
-          >
-            <LayoutTemplate className="w-4 h-4 mr-2" />
-            Templates
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onEditGlobalStyles}
+        >
+          <Palette className="w-4 h-4 mr-2" />
+          Estilos Globais
+        </Button>
 
-        {onReset && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onReset}
-          >
-            <Undo className="w-4 h-4 mr-2" />
-            Redefinir
-          </Button>
+        {resultPageConfig && onUpdateConfig && (
+          <JsonConfigEditor 
+            config={resultPageConfig}
+            onUpdate={onUpdateConfig}
+          />
         )}
         
-        {onSave && (
-          <Button
-            variant="default"
-            size="sm"
-            onClick={onSave}
-            className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-          >
-            <Save className="w-4 h-4 mr-2" />
-            Salvar
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onReset}
+          className="text-amber-600 hover:text-amber-700"
+        >
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Resetar
+        </Button>
+        
+        <Button
+          variant="default"
+          size="sm"
+          onClick={onSave}
+          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+        >
+          <Save className="w-4 h-4 mr-2" />
+          Salvar
+        </Button>
       </div>
     </div>
   );
 };
+
+export default EditorToolbar;

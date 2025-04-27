@@ -1,3 +1,4 @@
+
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles: {
@@ -15,8 +16,6 @@ export interface EditorConfig {
     fontFamily: string;
   };
 }
-
-export type EditorTab = 'quiz' | 'result' | 'sales';
 
 export interface EditorBlock {
   id: string;

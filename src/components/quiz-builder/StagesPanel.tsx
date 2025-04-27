@@ -71,9 +71,9 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
   ];
 
   return (
-    <div className="h-full flex flex-col border-r border-gray-300 text-gray-800">
+    <div className="h-full flex flex-col border-r border-[#333333] text-white">
       <div className="p-4 border-b border-[#333333] flex items-center justify-between">
-        <h2 className="font-semibold text-gray-900">Etapas do Quiz</h2>
+        <h2 className="font-semibold text-white">Etapas do Quiz</h2>
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-[#333333]">

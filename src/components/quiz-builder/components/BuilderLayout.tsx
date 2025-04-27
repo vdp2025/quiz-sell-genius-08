@@ -4,7 +4,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { StagesPanel } from '../StagesPanel';
 import { PropertiesPanel } from '../PropertiesPanel';
 import { ComponentPreviewPanel } from '../preview/ComponentPreviewPanel';
-import ComponentToolbar from './ComponentToolbar';
+import { ComponentToolbar } from './ComponentToolbar';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 
 interface BuilderLayoutProps {
@@ -55,7 +55,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       {/* Left Panel - Stages Sidebar */}
-      <ResizablePanel defaultSize={18} minSize={15} maxSize={25} className="bg-[#F9F6F2] text-gray-800">
+      <ResizablePanel defaultSize={18} minSize={15} maxSize={25} className="bg-[#F9F6F2]">
         <StagesPanel 
           stages={stages} 
           activeStageId={activeStageId}
@@ -70,7 +70,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
       <ResizableHandle withHandle />
       
       {/* Center Panel - Preview */}
-      <ResizablePanel defaultSize={57} className="bg-[#FAF9F7] text-gray-900">
+      <ResizablePanel defaultSize={57}>
         <div className="h-full flex flex-col">
           <ComponentToolbar
             activeStage={activeStage} 
@@ -93,7 +93,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
       <ResizableHandle withHandle />
       
       {/* Right Panel - Properties */}
-      <ResizablePanel defaultSize={25} className="bg-[#F9F6F2] text-gray-800">
+      <ResizablePanel defaultSize={25} className="bg-[#F9F6F2]">
         <PropertiesPanel 
           component={selectedComponent}
           stage={activeStage}

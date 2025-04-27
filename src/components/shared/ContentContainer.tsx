@@ -1,26 +1,29 @@
+
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface ContentContainerProps {
-  size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
 
-const sizeClassMap: Record<'sm' | 'md' | 'lg', string> = {
-  sm: 'max-w-sm',
-  md: 'max-w-md',
-  lg: 'max-w-lg',
-};
-
-export const ContentContainer: React.FC<ContentContainerProps> = ({
-  size = 'md',
-  children,
+export const ContentContainer: React.FC<ContentContainerProps> = ({ 
+  children, 
+  className,
+  size = 'md'
 }) => {
-  const maxWidthClass = sizeClassMap[size] || 'max-w-md';
+  const maxWidthClass = {
+    'sm': 'max-w-2xl',
+    'md': 'max-w-4xl',
+    'lg': 'max-w-6xl',
+    'xl': 'max-w-7xl',
+    'full': 'max-w-full',
+  }[size];
+
   return (
-    <div className={`w-full ${maxWidthClass} mx-auto`}>
+    <div className={cn('mx-auto px-4 sm:px-6 w-full', maxWidthClass, className)}>
       {children}
     </div>
   );
 };
-
-export default ContentContainer;

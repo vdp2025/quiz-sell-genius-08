@@ -17,14 +17,14 @@ interface EditorPreviewProps {
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
 }
 
-export function EditorPreview({
+export const EditorPreview: React.FC<EditorPreviewProps> = ({
   blocks,
   selectedBlockId,
   onSelectBlock,
   isPreviewing,
   primaryStyle,
   onReorderBlocks
-}: EditorPreviewProps) {
+}) => {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
 
   const sensors = useSensors(
@@ -119,4 +119,4 @@ export function EditorPreview({
       </div>
     </div>
   );
-}
+};

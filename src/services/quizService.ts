@@ -17,19 +17,13 @@ export const fetchQuizQuestions = async (quizId: string) => {
   return questions;
 };
 
-export const saveParticipant = async (
-  name: string, 
-  email: string | null, 
-  quizId: string, 
-  additionalInfo?: Record<string, any>
-) => {
+export const saveParticipant = async (name: string, email: string, quizId: string) => {
   const { data, error } = await supabase
     .from('quiz_participants')
     .insert({
       name,
       email,
       quiz_id: quizId,
-      additional_info: additionalInfo || {}
     })
     .select()
     .single();

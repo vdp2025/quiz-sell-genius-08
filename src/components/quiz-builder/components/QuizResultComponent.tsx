@@ -1,115 +1,71 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Award, Trophy } from 'lucide-react';
 
 interface QuizResultComponentProps {
   data: {
-    title?: string;
-    subtitle?: string;
     primaryStyleTitle?: string;
     secondaryStylesTitle?: string;
     showPercentages?: boolean;
     showDescriptions?: boolean;
-    accentColor?: string;
+    resultLayout?: 'classic' | 'modern' | 'minimal';
+    [key: string]: any;
   };
   style?: {
-    textColor?: string;
     backgroundColor?: string;
+    textColor?: string;
+    accentColor?: string;
+    [key: string]: any;
   };
-  isEditing?: boolean;
   isSelected?: boolean;
 }
 
-const QuizResultComponent: React.FC<QuizResultComponentProps> = ({
-  data,
-  style,
-  isEditing = false,
-  isSelected = false
-}) => {
-  const accentColor = data.accentColor || '#9b87f5';
-  
-  // Sample data for preview
-  const primaryStyle = { category: 'Contemporâneo', percentage: 40 };
-  const secondaryStyles = [
-    { category: 'Natural', percentage: 30 },
-    { category: 'Elegante', percentage: 20 },
-    { category: 'Dramático', percentage: 10 },
-  ];
+const QuizResultComponent: React.FC<QuizResultComponentProps> = ({ data, style, isSelected }) => {
+  const accentColor = style?.accentColor || '#B89B7A';
   
   return (
-    <div className="w-full">
+    <div 
+      className={cn(
+        "p-4",
+        isSelected && "outline-dashed outline-1 outline-blue-400"
+      )}
+      style={{
+        backgroundColor: style?.backgroundColor || 'transparent',
+        color: style?.textColor || 'inherit'
+      }}
+    >
       <div className="text-center mb-6">
-        <h2 
-          className={cn(
-            "text-2xl md:text-3xl font-bold mb-3",
-            isEditing && !data.title && "opacity-50"
-          )}
-          style={{ color: style?.textColor || 'inherit' }}
-        >
-          {data.title || 'Seu Resultado de Estilo Pessoal'}
+        <h2 className="text-xl md:text-2xl font-medium mb-1">
+          {data.primaryStyleTitle || "Seu estilo predominante é"}
         </h2>
-        
-        {(data.subtitle || isEditing) && (
-          <p 
-            className={cn(
-              "text-lg opacity-80",
-              isEditing && !data.subtitle && "opacity-50"
-            )}
-            style={{ color: style?.textColor || 'inherit' }}
-          >
-            {data.subtitle || 'Conheça seu estilo predominante e como ele afeta suas escolhas'}
-          </p>
-        )}
-      </div>
-      
-      <div className="bg-white shadow-sm rounded-lg p-6 mb-6">
-        <h3 
-          className={cn(
-            "text-xl font-medium mb-4 flex items-center gap-2",
-            isEditing && !data.primaryStyleTitle && "opacity-50"
-          )}
+        <div 
+          className="text-3xl font-bold mt-2"
           style={{ color: accentColor }}
         >
-          <Trophy className="h-5 w-5" />
-          {data.primaryStyleTitle || 'Seu Estilo Principal'}
-        </h3>
-        
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-bold text-2xl">{primaryStyle.category}</span>
-          {data.showPercentages && (
-            <span className="text-lg font-medium" style={{ color: accentColor }}>
-              {primaryStyle.percentage}%
-            </span>
-          )}
+          Elegante
         </div>
+        {data.showPercentages && (
+          <div className="mt-1 font-medium">65%</div>
+        )}
         
         {data.showDescriptions && (
-          <p className="text-gray-700 mt-3">
-            O estilo Contemporâneo é caracterizado por uma abordagem moderna e versátil ao se vestir. 
-            Você valoriza peças atuais, mas sem exageros ou modismos passageiros.
+          <p className="mt-3 text-gray-600">
+            Você se destaca pela sofisticação e refinamento em suas escolhas.
           </p>
         )}
       </div>
       
-      <div className="bg-white shadow-sm rounded-lg p-6">
-        <h3 
-          className={cn(
-            "text-xl font-medium mb-4 flex items-center gap-2",
-            isEditing && !data.secondaryStylesTitle && "opacity-50"
-          )}
-          style={{ color: accentColor }}
-        >
-          <Award className="h-5 w-5" />
-          {data.secondaryStylesTitle || 'Seus Estilos Secundários'}
+      <div className="mt-8">
+        <h3 className="text-lg font-medium mb-4 text-center">
+          {data.secondaryStylesTitle || "Seus estilos secundários"}
         </h3>
         
         <div className="space-y-3">
-          {secondaryStyles.map((style, index) => (
-            <div key={index} className="flex justify-between items-center">
-              <span className="font-medium">{style.category}</span>
+          {['Clássico', 'Natural', 'Contemporâneo'].map((style, index) => (
+            <div key={index} className="flex items-center justify-between">
+              <span className="font-medium">{style}</span>
               {data.showPercentages && (
-                <span style={{ color: accentColor }}>{style.percentage}%</span>
+                <span className="text-sm text-gray-600">{30 - index * 5}%</span>
               )}
             </div>
           ))}

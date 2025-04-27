@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useQuiz } from '../context/QuizContext';
+import { useQuizLogic } from '../hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
 import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
@@ -29,12 +29,11 @@ const QuizPage: React.FC = () => {
     calculateResults,
     handleStrategicAnswer: saveStrategicAnswer,
     submitQuizIfComplete
-  } = useQuiz();
+  } = useQuizLogic();
 
   // Handle strategic answer
   const handleStrategicAnswer = (response: UserResponse) => {
     try {
-      console.log('Strategic Answer Received:', response);
       setStrategicAnswers(prev => ({
         ...prev,
         [response.questionId]: response.selectedOptions
@@ -52,18 +51,12 @@ const QuizPage: React.FC = () => {
         }, 500);
       }
     } catch (error) {
-      console.error('Error processing strategic answer:', error);
       toast({
         title: "Erro no processamento da resposta",
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
-  };
-
-  // Função wrapper para adaptar resposta
-  const handleQuizAnswer = (response: UserResponse) => {
-    handleAnswer(response.questionId, response.selectedOptions);
   };
 
   // Handle answer submission
@@ -77,7 +70,6 @@ const QuizPage: React.FC = () => {
             handleNext();
           }, 500);
         } else {
-          console.log('Last question reached, showing transition...');
           setTimeout(() => {
             calculateResults();
             setShowingTransition(true);
@@ -85,7 +77,6 @@ const QuizPage: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('Error submitting answer:', error);
       toast({
         title: "Erro na submissão da resposta",
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
@@ -97,17 +88,12 @@ const QuizPage: React.FC = () => {
   // Handle showing result
   const handleShowResult = () => {
     try {
-      const results = submitQuizIfComplete();
-      console.log('Final results being saved:', results);
-      
+      submitQuizIfComplete();
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-      
       setTimeout(() => {
-        console.log('Navigating to /resultado page...');
         window.location.href = '/resultado';
       }, 500);
     } catch (error) {
-      console.error('Error showing result:', error);
       toast({
         title: "Erro ao mostrar resultado",
         description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
@@ -145,8 +131,8 @@ const QuizPage: React.FC = () => {
             currentStrategicQuestionIndex={currentStrategicQuestionIndex}
             currentQuestion={currentQuestion}
             currentAnswers={currentAnswers}
-            handleAnswerSubmit={handleQuizAnswer}
-            handleNextClick={handleNext}
+            handleAnswerSubmit={handleAnswerSubmit}
+            handleNextClick={handleNextClick}
             handlePrevious={handlePrevious}
           />
           

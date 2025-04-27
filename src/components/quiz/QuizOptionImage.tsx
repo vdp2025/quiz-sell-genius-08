@@ -27,8 +27,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   if (imageError) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-center p-4" style={getFallbackStyle(styleCategory)}>
-        <span>{styleCategory || 'Imagem não disponível'}</span>
+      <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
+        <span>{styleCategory}</span>
       </div>
     );
   }
@@ -47,7 +47,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
         <div className="w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={imageUrl}
-            alt={altText || 'Opção do quiz'}
+            alt={altText}
             className={cn(
               "object-cover w-full h-full",
               "transition-all duration-300 ease-in-out",
