@@ -1,166 +1,169 @@
 
-import { EditableContent, EditorConfig } from '@/types/editor';
-import { generateId } from './idGenerator';
+import { Block } from '@/types/editor';
 
-export const getDefaultContentForType = (type: string): EditableContent => {
+export const getDefaultContentForType = (type: Block['type']): any => {
   switch (type) {
-    case 'header':
-      return { 
-        title: 'Olá, seu Estilo Predominante é:',
-        subtitle: '',
-        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-        logoAlt: 'Logo Gisele Galvão'
-      };
     case 'headline':
-      return { 
-        title: 'VOCÊ DESCOBRIU SEU ESTILO', 
-        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        textColor: '#432818',
-        alignment: 'center'
-      };
-    case 'text':
-      return { 
-        text: 'Digite seu texto aqui...',
-        alignment: 'left'
-      };
-    case 'image':
-      return { 
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp', 
-        imageAlt: 'Imagem do Resultado',
-        width: '100%',
-        borderRadius: '8px'
-      };
-    case 'benefits':
-      return { 
-        title: 'O que você vai aprender:', 
-        items: [
-          'Aplicar seus estilos com autenticidade',
-          'Montar looks práticos para o dia a dia, trabalho e eventos',
-          'Usar cores e modelagens que valorizam quem você é',
-          'Parar de errar nas compras e economizar tempo'
-        ]
-      };
-    case 'pricing':
-      return { 
-        regularPrice: '175,00', 
-        salePrice: '39,00', 
-        buttonText: 'Quero Transformar Meu Estilo',
-        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        urgencyText: 'Oferta por tempo limitado!'
-      };
-    case 'guarantee':
-      return { 
-        title: 'Garantia de 7 dias',
-        text: 'Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia.',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
-      };
-    case 'cta':
-      return { 
-        buttonText: 'Clique Aqui', 
-        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-        title: 'Transforme seu estilo agora',
-        url: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'
-      };
-    case 'style-result':
-      return { 
-        title: 'Seu estilo predominante é {{primaryStyle}}',
-        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.'
-      };
-    case 'secondary-styles':
-      return { title: 'Seus Estilos Complementares' };
-    case 'hero-section':
-      return { 
-        title: 'VOCÊ DESCOBRIU SEU ESTILO',
-        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
-        heroImage2: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp',
-        heroImageAlt: 'Guia de Estilo',
-        quote: 'Descubra como expressar sua personalidade através do seu estilo de vestir',
-        quoteAuthor: 'Gisele Galvão'
-      };
-    case 'products':
       return {
-        title: 'O que você vai receber:',
-        images: [
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
-            alt: 'Guia de Estilo - 3 Revistas'
-          },
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
-            alt: 'Todos os produtos e bônus'
-          }
-        ]
+        title: 'Título Principal',
+        subtitle: 'Subtítulo ou descrição breve',
+        style: {
+          textAlign: 'center',
+          padding: '1.5rem',
+        }
       };
+    
+    case 'text':
+      return {
+        text: 'Digite seu texto aqui. Este é um exemplo de texto que pode ser editado diretamente no editor visual.',
+        style: {
+          padding: '1rem',
+        }
+      };
+    
+    case 'image':
+      return {
+        imageUrl: '',
+        imageAlt: 'Imagem',
+        caption: '',
+        style: {
+          padding: '1rem',
+        }
+      };
+    
+    case 'header':
+      return {
+        title: 'Cabeçalho',
+        subtitle: 'Subtítulo do cabeçalho',
+        logo: '',
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '1rem',
+        }
+      };
+    
+    case 'hero-section':
+      return {
+        headline: 'Título Principal',
+        subheadline: 'Descrição ou chamada para ação',
+        imageUrl: '',
+        buttonText: 'Iniciar',
+        buttonUrl: '#',
+        style: {
+          backgroundColor: '#fffaf7',
+          padding: '2rem',
+        }
+      };
+    
+    case 'benefits':
+      return {
+        title: 'Benefícios',
+        items: [
+          { title: 'Benefício 1', description: 'Descrição do benefício 1' },
+          { title: 'Benefício 2', description: 'Descrição do benefício 2' },
+          { title: 'Benefício 3', description: 'Descrição do benefício 3' }
+        ],
+        style: {
+          padding: '1.5rem',
+        }
+      };
+    
     case 'testimonials':
-      return { 
-        title: 'O que estão dizendo',
-        testimonialsImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
+      return {
+        title: 'O que dizem nossos clientes',
+        items: [
+          { name: 'Cliente 1', role: 'Função', text: 'Depoimento do cliente 1', imageUrl: '' },
+          { name: 'Cliente 2', role: 'Função', text: 'Depoimento do cliente 2', imageUrl: '' }
+        ],
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#f9f6f2',
+        }
       };
+    
+    case 'guarantee':
+      return {
+        title: 'Nossa Garantia',
+        description: 'Descrição da garantia oferecida',
+        days: '30',
+        imageUrl: '',
+        style: {
+          padding: '1.5rem',
+        }
+      };
+    
+    case 'cta':
+      return {
+        text: 'Chamada para Ação',
+        buttonText: 'Clique Aqui',
+        buttonUrl: '#',
+        style: {
+          padding: '1.5rem',
+          textAlign: 'center',
+          backgroundColor: '#f3e8e6',
+        }
+      };
+    
+    case 'style-result':
+      return {
+        showTitle: true,
+        showDescription: true,
+        showPercentage: true,
+        style: {
+          padding: '1.5rem',
+        }
+      };
+    
+    case 'secondary-styles':
+      return {
+        showTitle: true,
+        maxStyles: 3,
+        showPercentages: true,
+        style: {
+          padding: '1.5rem',
+        }
+      };
+    
+    case 'bonus':
+      return {
+        title: 'Bônus Exclusivo',
+        description: 'Descrição do bônus oferecido',
+        imageUrl: '',
+        style: {
+          padding: '1.5rem',
+          backgroundColor: '#f9f6f2',
+        }
+      };
+    
     case 'bonus-carousel':
-      return { 
-        title: 'Você também recebe estes bônus',
-        bonusImages: [
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
-            alt: 'Bônus 1',
-            title: 'Guia de Estilo Digital'
-          },
-          {
-            url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
-            alt: 'Bônus 2',
-            title: 'Templates de Looks'
-          }
-        ]
+      return {
+        title: 'Bônus Exclusivos',
+        items: [
+          { title: 'Bônus 1', description: 'Descrição do bônus 1', imageUrl: '' },
+          { title: 'Bônus 2', description: 'Descrição do bônus 2', imageUrl: '' }
+        ],
+        style: {
+          padding: '1.5rem',
+        }
       };
+    
+    case 'columns':
+      return {
+        columns: 2,
+        items: [
+          { title: 'Coluna 1', content: 'Conteúdo da coluna 1' },
+          { title: 'Coluna 2', content: 'Conteúdo da coluna 2' }
+        ],
+        style: {
+          padding: '1.5rem',
+        }
+      };
+    
     default:
-      return {};
-  }
-};
-
-export const defaultConfig: EditorConfig = {
-  blocks: [
-    {
-      id: generateId(),
-      type: 'header',
-      content: { 
-        title: 'Olá, seu Estilo Predominante é:',
-        subtitle: '',
-        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-        logoAlt: 'Logo Gisele Galvão'
-      },
-      order: 0
-    },
-    {
-      id: generateId(),
-      type: 'style-result',
-      content: { 
-        title: 'Seu estilo predominante é {{primaryStyle}}',
-        description: 'Você possui características únicas que refletem sua personalidade através do seu estilo pessoal.'
-      },
-      order: 1
-    },
-    {
-      id: generateId(),
-      type: 'secondary-styles',
-      content: { 
-        title: 'Seus Estilos Complementares' 
-      },
-      order: 2
-    }
-  ],
-  globalStyles: {
-    primaryColor: '#B89B7A',
-    secondaryColor: '#432818',
-    textColor: '#1A1818',
-    backgroundColor: '#fffaf7',
-    fontFamily: 'Inter, sans-serif'
-  },
-  theme: {
-    primaryColor: '#B89B7A',
-    secondaryColor: '#432818',
-    textColor: '#1A1818',
-    backgroundColor: '#fffaf7',
-    fontFamily: 'Inter, sans-serif'
+      return {
+        style: {
+          padding: '1rem',
+        }
+      };
   }
 };
