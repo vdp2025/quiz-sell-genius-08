@@ -14,7 +14,16 @@ export type BlockType =
   | 'secondary-styles'
   | 'bonus'
   | 'bonus-carousel'
-  | 'columns';
+  | 'columns'
+  | 'products'
+  | 'spacer'
+  | 'video'
+  | 'two-column'
+  | 'icon'
+  | 'faq'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block';
 
 export type ResponsiveSettings = {
   hideOnMobile?: boolean;
@@ -50,6 +59,8 @@ export type EditableContent = {
   items?: Array<any>;
   style?: StyleOptions;
   responsive?: ResponsiveSettings;
+  description?: string;
+  customImage?: string;
   [key: string]: any;
 };
 
@@ -64,3 +75,6 @@ export interface EditorConfig {
   blocks: Block[];
   globalStyles?: StyleOptions;
 }
+
+// Add this type alias to maintain compatibility with existing code
+export type EditorBlock = Block;

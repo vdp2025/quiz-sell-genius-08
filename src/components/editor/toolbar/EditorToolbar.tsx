@@ -1,66 +1,114 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Eye, Save, Undo, Redo } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { 
+  Save, 
+  Eye, 
+  EyeOff, 
+  Smartphone, 
+  Tablet, 
+  Monitor, 
+  LayoutGrid
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface EditorToolbarProps {
-  onUndo: () => void;
-  onRedo: () => void;
-  onPreviewToggle: () => void;
-  onSave: () => void;
   isPreviewing: boolean;
-  canUndo: boolean;
-  canRedo: boolean;
+  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
+  onViewportSizeChange: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
+  onTogglePreview: () => void;
+  onSave: () => void;
 }
 
-export const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  onUndo,
-  onRedo,
-  onPreviewToggle,
-  onSave,
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({ 
   isPreviewing,
-  canUndo,
-  canRedo
+  viewportSize,
+  onViewportSizeChange,
+  onTogglePreview,
+  onSave
 }) => {
   return (
-    <div className="bg-white border-b p-3 flex items-center justify-between flex-wrap gap-2">
-      <div className="flex items-center gap-2">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={onUndo}
-          disabled={!canUndo}
+    <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'sm' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('sm')}
+          title="Visualização Mobile"
         >
-          <Undo className="w-4 h-4 mr-1" />
-          Desfazer
+          <Smartphone className="h-4 w-4" />
         </Button>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={onRedo}
-          disabled={!canRedo}
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'md' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('md')}
+          title="Visualização Tablet"
         >
-          <Redo className="w-4 h-4 mr-1" />
-          Refazer
+          <Tablet className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'lg' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('lg')}
+          title="Visualização Desktop"
+        >
+          <Monitor className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'xl' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('xl')}
+          title="Visualização Desktop Grande"
+        >
+          <LayoutGrid className="h-4 w-4" />
         </Button>
       </div>
-      <div className="flex items-center gap-2">
-        <Button 
+      
+      <div className="flex items-center space-x-2">
+        <Button
           variant="outline" 
           size="sm"
-          onClick={onPreviewToggle}
+          onClick={onTogglePreview}
+          className="text-[#432818]"
         >
-          <Eye className="w-4 h-4 mr-1" />
-          {isPreviewing ? "Editar" : "Visualizar"}
+          {isPreviewing ? (
+            <>
+              <EyeOff className="mr-2 h-4 w-4" />
+              Editar
+            </>
+          ) : (
+            <>
+              <Eye className="mr-2 h-4 w-4" />
+              Visualizar
+            </>
+          )}
         </Button>
-        <Button 
-          variant="default" 
-          size="sm"
+        
+        <Button
           onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+          size="sm"
+          className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
         >
-          <Save className="w-4 h-4 mr-1" />
+          <Save className="mr-2 h-4 w-4" />
           Salvar
         </Button>
       </div>
