@@ -4,6 +4,7 @@ interface QuizNavigationProps {
   onPrevious?: () => void;
   currentQuestionType: 'normal' | 'strategic';
   selectedOptionsCount: number;
+  isLastQuestion?: boolean;
 }
 
 const QuizNavigation: React.FC<QuizNavigationProps> = ({
@@ -11,7 +12,8 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   onNext,
   onPrevious,
   currentQuestionType,
-  selectedOptionsCount
+  selectedOptionsCount,
+  isLastQuestion = false
 }) => {
   const requiredOptions = currentQuestionType === 'strategic' ? 1 : 3;
   const isButtonEnabled = canProceed && selectedOptionsCount >= requiredOptions;
@@ -21,6 +23,12 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
       return `Selecione ${requiredOptions} ${requiredOptions === 1 ? 'opção' : 'opções'} para continuar`;
     }
     return '';
+  };
+
+  const handleNext = () => {
+    if (isButtonEnabled) {
+      onNext();
+    }
   };
 
   return (
@@ -40,11 +48,11 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           <p className="text-sm text-[#8F7A6A] mb-2">{getHelperText()}</p>
         )}
         <Button
-          onClick={onNext}
+          onClick={handleNext}
           disabled={!isButtonEnabled}
           className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          Próximo
+          {isLastQuestion ? 'Ver Resultado' : 'Próximo'}
         </Button>
       </div>
     </div>
