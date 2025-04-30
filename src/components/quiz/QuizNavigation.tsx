@@ -25,12 +25,6 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     return '';
   };
 
-  const handleNext = () => {
-    if (isButtonEnabled) {
-      onNext();
-    }
-  };
-
   return (
     <div className="flex justify-between items-center mt-6">
       {onPrevious && (
@@ -48,7 +42,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           <p className="text-sm text-[#8F7A6A] mb-2">{getHelperText()}</p>
         )}
         <Button
-          onClick={handleNext}
+          onClick={onNext}
           disabled={!isButtonEnabled}
           className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
