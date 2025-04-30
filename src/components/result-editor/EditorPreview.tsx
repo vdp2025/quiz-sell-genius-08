@@ -36,7 +36,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
     })
   );
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
     const { active, over } = event;
     
     if (active.id !== over.id) {
@@ -106,7 +106,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
               sensors={sensors}
               collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
-              autoScroll={{ threshold: 0 }}
+              autoScroll={{ threshold: { x: 0, y: 0 } }}
             >
               <SortableContext 
                 items={blocks.map(block => block.id)}

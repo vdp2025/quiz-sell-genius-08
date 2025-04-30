@@ -1,5 +1,5 @@
 
-import { EditableContent } from "@/types/editor";
+import { EditableContent, EditorConfig } from "@/types/editor";
 
 export const getDefaultContentForType = (type: string): EditableContent => {
   switch (type) {
@@ -155,5 +155,20 @@ export const getDefaultContentForType = (type: string): EditableContent => {
         text: 'Bloco personalizado',
         style: {}
       };
+  }
+};
+
+// Adicionando a configuração padrão do editor
+export const defaultConfig: EditorConfig = {
+  blocks: [],
+  globalStyles: {
+    fontFamily: 'Inter, sans-serif',
+    backgroundColor: '#FFFFFF',
+    textColor: '#333333',
+    headingColor: '#432818',
+    accentColor: '#B89B7A',
+    fontSize: '16px',
+    borderRadius: '0.5rem',
+    padding: '1rem'
   }
 };

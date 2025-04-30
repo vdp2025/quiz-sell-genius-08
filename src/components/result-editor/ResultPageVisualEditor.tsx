@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
@@ -11,6 +12,7 @@ import { EditorProps } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { StyleResult } from '@/types/quiz';
 
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
@@ -94,6 +96,13 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     );
   }
 
+  // Cast do tipo para garantir compatibilidade com o componente EditorPreview
+  const primaryStyle: StyleResult = {
+    category: selectedStyle.category as any,
+    score: selectedStyle.score,
+    percentage: selectedStyle.percentage
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
@@ -126,7 +135,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 selectedBlockId={selectedBlockId}
                 onSelectBlock={setSelectedBlockId}
                 isPreviewing={isPreviewing}
-                primaryStyle={selectedStyle}
+                primaryStyle={primaryStyle}
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />
             </ResizablePanel>

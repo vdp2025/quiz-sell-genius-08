@@ -13,10 +13,6 @@ export const useEditorTheme = (
       globalStyles: {
         ...config.globalStyles,
         ...theme
-      },
-      theme: {
-        ...config.theme,
-        ...theme
       }
     });
   }, [config, setConfig]);

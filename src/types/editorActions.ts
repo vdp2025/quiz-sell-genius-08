@@ -14,7 +14,7 @@ export interface EditorActions {
 }
 
 export interface EditorThemeActions {
-  updateTheme: (theme: Partial<EditorConfig['globalStyles'] | EditorConfig['theme']>) => void;
+  updateTheme: (theme: Partial<EditorConfig['globalStyles']>) => void;
 }
 
 export interface EditorTemplateActions {
