@@ -16,11 +16,21 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   isLastQuestion = false
 }) => {
   const requiredOptions = currentQuestionType === 'strategic' ? 1 : 3;
-  const isButtonEnabled = canProceed && selectedOptionsCount >= requiredOptions;
+  
+  // Lógica de ativação mais rigorosa
+  const isButtonEnabled = useMemo(() => {
+    if (currentQuestionType === 'strategic') {
+      return selectedOptionsCount === 1;
+    }
+    return selectedOptionsCount === 3;
+  }, [currentQuestionType, selectedOptionsCount]);
 
   const getHelperText = () => {
     if (!isButtonEnabled) {
-      return `Selecione ${requiredOptions} ${requiredOptions === 1 ? 'opção' : 'opções'} para continuar`;
+      if (currentQuestionType === 'strategic') {
+        return 'Selecione 1 opção para continuar';
+      }
+      return 'Selecione exatamente 3 opções para continuar';
     }
     return '';
   };
