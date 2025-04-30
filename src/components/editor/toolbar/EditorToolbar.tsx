@@ -5,31 +5,68 @@ import {
   Save, 
   Eye, 
   EyeOff, 
+  Undo, 
+  Redo,
   Smartphone, 
   Tablet, 
   Monitor, 
   LayoutGrid
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Block } from '@/types/editor';
 
 interface EditorToolbarProps {
   isPreviewing: boolean;
-  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
-  onViewportSizeChange: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
-  onTogglePreview: () => void;
+  onPreviewToggle: () => void;
   onSave: () => void;
+  onUndo?: () => Block[];
+  onRedo?: () => Block[];
+  canUndo?: boolean;
+  canRedo?: boolean;
+  viewportSize?: 'sm' | 'md' | 'lg' | 'xl';
+  onViewportSizeChange?: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({ 
   isPreviewing,
-  viewportSize,
-  onViewportSizeChange,
-  onTogglePreview,
-  onSave
+  onPreviewToggle,
+  onSave,
+  onUndo,
+  onRedo,
+  canUndo = false,
+  canRedo = false,
+  viewportSize = 'lg',
+  onViewportSizeChange = () => {}
 }) => {
   return (
     <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
       <div className="flex items-center space-x-2">
+        {onUndo && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onUndo}
+            disabled={!canUndo}
+            title="Desfazer"
+            className="text-[#432818]"
+          >
+            <Undo className="h-4 w-4" />
+          </Button>
+        )}
+        
+        {onRedo && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRedo}
+            disabled={!canRedo}
+            title="Refazer"
+            className="text-[#432818]"
+          >
+            <Redo className="h-4 w-4" />
+          </Button>
+        )}
+
         <Button
           variant="ghost"
           size="sm"
@@ -87,7 +124,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <Button
           variant="outline" 
           size="sm"
-          onClick={onTogglePreview}
+          onClick={onPreviewToggle}
           className="text-[#432818]"
         >
           {isPreviewing ? (

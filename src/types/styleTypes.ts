@@ -11,8 +11,21 @@ export interface StyleOptions {
   width?: string;
   height?: string;
   borderRadius?: string;
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
   fontFamily?: string;
+  lineHeight?: string;
+  letterSpacing?: string;
+  display?: string;
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gap?: string;
+  boxShadow?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  type?: string;
 }
 
 export type StyleCategory = 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';

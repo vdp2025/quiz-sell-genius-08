@@ -1,49 +1,35 @@
-﻿import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Suspense } from "react";
-import { Toaster } from "./components/ui/toaster";
-import { LoadingState } from "./components/ui/loading-state";
-import { QuizProvider } from "./context/QuizContext";
-import { TooltipProvider } from "./components/ui/tooltip";
-import Index from "./pages/Index";
-import ResultPage from "./pages/ResultPage";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import QuizBuilderPage from "./pages/QuizBuilderPage";
-import UnifiedEditorPage from "./pages/UnifiedEditorPage";
+import React from 'react';
+import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from './components/ui/toaster';
 
-// Componente para rotas protegidas administrativas
-const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-  // Aqui você pode verificar se o usuário está autenticado e é um administrador
-  // Por enquanto, apenas renderizamos diretamente para fins de desenvolvimento
-  const isAdmin = true; // Implementar lógica real de verificação
-  
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-  
-  return <>{children}</>;
-};
+// Import pages here
+import HomePage from './pages/HomePage';
+import QuizPage from './components/QuizPage';
+import ResultPage from './pages/ResultPage';
+import AdminPage from './pages/admin/AdminPage';
+import EditorPage from './pages/admin/EditorPage';
+import QuizBuilderPage from './pages/admin/QuizBuilderPage';
+import SettingsPage from './pages/admin/SettingsPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
-    <TooltipProvider>
-      <QuizProvider>
-        <Router>
-          <Suspense fallback={<LoadingState />}>
-            <Routes>
-              {/* Rotas públicas */}
-              <Route path="/" element={<Index />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              
-              {/* Rotas administrativas protegidas */}
-              <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
-              <Route path="/admin/quiz-builder" element={<ProtectedAdminRoute><QuizBuilderPage /></ProtectedAdminRoute>} />
-              <Route path="/admin/editor" element={<ProtectedAdminRoute><UnifiedEditorPage /></ProtectedAdminRoute>} />
-            </Routes>
-          </Suspense>
-          <Toaster />
-        </Router>
-      </QuizProvider>
-    </TooltipProvider>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/resultado" element={<ResultPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/editor" element={<EditorPage />} />
+          <Route path="/admin/quiz-builder" element={<QuizBuilderPage />} />
+          <Route path="/admin/settings" element={<SettingsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <Toaster />
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -38,13 +38,29 @@ export type StyleOptions = {
   color?: string;
   padding?: string;
   margin?: string;
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
   width?: string;
   borderRadius?: string;
   fontFamily?: string;
   fontSize?: string;
   fontWeight?: string;
   lineHeight?: string;
+  letterSpacing?: string;
+  height?: string;
+  display?: string;
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gap?: string;
+  boxShadow?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  type?: string;
+  textColor?: string;
+  headingColor?: string;
+  accentColor?: string;
 };
 
 export type EditableContent = {

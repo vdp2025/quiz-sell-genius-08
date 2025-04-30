@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
@@ -7,8 +8,12 @@ import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import { QuizNavigation } from './navigation/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
+import { useAuth } from '../context/AuthContext';
 
 const QuizPage: React.FC = () => {
+  // Get auth context
+  const { user } = useAuth();
+  
   // State declarations
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [showingTransition, setShowingTransition] = useState(false);
@@ -125,6 +130,7 @@ const QuizPage: React.FC = () => {
       {!showingTransition && !showingFinalTransition && (
         <>
           <QuizContent
+            user={user}
             currentQuestionIndex={currentQuestionIndex}
             totalQuestions={totalQuestions}
             showingStrategicQuestions={showingStrategicQuestions}
