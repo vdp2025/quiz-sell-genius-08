@@ -2,8 +2,6 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress';
-import { EditorButton } from '@/components/ui/EditorButton';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -25,13 +23,18 @@ const ResultPage: React.FC = () => {
   }
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  const { image, guideImage, description } = styleConfig[category] || {};
+
+  // Validação adicional para garantir que temos todos os dados necessários
+  if (!image || !guideImage || !description) {
+    return <ErrorState />;
+  }
 
   return (
     <div
       className="min-h-screen bg-[#fffaf7]"
       style={{
-        backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+        backgroundColor: globalStyles?.backgroundColor || '#fffaf7',
       }}
     >
       <AnimatedWrapper>
