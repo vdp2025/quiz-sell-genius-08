@@ -1,12 +1,13 @@
+
 import React from 'react';
-import { Block } from '@/types/editor';
-import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone, Eye } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { StyleResult } from '@/types/quiz';
-import EditableBlock from './EditableBlock';
-import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import EditableBlock from './EditableBlock';
+import { Block } from '@/types/editor';
+import { StyleResult } from '@/types/quiz';
+import { Button } from '@/components/ui/button';
+import { Monitor, Smartphone, Eye, EyeOff } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface EditorPreviewProps {
   blocks: Block[];
@@ -26,20 +27,23 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   onReorderBlocks
 }) => {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
-
+  
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
+      activationConstraint: {
+        distance: 5, // 5px
+      },
     })
   );
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = (event) => {
     const { active, over } = event;
     
-    if (over && active.id !== over.id) {
-      const oldIndex = blocks.findIndex(block => block.id === active.id);
-      const newIndex = blocks.findIndex(block => block.id === over.id);
-      onReorderBlocks(oldIndex, newIndex);
+    if (active.id !== over.id) {
+      const activeIndex = blocks.findIndex((block) => block.id === active.id);
+      const overIndex = blocks.findIndex((block) => block.id === over.id);
+      
+      onReorderBlocks(activeIndex, overIndex);
     }
   };
 
@@ -52,7 +56,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
             variant="outline"
             size="sm"
             onClick={() => setViewMode('desktop')}
-            className={cn(viewMode === 'desktop' && 'bg-[#FAF9F7]')}
+            className={viewMode === 'desktop' ? 'bg-[#FAF9F7]' : ''}
           >
             <Monitor className="w-4 h-4 mr-2" />
             Desktop
@@ -61,57 +65,68 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
             variant="outline"
             size="sm"
             onClick={() => setViewMode('mobile')}
-            className={cn(viewMode === 'mobile' && 'bg-[#FAF9F7]')}
+            className={viewMode === 'mobile' ? 'bg-[#FAF9F7]' : ''}
           >
             <Smartphone className="w-4 h-4 mr-2" />
             Mobile
           </Button>
         </div>
 
-        <Button variant="outline" size="sm">
-          <Eye className="w-4 h-4 mr-2" />
-          {isPreviewing ? 'Editar' : 'Visualizar'}
-        </Button>
+        <div className="flex items-center text-sm text-[#8F7A6A]">
+          {isPreviewing ? (
+            <div className="flex items-center gap-1">
+              <Eye className="w-4 h-4" />
+              <span>Modo de visualização</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <EyeOff className="w-4 h-4" />
+              <span>Modo de edição</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Preview Content */}
-      <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
+      <div className={cn(
+        "flex-1 overflow-auto p-4 bg-[#FAF9F7]",
+        viewMode === 'mobile' && 'flex justify-center'
+      )}>
         <div className={cn(
-          "min-h-full bg-white rounded-lg shadow-sm p-6",
-          viewMode === 'mobile' && 'max-w-md mx-auto'
+          "min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6",
+          viewMode === 'mobile' && 'max-w-md w-full'
         )}>
           {blocks.length === 0 ? (
-            <div className="text-center p-8 border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
-              <p className="text-[#8F7A6A] mb-4">Adicione componentes usando o painel lateral</p>
-              <Button 
-                variant="outline" 
-                className="border-[#B89B7A] text-[#B89B7A]"
-                onClick={() => {/* Add first block functionality here */}}
-              >
-                Adicionar Primeiro Componente
-              </Button>
+            <div className="h-64 flex flex-col items-center justify-center text-[#8F7A6A] border-2 border-dashed border-[#B89B7A]/20 rounded-lg">
+              <p className="mb-2">Nenhum bloco adicionado.</p>
+              <p>Use o painel da esquerda para adicionar blocos à página.</p>
             </div>
           ) : (
             <DndContext 
               sensors={sensors}
+              collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
+              autoScroll={{ threshold: 0 }}
             >
               <SortableContext 
                 items={blocks.map(block => block.id)}
                 strategy={verticalListSortingStrategy}
+                disabled={isPreviewing}
               >
-                {blocks.map((block, index) => (
-                  <EditableBlock
-                    key={block.id}
-                    block={block}
-                    index={index}
-                    isSelected={block.id === selectedBlockId}
-                    onClick={() => onSelectBlock(block.id)}
-                    isPreviewMode={isPreviewing}
-                    onReorderBlocks={onReorderBlocks}
-                    primaryStyle={primaryStyle}
-                  />
-                ))}
+                <div className="space-y-4">
+                  {blocks.map((block, index) => (
+                    <EditableBlock
+                      key={block.id}
+                      block={block}
+                      index={index}
+                      isSelected={selectedBlockId === block.id}
+                      onClick={() => onSelectBlock(block.id)}
+                      isPreviewMode={isPreviewing}
+                      onReorderBlocks={onReorderBlocks}
+                      primaryStyle={primaryStyle}
+                    />
+                  ))}
+                </div>
               </SortableContext>
             </DndContext>
           )}

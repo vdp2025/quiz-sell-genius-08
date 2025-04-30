@@ -1,9 +1,10 @@
 
-import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
+import React, { useState } from 'react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 interface GlobalStylesEditorProps {
   globalStyles: {
@@ -12,7 +13,6 @@ interface GlobalStylesEditorProps {
     textColor?: string;
     backgroundColor?: string;
     fontFamily?: string;
-    [key: string]: any;
   };
   onSave: (styles: any) => void;
   onCancel: () => void;
@@ -23,19 +23,13 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   onSave,
   onCancel
 }) => {
-  const [styles, setStyles] = React.useState({
-    primaryColor: globalStyles.primaryColor || '#B89B7A',
-    secondaryColor: globalStyles.secondaryColor || '#432818',
-    textColor: globalStyles.textColor || '#1A1818',
-    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-    fontFamily: globalStyles.fontFamily || 'Inter, sans-serif'
-  });
+  const [styles, setStyles] = useState(globalStyles);
 
   const handleChange = (key: string, value: string) => {
-    setStyles({
-      ...styles,
+    setStyles(prev => ({
+      ...prev,
       [key]: value
-    });
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,114 +38,107 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   };
 
   return (
-    <Dialog open={true} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Estilos Globais</DialogTitle>
-        </DialogHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-4 py-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="primaryColor">Cor Primária</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="primaryColor"
-                  type="color"
-                  value={styles.primaryColor}
-                  onChange={(e) => handleChange('primaryColor', e.target.value)}
-                  className="w-12 h-12 p-1"
-                />
-                <Input
-                  value={styles.primaryColor}
-                  onChange={(e) => handleChange('primaryColor', e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="secondaryColor">Cor Secundária</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="secondaryColor"
-                  type="color"
-                  value={styles.secondaryColor}
-                  onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                  className="w-12 h-12 p-1"
-                />
-                <Input
-                  value={styles.secondaryColor}
-                  onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="textColor">Cor do Texto</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="textColor"
-                  type="color"
-                  value={styles.textColor}
-                  onChange={(e) => handleChange('textColor', e.target.value)}
-                  className="w-12 h-12 p-1"
-                />
-                <Input
-                  value={styles.textColor}
-                  onChange={(e) => handleChange('textColor', e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="backgroundColor"
-                  type="color"
-                  value={styles.backgroundColor}
-                  onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                  className="w-12 h-12 p-1"
-                />
-                <Input
-                  value={styles.backgroundColor}
-                  onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-          </div>
-          
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-auto">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-medium text-[#432818]">Estilos Globais</h2>
+          <Button variant="ghost" size="sm" onClick={onCancel} className="text-[#8F7A6A]">
+            Fechar
+          </Button>
+        </div>
+
+        <Separator className="mb-4" />
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fontFamily">Família de Fonte</Label>
+            <Label htmlFor="primaryColor">Cor Primária</Label>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.primaryColor }}
+              ></div>
+              <Input
+                id="primaryColor"
+                type="text"
+                value={styles.primaryColor || ''}
+                onChange={(e) => handleChange('primaryColor', e.target.value)}
+                placeholder="#B89B7A"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="secondaryColor">Cor Secundária</Label>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.secondaryColor }}
+              ></div>
+              <Input
+                id="secondaryColor"
+                type="text"
+                value={styles.secondaryColor || ''}
+                onChange={(e) => handleChange('secondaryColor', e.target.value)}
+                placeholder="#432818"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="textColor">Cor do Texto</Label>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.textColor }}
+              ></div>
+              <Input
+                id="textColor"
+                type="text"
+                value={styles.textColor || ''}
+                onChange={(e) => handleChange('textColor', e.target.value)}
+                placeholder="#3A3A3A"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.backgroundColor }}
+              ></div>
+              <Input
+                id="backgroundColor"
+                type="text"
+                value={styles.backgroundColor || ''}
+                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                placeholder="#FAF9F7"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="fontFamily">Fonte Principal</Label>
             <Input
               id="fontFamily"
-              value={styles.fontFamily}
+              type="text"
+              value={styles.fontFamily || ''}
               onChange={(e) => handleChange('fontFamily', e.target.value)}
-              placeholder="Inter, sans-serif"
+              placeholder="Playfair Display, serif"
             />
-            <p className="text-xs text-[#8F7A6A]">
-              Exemplo: "Inter, sans-serif", "Playfair Display, serif"
-            </p>
           </div>
-          
-          <DialogFooter className="pt-4">
+
+          <div className="flex gap-2 justify-end pt-4">
             <Button type="button" variant="outline" onClick={onCancel}>
               Cancelar
             </Button>
-            <Button type="submit" className="bg-[#B89B7A] hover:bg-[#8F7A6A]">
+            <Button type="submit" className="bg-[#B89B7A] hover:bg-[#A38A69] text-white">
               Salvar Estilos
             </Button>
-          </DialogFooter>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
-
-export default GlobalStylesEditor;

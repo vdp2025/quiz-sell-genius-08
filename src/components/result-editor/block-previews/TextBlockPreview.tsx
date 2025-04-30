@@ -4,24 +4,24 @@ import React from 'react';
 interface TextBlockPreviewProps {
   content: {
     text?: string;
-    alignment?: 'left' | 'center' | 'right';
-    textColor?: string;
     style?: any;
   };
 }
 
 const TextBlockPreview: React.FC<TextBlockPreviewProps> = ({ content }) => {
+  const { text, style = {} } = content;
+  
   const textStyle = {
-    textAlign: content.alignment || 'left',
-    color: content.textColor || '#1A1818',
-    ...content.style
+    fontSize: style.fontSize || '1rem',
+    lineHeight: style.lineHeight || '1.6',
+    color: style.color || '#3A3A3A',
+    textAlign: style.textAlign || 'left',
+    ...style
   };
 
   return (
-    <div className="prose max-w-none" style={textStyle}>
-      <p className="text-[#1A1818]/90">
-        {content.text || 'Digite seu texto aqui...'}
-      </p>
+    <div className="mb-4">
+      {text && <p style={textStyle}>{text}</p>}
     </div>
   );
 };

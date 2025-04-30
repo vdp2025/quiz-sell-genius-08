@@ -4,7 +4,7 @@ import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
-import { getDefaultContentForType } from '@/utils/blockDefaults';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
 import { generateId } from '@/utils/idGenerator';
 
 export const useResultPageEditor = (styleType: string) => {
@@ -41,6 +41,10 @@ export const useResultPageEditor = (styleType: string) => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
   }, []);
 
+  const selectBlock = useCallback((blockId: string | null) => {
+    setState(prev => ({ ...prev, selectedBlockId: blockId }));
+  }, []);
+
   const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
       id: generateId(),
@@ -49,64 +53,67 @@ export const useResultPageEditor = (styleType: string) => {
       order: state.blocks.length
     };
     
-    setState(prev => {
-      const newBlocks = [...prev.blocks, newBlock];
-      updateSection('blocks', newBlocks);
-      return {
-        ...prev,
-        blocks: newBlocks,
-        selectedBlockId: newBlock.id
-      };
-    });
+    const newBlocks = [...state.blocks, newBlock];
+    
+    setState(prev => ({
+      ...prev,
+      blocks: newBlocks,
+      selectedBlockId: newBlock.id
+    }));
+    
+    // Sync with resultPageConfig
+    updateSection('blocks', newBlocks);
     
     return newBlock.id;
   }, [state.blocks, updateSection]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    setState(prev => {
-      const updatedBlocks = prev.blocks.map(block =>
-        block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-      );
-      updateSection('blocks', updatedBlocks);
-      return {
-        ...prev,
-        blocks: updatedBlocks
-      };
-    });
-  }, [updateSection]);
+    const updatedBlocks = state.blocks.map(block =>
+      block.id === id ? { ...block, content: { ...block.content, ...content } } : block
+    );
+    
+    setState(prev => ({
+      ...prev,
+      blocks: updatedBlocks
+    }));
+    
+    // Sync with resultPageConfig
+    updateSection('blocks', updatedBlocks);
+  }, [state.blocks, updateSection]);
 
   const handleDeleteBlock = useCallback((id: string) => {
-    setState(prev => {
-      const filteredBlocks = prev.blocks
-        .filter(block => block.id !== id)
-        .map((block, index) => ({ ...block, order: index }));
-      updateSection('blocks', filteredBlocks);
-      return {
-        ...prev,
-        blocks: filteredBlocks,
-        selectedBlockId: null
-      };
-    });
-  }, [updateSection]);
+    const filteredBlocks = state.blocks
+      .filter(block => block.id !== id)
+      .map((block, index) => ({ ...block, order: index }));
+    
+    setState(prev => ({
+      ...prev,
+      blocks: filteredBlocks,
+      selectedBlockId: null
+    }));
+    
+    // Sync with resultPageConfig
+    updateSection('blocks', filteredBlocks);
+  }, [state.blocks, updateSection]);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
-    setState(prev => {
-      const result = Array.from(prev.blocks);
-      const [removed] = result.splice(sourceIndex, 1);
-      result.splice(destinationIndex, 0, removed);
-      
-      const reorderedBlocks = result.map((block, index) => ({
-        ...block,
-        order: index
-      }));
-      
-      updateSection('blocks', reorderedBlocks);
-      return {
-        ...prev,
-        blocks: reorderedBlocks
-      };
-    });
-  }, [updateSection]);
+    const result = Array.from(state.blocks);
+    const [removed] = result.splice(sourceIndex, 1);
+    result.splice(destinationIndex, 0, removed);
+    
+    const reorderedBlocks = result.map((block, index) => ({
+      ...block,
+      order: index
+    }));
+    
+    setState(prev => ({
+      ...prev,
+      blocks: reorderedBlocks
+    }));
+    
+    // Sync with resultPageConfig
+    updateSection('blocks', reorderedBlocks);
+  }, [state.blocks, updateSection]);
 
   const toggleGlobalStyles = useCallback(() => {
     setState(prev => ({
@@ -118,15 +125,22 @@ export const useResultPageEditor = (styleType: string) => {
   return {
     resultPageConfig,
     loading,
+    blocks: state.blocks,
+    selectedBlockId: state.selectedBlockId,
     isPreviewing: state.isPreviewing,
     isGlobalStylesOpen: state.isGlobalStylesOpen,
+    selectBlock,
     actions: {
       handleSave: saveConfig,
       handleReset: () => resetConfig(styleType),
       toggleGlobalStyles,
       togglePreview,
       updateSection,
-      importConfig
+      importConfig,
+      handleAddBlock,
+      handleUpdateBlock,
+      handleDeleteBlock,
+      handleReorderBlocks
     }
   };
 };

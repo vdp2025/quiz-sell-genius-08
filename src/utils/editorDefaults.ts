@@ -1,59 +1,59 @@
-import { Block, EditorConfig } from '@/types/editor';
 
-export const getDefaultContentForType = (type: Block['type']): any => {
+import { EditableContent } from "@/types/editor";
+
+export const getDefaultContentForType = (type: string): EditableContent => {
   switch (type) {
     case 'headline':
       return {
-        title: 'Título Principal',
-        subtitle: 'Subtítulo ou descrição breve',
+        title: 'Seu título aqui',
+        subtitle: 'Subtítulo opcional',
         style: {
           textAlign: 'center',
-          padding: '1.5rem',
+          fontSize: '1.5rem',
+          fontWeight: '600',
+          color: '#432818',
+          margin: '1rem 0'
         }
       };
-    
     case 'text':
       return {
-        text: 'Digite seu texto aqui. Este é um exemplo de texto que pode ser editado diretamente no editor visual.',
+        text: 'Digite seu texto aqui. Este é um parágrafo de exemplo que você pode editar.',
         style: {
-          padding: '1rem',
+          fontSize: '1rem',
+          lineHeight: '1.6',
+          color: '#3A3A3A'
         }
       };
-    
     case 'image':
       return {
-        imageUrl: '',
-        imageAlt: 'Imagem',
-        caption: '',
+        imageUrl: 'https://placehold.co/600x400/png',
+        imageAlt: 'Descrição da imagem',
+        caption: 'Legenda da imagem',
         style: {
-          padding: '1rem',
+          width: '100%',
+          borderRadius: '0.5rem'
         }
       };
-    
     case 'header':
       return {
-        title: 'Cabeçalho',
-        subtitle: 'Subtítulo do cabeçalho',
+        title: 'Cabeçalho da Página',
         logo: '',
         style: {
-          backgroundColor: '#fffaf7',
+          backgroundColor: '#FAF9F7',
           padding: '1rem',
+          textAlign: 'center'
         }
       };
-    
     case 'hero-section':
       return {
-        headline: 'Título Principal',
-        subheadline: 'Descrição ou chamada para ação',
-        imageUrl: '',
-        buttonText: 'Iniciar',
-        buttonUrl: '#',
+        title: 'Seu Resultado de Estilo',
+        subtitle: 'Descubra como expressar sua personalidade através da moda',
+        imageUrl: 'https://placehold.co/800x600/png',
         style: {
-          backgroundColor: '#fffaf7',
-          padding: '2rem',
+          backgroundColor: '#FAF9F7',
+          padding: '2rem'
         }
       };
-    
     case 'benefits':
       return {
         title: 'Benefícios',
@@ -63,211 +63,97 @@ export const getDefaultContentForType = (type: Block['type']): any => {
           { title: 'Benefício 3', description: 'Descrição do benefício 3' }
         ],
         style: {
-          padding: '1.5rem',
+          backgroundColor: '#FFFFFF',
+          padding: '2rem'
         }
       };
-    
     case 'testimonials':
       return {
-        title: 'O que dizem nossos clientes',
+        title: 'O que nossos clientes dizem',
         items: [
-          { name: 'Cliente 1', role: 'Função', text: 'Depoimento do cliente 1', imageUrl: '' },
-          { name: 'Cliente 2', role: 'Função', text: 'Depoimento do cliente 2', imageUrl: '' }
+          { name: 'Cliente 1', text: 'Depoimento do cliente 1', imageUrl: '' },
+          { name: 'Cliente 2', text: 'Depoimento do cliente 2', imageUrl: '' }
         ],
         style: {
-          padding: '1.5rem',
-          backgroundColor: '#f9f6f2',
+          backgroundColor: '#FAF9F7',
+          padding: '2rem'
         }
       };
-    
-    case 'guarantee':
+    case 'pricing':
       return {
-        title: 'Nossa Garantia',
-        description: 'Descrição da garantia oferecida',
-        days: '30',
-        imageUrl: '',
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
-    case 'cta':
-      return {
-        text: 'Chamada para Ação',
-        buttonText: 'Clique Aqui',
+        title: 'Adquira agora',
+        price: 'R$ 97,00',
+        regularPrice: 'R$ 197,00',
+        buttonText: 'Comprar agora',
         buttonUrl: '#',
         style: {
-          padding: '1.5rem',
-          textAlign: 'center',
-          backgroundColor: '#f3e8e6',
+          backgroundColor: '#FFFFFF',
+          padding: '2rem',
+          textAlign: 'center'
         }
       };
-    
+    case 'guarantee':
+      return {
+        title: 'Garantia de Satisfação',
+        text: 'Se você não ficar satisfeito, devolvemos o seu dinheiro em até 7 dias.',
+        imageUrl: 'https://placehold.co/200x200/png',
+        style: {
+          backgroundColor: '#FAF9F7',
+          padding: '2rem',
+          textAlign: 'center'
+        }
+      };
+    case 'cta':
+      return {
+        title: 'Faça sua transformação de estilo agora',
+        buttonText: 'Começar',
+        buttonUrl: '#',
+        style: {
+          backgroundColor: '#B89B7A',
+          color: '#FFFFFF',
+          padding: '2rem',
+          textAlign: 'center'
+        }
+      };
     case 'style-result':
       return {
-        showTitle: true,
-        showDescription: true,
-        showPercentage: true,
+        title: 'Seu Estilo Principal',
+        description: 'Descrição personalizada do estilo predominante.',
+        customImage: '',
         style: {
-          padding: '1.5rem',
+          backgroundColor: '#FAF9F7',
+          padding: '2rem',
+          textAlign: 'center'
         }
       };
-    
     case 'secondary-styles':
       return {
-        showTitle: true,
-        maxStyles: 3,
-        showPercentages: true,
+        title: 'Seus Estilos Secundários',
+        description: 'Estes são os estilos que complementam seu estilo principal.',
         style: {
-          padding: '1.5rem',
+          backgroundColor: '#FFFFFF',
+          padding: '2rem'
         }
       };
-    
-    case 'bonus':
-      return {
-        title: 'Bônus Exclusivo',
-        description: 'Descrição do bônus oferecido',
-        imageUrl: '',
-        style: {
-          padding: '1.5rem',
-          backgroundColor: '#f9f6f2',
-        }
-      };
-    
-    case 'bonus-carousel':
-      return {
-        title: 'Bônus Exclusivos',
-        items: [
-          { title: 'Bônus 1', description: 'Descrição do bônus 1', imageUrl: '' },
-          { title: 'Bônus 2', description: 'Descrição do bônus 2', imageUrl: '' }
-        ],
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
-    case 'columns':
-      return {
-        columns: 2,
-        items: [
-          { title: 'Coluna 1', content: 'Conteúdo da coluna 1' },
-          { title: 'Coluna 2', content: 'Conteúdo da coluna 2' }
-        ],
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
-    case 'products':
-      return {
-        title: 'Nossos Produtos',
-        items: [
-          { title: 'Produto 1', description: 'Descrição do produto 1', imageUrl: '', price: '99,90' },
-          { title: 'Produto 2', description: 'Descrição do produto 2', imageUrl: '', price: '149,90' }
-        ],
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
     case 'spacer':
       return {
         height: '2rem',
         style: {
-          backgroundColor: 'transparent',
+          margin: '1rem 0'
         }
       };
-    
-    case 'video':
-      return {
-        videoUrl: '',
-        title: 'Título do vídeo',
-        description: 'Descrição do vídeo',
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
     case 'two-column':
       return {
-        column1: {
-          content: 'Conteúdo da primeira coluna'
-        },
-        column2: {
-          content: 'Conteúdo da segunda coluna'
-        },
+        leftContent: 'Conteúdo da coluna da esquerda',
+        rightContent: 'Conteúdo da coluna da direita',
         style: {
-          padding: '1.5rem',
+          gap: '1rem'
         }
       };
-    
-    case 'icon':
-      return {
-        iconName: 'star',
-        size: 'medium',
-        color: '#B89B7A',
-        style: {
-          textAlign: 'center',
-          padding: '1rem',
-        }
-      };
-    
-    case 'faq':
-      return {
-        title: 'Perguntas Frequentes',
-        items: [
-          { question: 'Pergunta 1', answer: 'Resposta 1' },
-          { question: 'Pergunta 2', answer: 'Resposta 2' }
-        ],
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
-    case 'carousel':
-      return {
-        items: [
-          { title: 'Item 1', description: 'Descrição do item 1', imageUrl: '' },
-          { title: 'Item 2', description: 'Descrição do item 2', imageUrl: '' }
-        ],
-        style: {
-          padding: '1.5rem',
-        }
-      };
-    
-    case 'custom-code':
-      return {
-        code: '<!-- Insira seu código personalizado aqui -->',
-        style: {
-          padding: '1rem',
-        }
-      };
-    
-    case 'animation-block':
-      return {
-        animationType: 'fade-in',
-        content: 'Conteúdo animado',
-        duration: 1000,
-        delay: 0,
-        style: {
-          padding: '1rem',
-        }
-      };
-    
     default:
       return {
-        style: {
-          padding: '1rem',
-        }
+        text: 'Bloco personalizado',
+        style: {}
       };
-  }
-};
-
-export const defaultConfig: EditorConfig = {
-  blocks: [],
-  globalStyles: {
-    backgroundColor: '#ffffff',
-    color: '#333333',
-    fontFamily: 'sans-serif'
   }
 };

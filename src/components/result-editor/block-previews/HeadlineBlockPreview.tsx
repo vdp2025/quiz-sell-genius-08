@@ -5,34 +5,32 @@ interface HeadlineBlockPreviewProps {
   content: {
     title?: string;
     subtitle?: string;
-    alignment?: 'left' | 'center' | 'right';
-    textColor?: string;
     style?: any;
   };
 }
 
 const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content }) => {
-  const textColor = content.textColor || '#432818';
-  const alignment = content.alignment || 'center';
+  const { title, subtitle, style = {} } = content;
   
-  const containerStyle = {
-    textAlign: alignment,
-    ...content.style
+  // Aplicar estilos ou usar padrões
+  const titleStyle = {
+    fontSize: style.fontSize || '1.5rem',
+    fontWeight: style.fontWeight || '600',
+    color: style.color || '#432818',
+    textAlign: style.textAlign || 'left',
+    ...style
   };
   
+  const subtitleStyle = {
+    fontSize: '1rem',
+    color: '#8F7A6A',
+    textAlign: style.textAlign || 'left',
+  };
+
   return (
-    <div style={containerStyle} className="space-y-2">
-      {content.title && (
-        <h2 
-          className="text-2xl md:text-3xl font-playfair font-bold"
-          style={{ color: textColor }}
-        >
-          {content.title}
-        </h2>
-      )}
-      {content.subtitle && (
-        <p className="text-[#1A1818]/70">{content.subtitle}</p>
-      )}
+    <div className="mb-4">
+      {title && <h2 style={titleStyle} className="font-playfair">{title}</h2>}
+      {subtitle && <p style={subtitleStyle}>{subtitle}</p>}
     </div>
   );
 };

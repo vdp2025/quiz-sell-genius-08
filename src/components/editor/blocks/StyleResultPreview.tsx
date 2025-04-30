@@ -1,10 +1,7 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
 import { StyleResult } from '@/types/quiz';
-import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-import { getStyleColor } from '@/utils/styleUtils';
-import { styleConfig } from '@/config/styleConfig';
+import { cn } from '@/lib/utils';
 
 interface StyleResultPreviewProps {
   primaryStyle: StyleResult;
@@ -17,57 +14,70 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
   description,
   customImage
 }) => {
-  const mockSecondaryStyles: StyleResult[] = [
-    { category: 'Contemporâneo', score: 4, percentage: 30 },
-    { category: 'Clássico', score: 3, percentage: 20 }
-  ];
+  const getStyleImage = (styleType: string): string => {
+    const defaultImage = 'https://placehold.co/600x400/png';
+    
+    // Mapa de imagens por estilo (você pode substituir por imagens reais)
+    const styleImages = {
+      'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+      'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp'
+    };
+    
+    return customImage || styleImages[styleType] || defaultImage;
+  };
 
-  const styleName = primaryStyle.category;
+  const getStyleDescription = (styleType: string): string => {
+    // Descrições padrão para cada estilo
+    const styleDescriptions = {
+      'Elegante': 'O estilo Elegante valoriza a sofisticação e o requinte. Você prefere peças de qualidade, com bom caimento e acabamento impecável.',
+      'Contemporâneo': 'O estilo Contemporâneo é moderno e atual. Você gosta de acompanhar as tendências e adaptar-se às mudanças da moda.',
+      'Natural': 'O estilo Natural valoriza o conforto e a praticidade. Você prefere peças confortáveis, tecidos naturais e um visual despretensioso.',
+      'Clássico': 'O estilo Clássico é atemporal e tradicional. Você prefere peças que nunca saem de moda e tem um guarda-roupa versátil e duradouro.',
+      'Romântico': 'O estilo Romântico valoriza a feminilidade e a delicadeza. Você gosta de peças com detalhes românticos, como babados e rendas.',
+      'Sexy': 'O estilo Sexy valoriza a sensualidade. Você gosta de destacar seus pontos fortes e não tem medo de mostrar um pouco mais da sua silhueta.',
+      'Dramático': 'O estilo Dramático é ousado e impactante. Você gosta de peças que chamam a atenção e criar looks que não passam despercebidos.',
+      'Criativo': 'O estilo Criativo é único e original. Você gosta de experimentar, misturar e criar seu próprio estilo sem seguir regras.'
+    };
+    
+    return description || styleDescriptions[styleType] || 'Descrição não disponível para este estilo.';
+  };
 
   return (
-    <Card className="p-6 bg-white shadow-sm">
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-full md:w-1/2">
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-[#432818] pr-4 break-words">{styleName}</h2>
-                <span className="text-[#B89B7A] font-medium whitespace-nowrap ml-2">{primaryStyle.percentage}%</span>
-              </div>
-              <div className="w-full bg-[#F3E8E6] rounded-full h-2">
-                <div 
-                  className="h-2 rounded-full transition-all duration-300 ease-in-out" 
-                  style={{ 
-                    width: `${primaryStyle.percentage}%`,
-                    backgroundColor: getStyleColor(primaryStyle.category)
-                  }} 
-                />
-              </div>
-            </div>
-            
-            <div className="prose max-w-none">
-              <p className="text-[#432818]/80 leading-relaxed whitespace-pre-wrap">
-                {description || styleConfig[primaryStyle.category]?.description || ''}
-              </p>
-            </div>
-          </div>
-
-          <div className="w-full md:w-1/2">
-            <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-[#FAF9F7]">
-              <img 
-                src={customImage || styleConfig[primaryStyle.category]?.image}
-                alt={`Estilo ${styleName}`}
-                className="w-full h-full object-cover rounded-lg"
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 bg-[#FAF9F7] p-4 rounded-lg">
-          <SecondaryStylesSection secondaryStyles={mockSecondaryStyles} />
+    <div className="p-4 border rounded-lg bg-[#FAF9F7]">
+      <div className="text-center mb-4">
+        <h3 className="text-xl font-playfair text-[#432818]">
+          Seu estilo predominante é <span className="font-bold">{primaryStyle.category}</span>
+        </h3>
+        <div className="inline-block bg-[#B89B7A] text-white px-3 py-1 rounded-full text-sm mt-2">
+          {primaryStyle.percentage}% de compatibilidade
         </div>
       </div>
-    </Card>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <img
+            src={getStyleImage(primaryStyle.category)}
+            alt={`Estilo ${primaryStyle.category}`}
+            className="w-full h-auto object-cover rounded-lg shadow-sm"
+          />
+        </div>
+        <div>
+          <p className="text-[#5A5A5A] leading-relaxed">
+            {getStyleDescription(primaryStyle.category)}
+          </p>
+          <div className="mt-4 text-sm text-[#8F7A6A]">
+            <p>
+              Pontuação: <span className="font-medium">{primaryStyle.score} pontos</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

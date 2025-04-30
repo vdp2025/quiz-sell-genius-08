@@ -1,12 +1,5 @@
 
-import { StyleResult } from './quiz';
 import { Block } from './editor';
-import { ResultPageConfig } from './resultPageConfig';
-
-export interface EditorProps {
-  selectedStyle: StyleResult;
-  onShowTemplates?: () => void;
-}
 
 export interface EditorState {
   selectedBlockId: string | null;
@@ -22,8 +15,12 @@ export interface BlockManipulationActions {
   handleReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
 }
 
-export interface EditorActions extends BlockManipulationActions {
-  handleSave: () => Promise<void>;
-  handleReset: () => void;
-  toggleGlobalStyles: () => void;
+export interface EditorProps {
+  selectedStyle: {
+    category: string;
+    score: number;
+    percentage: number;
+  };
+  onShowTemplates?: () => void;
+  initialConfig?: any;
 }
