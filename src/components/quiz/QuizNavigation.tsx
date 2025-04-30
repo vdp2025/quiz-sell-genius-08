@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 interface QuizNavigationProps {
   canProceed: boolean;
   onNext: () => void;
@@ -17,13 +19,9 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
 }) => {
   const requiredOptions = currentQuestionType === 'strategic' ? 1 : 3;
   
-  // Lógica de ativação mais rigorosa
   const isButtonEnabled = useMemo(() => {
-    if (currentQuestionType === 'strategic') {
-      return selectedOptionsCount === 1;
-    }
-    return selectedOptionsCount === 3;
-  }, [currentQuestionType, selectedOptionsCount]);
+    return selectedOptionsCount === requiredOptions;
+  }, [selectedOptionsCount, requiredOptions]);
 
   const getHelperText = () => {
     if (!isButtonEnabled) {

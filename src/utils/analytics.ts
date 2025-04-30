@@ -1,74 +1,61 @@
-// Tipos para o Facebook Pixel
-interface FacebookPixelEvent {
-  eventName: string;
-  params?: Record<string, any>;
+declare global {
+  interface Window {
+    fbq: any;
+  }
 }
 
-// Inicialização do Facebook Pixel
-export const initializeFacebookPixel = (pixelId: string): void => {
-  // Código de inicialização do Facebook Pixel
-  (function(f: any, b, e, v, n, t, s) {
-    if (f.fbq) return;
-    n = f.fbq = function() {
-      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-    };
-    if (!f._fbq) f._fbq = n;
-    n.push = n;
-    n.loaded = !0;
-    n.version = '2.0';
-    n.queue = [];
-    t = b.createElement(e);
-    t.async = !0;
-    t.src = v;
-    s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
-  })(
-    window,
-    document,
-    'script',
-    'https://connect.facebook.net/en_US/fbevents.js'
-  );
+// ID do Pixel de exemplo (substituir pelo real posteriormente)
+const FB_PIXEL_ID = '123456789012345';
 
-  fbq('init', pixelId);
-  fbq('track', 'PageView');
+// Inicialização do Facebook Pixel
+export const initFacebookPixel = () => {
+  if (!window.fbq) {
+    window.fbq = function() {
+      window.fbq.callMethod ? window.fbq.callMethod.apply(window.fbq, arguments) : window.fbq.queue.push(arguments);
+    };
+    window.fbq.push = window.fbq;
+    window.fbq.loaded = true;
+    window.fbq.version = '2.0';
+    window.fbq.queue = [];
+  }
+  
+  window.fbq('init', FB_PIXEL_ID);
+  window.fbq('track', 'PageView');
 };
 
 // Funções para rastreamento de eventos
-export const trackQuizStart = (): void => {
-  fbq('track', 'ViewContent', {
-    content_name: 'Quiz de Estilo',
-    content_category: 'Quiz',
-    content_type: 'quiz_start'
+export const trackQuizStart = () => {
+  window.fbq('track', 'ViewContent', {
+    content_name: 'Quiz Início',
+    content_category: 'Quiz'
   });
 };
 
-export const trackQuizAnswer = (questionId: string, answer: string): void => {
-  fbq('trackCustom', 'QuizAnswer', {
+export const trackQuizAnswer = (questionId: string, selectedOptions: string[]) => {
+  window.fbq('trackCustom', 'QuizAnswer', {
     question_id: questionId,
-    answer: answer
+    selected_options: selectedOptions
   });
 };
 
-export const trackQuizComplete = (result: string): void => {
-  fbq('track', 'CompleteRegistration', {
-    content_name: 'Quiz de Estilo',
-    status: 'completed',
-    result: result
+export const trackQuizComplete = () => {
+  window.fbq('track', 'CompleteRegistration', {
+    content_name: 'Quiz Completo',
+    status: 'success'
   });
 };
 
-export const trackResultView = (styleType: string): void => {
-  fbq('track', 'ViewContent', {
+export const trackResultView = (resultType: string) => {
+  window.fbq('track', 'ViewContent', {
     content_name: 'Resultado do Quiz',
-    content_category: 'Quiz Result',
-    style_type: styleType
+    content_category: 'Resultado',
+    content_type: resultType
   });
 };
 
-export const trackCTAClick = (ctaType: string): void => {
-  fbq('track', 'Lead', {
-    content_name: 'CTA Click',
-    content_category: 'Conversion',
-    cta_type: ctaType
+export const trackLeadGeneration = () => {
+  window.fbq('track', 'Lead', {
+    content_name: 'Lead Quiz',
+    content_category: 'Quiz'
   });
 };
