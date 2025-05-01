@@ -57,6 +57,8 @@ export interface EditableContent {
   benefits?: string[];
   // For bonus carousel
   bonusImages?: Array<{url: string; alt: string; title?: string}>;
+  // Alignment property with limited values
+  alignment?: 'left' | 'center' | 'right';
   // Custom properties
   [key: string]: any;
 }

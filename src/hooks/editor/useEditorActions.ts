@@ -1,6 +1,6 @@
 
 import { useCallback } from 'react';
-import { EditorBlock } from '@/types/editor';
+import { EditorBlock, EditableContent } from '@/types/editor';
 import { useToast } from '@/components/ui/use-toast';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
 
@@ -23,7 +23,7 @@ export const useEditorActions = (
     addToHistory(newBlocks);
   }, [blocks, onBlocksChange, addToHistory]);
 
-  const handleUpdateBlock = useCallback((id: string, content: any) => {
+  const handleUpdateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
     const newBlocks = blocks.map(block => 
       block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     );

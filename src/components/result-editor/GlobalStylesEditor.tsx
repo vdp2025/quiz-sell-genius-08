@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
@@ -24,6 +23,14 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   onCancel
 }) => {
   const [styles, setStyles] = useState(globalStyles);
+
+  // Handle color change safely
+  const handleColorChange = (colorType: string, hexColor: string) => {
+    setStyles(prev => ({
+      ...prev,
+      [colorType]: hexColor || '#FFFFFF' // Default to white if color is undefined
+    }));
+  };
 
   const handleChange = (key: string, value: string) => {
     setStyles(prev => ({

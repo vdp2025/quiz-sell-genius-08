@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import UnifiedEditorPage from './pages/UnifiedEditorPage';
+import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -23,10 +23,10 @@ const App = () => {
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/admin" element={<AdminDashboard />} />
-              {/* Simplify editor routes - redirect all editor routes to unified editor */}
-              <Route path="/admin/editor" element={<Navigate to="/admin/editor/unified" replace />} />
-              <Route path="/admin/editor/unified" element={<UnifiedEditorPage />} />
-              <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor/unified?tab=quiz" replace />} />
+              {/* Use the EditorPage as the main editor */}
+              <Route path="/admin/editor" element={<EditorPage />} />
+              <Route path="/admin/editor/unified" element={<EditorPage />} />
+              <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
               <Route path="/admin/settings" element={<SettingsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>

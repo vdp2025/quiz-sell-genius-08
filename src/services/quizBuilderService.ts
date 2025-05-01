@@ -1,180 +1,197 @@
-import { QuizQuestion, QuizOption } from '@/types/quiz';
-import { QuizStage, QuizComponentData, QuizBuilderState } from '@/types/quizBuilder';
+
+import { QuizBuilderState, QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
-import { ResultPageConfig } from '@/types/resultPageConfig';
-import { resultPageStorage } from '@/services/resultPageStorage';
 
-/**
- * Creates a stage for quiz builder based on provided parameters
- */
-export const createStage = (
-  title: string,
-  type: QuizStage['type'],
-  order: number
-): QuizStage => {
-  return {
+// Function to create a basic quiz builder state with initial stages
+export const generateInitialStages = () => {
+  const welcomeStage: QuizStage = {
     id: generateId(),
-    title,
-    order,
-    type
+    title: 'Bem-vindo',
+    type: 'welcome',
+    order: 0,
+    isEnabled: true
   };
-};
-
-/**
- * Creates a component for the quiz builder
- */
-export const createComponent = (
-  type: QuizComponentData['type'],
-  stageId: string,
-  data: any,
-  order: number
-): QuizComponentData => {
-  return {
+  
+  const questionStage: QuizStage = {
     id: generateId(),
-    type,
-    stageId,
-    order,
-    data
+    title: 'Pergunta 1',
+    type: 'question',
+    order: 1,
+    isEnabled: true
   };
-};
-
-/**
- * Creates the initial stages and components for a new quiz builder
- */
-export const generateInitialStages = (): { stages: QuizStage[], components: QuizComponentData[] } => {
-  const coverStage = createStage('Capa do Quiz', 'cover', 0);
-  const questionStage = createStage('Primeira Questão', 'question', 1);
-  const resultStage = createStage('Resultado Final', 'result', 2);
   
-  const coverComponent = createComponent('stageCover', coverStage.id, {
-    title: 'Quiz de Estilo',
-    subtitle: 'Descubra seu estilo predominante',
-    buttonText: 'Começar'
-  }, 0);
-  
-  const questionComponent = createComponent('stageQuestion', questionStage.id, {
-    question: 'Qual é o seu tipo de roupa favorita?',
-    options: [
-      'Looks confortáveis e práticos',
-      'Roupas clássicas e atemporais',
-      'Peças modernas com toques pessoais',
-      'Roupas sofisticadas e elegantes'
-    ],
-    multiSelect: 3,
-    displayType: 'text',
-    autoAdvance: true
-  }, 0);
-  
-  const resultComponent = createComponent('stageResult', resultStage.id, {
+  const resultStage: QuizStage = {
+    id: generateId(),
     title: 'Seu Resultado',
-    subtitle: 'Baseado nas suas respostas'
-  }, 0);
-  
-  return {
-    stages: [coverStage, questionStage, resultStage],
-    components: [coverComponent, questionComponent, resultComponent]
+    type: 'result',
+    order: 2,
+    isEnabled: true
   };
-};
-
-export const createBuilderStateFromQuiz = (
-  questions: QuizQuestion[],
-  title: string,
-  description: string,
-  resultTitle: string
-): QuizBuilderState => {
-  const stages: QuizStage[] = [];
-  const components: QuizComponentData[] = [];
   
-  // Create cover stage
-  const coverStage = createStage('Capa do Quiz', 'cover', 0);
-  stages.push(coverStage);
+  const stages = [welcomeStage, questionStage, resultStage];
   
-  components.push(createComponent('stageCover', coverStage.id, {
-    title: title,
-    subtitle: description,
-    buttonText: 'Começar Quiz',
-    backgroundColor: '#FFFAF0',
-    textColor: '#432818',
-    stageTitle: 'Início',
-    stageNumber: 1,
-    totalStages: questions.length + 2, // Cover + Questions + Result
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
-  }, 0));
-  
-  // Create question stages
-  questions.forEach((question, index) => {
-    const questionStage = createStage(
-      question.title || `Pergunta ${index + 1}`,
-      'question',
-      index + 1
-    );
-    stages.push(questionStage);
-    
-    components.push(createComponent('multipleChoice', questionStage.id, {
-      question: question.title,
-      options: question.options.map(opt => ({
-        text: opt.text,
-        imageUrl: opt.imageUrl,
-        styleCategory: opt.styleCategory
-      })),
-      multiSelect: question.multiSelect,
-      displayType: question.type,
-      autoAdvance: true,
-      stageTitle: `Questão ${index + 1}`,
-      stageNumber: index + 2,
-      totalStages: questions.length + 2
-    }, 0));
-  });
-  
-  // Create result stage
-  const resultStage = createStage('Resultado do Quiz', 'result', questions.length + 1);
-  stages.push(resultStage);
-  
-  components.push(createComponent('stageResult', resultStage.id, {
-    title: resultTitle,
-    subtitle: 'Baseado nas suas respostas',
-    showPercentages: true,
-    showDescriptions: true,
-    stageTitle: 'Resultado',
-    stageNumber: questions.length + 2,
-    totalStages: questions.length + 2
-  }, 0));
+  // Create default components
+  const components: QuizComponentData[] = [
+    {
+      id: generateId(),
+      type: 'headline',
+      stageId: welcomeStage.id,
+      content: {
+        title: 'Quiz de Estilo Pessoal',
+        subtitle: 'Descubra seu estilo predominante',
+        alignment: 'center'
+      },
+      order: 0
+    },
+    {
+      id: generateId(),
+      type: 'text',
+      stageId: questionStage.id,
+      content: {
+        text: 'Qual opção descreve melhor seu estilo?',
+        alignment: 'center'
+      },
+      order: 0
+    },
+    {
+      id: generateId(),
+      type: 'result',
+      stageId: resultStage.id,
+      content: {
+        title: 'Seu Resultado de Estilo Pessoal',
+        showShare: true,
+        alignment: 'center'
+      },
+      order: 0
+    }
+  ];
   
   return { stages, components };
 };
 
-/**
- * Creates a builder state from an existing result page configuration
- */
-export const createBuilderStateFromResultPage = (
-  resultConfig: ResultPageConfig
-): QuizBuilderState => {
-  // Create a minimal quiz builder state with just a result page
-  const resultStage = createStage('Resultado do Quiz', 'result', 0);
-  
-  const resultComponent = createComponent('stageResult', resultStage.id, {
-    title: resultConfig.header?.content?.title || 'Seu Resultado',
-    subtitle: resultConfig.header?.content?.subtitle || 'Baseado nas suas respostas',
-    resultLayout: 'custom',
-    primaryStyleTitle: 'Seu Estilo Predominante',
-    secondaryStylesTitle: resultConfig.secondaryStyles?.visible !== false ? 'Seus Estilos Complementares' : '',
-    showPercentages: true,
-    showDescriptions: true,
-    callToActionText: resultConfig.offer?.hero?.content?.ctaText || 'Conhecer o Guia Completo',
-    callToActionUrl: resultConfig.offer?.hero?.content?.ctaUrl || '#',
-    accentColor: resultConfig.globalStyles?.primaryColor || '#B89B7A',
-    savedResultConfig: JSON.stringify(resultConfig)
-  }, 0);
-  
-  return {
-    stages: [resultStage],
-    components: [resultComponent]
+export const createBuilderStateFromQuiz = (
+  quizQuestions: any[],
+  title: string = 'Quiz de Estilo Pessoal',
+  subtitle: string = 'Descubra seu estilo predominante',
+  resultTitle: string = 'Seu Resultado de Estilo Pessoal'
+) => {
+  // Create stages
+  const welcomeStage: QuizStage = {
+    id: generateId(),
+    title: 'Bem-vindo',
+    type: 'welcome',
+    order: 0,
+    isEnabled: true
   };
+  
+  // Create a question stage for each question
+  const questionStages: QuizStage[] = quizQuestions.map((_, index) => ({
+    id: generateId(),
+    title: `Pergunta ${index + 1}`,
+    type: 'question',
+    order: index + 1,
+    isEnabled: true
+  }));
+  
+  const resultStage: QuizStage = {
+    id: generateId(),
+    title: 'Seu Resultado',
+    type: 'result',
+    order: questionStages.length + 1,
+    isEnabled: true
+  };
+  
+  const stages = [welcomeStage, ...questionStages, resultStage];
+  
+  // Create welcome components
+  const welcomeComponents: QuizComponentData[] = [
+    {
+      id: generateId(),
+      type: 'headline',
+      stageId: welcomeStage.id,
+      content: {
+        title,
+        subtitle,
+        alignment: 'center'
+      },
+      order: 0
+    },
+    {
+      id: generateId(),
+      type: 'button',
+      stageId: welcomeStage.id,
+      content: {
+        text: 'Iniciar Quiz',
+        action: 'next',
+        alignment: 'center'
+      },
+      order: 1
+    }
+  ];
+  
+  // Create question components
+  const questionComponents: QuizComponentData[] = [];
+  quizQuestions.forEach((question, qIndex) => {
+    questionComponents.push({
+      id: generateId(),
+      type: 'text',
+      stageId: questionStages[qIndex].id,
+      content: {
+        text: question.text || `Pergunta ${qIndex + 1}`,
+        alignment: 'center'
+      },
+      order: 0
+    });
+    
+    // Add options
+    if (question.options && Array.isArray(question.options)) {
+      question.options.forEach((option, oIndex) => {
+        questionComponents.push({
+          id: generateId(),
+          type: 'choice',
+          stageId: questionStages[qIndex].id,
+          content: {
+            text: option.text || `Opção ${oIndex + 1}`,
+            value: option.value || String(oIndex),
+            image: option.image || '',
+            alignment: 'center'
+          },
+          order: oIndex + 1
+        });
+      });
+    }
+  });
+  
+  // Create result component
+  const resultComponents: QuizComponentData[] = [
+    {
+      id: generateId(),
+      type: 'result',
+      stageId: resultStage.id,
+      content: {
+        title: resultTitle,
+        showShare: true,
+        alignment: 'center'
+      },
+      order: 0
+    }
+  ];
+  
+  const components = [...welcomeComponents, ...questionComponents, ...resultComponents];
+  
+  return { stages, components };
 };
 
-/**
- * Loads a quiz result page configuration from localStorage
- */
-export const loadQuizResultConfig = (styleType: string): ResultPageConfig | null => {
-  return resultPageStorage.load(styleType);
+export const loadQuizResultConfig = (styleType: string) => {
+  try {
+    const configKey = `result_page_config_${styleType}`;
+    const savedConfig = localStorage.getItem(configKey);
+    if (savedConfig) {
+      return JSON.parse(savedConfig);
+    }
+    return null;
+  } catch (error) {
+    console.error('Error loading quiz result config:', error);
+    return null;
+  }
 };

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -213,6 +212,32 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
         }
       ]
     };
+  };
+
+  const handleImportBasicQuiz = () => {
+    const { stages, components } = createBuilderStateFromQuiz(quizQuestions);
+    initializeStages(stages);
+    initializeComponents(components);
+    setActiveStage(stages[0].id);
+    
+    onClose();
+    toast({
+      title: "Template básico importado",
+      description: "O template básico foi aplicado com sucesso.",
+    });
+  };
+
+  const handleImportPersonalStyleQuiz = () => {
+    const { stages, components } = createBuilderStateFromQuiz(personalStyleQuizQuestions);
+    initializeStages(stages);
+    initializeComponents(components);
+    setActiveStage(stages[0].id);
+    
+    onClose();
+    toast({
+      title: "Template de estilo pessoal importado",
+      description: "O template de estilo pessoal foi aplicado com sucesso.",
+    });
   };
 
   return (
