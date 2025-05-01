@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Monitor, Smartphone, Tablet } from 'lucide-react';
-import ComponentRenderer from './ComponentRenderer';
+import { ComponentRenderer } from './ComponentRenderer';
 
 interface TypeformPreviewPanelProps {
   components: QuizComponentData[];
