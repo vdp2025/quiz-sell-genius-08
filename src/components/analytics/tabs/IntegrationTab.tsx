@@ -172,7 +172,7 @@ export const IntegrationTab: React.FC = () => {
                   onChange={(e) => setFbPixelId(e.target.value)}
                 />
                 <p className="text-sm text-muted-foreground">
-                  Found in Facebook Events Manager > Data Sources > Pixel
+                  Found in Facebook Events Manager {'>'}  Data Sources {'>'}  Pixel
                 </p>
               </div>
               
@@ -274,3 +274,4 @@ export const IntegrationTab: React.FC = () => {
     </div>
   );
 };
+
