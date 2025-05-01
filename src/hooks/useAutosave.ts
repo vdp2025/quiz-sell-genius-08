@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
-import { useAutoSave } from './useAutoSave';
+import debounce from 'lodash/debounce';
 
 interface UseAutosaveOptions<T> {
   data: T;
@@ -113,15 +113,9 @@ export function useAutosave<T>({
     saveNow: () => save(true),
   };
 }
-import { useEffect, useRef } from 'react';
-import debounce from 'lodash/debounce';
 
-interface AutoSaveOptions {
-  onSave: (data: any) => void;
-  delay?: number;
-}
-
-export function useAutoSave({ onSave, delay = 1000 }: AutoSaveOptions) {
+// Separate implementation for useAutoSave with different signature
+export function useAutoSave({ onSave, delay = 1000 }: { onSave: (data: any) => void; delay?: number }) {
   const savedCallback = useRef(onSave);
 
   useEffect(() => {

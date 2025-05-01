@@ -17,7 +17,7 @@ import { Block } from '@/types/editor';
 
 interface EditorToolbarProps {
   isPreviewing: boolean;
-  onPreviewToggle: () => void;
+  onTogglePreview: () => void;
   onSave: () => void;
   onUndo?: () => Block[];
   onRedo?: () => Block[];
@@ -29,7 +29,7 @@ interface EditorToolbarProps {
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({ 
   isPreviewing,
-  onPreviewToggle,
+  onTogglePreview,
   onSave,
   onUndo,
   onRedo,
@@ -124,7 +124,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <Button
           variant="outline" 
           size="sm"
-          onClick={onPreviewToggle}
+          onClick={onTogglePreview}
           className="text-[#432818]"
         >
           {isPreviewing ? (

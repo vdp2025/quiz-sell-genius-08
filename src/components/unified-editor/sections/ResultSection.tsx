@@ -1,11 +1,12 @@
+
 import React, { useState } from 'react';
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
 import { ImageUploader } from '../../ui/image-uploader';
-import { useAutoSave } from '../../../hooks/useAutoSave';
 import { Switch } from '../../ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs';
+import { useAutoSave } from '../../../hooks/useAutosave';
 
 interface AnimationOptions {
   entrance: {
@@ -71,6 +72,70 @@ interface ResultData {
   responsive: ResponsiveOptions;
 }
 
+const defaultAnimations: AnimationOptions = {
+  entrance: {
+    type: 'fade',
+    duration: 500,
+    delay: 0
+  },
+  elements: {
+    type: 'fade',
+    duration: 300,
+    stagger: 100
+  }
+};
+
+const defaultStyles: StyleOptions = {
+  colors: {
+    primary: '#B89B7A',
+    secondary: '#8F7A6A',
+    background: '#FAF9F7',
+    text: '#432818',
+    accent: '#aa6b5d'
+  },
+  fonts: {
+    title: 'Playfair Display',
+    body: 'Inter'
+  },
+  spacing: {
+    vertical: 24,
+    horizontal: 24
+  },
+  shadows: {
+    enabled: true,
+    intensity: 'medium'
+  },
+  borders: {
+    radius: 8,
+    width: 1,
+    style: 'solid'
+  }
+};
+
+const defaultResponsive: ResponsiveOptions = {
+  mobileBreakpoint: 768,
+  mobilePadding: 16,
+  desktopMaxWidth: 1200,
+  mobileStack: true,
+  imageSize: {
+    desktop: 50,
+    mobile: 100
+  }
+};
+
+const defaultResultData: ResultData = {
+  title: 'Seu Resultado',
+  subtitle: 'Seu tipo de personalidade é:',
+  description: 'Descrição detalhada do resultado...',
+  imageUrl: '',
+  ctaButtonText: 'Ver Oferta Especial',
+  personalityType: 'Tipo de Personalidade',
+  traits: ['Característica 1', 'Característica 2', 'Característica 3'],
+  animations: defaultAnimations,
+  styles: defaultStyles,
+  responsive: defaultResponsive
+};
+
 interface ResultSectionProps {
   data?: ResultData;
   onChange?: (data: ResultData) => void;
@@ -78,15 +143,7 @@ interface ResultSectionProps {
 
 const ResultSection: React.FC<ResultSectionProps> = ({ data, onChange }) => {
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
-  const [resultData, setResultData] = useState<ResultData>(data || {
-    title: 'Seu Resultado',
-    subtitle: 'Seu tipo de personalidade é:',
-    description: 'Descrição detalhada do resultado...',
-    imageUrl: '',
-    ctaButtonText: 'Ver Oferta Especial',
-    personalityType: 'Tipo de Personalidade',
-    traits: ['Característica 1', 'Característica 2', 'Característica 3']
-  });
+  const [resultData, setResultData] = useState<ResultData>(data || defaultResultData);
 
   const autoSave = useAutoSave({
     onSave: (data) => {

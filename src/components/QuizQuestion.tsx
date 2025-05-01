@@ -47,9 +47,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     if (currentAnswers.includes(optionId)) {
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
-      if (isStrategicQuestion || autoAdvance) {
+      if (isStrategicQuestion) {
         newSelectedOptions = [optionId];
-      } else if (currentAnswers.length >= question.multiSelect) {
+      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
         newSelectedOptions = [...currentAnswers, optionId];
@@ -61,8 +61,16 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       selectedOptions: newSelectedOptions
     });
 
-    if ((isStrategicQuestion || autoAdvance) && newSelectedOptions.length > 0 && onNextClick) {
-      onNextClick();
+    // Auto advance if:
+    // 1. It's a strategic question and we have a selection
+    // 2. Auto advance is enabled and we've reached the required number of selections
+    // 3. onNextClick function is provided
+    const shouldAutoAdvance = 
+      (isStrategicQuestion && newSelectedOptions.length > 0) || 
+      (autoAdvance && newSelectedOptions.length === question.multiSelect);
+    
+    if (shouldAutoAdvance && onNextClick) {
+      setTimeout(() => onNextClick(), 500); // Small delay for better UX
     }
   };
   
@@ -144,7 +152,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           )}
           
           <div className="ml-auto">
-            
+            {/* Navigation buttons would go here if needed */}
           </div>
         </div>
       </div>

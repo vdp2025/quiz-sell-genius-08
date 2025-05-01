@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext';
 
 const HomePage = () => {
   const [started, setStarted] = useState(false);
-  const { startQuiz } = useQuizContext(); // This will now work as we have the QuizProvider in App.tsx
+  const { startQuiz } = useQuizContext();
   const { login } = useAuth();
 
   const handleStart = async (name: string) => {
