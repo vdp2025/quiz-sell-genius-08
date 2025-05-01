@@ -1,9 +1,12 @@
-
 import { useState, useCallback, useEffect } from 'react';
+import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizStages } from './useQuizStages';
 import { useQuizComponents } from './useQuizComponents';
-import { generateInitialStages, createBuilderStateFromQuiz } from '@/services/quizBuilderService';
+import { 
+  generateInitialStages, 
+  createBuilderStateFromQuiz
+} from '@/services/quizBuilderService';
 import { quizQuestions } from '@/data/quizQuestions';
 
 const STORAGE_KEY = 'quiz_builder_data';

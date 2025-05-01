@@ -1,3 +1,4 @@
+
 import { QuizBuilderState, QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { generateId } from '@/utils/idGenerator';
@@ -103,3 +104,6 @@ export const loadQuizResultConfig = (styleType: string): ResultPageConfig | null
     return null;
   }
 };
+
+// Import the generateInitialStages function from quizBuilderCreator.ts to maintain compatibility
+export { generateInitialStages } from '@/services/quizBuilderCreator';

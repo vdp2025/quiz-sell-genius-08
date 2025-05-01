@@ -34,7 +34,7 @@ export const useQuizStages = () => {
       title: stageTitle,
       order: stages.length,
       type,
-      isEnabled: true // Add isEnabled property
+      isEnabled: true
     };
     
     setStages(prev => [...prev, newStage]);

@@ -21,7 +21,7 @@ export const useEditorActions = (
     
     // Ensure alignment is properly typed
     if (content.alignment && typeof content.alignment === 'string') {
-      content.alignment = (['left', 'center', 'right'].includes(content.alignment) 
+      content.alignment = (['left', 'center', 'right'].includes(content.alignment as string) 
         ? content.alignment as 'left' | 'center' | 'right'
         : 'center');
     }
