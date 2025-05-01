@@ -2,15 +2,15 @@
 import React from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
 
-const EditorPage = () => {
+const SettingsPage = () => {
   return (
     <AdminLayout>
       <div className="p-8">
-        <h1 className="text-2xl font-bold">Editor</h1>
-        <p className="mt-4">Edit quiz content here.</p>
+        <h1 className="text-2xl font-bold">Settings</h1>
+        <p className="mt-4">Configure application settings here.</p>
       </div>
     </AdminLayout>
   );
 };
 
-export default EditorPage;
+export default SettingsPage;

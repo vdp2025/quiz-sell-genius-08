@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
@@ -24,19 +25,19 @@ const QuestionComponent: React.FC<QuestionProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const requiredSelections = question.isStrategic ? 1 : 3;
 
-  // Reseta as seleções quando a questão muda
+  // Reset selections when question changes
   useEffect(() => {
     setSelectedOptions([]);
   }, [question.id]);
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptions((prev) => {
-      // Se a opção já está selecionada, remove ela
+      // If option is already selected, remove it
       if (prev.includes(optionId)) {
         return prev.filter(id => id !== optionId);
       }
       
-      // Se já atingiu o limite de seleções, mostra mensagem e não adiciona
+      // If already reached selection limit, show message and don't add
       if (prev.length >= requiredSelections) {
         toast({
           title: "Limite de seleções atingido",
@@ -46,16 +47,19 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         return prev;
       }
 
-      // Adiciona a nova seleção
+      // Add the new selection
       const newSelections = [...prev, optionId];
       
-      // Se completou as seleções necessárias, mostra mensagem de sucesso
+      // If completed required selections, show success message
       if (newSelections.length === requiredSelections) {
         toast({
           title: "Seleções completas!",
           description: "Agora você pode avançar para a próxima questão",
           variant: "success"
         });
+        
+        // Call onSelect with the new selections
+        onSelect(newSelections);
       }
 
       return newSelections;

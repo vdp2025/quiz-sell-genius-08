@@ -8,13 +8,15 @@ interface QuizNavigationProps {
   totalSteps?: number;
   onNext?: () => void;
   onPrevious?: () => void;
+  canProceed?: boolean;
 }
 
 export const QuizNavigation: React.FC<QuizNavigationProps> = ({
   onNext,
   onPrevious,
   currentStep = 0,
-  totalSteps = 0
+  totalSteps = 0,
+  canProceed = true
 }) => {
   const location = useLocation();
   const isQuizRoute = location.pathname === '/';
@@ -35,8 +37,8 @@ export const QuizNavigation: React.FC<QuizNavigationProps> = ({
               </Button>
               <Button
                 onClick={onNext}
-                disabled={currentStep >= totalSteps}
-                className="bg-[#B89B7A] hover:bg-[#9F836A] text-white transition-all duration-200"
+                disabled={!canProceed || currentStep >= totalSteps}
+                className={`bg-[#B89B7A] hover:bg-[#9F836A] text-white transition-all duration-200 ${!canProceed ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {currentStep >= totalSteps ? 'Ver Resultado' : 'Próxima'}
               </Button>

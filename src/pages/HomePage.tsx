@@ -1,14 +1,29 @@
-import React from 'react';
 
-const HomePage: React.FC = () => {
+import { useState } from 'react';
+import QuizIntro from '../components/QuizIntro';
+import QuizPage from '../components/QuizPage';
+import { useQuizContext } from '../context/QuizContext';
+import { useAuth } from '../context/AuthContext';
+
+const HomePage = () => {
+  const [started, setStarted] = useState(false);
+  const { startQuiz } = useQuizContext();
+  const { login } = useAuth();
+
+  const handleStart = async (name: string) => {
+    setStarted(true);
+    login(name);
+    console.log(`Quiz started by ${name}`);
+    localStorage.setItem('userName', name);
+  };
+
   return (
-    <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
-      <div className="max-w-3xl w-full mx-auto p-6">
-        <h1 className="text-3xl font-playfair text-[#432818] text-center mb-6">
-          Welcome to Quiz Sell Genius
-        </h1>
-        {/* Add your homepage content here */}
-      </div>
+    <div className="min-h-screen bg-background">
+      {!started ? (
+        <QuizIntro onStart={handleStart} />
+      ) : (
+        <QuizPage />
+      )}
     </div>
   );
 };
