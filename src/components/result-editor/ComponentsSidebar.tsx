@@ -1,114 +1,95 @@
+
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Layout, 
-  Type, 
-  Image, 
-  CreditCard, 
-  Check, 
-  Award, 
-  Sparkles, 
-  ShieldCheck, 
-  Columns, 
-  Palette, 
-  Video, 
-  Layers, 
-  Heart,
-  Share2,
-  Gift,
-  SlidersHorizontal,
-  FileText,
-  Maximize,
-  HelpCircle,
-  ImagePlus,
-  Code,
-  Wand2
+import { BlockType } from '@/types/editor';
+import {
+  Heading1,
+  Type,
+  Image,
+  CreditCard,
+  CheckCircle,
+  MessageSquareQuote,
+  Award,
+  LayoutGrid,
+  PanelTop,
+  GripVertical,
+  Video,
+  Columns,
+  BaggageClaim
 } from 'lucide-react';
 
-const componentGroups = [
-  {
-    title: 'Básico',
-    components: [
-      { name: 'Cabeçalho', type: 'header', icon: <Layout className="h-4 w-4" /> },
-      { name: 'Título', type: 'headline', icon: <Type className="h-4 w-4" /> },
-      { name: 'Texto', type: 'text', icon: <FileText className="h-4 w-4" /> },
-      { name: 'Imagem', type: 'image', icon: <Image className="h-4 w-4" /> },
-      { name: 'Duas Colunas', type: 'two-column', icon: <Columns className="h-4 w-4" /> },
-      { name: 'Espaçador', type: 'spacer', icon: <Maximize className="h-4 w-4" /> },
-      { name: 'Ícone Decorativo', type: 'icon', icon: <Sparkles className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Seções',
-    components: [
-      { name: 'Seção Hero', type: 'hero-section', icon: <Layers className="h-4 w-4" /> },
-      { name: 'Benefícios', type: 'benefits', icon: <Check className="h-4 w-4" /> },
-      { name: 'Depoimentos', type: 'testimonials', icon: <Heart className="h-4 w-4" /> },
-      { name: 'Produtos', type: 'products', icon: <ShieldCheck className="h-4 w-4" /> },
-      { name: 'Carrossel de Bônus', type: 'bonus-carousel', icon: <Gift className="h-4 w-4" /> },
-      { name: 'Garantia', type: 'guarantee', icon: <Award className="h-4 w-4" /> },
-      { name: 'Vídeo', type: 'video', icon: <Video className="h-4 w-4" /> },
-      { name: 'FAQ', type: 'faq', icon: <HelpCircle className="h-4 w-4" /> },
-      { name: 'Carrossel', type: 'carousel', icon: <ImagePlus className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Conversão',
-    components: [
-      { name: 'Preço', type: 'pricing', icon: <CreditCard className="h-4 w-4" /> },
-      { name: 'Botão CTA', type: 'cta', icon: <Share2 className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Resultado do Quiz',
-    components: [
-      { name: 'Estilo Principal', type: 'style-result', icon: <Palette className="h-4 w-4" /> },
-      { name: 'Estilos Secundários', type: 'secondary-styles', icon: <SlidersHorizontal className="h-4 w-4" /> },
-    ]
-  },
-  {
-    title: 'Avançado',
-    components: [
-      { name: 'Código Personalizado', type: 'custom-code', icon: <Code className="h-4 w-4" /> },
-      { name: 'Animação', type: 'animation-block', icon: <Wand2 className="h-4 w-4" /> },
-    ]
-  }
-];
-
-type ComponentsSidebarProps = {
-  onComponentSelect: (type: string) => void;
-};
+interface ComponentsSidebarProps {
+  onComponentSelect: (type: BlockType) => void;
+}
 
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
+  // Component category definitions
+  const componentCategories = [
+    {
+      title: 'Estrutura',
+      components: [
+        { type: 'header', icon: <PanelTop size={16} />, label: 'Cabeçalho' },
+        { type: 'two-column', icon: <Columns size={16} />, label: 'Duas Colunas' },
+        { type: 'spacer', icon: <GripVertical size={16} />, label: 'Espaçador' },
+      ]
+    },
+    {
+      title: 'Conteúdo',
+      components: [
+        { type: 'headline', icon: <Heading1 size={16} />, label: 'Título' },
+        { type: 'text', icon: <Type size={16} />, label: 'Texto' },
+        { type: 'image', icon: <Image size={16} />, label: 'Imagem' },
+        { type: 'video', icon: <Video size={16} />, label: 'Vídeo' },
+      ]
+    },
+    {
+      title: 'Resultado',
+      components: [
+        { type: 'style-result', icon: <BaggageClaim size={16} />, label: 'Estilo Principal' },
+        { type: 'secondary-styles', icon: <LayoutGrid size={16} />, label: 'Estilos Secundários' },
+      ]
+    },
+    {
+      title: 'Vendas',
+      components: [
+        { type: 'pricing', icon: <CreditCard size={16} />, label: 'Preço' },
+        { type: 'benefits', icon: <CheckCircle size={16} />, label: 'Benefícios' },
+        { type: 'testimonials', icon: <MessageSquareQuote size={16} />, label: 'Depoimentos' },
+        { type: 'guarantee', icon: <Award size={16} />, label: 'Garantia' },
+        { type: 'cta', icon: <Award size={16} />, label: 'Chamada para Ação' },
+      ]
+    },
+  ];
+
   return (
-    <div className="h-full border-r bg-white">
+    <div className="h-full flex flex-col">
       <div className="p-4 border-b">
-        <h2 className="font-semibold text-[#432818]">Componentes</h2>
-        <p className="text-sm text-[#8F7A6A]">Arraste ou clique para adicionar</p>
+        <h2 className="font-medium text-[#432818]">Componentes</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Arraste ou clique nos componentes para adicionar à sua página
+        </p>
       </div>
       
-      <ScrollArea className="h-[calc(100vh-10rem)]">
-        <div className="p-4 space-y-6">
-          {componentGroups.map((group) => (
-            <div key={group.title} className="space-y-3">
-              <h3 className="text-sm font-medium text-[#432818]">{group.title}</h3>
-              <div className="space-y-2">
-                {group.components.map((component) => (
-                  <Card
-                    key={component.type}
-                    className="p-3 cursor-pointer hover:bg-[#FAF9F7] transition-colors flex items-center gap-2"
-                    onClick={() => onComponentSelect(component.type)}
-                    draggable
-                    onDragStart={(e) => {
-                      e.dataTransfer.setData('componentType', component.type);
-                    }}
+      <ScrollArea className="flex-1 p-3">
+        <div className="space-y-6">
+          {componentCategories.map((category, index) => (
+            <div key={index} className="space-y-2">
+              <h3 className="text-xs text-[#8F7A6A] uppercase font-medium tracking-wide">
+                {category.title}
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {category.components.map((component, compIndex) => (
+                  <Button
+                    key={compIndex}
+                    variant="outline"
+                    size="sm"
+                    className="h-auto py-3 px-3 justify-start gap-2 hover:bg-[#FAF9F7]"
+                    onClick={() => onComponentSelect(component.type as BlockType)}
                   >
-                    <div className="bg-[#FAF9F7] rounded-md p-1.5">
-                      {component.icon}
-                    </div>
-                    <span className="text-sm text-[#432818]">{component.name}</span>
-                  </Card>
+                    <span className="text-[#B89B7A]">{component.icon}</span>
+                    <span className="text-xs">{component.label}</span>
+                  </Button>
                 ))}
               </div>
             </div>

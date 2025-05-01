@@ -11,6 +11,7 @@ import { PropertiesPanel } from '@/components/result-editor/PropertiesPanel';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { toast } from '@/components/ui/use-toast';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
+import { BlockType } from '@/types/editor';
 
 interface ResultEditorPanelProps {
   isPreviewing: boolean;
@@ -44,7 +45,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({ isPreviewing, pri
     );
   }
 
-  const handleComponentSelect = (type: string) => {
+  const handleComponentSelect = (type: BlockType) => {
     if (!actions?.handleAddBlock) {
       toast({
         title: "Erro",
