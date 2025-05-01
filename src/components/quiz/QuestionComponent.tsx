@@ -22,12 +22,9 @@ const QuestionComponent: React.FC<QuestionProps> = ({
   onSelect,
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [canAdvance, setCanAdvance] = useState(false);
 
-  useEffect(() => {
-    const requiredSelections = question.isStrategic ? 1 : 3;
-    setCanAdvance(selectedOptions.length === requiredSelections);
-  }, [selectedOptions, question.isStrategic]);
+  // Função para verificar se pode avançar
+  const canAdvance = selectedOptions.length === (question.isStrategic ? 1 : 3);
 
   const handleOptionSelect = (optionId: string) => {
     const requiredSelections = question.isStrategic ? 1 : 3;
@@ -49,7 +46,18 @@ const QuestionComponent: React.FC<QuestionProps> = ({
       }
 
       // Adiciona a nova seleção
-      return [...prev, optionId];
+      const newSelections = [...prev, optionId];
+      
+      // Se completou as seleções necessárias, mostra mensagem de sucesso
+      if (newSelections.length === requiredSelections) {
+        toast({
+          title: "Seleções completas!",
+          description: "Agora você pode avançar para a próxima questão",
+          variant: "success"
+        });
+      }
+
+      return newSelections;
     });
   };
 
@@ -89,7 +97,10 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         ))}
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-[#8F7A6A]">
+          {`Selecionadas ${selectedOptions.length} de ${question.isStrategic ? 1 : 3} opções necessárias`}
+        </div>
         <Button
           onClick={handleNext}
           disabled={!canAdvance}
@@ -101,14 +112,6 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         >
           Próxima Questão
         </Button>
-      </div>
-
-      <div className="text-sm text-[#8F7A6A] text-center">
-        {question.isStrategic ? (
-          <p>Selecione 1 opção para continuar</p>
-        ) : (
-          <p>Selecione 3 opções para continuar</p>
-        )}
       </div>
     </div>
   );
