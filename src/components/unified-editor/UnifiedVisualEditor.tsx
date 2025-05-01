@@ -10,37 +10,66 @@ import { EditorToolbar } from './toolbar/EditorToolbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export type EditorTab = 'quiz' | 'result' | 'sales';
 
 interface UnifiedVisualEditorProps {
   primaryStyle: StyleResult;
+  initialActiveTab?: EditorTab;
 }
 
-export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ primaryStyle }) => {
-  const [activeTab, setActiveTab] = useState<EditorTab>('quiz');
+export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ 
+  primaryStyle, 
+  initialActiveTab = 'quiz' 
+}) => {
+  const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   
   const {
     saveAll,
     resultPageEditor,
-    quizBuilder
+    quizBuilder,
+    salesPageEditor
   } = useUnifiedEditor(primaryStyle);
 
   useEffect(() => {
-    // Simulate initial loading of resources
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Editor inicializado",
-        description: `Editor unificado carregado com estilo primário: ${primaryStyle.category}`,
-        duration: 3000,
-      });
-    }, 1500);
+    // Update URL when tab changes
+    navigate(`/admin/editor/unified?tab=${activeTab}`, { replace: true });
+  }, [activeTab, navigate]);
+
+  useEffect(() => {
+    // Load resources for the active tab
+    const loadTabResources = async () => {
+      setIsLoading(true);
+      try {
+        // Simulate loading resources for the current tab
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Check if the specific editor is ready
+        if (
+          (activeTab === 'quiz' && quizBuilder && !quizBuilder.loading) || 
+          (activeTab === 'result' && resultPageEditor && !resultPageEditor.loading) || 
+          (activeTab === 'sales' && salesPageEditor && salesPageEditor.isInitialized)
+        ) {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error(`Error loading resources for ${activeTab} tab:`, error);
+        toast({
+          title: "Erro no carregamento",
+          description: `Não foi possível carregar os recursos para a aba ${activeTab}.`,
+          variant: "destructive",
+          duration: 5000,
+        });
+        setIsLoading(false);
+      }
+    };
     
-    return () => clearTimeout(timer);
-  }, [primaryStyle]);
+    loadTabResources();
+  }, [activeTab, quizBuilder, resultPageEditor, salesPageEditor]);
 
   const handleTogglePreview = () => {
     setIsPreviewing(prev => !prev);
@@ -86,18 +115,6 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ primar
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
-        <div className="text-center">
-          <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
-          <h2 className="text-xl font-medium text-[#432818] mb-2">Carregando Editor</h2>
-          <p className="text-[#8F7A6A]">Preparando o ambiente para edição...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <EditorToolbar
@@ -120,19 +137,46 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ primar
         
         <TabsContent value="quiz" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            <QuizEditorPanel isPreviewing={isPreviewing} />
+            {isLoading && activeTab === 'quiz' ? (
+              <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
+                <div className="text-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
+                  <p className="text-[#8F7A6A]">Carregando editor de Quiz...</p>
+                </div>
+              </div>
+            ) : (
+              <QuizEditorPanel isPreviewing={isPreviewing} />
+            )}
           </TooltipProvider>
         </TabsContent>
         
         <TabsContent value="result" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            <ResultEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+            {isLoading && activeTab === 'result' ? (
+              <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
+                <div className="text-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
+                  <p className="text-[#8F7A6A]">Carregando editor de Resultados...</p>
+                </div>
+              </div>
+            ) : (
+              <ResultEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+            )}
           </TooltipProvider>
         </TabsContent>
         
         <TabsContent value="sales" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            <SalesEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+            {isLoading && activeTab === 'sales' ? (
+              <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
+                <div className="text-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
+                  <p className="text-[#8F7A6A]">Carregando editor de Página de Vendas...</p>
+                </div>
+              </div>
+            ) : (
+              <SalesEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+            )}
           </TooltipProvider>
         </TabsContent>
       </Tabs>

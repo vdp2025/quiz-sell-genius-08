@@ -4,13 +4,22 @@ import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEd
 import { LoadingState } from '@/components/ui/loading-state';
 import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
 
 const UnifiedEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Extract tab from URL query parameters
+  const getInitialTab = (): EditorTab => {
+    const searchParams = new URLSearchParams(location.search);
+    const tab = searchParams.get('tab') as EditorTab | null;
+    return tab && ['quiz', 'result', 'sales'].includes(tab) ? tab as EditorTab : 'quiz';
+  };
 
   // Carregar o estilo primário para os editores
   useEffect(() => {
@@ -108,7 +117,7 @@ const UnifiedEditorPage: React.FC = () => {
     );
   }
 
-  return <UnifiedVisualEditor primaryStyle={primaryStyle} />;
+  return <UnifiedVisualEditor primaryStyle={primaryStyle} initialActiveTab={getInitialTab()} />;
 };
 
 export default UnifiedEditorPage;
