@@ -78,6 +78,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
             isPreviewing={isPreviewing}
             primaryStyle={primaryStyle}
             onReorderBlocks={actions.handleReorderBlocks}
+            autoTransition={true} // Adicionar esta prop para habilitar transição automática
             onError={(error) => {
               toast({
                 title: "Erro na visualização",
