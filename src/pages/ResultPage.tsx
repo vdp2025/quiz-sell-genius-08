@@ -73,8 +73,8 @@ const ResultPage = () => {
     );
   }
 
-  // Use o componente BackupResultPage com a prop onPurchaseClick
-  return <BackupResultPage onPurchaseClick={handlePurchaseClick} />;
+  // Fix: Pass an empty object if BackupResultPage doesn't accept props
+  return <BackupResultPage />;
 };
 
 export default ResultPage;
