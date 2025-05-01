@@ -70,7 +70,7 @@ export const getDefaultBlockContent = (type: BlockType, styleType: string = 'Ele
         borderRadius: 'medium'
       }
     },
-    'testimonial': {
+    'testimonial-card': {
       name: 'Maria Silva',
       role: 'Empresária',
       testimonialText: 'A análise de estilo mudou completamente minha forma de me vestir. Agora me sinto muito mais confiante!',
@@ -138,8 +138,11 @@ export const getDefaultBlockContent = (type: BlockType, styleType: string = 'Ele
     }
   };
 
-  return blockDefaults[type as keyof typeof blockDefaults] || {};
+  return blockDefaults[type] || {};
 };
+
+// Export the function with the name used in imports
+export const getDefaultContentForType = getDefaultBlockContent;
 
 // Function to create a new block with default content
 export const createDefaultBlock = (type: BlockType, order: number = 0, styleType: string = 'Elegante'): Block => {

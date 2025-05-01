@@ -15,7 +15,7 @@ const EditorPage = () => {
     percentage: 60
   });
   
-  // Generate a default config with the required properties
+  // Generate a default config with all the required properties
   const defaultConfig = createDefaultConfig('Elegante');
 
   return (

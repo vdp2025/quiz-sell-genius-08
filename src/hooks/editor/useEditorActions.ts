@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import { EditorBlock } from '@/types/editor';
 import { useToast } from '@/components/ui/use-toast';
-import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
 
 export const useEditorActions = (
   blocks: EditorBlock[],
@@ -15,7 +15,7 @@ export const useEditorActions = (
     const newBlocks = [...blocks, {
       id: `block-${Date.now()}`,
       type,
-      content: getDefaultContentForType(type),
+      content: getDefaultContentForBlockType(type),
       order: blocks.length
     }];
     

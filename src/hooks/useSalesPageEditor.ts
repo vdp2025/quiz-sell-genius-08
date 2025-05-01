@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { toast } from '@/components/ui/use-toast';
-import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
 
 const STORAGE_KEY_PREFIX = 'sales_page_editor_';
@@ -14,7 +14,7 @@ export const useSalesPageEditor = (styleType: string) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Carregar blocos salvos
+  // Load saved blocks
   useEffect(() => {
     const loadBlocks = () => {
       setIsLoading(true);
@@ -26,10 +26,10 @@ export const useSalesPageEditor = (styleType: string) => {
           console.info(`Blocos da página de vendas carregados para ${styleType}:`, parsedBlocks.length);
         } else {
           console.info(`Nenhum bloco da página de vendas encontrado para ${styleType}.`);
-          // Adicionar blocos padrão quando não houver blocos salvos
+          // Add default blocks when no saved blocks are found
           const defaultBlocks = createDefaultSalesPageBlocks();
           setBlocks(defaultBlocks);
-          // Salvar os blocos padrão no localStorage
+          // Save default blocks to localStorage
           localStorage.setItem(`${STORAGE_KEY_PREFIX}${styleType}`, JSON.stringify(defaultBlocks));
         }
         setIsInitialized(true);
@@ -45,7 +45,7 @@ export const useSalesPageEditor = (styleType: string) => {
     loadBlocks();
   }, [styleType]);
 
-  // Função para criar blocos padrão para uma página de vendas
+  // Function to create default blocks for a sales page
   const createDefaultSalesPageBlocks = (): Block[] => {
     return [
       {
@@ -104,7 +104,7 @@ export const useSalesPageEditor = (styleType: string) => {
     const newBlock: Block = {
       id: generateId(),
       type,
-      content: getDefaultContentForType(type),
+      content: getDefaultContentForBlockType(type),
       order: blocks.length
     };
     

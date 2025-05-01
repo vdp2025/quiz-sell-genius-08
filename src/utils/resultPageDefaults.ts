@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { createHeaderConfig } from './config/headerDefaults';
-import { createBlockContentByType } from './blockDefaults';
+import { getDefaultContentForBlockType } from './blockDefaults';
 
 export const createDefaultConfig = (styleType: string): ResultPageConfig => {
   // Create a default configuration for a result page

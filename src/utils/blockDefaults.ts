@@ -93,6 +93,9 @@ export const getDefaultContentForBlockType = (type: string) => {
   }
 };
 
+// For backward compatibility, also export with the name used in imports
+export const createBlockContentByType = getDefaultContentForBlockType;
+
 // Function to create a new block with default content
 export const createNewBlock = (type: string, order: number = 0) => {
   return {

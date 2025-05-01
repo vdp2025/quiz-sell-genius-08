@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { Block, BlockType, EditorConfig } from '@/types/editor';
 import { generateId } from '@/utils/idGenerator';
-import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
 
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>({ blocks: [] });
@@ -16,7 +16,7 @@ export const useEditor = () => {
         {
           id,
           type,
-          content: getDefaultContentForType(type),
+          content: getDefaultContentForBlockType(type),
           order: prevConfig.blocks.length
         }
       ]

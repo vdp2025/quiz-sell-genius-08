@@ -1,3 +1,4 @@
+
 import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from './resultPageStorage';
@@ -75,7 +76,7 @@ export const createBuilderStateFromQuiz = (
         optionStyleCategories: question.styleCategories || [],
         displayType: question.displayType || 'text',
         multiSelect: question.multiSelect || false,
-        required: true,
+        required: 1, // Changed from boolean to number
         autoAdvance: question.autoAdvance || false,
       }
     });
@@ -160,7 +161,7 @@ export const generateInitialStages = (): QuizBuilderState => {
         ],
         displayType: 'text',
         multiSelect: false,
-        required: true,
+        required: 1, // Changed from boolean to number
         autoAdvance: true
       }
     },
@@ -241,7 +242,7 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
         ],
         displayType: 'text',
         multiSelect: false,
-        required: true,
+        required: 1, // Changed from boolean to number
         autoAdvance: true,
         optionStyleCategories: [
           styleTitle,
