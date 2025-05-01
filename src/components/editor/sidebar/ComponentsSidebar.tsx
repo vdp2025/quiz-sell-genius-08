@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -15,7 +16,9 @@ import {
   Tag,
   Heart,
   Shield,
-  Columns
+  Columns,
+  MessageCircle,
+  Table
 } from 'lucide-react';
 
 interface ComponentsSidebarProps {
@@ -90,7 +93,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
         },
         { 
           type: 'testimonials' as BlockType, 
-          icon: <Heart className="h-4 w-4 mr-2" />, 
+          icon: <MessageCircle className="h-4 w-4 mr-2" />, 
           label: 'Depoimentos', 
           description: 'Seção de depoimentos' 
         },
@@ -120,7 +123,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
         },
         { 
           type: 'feature-comparison' as BlockType, 
-          icon: <Columns className="h-4 w-4 mr-2" />, 
+          icon: <Table className="h-4 w-4 mr-2" />, 
           label: 'Comparação de Recursos', 
           description: 'Compare planos ou recursos' 
         }

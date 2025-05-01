@@ -4,8 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Block } from '@/types/editor';
-import { useColorPicker } from '@/hooks/useColorPicker';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 
 interface TestimonialCardBlockEditorProps {
   block: Block;
@@ -14,44 +13,43 @@ interface TestimonialCardBlockEditorProps {
 
 const TestimonialCardBlockEditor: React.FC<TestimonialCardBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
-  const { ColorPicker } = useColorPicker();
-
+  
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Nome</Label>
+        <Label htmlFor="name">Nome do Cliente</Label>
         <Input
           id="name"
           value={content.name || "Maria Silva"}
           onChange={(e) => onUpdate({ name: e.target.value })}
-          placeholder="Nome da pessoa"
+          placeholder="Nome do cliente"
         />
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="role">Cargo/Função</Label>
+        <Label htmlFor="role">Cargo/Informação</Label>
         <Input
           id="role"
-          value={content.role || "Cliente"}
+          value={content.role || ""}
           onChange={(e) => onUpdate({ role: e.target.value })}
-          placeholder="Cargo ou função (opcional)"
+          placeholder="Ex: Cliente desde 2022"
         />
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="avatarUrl">URL da Imagem</Label>
+        <Label htmlFor="avatarUrl">URL da Foto</Label>
         <Input
           id="avatarUrl"
           value={content.avatarUrl || ""}
           onChange={(e) => onUpdate({ avatarUrl: e.target.value })}
-          placeholder="https://exemplo.com/imagem.jpg"
+          placeholder="URL da imagem de perfil"
         />
         {content.avatarUrl && (
-          <div className="mt-2 p-2 bg-gray-50 rounded">
+          <div className="mt-2 w-16 h-16 rounded-full overflow-hidden border-2 border-[#B89B7A]/30">
             <img 
               src={content.avatarUrl} 
-              alt="Avatar" 
-              className="h-20 w-20 object-cover rounded-full mx-auto"
+              alt="Avatar Preview" 
+              className="w-full h-full object-cover"
             />
           </div>
         )}
@@ -61,7 +59,7 @@ const TestimonialCardBlockEditor: React.FC<TestimonialCardBlockEditorProps> = ({
         <Label htmlFor="testimonialText">Depoimento</Label>
         <Textarea
           id="testimonialText"
-          value={content.testimonialText || ""}
+          value={content.testimonialText || "Este guia de estilo mudou completamente a forma como me visto. Agora tenho confiança para escolher roupas que realmente combinam com minha personalidade."}
           onChange={(e) => onUpdate({ testimonialText: e.target.value })}
           placeholder="Texto do depoimento"
           rows={4}
@@ -69,35 +67,22 @@ const TestimonialCardBlockEditor: React.FC<TestimonialCardBlockEditorProps> = ({
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="rating">Avaliação</Label>
-        <Select
-          value={String(content.rating || 5)}
-          onValueChange={(value) => onUpdate({ rating: Number(value) })}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Escolha uma avaliação" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1">1 estrela</SelectItem>
-            <SelectItem value="2">2 estrelas</SelectItem>
-            <SelectItem value="3">3 estrelas</SelectItem>
-            <SelectItem value="4">4 estrelas</SelectItem>
-            <SelectItem value="5">5 estrelas</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      
-      <div className="space-y-2">
-        <Label>Cor de fundo</Label>
-        <ColorPicker
-          color={content.style?.backgroundColor || "#FFF8F0"}
-          onChange={(color) => onUpdate({ 
-            style: { 
-              ...content.style,
-              backgroundColor: color 
-            } 
-          })}
+        <Label>Avaliação ({content.rating || 5} estrelas)</Label>
+        <Slider
+          defaultValue={[content.rating || 5]}
+          max={5}
+          step={1}
+          min={1}
+          onValueChange={(value) => onUpdate({ rating: value[0] })}
         />
+        <div className="flex justify-center text-xl text-amber-500">
+          {Array.from({length: content.rating || 5}, (_, i) => (
+            <span key={i}>★</span>
+          ))}
+          {Array.from({length: 5 - (content.rating || 5)}, (_, i) => (
+            <span key={i}>☆</span>
+          ))}
+        </div>
       </div>
     </div>
   );

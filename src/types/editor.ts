@@ -60,6 +60,16 @@ export interface EditableContent {
   benefits?: string[];
   // For bonus carousel
   bonusImages?: Array<{url: string; alt: string; title?: string}>;
+  // For feature comparison
+  features?: Array<{name: string; included: boolean; premium: boolean}>;
+  // For testimonial card
+  name?: string;
+  avatarUrl?: string;
+  testimonialText?: string;
+  rating?: number;
+  role?: string;
+  // For countdown timer
+  endDate?: string;
   // Custom properties
   [key: string]: any;
 }

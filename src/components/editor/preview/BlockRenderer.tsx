@@ -81,6 +81,28 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     case 'testimonial-card':
       return <TestimonialCardBlock content={block.content} onClick={onSelect} />;
       
+    case 'image':
+      return (
+        <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg" onClick={onSelect}>
+          {block.content.imageUrl ? (
+            <div className="flex flex-col items-center">
+              <img 
+                src={block.content.imageUrl} 
+                alt={block.content.imageAlt || "Imagem"} 
+                className="max-w-full h-auto rounded"
+              />
+              {block.content.caption && (
+                <p className="mt-2 text-sm text-[#8F7A6A] text-center">{block.content.caption}</p>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-40 bg-[#FAF9F7]">
+              <p className="text-[#8F7A6A]">Imagem não configurada</p>
+            </div>
+          )}
+        </div>
+      );
+      
     case 'products':
       return (
         <PlaceholderBlock 
@@ -90,11 +112,18 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
       );
       
     case 'style-result':
+      return (
+        <PlaceholderBlock 
+          title="Estilo Principal" 
+          description="Clique para editar esta seção de resultado do estilo" 
+        />
+      );
+      
     case 'secondary-styles':
       return (
         <PlaceholderBlock 
-          title={block.type === 'style-result' ? 'Estilo Principal' : 'Estilos Secundários'}
-          description="Clique para editar esta seção" 
+          title="Estilos Secundários"
+          description="Clique para editar esta seção de estilos secundários" 
         />
       );
       

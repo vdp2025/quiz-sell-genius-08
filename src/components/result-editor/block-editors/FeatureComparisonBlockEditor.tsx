@@ -2,17 +2,10 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Block } from '@/types/editor';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Block } from '@/types/editor';
 import { Plus, Trash } from 'lucide-react';
-
-interface Feature {
-  name: string;
-  included: boolean;
-  premium: boolean;
-}
+import { Switch } from '@/components/ui/switch';
 
 interface FeatureComparisonBlockEditorProps {
   block: Block;
@@ -21,30 +14,28 @@ interface FeatureComparisonBlockEditorProps {
 
 const FeatureComparisonBlockEditor: React.FC<FeatureComparisonBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
-  
-  // Ensure we have a features array
-  const features: Feature[] = content.features || [
+  const features = content.features || [
     { name: "Análise de Estilo", included: true, premium: true },
     { name: "Consultoria Básica", included: true, premium: true },
     { name: "Guia de Cores", included: false, premium: true },
     { name: "Orientação de Tecidos", included: false, premium: true }
   ];
-  
+
   const handleAddFeature = () => {
-    const newFeature = { name: "Novo Recurso", included: false, premium: true };
-    onUpdate({ features: [...features, newFeature] });
+    const newFeatures = [...features, { name: "Novo Recurso", included: false, premium: true }];
+    onUpdate({ features: newFeatures });
   };
-  
+
   const handleRemoveFeature = (index: number) => {
-    const updatedFeatures = [...features];
-    updatedFeatures.splice(index, 1);
-    onUpdate({ features: updatedFeatures });
+    const newFeatures = [...features];
+    newFeatures.splice(index, 1);
+    onUpdate({ features: newFeatures });
   };
-  
-  const handleFeatureUpdate = (index: number, field: keyof Feature, value: any) => {
-    const updatedFeatures = [...features];
-    updatedFeatures[index] = { ...updatedFeatures[index], [field]: value };
-    onUpdate({ features: updatedFeatures });
+
+  const handleFeatureChange = (index: number, field: keyof typeof features[0], value: any) => {
+    const newFeatures = [...features];
+    newFeatures[index] = { ...newFeatures[index], [field]: value };
+    onUpdate({ features: newFeatures });
   };
 
   return (
@@ -81,51 +72,56 @@ const FeatureComparisonBlockEditor: React.FC<FeatureComparisonBlockEditorProps> 
         </div>
       </div>
       
-      <div>
-        <Label className="mb-2 block">Recursos</Label>
-        {features.map((feature, index) => (
-          <Card key={index} className="p-3 mb-2">
-            <div className="flex justify-between gap-2">
-              <Input
-                value={feature.name}
-                onChange={(e) => handleFeatureUpdate(index, 'name', e.target.value)}
-                placeholder="Nome do recurso"
-                className="flex-grow"
-              />
-              <Button 
-                variant="destructive" 
-                size="icon"
-                onClick={() => handleRemoveFeature(index)}
-              >
-                <Trash className="h-4 w-4" />
-              </Button>
-            </div>
-            
-            <div className="flex gap-4 mt-3">
-              <div className="flex items-center gap-2">
-                <Checkbox 
-                  id={`included-${index}`} 
-                  checked={feature.included}
-                  onCheckedChange={(checked) => handleFeatureUpdate(index, 'included', Boolean(checked))}
+      <div className="mt-4">
+        <Label>Recursos</Label>
+        <div className="space-y-3 mt-2">
+          {features.map((feature, index) => (
+            <div key={index} className="border p-3 rounded-md">
+              <div className="flex items-center justify-between">
+                <Input
+                  value={feature.name}
+                  onChange={(e) => handleFeatureChange(index, 'name', e.target.value)}
+                  placeholder="Nome do recurso"
+                  className="mb-2"
                 />
-                <Label htmlFor={`included-${index}`} className="text-sm">Plano Básico</Label>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => handleRemoveFeature(index)}
+                  className="h-8 w-8 text-red-500"
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
               </div>
               
-              <div className="flex items-center gap-2">
-                <Checkbox 
-                  id={`premium-${index}`} 
-                  checked={feature.premium}
-                  onCheckedChange={(checked) => handleFeatureUpdate(index, 'premium', Boolean(checked))}
-                />
-                <Label htmlFor={`premium-${index}`} className="text-sm">Plano Premium</Label>
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="flex items-center gap-2">
+                  <Switch 
+                    checked={feature.included} 
+                    onCheckedChange={(checked) => handleFeatureChange(index, 'included', checked)} 
+                  />
+                  <Label className="cursor-pointer">Incluído no Básico</Label>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Switch 
+                    checked={feature.premium} 
+                    onCheckedChange={(checked) => handleFeatureChange(index, 'premium', checked)} 
+                  />
+                  <Label className="cursor-pointer">Incluído no Premium</Label>
+                </div>
               </div>
             </div>
-          </Card>
-        ))}
-        
-        <Button variant="outline" className="mt-2 w-full" onClick={handleAddFeature}>
-          <Plus className="h-4 w-4 mr-2" /> Adicionar Recurso
-        </Button>
+          ))}
+          
+          <Button 
+            variant="outline" 
+            className="w-full" 
+            onClick={handleAddFeature}
+          >
+            <Plus className="h-4 w-4 mr-2" /> Adicionar Recurso
+          </Button>
+        </div>
       </div>
     </div>
   );
