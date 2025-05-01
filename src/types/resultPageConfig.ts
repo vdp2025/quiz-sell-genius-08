@@ -57,6 +57,15 @@ export interface OfferContent {
   urgencyText?: string;
   heroImage?: string;
   heroImage2?: string;
+  allProductsImage?: string;
+  mentorImage?: string;
+  bonusImage?: string;
+  productTitle?: string;
+  benefitItems?: Array<{
+    title: string;
+    description: string;
+  }>;
+  guaranteeText?: string;
   table?: Array<{
     item: string;
     value: string;

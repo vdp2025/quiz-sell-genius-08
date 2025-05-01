@@ -23,15 +23,20 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [activeTab, setActiveTab] = useState<'content' | 'style'>('content');
   
+  const salesPageEditor = useSalesPageEditor(primaryStyle.category);
   const {
     blocks, 
     selectedBlockId, 
     selectBlock, 
-    actions
-  } = useSalesPageEditor(primaryStyle.category);
+    handleAddBlock,
+    handleUpdateBlock,
+    handleDeleteBlock,
+    handleReorderBlocks,
+    handleSave
+  } = salesPageEditor;
 
   const handleComponentSelect = (type: Block['type']) => {
-    const id = actions.handleAddBlock(type);
+    const id = handleAddBlock(type);
     selectBlock(id);
   };
 
@@ -47,7 +52,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
       const oldIndex = blocks.findIndex(block => block.id === active.id);
       const newIndex = blocks.findIndex(block => block.id === over.id);
       
-      actions.handleReorderBlocks(oldIndex, newIndex);
+      handleReorderBlocks(oldIndex, newIndex);
     }
   };
 
@@ -88,7 +93,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
             <Button
               variant="outline"
               size="sm"
-              onClick={actions.handleSave}
+              onClick={handleSave}
             >
               Salvar Alterações
             </Button>
@@ -165,7 +170,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.title || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { title: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { title: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                       </div>
@@ -173,7 +178,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <label className="text-sm font-medium">Subtítulo</label>
                         <textarea
                           value={selectedComponent.content.subtitle || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { subtitle: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { subtitle: e.target.value })}
                           className="w-full p-2 border rounded"
                           rows={3}
                         />
@@ -187,7 +192,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <label className="text-sm font-medium">Texto</label>
                         <textarea
                           value={selectedComponent.content.text || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { text: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { text: e.target.value })}
                           className="w-full p-2 border rounded"
                           rows={5}
                         />
@@ -202,7 +207,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.imageUrl || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { imageUrl: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { imageUrl: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                         
@@ -222,7 +227,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.imageAlt || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { imageAlt: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { imageAlt: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                       </div>
@@ -236,7 +241,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.title || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { title: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { title: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                       </div>
@@ -246,7 +251,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.price || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { price: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { price: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                       </div>
@@ -256,7 +261,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.regularPrice || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { regularPrice: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { regularPrice: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                       </div>
@@ -266,7 +271,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         <input
                           type="text"
                           value={selectedComponent.content.ctaText || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { ctaText: e.target.value })}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { ctaText: e.target.value })}
                           className="w-full p-2 border rounded"
                         />
                       </div>
@@ -281,7 +286,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                       <input
                         type="color"
                         value={(selectedComponent.content.style?.backgroundColor as string) || '#ffffff'}
-                        onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
+                        onChange={(e) => handleUpdateBlock(selectedBlockId, { 
                           style: { 
                             ...selectedComponent.content.style,
                             backgroundColor: e.target.value 
@@ -296,7 +301,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                       <input
                         type="color"
                         value={(selectedComponent.content.style?.color as string) || '#000000'}
-                        onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
+                        onChange={(e) => handleUpdateBlock(selectedBlockId, { 
                           style: { 
                             ...selectedComponent.content.style,
                             color: e.target.value 
@@ -312,8 +317,8 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         type="range"
                         min="0"
                         max="32"
-                        value={String(Number(selectedComponent.content.style?.borderRadius) || 0)}
-                        onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
+                        value={String(Number(selectedComponent.content.style?.borderRadius || 0))}
+                        onChange={(e) => handleUpdateBlock(selectedBlockId, { 
                           style: { 
                             ...selectedComponent.content.style,
                             borderRadius: Number(e.target.value)
@@ -322,7 +327,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         className="w-full"
                       />
                       <div className="text-right text-xs text-gray-500">
-                        {Number(selectedComponent.content.style?.borderRadius) || 0}px
+                        {Number(selectedComponent.content.style?.borderRadius || 0)}px
                       </div>
                     </div>
                     
@@ -333,8 +338,8 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           type="range"
                           min="0"
                           max="64"
-                          value={String(Number(selectedComponent.content.style?.paddingY) || 16)}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
+                          value={String(Number(selectedComponent.content.style?.paddingY || 16))}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
                               paddingY: Number(e.target.value)
@@ -343,7 +348,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           className="w-full"
                         />
                         <div className="text-right text-xs text-gray-500">
-                          {Number(selectedComponent.content.style?.paddingY) || 16}px
+                          {Number(selectedComponent.content.style?.paddingY || 16)}px
                         </div>
                       </div>
                       
@@ -353,8 +358,8 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           type="range"
                           min="0"
                           max="64"
-                          value={String(Number(selectedComponent.content.style?.paddingX) || 16)}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
+                          value={String(Number(selectedComponent.content.style?.paddingX || 16))}
+                          onChange={(e) => handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
                               paddingX: Number(e.target.value)
@@ -363,7 +368,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           className="w-full"
                         />
                         <div className="text-right text-xs text-gray-500">
-                          {Number(selectedComponent.content.style?.paddingX) || 16}px
+                          {Number(selectedComponent.content.style?.paddingX || 16)}px
                         </div>
                       </div>
                     </div>
@@ -375,7 +380,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                 <Button 
                   variant="destructive" 
                   onClick={() => {
-                    actions.handleDeleteBlock(selectedBlockId);
+                    handleDeleteBlock(selectedBlockId);
                     selectBlock(null);
                   }}
                 >
