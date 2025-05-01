@@ -6,7 +6,7 @@ import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
-import { QuizNavigation } from './quiz/QuizNavigation'; // Alterar importação
+import QuizNavigation from './quiz/QuizNavigation'; // Fixed import
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { useAuth } from '../context/AuthContext';
 
@@ -69,19 +69,6 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmit = (response: UserResponse) => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
-      
-      if (response.selectedOptions.length === currentQuestion.multiSelect) {
-        if (!isLastQuestion) {
-          setTimeout(() => {
-            handleNext();
-          }, 500);
-        } else {
-          setTimeout(() => {
-            calculateResults();
-            setShowingTransition(true);
-          }, 800);
-        }
-      }
     } catch (error) {
       toast({
         title: "Erro na submissão da resposta",
@@ -118,19 +105,11 @@ const QuizPage: React.FC = () => {
     }
   };
 
+  // Determine if we can proceed based on the question type and selected answers
   const getCurrentCanProceed = () => {
     const currentAnswersLength = currentAnswers?.length || 0;
     const isStrategicQuestion = currentQuestion?.id.startsWith('strategic');
     return isStrategicQuestion ? currentAnswersLength === 1 : currentAnswersLength === 3;
-=======
-  // Determine if we can proceed based on the question type
-  const getCurrentCanProceed = () => {
-    if (showingStrategicQuestions) {
-      const currentStrategicQuestionId = strategicQuestions[currentStrategicQuestionIndex]?.id;
-      return strategicAnswers[currentStrategicQuestionId]?.length === 1;
-    }
-    return currentAnswers.length === currentQuestion.multiSelect;
->>>>>>> cadb3d4268235c21060acd8da3f28a86838d00d9
   };
 
   return (
@@ -159,7 +138,7 @@ const QuizPage: React.FC = () => {
           />
           
           <QuizNavigation
-            currentQuestionType={currentQuestion?.id.startsWith('strategic') ? 'strategic' : 'normal'}
+            currentQuestionType={currentQuestion?.id?.startsWith('strategic') ? 'strategic' : 'normal'}
             selectedOptionsCount={currentAnswers?.length || 0}
             isLastQuestion={isLastQuestion}
             onNext={handleNextClick}

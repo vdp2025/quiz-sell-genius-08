@@ -32,12 +32,12 @@ const QuestionComponent: React.FC<QuestionProps> = ({
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptions((prev) => {
-      // Se a opção já está selecionada, remove ela
+      // If the option is already selected, remove it
       if (prev.includes(optionId)) {
         return prev.filter(id => id !== optionId);
       }
       
-      // Se já atingiu o limite de seleções, mostra mensagem e não adiciona
+      // If already reached the limit of selections, show message and don't add
       if (prev.length >= requiredSelections) {
         toast({
           title: "Limite de seleções atingido",
@@ -47,15 +47,17 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         return prev;
       }
 
-      // Adiciona a nova seleção
+      // Add the new selection
       const newSelections = [...prev, optionId];
       
-      // Se completou as seleções necessárias, mostra mensagem de sucesso
+      // Call onSelect to propagate the change up
+      onSelect(newSelections);
+      
+      // If completed the required selections, show success message
       if (newSelections.length === requiredSelections) {
         toast({
           title: "Seleções completas!",
           description: "Agora você pode avançar para a próxima questão",
-          variant: "success"
         });
       }
 
@@ -73,7 +75,6 @@ const QuestionComponent: React.FC<QuestionProps> = ({
       return;
     }
 
-    onSelect(selectedOptions);
     onNext();
   };
 
