@@ -1,9 +1,9 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Block } from '@/types/editor';
 import { getDefaultGlobalStyles } from '@/utils/editorDefaults';
+import { createDefaultConfig } from '@/utils/resultPageDefaults';
 
 export const useResultPageEditor = (styleType: string) => {
   const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig | null>(null);
@@ -27,12 +27,8 @@ export const useResultPageEditor = (styleType: string) => {
         if (savedConfig) {
           config = JSON.parse(savedConfig);
         } else {
-          // Create default config
-          config = {
-            styleType,
-            globalStyles: getDefaultGlobalStyles(styleType),
-            blocks: []
-          };
+          // Create default config using the helper function
+          config = createDefaultConfig(styleType);
           // Save default config
           localStorage.setItem(configKey, JSON.stringify(config));
         }
@@ -104,14 +100,11 @@ export const useResultPageEditor = (styleType: string) => {
   // Reset config to default
   const handleReset = useCallback(() => {
     if (confirm('Tem certeza que deseja resetar todas as configurações? Esta ação não pode ser desfeita.')) {
-      const defaultConfig: ResultPageConfig = {
-        styleType,
-        globalStyles: getDefaultGlobalStyles(styleType),
-        blocks: []
-      };
+      // Use the helper function to create a default config
+      const defaultConfig = createDefaultConfig(styleType);
       
       setResultPageConfig(defaultConfig);
-      setBlocks([]);
+      setBlocks(defaultConfig.blocks || []);
       localStorage.setItem(configKey, JSON.stringify(defaultConfig));
       
       toast({
