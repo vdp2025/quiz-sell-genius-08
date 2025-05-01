@@ -1,4 +1,3 @@
-
 import { StyleOptions } from './resultPageConfig';
 
 export type BlockType =
@@ -27,7 +26,10 @@ export type BlockType =
   | 'carousel'
   | 'custom-code'
   | 'animation-block'
-  | 'bonus-carousel';
+  | 'bonus-carousel'
+  | 'countdown-timer'
+  | 'feature-comparison'
+  | 'testimonial-card';
 
 export interface Block {
   id: string;
