@@ -32,24 +32,12 @@ const QuestionComponent: React.FC<QuestionProps> = ({
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptions((prev) => {
-      // If option is already selected, remove it
+      // Se a opção já está selecionada, remove ela
       if (prev.includes(optionId)) {
         return prev.filter(id => id !== optionId);
       }
       
-<<<<<<< HEAD
-      const maxSelections = question.isStrategic ? 1 : 3;
-      
-      // Se já atingiu o limite de seleções
-      if (prev.length >= maxSelections) {
-        // Para questões estratégicas, substitui a seleção
-        if (question.isStrategic) {
-          return [optionId];
-        }
-        // Para questões normais, remove a primeira e adiciona a nova
-        return [...prev.slice(1), optionId];
-=======
-      // If already reached selection limit, show message and don't add
+      // Se já atingiu o limite de seleções, mostra mensagem e não adiciona
       if (prev.length >= requiredSelections) {
         toast({
           title: "Limite de seleções atingido",
@@ -59,23 +47,19 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         return prev;
       }
 
-      // Add the new selection
+      // Adiciona a nova seleção
       const newSelections = [...prev, optionId];
       
-      // If completed required selections, show success message
+      // Se completou as seleções necessárias, mostra mensagem de sucesso
       if (newSelections.length === requiredSelections) {
         toast({
           title: "Seleções completas!",
           description: "Agora você pode avançar para a próxima questão",
           variant: "success"
         });
-        
-        // Call onSelect with the new selections
-        onSelect(newSelections);
->>>>>>> cadb3d4268235c21060acd8da3f28a86838d00d9
       }
 
-      return [...prev, optionId];
+      return newSelections;
     });
   };
 

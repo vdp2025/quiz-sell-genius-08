@@ -45,7 +45,7 @@ const ResultPage: React.FC = () => {
             <div className="flex flex-col gap-6">
               <div className="text-center">
                 <h1 className="text-3xl font-bold text-primary mb-2">
-                  Seu Estilo Principal: {primaryStyle.name}
+                  Seu Estilo Principal: {primaryStyle.category}
                 </h1>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   {description}
@@ -56,7 +56,7 @@ const ResultPage: React.FC = () => {
                 <div className="relative aspect-video overflow-hidden rounded-xl">
                   <img
                     src={image}
-                    alt={`Estilo ${primaryStyle.name}`}
+                    alt={`Style ${primaryStyle.category}`}
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -72,7 +72,7 @@ const ResultPage: React.FC = () => {
           </Card>
 
           <div className="space-y-12">
-            <SecondaryStylesSection styles={secondaryStyles} />
+            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
             <MotivationSection />
             <MentorSection />
             
