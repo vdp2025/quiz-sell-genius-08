@@ -1,15 +1,17 @@
+
 import React, { useState } from 'react';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { PropertiesPanel } from './properties/PropertiesPanel';
 import { useEditor } from '@/hooks/useEditor';
 import { ResizablePanel, ResizablePanelGroup, ResizableHandle } from '@/components/ui/resizable';
+import { BlockType } from '@/types/editor';
 
 export function VisualEditor() {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const { config, addBlock, updateBlock, deleteBlock, reorderBlocks, saveConfig } = useEditor();
 
-  const handleComponentSelect = (type: string) => {
+  const handleComponentSelect = (type: BlockType) => {
     const newBlockId = addBlock(type);
     setSelectedBlockId(newBlockId);
   };

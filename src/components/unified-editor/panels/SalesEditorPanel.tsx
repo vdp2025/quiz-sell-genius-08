@@ -315,7 +315,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                           style: { 
                             ...selectedComponent.content.style,
-                            borderRadius: parseInt(e.target.value) 
+                            borderRadius: Number(e.target.value)
                           } 
                         })}
                         className="w-full"
@@ -336,7 +336,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
-                              paddingY: parseInt(e.target.value) 
+                              paddingY: Number(e.target.value)
                             } 
                           })}
                           className="w-full"
@@ -356,7 +356,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
-                              paddingX: parseInt(e.target.value) 
+                              paddingX: Number(e.target.value)
                             } 
                           })}
                           className="w-full"

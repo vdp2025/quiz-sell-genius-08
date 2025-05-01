@@ -1,24 +1,13 @@
 
 import { useState, useCallback } from 'react';
-import { Block } from '@/types/editor';
+import { Block, BlockType, EditorConfig } from '@/types/editor';
 import { generateId } from '@/utils/idGenerator';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
-
-interface EditorConfig {
-  blocks: Block[];
-  globalStyles?: {
-    primaryColor?: string;
-    secondaryColor?: string;
-    textColor?: string;
-    backgroundColor?: string;
-    fontFamily?: string;
-  };
-}
 
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>({ blocks: [] });
 
-  const addBlock = useCallback((type: Block['type']) => {
+  const addBlock = useCallback((type: BlockType) => {
     const id = generateId();
     setConfig(prevConfig => ({
       ...prevConfig,

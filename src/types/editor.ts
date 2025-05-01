@@ -40,7 +40,6 @@ export interface Block {
 export type EditorBlock = Block;
 
 export interface EditableContent {
-  [key: string]: any;
   title?: string;
   subtitle?: string;
   text?: string;
