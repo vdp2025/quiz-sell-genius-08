@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -142,7 +141,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
                   key={`${item.type}-${index}`}
                   variant="outline"
                   className="justify-start text-left h-auto py-2.5 hover:bg-[#FAF9F7] hover:border-[#B89B7A]/60"
-                  onClick={() => onComponentSelect(item.type)}
+                  onClick={() => onComponentSelect(item.type as BlockType)}
                 >
                   <div className="flex items-center w-full">
                     <div className="mr-2 text-[#B89B7A]">

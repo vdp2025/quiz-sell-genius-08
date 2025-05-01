@@ -148,7 +148,6 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 blocks={blocks}
                 onClose={() => setSelectedBlockId(null)}
                 onUpdate={(content, id) => {
-                  // Make sure we handle both formats - with id and without
                   if (id) {
                     blockActions.handleUpdateBlock(id, content);
                   } else if (selectedBlockId) {
@@ -175,3 +174,5 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     </div>
   );
 };
+
+export default ResultPageVisualEditor;

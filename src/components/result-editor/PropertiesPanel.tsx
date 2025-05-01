@@ -22,7 +22,7 @@ interface PropertiesPanelProps {
   selectedBlockId: string | null;
   blocks: Block[];
   onClose: () => void;
-  onUpdate: (content: any) => void;
+  onUpdate: (content: any, id?: string) => void;
   onDelete: (id: string) => void;
 }
 
