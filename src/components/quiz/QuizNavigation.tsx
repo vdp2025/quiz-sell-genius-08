@@ -19,6 +19,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
 }) => {
   const requiredOptions = currentQuestionType === 'strategic' ? 1 : 3;
   
+  // Validação estrita do número de opções
   const isButtonEnabled = useMemo(() => {
     return selectedOptionsCount === requiredOptions;
   }, [selectedOptionsCount, requiredOptions]);
@@ -26,7 +27,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   const getHelperText = () => {
     if (!isButtonEnabled) {
       if (currentQuestionType === 'strategic') {
-        return 'Selecione 1 opção para continuar';
+        return 'Selecione exatamente 1 opção para continuar';
       }
       return 'Selecione exatamente 3 opções para continuar';
     }
@@ -49,13 +50,14 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         {!isButtonEnabled && (
           <p className="text-sm text-[#8F7A6A] mb-2">{getHelperText()}</p>
         )}
-        <Button
-          onClick={onNext}
-          disabled={!isButtonEnabled}
-          className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {isLastQuestion ? 'Ver Resultado' : 'Próximo'}
-        </Button>
+        {isButtonEnabled && (
+          <Button
+            onClick={onNext}
+            className="bg-[#B89B7A] hover:bg-[#A38A69]"
+          >
+            {isLastQuestion ? 'Ver Resultado' : 'Próximo'}
+          </Button>
+        )}
       </div>
     </div>
   );
