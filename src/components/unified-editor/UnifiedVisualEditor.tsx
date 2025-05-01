@@ -94,7 +94,6 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         onPreviewToggle={togglePreview}
         onSave={handleSave}
         onOpenTemplateModal={openTemplateModal}
-        isLoading={isLoading}
       />
       
       <Tabs
