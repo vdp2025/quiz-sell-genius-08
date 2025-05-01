@@ -15,6 +15,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
   primaryStyle,
   initialConfig
 }) => {
+  // Pass the isPreviewing prop to the ResultPageVisualEditor
   return (
     <div className="h-full">
       <ResultPageVisualEditor

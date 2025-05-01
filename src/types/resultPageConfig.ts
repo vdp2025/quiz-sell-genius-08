@@ -1,3 +1,4 @@
+
 import { Block } from './editor';
 
 export type BorderRadiusType = 'none' | 'small' | 'medium' | 'large';
@@ -57,11 +58,41 @@ export interface StyleOptions {
   [key: string]: any;
 }
 
+export interface SectionConfig {
+  content: Record<string, any>;
+  style?: Partial<StyleOptions>;
+  visible?: boolean;
+}
+
 export interface ResultPageConfig {
+  // Added properties that were missing
+  title?: string;
+  description?: string;
+  styleType?: string;
+  version?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  templateName?: string;
+  
+  // Core properties
   globalStyles: Partial<StyleOptions>;
   blocks: Block[];
-  templateName?: string;
-  version?: string;
+  
+  // Section configurations
+  header?: SectionConfig;
+  mainContent?: SectionConfig;
+  secondaryStyles?: SectionConfig;
+  offer?: {
+    hero?: SectionConfig;
+    benefits?: SectionConfig;
+    testimonials?: SectionConfig;
+    guarantee?: SectionConfig;
+    products?: SectionConfig;
+    pricing?: SectionConfig;
+    content?: Record<string, any>;
+    style?: Partial<StyleOptions>;
+    visible?: boolean;
+  };
 }
 
 export interface ResultPageTheme {
