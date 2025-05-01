@@ -1,17 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
+import { StyleResult } from '@/types/quiz';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Monitor, Smartphone, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { StyleResult } from '@/types/quiz';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Block } from '@/types/editor';
+import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
+import { PropertiesPanel } from '@/components/result-editor/PropertiesPanel';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { SortableBlock } from '@/components/result-editor/SortableBlock';
 import { toast } from '@/components/ui/use-toast';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
 
@@ -22,7 +19,6 @@ interface ResultEditorPanelProps {
 
 const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({ isPreviewing, primaryStyle }) => {
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
-  const [activeTab, setActiveTab] = useState<'content' | 'style'>('content');
   const [isGlobalStylesOpen, setIsGlobalStylesOpen] = useState(false);
   
   const {
@@ -33,14 +29,31 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({ isPreviewing, pri
     resultPageConfig,
     loading
   } = useResultPageEditor(primaryStyle.category);
-
+  
   useEffect(() => {
-    if (!loading) {
+    if (!loading && resultPageConfig) {
       console.info(`Editor de resultados carregado para ${primaryStyle.category} com ${blocks.length} blocos`);
     }
-  }, [loading, blocks.length, primaryStyle.category]);
+  }, [loading, blocks?.length, primaryStyle.category, resultPageConfig]);
 
-  const handleComponentSelect = (type: Block['type']) => {
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <p className="text-gray-500">Carregando editor de resultados...</p>
+      </div>
+    );
+  }
+
+  const handleComponentSelect = (type: string) => {
+    if (!actions?.handleAddBlock) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível adicionar o componente. Tente novamente.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     const id = actions.handleAddBlock(type);
     selectBlock(id);
     toast({
@@ -49,54 +62,37 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({ isPreviewing, pri
     });
   };
 
-  // Find selected component
-  const selectedComponent = selectedBlockId 
-    ? blocks.find(block => block.id === selectedBlockId)
-    : null;
-    
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    
-    if (over && active.id !== over.id) {
-      const oldIndex = blocks.findIndex(block => block.id === active.id);
-      const newIndex = blocks.findIndex(block => block.id === over.id);
-      
-      actions.handleReorderBlocks(oldIndex, newIndex);
-    }
-  };
-
   const handleOpenGlobalStyles = () => {
     setIsGlobalStylesOpen(true);
   };
 
-  if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-gray-500">Carregando editor de página de resultados...</p>
-      </div>
-    );
-  }
+  // Find selected component
+  const selectedComponent = selectedBlockId 
+    ? blocks.find(block => block.id === selectedBlockId)
+    : null;
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
-      {/* Painel esquerdo - Biblioteca de componentes */}
+      {/* Left sidebar */}
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-        <ComponentsSidebar onComponentSelect={handleComponentSelect} />
+        <div className="h-full border-r bg-white">
+          <ComponentsSidebar onComponentSelect={handleComponentSelect} />
+        </div>
       </ResizablePanel>
-
+      
       <ResizableHandle withHandle />
-
-      {/* Painel central - Preview */}
-      <ResizablePanel defaultSize={55}>
+      
+      {/* Main preview area */}
+      <ResizablePanel defaultSize={60}>
         <div className="h-full flex flex-col">
-          {/* Preview Controls */}
-          <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
+          {/* Preview controls */}
+          <div className="border-b bg-white p-3 flex items-center justify-between">
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setViewMode('desktop')}
-                className={cn(viewMode === 'desktop' && 'bg-[#FAF9F7]')}
+                className={cn(viewMode === 'desktop' && 'bg-slate-100')}
               >
                 <Monitor className="w-4 h-4 mr-2" />
                 Desktop
@@ -105,295 +101,102 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({ isPreviewing, pri
                 variant="outline"
                 size="sm"
                 onClick={() => setViewMode('mobile')}
-                className={cn(viewMode === 'mobile' && 'bg-[#FAF9F7]')}
+                className={cn(viewMode === 'mobile' && 'bg-slate-100')}
               >
                 <Smartphone className="w-4 h-4 mr-2" />
                 Mobile
               </Button>
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleOpenGlobalStyles}
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Estilos Globais
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={actions.handleSave}
-              >
-                Salvar Alterações
-              </Button>
-            </div>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleOpenGlobalStyles}
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Estilos Globais
+            </Button>
           </div>
-
-          {/* Preview Content */}
-          <ScrollArea className="flex-1 p-4 bg-[#FAF9F7]">
+          
+          {/* Preview area */}
+          <ScrollArea className="flex-1 p-4 bg-slate-50">
             <div className={cn(
-              "min-h-full bg-white rounded-lg shadow-sm p-6",
-              viewMode === 'mobile' && 'max-w-md mx-auto'
+              "min-h-full bg-white shadow-sm rounded-lg mx-auto transition-all",
+              viewMode === 'mobile' ? 'max-w-sm' : 'max-w-4xl'
             )}>
-              <DndContext
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-              >
-                <SortableContext
-                  items={blocks.map(block => block.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {blocks.length === 0 ? (
-                    <div className="text-center p-8 border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
-                      <p className="text-[#8F7A6A] mb-4">Adicione componentes usando o painel lateral</p>
-                      <Button 
-                        variant="outline" 
-                        className="border-[#B89B7A] text-[#B89B7A]"
-                        onClick={() => handleComponentSelect('headline')}
-                      >
-                        Adicionar Primeiro Componente
-                      </Button>
+              {blocks && blocks.length > 0 ? (
+                <div className="p-4">
+                  {blocks.map((block) => (
+                    <div 
+                      key={block.id}
+                      onClick={() => !isPreviewing && selectBlock(block.id)}
+                      className={cn(
+                        "p-4 mb-4 rounded-md transition-all",
+                        !isPreviewing && "cursor-pointer hover:bg-gray-50",
+                        !isPreviewing && block.id === selectedBlockId && "ring-2 ring-blue-400"
+                      )}
+                    >
+                      {/* Simplified block preview */}
+                      <div className="p-2 border rounded">
+                        <h3 className="font-medium">{block.type}</h3>
+                        <p className="text-sm text-gray-500">
+                          {block.content?.title || block.content?.text || "Sem conteúdo"}
+                        </p>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {blocks.sort((a, b) => a.order - b.order).map(block => (
-                        <SortableBlock
-                          key={block.id}
-                          block={block}
-                          isSelected={selectedBlockId === block.id}
-                          isPreviewing={isPreviewing}
-                          onSelect={() => !isPreviewing && selectBlock(block.id)}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </SortableContext>
-              </DndContext>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-center p-6">
+                  <p className="text-gray-500 mb-4">Nenhum componente adicionado</p>
+                  <p className="text-sm text-gray-400">
+                    Adicione componentes a partir do painel lateral
+                  </p>
+                </div>
+              )}
             </div>
           </ScrollArea>
         </div>
       </ResizablePanel>
-
+      
       <ResizableHandle withHandle />
-
-      {/* Painel direito - Propriedades */}
-      <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-        <div className="h-full bg-white border-l border-[#B89B7A]/20 overflow-y-auto">
-          <div className="p-4 border-b">
-            <h3 className="font-medium text-[#432818]">Propriedades</h3>
-          </div>
-          
+      
+      {/* Properties panel */}
+      <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
+        <div className="h-full border-l bg-white">
           {selectedComponent ? (
-            <div className="p-4">
-              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'content' | 'style')}>
-                <TabsList className="w-full mb-4">
-                  <TabsTrigger value="content" className="flex-1">Conteúdo</TabsTrigger>
-                  <TabsTrigger value="style" className="flex-1">Estilo</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="content" className="space-y-4">
-                  {/* Conteúdo do componente selecionado */}
-                  {selectedComponent.type === 'headline' && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Título</label>
-                        <input
-                          type="text"
-                          value={selectedComponent.content.title || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { title: e.target.value })}
-                          className="w-full p-2 border rounded"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Subtítulo</label>
-                        <textarea
-                          value={selectedComponent.content.subtitle || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { subtitle: e.target.value })}
-                          className="w-full p-2 border rounded"
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {selectedComponent.type === 'text' && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Texto</label>
-                        <textarea
-                          value={selectedComponent.content.text || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { text: e.target.value })}
-                          className="w-full p-2 border rounded"
-                          rows={5}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {selectedComponent.type === 'image' && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">URL da Imagem</label>
-                        <input
-                          type="text"
-                          value={selectedComponent.content.imageUrl || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { imageUrl: e.target.value })}
-                          className="w-full p-2 border rounded"
-                        />
-                        
-                        {selectedComponent.content.imageUrl && (
-                          <div className="mt-2 p-2 bg-gray-50 rounded">
-                            <img 
-                              src={selectedComponent.content.imageUrl} 
-                              alt="Preview" 
-                              className="max-h-40 mx-auto object-contain"
-                            />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Texto Alternativo</label>
-                        <input
-                          type="text"
-                          value={selectedComponent.content.imageAlt || ''}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { imageAlt: e.target.value })}
-                          className="w-full p-2 border rounded"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* ... keep existing code for other component types */}
-                </TabsContent>
-                
-                <TabsContent value="style">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Cor de Fundo</label>
-                      <input
-                        type="color"
-                        value={(selectedComponent.content.style?.backgroundColor as string) || '#ffffff'}
-                        onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
-                          style: { 
-                            ...selectedComponent.content.style,
-                            backgroundColor: e.target.value 
-                          } 
-                        })}
-                        className="w-full h-8 p-1 border rounded"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Cor do Texto</label>
-                      <input
-                        type="color"
-                        value={(selectedComponent.content.style?.color as string) || '#000000'}
-                        onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
-                          style: { 
-                            ...selectedComponent.content.style,
-                            color: e.target.value 
-                          } 
-                        })}
-                        className="w-full h-8 p-1 border rounded"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Raio da Borda</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="32"
-                        value={String(Number(selectedComponent.content.style?.borderRadius) || 0)}
-                        onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
-                          style: { 
-                            ...selectedComponent.content.style,
-                            borderRadius: Number(e.target.value)
-                          } 
-                        })}
-                        className="w-full"
-                      />
-                      <div className="text-right text-xs text-gray-500">
-                        {Number(selectedComponent.content.style?.borderRadius) || 0}px
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Padding Vertical</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="64"
-                          value={String(Number(selectedComponent.content.style?.padding) || 16)}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
-                            style: { 
-                              ...selectedComponent.content.style,
-                              padding: Number(e.target.value)
-                            } 
-                          })}
-                          className="w-full"
-                        />
-                        <div className="text-right text-xs text-gray-500">
-                          {Number(selectedComponent.content.style?.padding) || 16}px
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Margin</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="64"
-                          value={String(Number(selectedComponent.content.style?.margin) || 0)}
-                          onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
-                            style: { 
-                              ...selectedComponent.content.style,
-                              margin: Number(e.target.value)
-                            } 
-                          })}
-                          className="w-full"
-                        />
-                        <div className="text-right text-xs text-gray-500">
-                          {Number(selectedComponent.content.style?.margin) || 0}px
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-              
-              <div className="mt-4 border-t pt-4">
-                <Button 
-                  variant="destructive" 
-                  onClick={() => {
-                    actions.handleDeleteBlock(selectedBlockId);
-                    selectBlock(null);
-                  }}
-                >
-                  Excluir Componente
-                </Button>
-              </div>
-            </div>
+            <PropertiesPanel
+              selectedBlockId={selectedBlockId}
+              blocks={blocks}
+              onClose={() => selectBlock(null)}
+              onUpdate={(content) => actions.handleUpdateBlock(selectedBlockId, content)}
+              onDelete={() => {
+                actions.handleDeleteBlock(selectedBlockId);
+                selectBlock(null);
+                toast({
+                  title: "Componente removido",
+                  description: "O componente foi removido da sua página."
+                });
+              }}
+            />
           ) : (
-            <div className="p-4">
-              <p className="text-[#8F7A6A]">Selecione um componente para editar suas propriedades</p>
+            <div className="p-4 text-center text-gray-500">
+              <p>Selecione um componente para editar suas propriedades</p>
             </div>
           )}
         </div>
       </ResizablePanel>
-
-      {isGlobalStylesOpen && resultPageConfig?.globalStyles && (
+      
+      {/* Global styles editor */}
+      {isGlobalStylesOpen && (
         <GlobalStylesEditor
-          globalStyles={resultPageConfig.globalStyles}
+          globalStyles={resultPageConfig?.globalStyles || {}}
           onSave={(styles) => {
             actions.updateSection('globalStyles', styles);
             setIsGlobalStylesOpen(false);
             toast({
-              title: "Estilos globais salvos",
-              description: "Os estilos globais foram atualizados com sucesso.",
+              title: "Estilos globais atualizados",
+              description: "Os estilos globais foram atualizados com sucesso."
             });
           }}
           onCancel={() => setIsGlobalStylesOpen(false)}

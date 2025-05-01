@@ -1,81 +1,107 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { EditorTab } from '../UnifiedVisualEditor';
-import { 
-  Eye, 
-  EyeOff, 
-  Save, 
-  Layout, 
-  FilePlus, 
-  Loader2 
-} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Eye, EyeOff, Save, Redo, Undo } from 'lucide-react';
+import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
+import { toast } from '@/components/ui/use-toast';
 
 interface EditorToolbarProps {
-  activeTab: EditorTab;
+  activeTab?: EditorTab;
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;
-  onOpenTemplateModal: () => void;
+  onOpenTemplateModal?: () => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  activeTab,
+  activeTab = 'quiz',
   isPreviewing,
   onPreviewToggle,
   onSave,
   onOpenTemplateModal
 }) => {
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const getTabTitle = () => {
+    switch (activeTab) {
+      case 'quiz': return 'Quiz';
+      case 'result': return 'Página de Resultado';
+      case 'sales': return 'Página de Vendas';
+      default: return 'Editor';
+    }
+  };
+  
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await onSave();
+      toast({
+        title: "Alterações salvas",
+        description: "Suas alterações foram salvas com sucesso."
+      });
+    } catch (error) {
+      console.error('Error saving changes:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Ocorreu um erro ao salvar suas alterações.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+  
   return (
-    <div className="flex items-center justify-between p-2 border-b bg-white">
-      <div className="flex items-center space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onPreviewToggle}
-          className="flex items-center gap-1"
-        >
-          {isPreviewing ? (
-            <>
-              <EyeOff className="h-4 w-4" />
-              <span className="hidden sm:inline">Editor</span>
-            </>
-          ) : (
-            <>
-              <Eye className="h-4 w-4" />
-              <span className="hidden sm:inline">Visualizar</span>
-            </>
-          )}
-        </Button>
+    <div className="border-b bg-white p-3 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <Link to="/admin" className="text-gray-600 hover:text-gray-900">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
+        </Link>
+        <h1 className="text-xl font-medium">Editor de {getTabTitle()}</h1>
       </div>
-
-      <div className="text-center">
-        <h2 className="text-sm font-medium">
-          {activeTab === 'quiz' && 'Editor de Quiz'}
-          {activeTab === 'result' && 'Editor de Página de Resultado'}
-          {activeTab === 'sales' && 'Editor de Página de Vendas'}
-        </h2>
-      </div>
-
+      
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
           size="sm"
-          onClick={onOpenTemplateModal}
-          className="flex items-center gap-1"
+          onClick={onPreviewToggle}
         >
-          <FilePlus className="h-4 w-4" />
-          <span className="hidden sm:inline">Modelos</span>
+          {isPreviewing ? (
+            <>
+              <EyeOff className="w-4 h-4 mr-2" />
+              Modo Edição
+            </>
+          ) : (
+            <>
+              <Eye className="w-4 h-4 mr-2" />
+              Visualizar
+            </>
+          )}
         </Button>
-
+        
+        {onOpenTemplateModal && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onOpenTemplateModal}
+          >
+            Templates
+          </Button>
+        )}
+        
         <Button
           variant="default"
           size="sm"
-          onClick={onSave}
-          className="flex items-center gap-1 bg-[#B89B7A] hover:bg-[#A38A69] text-white"
+          onClick={handleSave}
+          disabled={isSaving}
+          className="bg-blue-600 hover:bg-blue-700 text-white"
         >
-          <Save className="h-4 w-4" />
-          <span className="hidden sm:inline">Salvar</span>
+          <Save className="w-4 h-4 mr-2" />
+          {isSaving ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
     </div>

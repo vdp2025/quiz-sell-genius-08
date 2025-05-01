@@ -19,7 +19,11 @@ export type QuizComponentType =
   | 'stageResult'
   | 'button'
   | 'choice'
-  | 'result';
+  | 'result'
+  | 'divider'
+  | 'spacer'
+  | 'video'
+  | 'cta';
 
 export interface QuizComponentStyle {
   backgroundColor?: string;

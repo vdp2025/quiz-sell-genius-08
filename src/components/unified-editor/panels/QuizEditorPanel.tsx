@@ -1,125 +1,60 @@
 
 import React from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { ComponentsSidebar } from '@/components/quiz-builder/components/ComponentsSidebar';
-import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ComponentPreviewPanel } from '@/components/quiz-builder/preview/ComponentPreviewPanel';
-import { PropertyPanel } from '@/components/quiz-builder/components/PropertyPanel';
-import { StageList } from '@/components/quiz-builder/components/StageList';
+import { toast } from '@/components/ui/use-toast';
 
 interface QuizEditorPanelProps {
   isPreviewing: boolean;
 }
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
-  const {
-    components,
-    stages,
-    activeStageId,
-    selectedComponentId,
-    addComponent,
-    updateComponent,
-    deleteComponent,
-    moveComponent,
-    addStage,
-    updateStage,
-    deleteStage,
-    moveStage,
-    setActiveStage,
-    setSelectedComponentId,
-    loading
-  } = useQuizBuilder();
-
-  const activeStage = activeStageId
-    ? stages.find(s => s.id === activeStageId)
-    : null;
-
-  const stageComponents = activeStageId
-    ? components.filter(c => c.stageId === activeStageId)
-    : [];
-
-  const handleComponentSelect = (type) => {
-    if (activeStageId) {
-      addComponent(type, activeStageId);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <p>Carregando editor de quiz...</p>
-      </div>
-    );
-  }
-
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
-      {/* Left Sidebar - Stages & Components */}
-      <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-        <div className="h-full flex flex-col border-r border-[#B89B7A]/20">
-          {/* Stages List */}
-          <div className="p-4 border-b border-[#B89B7A]/20">
-            <h3 className="font-medium text-[#432818] mb-2">Etapas do Quiz</h3>
-            <StageList 
-              stages={stages}
-              activeStageId={activeStageId}
-              onStageAdd={addStage}
-              onStageSelect={setActiveStage}
-              onStageUpdate={updateStage}
-              onStageDelete={deleteStage}
-              onStageMove={moveStage}
-            />
-          </div>
-          
-          {/* Components Library */}
-          <div className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full">
-              <div className="p-4">
-                <h3 className="font-medium text-[#432818] mb-2">Componentes</h3>
-                {activeStageId ? (
-                  <ComponentsSidebar
-                    onComponentSelect={handleComponentSelect}
-                    activeStage={activeStage}
-                  />
-                ) : (
-                  <div className="text-center p-4 border border-dashed border-[#B89B7A]/40 rounded">
-                    <p className="text-[#8F7A6A]">Selecione uma etapa para adicionar componentes</p>
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
-          </div>
+      {/* Left sidebar */}
+      <ResizablePanel defaultSize={20}>
+        <div className="h-full border-r bg-white p-4">
+          <h2 className="text-lg font-medium mb-4">Componentes do Quiz</h2>
+          <p className="text-sm text-gray-500">
+            Esta parte do editor está em desenvolvimento. Em breve você poderá arrastar e soltar componentes para criar seu quiz.
+          </p>
         </div>
       </ResizablePanel>
-
+      
       <ResizableHandle withHandle />
-
-      {/* Middle Panel - Preview */}
-      <ResizablePanel defaultSize={55}>
-        <ComponentPreviewPanel
-          components={stageComponents}
-          selectedComponentId={selectedComponentId}
-          onSelectComponent={setSelectedComponentId}
-          onMoveComponent={moveComponent}
-          activeStage={activeStage}
-          isPreviewing={isPreviewing}
-        />
+      
+      {/* Main preview area */}
+      <ResizablePanel defaultSize={60}>
+        <ScrollArea className="h-full p-4 bg-slate-50">
+          <div className="bg-white shadow-sm rounded-lg p-8 min-h-[600px] flex items-center justify-center">
+            <div className="text-center">
+              <h2 className="text-xl font-medium mb-3">Editor de Quiz</h2>
+              <p className="text-gray-500 mb-6">
+                O editor visual de quiz está em desenvolvimento. Logo mais você poderá criar e editar questionários interativos.
+              </p>
+              <button
+                onClick={() => toast({
+                  title: "Funcionalidade em desenvolvimento",
+                  description: "O editor de quiz estará disponível em breve."
+                })}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Saiba mais
+              </button>
+            </div>
+          </div>
+        </ScrollArea>
       </ResizablePanel>
-
+      
       <ResizableHandle withHandle />
-
-      {/* Right Panel - Properties */}
-      <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-        <div className="h-full bg-white border-l border-[#B89B7A]/20 overflow-y-auto">
-          <PropertyPanel 
-            selectedComponentId={selectedComponentId}
-            components={components}
-            onUpdate={updateComponent}
-            onDelete={deleteComponent}
-            onClose={() => setSelectedComponentId(null)}
-          />
+      
+      {/* Properties panel */}
+      <ResizablePanel defaultSize={20}>
+        <div className="h-full border-l bg-white p-4">
+          <h2 className="text-lg font-medium mb-4">Propriedades</h2>
+          <p className="text-sm text-gray-500">
+            Selecione um elemento do quiz para editar suas propriedades.
+          </p>
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

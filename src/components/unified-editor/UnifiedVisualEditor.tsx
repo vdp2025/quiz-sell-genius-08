@@ -35,9 +35,6 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     isTemplateModalOpen,
     closeTemplateModal,
     loadTemplateForCurrentEditor,
-    quizBuilder,
-    resultPageEditor,
-    salesPageEditor,
     setActiveMode
   } = useUnifiedEditor(primaryStyle);
 
@@ -187,7 +184,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg p-6 flex items-center gap-3">
-            <Loader2 className="h-5 w-5 animate-spin text-[#B89B7A]" />
+            <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
             <span>Salvando alterações...</span>
           </div>
         </div>

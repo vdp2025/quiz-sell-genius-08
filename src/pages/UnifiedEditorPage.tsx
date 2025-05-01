@@ -4,7 +4,7 @@ import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEd
 import { LoadingState } from '@/components/ui/loading-state';
 import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
 
 const UnifiedEditorPage: React.FC = () => {
@@ -13,10 +13,10 @@ const UnifiedEditorPage: React.FC = () => {
   const [loadError, setLoadError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   
   // Extract tab from URL query parameters
   const getInitialTab = (): EditorTab => {
-    const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get('tab') as EditorTab | null;
     return tab && ['quiz', 'result', 'sales'].includes(tab) ? tab as EditorTab : 'quiz';
   };
@@ -32,7 +32,7 @@ const UnifiedEditorPage: React.FC = () => {
           percentage: 40
         };
 
-        // Tentar carregar do localStorage primeiro
+        // Try to load from localStorage first
         const savedResult = localStorage.getItem('quiz_result');
         if (savedResult) {
           try {
@@ -96,7 +96,7 @@ const UnifiedEditorPage: React.FC = () => {
 
   if (loadError) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-[#FAF9F7] p-6">
+      <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7] p-6">
         <div className="bg-white rounded-lg shadow-md p-8 max-w-md text-center">
           <h2 className="text-2xl font-medium text-[#432818] mb-4">Erro ao carregar o editor</h2>
           <p className="text-[#8F7A6A] mb-6">{loadError}</p>
@@ -113,7 +113,7 @@ const UnifiedEditorPage: React.FC = () => {
 
   if (!primaryStyle) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-[#FAF9F7] p-6">
+      <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7] p-6">
         <div className="bg-white rounded-lg shadow-md p-8 max-w-md text-center">
           <h2 className="text-2xl font-medium text-[#432818] mb-4">Estilo não encontrado</h2>
           <p className="text-[#8F7A6A] mb-6">
@@ -131,7 +131,11 @@ const UnifiedEditorPage: React.FC = () => {
     );
   }
 
-  return <UnifiedVisualEditor primaryStyle={primaryStyle} initialActiveTab={getInitialTab()} />;
+  return (
+    <div className="h-screen w-full overflow-hidden">
+      <UnifiedVisualEditor primaryStyle={primaryStyle} initialActiveTab={getInitialTab()} />
+    </div>
+  );
 };
 
 export default UnifiedEditorPage;
