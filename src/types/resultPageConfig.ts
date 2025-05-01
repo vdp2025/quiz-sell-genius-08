@@ -5,7 +5,7 @@ export interface StyleOptions {
   backgroundColor?: string;
   textColor?: string;
   accentColor?: string;
-  borderRadius?: number | string;
+  borderRadius?: BorderRadiusType | string;
   borderStyle?: string;
   borderWidth?: number | string;
   borderColor?: string;
@@ -41,7 +41,7 @@ export interface StyleOptions {
   spacing?: 'compact' | 'comfortable' | 'spacious';
 }
 
-export type BorderRadiusType = 'none' | 'sm' | 'md' | 'lg' | 'full' | 'custom';
+export type BorderRadiusType = 'none' | 'sm' | 'md' | 'lg' | 'full' | 'custom' | 'medium' | 'small' | 'large';
 
 export interface GlobalStyles extends StyleOptions {
   fontFamily?: string;
@@ -57,7 +57,7 @@ export interface Section {
   visible: boolean;
   content: Record<string, any>;
   style?: StyleOptions;
-  appearance?: Record<string, any>; // Add this to fix SectionEditor errors
+  appearance?: Record<string, any>; // Add appearance property to Section interface
 }
 
 export interface OfferContent {
@@ -85,7 +85,7 @@ export interface OfferContent {
 }
 
 export interface OfferSection {
-  hero: Section;
+  hero?: Section;
   products?: Section;
   benefits?: Section;
   pricing?: Section;

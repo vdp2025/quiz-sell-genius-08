@@ -1,4 +1,3 @@
-
 import { BorderRadiusType } from '@/types/resultPageConfig';
 
 /**
@@ -6,13 +5,24 @@ import { BorderRadiusType } from '@/types/resultPageConfig';
  * @param value The borderRadius value to sanitize
  * @returns A valid BorderRadiusType value
  */
-export const sanitizeBorderRadius = (value: string | BorderRadiusType): BorderRadiusType => {
-  if (value === 'none' || value === 'small' || value === 'medium' || value === 'large') {
-    return value;
-  }
+export const sanitizeBorderRadius = (value: string | undefined): BorderRadiusType => {
+  if (!value) return 'md';
   
-  // Default value if not valid
-  return 'medium';
+  // Convert string values to our enum type
+  switch(value.toLowerCase()) {
+    case 'none': return 'none';
+    case 'sm': 
+    case 'small': return 'sm';
+    case 'md': 
+    case 'medium': return 'md';
+    case 'lg': 
+    case 'large': return 'lg';
+    case 'full': return 'full';
+    case 'custom': return 'custom';
+    default: 
+      // Try to parse numeric values with units like '8px' or '0.5rem'
+      return /^\d+(\.\d+)?(px|rem|em|%)?$/.test(value) ? 'custom' : 'md';
+  }
 };
 
 /**

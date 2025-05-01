@@ -44,10 +44,11 @@ export type QuizComponentType =
   | 'scale'
   | 'benefitsList'
   | 'faq'
-  | 'columns';
+  | 'columns'
+  | 'openEnded';
 
 export interface QuizBuilderState {
   stages: QuizStage[];
   components: QuizComponentData[];
-  activeStageId?: string; // Add this to fix useTypeformQuizBuilder errors
+  activeStageId?: string;
 }

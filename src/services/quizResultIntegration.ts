@@ -1,98 +1,73 @@
-import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
-import { ResultPageConfig } from '@/types/resultPageConfig';
-import { resultPageStorage } from './resultPageStorage';
+import { QuizBuilderState, QuizComponentData, QuizStage } from "@/types/quizBuilder";
+import { generateId } from "@/utils/idGenerator";
 
-export const createBuilderStateFromResultPage = (config: ResultPageConfig): QuizBuilderState => {
-  const coverStageId = `stage-cover-${Date.now()}`;
-  const questionStageId = `stage-question-${Date.now()}`;
-  const resultStageId = `stage-result-${Date.now()}`;
-  
+export const createQuizBuilderState = (): QuizBuilderState => {
   const stages: QuizStage[] = [
     {
-      id: coverStageId,
-      title: 'Etapa 1: Capa do Quiz',
+      id: generateId(),
+      title: "Etapa 1: Capa do Quiz",
       order: 0,
-      type: 'cover',
+      type: "cover",
       isEnabled: true
     },
     {
-      id: questionStageId,
-      title: 'Etapa 2: Pergunta 1',
+      id: generateId(),
+      title: "Etapa 2: Questão 1",
       order: 1,
-      type: 'question',
+      type: "question",
       isEnabled: true
     },
     {
-      id: resultStageId,
-      title: 'Etapa 3: Resultado',
+      id: generateId(),
+      title: "Etapa 3: Resultado",
       order: 2,
-      type: 'result',
+      type: "result",
       isEnabled: true
     }
   ];
-  
-  const styleType = config.styleType || 'Personalizado';
-  
+
   const components: QuizComponentData[] = [
     {
-      id: `component-cover-${Date.now()}`,
-      type: 'stageCover',
-      order: 0,
-      stageId: coverStageId,
+      id: generateId(),
+      type: "stageCover",
       data: {
-        title: `Quiz de Estilo ${styleType}`,
-        subtitle: 'Responda as perguntas e descubra seu estilo pessoal',
-        buttonText: 'Iniciar Quiz',
-        backgroundColor: config.globalStyles?.backgroundColor || '#FAF9F7',
-        textColor: config.globalStyles?.textColor || '#432818'
-      }
+        title: "Descubra Seu Estilo Pessoal",
+        description: "Responda algumas perguntas e veja qual estilo mais combina com você.",
+        imageUrl: "https://images.unsplash.com/photo-1591047139829-d91aecb6ca9c?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      order: 0,
+      stageId: stages[0].id
     },
     {
-      id: `component-question-${Date.now()}`,
-      type: 'stageQuestion',
-      order: 0,
-      stageId: questionStageId,
+      id: generateId(),
+      type: "stageQuestion",
       data: {
-        question: `Qual dessas opções descreve melhor o estilo ${styleType}?`,
+        question: "Qual cor você mais gosta?",
         options: [
-          `Opção A - Estilo ${styleType}`,
-          'Opção B - Outro estilo',
-          'Opção C - Outro estilo',
-          'Opção D - Outro estilo'
-        ],
-        displayType: 'text',
-        multiSelect: 0,
-        required: true,
-        autoAdvance: true,
-        optionStyleCategories: [
-          styleType,
-          'Outro Estilo',
-          'Outro Estilo',
-          'Outro Estilo'
+          { text: "Azul", isCorrect: false },
+          { text: "Verde", isCorrect: true },
+          { text: "Amarelo", isCorrect: false },
+          { text: "Vermelho", isCorrect: false }
         ]
-      }
+      },
+      order: 0,
+      stageId: stages[1].id
     },
     {
-      id: `component-result-${Date.now()}`,
-      type: 'stageResult',
-      order: 0,
-      stageId: resultStageId,
+      id: generateId(),
+      type: "stageResult",
       data: {
-        title: config.title || `Seu Resultado: ${styleType}`,
-        primaryStyleTitle: 'Seu Estilo Predominante',
-        secondaryStyleTitle: 'Estilos Complementares',
-        showPercentages: true,
-        showDescriptions: true,
-        callToActionText: 'Ver Recomendações',
-        accentColor: config.globalStyles?.primaryColor || '#B89B7A',
-        resultPageId: config.styleType // Link to the result page
-      }
+        resultTitle: "Seu estilo é Natural",
+        resultDescription: "Você é uma pessoa que gosta de coisas simples e confortáveis."
+      },
+      order: 0,
+      stageId: stages[2].id
     }
   ];
-  
-  return { stages, components };
-};
 
-export const loadQuizResultConfig = (styleType: string): ResultPageConfig | null => {
-  return resultPageStorage.loadConfig(styleType);
+  return {
+    stages: stages,
+    components: components,
+    activeStageId: stages[0].id
+  };
 };

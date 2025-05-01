@@ -1,10 +1,9 @@
 
 import { useCallback } from 'react';
-import { EditorBlock } from '@/types/editor';
+import { EditorBlock, BlockType } from '@/types/editor';
 import { useToast } from '@/components/ui/use-toast';
 import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
 import { sanitizeBorderRadius } from '@/utils/styleUtils';
-import { BorderRadiusType } from '@/types/resultPageConfig';
 
 export const useEditorActions = (
   blocks: EditorBlock[],
@@ -13,14 +12,18 @@ export const useEditorActions = (
 ) => {
   const { toast } = useToast();
 
-  const handleAddBlock = useCallback((type: EditorBlock['type']) => {
-    const content = getDefaultContentForBlockType(type);
+  const handleAddBlock = useCallback((type: BlockType) => {
+    // Get default content
+    const defaultContent = getDefaultContentForBlockType(type);
     
-    // Ensure alignment is properly typed as 'left' | 'center' | 'right'
+    // Create properly typed content
+    let content = { ...defaultContent };
+    
+    // Ensure alignment is properly typed
     if (content.alignment && typeof content.alignment === 'string') {
-      content.alignment = (content.alignment === 'left' || content.alignment === 'center' || content.alignment === 'right') 
-        ? content.alignment 
-        : 'center';
+      content.alignment = (['left', 'center', 'right'].includes(content.alignment) 
+        ? content.alignment as 'left' | 'center' | 'right'
+        : 'center');
     }
     
     // Ensure borderRadius is properly typed

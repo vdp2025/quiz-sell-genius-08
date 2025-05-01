@@ -1,5 +1,39 @@
+import { OfferSection, Section } from "@/types/resultPageConfig";
 
-import { OfferSection } from '@/types/resultPageConfig';
+export const createDefaultOfferSection = (): OfferSection => {
+  return {
+    hero: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    products: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    benefits: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    pricing: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    testimonials: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    guarantee: {
+      visible: true,
+      content: {},
+      style: {}
+    }
+  };
+};
 
 export const createOfferConfig = (): OfferSection => ({
   visible: true,

@@ -52,11 +52,19 @@ export type BlockType =
   | 'bonus-carousel'
   | 'countdown-timer'
   | 'feature-comparison'
-  | 'testimonial-card';
+  | 'testimonial-card'
+  | 'spacer'
+  | 'video'
+  | 'two-column'
+  | 'icon'
+  | 'faq'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block';
 
 export interface Block {
   id: string;
-  type: BlockType; // Change this to BlockType from string to ensure compatibility
+  type: BlockType; 
   content: Record<string, any>;
   styles?: StyleOptions;
   parentId?: string;
@@ -83,7 +91,7 @@ export interface EditorConfig {
   allowedBlockTypes: string[];
   maxDepth: number;
   blocks: EditorBlock[];
-  globalStyles?: any; // Add this to fix useEditorTheme
+  globalStyles?: any; // Global styles configuration
 }
 
 export interface EditorProps {

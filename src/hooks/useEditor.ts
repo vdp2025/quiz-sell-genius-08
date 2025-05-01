@@ -9,25 +9,37 @@ import { sanitizeBorderRadius } from '@/utils/styleUtils';
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>({ 
     blocks: [],
-    allowedBlockTypes: [], // Initialize with empty arrays
-    maxDepth: 1 
+    allowedBlockTypes: [],
+    maxDepth: 1,
+    globalStyles: {} // Initialize globalStyles
   });
 
   const addBlock = useCallback((type: BlockType) => {
     const id = generateId();
     
-    // Create a properly typed new block
+    // Get default content for the block type
+    const defaultContent = getDefaultContentForBlockType(type);
+    
+    // Ensure alignment is properly typed
+    let content = { ...defaultContent };
+    if (content.alignment && typeof content.alignment === 'string') {
+      // Ensure alignment is one of the allowed values
+      content.alignment = (['left', 'center', 'right'].includes(content.alignment) 
+        ? content.alignment as 'left' | 'center' | 'right'
+        : 'center');
+    }
+    
+    // Ensure borderRadius is properly typed
+    if (content.style && typeof content.style.borderRadius === 'string') {
+      content.style.borderRadius = sanitizeBorderRadius(content.style.borderRadius);
+    }
+    
     const newBlock: EditorBlock = {
       id,
       type,
-      content: getDefaultContentForBlockType(type),
+      content,
       order: config.blocks.length
     };
-    
-    // Ensure all style.borderRadius values are correctly typed
-    if (newBlock.content.style && typeof newBlock.content.style.borderRadius === 'string') {
-      newBlock.content.style.borderRadius = sanitizeBorderRadius(newBlock.content.style.borderRadius);
-    }
     
     setConfig(prevConfig => ({
       ...prevConfig,

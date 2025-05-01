@@ -24,6 +24,9 @@ export const useQuizStages = () => {
       case 'result':
         stageTitle = `Etapa ${stageNumber}: Página de Resultado`;
         break;
+      case 'strategic':
+        stageTitle = `Etapa ${stageNumber}: Estratégica`;
+        break;
     }
     
     const newStage: QuizStage = {
@@ -31,7 +34,7 @@ export const useQuizStages = () => {
       title: stageTitle,
       order: stages.length,
       type,
-      isEnabled: true
+      isEnabled: true // Add isEnabled property
     };
     
     setStages(prev => [...prev, newStage]);

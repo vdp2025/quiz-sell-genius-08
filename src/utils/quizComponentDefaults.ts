@@ -1,110 +1,173 @@
+import { QuizComponentData, QuizComponentType } from "@/types/quizBuilder";
+import { generateId } from "./idGenerator";
 
-import { QuizComponentType } from '@/types/quizBuilder';
-
-export const getDefaultData = (type: QuizComponentType) => {
-  switch (type) {
+export const getDefaultComponentData = (type: QuizComponentType, stageId: string): QuizComponentData => {
+  switch(type) {
     case 'header':
       return {
-        title: 'Título do Quiz',
-        subtitle: 'Descrição breve do quiz'
+        id: generateId(),
+        type: 'header',
+        data: {
+          stageTitle: 'Título Principal',
+          subtitle: 'Subtítulo'
+        },
+        order: 0,
+        stageId
+      };
+    
+    case 'headline':
+      return {
+        id: generateId(),
+        type: 'headline',
+        data: {
+          title: 'Título da Seção'
+        },
+        order: 0,
+        stageId
       };
     
     case 'text':
       return {
-        text: 'Digite seu texto aqui. Este é um parágrafo de exemplo para o seu quiz.'
+        id: generateId(),
+        type: 'text',
+        data: {
+          text: 'Texto do parágrafo que será exibido aqui. Edite este texto nas propriedades.'
+        },
+        order: 0,
+        stageId
       };
     
     case 'image':
       return {
-        imageUrl: '',
-        alt: 'Imagem do quiz',
-        caption: ''
+        id: generateId(),
+        type: 'image',
+        data: {
+          imageUrl: '',
+          alt: 'Quiz image',
+          caption: ''
+        },
+        order: 0,
+        stageId
+      };
+
+    case 'singleChoice':
+      return {
+        id: generateId(),
+        type: 'singleChoice',
+        data: {
+          question: 'Escolha uma opção',
+          options: [
+            { id: generateId(), label: 'Opção 1', isCorrect: false },
+            { id: generateId(), label: 'Opção 2', isCorrect: false }
+          ],
+          displayType: 'text',
+          multiSelect: 1,
+          layout: { columns: 2, direction: 'vertical' },
+          imageSize: 'medium',
+          selectionIndicator: 'border'
+        },
+        order: 0,
+        stageId
       };
     
     case 'multipleChoice':
       return {
-        question: 'Digite sua pergunta aqui?',
-        options: ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4'],
-        optionImages: [],
-        optionStyleCategories: ['Natural', 'Clássico', 'Contemporâneo', 'Elegante'],
-        multiSelect: 3,
-        required: true,
-        displayType: 'text' as 'text' | 'image' | 'both'
+        id: generateId(),
+        type: 'multipleChoice',
+        data: {
+          question: 'Escolha as opções corretas',
+          options: [
+            { id: generateId(), label: 'Opção 1', isCorrect: false },
+            { id: generateId(), label: 'Opção 2', isCorrect: false }
+          ],
+          displayType: 'text',
+          multiSelect: 3,
+          layout: { columns: 2, direction: 'vertical' },
+          imageSize: 'medium',
+          selectionIndicator: 'border'
+        },
+        order: 0,
+        stageId
       };
-    
-    case 'singleChoice':
-      return {
-        question: 'Digite sua pergunta aqui?',
-        options: ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4'],
-        required: true
-      };
-    
-    case 'scale':
-      return {
-        question: 'Digite sua pergunta aqui?',
-        minLabel: 'Discordo totalmente',
-        maxLabel: 'Concordo totalmente',
-        steps: 5,
-        required: true
-      };
-    
-    case 'openEnded':
-      return {
-        question: 'Digite sua pergunta aqui?',
-        placeholder: 'Digite sua resposta...',
-        required: true
-      };
-    
-    case 'benefitsList':
-      return {
-        title: 'Benefícios',
-        benefits: [
-          'Benefício 1 - Descreva o primeiro benefício',
-          'Benefício 2 - Descreva o segundo benefício',
-          'Benefício 3 - Descreva o terceiro benefício'
-        ]
-      };
-    
-    case 'faq':
-      return {
-        title: 'Perguntas Frequentes',
-        items: [
-          { question: 'Pergunta 1?', answer: 'Resposta para a pergunta 1.' },
-          { question: 'Pergunta 2?', answer: 'Resposta para a pergunta 2.' }
-        ]
-      };
-    
+
     case 'quizResult':
       return {
-        title: 'Seu Resultado',
-        description: 'Descrição do resultado do quiz baseado nas respostas fornecidas.',
-        showSecondaryStyles: true,
-        showOffer: true
+        id: generateId(),
+        type: 'quizResult',
+        data: {
+          resultTitle: 'Seu Estilo Predominante',
+          resultDescription: 'Descrição do resultado do quiz será exibida aqui.'
+        },
+        order: 0,
+        stageId
       };
-    
+
     case 'stageCover':
       return {
-        stageTitle: 'Capa do Quiz',
-        headline: 'Bem-vindo ao Quiz!',
-        subheadline: 'Descubra seu estilo respondendo às perguntas a seguir.',
-        buttonText: 'Começar'
+        id: generateId(),
+        type: 'stageCover',
+        data: {
+          stageTitle: 'Título da Capa',
+          subtitle: 'Subtítulo da Capa',
+          description: 'Descrição da Capa'
+        },
+        order: 0,
+        stageId
       };
-    
+
     case 'stageQuestion':
       return {
-        stageTitle: 'Pergunta',
-        stageNumber: 1,
-        progressText: 'Questão {current} de {total}'
+        id: generateId(),
+        type: 'stageQuestion',
+        data: {
+          question: 'Pergunta do Quiz',
+          options: [
+            { id: generateId(), label: 'Opção 1', isCorrect: false },
+            { id: generateId(), label: 'Opção 2', isCorrect: false }
+          ],
+          displayType: 'text',
+          multiSelect: 1,
+          layout: { columns: 2, direction: 'vertical' },
+          imageSize: 'medium',
+          selectionIndicator: 'border'
+        },
+        order: 0,
+        stageId
       };
-    
+
     case 'stageResult':
       return {
-        stageTitle: 'Resultado',
-        headline: 'Seu Resultado',
-        subheadline: 'Confira o resultado baseado nas suas respostas.'
+        id: generateId(),
+        type: 'stageResult',
+        data: {
+          resultTitle: 'Título do Resultado',
+          resultDescription: 'Descrição do Resultado'
+        },
+        order: 0,
+        stageId
+      };
+    case 'openEnded':
+      return {
+        id: generateId(),
+        type: 'openEnded',
+        data: {
+          question: 'Digite sua resposta',
+          placeholder: 'Digite aqui...',
+          maxLength: 500
+        },
+        order: 0,
+        stageId
       };
     
     default:
-      return {};
+      return {
+        id: generateId(),
+        type: 'text',
+        data: {
+          text: `Componente do tipo "${type}" não reconhecido.`
+        },
+        order: 0,
+        stageId
+      };
   }
 };

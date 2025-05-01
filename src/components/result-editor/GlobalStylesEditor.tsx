@@ -33,6 +33,12 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
     onSave(styles);
   };
 
+  const fontSizeValue = globalStyles?.fontSize 
+    ? typeof globalStyles.fontSize === 'number' 
+      ? globalStyles.fontSize.toString() 
+      : globalStyles.fontSize
+    : '';
+
   return (
     <Dialog open={true} onOpenChange={() => onCancel()}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
