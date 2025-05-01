@@ -19,8 +19,38 @@ export interface StyleOptions {
   padding?: string;
   margin?: string;
   width?: string;
+  height?: string;
   textAlign?: string;
   fontFamily?: string;
+  
+  // Additional properties needed for styling
+  lineHeight?: string;
+  letterSpacing?: string;
+  display?: string;
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gap?: string;
+  boxShadow?: string;
+  objectFit?: string;
+  type?: string;
+  
+  // Additional global styles properties
+  primaryColor?: string;
+  secondaryColor?: string;
+  spacing?: 'compact' | 'comfortable' | 'spacious';
+}
+
+export type BorderRadiusType = 'none' | 'sm' | 'md' | 'lg' | 'full' | 'custom';
+
+export interface GlobalStyles extends StyleOptions {
+  fontFamily?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  borderRadiusType?: BorderRadiusType;
+  customBorderRadius?: number;
+  spacing?: 'compact' | 'comfortable' | 'spacious';
+  lineHeight?: string;
 }
 
 export interface Section {
@@ -60,16 +90,6 @@ export interface OfferSection {
   pricing?: Section;
   testimonials?: Section;
   guarantee?: Section;
-}
-
-export type BorderRadiusType = 'none' | 'sm' | 'md' | 'lg' | 'full' | 'custom';
-
-export interface GlobalStyles extends StyleOptions {
-  fontFamily?: string;
-  primaryColor?: string;
-  secondaryColor?: string;
-  borderRadiusType?: BorderRadiusType;
-  customBorderRadius?: number;
 }
 
 export interface ResultPageConfig {

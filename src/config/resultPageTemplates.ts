@@ -61,11 +61,35 @@ export const defaultResultTemplate: ResultPageConfig = {
       },
       style: {
         padding: '24px',
-        backgroundColor: '#FAF9F7',
-        accentColor: '#B89B7A',
+        backgroundColor: '#FFF8F3',
         textColor: '#432818'
       },
       visible: true
+    },
+    products: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    benefits: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    pricing: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    testimonials: {
+      visible: true,
+      content: {},
+      style: {}
+    },
+    guarantee: {
+      visible: true,
+      content: {},
+      style: {}
     }
   }
 };

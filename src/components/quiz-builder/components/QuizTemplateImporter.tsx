@@ -197,7 +197,8 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
           id: stageId,
           title: 'Resultado',
           order: 0,
-          type: 'result'
+          type: 'result' as const,
+          isEnabled: true
         },
         resultStage
       ],
