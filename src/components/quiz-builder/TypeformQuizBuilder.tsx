@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { StageList } from './components/StageList';
@@ -33,7 +32,7 @@ interface TypeformQuizBuilderProps {
   components: QuizComponentData[];
   activeStageId: string | null;
   selectedComponentId: string | null;
-  onAddStage: (type: QuizStage['type']) => void;
+  onAddStage: (type: QuizStage['type']) => string; // This expects a function that returns string
   onUpdateStage: (id: string, updates: Partial<QuizStage>) => void;
   onDeleteStage: (id: string) => void;
   onMoveStage: (draggedId: string, targetId: string) => void;

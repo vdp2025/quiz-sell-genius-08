@@ -4,15 +4,16 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Import pages
 import HomePage from '@/pages/HomePage';
-import QuizPage from '@/pages/QuizPage';
+// Import pages directly from their correct paths
+import QuizPage from '@/pages/QuizPage.tsx';
 import ResultPage from '@/pages/ResultPage';
-import VerificationPage from '@/pages/VerificationPage';
+import VerificationPage from '@/pages/VerificationPage.tsx';
 import AdminPage from '@/pages/admin/AdminPage';
 import EditorPage from '@/pages/admin/EditorPage';
 import TypeformEditorPage from '@/pages/admin/TypeformEditorPage';
-import QuizTemplatesPage from '@/pages/admin/QuizTemplatesPage';
-import ResultsPage from '@/pages/admin/ResultsPage';
-import StatisticsPage from '@/pages/admin/StatisticsPage';
+import QuizTemplatesPage from '@/pages/admin/QuizTemplatesPage.tsx';
+import ResultsPage from '@/pages/admin/ResultsPage.tsx';
+import StatisticsPage from '@/pages/admin/StatisticsPage.tsx';
 import SettingsPage from '@/pages/admin/SettingsPage';
 import UnifiedEditorPage from '@/pages/UnifiedEditorPage';
 
