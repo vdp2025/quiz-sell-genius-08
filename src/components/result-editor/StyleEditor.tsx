@@ -36,7 +36,7 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                 <SelectValue placeholder="Selecione uma fonte" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Padrão</SelectItem>
+                <SelectItem value="default">Padrão</SelectItem>
                 <SelectItem value="'Playfair Display', serif">Playfair Display</SelectItem>
                 <SelectItem value="'Inter', sans-serif">Inter</SelectItem>
                 <SelectItem value="'Roboto', sans-serif">Roboto</SelectItem>
@@ -67,7 +67,7 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                 <SelectValue placeholder="Selecione um peso" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Padrão</SelectItem>
+                <SelectItem value="default">Padrão</SelectItem>
                 <SelectItem value="300">Leve (300)</SelectItem>
                 <SelectItem value="400">Normal (400)</SelectItem>
                 <SelectItem value="500">Médio (500)</SelectItem>
@@ -172,7 +172,7 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                 <SelectValue placeholder="Selecione um valor" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Padrão</SelectItem>
+                <SelectItem value="default">Padrão</SelectItem>
                 <SelectItem value="block">Block</SelectItem>
                 <SelectItem value="inline-block">Inline Block</SelectItem>
                 <SelectItem value="flex">Flex</SelectItem>
@@ -315,7 +315,7 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                     <SelectValue placeholder="Selecione um estilo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Nenhum</SelectItem>
+                    <SelectItem value="none">Nenhum</SelectItem>
                     <SelectItem value="solid">Sólido</SelectItem>
                     <SelectItem value="dashed">Tracejado</SelectItem>
                     <SelectItem value="dotted">Pontilhado</SelectItem>
