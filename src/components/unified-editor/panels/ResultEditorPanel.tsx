@@ -8,26 +8,15 @@ import { StyleResult } from '@/types/quiz';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { GlobalStylesEditor } from '@/components/result-editor/GlobalStylesEditor';
 import { toast } from '@/components/ui/use-toast';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface ResultEditorPanelProps {
   isPreviewing: boolean;
   primaryStyle: StyleResult;
-  handleLoadDefaultTemplate: () => void; // Add missing prop
-  onError?: (error: any) => void; // Add missing prop for ComponentsSidebar
 }
 
 const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
   isPreviewing,
-  primaryStyle,
-  handleLoadDefaultTemplate,
-  onError
+  primaryStyle
 }) => {
   const {
     resultPageConfig,
@@ -40,31 +29,18 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
   } = useResultPageEditor(primaryStyle.category);
 
   useEffect(() => {
-    // Carregar configuração inicial
+    // Load initial configuration
     if (!blocks.length && !loading) {
-      handleLoadDefaultTemplate(); // Use the prop instead of actions
+      actions.handleSave(); // Use existing action instead of missing prop
     }
-  }, [loading, handleLoadDefaultTemplate]);
+  }, [loading, actions, blocks.length]);
 
-  // Fix Select component usage
-  const handleChange = (field: string, value: any) => {
-    // Add your change handler logic here
-  };
-
-  // Remove the invalid Select usage at the bottom
   return (
     <div className="h-full flex flex-col overflow-hidden relative">
       <ResizablePanelGroup direction="horizontal" className="h-full">
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar 
             onComponentSelect={actions.handleAddBlock}
-            onError={(error) => {
-              toast({
-                title: "Erro ao adicionar componente",
-                description: error,
-                variant: "destructive"
-              });
-            }}
           />
         </ResizablePanel>
 
@@ -78,14 +54,6 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
             isPreviewing={isPreviewing}
             primaryStyle={primaryStyle}
             onReorderBlocks={actions.handleReorderBlocks}
-            autoTransition={true} // Adicionar esta prop para habilitar transição automática
-            onError={(error) => {
-              toast({
-                title: "Erro na visualização",
-                description: error,
-                variant: "destructive"
-              });
-            }}
           />
         </ResizablePanel>
 
@@ -117,50 +85,3 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
 };
 
 export default ResultEditorPanel;
-
-
-          <div>
-            <label className="text-sm font-medium text-[#432818]">Animação de Entrada</label>
-            <Select
-              value={resultData.animations.entrance.type}
-              options={[
-                { label: 'Fade', value: 'fade' },
-                { label: 'Slide', value: 'slide' },
-                { label: 'Zoom', value: 'zoom' }
-              ]}
-              onChange={(value) => handleChange('animations', {
-                ...resultData.animations,
-                entrance: { ...resultData.animations.entrance, type: value }
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select animation type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="fade">Fade</SelectItem>
-                <SelectItem value="slide">Slide</SelectItem>
-                <SelectItem value="zoom">Zoom</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Replace other Select components with this pattern */}
-          <div>
-            <label className="text-sm font-medium text-[#432818]">Shadows Intensity</label>
-            <Select
-              value={resultData.styles.shadows.intensity}
-              onValueChange={(value) => handleChange('styles', {
-                ...resultData.styles,
-                shadows: { ...resultData.styles.shadows, intensity: value }
-              })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select shadow intensity" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="strong">Strong</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
