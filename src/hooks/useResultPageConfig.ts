@@ -1,20 +1,13 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
 import { set } from 'lodash';
+import { createDefaultConfig as createFullDefaultConfig } from '@/utils/resultPageDefaults';
 
 // Default configurations based on style type
 const createDefaultConfig = (styleType: string): ResultPageConfig => {
-  return {
-    styleType,
-    globalStyles: {
-      backgroundColor: "#F9F5F1",
-      textColor: "#432818",
-      fontFamily: "Playfair Display, serif",
-    },
-    blocks: []
-  };
+  // Use the full default config utility to ensure all required fields are present
+  return createFullDefaultConfig(styleType);
 };
 
 // Storage key based on style type
