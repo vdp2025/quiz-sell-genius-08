@@ -1,70 +1,63 @@
 import React, { useState } from 'react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
-import { EditorPreview } from './preview/EditorPreview';
+import { PreviewPanel } from './preview/PreviewPanel';
 import { PropertiesPanel } from './properties/PropertiesPanel';
 import { useEditor } from '@/hooks/useEditor';
-import { EditorToolbar } from './toolbar/EditorToolbar';
+import { ResizablePanel, ResizablePanelGroup, ResizableHandle } from '@/components/ui/resizable';
 
 export function VisualEditor() {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const { config, addBlock, updateBlock, deleteBlock, saveConfig } = useEditor();
-  
+  const { config, addBlock, updateBlock, deleteBlock, reorderBlocks, saveConfig } = useEditor();
+
+  const handleComponentSelect = (type: string) => {
+    const newBlockId = addBlock(type);
+    setSelectedBlockId(newBlockId);
+  };
+
+  const handleBlockSelect = (id: string) => {
+    setSelectedBlockId(id);
+  };
+
+  const handleUpdateBlock = (content: any) => {
+    if (selectedBlockId) {
+      updateBlock(selectedBlockId, content);
+    }
+  };
+
+  const handleDeleteBlock = () => {
+    if (selectedBlockId) {
+      deleteBlock(selectedBlockId);
+      setSelectedBlockId(null);
+    }
+  };
+
   return (
-    <div className="h-screen flex flex-col">
-      <EditorToolbar 
-        isPreviewing={isPreviewing}
-        onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-        onSave={saveConfig}
-        config={config}
-      />
-      
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Panel - Components */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <ComponentsSidebar 
-            onComponentSelect={(type) => {
-              const id = addBlock(type);
-              setSelectedBlockId(id);
-            }} 
-          />
-        </ResizablePanel>
+    <ResizablePanelGroup direction="horizontal" className="h-full w-full">
+      {/* Sidebar */}
+      <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+        <ComponentsSidebar onComponentSelect={handleComponentSelect} />
+      </ResizablePanel>
+      <ResizableHandle withHandle />
 
-        <ResizableHandle withHandle />
+      {/* Preview */}
+      <ResizablePanel defaultSize={55}>
+        <PreviewPanel
+          blocks={config.blocks}
+          selectedBlockId={selectedBlockId}
+          onSelect={handleBlockSelect}
+        />
+      </ResizablePanel>
+      <ResizableHandle withHandle />
 
-        {/* Center Panel - Preview */}
-        <ResizablePanel defaultSize={55}>
-          <EditorPreview
-            blocks={config.blocks}
-            selectedBlockId={selectedBlockId}
-            onSelectBlock={setSelectedBlockId}
-            isPreviewing={isPreviewing}
-            onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-          />
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        {/* Right Panel - Properties */}
-        <ResizablePanel defaultSize={25}>
-          <PropertiesPanel
-            selectedBlockId={selectedBlockId}
-            onClose={() => setSelectedBlockId(null)}
-            onUpdate={(content) => {
-              if (selectedBlockId) {
-                updateBlock(selectedBlockId, content);
-              }
-            }}
-            onDelete={() => {
-              if (selectedBlockId) {
-                deleteBlock(selectedBlockId);
-                setSelectedBlockId(null);
-              }
-            }}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
+      {/* Properties */}
+      <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+        <PropertiesPanel
+          selectedBlockId={selectedBlockId}
+          onClose={() => setSelectedBlockId(null)}
+          onUpdate={handleUpdateBlock}
+          onDelete={handleDeleteBlock}
+        />
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 }

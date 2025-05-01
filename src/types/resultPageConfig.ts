@@ -6,6 +6,8 @@ export interface StyleOptions {
   color?: string;
   backgroundColor?: string;
   padding?: string;
+  paddingY?: string;
+  paddingX?: string;
   margin?: string;
   width?: string;
   height?: string;
@@ -24,6 +26,7 @@ export interface StyleOptions {
   borderStyle?: string;
   borderColor?: string;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  type?: string;
 }
 
 export interface ImageOptions {

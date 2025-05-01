@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
@@ -312,7 +311,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         type="range"
                         min="0"
                         max="32"
-                        value={(selectedComponent.content.style?.borderRadius as number) || 0}
+                        value={String((selectedComponent.content.style?.borderRadius as number) || 0)}
                         onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                           style: { 
                             ...selectedComponent.content.style,
@@ -333,7 +332,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           type="range"
                           min="0"
                           max="64"
-                          value={(selectedComponent.content.style?.paddingY as number) || 16}
+                          value={String((selectedComponent.content.style?.paddingY as number) || 16)}
                           onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
@@ -353,7 +352,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           type="range"
                           min="0"
                           max="64"
-                          value={(selectedComponent.content.style?.paddingX as number) || 16}
+                          value={String((selectedComponent.content.style?.paddingX as number) || 16)}
                           onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,

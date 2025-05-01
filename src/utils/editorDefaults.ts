@@ -8,9 +8,8 @@ export const getDefaultContentForType = (type: Block['type']) => {
         title: 'Título Principal',
         subtitle: 'Subtítulo explicativo para chamar atenção',
         style: {
-          paddingY: 16,
-          paddingX: 16,
-          textAlign: 'center',
+          padding: '16px',
+          textAlign: 'center' as 'center',
           color: '#432818'
         }
       };
@@ -19,8 +18,7 @@ export const getDefaultContentForType = (type: Block['type']) => {
       return {
         text: 'Insira seu texto aqui. Este componente é ideal para parágrafos, descrições ou qualquer conteúdo textual que você deseja apresentar ao seu visitante.',
         style: {
-          paddingY: 16,
-          paddingX: 16,
+          padding: '16px',
           color: '#432818',
           lineHeight: '1.6'
         }
@@ -32,9 +30,8 @@ export const getDefaultContentForType = (type: Block['type']) => {
         imageAlt: 'Descrição da imagem',
         style: {
           maxWidth: '100%',
-          borderRadius: 8,
-          marginTop: 16,
-          marginBottom: 16
+          borderRadius: '8px',
+          margin: '16px 0'
         }
       };
 
@@ -46,9 +43,8 @@ export const getDefaultContentForType = (type: Block['type']) => {
         ctaText: 'Comprar Agora',
         style: {
           backgroundColor: '#FAF9F7',
-          borderRadius: 8,
-          paddingY: 24,
-          paddingX: 24
+          borderRadius: '8px',
+          padding: '24px'
         }
       };
 
@@ -61,8 +57,20 @@ export const getDefaultContentForType = (type: Block['type']) => {
           'Benefício 3: Descrição detalhada'
         ],
         style: {
-          paddingY: 16,
-          paddingX: 16,
+          padding: '16px',
+          backgroundColor: '#FFFAF0'
+        }
+      };
+      
+    case 'bonus-carousel':
+      return {
+        title: 'Você recebe também:',
+        bonusImages: [
+          { url: '', alt: 'Bônus 1', title: 'Título do Bônus 1' },
+          { url: '', alt: 'Bônus 2', title: 'Título do Bônus 2' }
+        ],
+        style: {
+          padding: '16px',
           backgroundColor: '#FFFAF0'
         }
       };

@@ -6,6 +6,13 @@ import { getDefaultContentForType } from '@/utils/editorDefaults';
 
 interface EditorConfig {
   blocks: Block[];
+  globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
 }
 
 export const useEditor = () => {
@@ -61,11 +68,18 @@ export const useEditor = () => {
     });
   }, []);
 
+  const saveConfig = useCallback(() => {
+    console.log('Saving editor config:', config);
+    // Implement actual saving logic here (API call, localStorage, etc.)
+    return true;
+  }, [config]);
+
   return {
     config,
     addBlock,
     updateBlock,
     deleteBlock,
-    reorderBlocks
+    reorderBlocks,
+    saveConfig
   };
 };

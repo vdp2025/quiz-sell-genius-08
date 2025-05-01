@@ -26,7 +26,8 @@ export type BlockType =
   | 'icon'
   | 'carousel'
   | 'custom-code'
-  | 'animation-block';
+  | 'animation-block'
+  | 'bonus-carousel';
 
 export interface Block {
   id: string;
@@ -55,10 +56,19 @@ export interface EditableContent {
   customImage?: string;
   // For benefits
   benefits?: string[];
+  // For bonus carousel
+  bonusImages?: Array<{url: string; alt: string; title?: string}>;
   // For other custom properties
   [key: string]: any;
 }
 
 export interface EditorConfig {
   blocks: Block[];
+  globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
 }
