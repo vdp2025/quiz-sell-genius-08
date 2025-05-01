@@ -25,10 +25,9 @@ const UnifiedEditorPage: React.FC = () => {
   useEffect(() => {
     const loadStyles = async () => {
       try {
-        // Simulando o carregamento de um estilo para desenvolvimento
-        // Em produção, isso viria de uma API ou localStorage
+        // Default style if nothing is found
         const defaultPrimaryStyle: StyleResult = {
-          category: 'Elegante',
+          category: 'Elegante', // Usar estilo elegante como padrão
           score: 12,
           percentage: 40
         };
@@ -48,12 +47,6 @@ const UnifiedEditorPage: React.FC = () => {
           } catch (error) {
             console.error('Erro ao analisar resultado do quiz salvo:', error);
             setPrimaryStyle(defaultPrimaryStyle);
-            toast({
-              title: 'Aviso',
-              description: 'Não foi possível carregar os resultados salvos. Usando configuração padrão.',
-              variant: 'default',
-              duration: 5000,
-            });
           }
         } else {
           console.info('Resultado do quiz não encontrado no localStorage, usando padrão');
@@ -63,6 +56,27 @@ const UnifiedEditorPage: React.FC = () => {
             description: 'Nenhum resultado de quiz encontrado. Usando estilo "Elegante" para demonstração.',
             duration: 5000,
           });
+        }
+        
+        // Create fallback config for result page if needed
+        try {
+          const styleType = defaultPrimaryStyle.category;
+          const resultConfigKey = `result_page_config_${styleType}`;
+          if (!localStorage.getItem(resultConfigKey)) {
+            const defaultConfig = {
+              styleType,
+              globalStyles: {
+                backgroundColor: "#F9F5F1",
+                textColor: "#432818",
+                fontFamily: "Playfair Display, serif"
+              },
+              blocks: []
+            };
+            localStorage.setItem(resultConfigKey, JSON.stringify(defaultConfig));
+            console.info(`Configuração padrão criada para estilo: ${styleType}`);
+          }
+        } catch (error) {
+          console.error('Erro ao criar configuração padrão:', error);
         }
         
         setLoading(false);

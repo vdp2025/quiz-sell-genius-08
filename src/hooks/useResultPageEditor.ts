@@ -122,6 +122,34 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
+  // Improved import config with error handling
+  const handleImportConfig = useCallback((config: any) => {
+    if (!config) {
+      console.warn('Tentativa de importar configuração nula ou indefinida');
+      return false;
+    }
+    
+    try {
+      if (importConfig) {
+        importConfig(config);
+        
+        // Se a configuração tiver blocos, atualizar o estado local também
+        if (config.blocks) {
+          setState(prev => ({
+            ...prev,
+            blocks: config.blocks
+          }));
+        }
+        
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Erro ao importar configuração:', error);
+      return false;
+    }
+  }, [importConfig]);
+
   return {
     resultPageConfig,
     loading,
@@ -136,7 +164,7 @@ export const useResultPageEditor = (styleType: string) => {
       toggleGlobalStyles,
       togglePreview,
       updateSection,
-      importConfig,
+      importConfig: handleImportConfig,
       handleAddBlock,
       handleUpdateBlock,
       handleDeleteBlock,

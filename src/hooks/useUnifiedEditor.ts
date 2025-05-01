@@ -21,18 +21,6 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
   // Inicialização sincronizada
   useEffect(() => {
     console.info('useUnifiedEditor inicializado com estilo:', primaryStyle.category);
-    
-    // Pré-carregar dados de templates para cada editor
-    const preloadTemplates = async () => {
-      try {
-        // Aqui podemos carregar templates padrão para cada tipo de editor
-        console.info('Templates pré-carregados para editores');
-      } catch (error) {
-        console.error('Erro ao pré-carregar templates:', error);
-      }
-    };
-    
-    preloadTemplates();
   }, [primaryStyle.category]);
   
   const togglePreview = useCallback(() => {
@@ -76,26 +64,41 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
 
   const loadTemplateForCurrentEditor = useCallback((templateData: any) => {
     try {
+      let success = false;
+      
       if (activeMode === 'quiz' && quizBuilder) {
         // Carregar template para quiz
         if (templateData.stages && templateData.components) {
           quizBuilder.initializeStages(templateData.stages);
           quizBuilder.initializeComponents(templateData.components);
-          return true;
+          success = true;
+        } else if (quizBuilder.stages && quizBuilder.stages.length > 0) {
+          // Se não tiver stages no template, mas o quiz builder já tiver stages, considera como sucesso
+          success = true;
         }
       } else if (activeMode === 'result' && resultPageEditor) {
         // Carregar template para página de resultado
         if (resultPageEditor.actions.importConfig) {
           resultPageEditor.actions.importConfig(templateData);
-          return true;
+          success = true;
         }
       } else if (activeMode === 'sales' && salesPageEditor) {
         // Carregar template para página de vendas
-        if (salesPageEditor.loadTemplate) {
-          return salesPageEditor.loadTemplate(templateData.blocks || []);
+        if (templateData.blocks && Array.isArray(templateData.blocks)) {
+          success = salesPageEditor.loadTemplate(templateData.blocks);
         }
       }
-      return false;
+      
+      if (!success) {
+        console.warn('Não foi possível carregar o template para o editor atual:', activeMode);
+        toast({
+          title: "Aviso",
+          description: `Formato de template incompatível com o editor de ${activeMode === 'quiz' ? 'Quiz' : activeMode === 'result' ? 'Resultado' : 'Vendas'}.`,
+          variant: "default"
+        });
+      }
+      
+      return success;
     } catch (error) {
       console.error('Erro ao carregar template:', error);
       toast({

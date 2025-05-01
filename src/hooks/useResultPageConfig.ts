@@ -2,9 +2,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
-import { createDefaultConfig } from '@/utils/resultPageDefaults';
-import { resultPageStorage } from '@/services/resultPageStorage';
-import { set, get, merge } from 'lodash';
+import { set } from 'lodash';
+
+// Default configurations based on style type
+const createDefaultConfig = (styleType: string): ResultPageConfig => {
+  return {
+    styleType,
+    globalStyles: {
+      backgroundColor: "#F9F5F1",
+      textColor: "#432818",
+      fontFamily: "Playfair Display, serif",
+    },
+    blocks: []
+  };
+};
+
+// Storage key based on style type
+const getStorageKey = (styleType: string) => `result_page_config_${styleType}`;
 
 export const useResultPageConfig = (styleType: string) => {
   const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(createDefaultConfig(styleType));
@@ -14,18 +28,35 @@ export const useResultPageConfig = (styleType: string) => {
     const loadConfig = async () => {
       setLoading(true);
       try {
-        const savedConfig = resultPageStorage.load(styleType);
-        if (savedConfig) {
-          setResultPageConfig(savedConfig);
+        // Get config from localStorage
+        const key = getStorageKey(styleType);
+        const savedConfigStr = localStorage.getItem(key);
+        
+        if (savedConfigStr) {
+          try {
+            const savedConfig = JSON.parse(savedConfigStr);
+            console.info(`Configuração carregada para ${styleType}`);
+            setResultPageConfig(savedConfig);
+          } catch (error) {
+            console.error(`Erro ao analisar configuração salva para ${styleType}:`, error);
+            const defaultConfig = createDefaultConfig(styleType);
+            setResultPageConfig(defaultConfig);
+            localStorage.setItem(key, JSON.stringify(defaultConfig));
+            console.info(`Nova configuração padrão criada para ${styleType}`);
+          }
         } else {
-          setResultPageConfig(createDefaultConfig(styleType));
+          console.info(`Nenhuma configuração encontrada para ${styleType}`);
+          const defaultConfig = createDefaultConfig(styleType);
+          setResultPageConfig(defaultConfig);
+          localStorage.setItem(key, JSON.stringify(defaultConfig));
+          console.info(`Nova configuração padrão criada para ${styleType}`);
         }
       } catch (error) {
         console.error('Error loading result page config:', error);
         toast({
           title: 'Erro ao carregar configuração',
-          description: 'Não foi possível carregar a configuração da página de resultados',
-          variant: 'destructive'
+          description: 'Usando configuração padrão',
+          variant: 'default'
         });
         setResultPageConfig(createDefaultConfig(styleType));
       } finally {
@@ -45,16 +76,16 @@ export const useResultPageConfig = (styleType: string) => {
   }, []);
 
   const resetConfig = useCallback((styleType: string) => {
-    setResultPageConfig(createDefaultConfig(styleType));
+    const defaultConfig = createDefaultConfig(styleType);
+    setResultPageConfig(defaultConfig);
+    return true;
   }, []);
 
   const saveConfig = useCallback(async () => {
     try {
-      await resultPageStorage.save(resultPageConfig);
-      toast({
-        title: 'Configuração salva',
-        description: 'A configuração da página de resultados foi salva com sucesso',
-      });
+      const key = getStorageKey(resultPageConfig.styleType || styleType);
+      localStorage.setItem(key, JSON.stringify(resultPageConfig));
+      console.info(`Configuração salva para ${resultPageConfig.styleType || styleType}`);
       return true;
     } catch (error) {
       console.error('Error saving config:', error);
@@ -65,10 +96,15 @@ export const useResultPageConfig = (styleType: string) => {
       });
       return false;
     }
-  }, [resultPageConfig]);
+  }, [resultPageConfig, styleType]);
 
   const importConfig = useCallback((importedConfig: any) => {
     try {
+      if (!importedConfig) {
+        console.warn("Tentativa de importar configuração nula ou indefinida");
+        return false;
+      }
+      
       // Ensure the imported config has the correct styleType
       const configToImport = {
         ...importedConfig,

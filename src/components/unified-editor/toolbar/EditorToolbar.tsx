@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Eye, 
@@ -9,15 +9,6 @@ import {
   LayoutTemplate
 } from 'lucide-react';
 import { EditorTab } from '../UnifiedVisualEditor';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { toast } from '@/components/ui/use-toast';
 
 interface EditorToolbarProps {
@@ -25,16 +16,16 @@ interface EditorToolbarProps {
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;
+  onOpenTemplateModal?: () => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   activeTab,
   isPreviewing,
   onPreviewToggle,
-  onSave
+  onSave,
+  onOpenTemplateModal
 }) => {
-  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
-  
   const getTabLabel = () => {
     switch (activeTab) {
       case 'quiz': return 'Quiz';
@@ -44,10 +35,6 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     }
   };
 
-  const closeTemplateDialog = () => {
-    setIsTemplateDialogOpen(false);
-  };
-
   return (
     <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -55,23 +42,17 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           Editor de {getTabLabel()}
         </h1>
         
-        <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" size="sm" className="text-[#8F7A6A]">
-              <LayoutTemplate className="w-4 h-4 mr-2" />
-              Templates
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Templates para {getTabLabel()}</DialogTitle>
-              <DialogDescription>
-                Escolha um template para aplicar ao seu {getTabLabel()}.
-              </DialogDescription>
-            </DialogHeader>
-            <TemplateList onSelectTemplate={closeTemplateDialog} />
-          </DialogContent>
-        </Dialog>
+        {onOpenTemplateModal && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="text-[#8F7A6A]"
+            onClick={onOpenTemplateModal}
+          >
+            <LayoutTemplate className="w-4 h-4 mr-2" />
+            Templates
+          </Button>
+        )}
         
         <Button variant="outline" size="sm" className="text-[#8F7A6A]">
           <Settings className="w-4 h-4 mr-2" />

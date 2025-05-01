@@ -24,60 +24,34 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   initialActiveTab = 'quiz' 
 }) => {
   const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   
   const {
+    isPreviewing,
+    togglePreview,
     saveAll,
-    resultPageEditor,
+    openTemplateModal,
+    isTemplateModalOpen,
+    closeTemplateModal,
+    loadTemplateForCurrentEditor,
     quizBuilder,
-    salesPageEditor
+    resultPageEditor,
+    salesPageEditor,
+    setActiveMode
   } = useUnifiedEditor(primaryStyle);
 
   useEffect(() => {
+    // Update the active mode in the unified editor hook
+    setActiveMode(activeTab);
     // Update URL when tab changes
     navigate(`/admin/editor/unified?tab=${activeTab}`, { replace: true });
-  }, [activeTab, navigate]);
-
-  useEffect(() => {
-    // Load resources for the active tab
-    const loadTabResources = async () => {
-      setIsLoading(true);
-      try {
-        // Simulate loading resources for the current tab
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Check if the specific editor is ready
-        if (
-          (activeTab === 'quiz' && quizBuilder && !quizBuilder.loading) || 
-          (activeTab === 'result' && resultPageEditor && !resultPageEditor.loading) || 
-          (activeTab === 'sales' && salesPageEditor && salesPageEditor.isInitialized)
-        ) {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error(`Error loading resources for ${activeTab} tab:`, error);
-        toast({
-          title: "Erro no carregamento",
-          description: `Não foi possível carregar os recursos para a aba ${activeTab}.`,
-          variant: "destructive",
-          duration: 5000,
-        });
-        setIsLoading(false);
-      }
-    };
-    
-    loadTabResources();
-  }, [activeTab, quizBuilder, resultPageEditor, salesPageEditor]);
-
-  const handleTogglePreview = () => {
-    setIsPreviewing(prev => !prev);
-    
+  }, [activeTab, navigate, setActiveMode]);
+  
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as EditorTab);
     toast({
-      description: isPreviewing 
-        ? "Modo de edição ativado" 
-        : "Modo de visualização ativado",
+      description: `Editor de ${value === 'quiz' ? 'Quiz' : value === 'result' ? 'Resultado' : 'Vendas'} ativado`,
       duration: 2000,
     });
   };
@@ -107,21 +81,14 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     }
   };
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value as EditorTab);
-    toast({
-      description: `Editor de ${value === 'quiz' ? 'Quiz' : value === 'result' ? 'Resultado' : 'Vendas'} ativado`,
-      duration: 2000,
-    });
-  };
-
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <EditorToolbar
         activeTab={activeTab}
         isPreviewing={isPreviewing}
-        onPreviewToggle={handleTogglePreview}
+        onPreviewToggle={togglePreview}
         onSave={handleSave}
+        onOpenTemplateModal={openTemplateModal}
       />
       
       <Tabs
@@ -137,49 +104,80 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         
         <TabsContent value="quiz" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            {isLoading && activeTab === 'quiz' ? (
-              <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
-                <div className="text-center">
-                  <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
-                  <p className="text-[#8F7A6A]">Carregando editor de Quiz...</p>
-                </div>
-              </div>
-            ) : (
-              <QuizEditorPanel isPreviewing={isPreviewing} />
-            )}
+            <QuizEditorPanel isPreviewing={isPreviewing} />
           </TooltipProvider>
         </TabsContent>
         
         <TabsContent value="result" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            {isLoading && activeTab === 'result' ? (
-              <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
-                <div className="text-center">
-                  <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
-                  <p className="text-[#8F7A6A]">Carregando editor de Resultados...</p>
-                </div>
-              </div>
-            ) : (
-              <ResultEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
-            )}
+            <ResultEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
           </TooltipProvider>
         </TabsContent>
         
         <TabsContent value="sales" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            {isLoading && activeTab === 'sales' ? (
-              <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
-                <div className="text-center">
-                  <Loader2 className="h-10 w-10 animate-spin text-[#B89B7A] mx-auto mb-4" />
-                  <p className="text-[#8F7A6A]">Carregando editor de Página de Vendas...</p>
-                </div>
-              </div>
-            ) : (
-              <SalesEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
-            )}
+            <SalesEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
           </TooltipProvider>
         </TabsContent>
       </Tabs>
+
+      {isTemplateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[80vh] overflow-auto">
+            <h2 className="text-xl font-medium mb-4">Templates para {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'}</h2>
+            <div className="mb-4">
+              <p className="mb-2">Escolha um template para aplicar:</p>
+              <div className="space-y-2">
+                <button 
+                  onClick={() => {
+                    loadTemplateForCurrentEditor({
+                      title: "Template Padrão",
+                      blocks: activeTab === 'sales' ? [
+                        {
+                          id: "headline-1",
+                          type: "headline",
+                          content: { 
+                            title: "Descubra seu Estilo Único",
+                            subtitle: "Transforme sua imagem pessoal",
+                            style: { backgroundColor: "#ffffff", color: "#432818", paddingY: 24, paddingX: 16 }
+                          },
+                          order: 0
+                        },
+                        {
+                          id: "text-1",
+                          type: "text",
+                          content: { 
+                            text: "Nossa consultoria especializada irá ajudar você a encontrar o estilo que combina com sua personalidade e destaca seus pontos fortes.",
+                            style: { backgroundColor: "#F9F5F1", color: "#8F7A6A", paddingY: 16, paddingX: 16 }
+                          },
+                          order: 1
+                        }
+                      ] : {}
+                    });
+                    closeTemplateModal();
+                    toast({
+                      title: "Template aplicado",
+                      description: "O template foi aplicado com sucesso.",
+                      duration: 3000,
+                    });
+                  }}
+                  className="w-full text-left p-3 border rounded hover:bg-gray-50 transition-colors"
+                >
+                  Template Padrão - {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'}
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <button 
+                onClick={closeTemplateModal}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
