@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
@@ -23,7 +22,6 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [activeTab, setActiveTab] = useState<'content' | 'style'>('content');
   
-  const salesPageEditor = useSalesPageEditor(primaryStyle.category);
   const {
     blocks, 
     selectedBlockId, 
@@ -33,7 +31,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
     handleDeleteBlock,
     handleReorderBlocks,
     handleSave
-  } = salesPageEditor;
+  } = useSalesPageEditor(primaryStyle.category);
 
   const handleComponentSelect = (type: Block['type']) => {
     const id = handleAddBlock(type);
