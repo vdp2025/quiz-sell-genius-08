@@ -11,6 +11,9 @@ import { TestimonialsBlock } from './blocks/TestimonialsBlock';
 import { PricingBlock } from './blocks/PricingBlock';
 import { GuaranteeBlock } from './blocks/GuaranteeBlock';
 import { CTABlock } from './blocks/CTABlock';
+import { CountdownTimerBlock } from './blocks/CountdownTimerBlock';
+import { FeatureComparisonBlock } from './blocks/FeatureComparisonBlock';
+import { TestimonialCardBlock } from './blocks/TestimonialCardBlock';
 import { cn } from '@/lib/utils';
 
 interface BlockRendererProps {
@@ -69,29 +72,14 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     case 'cta':
       return <CTABlock content={block.content} onClick={onSelect} />;
       
-    case 'countdown-timer': 
-      return (
-        <PlaceholderBlock 
-          title="Contador Regressivo" 
-          description="Exibe um timer para criar urgência na oferta" 
-        />
-      );
+    case 'countdown-timer':
+      return <CountdownTimerBlock content={block.content} onClick={onSelect} />;
       
     case 'feature-comparison':
-      return (
-        <PlaceholderBlock 
-          title="Comparação de Recursos" 
-          description="Compara recursos ou planos lado a lado" 
-        />
-      );
+      return <FeatureComparisonBlock content={block.content} onClick={onSelect} />;
       
     case 'testimonial-card':
-      return (
-        <PlaceholderBlock 
-          title="Card de Depoimento" 
-          description="Exibe um depoimento destacado com foto" 
-        />
-      );
+      return <TestimonialCardBlock content={block.content} onClick={onSelect} />;
       
     case 'products':
       return (
