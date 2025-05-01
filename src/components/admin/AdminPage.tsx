@@ -15,7 +15,7 @@ const AdminPage = () => {
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-playfair text-[#432818]">Painel Administrativo</h1>
-          <p className="text-[#8F7A6A]">Bem-vindo(a), {user?.userName || "Administrador"}!</p>
+          <p className="text-[#8F7A6A]">Bem-vindo(a), {user?.name || "Administrador"}!</p>
         </div>
 
         <Tabs defaultValue="content">
