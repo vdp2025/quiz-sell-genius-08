@@ -1,7 +1,8 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
-import { set } from 'lodash';
+import { set, get } from 'lodash';
 import { createDefaultConfig as createFullDefaultConfig } from '@/utils/resultPageDefaults';
 
 // Default configurations based on style type
@@ -16,6 +17,7 @@ const getStorageKey = (styleType: string) => `result_page_config_${styleType}`;
 export const useResultPageConfig = (styleType: string) => {
   const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(createDefaultConfig(styleType));
   const [loading, setLoading] = useState(true);
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -64,6 +66,7 @@ export const useResultPageConfig = (styleType: string) => {
     setResultPageConfig(prevConfig => {
       const newConfig = { ...prevConfig };
       set(newConfig, path, newContent);
+      setHasChanges(true);
       return newConfig;
     });
   }, []);
@@ -71,6 +74,7 @@ export const useResultPageConfig = (styleType: string) => {
   const resetConfig = useCallback((styleType: string) => {
     const defaultConfig = createDefaultConfig(styleType);
     setResultPageConfig(defaultConfig);
+    setHasChanges(true);
     return true;
   }, []);
 
@@ -79,6 +83,7 @@ export const useResultPageConfig = (styleType: string) => {
       const key = getStorageKey(resultPageConfig.styleType || styleType);
       localStorage.setItem(key, JSON.stringify(resultPageConfig));
       console.info(`Configuração salva para ${resultPageConfig.styleType || styleType}`);
+      setHasChanges(false);
       return true;
     } catch (error) {
       console.error('Error saving config:', error);
@@ -105,6 +110,7 @@ export const useResultPageConfig = (styleType: string) => {
       };
       
       setResultPageConfig(configToImport);
+      setHasChanges(true);
       return true;
     } catch (error) {
       console.error('Error importing config:', error);
@@ -117,12 +123,23 @@ export const useResultPageConfig = (styleType: string) => {
     }
   }, [styleType]);
 
+  const getConfig = useCallback(() => {
+    return resultPageConfig;
+  }, [resultPageConfig]);
+
+  const getSectionValue = useCallback((path: string, defaultValue?: any) => {
+    return get(resultPageConfig, path, defaultValue);
+  }, [resultPageConfig]);
+
   return {
     resultPageConfig,
     updateSection,
     resetConfig,
     saveConfig,
     importConfig,
-    loading
+    getConfig,
+    getSectionValue,
+    loading,
+    hasChanges
   };
 };

@@ -1,40 +1,44 @@
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from './components/ui/toaster';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
 import HomePage from './pages/HomePage';
-import QuizPage from './components/QuizPage';
+import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import UnifiedEditorPage from './pages/UnifiedEditorPage';
-import SettingsPage from './pages/admin/SettingsPage';
+import AdminPage from './pages/AdminPage';
+import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import UnifiedEditorPage from './pages/UnifiedEditorPage';
+import ResultPageEditor from './components/quiz-result/ResultPageEditor.lovable';
 
-const App = () => {
+function App() {
   return (
-    <AuthProvider>
-      <QuizProvider>
-        <TooltipProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              {/* Simplify editor routes - redirect all editor routes to unified editor */}
-              <Route path="/admin/editor" element={<Navigate to="/admin/editor/unified" replace />} />
+    <Router>
+      <AuthProvider>
+        <QuizProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/resultado" element={<ResultPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            
+            {/* Rotas protegidas (apenas admin) */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/editor/unified" element={<UnifiedEditorPage />} />
-              <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor/unified?tab=quiz" replace />} />
-              <Route path="/admin/settings" element={<SettingsPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Router>
-        </TooltipProvider>
-      </QuizProvider>
-    </AuthProvider>
+              <Route path="/admin/editor/result-editor" element={<ResultPageEditor />} />
+            </Route>
+            
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          
+          <Toaster />
+        </QuizProvider>
+      </AuthProvider>
+    </Router>
   );
-};
+}
 
 export default App;

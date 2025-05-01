@@ -54,9 +54,15 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           </Button>
         )}
         
-        <Button variant="outline" size="sm" className="text-[#8F7A6A]">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="text-[#8F7A6A]"
+          as="a"
+          href={activeTab === 'result' ? '/admin/editor/result-editor' : '#'}
+        >
           <Settings className="w-4 h-4 mr-2" />
-          Configurações
+          {activeTab === 'result' ? 'Editor Visual Avançado' : 'Configurações'}
         </Button>
       </div>
       
