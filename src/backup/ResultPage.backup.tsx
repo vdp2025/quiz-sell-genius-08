@@ -51,9 +51,7 @@ const ResultPage: React.FC = () => {
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
           <AnimatedWrapper show={true}>
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-                Seu Estilo é {category}
-              </h2>
+              
               
               <div className="max-w-md mx-auto mb-6">
                 <div className="flex justify-between items-center mb-2">
