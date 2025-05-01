@@ -24,6 +24,10 @@ const ResultPage = () => {
           
           // Rastrear visualização de resultado se ainda não foi rastreado
           if (!resultTracked && parsedResult?.primaryStyle?.category) {
+            // Obter informações do usuário para rastreamento
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            
             trackResultView(parsedResult.primaryStyle.category);
             setResultTracked(true);
           }
@@ -37,6 +41,9 @@ const ResultPage = () => {
       }
     } else if (!resultTracked && quizResult?.primaryStyle?.category) {
       // Rastrear visualização de resultado do contexto se ainda não foi rastreado
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
+      
       trackResultView(quizResult.primaryStyle.category);
       setResultTracked(true);
     }
@@ -66,8 +73,8 @@ const ResultPage = () => {
     );
   }
 
-  // Use o componente BackupResultPage sem passar a prop onPurchaseClick
-  return <BackupResultPage />;
+  // Use o componente BackupResultPage com a prop onPurchaseClick
+  return <BackupResultPage onPurchaseClick={handlePurchaseClick} />;
 };
 
 export default ResultPage;

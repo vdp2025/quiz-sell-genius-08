@@ -1,4 +1,3 @@
-
 declare global {
   interface Window {
     fbq: any;
@@ -25,16 +24,19 @@ export const initFacebookPixel = () => {
 };
 
 // Funções para rastreamento de eventos do quiz
-export const trackQuizStart = () => {
+export const trackQuizStart = (userName?: string, userEmail?: string) => {
   console.log('Quiz iniciado - evento registrado');
   window.fbq('trackCustom', 'QuizStart', {
     content_name: 'Quiz Iniciado'
   });
   
-  // Armazenar o evento no localStorage para o dashboard
+  // Armazenar o evento no localStorage para o dashboard com dados do usuário
   saveAnalyticsEvent({
     type: 'quiz_start',
-    timestamp: new Date().toISOString()
+    userName: userName || 'Anônimo',
+    userEmail: userEmail || 'não informado',
+    timestamp: new Date().toISOString(),
+    sessionId: getOrCreateSessionId()
   });
 };
 
@@ -54,7 +56,8 @@ export const trackQuizAnswer = (questionId: string, selectedOptions: string[], q
     selectedOptions,
     questionIndex,
     totalQuestions,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    sessionId: getOrCreateSessionId()
   });
 };
 
@@ -91,11 +94,13 @@ export const trackLeadGeneration = (email: string) => {
     content_name: 'Lead Quiz'
   });
   
-  // Armazenar o evento no localStorage para o dashboard (sem armazenar o email completo para privacidade)
+  // Armazenar o evento no localStorage para o dashboard
   saveAnalyticsEvent({
     type: 'lead_generated',
     emailDomain: email.split('@')[1] || 'unknown',
-    timestamp: new Date().toISOString()
+    email: email, // Adicionar email completo para identificação
+    timestamp: new Date().toISOString(),
+    sessionId: getOrCreateSessionId()
   });
 };
 
@@ -114,16 +119,45 @@ export const trackSaleConversion = (value: number) => {
   });
 };
 
+// Função para obter ou criar um ID de sessão único para o usuário
+const getOrCreateSessionId = (): string => {
+  let sessionId = localStorage.getItem('quiz_session_id');
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    localStorage.setItem('quiz_session_id', sessionId);
+  }
+  return sessionId;
+};
+
 // Funções para armazenar e recuperar eventos de analytics para o dashboard interno
 interface AnalyticsEvent {
   type: string;
   timestamp: string;
+  sessionId?: string;
+  userName?: string;
+  userEmail?: string;
   [key: string]: any;
 }
 
 // Salvar evento no localStorage
 const saveAnalyticsEvent = (event: AnalyticsEvent) => {
   try {
+    // Adicione nome do usuário ao evento, se disponível
+    if (!event.userName) {
+      const userName = localStorage.getItem('userName');
+      if (userName) {
+        event.userName = userName;
+      }
+    }
+    
+    // Adicione email do usuário ao evento, se disponível
+    if (!event.userEmail && event.type !== 'lead_generated') {
+      const userEmail = localStorage.getItem('userEmail');
+      if (userEmail) {
+        event.userEmail = userEmail;
+      }
+    }
+    
     const existingEvents = getAnalyticsEvents();
     existingEvents.push(event);
     localStorage.setItem('quiz_analytics_events', JSON.stringify(existingEvents));
@@ -146,6 +180,7 @@ export const getAnalyticsEvents = (): AnalyticsEvent[] => {
 // Função para limpar todos os dados de analytics (apenas para administradores)
 export const clearAnalyticsData = () => {
   localStorage.removeItem('quiz_analytics_events');
+  localStorage.removeItem('quiz_session_id');
   console.log('Dados de analytics limpos com sucesso');
 };
 
@@ -201,6 +236,70 @@ const groupEventsByDay = (events: AnalyticsEvent[]) => {
   });
   
   return grouped;
+};
+
+// Agrupar eventos por usuário
+export const groupEventsByUser = (events: AnalyticsEvent[]): Record<string, AnalyticsEvent[]> => {
+  const grouped: Record<string, AnalyticsEvent[]> = {};
+  
+  events.forEach(event => {
+    // Usar sessionId como identificador principal, fallback para userEmail ou userName
+    const userId = event.sessionId || event.userEmail || event.userName || 'unknown';
+    
+    if (!grouped[userId]) {
+      grouped[userId] = [];
+    }
+    
+    grouped[userId].push(event);
+  });
+  
+  return grouped;
+};
+
+// Obter dados sobre progresso do usuário por pergunta
+export const getUserProgressData = (events: AnalyticsEvent[]): any[] => {
+  const usersByQuestion: Record<string, Set<string>> = {};
+  const questionCounts: Record<string, number> = {};
+  let totalUsers = 0;
+  
+  // Identificar usuários únicos pela sessão
+  const uniqueSessions = new Set<string>();
+  
+  events.forEach(event => {
+    if (event.sessionId) {
+      uniqueSessions.add(event.sessionId);
+    }
+    
+    if (event.type === 'quiz_answer' && event.questionId) {
+      if (!usersByQuestion[event.questionId]) {
+        usersByQuestion[event.questionId] = new Set<string>();
+        questionCounts[event.questionId] = 0;
+      }
+      
+      if (event.sessionId) {
+        usersByQuestion[event.questionId].add(event.sessionId);
+      }
+      
+      questionCounts[event.questionId]++;
+    }
+  });
+  
+  totalUsers = uniqueSessions.size;
+  
+  // Converter para formato para visualização
+  const progressData = Object.entries(usersByQuestion).map(([questionId, users]) => {
+    return {
+      questionId,
+      uniqueUsers: users.size,
+      totalAnswers: questionCounts[questionId],
+      completionRate: totalUsers > 0 ? (users.size / totalUsers) * 100 : 0
+    };
+  });
+  
+  // Ordenar por questionId (assumindo que está em ordem numérica)
+  return progressData.sort((a, b) => {
+    return a.questionId.localeCompare(b.questionId, undefined, { numeric: true });
+  });
 };
 
 // Função para capturar UTM parameters para analytics de marketing
