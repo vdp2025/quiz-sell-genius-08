@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { calculateQuizMetrics, getAnalyticsEvents, clearAnalyticsData } from '@/utils/analytics';
-import { ChartConfig, ChartContainer, ChartLegendContent, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Calendar, FileText, Download, RefreshCcw, Trash2 } from 'lucide-react';
 
@@ -128,6 +128,41 @@ const AnalyticsPage: React.FC = () => {
     { name: 'Leads Gerados', value: metrics.totalLeads }
   ] : [];
 
+  // Function to render custom tooltip content
+  const renderTooltipContent = (props: any) => {
+    if (!props.active || !props.payload) return null;
+    
+    return (
+      <div className="bg-white p-2 border border-gray-200 shadow-md rounded-md">
+        <p className="font-medium">{props.label}</p>
+        {props.payload.map((entry: any, index: number) => (
+          <p key={`item-${index}`} style={{ color: entry.color }}>
+            {entry.name}: {entry.value}
+          </p>
+        ))}
+      </div>
+    );
+  };
+
+  // Function to render custom legend content
+  const renderLegendContent = (props: any) => {
+    const { payload } = props;
+    
+    return (
+      <div className="flex flex-wrap justify-center gap-4 pt-4">
+        {payload.map((entry: any, index: number) => (
+          <div key={`item-${index}`} className="flex items-center">
+            <div 
+              className="w-3 h-3 mr-1"
+              style={{ backgroundColor: entry.color }}
+            />
+            <span>{entry.value}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <AdminLayout>
       <div className="container mx-auto p-6">
@@ -227,8 +262,8 @@ const AnalyticsPage: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
                       <YAxis />
-                      <Tooltip content={(props) => <ChartTooltipContent {...props} />} />
-                      <Legend content={(props) => <ChartLegendContent {...props} />} />
+                      <Tooltip content={renderTooltipContent} />
+                      <Legend content={renderLegendContent} />
                       <Line type="monotone" dataKey="inicios" stroke="#4f46e5" strokeWidth={2} />
                       <Line type="monotone" dataKey="conclusoes" stroke="#10b981" strokeWidth={2} />
                       <Line type="monotone" dataKey="resultados" stroke="#f59e0b" strokeWidth={2} />
@@ -254,8 +289,8 @@ const AnalyticsPage: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis type="number" />
                       <YAxis dataKey="name" type="category" />
-                      <Tooltip content={(props) => <ChartTooltipContent {...props} />} />
-                      <Legend content={(props) => <ChartLegendContent {...props} />} />
+                      <Tooltip content={renderTooltipContent} />
+                      <Legend content={renderLegendContent} />
                       <Bar dataKey="value" fill="#4f46e5" />
                     </BarChart>
                   </ChartContainer>

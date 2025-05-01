@@ -66,8 +66,8 @@ const ResultPage = () => {
     );
   }
 
-  // Use o componente BackupResultPage com a funcionalidade de rastreamento de compra
-  return <BackupResultPage onPurchaseClick={handlePurchaseClick} />;
+  // Use o componente BackupResultPage sem passar a prop onPurchaseClick
+  return <BackupResultPage />;
 };
 
 export default ResultPage;
