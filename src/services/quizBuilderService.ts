@@ -9,7 +9,7 @@ export interface QuizQuestion {
   description?: string;
   type: 'multiple-choice' | 'single-choice' | 'scale';
   answers: QuizAnswer[];
-  required: boolean; // Changed to boolean
+  required: boolean;
   order: number;
 }
 
@@ -18,7 +18,7 @@ export interface QuizAnswer {
   text: string;
   value: string;
   styleScores?: Record<string, number>;
-  required: boolean; // Changed to boolean
+  required: boolean;
   order: number;
 }
 
@@ -76,7 +76,7 @@ export const createBuilderStateFromQuiz = (
         optionStyleCategories: question.styleCategories || [],
         displayType: question.displayType || 'text',
         multiSelect: question.multiSelect || false,
-        required: true, // Using boolean as required is boolean
+        required: true, // Using boolean as required
         autoAdvance: question.autoAdvance || false,
       }
     });
@@ -242,7 +242,7 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
         ],
         displayType: 'text',
         multiSelect: false,
-        required: true, // Changed to boolean
+        required: true, // Using boolean type
         autoAdvance: true,
         optionStyleCategories: [
           styleTitle,

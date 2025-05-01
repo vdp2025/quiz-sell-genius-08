@@ -17,17 +17,18 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
 }) => {
   const [config, setConfig] = useState<ResultPageConfig | undefined>(initialConfig);
   
-  const handleUpdateConfig = (newConfig: ResultPageConfig) => {
-    setConfig(newConfig);
+  // We'll handle updates internally since ResultPageVisualEditor doesn't have onUpdateConfig
+  const handleShowTemplates = () => {
+    // This is a placeholder function since we're not handling templates here
+    console.log('Show templates clicked');
   };
   
   return (
     <div className="h-full">
       <ResultPageVisualEditor
         selectedStyle={primaryStyle}
-        onShowTemplates={() => {}}
+        onShowTemplates={handleShowTemplates}
         initialConfig={config}
-        onUpdateConfig={handleUpdateConfig}
         isPreviewing={isPreviewing}
       />
     </div>
