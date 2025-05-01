@@ -57,7 +57,7 @@ export interface EditableContent {
   benefits?: string[];
   // For bonus carousel
   bonusImages?: Array<{url: string; alt: string; title?: string}>;
-  // For other custom properties
+  // Custom properties
   [key: string]: any;
 }
 

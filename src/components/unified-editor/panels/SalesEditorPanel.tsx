@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
@@ -311,7 +312,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         type="range"
                         min="0"
                         max="32"
-                        value={String((selectedComponent.content.style?.borderRadius as number) || 0)}
+                        value={String(Number(selectedComponent.content.style?.borderRadius) || 0)}
                         onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                           style: { 
                             ...selectedComponent.content.style,
@@ -321,7 +322,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                         className="w-full"
                       />
                       <div className="text-right text-xs text-gray-500">
-                        {(selectedComponent.content.style?.borderRadius as number) || 0}px
+                        {Number(selectedComponent.content.style?.borderRadius) || 0}px
                       </div>
                     </div>
                     
@@ -332,7 +333,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           type="range"
                           min="0"
                           max="64"
-                          value={String((selectedComponent.content.style?.paddingY as number) || 16)}
+                          value={String(Number(selectedComponent.content.style?.paddingY) || 16)}
                           onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
@@ -342,7 +343,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           className="w-full"
                         />
                         <div className="text-right text-xs text-gray-500">
-                          {(selectedComponent.content.style?.paddingY as number) || 16}px
+                          {Number(selectedComponent.content.style?.paddingY) || 16}px
                         </div>
                       </div>
                       
@@ -352,7 +353,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           type="range"
                           min="0"
                           max="64"
-                          value={String((selectedComponent.content.style?.paddingX as number) || 16)}
+                          value={String(Number(selectedComponent.content.style?.paddingX) || 16)}
                           onChange={(e) => actions.handleUpdateBlock(selectedBlockId, { 
                             style: { 
                               ...selectedComponent.content.style,
@@ -362,7 +363,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           className="w-full"
                         />
                         <div className="text-right text-xs text-gray-500">
-                          {(selectedComponent.content.style?.paddingX as number) || 16}px
+                          {Number(selectedComponent.content.style?.paddingX) || 16}px
                         </div>
                       </div>
                     </div>
