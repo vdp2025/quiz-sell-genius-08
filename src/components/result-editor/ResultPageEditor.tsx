@@ -47,14 +47,12 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
         title: 'Configurações salvas',
         description: 'As alterações foram salvas com sucesso',
       });
-      return true; // Return true after successful save
     } catch (error) {
       toast({
         title: 'Erro ao salvar',
         description: 'Não foi possível salvar as alterações',
         variant: 'destructive'
       });
-      return false; // Return false if there was an error
     }
   };
 
@@ -64,7 +62,6 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
       title: 'Configurações redefinidas',
       description: 'As configurações foram redefinidas para os valores padrão',
     });
-    return true; // Return true after reset
   };
 
   const handleUpdateConfig = (newConfig: any) => {
@@ -109,24 +106,6 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
     );
   }
 
-  // Ensure offer section and its subsections exist
-  const offerDefault = {
-    hero: { visible: false, content: {}, style: {} },
-    products: { visible: false, content: {}, style: {} },
-    benefits: { visible: false, content: { items: [] }, style: {} },
-    pricing: { visible: false, content: {}, style: {} },
-    testimonials: { visible: false, content: { items: [] }, style: {} },
-    guarantee: { visible: false, content: { title: '', text: '' }, style: {} }
-  };
-  
-  const offer = resultPageConfig.offer || offerDefault;
-  const heroSection = offer.hero || { visible: false, content: {}, style: {} };
-  const productsSection = offer.products || { visible: false, content: {}, style: {} };
-  const benefitsSection = offer.benefits || { visible: false, content: { items: [] }, style: {} };
-  const pricingSection = offer.pricing || { visible: false, content: {}, style: {} };
-  const testimonialsSection = offer.testimonials || { visible: false, content: { items: [] }, style: {} };
-  const guaranteeSection = offer.guarantee || { visible: false, content: { title: '', text: '' }, style: {} };
-
   return (
     <div className="min-h-screen bg-background pb-20">
       <EditorToolbar 
@@ -145,9 +124,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Cabeçalho"
             sectionPath="header"
-            content={resultPageConfig.header?.content || {}}
-            style={resultPageConfig.header?.style || {}}
-            visible={resultPageConfig.header?.visible || false}
+            content={resultPageConfig.header.content}
+            style={resultPageConfig.header.style}
+            visible={resultPageConfig.header.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('header')}
             onToggleVisibility={() => toggleSection('header')}
@@ -162,9 +141,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Estilo Principal"
             sectionPath="mainContent"
-            content={resultPageConfig.mainContent?.content || {}}
-            style={resultPageConfig.mainContent?.style || {}}
-            visible={resultPageConfig.mainContent?.visible || false}
+            content={resultPageConfig.mainContent.content}
+            style={resultPageConfig.mainContent.style}
+            visible={resultPageConfig.mainContent.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('mainContent')}
             onToggleVisibility={() => toggleSection('mainContent')}
@@ -179,9 +158,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Estilos Secundários"
             sectionPath="secondaryStyles"
-            content={resultPageConfig.secondaryStyles?.content || {}}
-            style={resultPageConfig.secondaryStyles?.style || {}}
-            visible={resultPageConfig.secondaryStyles?.visible || false}
+            content={resultPageConfig.secondaryStyles.content}
+            style={resultPageConfig.secondaryStyles.style}
+            visible={resultPageConfig.secondaryStyles.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('secondaryStyles')}
             onToggleVisibility={() => toggleSection('secondaryStyles')}
@@ -197,9 +176,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Oferta Principal"
             sectionPath="offer.hero"
-            content={heroSection.content}
-            style={heroSection.style}
-            visible={heroSection.visible || false}
+            content={resultPageConfig.offer.hero.content}
+            style={resultPageConfig.offer.hero.style}
+            visible={resultPageConfig.offer.hero.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('offer.hero')}
             onToggleVisibility={() => toggleSection('offer.hero')}
@@ -214,9 +193,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Produtos e Bônus"
             sectionPath="offer.products"
-            content={productsSection.content}
-            style={productsSection.style}
-            visible={productsSection.visible || false}
+            content={resultPageConfig.offer.products.content}
+            style={resultPageConfig.offer.products.style}
+            visible={resultPageConfig.offer.products.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('offer.products')}
             onToggleVisibility={() => toggleSection('offer.products')}
@@ -231,9 +210,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Benefícios"
             sectionPath="offer.benefits"
-            content={benefitsSection.content}
-            style={benefitsSection.style}
-            visible={benefitsSection.visible || false}
+            content={resultPageConfig.offer.benefits.content}
+            style={resultPageConfig.offer.benefits.style}
+            visible={resultPageConfig.offer.benefits.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('offer.benefits')}
             onToggleVisibility={() => toggleSection('offer.benefits')}
@@ -248,9 +227,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Preço e Botão de Compra"
             sectionPath="offer.pricing"
-            content={pricingSection.content}
-            style={pricingSection.style}
-            visible={pricingSection.visible || false}
+            content={resultPageConfig.offer.pricing.content}
+            style={resultPageConfig.offer.pricing.style}
+            visible={resultPageConfig.offer.pricing.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('offer.pricing')}
             onToggleVisibility={() => toggleSection('offer.pricing')}
@@ -265,9 +244,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Depoimentos"
             sectionPath="offer.testimonials"
-            content={testimonialsSection.content}
-            style={testimonialsSection.style}
-            visible={testimonialsSection.visible || false}
+            content={resultPageConfig.offer.testimonials.content}
+            style={resultPageConfig.offer.testimonials.style}
+            visible={resultPageConfig.offer.testimonials.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('offer.testimonials')}
             onToggleVisibility={() => toggleSection('offer.testimonials')}
@@ -282,9 +261,9 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
           <EditableSection
             title="Garantia"
             sectionPath="offer.guarantee"
-            content={guaranteeSection.content}
-            style={guaranteeSection.style}
-            visible={guaranteeSection.visible || false}
+            content={resultPageConfig.offer.guarantee.content}
+            style={resultPageConfig.offer.guarantee.style}
+            visible={resultPageConfig.offer.guarantee.visible}
             isPreview={previewMode}
             onEdit={() => setEditingSection('offer.guarantee')}
             onToggleVisibility={() => toggleSection('offer.guarantee')}
@@ -382,8 +361,6 @@ function getSectionStyle(sectionPath: string, config: any): any {
   pathParts.forEach(part => {
     if (current[part]) {
       current = current[part];
-    } else {
-      current = {};
     }
   });
   
@@ -399,8 +376,6 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
     currentPath = currentPath ? `${currentPath}.${part}` : part;
     if (current[part]) {
       current = current[part];
-    } else {
-      current = {};
     }
   });
   
@@ -408,35 +383,35 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
     case 'header':
       return (
         <HeaderEditor 
-          content={current.content || {}}
+          content={current.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
     case 'mainContent':
       return (
         <MainContentEditor 
-          content={current.content || {}}
+          content={current.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
     case 'offer.hero':
       return (
         <OfferHeroEditor 
-          content={current.content || {}}
+          content={current.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
     case 'offer.pricing':
       return (
         <PricingEditor 
-          content={current.content || {}}
+          content={current.content}
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
     default:
       return (
         <div className="space-y-4">
-          {Object.entries(current.content || {}).map(([key, value]) => {
+          {Object.entries(current.content).map(([key, value]) => {
             if (typeof value === 'string') {
               return (
                 <div key={key} className="space-y-2">

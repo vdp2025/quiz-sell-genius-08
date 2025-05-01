@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { EditorBlock, EditorConfig, EditableContent } from '@/types/editor';
 import { EditorActions } from '@/types/editorActions';
-import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
 import { generateId } from '@/utils/idGenerator';
 
 export const useEditorBlocks = (
@@ -11,12 +11,10 @@ export const useEditorBlocks = (
 ): EditorActions => {
   const addBlock = useCallback((type: EditorBlock['type']) => {
     const blocksLength = config.blocks.length;
-    
-    // Create new block with proper typing
     const newBlock: EditorBlock = {
       id: generateId(),
       type,
-      content: getDefaultContentForBlockType(type) as EditableContent,
+      content: getDefaultContentForType(type),
       order: blocksLength
     };
     

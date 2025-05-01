@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
-import EditorPreview from './EditorPreview';
+import { EditorPreview } from './EditorPreview';
 import { PropertiesPanel } from './PropertiesPanel';
 import EditorToolbar from './EditorToolbar';
-import GlobalStylesEditor from './GlobalStylesEditor';
+import { GlobalStylesEditor } from './GlobalStylesEditor';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
@@ -16,19 +16,17 @@ import { StyleResult } from '@/types/quiz';
 
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
-  onShowTemplates?: () => void;
-  isPreviewing?: boolean;
 }
 
 export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
   selectedStyle,
   onShowTemplates,
-  initialConfig,
-  isPreviewing = false
+  initialConfig
 }) => {
   const {
     resultPageConfig,
     loading,
+    isPreviewing,
     isGlobalStylesOpen,
     actions: {
       handleSave,
@@ -65,7 +63,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
 
-  const handleUpdateConfig = (newConfig: ResultPageConfig | null) => {
+  const handleUpdateConfig = (newConfig) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
@@ -90,9 +88,6 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   };
 
-  // Use the isPreviewing prop passed in or the internal state
-  const effectiveIsPreviewing = isPreviewing;
-  
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -112,7 +107,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
         onSave={handleSave}
-        isPreviewMode={effectiveIsPreviewing}
+        isPreviewMode={isPreviewing}
         onPreviewToggle={togglePreview}
         onReset={handleReset}
         onEditGlobalStyles={toggleGlobalStyles}
@@ -139,7 +134,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 blocks={blocks}
                 selectedBlockId={selectedBlockId}
                 onSelectBlock={setSelectedBlockId}
-                isPreviewing={effectiveIsPreviewing}
+                isPreviewing={isPreviewing}
                 primaryStyle={primaryStyle}
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />
@@ -152,13 +147,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 selectedBlockId={selectedBlockId}
                 blocks={blocks}
                 onClose={() => setSelectedBlockId(null)}
-                onUpdate={(content, id) => {
-                  if (id) {
-                    blockActions.handleUpdateBlock(id, content);
-                  } else if (selectedBlockId) {
-                    blockActions.handleUpdateBlock(selectedBlockId, content);
-                  }
-                }}
+                onUpdate={blockActions.handleUpdateBlock}
                 onDelete={blockActions.handleDeleteBlock}
               />
             </ResizablePanel>
@@ -166,7 +155,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         </TabsContent>
       </Tabs>
       
-      {isGlobalStylesOpen && resultPageConfig && (
+      {isGlobalStylesOpen && (
         <GlobalStylesEditor
           globalStyles={resultPageConfig.globalStyles || {}}
           onSave={(styles) => {
@@ -179,5 +168,3 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     </div>
   );
 };
-
-export default ResultPageVisualEditor;

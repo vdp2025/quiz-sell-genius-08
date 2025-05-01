@@ -1,155 +1,81 @@
 
-import { Block, BlockType } from '@/types/editor';
-import { v4 as uuidv4 } from 'uuid';
-import { StyleOptions } from '@/types/resultPageConfig';
+import { Block } from '@/types/editor';
 
-// Function to get default global styles
-export const getDefaultGlobalStyles = (): Partial<StyleOptions> => {
-  return {
-    primaryColor: '#B89B7A',
-    secondaryColor: '#8F7A6A',
-    backgroundColor: '#FAF9F7',
-    textColor: '#432818',
-    fontFamily: 'Inter, sans-serif',
-    fontSize: '16px',
-    lineHeight: '1.5',
-    spacing: 'comfortable',
-    borderRadius: 'medium',
-  };
-};
-
-// The function that generates default content for block types
-export const getDefaultBlockContent = (type: BlockType, styleType: string = 'Elegante') => {
-  const blockDefaults: Record<string, any> = {
-    'headline': {
-      title: `Descubra seu estilo ${styleType}`,
-      subtitle: 'Transforme sua imagem pessoal',
-      alignment: 'center',
-      style: {
-        backgroundColor: '#ffffff',
-        textColor: '#432818',
-        paddingY: '24',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    },
-    'text': {
-      text: `O estilo ${styleType} se caracteriza por linhas elegantes e sofisticadas. Pessoas com este estilo valorizam a qualidade e a atemporalidade das peças.`,
-      style: {
-        backgroundColor: '#F9F5F1',
-        textColor: '#432818',
-        paddingY: '16',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    },
-    'image': {
-      imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911692/logo-visagismo_zuilys.webp',
-      altText: 'Imagem ilustrativa',
-      caption: '',
-      alignment: 'center',
-      style: {
-        backgroundColor: 'transparent',
-        paddingY: '16',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    },
-    'cta': {
-      title: 'Aprimore seu estilo pessoal hoje mesmo!',
-      buttonText: 'Saiba Mais',
-      buttonUrl: '#',
-      alignment: 'center',
-      style: {
-        backgroundColor: '#F9F5F1',
-        buttonColor: '#B89B7A',
-        textColor: '#432818',
-        buttonTextColor: '#FFFFFF',
-        paddingY: '24',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    },
-    'testimonial-card': {
-      name: 'Maria Silva',
-      role: 'Empresária',
-      testimonialText: 'A análise de estilo mudou completamente minha forma de me vestir. Agora me sinto muito mais confiante!',
-      rating: 5,
-      avatarUrl: '',
-      style: {
-        backgroundColor: '#FFFFFF',
-        textColor: '#432818',
-        accentColor: '#B89B7A',
-        paddingY: '16',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    },
-    'divider': {
-      style: {
-        color: '#B89B7A',
-        width: '80%',
-        thickness: '1',
-        style: 'solid'
-      }
-    },
-    'feature-comparison': {
-      title: 'Compare nossos pacotes',
-      features: [
-        { name: 'Análise de Coloração Pessoal', included: true, premium: true },
-        { name: 'Cartela de Cores Personalizada', included: true, premium: true },
-        { name: 'Consultoria de Guarda-Roupa', included: false, premium: true }
-      ],
-      plans: [
-        {
-          title: 'Básico',
-          price: 'R$ 297',
-          description: 'Para quem está começando',
-          isPopular: false,
-          buttonText: 'Escolher plano',
-          buttonUrl: '#'
-        },
-        {
-          title: 'Premium',
-          price: 'R$ 497',
-          description: 'Consultoria completa',
-          isPopular: true,
-          buttonText: 'Melhor escolha',
-          buttonUrl: '#'
+export const getDefaultContentForType = (type: Block['type']) => {
+  switch (type) {
+    case 'headline':
+      return {
+        title: 'Título Principal',
+        subtitle: 'Subtítulo explicativo para chamar atenção',
+        style: {
+          padding: '16px',
+          textAlign: 'center' as 'center',
+          color: '#432818'
         }
-      ],
-      style: {
-        backgroundColor: '#FFFFFF',
-        textColor: '#432818',
-        accentColor: '#B89B7A',
-        paddingY: '24',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    },
-    'custom-code': {
-      html: '<div style="text-align:center;"><p>Seu código HTML personalizado aqui</p></div>',
-      css: '/* Seu CSS personalizado aqui */',
-      style: {
-        paddingY: '16',
-        paddingX: '16',
-        borderRadius: 'medium'
-      }
-    }
-  };
+      };
 
-  return blockDefaults[type] || {};
-};
+    case 'text':
+      return {
+        text: 'Insira seu texto aqui. Este componente é ideal para parágrafos, descrições ou qualquer conteúdo textual que você deseja apresentar ao seu visitante.',
+        style: {
+          padding: '16px',
+          color: '#432818',
+          lineHeight: '1.6'
+        }
+      };
 
-// Export the function with the name used in imports
-export const getDefaultContentForType = getDefaultBlockContent;
+    case 'image':
+      return {
+        imageUrl: '',
+        imageAlt: 'Descrição da imagem',
+        style: {
+          maxWidth: '100%',
+          borderRadius: '8px',
+          margin: '16px 0'
+        }
+      };
 
-// Function to create a new block with default content
-export const createDefaultBlock = (type: BlockType, order: number = 0, styleType: string = 'Elegante'): Block => {
-  return {
-    id: uuidv4(),
-    type,
-    order,
-    content: getDefaultBlockContent(type, styleType)
-  };
+    case 'pricing':
+      return {
+        title: 'Pacote Premium',
+        price: 'R$ 97,00',
+        regularPrice: 'R$ 197,00',
+        ctaText: 'Comprar Agora',
+        style: {
+          backgroundColor: '#FAF9F7',
+          borderRadius: '8px',
+          padding: '24px'
+        }
+      };
+
+    case 'benefits':
+      return {
+        title: 'Benefícios',
+        benefits: [
+          'Benefício 1: Descrição detalhada',
+          'Benefício 2: Descrição detalhada',
+          'Benefício 3: Descrição detalhada'
+        ],
+        style: {
+          padding: '16px',
+          backgroundColor: '#FFFAF0'
+        }
+      };
+      
+    case 'bonus-carousel':
+      return {
+        title: 'Você recebe também:',
+        bonusImages: [
+          { url: '', alt: 'Bônus 1', title: 'Título do Bônus 1' },
+          { url: '', alt: 'Bônus 2', title: 'Título do Bônus 2' }
+        ],
+        style: {
+          padding: '16px',
+          backgroundColor: '#FFFAF0'
+        }
+      };
+      
+    default:
+      return {};
+  }
 };

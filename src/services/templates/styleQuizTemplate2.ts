@@ -1,3 +1,4 @@
+
 import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 
@@ -240,39 +241,34 @@ export const styleQuizTemplate2: QuizBuilderState = {
   ],
   stages: [
     {
-      id: "cover-stage",
-      title: "Etapa 1: Capa do Quiz",
+      id: 'cover',
+      title: 'Início',
       order: 0,
-      type: "cover",
-      isEnabled: true
+      type: 'cover'
     },
     {
-      id: "question1-stage",
-      title: "Etapa 2: Pergunta 1",
+      id: 'q1',
+      title: 'Pergunta 1',
       order: 1,
-      type: "question",
-      isEnabled: true
+      type: 'question'
     },
     {
-      id: "question2-stage",
-      title: "Etapa 3: Pergunta 2",
+      id: 'q2',
+      title: 'Pergunta 2',
       order: 2,
-      type: "question",
-      isEnabled: true
+      type: 'question'
     },
     {
-      id: "question3-stage",
-      title: "Etapa 4: Pergunta 3",
+      id: 'q3',
+      title: 'Pergunta 3',
       order: 3,
-      type: "question",
-      isEnabled: true
+      type: 'question'
     },
     {
-      id: "result-stage",
-      title: "Etapa 5: Resultado",
+      id: 'result',
+      title: 'Resultado',
       order: 4,
-      type: "result",
-      isEnabled: true
+      type: 'result'
     }
   ]
 };

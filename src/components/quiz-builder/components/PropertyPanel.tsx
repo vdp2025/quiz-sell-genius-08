@@ -1,17 +1,12 @@
 
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { QuizComponentData } from '@/types/quizBuilder';
-import { X, Settings, Type, Layout, PaintBucket } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import ImageUploadField from './ImageUploadField';
-import QuestionPropertiesEditor from './QuestionPropertiesEditor';
-import StylePropertiesEditor from './StylePropertiesEditor';
-import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { QuizComponentData } from '@/types/quizBuilder';
+import { Trash2 } from 'lucide-react';
 
 interface PropertyPanelProps {
   selectedComponentId: string | null;
@@ -30,12 +25,8 @@ export const PropertyPanel: React.FC<PropertyPanelProps> = ({
 }) => {
   if (!selectedComponentId) {
     return (
-      <div className="h-full bg-white flex flex-col justify-center items-center p-6 text-center">
-        <Settings className="h-12 w-12 text-[#B89B7A]/20 mb-3" />
-        <h3 className="text-lg font-medium text-[#432818] mb-2">Painel de Propriedades</h3>
-        <p className="text-[#8F7A6A]">
-          Selecione um componente para editar suas propriedades
-        </p>
+      <div className="p-4 text-center text-[#432818]/60">
+        Selecione um componente para editar suas propriedades
       </div>
     );
   }
@@ -44,254 +35,107 @@ export const PropertyPanel: React.FC<PropertyPanelProps> = ({
 
   if (!component) {
     return (
-      <div className="h-full bg-white flex flex-col justify-center items-center p-6 text-center">
-        <p className="text-[#8F7A6A]">
-          Componente não encontrado
-        </p>
+      <div className="p-4 text-center text-[#432818]/60">
+        Componente não encontrado
       </div>
     );
   }
 
-  const getComponentTypeLabel = () => {
-    switch(component.type) {
-      case 'stageCover':
-        return 'Capa';
-      case 'stageQuestion':
-        return 'Pergunta';
-      case 'stageResult':
-        return 'Resultado';
-      case 'text':
-        return 'Texto';
-      case 'image':
-        return 'Imagem';
-      default:
-        return component.type;
-    }
+  const handleUpdate = (field: string, value: any) => {
+    onUpdate(selectedComponentId, { 
+      ...component.data, 
+      [field]: value 
+    });
   };
 
   return (
-    <div className="h-full bg-white flex flex-col">
-      <div className="p-4 border-b flex justify-between items-center">
-        <h2 className="font-medium text-[#432818] flex items-center">
-          <Type className="h-4 w-4 mr-2" />
-          {getComponentTypeLabel()}
-        </h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          <X className="h-4 w-4 text-[#8F7A6A]" />
+    <div className="h-full p-4 space-y-4 bg-white">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-medium text-[#432818]">Propriedades</h3>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-red-500"
+          onClick={() => onDelete(selectedComponentId)}
+        >
+          <Trash2 className="w-4 h-4" />
         </Button>
       </div>
 
-      <Tabs defaultValue="content" className="flex-1 flex flex-col">
-        <div className="px-4 pt-2">
-          <TabsList className="w-full">
-            <TabsTrigger value="content" className="flex-1">
-              <Type className="h-4 w-4 mr-1.5" /> Conteúdo
-            </TabsTrigger>
-            <TabsTrigger value="style" className="flex-1">
-              <PaintBucket className="h-4 w-4 mr-1.5" /> Estilo
-            </TabsTrigger>
-            <TabsTrigger value="layout" className="flex-1">
-              <Layout className="h-4 w-4 mr-1.5" /> Layout
-            </TabsTrigger>
-          </TabsList>
+      <Card className="p-4 space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Título</Label>
+          <Input
+            id="title"
+            value={component.data.title || ''}
+            placeholder="Digite o título"
+            onChange={(e) => handleUpdate('title', e.target.value)}
+          />
         </div>
-        
-        <ScrollArea className="flex-1">
-          <TabsContent value="content" className="p-4">
-            {component.type === 'stageCover' && (
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Título</Label>
-                  <Input
-                    value={component.data.title || ''}
-                    onChange={(e) => onUpdate(component.id, { title: e.target.value })}
-                    placeholder="Título do quiz"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Subtítulo</Label>
-                  <Textarea
-                    value={component.data.subtitle || ''}
-                    onChange={(e) => onUpdate(component.id, { subtitle: e.target.value })}
-                    placeholder="Descrição do quiz"
-                    className="resize-none"
-                    rows={3}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Texto do botão</Label>
-                  <Input
-                    value={component.data.buttonText || ''}
-                    onChange={(e) => onUpdate(component.id, { buttonText: e.target.value })}
-                    placeholder="Iniciar quiz"
-                  />
-                </div>
-                
-                <Separator />
-                
-                <ImageUploadField
-                  label="Imagem da capa"
-                  value={component.data.imageUrl || ''}
-                  onChange={(url) => onUpdate(component.id, { imageUrl: url })}
-                  previewSize="medium"
-                />
-              </div>
-            )}
-            
-            {component.type === 'stageQuestion' && (
-              <QuestionPropertiesEditor
-                data={component.data}
-                onUpdate={(data) => onUpdate(component.id, data)}
-              />
-            )}
-            
-            {component.type === 'stageResult' && (
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Título do resultado</Label>
-                  <Input
-                    value={component.data.title || ''}
-                    onChange={(e) => onUpdate(component.id, { title: e.target.value })}
-                    placeholder="Seu Resultado"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Título do estilo principal</Label>
-                  <Input
-                    value={component.data.primaryStyleTitle || ''}
-                    onChange={(e) => onUpdate(component.id, { primaryStyleTitle: e.target.value })}
-                    placeholder="Seu Estilo Predominante"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Título dos estilos secundários</Label>
-                  <Input
-                    value={component.data.secondaryStylesTitle || ''}
-                    onChange={(e) => onUpdate(component.id, { secondaryStylesTitle: e.target.value })}
-                    placeholder="Estilos Complementares"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Texto do botão</Label>
-                  <Input
-                    value={component.data.callToActionText || ''}
-                    onChange={(e) => onUpdate(component.id, { callToActionText: e.target.value })}
-                    placeholder="Ver Recomendações"
-                  />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="showPercentages">Mostrar porcentagens</Label>
-                  <input
-                    id="showPercentages"
-                    type="checkbox"
-                    checked={component.data.showPercentages || false}
-                    onChange={(e) => onUpdate(component.id, { showPercentages: e.target.checked })}
-                    className="toggle"
-                  />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="showDescriptions">Mostrar descrições</Label>
-                  <input
-                    id="showDescriptions"
-                    type="checkbox"
-                    checked={component.data.showDescriptions || false}
-                    onChange={(e) => onUpdate(component.id, { showDescriptions: e.target.checked })}
-                    className="toggle"
-                  />
-                </div>
-              </div>
-            )}
-            
-            {component.type === 'text' && (
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Título</Label>
-                  <Input
-                    value={component.data.title || ''}
-                    onChange={(e) => onUpdate(component.id, { title: e.target.value })}
-                    placeholder="Título (opcional)"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Texto</Label>
-                  <Textarea
-                    value={component.data.text || ''}
-                    onChange={(e) => onUpdate(component.id, { text: e.target.value })}
-                    placeholder="Conteúdo do texto"
-                    className="min-h-[150px]"
-                    rows={6}
-                  />
-                </div>
-              </div>
-            )}
-            
-            {component.type === 'image' && (
-              <div className="space-y-6">
-                <ImageUploadField
-                  label="Imagem"
-                  value={component.data.imageUrl || ''}
-                  onChange={(url) => onUpdate(component.id, { imageUrl: url })}
-                  previewSize="large"
-                />
-                
-                <div className="space-y-2">
-                  <Label>Texto alternativo (alt)</Label>
-                  <Input
-                    value={component.data.alt || ''}
-                    onChange={(e) => onUpdate(component.id, { alt: e.target.value })}
-                    placeholder="Descrição da imagem para acessibilidade"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Legenda/Título</Label>
-                  <Input
-                    value={component.data.title || ''}
-                    onChange={(e) => onUpdate(component.id, { title: e.target.value })}
-                    placeholder="Legenda (opcional)"
-                  />
-                </div>
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="style" className="p-4">
-            <StylePropertiesEditor 
-              style={component.data}
-              onUpdate={(updates) => onUpdate(component.id, updates)}
+
+        <div className="space-y-2">
+          <Label htmlFor="subtitle">Subtítulo</Label>
+          <Input
+            id="subtitle"
+            value={component.data.subtitle || ''}
+            placeholder="Digite o subtítulo"
+            onChange={(e) => handleUpdate('subtitle', e.target.value)}
+          />
+        </div>
+
+        {component.type === 'text' && (
+          <div className="space-y-2">
+            <Label htmlFor="text">Texto</Label>
+            <Textarea
+              id="text"
+              value={component.data.text || ''}
+              placeholder="Digite o texto"
+              className="min-h-[100px]"
+              onChange={(e) => handleUpdate('text', e.target.value)}
             />
-          </TabsContent>
-          
-          <TabsContent value="layout" className="p-4">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <Label>Em breve</Label>
-                <p className="text-sm text-gray-500">
-                  As opções avançadas de layout estarão disponíveis em breve
-                </p>
-              </div>
+          </div>
+        )}
+
+        {(component.type === 'image' || component.data.imageUrl !== undefined) && (
+          <div className="space-y-2">
+            <Label htmlFor="imageUrl">URL da Imagem</Label>
+            <Input
+              id="imageUrl"
+              value={component.data.imageUrl || ''}
+              placeholder="https://exemplo.com/imagem.jpg"
+              onChange={(e) => handleUpdate('imageUrl', e.target.value)}
+            />
+          </div>
+        )}
+
+        {component.type === 'stageQuestion' && (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="question">Pergunta</Label>
+              <Textarea
+                id="question"
+                value={component.data.question || ''}
+                placeholder="Digite a pergunta"
+                className="min-h-[80px]"
+                onChange={(e) => handleUpdate('question', e.target.value)}
+              />
             </div>
-          </TabsContent>
-        </ScrollArea>
-      </Tabs>
-      
-      <div className="p-4 border-t border-[#B89B7A]/20">
-        <Button 
-          variant="destructive" 
-          onClick={() => onDelete(selectedComponentId)} 
-          className="w-full"
-        >
-          Excluir Componente
-        </Button>
-      </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="multiSelect">Múltipla Escolha</Label>
+              <Input
+                id="multiSelect"
+                type="number"
+                min="0"
+                max="10"
+                value={component.data.multiSelect || 0}
+                onChange={(e) => handleUpdate('multiSelect', parseInt(e.target.value) || 0)}
+              />
+              <p className="text-xs text-[#8F7A6A]">0 para escolha única, 1+ para múltipla</p>
+            </div>
+          </div>
+        )}
+      </Card>
     </div>
   );
 };

@@ -18,13 +18,6 @@ const AdminDashboard = () => {
           />
           
           <DashboardCard 
-            title="Editor Typeform"
-            description="Edite seu quiz no estilo Typeform"
-            linkTo="/admin/editor/typeform"
-            buttonText="Abrir Editor Typeform"
-          />
-          
-          <DashboardCard 
             title="Configurações"
             description="Gerencie configurações do sistema"
             linkTo="/admin/settings"
@@ -34,22 +27,9 @@ const AdminDashboard = () => {
           <DashboardCard 
             title="Resultados"
             description="Visualize os resultados do quiz"
-            linkTo="/admin/results"
+            linkTo="/resultado"
             buttonText="Ver Resultados"
-          />
-          
-          <DashboardCard 
-            title="Templates"
-            description="Gerencie templates de quiz"
-            linkTo="/admin/templates"
-            buttonText="Ver Templates"
-          />
-          
-          <DashboardCard 
-            title="Estatísticas"
-            description="Analise o desempenho do seu quiz"
-            linkTo="/admin/statistics"
-            buttonText="Ver Estatísticas"
+            isExternal
           />
         </div>
       </div>

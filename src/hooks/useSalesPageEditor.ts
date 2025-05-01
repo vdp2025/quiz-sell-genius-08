@@ -2,9 +2,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { toast } from '@/components/ui/use-toast';
-import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
 import { generateId } from '@/utils/idGenerator';
-import { BorderRadiusType } from '@/types/resultPageConfig';
 
 const STORAGE_KEY_PREFIX = 'sales_page_editor_';
 
@@ -15,7 +14,7 @@ export const useSalesPageEditor = (styleType: string) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load saved blocks
+  // Carregar blocos salvos
   useEffect(() => {
     const loadBlocks = () => {
       setIsLoading(true);
@@ -27,10 +26,10 @@ export const useSalesPageEditor = (styleType: string) => {
           console.info(`Blocos da página de vendas carregados para ${styleType}:`, parsedBlocks.length);
         } else {
           console.info(`Nenhum bloco da página de vendas encontrado para ${styleType}.`);
-          // Add default blocks when no saved blocks are found
+          // Adicionar blocos padrão quando não houver blocos salvos
           const defaultBlocks = createDefaultSalesPageBlocks();
           setBlocks(defaultBlocks);
-          // Save default blocks to localStorage
+          // Salvar os blocos padrão no localStorage
           localStorage.setItem(`${STORAGE_KEY_PREFIX}${styleType}`, JSON.stringify(defaultBlocks));
         }
         setIsInitialized(true);
@@ -46,7 +45,7 @@ export const useSalesPageEditor = (styleType: string) => {
     loadBlocks();
   }, [styleType]);
 
-  // Function to create default blocks for a sales page
+  // Função para criar blocos padrão para uma página de vendas
   const createDefaultSalesPageBlocks = (): Block[] => {
     return [
       {
@@ -58,9 +57,9 @@ export const useSalesPageEditor = (styleType: string) => {
           style: {
             backgroundColor: '#ffffff',
             color: '#432818',
-            paddingY: '16',
-            paddingX: '16',
-            borderRadius: 'medium' as BorderRadiusType
+            paddingY: 16,
+            paddingX: 16,
+            borderRadius: 8
           }
         },
         order: 0
@@ -73,9 +72,9 @@ export const useSalesPageEditor = (styleType: string) => {
           style: {
             backgroundColor: '#F9F5F1',
             color: '#8F7A6A',
-            paddingY: '16',
-            paddingX: '16',
-            borderRadius: 'medium' as BorderRadiusType
+            paddingY: 16,
+            paddingX: 16,
+            borderRadius: 8
           }
         },
         order: 1
@@ -91,9 +90,9 @@ export const useSalesPageEditor = (styleType: string) => {
           style: {
             backgroundColor: '#F9F5F1',
             color: '#432818',
-            paddingY: '24',
-            paddingX: '16',
-            borderRadius: 'medium' as BorderRadiusType
+            paddingY: 24,
+            paddingX: 16,
+            borderRadius: 8
           }
         },
         order: 2
@@ -105,7 +104,7 @@ export const useSalesPageEditor = (styleType: string) => {
     const newBlock: Block = {
       id: generateId(),
       type,
-      content: getDefaultContentForBlockType(type),
+      content: getDefaultContentForType(type),
       order: blocks.length
     };
     

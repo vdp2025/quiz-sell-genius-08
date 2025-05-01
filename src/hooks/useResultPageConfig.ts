@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
@@ -28,7 +27,7 @@ export const useResultPageConfig = (styleType: string) => {
         
         if (savedConfigStr) {
           try {
-            const savedConfig = JSON.parse(savedConfigStr) as ResultPageConfig;
+            const savedConfig = JSON.parse(savedConfigStr);
             console.info(`Configuração carregada para ${styleType}`);
             setResultPageConfig(savedConfig);
           } catch (error) {
@@ -77,10 +76,9 @@ export const useResultPageConfig = (styleType: string) => {
 
   const saveConfig = useCallback(async () => {
     try {
-      const currentStyleType = resultPageConfig.styleType || styleType;
-      const key = getStorageKey(currentStyleType);
+      const key = getStorageKey(resultPageConfig.styleType || styleType);
       localStorage.setItem(key, JSON.stringify(resultPageConfig));
-      console.info(`Configuração salva para ${currentStyleType}`);
+      console.info(`Configuração salva para ${resultPageConfig.styleType || styleType}`);
       return true;
     } catch (error) {
       console.error('Error saving config:', error);

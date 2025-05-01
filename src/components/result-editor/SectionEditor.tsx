@@ -82,7 +82,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </Label>
                         <Input
                           id={key}
-                          value={value as string}
+                          value={value}
                           onChange={(e) => handleContentChange(key, e.target.value)}
                         />
                       </div>
@@ -96,23 +96,21 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
               <AccordionTrigger className="text-sm">Aparência</AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
-                  {/* Avoid accessing appearance directly */}
-                  {/* Use dynamic approach without referencing appearance directly */}
-                  {section.style && Object.entries(section.style).map(([key, value]) => {
+                  {section.appearance && Object.entries(section.appearance).map(([key, value]) => {
                     if (typeof value === 'boolean') {
                       return (
                         <div key={key} className="flex items-center justify-between">
-                          <Label htmlFor={`${key}-style`} className="text-xs capitalize">
+                          <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">
                             {key.replace(/([A-Z])/g, ' $1').trim()}
                           </Label>
                           <Switch 
-                            id={`${key}-style`}
+                            id={`${key}-appearance`}
                             checked={value}
                             onCheckedChange={(checked) => {
                               onUpdate({
                                 ...section,
-                                style: {
-                                  ...section.style,
+                                appearance: {
+                                  ...section.appearance,
                                   [key]: checked
                                 }
                               });
@@ -124,17 +122,17 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                     
                     return (
                       <div key={key} className="space-y-2">
-                        <Label htmlFor={`${key}-style`} className="text-xs capitalize">
+                        <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">
                           {key.replace(/([A-Z])/g, ' $1').trim()}
                         </Label>
                         <Input
-                          id={`${key}-style`}
-                          value={value as string}
+                          id={`${key}-appearance`}
+                          value={value}
                           onChange={(e) => {
                             onUpdate({
                               ...section,
-                              style: {
-                                ...section.style,
+                              appearance: {
+                                ...section.appearance,
                                 [key]: e.target.value
                               }
                             });

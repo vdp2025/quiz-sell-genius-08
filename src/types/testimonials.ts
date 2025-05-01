@@ -1,12 +1,8 @@
 
 export interface Testimonial {
-  id?: string;
+  id: string;
   name: string;
-  image?: string;
-  text?: string;
-  testimonialText?: string;
+  image: string;
+  text: string;
   location?: string;
-  role?: string;
-  rating?: number;
-  avatarUrl?: string;
 }

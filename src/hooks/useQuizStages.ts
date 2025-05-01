@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { QuizStage } from '@/types/quizBuilder';
 
@@ -24,17 +23,13 @@ export const useQuizStages = () => {
       case 'result':
         stageTitle = `Etapa ${stageNumber}: Página de Resultado`;
         break;
-      case 'strategic':
-        stageTitle = `Etapa ${stageNumber}: Estratégica`;
-        break;
     }
     
     const newStage: QuizStage = {
       id: `stage-${Date.now()}`,
       title: stageTitle,
       order: stages.length,
-      type,
-      isEnabled: true
+      type
     };
     
     setStages(prev => [...prev, newStage]);

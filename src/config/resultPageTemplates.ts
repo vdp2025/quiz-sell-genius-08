@@ -1,19 +1,5 @@
 
-import { BorderRadiusType, ResultPageConfig } from '@/types/resultPageConfig';
-
-export const defaultResultTemplate: ResultPageConfig = {
-  globalStyles: {
-    primaryColor: '#B89B7A',
-    secondaryColor: '#8F7A6A',
-    backgroundColor: '#FAF9F7',
-    textColor: '#432818',
-    fontFamily: 'Inter, sans-serif',
-    fontSize: '16px',
-    lineHeight: '1.5',
-    spacing: 'comfortable',
-    borderRadius: 'medium',
-  },
-  blocks: [],
+export const defaultResultTemplate = {
   header: {
     content: {
       title: 'Seu Estilo Predominante',
@@ -24,7 +10,7 @@ export const defaultResultTemplate: ResultPageConfig = {
       paddingX: '16',
       backgroundColor: '#FAF9F7',
       textColor: '#432818',
-      borderRadius: 'none' as BorderRadiusType
+      borderRadius: '0' // Changed from number to string
     },
     visible: true
   },
@@ -44,52 +30,26 @@ export const defaultResultTemplate: ResultPageConfig = {
     visible: true
   },
   offer: {
-    hero: {
-      content: {
-        title: 'Guia de Estilo e Imagem Personalizado',
-        description: 'Adquira seu guia completo com análise detalhada, paleta de cores personalizada e recomendações de peças específicas para o seu tipo de estilo.',
-        features: [
-          'Análise detalhada do seu estilo pessoal',
-          'Paleta de cores personalizada',
-          'Guia de peças essenciais para o seu guarda-roupa',
-          'Dicas de tecidos e modelagens ideais'
-        ],
-        ctaText: 'Adquirir meu Guia de Estilo',
-        ctaLink: '#',
-        price: 'R$ 97,00',
-        discountPrice: 'R$ 67,00'
-      },
-      style: {
-        padding: '24px',
-        backgroundColor: '#FFF8F3',
-        textColor: '#432818'
-      },
-      visible: true
+    content: {
+      title: 'Guia de Estilo e Imagem Personalizado',
+      description: 'Adquira seu guia completo com análise detalhada, paleta de cores personalizada e recomendações de peças específicas para o seu tipo de estilo.',
+      features: [
+        'Análise detalhada do seu estilo pessoal',
+        'Paleta de cores personalizada',
+        'Guia de peças essenciais para o seu guarda-roupa',
+        'Dicas de tecidos e modelagens ideais'
+      ],
+      ctaText: 'Adquirir meu Guia de Estilo',
+      ctaLink: '#',
+      price: 'R$ 97,00',
+      discountPrice: 'R$ 67,00'
     },
-    products: {
-      visible: true,
-      content: {},
-      style: {}
+    style: {
+      padding: '24px',
+      backgroundColor: '#FAF9F7',
+      accentColor: '#B89B7A',
+      textColor: '#432818'
     },
-    benefits: {
-      visible: true,
-      content: {},
-      style: {}
-    },
-    pricing: {
-      visible: true,
-      content: {},
-      style: {}
-    },
-    testimonials: {
-      visible: true,
-      content: {},
-      style: {}
-    },
-    guarantee: {
-      visible: true,
-      content: {},
-      style: {}
-    }
+    visible: true
   }
 };

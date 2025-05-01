@@ -1,183 +1,123 @@
 
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
+import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import StageResultComponent from './components/StageResultComponent';
-import StageCoverComponent from './components/StageCoverComponent';
-import StageQuestionComponent from './components/StageQuestionComponent';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from 'lucide-react';
 
 interface ComponentRendererProps {
   component: QuizComponentData;
-  isPreview?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
   onMove?: (draggedId: string, targetId: string) => void;
   isPreviewing?: boolean;
-  isActive?: boolean;
-  isOver?: boolean;
 }
 
-export const ComponentRenderer: React.FC<ComponentRendererProps> = ({ 
-  component, 
-  isPreview = false,
+const ComponentRenderer: React.FC<ComponentRendererProps> = ({
+  component,
   isSelected = false,
   onSelect,
   onMove,
   isPreviewing = false,
-  isActive = false,
-  isOver = false
 }) => {
-  const { type, data, style } = component;
-  
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: component.id,
-    disabled: isPreviewing
-  });
-  
-  const sortableStyle = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isActive ? 0.8 : 1
-  };
-
-  const getComponentStyles = () => {
-    return {
-      backgroundColor: style?.backgroundColor || 'transparent',
-      color: style?.textColor || 'inherit',
-      borderRadius: style?.borderRadius ? `${style.borderRadius}px` : '0',
-      padding: style?.padding || '1rem',
-      margin: style?.margin || '0',
-      borderColor: style?.borderColor || 'transparent',
-      borderWidth: style?.borderWidth || '0',
-      boxShadow: style?.boxShadow || 'none',
-    };
-  };
-
-  const componentProps = {
-    data,
-    style,
-    isSelected: isSelected && !isPreviewing
-  };
-
-  const renderInnerComponent = () => {
-    switch (type) {
-      case 'header': 
-        return (
-          <div style={getComponentStyles()} className={cn("py-6", isSelected && !isPreview && "bg-opacity-90")}>
-            <h1 className="text-3xl font-bold text-center font-playfair">{data.stageTitle || 'Título Principal'}</h1>
-            {data.subtitle && <p className="text-xl text-center mt-2">{data.subtitle}</p>}
-          </div>
-        );
-
+  const renderComponentContent = () => {
+    switch (component.type) {
       case 'headline':
         return (
-          <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
-            <h2 className="text-2xl font-bold font-playfair">{data.title || 'Título da Seção'}</h2>
+          <div className="space-y-2">
+            {component.data.title && (
+              <h2 className="text-2xl font-bold">{component.data.title}</h2>
+            )}
+            {component.data.subtitle && (
+              <p className="text-lg">{component.data.subtitle}</p>
+            )}
           </div>
         );
-
+      
       case 'text':
-        return (
-          <div style={getComponentStyles()} className={cn("py-3", isSelected && !isPreview && "bg-opacity-90")}>
-            <p>{data.text || 'Texto do parágrafo que será exibido aqui. Edite este texto nas propriedades.'}</p>
+        return <div className="prose max-w-none">{component.data.text || 'Texto de exemplo'}</div>;
+      
+      case 'image':
+        return component.data.imageUrl ? (
+          <img 
+            src={component.data.imageUrl}
+            alt={component.data.alt || 'Imagem'}
+            className="max-w-full h-auto rounded"
+          />
+        ) : (
+          <div className="bg-gray-100 h-40 w-full flex items-center justify-center rounded">
+            <p className="text-gray-500">Imagem não definida</p>
           </div>
         );
-
-      case 'image':
+      
+      case 'stageQuestion':
         return (
-          <div style={getComponentStyles()} className={cn("py-4 text-center", isSelected && !isPreview && "bg-opacity-90")}>
-            {data.imageUrl ? (
-              <img 
-                src={data.imageUrl} 
-                alt={data.alt || 'Quiz image'} 
-                className="max-w-full max-h-96 mx-auto rounded-md"
-              />
+          <div className="space-y-4">
+            <h3 className="text-xl font-medium">{component.data.question || 'Pergunta não definida'}</h3>
+            {(component.data.options && component.data.options.length > 0) ? (
+              <div className="space-y-2">
+                {component.data.options.map((option, index) => (
+                  <div key={index} className="p-3 border rounded hover:bg-gray-50 cursor-pointer">
+                    {option}
+                  </div>
+                ))}
+              </div>
             ) : (
-              <div className="bg-gray-200 h-48 flex items-center justify-center rounded-md">
-                <p className="text-gray-500">Imagem não configurada</p>
+              <div className="p-3 border rounded bg-gray-50 text-center">
+                <p className="text-gray-500">Opções não definidas</p>
               </div>
             )}
-            {data.caption && (
-              <p className="text-sm text-gray-500 mt-2">{data.caption}</p>
+          </div>
+        );
+        
+      case 'multipleChoice':
+        return (
+          <div className="space-y-2">
+            {(component.data.options && component.data.options.length > 0) ? (
+              component.data.options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <input type="checkbox" id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
+                  <label htmlFor={`opt-${component.id}-${index}`}>{option}</label>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500">Opções não definidas</div>
             )}
           </div>
         );
-
+      
       case 'singleChoice':
-      case 'multipleChoice':
         return (
-          <StageQuestionComponent
-            data={{
-              ...data,
-              displayType: data.displayType || 'text',
-              multiSelect: type === 'multipleChoice' ? (data.multiSelect || 3) : 1,
-              layout: data.layout || { columns: 2, direction: 'vertical' },
-              imageSize: data.imageSize || 'medium',
-              selectionIndicator: data.selectionIndicator === 'background' ? 'highlight' : (data.selectionIndicator || 'border'),
-            }}
-            style={style || {}}
-            isSelected={isSelected && !isPreview}
-          />
-        );
-        
-      case 'quizResult':
-        return (
-          <div style={getComponentStyles()} className={cn("py-6 text-center", isSelected && !isPreview && "bg-opacity-90")}>
-            <h2 className="text-2xl font-bold mb-4 font-playfair">{data.resultTitle || 'Seu Estilo Predominante'}</h2>
-            <div className="inline-block bg-[#ffefec] px-4 py-2 rounded-md text-[#aa6b5d] mb-6">
-              Estilo exemplo: Natural
-            </div>
-            <p>{data.resultDescription || 'Descrição do resultado do quiz será exibida aqui.'}</p>
+          <div className="space-y-2">
+            {(component.data.options && component.data.options.length > 0) ? (
+              component.data.options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <input type="radio" name={`opt-${component.id}`} id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
+                  <label htmlFor={`opt-${component.id}-${index}`}>{option}</label>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500">Opções não definidas</div>
+            )}
           </div>
         );
-
-      case 'stageCover':
-        return <StageCoverComponent {...componentProps} />;
         
-      case 'stageQuestion':
-        return <StageQuestionComponent {...componentProps} />;
-
-      case 'stageResult':
-        return <StageResultComponent {...componentProps} />;
-
       default:
-        return (
-          <div className="p-4 text-center border border-dashed border-gray-300 rounded-md">
-            <p className="text-gray-500">Componente tipo {type} não reconhecido</p>
-          </div>
-        );
+        return <div>Componente de tipo desconhecido: {component.type}</div>;
     }
   };
-
-  if (isPreviewing) {
-    return renderInnerComponent();
-  }
-
+  
   return (
-    <div
-      ref={setNodeRef}
-      style={sortableStyle}
+    <Card 
       className={cn(
-        "relative border-2 rounded-lg transition-all duration-200 my-3 overflow-hidden",
-        isSelected ? "border-[#B89B7A]" : "border-transparent hover:border-gray-200",
-        isOver && "border-dashed border-[#B89B7A]"
+        "mb-4 p-4 transition-colors",
+        isSelected && !isPreviewing ? "border-2 border-blue-400" : "",
+        !isPreviewing && "hover:bg-gray-50 cursor-pointer"
       )}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (onSelect) onSelect();
-      }}
+      onClick={() => !isPreviewing && onSelect && onSelect()}
     >
-      <div 
-        {...attributes} 
-        {...listeners}
-        className="absolute top-2 right-2 z-10 cursor-grab w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow-sm"
-      >
-        <GripVertical className="w-4 h-4 text-gray-500" />
-      </div>
-      {renderInnerComponent()}
-    </div>
+      {renderComponentContent()}
+    </Card>
   );
 };
+
+export default ComponentRenderer;

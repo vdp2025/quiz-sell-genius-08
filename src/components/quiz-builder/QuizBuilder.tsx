@@ -11,11 +11,7 @@ import QuizTemplateImporter from './components/QuizTemplateImporter';
 import QuizPreview from './preview/QuizPreview';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from '@/services/resultPageStorage';
-import { 
-  createBuilderStateFromQuiz, 
-  loadQuizResultConfig, 
-  createBuilderStateFromResultPage 
-} from '@/services/quizBuilderService';
+import { createBuilderStateFromResultPage, loadQuizResultConfig } from '@/services/quizBuilderService';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);

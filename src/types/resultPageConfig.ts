@@ -2,28 +2,19 @@
 import { Block } from './editor';
 
 export interface StyleOptions {
-  backgroundColor?: string;
-  textColor?: string;
-  accentColor?: string;
-  borderRadius?: BorderRadiusType | string;
-  borderStyle?: string;
-  borderWidth?: number | string;
-  borderColor?: string;
-  paddingX?: number | string;
-  paddingY?: number | string;
-  marginX?: number | string;
-  marginY?: number | string;
   fontSize?: string;
   fontWeight?: string;
   color?: string;
-  padding?: string;
-  margin?: string;
+  backgroundColor?: string;
+  padding?: string | number;
+  paddingY?: string | number;
+  paddingX?: string | number;
+  margin?: string | number;
   width?: string;
   height?: string;
-  textAlign?: string;
+  borderRadius?: string | number;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
   fontFamily?: string;
-  
-  // Additional properties needed for styling
   lineHeight?: string;
   letterSpacing?: string;
   display?: string;
@@ -32,89 +23,120 @@ export interface StyleOptions {
   alignItems?: string;
   gap?: string;
   boxShadow?: string;
-  objectFit?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   type?: string;
-  
-  // Additional global styles properties
-  primaryColor?: string;
-  secondaryColor?: string;
-  spacing?: 'compact' | 'comfortable' | 'spacious';
 }
 
-export type BorderRadiusType = 'none' | 'sm' | 'md' | 'lg' | 'full' | 'custom' | 'medium' | 'small' | 'large';
-
-export interface GlobalStyles extends StyleOptions {
-  fontFamily?: string;
-  primaryColor?: string;
-  secondaryColor?: string;
-  borderRadiusType?: BorderRadiusType;
-  customBorderRadius?: number;
-  spacing?: 'compact' | 'comfortable' | 'spacious';
-  lineHeight?: string;
+export interface ImageOptions {
+  url: string;
+  alt: string;
+  width?: string;
+  height?: string;
+  borderRadius?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
-export interface Section {
-  visible: boolean;
-  content: Record<string, any>;
+export interface SectionContent {
+  [key: string]: any;
   style?: StyleOptions;
-  appearance?: Record<string, any>; // Add appearance property to Section interface
+  images?: ImageOptions[];
 }
 
 export interface OfferContent {
   title?: string;
   subtitle?: string;
+  description?: string;
   price?: string;
   regularPrice?: string;
+  installments?: string;
   ctaText?: string;
   ctaUrl?: string;
+  urgencyText?: string;
   heroImage?: string;
   heroImage2?: string;
-  productTitle?: string;
   allProductsImage?: string;
   mentorImage?: string;
   bonusImage?: string;
+  productTitle?: string;
+  benefitItems?: Array<{
+    title: string;
+    description: string;
+  }>;
   guaranteeText?: string;
-  benefitItems?: Array<{title: string; description: string}>;
+  table?: Array<{
+    item: string;
+    value: string;
+  }>;
+  productImages?: Array<{
+    url: string;
+    alt: string;
+  }>;
+  items?: Array<{
+    title: string;
+    description: string;
+  }>;
   testimonials?: Array<{
     name: string;
-    role?: string;
-    testimonialText: string;
-    rating?: number;
-    avatarUrl?: string;
+    role: string;
+    text: string;
   }>;
+  image?: string;
+}
+
+export interface Section {
+  visible: boolean;
+  content: SectionContent;
+  appearance?: Record<string, any>;
+  style?: StyleOptions;
 }
 
 export interface OfferSection {
-  hero?: Section;
-  products?: Section;
-  benefits?: Section;
-  pricing?: Section;
-  testimonials?: Section;
-  guarantee?: Section;
+  hero: {
+    visible: boolean;
+    content: OfferContent;
+    appearance?: Record<string, any>;
+    style?: StyleOptions;
+  };
+  benefits: Section;
+  products: Section;
+  pricing: Section;
+  testimonials: Section;
+  guarantee: Section;
+}
+
+export interface MentorSection {
+  visible: boolean;
+  content: {
+    title?: string;
+    name?: string;
+    image?: string;
+    beforeAfterImage?: string;
+    stylesImage?: string;
+    bio?: string[];
+  };
+  style?: StyleOptions;
 }
 
 export interface ResultPageConfig {
-  title?: string;
-  subtitle?: string;
-  resultTitle?: string;
-  showPercentages?: boolean;
-  showDescriptions?: boolean;
-  callToAction?: string;
-  accentColor?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  styleType?: string;
-  
-  // Extended properties
-  globalStyles?: GlobalStyles;
-  blocks?: Block[];
-  header?: Section;
-  mainContent?: Section;
+  styleType: string;
+  header: Section;
+  mainContent: Section;
   secondaryStyles?: Section;
-  offer?: OfferSection;
-  
-  // Optional metadata
-  version?: string;
-  lastUpdated?: string;
-  author?: string;
+  offer: OfferSection;
+  mentor?: MentorSection;
+  globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
+  blocks?: Block[];
+}
+
+export interface ResultPageConfigsStore {
+  configs: Record<string, ResultPageConfig>;
 }

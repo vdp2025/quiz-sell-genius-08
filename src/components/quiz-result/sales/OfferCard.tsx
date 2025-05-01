@@ -9,7 +9,6 @@ import Testimonials from './Testimonials';
 import Guarantee from './Guarantee';
 import Logo from '../../ui/logo';
 import { OfferContent } from '@/types/resultPageConfig';
-import { Testimonial } from '@/types/testimonials';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
@@ -31,22 +30,6 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
   const finalConfig = {
     ...defaultConfig,
     ...config
-  };
-  
-  // Map testimonials if they exist
-  const prepareTestimonials = (): Testimonial[] => {
-    if (config?.testimonials && Array.isArray(config.testimonials)) {
-      return config.testimonials.map(t => ({
-        name: t.name,
-        role: t.role,
-        text: t.testimonialText,
-        testimonialText: t.testimonialText,
-        rating: t.rating,
-        avatarUrl: t.avatarUrl,
-        image: t.avatarUrl
-      }));
-    }
-    return [];
   };
 
   return (
@@ -122,7 +105,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
         />
       </div>
 
-      <Testimonials items={prepareTestimonials()} />
+      <Testimonials />
       <Guarantee />
     </div>
   );
