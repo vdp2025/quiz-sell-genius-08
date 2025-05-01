@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
@@ -27,12 +28,14 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   
+  // Enhanced display options
   const displayType = data.displayType || 'text';
   const showImages = displayType === 'image' || displayType === 'both';
   const showText = displayType === 'text' || displayType === 'both';
   const multiSelect = data.multiSelect || 1;
   const imageSize = data.imageSize || 'medium';
   const selectionIndicator = data.selectionIndicator || 'border';
+  const optionStyle = data.optionStyle || 'default';
   
   const getGridColumns = () => {
     const columns = data.layout?.columns || 2;
@@ -72,6 +75,39 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
     }
     
     return { text, imageUrl, styleCategory };
+  };
+  
+  const getOptionStyle = (index: number, isSelected: boolean) => {
+    switch (optionStyle) {
+      case 'card':
+        return cn(
+          "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer shadow",
+          isSelected 
+            ? "border-2 border-[#B89B7A] bg-[#FAF9F7]" 
+            : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:bg-[#FAF9F7]/50"
+        );
+      case 'modern':
+        return cn(
+          "relative rounded-xl overflow-hidden transition-all duration-200 cursor-pointer",
+          isSelected 
+            ? "bg-[#B89B7A]/20 ring-2 ring-[#B89B7A] shadow-lg" 
+            : "bg-white hover:bg-[#FAF9F7] hover:shadow-md"
+        );
+      case 'minimal':
+        return cn(
+          "relative overflow-hidden transition-all duration-200 cursor-pointer",
+          isSelected 
+            ? "border-b-2 border-[#B89B7A]" 
+            : "border-b-2 border-transparent hover:border-[#B89B7A]/60"
+        );
+      default:
+        return cn(
+          "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer",
+          isSelected 
+            ? "border-2 border-[#B89B7A] shadow-md" 
+            : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:shadow-md"
+        );
+    }
   };
   
   const handleOptionClick = (index: number) => {
@@ -135,13 +171,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
           return (
             <div
               key={index}
-              className={cn(
-                "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer",
-                isSelected 
-                  ? "border-2 border-[#B89B7A] shadow-md" 
-                  : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:shadow-md",
-                showImages ? "flex flex-col" : "p-4"
-              )}
+              className={getOptionStyle(index, isSelected)}
               onClick={() => handleOptionClick(index)}
             >
               {showImages && imageUrl && (
@@ -151,7 +181,8 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                       src={imageUrl} 
                       alt={text}
                       className={cn(
-                        "w-full h-full object-cover rounded-t-lg",
+                        "w-full h-full object-cover",
+                        optionStyle === 'default' && "rounded-t-lg",
                         isSelected && "opacity-95"
                       )}
                       onError={(e) => {
