@@ -2,7 +2,7 @@
 import React from 'react';
 import { QuizStage, QuizComponentType } from '@/types/quizBuilder';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { Eye, EyeOff, Heading, Text, Image, ListOrdered, CheckCircle, LayoutGrid } from 'lucide-react';
 
 interface ComponentToolbarProps {
@@ -38,24 +38,26 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
   return (
     <div className="border-b bg-white p-3 flex items-center justify-between">
       <div className="flex items-center space-x-2">
-        {!isPreviewing && componentTypes.map((component) => (
-          <Tooltip key={component.type}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                onClick={() => onComponentSelect(component.type)}
-              >
-                <component.icon className="w-4 h-4 mr-1" />
-                {component.label}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Adicionar {component.label}</p>
-            </TooltipContent>
-          </Tooltip>
-        ))}
+        <TooltipProvider>
+          {!isPreviewing && componentTypes.map((component) => (
+            <Tooltip key={component.type}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  onClick={() => onComponentSelect(component.type)}
+                >
+                  <component.icon className="w-4 h-4 mr-1" />
+                  {component.label}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Adicionar {component.label}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </TooltipProvider>
       </div>
       
       <div className="flex items-center">

@@ -1,9 +1,10 @@
-﻿import React from "react";
+
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Monitor, Smartphone, EyeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PreviewContent } from "./PreviewContent";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 interface EditPreviewProps {
   isPreviewing: boolean;
@@ -24,48 +25,52 @@ export function EditPreview({
     <div className="flex flex-col h-full">
       <div className="border-b bg-white p-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setViewMode("desktop")}
-                className={cn(viewMode === "desktop" && "bg-accent")}
-              >
-                <Monitor className="w-4 h-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Visualização Desktop</TooltipContent>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setViewMode("desktop")}
+                  className={cn(viewMode === "desktop" && "bg-accent")}
+                >
+                  <Monitor className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Visualização Desktop</TooltipContent>
+            </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setViewMode("mobile")}
-                className={cn(viewMode === "mobile" && "bg-accent")}
-              >
-                <Smartphone className="w-4 h-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Visualização Mobile</TooltipContent>
-          </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setViewMode("mobile")}
+                  className={cn(viewMode === "mobile" && "bg-accent")}
+                >
+                  <Smartphone className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Visualização Mobile</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onPreviewToggle}
-            >
-              <EyeIcon className="w-4 h-4 mr-2" />
-              {isPreviewing ? "Editar" : "Visualizar"}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{isPreviewing ? "Modo Edição" : "Modo Visualização"}</TooltipContent>
-        </Tooltip>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onPreviewToggle}
+              >
+                <EyeIcon className="w-4 h-4 mr-2" />
+                {isPreviewing ? "Editar" : "Visualizar"}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{isPreviewing ? "Modo Edição" : "Modo Visualização"}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <div className={cn(

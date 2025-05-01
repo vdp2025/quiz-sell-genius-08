@@ -11,23 +11,26 @@ import EditorPage from './pages/admin/EditorPage';
 import QuizBuilderPage from './pages/admin/QuizBuilderPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const App = () => {
   return (
     <AuthProvider>
       <QuizProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/quiz" element={<QuizPage />} />
-            <Route path="/resultado" element={<ResultPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/editor" element={<EditorPage />} />
-            <Route path="/admin/quiz-builder" element={<QuizBuilderPage />} />
-            <Route path="/admin/settings" element={<SettingsPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Router>
+        <TooltipProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/resultado" element={<ResultPage />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/editor" element={<EditorPage />} />
+              <Route path="/admin/quiz-builder" element={<QuizBuilderPage />} />
+              <Route path="/admin/settings" element={<SettingsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Router>
+        </TooltipProvider>
       </QuizProvider>
     </AuthProvider>
   );

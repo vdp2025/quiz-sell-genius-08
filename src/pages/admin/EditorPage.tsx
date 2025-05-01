@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { UnifiedVisualEditor } from '../../components/unified-editor/UnifiedVisualEditor';
 import { StyleResult } from '@/types/quiz';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const EditorPage = () => {
   // Sample style data for the editor preview
@@ -16,7 +17,9 @@ const EditorPage = () => {
   return (
     <AdminLayout>
       <div className="h-[calc(100vh-64px)]">
-        <UnifiedVisualEditor primaryStyle={primaryStyle} />
+        <TooltipProvider>
+          <UnifiedVisualEditor primaryStyle={primaryStyle} />
+        </TooltipProvider>
       </div>
     </AdminLayout>
   );
