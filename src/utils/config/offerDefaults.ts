@@ -14,6 +14,10 @@ export const createOfferConfig = (): OfferSection => ({
       ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
       heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
       heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp"
+    },
+    style: {
+      borderRadius: 'medium',
+      padding: '16px',
     }
   },
   benefits: {
@@ -33,6 +37,10 @@ export const createOfferConfig = (): OfferSection => ({
           description: "Atualizações e conteúdos adicionais sem custos extras."
         }
       ]
+    },
+    style: {
+      borderRadius: 'medium',
+      padding: '16px',
     }
   },
   testimonials: {
@@ -52,6 +60,10 @@ export const createOfferConfig = (): OfferSection => ({
           rating: 5
         }
       ]
+    },
+    style: {
+      borderRadius: 'medium',
+      padding: '16px',
     }
   },
   guarantee: {
@@ -59,6 +71,34 @@ export const createOfferConfig = (): OfferSection => ({
     content: {
       title: "Garantia de 7 dias",
       text: "Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
+    },
+    style: {
+      borderRadius: 'medium',
+      padding: '16px',
+    }
+  },
+  products: {
+    visible: true,
+    content: {
+      title: "Produtos e Bônus",
+      description: "Conheça todos os produtos e bônus incluídos"
+    },
+    style: {
+      borderRadius: 'medium',
+      padding: '16px',
+    }
+  },
+  pricing: {
+    visible: true,
+    content: {
+      price: "39,00",
+      regularPrice: "175,00",
+      ctaText: "Quero meu Guia + Bônus por R$39,00",
+      ctaUrl: "https://pay.hotmart.com/W98977034C"
+    },
+    style: {
+      borderRadius: 'medium',
+      padding: '16px',
     }
   }
 });

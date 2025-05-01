@@ -59,7 +59,7 @@ export const useSalesPageEditor = (styleType: string) => {
             color: '#432818',
             paddingY: '16',
             paddingX: '16',
-            borderRadius: '8'
+            borderRadius: 'medium'
           }
         },
         order: 0
@@ -74,7 +74,7 @@ export const useSalesPageEditor = (styleType: string) => {
             color: '#8F7A6A',
             paddingY: '16',
             paddingX: '16',
-            borderRadius: '8'
+            borderRadius: 'medium'
           }
         },
         order: 1
@@ -92,7 +92,7 @@ export const useSalesPageEditor = (styleType: string) => {
             color: '#432818',
             paddingY: '24',
             paddingX: '16',
-            borderRadius: '8'
+            borderRadius: 'medium'
           }
         },
         order: 2

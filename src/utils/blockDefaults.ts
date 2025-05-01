@@ -14,7 +14,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           textColor: '#432818',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -26,7 +26,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           textColor: '#432818',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -40,7 +40,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           backgroundColor: 'transparent',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -57,7 +57,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           buttonTextColor: '#FFFFFF',
           paddingY: '24',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -74,7 +74,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           accentColor: '#B89B7A',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     

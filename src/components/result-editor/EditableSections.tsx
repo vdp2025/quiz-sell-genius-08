@@ -39,7 +39,7 @@ export const EditableSections: React.FC<EditableSectionsProps> = ({
   // Carregar as configurações da seção ou usar valores padrão
   const headerConfig = config.header?.content || {};
   const primaryStyleConfig = config.mainContent?.content || {};
-  const offerConfig = config.offer?.hero?.content as OfferContent || {};
+  const offerConfig = config.offer?.hero?.content || {};
 
   return (
     <div className="relative max-w-4xl mx-auto">
@@ -88,7 +88,7 @@ export const EditableSections: React.FC<EditableSectionsProps> = ({
           
           <OfferCard 
             primaryStyle={primaryStyle} 
-            config={offerConfig} 
+            config={offerConfig as OfferContent} 
           />
         </div>
       </div>

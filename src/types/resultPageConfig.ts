@@ -57,6 +57,7 @@ export interface OfferSection {
   hero?: {
     visible?: boolean;
     content: OfferContent;
+    style?: Partial<StyleOptions>;
   };
   benefits?: {
     visible?: boolean;
@@ -67,6 +68,7 @@ export interface OfferSection {
         icon?: string;
       }>;
     };
+    style?: Partial<StyleOptions>;
   };
   testimonials?: {
     visible?: boolean;
@@ -79,6 +81,7 @@ export interface OfferSection {
         avatarUrl?: string;
       }>;
     };
+    style?: Partial<StyleOptions>;
   };
   guarantee?: {
     visible?: boolean;
@@ -87,6 +90,17 @@ export interface OfferSection {
       text: string;
       image?: string;
     };
+    style?: Partial<StyleOptions>;
+  };
+  products?: {
+    visible?: boolean;
+    content: Record<string, any>;
+    style?: Partial<StyleOptions>;
+  };
+  pricing?: {
+    visible?: boolean;
+    content: Record<string, any>;
+    style?: Partial<StyleOptions>;
   };
 }
 

@@ -2,12 +2,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Quote } from 'lucide-react';
-
-interface Testimonial {
-  text: string;
-  name: string;
-  role: string;
-}
+import { Testimonial } from '@/types/testimonials';
 
 interface TestimonialsProps {
   items?: Testimonial[];
@@ -44,7 +39,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({ items }) => {
         {testimonialsToShow.map((testimonial, index) => (
           <div key={index} className="p-4 bg-[#fef5f2] rounded-lg relative">
             <Quote className="w-7 h-7 text-[#aa6b5d]/20 absolute -top-3 -left-3" />
-            <p className="text-[#6b605a] text-sm italic mb-4">{testimonial.text}</p>
+            <p className="text-[#6b605a] text-sm italic mb-4">
+              {testimonial.testimonialText || testimonial.text}
+            </p>
             <div className="text-right">
               <p className="font-medium text-[#432818]">{testimonial.name}</p>
               <p className="text-xs text-[#6b605a]">{testimonial.role}</p>

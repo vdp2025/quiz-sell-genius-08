@@ -1,7 +1,25 @@
-
 import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from './resultPageStorage';
+
+export interface QuizQuestion {
+  id: string;
+  title: string;
+  description?: string;
+  type: 'multiple-choice' | 'single-choice' | 'scale';
+  answers: QuizAnswer[];
+  required: number; // Replacing boolean with number
+  order: number;
+}
+
+export interface QuizAnswer {
+  id: string;
+  text: string;
+  value: string;
+  styleScores?: Record<string, number>;
+  required: number; // Replacing boolean with number
+  order: number;
+}
 
 export const createBuilderStateFromQuiz = (
   questions: any[],

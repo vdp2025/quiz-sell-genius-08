@@ -27,7 +27,7 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           textColor: '#432818',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -39,7 +39,7 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           textColor: '#432818',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -53,7 +53,7 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           backgroundColor: 'transparent',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -67,7 +67,7 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           backgroundColor: '#F9F5F1',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -84,7 +84,7 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           buttonTextColor: '#FFFFFF',
           paddingY: '24',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -101,7 +101,7 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           accentColor: '#B89B7A',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
@@ -112,9 +112,9 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
         regularPrice: 'R$ 1.997,00',
         description: 'Investimento único. Acesso vitalício.',
         features: [
-          'Análise detalhada do seu estilo pessoal',
-          'Guia personalizado de compras',
-          'Consultoria virtual 1:1'
+          { name: 'Análise detalhada do seu estilo pessoal', included: true, premium: false },
+          { name: 'Guia personalizado de compras', included: true, premium: false },
+          { name: 'Consultoria virtual 1:1', included: true, premium: false }
         ],
         ctaText: 'Adquirir Agora',
         ctaUrl: '#',
@@ -124,11 +124,11 @@ export const getDefaultContentForType = (type: Block['type']): EditableContent =
           accentColor: '#B89B7A',
           paddingY: '24',
           paddingX: '16',
-          borderRadius: '8'
+          borderRadius: 'medium'
         }
       };
     
-    case 'customCode':
+    case 'custom-code':
       return {
         code: '<!-- Insira seu código HTML personalizado aqui -->'
       };

@@ -9,6 +9,7 @@ import Testimonials from './sales/Testimonials';
 import Guarantee from './sales/Guarantee';
 import Logo from '../ui/logo';
 import { OfferContent } from '@/types/resultPageConfig';
+import { Testimonial } from '@/types/testimonials';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
@@ -30,6 +31,21 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
   const mentorImage = config?.mentorImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp";
   const bonusImage = config?.bonusImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp";
   
+  // Map testimonials to the expected format
+  const mapTestimonials = (testimonials?: Array<any>): Testimonial[] => {
+    if (!testimonials || !Array.isArray(testimonials)) return [];
+    
+    return testimonials.map(item => ({
+      name: item.name || '',
+      role: item.role || '',
+      text: item.testimonialText || '',      // Add text for compatibility
+      testimonialText: item.testimonialText || '',
+      rating: item.rating,
+      avatarUrl: item.avatarUrl,
+      image: item.avatarUrl || ''            // Map avatarUrl to image for compatibility
+    }));
+  };
+
   return (
     <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
       <div className="text-center">
@@ -99,7 +115,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
         />
       </div>
       
-      <Testimonials items={config?.testimonials} />
+      <Testimonials items={mapTestimonials(config?.testimonials)} />
       <Guarantee text={config?.guaranteeText} />
     </div>
   );

@@ -24,7 +24,8 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       },
       style: {
         textAlign: 'left',
-        padding: '16'
+        padding: '16',
+        borderRadius: 'medium'
       }
     },
     offer: createOfferConfig()
