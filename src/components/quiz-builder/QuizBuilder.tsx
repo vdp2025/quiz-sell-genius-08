@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -11,7 +12,7 @@ import QuizTemplateImporter from './components/QuizTemplateImporter';
 import QuizPreview from './preview/QuizPreview';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from '@/services/resultPageStorage';
-import { createBuilderStateFromResultPage, loadQuizResultConfig } from '@/services/quizBuilderService';
+import { createBuilderStateFromQuiz, loadQuizResultConfig } from '@/services/quizBuilderService';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -138,17 +139,8 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handleImportTemplate = (template: QuizBuilderState) => {
-    const editableComponents = template.components.map(component => ({
-      ...component,
-      data: {
-        ...component.data,
-        isEditable: true,
-        originalQuestionId: component.id
-      }
-    }));
-
     initializeStages(template.stages);
-    initializeComponents(editableComponents);
+    initializeComponents(template.components);
     
     if (template.stages.length > 0) {
       setActiveStage(template.stages[0].id);
@@ -161,13 +153,32 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handleImportResultPage = (config: ResultPageConfig) => {
-    const builderState = createBuilderStateFromResultPage(config);
-    initializeStages(builderState.stages);
-    initializeComponents(builderState.components);
+    // Create a new stage for the result page
+    const resultStageId = `stage-${Date.now()}`;
     
-    if (builderState.stages.length > 0) {
-      setActiveStage(builderState.stages[0].id);
-    }
+    const resultStage: QuizStage = {
+      id: resultStageId,
+      title: 'Página de Resultado',
+      type: 'result',
+      order: 0
+    };
+    
+    // Create components based on blocks in the config
+    const resultComponents = config.blocks?.map((block, index) => ({
+      id: `component-${Date.now()}-${index}`,
+      type: 'headline' as QuizComponentType, // Default to headline, modify as needed
+      order: index,
+      stageId: resultStageId,
+      content: {
+        title: block.content.title || 'Sem título',
+        subtitle: block.content.subtitle || '',
+        alignment: block.content.alignment || 'center'
+      }
+    })) || [];
+    
+    initializeStages([resultStage]);
+    initializeComponents(resultComponents);
+    setActiveStage(resultStage.id);
     
     toast({
       title: "Página de resultado importada",

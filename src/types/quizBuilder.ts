@@ -16,7 +16,10 @@ export type QuizComponentType =
   | 'quizResult'
   | 'stageCover'
   | 'stageQuestion'
-  | 'stageResult';
+  | 'stageResult'
+  | 'button'
+  | 'choice'
+  | 'result';
 
 export interface QuizComponentStyle {
   backgroundColor?: string;
@@ -31,7 +34,8 @@ export interface QuizStage {
   id: string;
   title: string;
   order: number;
-  type: 'cover' | 'question' | 'result' | 'strategic';
+  type: 'cover' | 'question' | 'result' | 'strategic' | 'welcome';
+  isEnabled?: boolean;
   componentId?: string;
 }
 
@@ -45,7 +49,8 @@ export interface QuizComponentData {
   type: QuizComponentType;
   order: number;
   stageId?: string;
-  data: {
+  content?: any;
+  data?: {
     [key: string]: any;
     title?: string;
     subtitle?: string;

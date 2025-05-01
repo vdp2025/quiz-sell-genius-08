@@ -11,7 +11,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'center' as const,
         style: {
           backgroundColor: '#ffffff',
-          textColor: '#432818',
+          color: '#432818',
           paddingY: '24px',
           paddingX: '16px',
           borderRadius: 'md' as BorderRadiusType
@@ -23,7 +23,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'left' as const,
         style: {
           backgroundColor: '#F9F5F1',
-          textColor: '#8F7A6A',
+          color: '#8F7A6A',
           paddingY: '16px',
           paddingX: '16px',
           borderRadius: 'md' as BorderRadiusType
@@ -50,7 +50,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'center' as const,
         style: {
           backgroundColor: '#ffffff',
-          textColor: '#432818',
+          color: '#432818',
           buttonColor: '#B89B7A',
           paddingY: '24px',
           paddingX: '16px',
@@ -68,7 +68,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'left' as const,
         style: {
           backgroundColor: '#ffffff',
-          textColor: '#432818',
+          color: '#432818',
           paddingY: '24px',
           paddingX: '16px',
           borderRadius: 'md' as BorderRadiusType
@@ -94,7 +94,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'center' as const,
         style: {
           backgroundColor: '#F9F5F1',
-          textColor: '#432818',
+          color: '#432818',
           paddingY: '24px',
           paddingX: '16px',
           borderRadius: 'md' as BorderRadiusType
@@ -108,7 +108,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'center' as const,
         style: {
           backgroundColor: '#ffffff',
-          textColor: '#432818',
+          color: '#432818',
           paddingY: '24px',
           paddingX: '16px',
           borderRadius: 'md' as BorderRadiusType
@@ -123,7 +123,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         alignment: 'center' as const,
         style: {
           backgroundColor: 'transparent',
-          textColor: '#432818',
+          color: '#432818',
           paddingY: '16px',
           paddingX: '16px',
           borderRadius: 'none' as BorderRadiusType

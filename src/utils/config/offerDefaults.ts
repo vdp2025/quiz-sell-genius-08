@@ -2,6 +2,7 @@
 import { OfferContent, OfferSection, Section } from '@/types/resultPageConfig';
 
 export const createOfferConfig = (): Section => ({
+  visible: true,
   content: {
     title: "TRANSFORME SEU ESTILO PESSOAL",
     subtitle: "Com a nossa consultoria especializada",
@@ -38,7 +39,33 @@ export const createOfferSectionConfig = (): OfferSection => {
         textAlign: 'center',
         paddingY: '2rem',
         paddingX: '1rem'
-      }
+      },
+      visible: true
+    },
+    benefits: {
+      content: {},
+      style: {},
+      visible: true
+    },
+    products: {
+      content: {},
+      style: {},
+      visible: true
+    },
+    pricing: {
+      content: {},
+      style: {},
+      visible: true
+    },
+    testimonials: {
+      content: {},
+      style: {},
+      visible: true
+    },
+    guarantee: {
+      content: {},
+      style: {},
+      visible: true
     }
   };
 };

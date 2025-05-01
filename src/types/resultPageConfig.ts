@@ -1,4 +1,3 @@
-
 import { Block } from './editor';
 
 export interface StyleOptions {
@@ -6,6 +5,7 @@ export interface StyleOptions {
   fontWeight?: string;
   color?: string;
   backgroundColor?: string;
+  textColor?: string;
   padding?: string | number;
   paddingY?: string | number;
   paddingX?: string | number;
@@ -28,6 +28,7 @@ export interface StyleOptions {
   borderColor?: string;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   type?: string;
+  buttonColor?: string;
 }
 
 export interface ImageOptions {

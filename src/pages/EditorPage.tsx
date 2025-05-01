@@ -5,7 +5,7 @@ import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVis
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
 import { defaultResultTemplate } from '@/config/resultPageTemplates';
-import { createOfferConfig } from '@/utils/config/offerDefaults';
+import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
 
 export const EditorPage = () => {
   const [showTemplates, setShowTemplates] = useState(false);
@@ -34,7 +34,7 @@ export const EditorPage = () => {
       ...defaultResultTemplate.mainContent,
       visible: true
     },
-    offer: createOfferConfig(), // Using the createOfferConfig() function to create a proper OfferSection
+    offer: createOfferSectionConfig(), // Using the createOfferConfig() function to create a proper OfferSection
     secondaryStyles: {
       visible: true,
       content: {},
