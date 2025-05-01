@@ -16,6 +16,7 @@ import { StyleResult } from '@/types/quiz';
 
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
+  onShowTemplates?: () => void;
 }
 
 export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 

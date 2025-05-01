@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import ComponentRenderer from './ComponentRenderer';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 interface ComponentPreviewPanelProps {
   components: QuizComponentData[];
@@ -24,6 +26,42 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
   activeStage,
   isPreviewing
 }) => {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // Minimum distance before activating drag
+      }
+    })
+  );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    setActiveId(active.id as string);
+  };
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { over } = event;
+    if (over) {
+      setOverId(over.id as string);
+    } else {
+      setOverId(null);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    setActiveId(null);
+    setOverId(null);
+    
+    if (over && active.id !== over.id) {
+      onMoveComponent(active.id as string, over.id as string);
+    }
+  };
+
   if (!activeStage) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -64,16 +102,32 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
               </Button>
             </div>
           ) : (
-            sortedComponents.map((component) => (
-              <ComponentRenderer
-                key={component.id}
-                component={component}
-                isSelected={component.id === selectedComponentId}
-                onSelect={() => onSelectComponent(component.id)}
-                onMove={onMoveComponent}
-                isPreviewing={isPreviewing}
-              />
-            ))
+            <DndContext
+              sensors={sensors}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={sortedComponents.map(component => component.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="space-y-4">
+                  {sortedComponents.map((component) => (
+                    <ComponentRenderer
+                      key={component.id}
+                      component={component}
+                      isSelected={component.id === selectedComponentId}
+                      onSelect={() => onSelectComponent(component.id)}
+                      onMove={onMoveComponent}
+                      isPreviewing={isPreviewing}
+                      isActive={component.id === activeId}
+                      isOver={component.id === overId}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </div>
       </ScrollArea>

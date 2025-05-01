@@ -11,17 +11,20 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export type EditorTab = 'quiz' | 'result' | 'sales';
 
 interface UnifiedVisualEditorProps {
   primaryStyle: StyleResult;
   initialActiveTab?: EditorTab;
+  initialConfig?: ResultPageConfig;
 }
 
 export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ 
   primaryStyle, 
-  initialActiveTab = 'quiz' 
+  initialActiveTab = 'quiz',
+  initialConfig
 }) => {
   const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
   const [isLoading, setIsLoading] = useState(false);
@@ -115,7 +118,11 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         
         <TabsContent value="result" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            <ResultEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+            <ResultEditorPanel 
+              isPreviewing={isPreviewing} 
+              primaryStyle={primaryStyle} 
+              initialConfig={initialConfig}
+            />
           </TooltipProvider>
         </TabsContent>
         
@@ -137,6 +144,8 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
                   onClick={() => {
                     loadTemplateForCurrentEditor({
                       title: "Template Padrão",
+                      description: "Template padrão para " + (activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'),
+                      styleType: primaryStyle.category,
                       blocks: activeTab === 'sales' ? [
                         {
                           id: "headline-1",
@@ -144,7 +153,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
                           content: { 
                             title: "Descubra seu Estilo Único",
                             subtitle: "Transforme sua imagem pessoal",
-                            style: { backgroundColor: "#ffffff", color: "#432818", paddingY: 24, paddingX: 16 }
+                            style: { backgroundColor: "#ffffff", textColor: "#432818", paddingY: "24", paddingX: "16" }
                           },
                           order: 0
                         },
@@ -153,11 +162,13 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
                           type: "text",
                           content: { 
                             text: "Nossa consultoria especializada irá ajudar você a encontrar o estilo que combina com sua personalidade e destaca seus pontos fortes.",
-                            style: { backgroundColor: "#F9F5F1", color: "#8F7A6A", paddingY: 16, paddingX: 16 }
+                            style: { backgroundColor: "#F9F5F1", textColor: "#8F7A6A", paddingY: "16", paddingX: "16" }
                           },
                           order: 1
                         }
-                      ] : {}
+                      ] : [],
+                      createdAt: new Date().toISOString(),
+                      updatedAt: new Date().toISOString(),
                     });
                     closeTemplateModal();
                     toast({

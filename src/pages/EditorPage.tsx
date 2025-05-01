@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import AdminLayout from '../../components/admin/AdminLayout';
-import { UnifiedVisualEditor } from '../../components/unified-editor/UnifiedVisualEditor';
+import AdminLayout from '@/components/admin/AdminLayout';
+import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';
 import { StyleResult } from '@/types/quiz';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { createDefaultConfig } from '@/utils/resultPageDefaults';

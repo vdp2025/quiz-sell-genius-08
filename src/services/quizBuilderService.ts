@@ -185,7 +185,6 @@ export const generateInitialStages = (): QuizBuilderState => {
 };
 
 export const createBuilderStateFromResultPage = (config: ResultPageConfig): QuizBuilderState => {
-  // Create a simple quiz that leads to this result page
   const coverStageId = `stage-cover-${Date.now()}`;
   const questionStageId = `stage-question-${Date.now()}`;
   const resultStageId = `stage-result-${Date.now()}`;
