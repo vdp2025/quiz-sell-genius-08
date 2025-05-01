@@ -48,7 +48,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
       <EditorToolbar 
         onUndo={undo}
         onRedo={redo}
-        onPreviewToggle={onPreviewToggle}
+        onTogglePreview={onPreviewToggle}
         onSave={handleSave}
         isPreviewing={isPreviewing}
         canUndo={canUndo}

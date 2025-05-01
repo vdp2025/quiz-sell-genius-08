@@ -45,7 +45,6 @@ const ResultPage = () => {
       <QuizResult 
         primaryStyle={resultToUse.primaryStyle}
         secondaryStyles={resultToUse.secondaryStyles}
-        onReset={resetQuiz}
       />
     </div>
   );

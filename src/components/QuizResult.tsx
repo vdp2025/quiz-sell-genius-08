@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
@@ -16,13 +17,15 @@ interface QuizResultProps {
   secondaryStyles: StyleResult[];
   config?: ResultPageConfig;
   previewMode?: boolean;
+  onReset?: () => void;
 }
 
 const QuizResult: React.FC<QuizResultProps> = ({
   primaryStyle,
   secondaryStyles,
   config: externalConfig,
-  previewMode = false
+  previewMode = false,
+  onReset
 }) => {
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>('Visitante');
