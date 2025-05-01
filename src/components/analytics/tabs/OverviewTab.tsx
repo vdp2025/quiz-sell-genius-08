@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { MetricCard } from '../MetricCard';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { Activity, Users, CheckCircle, MessageSquare } from 'lucide-react';
+import { GridLayout } from '@/components/shared/GridLayout';
 
 interface OverviewTabProps {
   metrics: any;
@@ -26,8 +27,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
   const avgConclusoes = metrics?.totalCompletes ? metrics.totalCompletes / (chartData.length || 1) : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-4">
+      <GridLayout columns={4} gap="md">
         <MetricCard 
           title="Total de Inicios" 
           value={metrics?.totalStarts || 0}
@@ -38,7 +39,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           title="Taxa de Conclusão" 
           value={`${metrics?.completionRate.toFixed(1) || 0}%`}
           subtitle={`${metrics?.totalCompletes || 0} conclusões`}
-          trend={5.2} // Example trend value
+          trend={5.2}
           icon={<CheckCircle className="h-4 w-4" />}
         />
         
@@ -46,7 +47,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           title="Taxa de Conversão" 
           value={`${metrics?.conversionRate.toFixed(1) || 0}%`}
           subtitle={`${metrics?.totalLeads || 0} leads gerados`}
-          trend={-2.1} // Example trend value
+          trend={-2.1}
           icon={<MessageSquare className="h-4 w-4" />}
         />
         
@@ -54,20 +55,20 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           title="Taxa de Vendas" 
           value={`${metrics?.salesRate.toFixed(1) || 0}%`}
           subtitle={`${metrics?.totalSales || 0} vendas realizadas`}
-          trend={8.4} // Example trend value
+          trend={8.4}
           icon={<Activity className="h-4 w-4" />}
         />
-      </div>
+      </GridLayout>
       
       <Card className="border border-border/60">
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle>Tendências</CardTitle>
           <CardDescription>Acompanhe a evolução do funil de conversão</CardDescription>
         </CardHeader>
-        <CardContent className="pt-4">
-          <div className="h-[350px] w-full">
+        <CardContent className="pt-2">
+          <div className="h-[280px] w-full">
             <ChartContainer config={chartConfig}>
-              <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+              <LineChart data={chartData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                 <XAxis 
                   dataKey="date" 
@@ -93,8 +94,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   dataKey="inicios" 
                   stroke="#4f46e5" 
                   strokeWidth={2.5}
-                  dot={{ r: 4, strokeWidth: 2 }}
-                  activeDot={{ r: 6, strokeWidth: 0, fill: '#4f46e5' }} 
+                  dot={{ r: 3, strokeWidth: 2 }}
+                  activeDot={{ r: 5, strokeWidth: 0, fill: '#4f46e5' }} 
                   animationDuration={1500}
                   animationEasing="ease-in-out"
                 />
@@ -103,8 +104,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   dataKey="conclusoes" 
                   stroke="#10b981" 
                   strokeWidth={2.5} 
-                  dot={{ r: 4, strokeWidth: 2 }}
-                  activeDot={{ r: 6, strokeWidth: 0, fill: '#10b981' }}
+                  dot={{ r: 3, strokeWidth: 2 }}
+                  activeDot={{ r: 5, strokeWidth: 0, fill: '#10b981' }}
                   animationDuration={1500}
                   animationEasing="ease-in-out"
                   animationBegin={300}
@@ -114,8 +115,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   dataKey="resultados" 
                   stroke="#f59e0b" 
                   strokeWidth={2.5} 
-                  dot={{ r: 4, strokeWidth: 2 }}
-                  activeDot={{ r: 6, strokeWidth: 0, fill: '#f59e0b' }}
+                  dot={{ r: 3, strokeWidth: 2 }}
+                  activeDot={{ r: 5, strokeWidth: 0, fill: '#f59e0b' }}
                   animationDuration={1500}
                   animationEasing="ease-in-out"
                   animationBegin={600}
@@ -125,8 +126,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   dataKey="leads" 
                   stroke="#ef4444" 
                   strokeWidth={2.5} 
-                  dot={{ r: 4, strokeWidth: 2 }}
-                  activeDot={{ r: 6, strokeWidth: 0, fill: '#ef4444' }}
+                  dot={{ r: 3, strokeWidth: 2 }}
+                  activeDot={{ r: 5, strokeWidth: 0, fill: '#ef4444' }}
                   animationDuration={1500}
                   animationEasing="ease-in-out"
                   animationBegin={900}

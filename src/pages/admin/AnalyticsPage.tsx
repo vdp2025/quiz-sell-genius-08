@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { calculateQuizMetrics, getAnalyticsEvents, clearAnalyticsData, groupEventsByUser, getUserProgressData, getUTMData } from '@/utils/analytics';
 import { ChartConfig } from '@/components/ui/chart';
 import { Badge } from '@/components/ui/badge';
+import { ContentContainer } from '@/components/shared/ContentContainer';
 
 // Import components
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
@@ -322,14 +323,14 @@ const AnalyticsPage: React.FC = () => {
     const { payload } = props;
     
     return (
-      <div className="flex flex-wrap justify-center gap-5 pt-4">
+      <div className="flex flex-wrap justify-center gap-3 pt-1">
         {payload.map((entry: any, index: number) => (
           <div key={`item-${index}`} className="flex items-center">
             <div 
-              className="w-3 h-3 mr-2 rounded-full"
+              className="w-2 h-2 mr-1 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-sm text-foreground/80">{entry.value}</span>
+            <span className="text-xs text-foreground/80">{entry.value}</span>
           </div>
         ))}
       </div>
@@ -338,7 +339,7 @@ const AnalyticsPage: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="container mx-auto p-6">
+      <ContentContainer size="full" className="py-3">
         <DashboardHeader 
           timeRange={timeRange}
           onTimeRangeChange={setTimeRange}
@@ -347,9 +348,9 @@ const AnalyticsPage: React.FC = () => {
           onClearData={handleClearData}
         />
         
-        <div className="mt-6">
+        <div className="mt-4">
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-7 mb-6">
+            <TabsList className="grid w-full grid-cols-7 mb-4">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="funnel">Conversion Funnel</TabsTrigger>
               <TabsTrigger value="users">Users</TabsTrigger>
@@ -360,7 +361,7 @@ const AnalyticsPage: React.FC = () => {
             </TabsList>
             
             {/* Overview Tab */}
-            <TabsContent value="overview" className="mt-6">
+            <TabsContent value="overview" className="mt-4">
               <OverviewTab 
                 metrics={metrics} 
                 chartData={chartData} 
@@ -371,7 +372,7 @@ const AnalyticsPage: React.FC = () => {
             </TabsContent>
             
             {/* Funnel Tab */}
-            <TabsContent value="funnel" className="mt-6">
+            <TabsContent value="funnel" className="mt-4">
               <FunnelTab 
                 metrics={metrics} 
                 funnelData={funnelData} 
@@ -382,7 +383,7 @@ const AnalyticsPage: React.FC = () => {
             </TabsContent>
             
             {/* Users Tab */}
-            <TabsContent value="users" className="mt-6">
+            <TabsContent value="users" className="mt-4">
               <UsersTab 
                 prepareUsersList={prepareUsersList} 
                 handleViewUserDetails={handleViewUserDetails} 
@@ -396,7 +397,7 @@ const AnalyticsPage: React.FC = () => {
             </TabsContent>
             
             {/* User Progress Tab */}
-            <TabsContent value="user-progress" className="mt-6">
+            <TabsContent value="user-progress" className="mt-4">
               <ProgressTab 
                 userProgressData={userProgressData} 
                 chartConfig={chartConfig} 
@@ -405,7 +406,7 @@ const AnalyticsPage: React.FC = () => {
             </TabsContent>
             
             {/* UTM Analytics Tab */}
-            <TabsContent value="utm" className="mt-6">
+            <TabsContent value="utm" className="mt-4">
               <UtmTab
                 utmData={utmData}
                 chartConfig={chartConfig}
@@ -414,12 +415,12 @@ const AnalyticsPage: React.FC = () => {
             </TabsContent>
             
             {/* API Integrations Tab */}
-            <TabsContent value="integrations" className="mt-6">
+            <TabsContent value="integrations" className="mt-4">
               <IntegrationTab />
             </TabsContent>
             
             {/* Raw Data Tab */}
-            <TabsContent value="data" className="mt-6">
+            <TabsContent value="data" className="mt-4">
               <DataTab 
                 getAnalyticsEvents={getAnalyticsEvents} 
                 handleExportData={handleExportData} 
@@ -427,7 +428,7 @@ const AnalyticsPage: React.FC = () => {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
+      </ContentContainer>
     </AdminLayout>
   );
 };

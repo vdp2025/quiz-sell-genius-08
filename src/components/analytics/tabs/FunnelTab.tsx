@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Progress } from '@/components/ui/progress';
+import { GridLayout } from '@/components/shared/GridLayout';
 
 interface FunnelTabProps {
   metrics: any;
@@ -24,19 +25,19 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
   const FUNNEL_COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444'];
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Card className="border border-border/60">
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle>Funil de Conversão</CardTitle>
           <CardDescription>Visualize a performance do seu funil de conversão</CardDescription>
         </CardHeader>
-        <CardContent className="pt-4">
-          <div className="h-[400px]">
+        <CardContent className="pt-2">
+          <div className="h-[280px]">
             <ChartContainer config={chartConfig}>
               <BarChart 
                 data={funnelData} 
                 layout="vertical"
-                margin={{ top: 20, right: 30, left: 40, bottom: 5 }}
+                margin={{ top: 20, right: 20, left: 40, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
                 <XAxis 
@@ -51,7 +52,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
                   stroke="#888888"
                   tick={{ fill: '#888888', fontSize: 12 }}
                   tickLine={{ stroke: '#e0e0e0' }}
-                  width={150}
+                  width={120}
                 />
                 <Tooltip content={renderTooltipContent} />
                 <Legend content={renderLegendContent} />
@@ -69,12 +70,12 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
             </ChartContainer>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <GridLayout columns={3} gap="md" className="mt-4">
             <Card className="border border-border/60">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Início → Conclusão</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-2 pt-0">
                 <div className="flex justify-between items-baseline">
                   <p className="text-2xl font-bold">{metrics?.completionRate.toFixed(1) || 0}%</p>
                   <p className="text-xs text-muted-foreground">de {metrics?.totalStarts || 0} inicios</p>
@@ -91,7 +92,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Conclusão → Visualização</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-2 pt-0">
                 <div className="flex justify-between items-baseline">
                   <p className="text-2xl font-bold">
                     {metrics?.totalCompletes ? ((metrics.totalResultViews / metrics.totalCompletes) * 100).toFixed(1) : 0}%
@@ -110,7 +111,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Visualização → Lead</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-2 pt-0">
                 <div className="flex justify-between items-baseline">
                   <p className="text-2xl font-bold">
                     {metrics?.totalResultViews ? ((metrics.totalLeads / metrics.totalResultViews) * 100).toFixed(1) : 0}%
@@ -124,7 +125,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
                 />
               </CardContent>
             </Card>
-          </div>
+          </GridLayout>
         </CardContent>
       </Card>
     </div>
