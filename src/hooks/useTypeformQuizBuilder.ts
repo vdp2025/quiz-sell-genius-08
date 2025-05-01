@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { toast } from '@/components/ui/use-toast';
@@ -6,7 +5,9 @@ import { useQuizStages } from './useQuizStages';
 import { useQuizComponents } from './useQuizComponents';
 import { 
   generateInitialStages, 
-  createBuilderStateFromQuiz 
+  createBuilderStateFromQuiz,
+  loadQuizResultConfig,
+  createBuilderStateFromResultPage
 } from '@/services/quizBuilderService';
 
 const STORAGE_KEY = 'typeform_quiz_builder_data';
@@ -190,8 +191,8 @@ export const useTypeformQuizBuilder = (
         buttonText: 'Iniciar Quiz',
         backgroundColor: '#FAF9F7',
         textColor: '#432818',
-        paddingY: 32,
-        paddingX: 16
+        paddingY: '32',
+        paddingX: '16'
       };
     } else if (type === 'stageQuestion') {
       initialData = {
@@ -208,8 +209,8 @@ export const useTypeformQuizBuilder = (
         selectionIndicator: 'border',
         backgroundColor: '#FAF9F7',
         textColor: '#432818',
-        paddingY: 24,
-        paddingX: 16
+        paddingY: '24',
+        paddingX: '16'
       };
     } else if (type === 'stageResult') {
       initialData = {
@@ -222,15 +223,15 @@ export const useTypeformQuizBuilder = (
         accentColor: '#B89B7A',
         backgroundColor: '#FAF9F7',
         textColor: '#432818',
-        paddingY: 32,
-        paddingX: 16
+        paddingY: '32',
+        paddingX: '16'
       };
     } else if (type === 'text') {
       initialData = {
         title: '',
         text: 'Insira seu texto aqui...',
-        paddingY: 16,
-        paddingX: 16
+        paddingY: '16',
+        paddingX: '16'
       };
     } else if (type === 'image') {
       initialData = {
@@ -238,8 +239,8 @@ export const useTypeformQuizBuilder = (
         alt: '',
         title: '',
         imageSize: 'medium',
-        paddingY: 16,
-        paddingX: 16
+        paddingY: '16',
+        paddingX: '16'
       };
     }
     

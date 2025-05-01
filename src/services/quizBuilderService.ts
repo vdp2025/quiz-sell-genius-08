@@ -1,8 +1,8 @@
-
 import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { QuizImportData } from '@/types/quizBuilderTypes';
 import { generateId } from '@/utils/idGenerator';
 import { createComponent } from '@/utils/componentCreator';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 
 export const createBuilderStateFromQuiz = (
   questions: any[],
@@ -241,4 +241,72 @@ export const convertBuilderStateToQuizData = (state: QuizBuilderState) => {
     showPercentages: resultComponent?.data.showPercentages || true,
     showDescriptions: resultComponent?.data.showDescriptions || true
   };
+};
+
+// Create builder state from result page config
+export const createBuilderStateFromResultPage = (config: ResultPageConfig): QuizBuilderState => {
+  // Create a cover stage and a result stage
+  const stages: QuizStage[] = [
+    {
+      id: `stage-cover-${generateId()}`,
+      title: 'Etapa 1: Capa do Quiz',
+      order: 0,
+      type: 'cover'
+    },
+    {
+      id: `stage-result-${generateId()}`,
+      title: 'Resultado Personalizado',
+      order: 1,
+      type: 'result'
+    }
+  ];
+  
+  // Create components for the stages
+  const components: QuizComponentData[] = [
+    createComponent({
+      type: 'stageCover',
+      data: {
+        title: config.title || 'Seu Estilo Pessoal',
+        subtitle: config.subtitle || 'Descubra suas preferências de estilo',
+        buttonText: 'Começar Quiz',
+        backgroundColor: config.backgroundColor || '#FAF9F7',
+        textColor: config.textColor || '#432818',
+        paddingY: 32,
+        paddingX: 16
+      }
+    }, stages[0].id, 0),
+    
+    createComponent({
+      type: 'stageResult',
+      data: {
+        title: config.resultTitle || 'Seu Resultado de Estilo',
+        primaryStyleTitle: 'Seu Estilo Predominante',
+        secondaryStylesTitle: 'Estilos Complementares',
+        showPercentages: config.showPercentages !== undefined ? config.showPercentages : true,
+        showDescriptions: config.showDescriptions !== undefined ? config.showDescriptions : true,
+        callToActionText: config.callToAction || 'Ver Recomendações',
+        accentColor: config.accentColor || '#B89B7A',
+        backgroundColor: config.backgroundColor || '#FAF9F7',
+        textColor: config.textColor || '#432818',
+        paddingY: 32,
+        paddingX: 16
+      }
+    }, stages[1].id, 0)
+  ];
+  
+  return { stages, components };
+};
+
+// Load quiz result configuration from storage
+export const loadQuizResultConfig = (styleType: string): ResultPageConfig | null => {
+  try {
+    const storedConfig = localStorage.getItem(`result_page_${styleType.toLowerCase()}`);
+    if (storedConfig) {
+      return JSON.parse(storedConfig);
+    }
+    return null;
+  } catch (error) {
+    console.error('Error loading result config:', error);
+    return null;
+  }
 };

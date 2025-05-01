@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -6,7 +5,7 @@ import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PopoverTrigger, PopoverContent, Popover } from '@/components/ui/popover';
-import { PaintBucket, Border, Layout } from 'lucide-react';
+import { PaintBucket, BorderAll, LayoutGrid } from 'lucide-react';
 
 interface StylePropertiesEditorProps {
   style: Record<string, any>;
@@ -55,10 +54,10 @@ export const StylePropertiesEditor: React.FC<StylePropertiesEditorProps> = ({
             <PaintBucket className="h-4 w-4 mr-1.5" /> Cores
           </TabsTrigger>
           <TabsTrigger value="borders">
-            <Border className="h-4 w-4 mr-1.5" /> Bordas
+            <BorderAll className="h-4 w-4 mr-1.5" /> Bordas
           </TabsTrigger>
           <TabsTrigger value="spacing">
-            <Layout className="h-4 w-4 mr-1.5" /> Espaçamento
+            <LayoutGrid className="h-4 w-4 mr-1.5" /> Espaçamento
           </TabsTrigger>
         </TabsList>
         

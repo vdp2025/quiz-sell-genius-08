@@ -30,7 +30,7 @@ import {
   Upload,
   Copy,
   LayoutTemplate,
-  QuestionMarkCircle
+  HelpCircle
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/components/ui/use-toast';
