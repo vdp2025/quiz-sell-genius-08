@@ -17,37 +17,34 @@ import BenefitList from '@/components/quiz-result/sales/BenefitList';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
-
 const ResultPage: React.FC = () => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
-  const { globalStyles } = useGlobalStyles();
-
+  const {
+    primaryStyle,
+    secondaryStyles
+  } = useQuiz();
+  const {
+    globalStyles
+  } = useGlobalStyles();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   if (!primaryStyle) {
     return <ErrorState />;
   }
-
-  const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
-
-  return (
-    <div
-      className="min-h-screen bg-[#fffaf7]"
-      style={{
-        backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-        color: globalStyles.textColor || '#432818',
-        fontFamily: globalStyles.fontFamily || 'inherit',
-      }}
-    >
-      <Header
-        primaryStyle={primaryStyle}
-        logoHeight={globalStyles.logoHeight}
-        logo={globalStyles.logo}
-        logoAlt={globalStyles.logoAlt}
-      />
+  const {
+    category
+  } = primaryStyle;
+  const {
+    image,
+    guideImage,
+    description
+  } = styleConfig[category];
+  return <div className="min-h-screen bg-[#fffaf7]" style={{
+    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+    color: globalStyles.textColor || '#432818',
+    fontFamily: globalStyles.fontFamily || 'inherit'
+  }}>
+      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Estilo Principal */}
@@ -60,14 +57,11 @@ const ResultPage: React.FC = () => {
               
               <div className="max-w-md mx-auto mb-6">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#8F7A6A]">Porcentagem de compatibilidade</span>
+                  <span className="text-sm text-[#8F7A6A]">
+                </span>
                   <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
                 </div>
-                <Progress 
-                  value={primaryStyle.percentage} 
-                  className="h-2 bg-[#F3E8E6]"
-                  indicatorClassName="bg-[#B89B7A]"
-                />
+                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-[#B89B7A]" />
               </div>
             </div>
 
@@ -83,19 +77,11 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
               <div>
-                <img
-                  src={image}
-                  alt={`Estilo ${category}`}
-                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-                />
+                <img src={image} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
               </div>
             </div>
             <div className="mt-8">
-              <img
-                src={guideImage}
-                alt={`Guia de Estilo ${category}`}
-                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-              />
+              <img src={guideImage} alt={`Guia de Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
             </div>
           </AnimatedWrapper>
         </Card>
@@ -122,25 +108,14 @@ const ResultPage: React.FC = () => {
                 Você vai aprender:
               </h3>
               <ul className="space-y-3">
-                {[
-                  'Como montar looks com intenção (e não no improviso)',
-                  'Como usar suas cores, modelagens e tecidos a seu favor',
-                  'Como alinhar sua imagem com seus valores e objetivos',
-                  'Como parar de comprar por impulso e montar um guarda-roupa funcional',
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start">
+                {['Como montar looks com intenção (e não no improviso)', 'Como usar suas cores, modelagens e tecidos a seu favor', 'Como alinhar sua imagem com seus valores e objetivos', 'Como parar de comprar por impulso e montar um guarda-roupa funcional'].map((item, index) => <li key={index} className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" />
                     <span>{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
             <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp"
-                alt="Guia de Estilo - 3 Revistas"
-                className="w-full h-auto rounded-lg shadow-sm"
-              />
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp" alt="Guia de Estilo - 3 Revistas" className="w-full h-auto rounded-lg shadow-sm" />
             </div>
           </div>
 
@@ -157,11 +132,7 @@ const ResultPage: React.FC = () => {
                   Itens essenciais que descomplicam a rotina e valorizam o seu
                   estilo pessoal.
                 </p>
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-                  alt="Peças-chave do Guarda-Roupa"
-                  className="w-full h-auto rounded-lg"
-                />
+                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" alt="Peças-chave do Guarda-Roupa" className="w-full h-auto rounded-lg" />
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
@@ -171,21 +142,13 @@ const ResultPage: React.FC = () => {
                   Para alinhar seu rosto, cabelo e maquiagem com a sua
                   identidade visual.
                 </p>
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
-                  alt="Mini Guia de Visagismo Facial"
-                  className="w-full h-auto rounded-lg"
-                />
+                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" alt="Mini Guia de Visagismo Facial" className="w-full h-auto rounded-lg" />
               </div>
             </div>
           </div>
 
           <div className="mb-8">
-            <img
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-              alt="Todos os produtos e bônus"
-              className="w-full h-auto rounded-lg"
-            />
+            <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" alt="Todos os produtos e bônus" className="w-full h-auto rounded-lg" />
           </div>
 
           <div className="bg-[#fff7f3] p-6 rounded-lg text-center">
@@ -202,13 +165,7 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            <Button
-              onClick={() =>
-                (window.location.href =
-                  'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912')
-              }
-              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
-            >
+            <Button onClick={() => window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'} className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors">
               <ShoppingCart className="w-5 h-5 mr-2" />
               Quero meu Guia + Bônus por R$39,00
             </Button>
@@ -222,8 +179,6 @@ const ResultPage: React.FC = () => {
         <MentorSection />
         <GuaranteeSection />
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ResultPage;
