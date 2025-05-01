@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
+import { Progress } from '@/components/ui/progress';
 
 interface ProgressTabProps {
   userProgressData: any[];
@@ -16,9 +17,16 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
   chartConfig,
   renderTooltipContent
 }) => {
+  // Color gradient for progress bars
+  const getBarColor = (index: number, total: number) => {
+    // Gradient from blue to red based on position
+    const hue = 240 - (index / (total - 1) * 160);
+    return `hsl(${hue}, 80%, 60%)`;
+  };
+
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border border-border/60">
         <CardHeader>
           <CardTitle>Progresso por Questão</CardTitle>
           <CardDescription>Análise de quantos usuários chegam a cada questão do quiz</CardDescription>
@@ -26,22 +34,49 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
         <CardContent>
           <div className="h-[400px]">
             <ChartContainer config={chartConfig}>
-              <BarChart data={userProgressData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="questionId" label={{ value: 'Questão', position: 'insideBottom', offset: -5 }} />
-                <YAxis label={{ value: 'Número de Usuários', angle: -90, position: 'insideLeft' }} />
+              <BarChart 
+                data={userProgressData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                <XAxis 
+                  dataKey="questionId" 
+                  label={{ value: 'Questão', position: 'insideBottom', offset: -15, fill: '#888888' }}
+                  stroke="#888888"
+                  tick={{ fill: '#888888', fontSize: 12 }}
+                  tickLine={{ stroke: '#e0e0e0' }}
+                />
+                <YAxis 
+                  label={{ value: 'Usuários', angle: -90, position: 'insideLeft', offset: 10, fill: '#888888' }}
+                  stroke="#888888"
+                  tick={{ fill: '#888888', fontSize: 12 }}
+                  tickLine={{ stroke: '#e0e0e0' }}
+                />
                 <Tooltip content={renderTooltipContent} />
                 <Legend />
-                <Bar dataKey="uniqueUsers" fill="#4f46e5" name="Usuários Únicos" />
+                <Bar 
+                  dataKey="uniqueUsers" 
+                  name="Usuários Únicos"
+                  radius={[4, 4, 0, 0]}
+                  animationDuration={1500}
+                  animationEasing="ease-out"
+                >
+                  {userProgressData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={getBarColor(index, userProgressData.length)}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ChartContainer>
           </div>
 
-          <div className="mt-6 rounded-md border">
+          <div className="mt-6 rounded-md border border-border/60">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Questão</TableHead>
+                  <TableHead className="w-[180px]">Questão</TableHead>
                   <TableHead>Usuários Únicos</TableHead>
                   <TableHead>Total de Respostas</TableHead>
                   <TableHead>Taxa de Completude</TableHead>
@@ -55,7 +90,16 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                     </TableCell>
                     <TableCell>{item.uniqueUsers}</TableCell>
                     <TableCell>{item.totalAnswers}</TableCell>
-                    <TableCell>{item.completionRate.toFixed(1)}%</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Progress 
+                          value={item.completionRate} 
+                          className="h-2 w-[60px]"
+                          indicatorClassName={`bg-[${getBarColor(index, userProgressData.length)}]`}
+                        />
+                        <span>{item.completionRate.toFixed(1)}%</span>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
                 {userProgressData.length === 0 && (

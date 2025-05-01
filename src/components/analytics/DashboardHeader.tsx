@@ -22,7 +22,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-[#432818]">Dashboard de Analytics</h1>
           <Breadcrumb className="text-sm text-muted-foreground mt-1">
@@ -38,9 +38,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </Breadcrumb>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Select value={timeRange} onValueChange={(value) => onTimeRangeChange(value as any)}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] border-border/60 bg-card">
               <SelectValue placeholder="Selecionar período" />
             </SelectTrigger>
             <SelectContent>
@@ -50,12 +50,12 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             </SelectContent>
           </Select>
           
-          <Button variant="outline" size="sm" onClick={onRefresh}>
+          <Button variant="outline" size="sm" onClick={onRefresh} className="border-border/60 bg-card hover:bg-muted/80">
             <RefreshCcw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
           
-          <Button variant="outline" size="sm" onClick={onExportData}>
+          <Button variant="outline" size="sm" onClick={onExportData} className="border-border/60 bg-card hover:bg-muted/80">
             <Download className="h-4 w-4 mr-2" />
             Exportar CSV
           </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -24,8 +23,14 @@ const AnalyticsPage: React.FC = () => {
   const [userEvents, setUserEvents] = useState<any[]>([]);
   const [userProgressData, setUserProgressData] = useState<any[]>([]);
   
-  // Colors for funnel charts
-  const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+  // Enhanced colors for charts
+  const COLORS = {
+    inicios: '#4f46e5',     // Indigo
+    conclusoes: '#10b981',  // Emerald
+    resultados: '#f59e0b',  // Amber
+    leads: '#ef4444',       // Red
+    sales: '#8b5cf6',       // Purple
+  };
 
   useEffect(() => {
     // Calculate metrics on load or refresh
@@ -123,33 +128,33 @@ const AnalyticsPage: React.FC = () => {
 
   const chartData = prepareChartData();
   
-  // Chart configuration
+  // Enhanced chart configuration with improved colors and labels
   const chartConfig: ChartConfig = {
     inicios: {
       label: "Inicios do Quiz",
       theme: {
-        light: "#4f46e5",
+        light: COLORS.inicios,
         dark: "#818cf8"
       }
     },
     conclusoes: {
       label: "Conclusões",
       theme: {
-        light: "#10b981",
+        light: COLORS.conclusoes,
         dark: "#34d399"
       }
     },
     resultados: {
       label: "Visualizações de Resultado",
       theme: {
-        light: "#f59e0b",
+        light: COLORS.resultados,
         dark: "#fbbf24"
       }
     },
     leads: {
       label: "Leads Gerados",
       theme: {
-        light: "#ef4444",
+        light: COLORS.leads,
         dark: "#f87171"
       }
     }
@@ -236,35 +241,42 @@ const AnalyticsPage: React.FC = () => {
     }
   };
 
-  // Function to render custom tooltip content
+  // Custom tooltip renderer with improved styling
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload) return null;
     
     return (
-      <div className="bg-white p-2 border border-gray-200 shadow-md rounded-md">
-        <p className="font-medium">{props.label}</p>
+      <div className="bg-white p-3 border border-border/60 shadow-lg rounded-md min-w-[180px]">
+        <p className="font-medium text-sm border-b pb-1 mb-1 text-foreground/80">{props.label}</p>
         {props.payload.map((entry: any, index: number) => (
-          <p key={`item-${index}`} style={{ color: entry.color }}>
-            {entry.name}: {entry.value}
+          <p key={`item-${index}`} className="flex items-center justify-between py-0.5 text-sm">
+            <span className="flex items-center gap-1">
+              <span 
+                className="inline-block w-3 h-3 rounded-full mr-1" 
+                style={{ backgroundColor: entry.color }}
+              ></span>
+              {entry.name}: 
+            </span>
+            <span className="font-semibold">{entry.value}</span>
           </p>
         ))}
       </div>
     );
   };
 
-  // Function to render custom legend content
+  // Custom legend renderer with improved styling
   const renderLegendContent = (props: any) => {
     const { payload } = props;
     
     return (
-      <div className="flex flex-wrap justify-center gap-4 pt-4">
+      <div className="flex flex-wrap justify-center gap-5 pt-4">
         {payload.map((entry: any, index: number) => (
           <div key={`item-${index}`} className="flex items-center">
             <div 
-              className="w-3 h-3 mr-1"
+              className="w-3 h-3 mr-2 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span>{entry.value}</span>
+            <span className="text-sm text-foreground/80">{entry.value}</span>
           </div>
         ))}
       </div>
@@ -284,7 +296,7 @@ const AnalyticsPage: React.FC = () => {
         
         <div className="mt-6">
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-5 mb-6">
               <TabsTrigger value="overview">Visão Geral</TabsTrigger>
               <TabsTrigger value="funnel">Funil de Conversão</TabsTrigger>
               <TabsTrigger value="users">Usuários</TabsTrigger>
