@@ -15,12 +15,30 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 
 const App = () => {
+  // Initialize Facebook Pixel as soon as the app loads
   useEffect(() => {
-    // Inicializar o Facebook Pixel
+    // Initialize Facebook Pixel
     initFacebookPixel();
     
-    // Capturar UTM parameters para analytics de marketing
+    // Capture UTM parameters for marketing analytics
     captureUTMParameters();
+    
+    // Re-initialize Facebook Pixel on route changes
+    const handleRouteChange = () => {
+      initFacebookPixel();
+      if (window.fbq) {
+        window.fbq('track', 'PageView');
+        console.log('PageView tracked on route change');
+      }
+    };
+    
+    // Add listener for route changes
+    window.addEventListener('popstate', handleRouteChange);
+    
+    // Clean up the listener
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, []);
 
   return (

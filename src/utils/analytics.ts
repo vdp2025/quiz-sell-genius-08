@@ -1,3 +1,4 @@
+
 declare global {
   interface Window {
     fbq: any;
@@ -9,24 +10,59 @@ const FB_PIXEL_ID = '123456789012345';
 
 // Inicialização do Facebook Pixel
 export const initFacebookPixel = () => {
-  if (!window.fbq) {
-    window.fbq = function() {
-      window.fbq.callMethod ? window.fbq.callMethod.apply(window.fbq, arguments) : window.fbq.queue.push(arguments);
-    };
-    window.fbq.push = window.fbq;
-    window.fbq.loaded = true;
-    window.fbq.version = '2.0';
-    window.fbq.queue = [];
+  try {
+    if (typeof window !== 'undefined') {
+      // Check if fbq is already defined
+      if (!window.fbq) {
+        window.fbq = function() {
+          window.fbq.callMethod 
+            ? window.fbq.callMethod.apply(window.fbq, arguments) 
+            : window.fbq.queue.push(arguments);
+        };
+        
+        window.fbq.push = window.fbq;
+        window.fbq.loaded = true;
+        window.fbq.version = '2.0';
+        window.fbq.queue = [];
+        
+        // Add the Facebook Pixel script to the document
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+        const firstScript = document.getElementsByTagName('script')[0];
+        if (firstScript && firstScript.parentNode) {
+          firstScript.parentNode.insertBefore(script, firstScript);
+        } else {
+          document.head.appendChild(script);
+        }
+        
+        window.fbq('init', FB_PIXEL_ID);
+        window.fbq('track', 'PageView');
+        console.log('Facebook Pixel initialized successfully');
+      }
+    }
+  } catch (error) {
+    console.error('Error initializing Facebook Pixel:', error);
   }
-  
-  window.fbq('init', FB_PIXEL_ID);
-  window.fbq('track', 'PageView');
+};
+
+// Safe wrapper for fbq calls
+const safeFbq = (event: string, name: string, params?: any) => {
+  try {
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq(event, name, params);
+    } else {
+      console.log(`Facebook Pixel not available. Would track: ${event}, ${name}`, params);
+    }
+  } catch (error) {
+    console.error('Error calling Facebook Pixel:', error);
+  }
 };
 
 // Funções para rastreamento de eventos do quiz
 export const trackQuizStart = (userName?: string, userEmail?: string) => {
   console.log('Quiz iniciado - evento registrado');
-  window.fbq('trackCustom', 'QuizStart', {
+  safeFbq('trackCustom', 'QuizStart', {
     content_name: 'Quiz Iniciado'
   });
   
@@ -42,7 +78,7 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
 
 export const trackQuizAnswer = (questionId: string, selectedOptions: string[], questionIndex: number, totalQuestions: number) => {
   console.log(`Resposta registrada - Questão ${questionId}`);
-  window.fbq('trackCustom', 'QuizAnswer', {
+  safeFbq('trackCustom', 'QuizAnswer', {
     question_id: questionId,
     selected_options: selectedOptions,
     question_index: questionIndex,
@@ -63,7 +99,7 @@ export const trackQuizAnswer = (questionId: string, selectedOptions: string[], q
 
 export const trackQuizComplete = () => {
   console.log('Quiz completo - evento registrado');
-  window.fbq('trackCustom', 'QuizComplete', {
+  safeFbq('trackCustom', 'QuizComplete', {
     content_name: 'Quiz Completo'
   });
   
@@ -76,7 +112,7 @@ export const trackQuizComplete = () => {
 
 export const trackResultView = (resultType: string) => {
   console.log(`Resultado visualizado - Tipo: ${resultType}`);
-  window.fbq('trackCustom', 'ResultView', {
+  safeFbq('trackCustom', 'ResultView', {
     result_type: resultType
   });
   
@@ -90,7 +126,7 @@ export const trackResultView = (resultType: string) => {
 
 export const trackLeadGeneration = (email: string) => {
   console.log('Lead gerado - evento registrado');
-  window.fbq('track', 'Lead', {
+  safeFbq('track', 'Lead', {
     content_name: 'Lead Quiz'
   });
   
@@ -106,7 +142,7 @@ export const trackLeadGeneration = (email: string) => {
 
 export const trackSaleConversion = (value: number) => {
   console.log(`Conversão de venda registrada - Valor: ${value}`);
-  window.fbq('track', 'Purchase', {
+  safeFbq('track', 'Purchase', {
     value: value,
     currency: 'BRL'
   });
@@ -115,6 +151,26 @@ export const trackSaleConversion = (value: number) => {
   saveAnalyticsEvent({
     type: 'sale',
     value,
+    timestamp: new Date().toISOString()
+  });
+};
+
+// Track button clicks
+export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLocation?: string) => {
+  console.log(`Botão clicado - ID: ${buttonId}, Texto: ${buttonText || 'N/A'}, Local: ${buttonLocation || 'N/A'}`);
+  safeFbq('trackCustom', 'ButtonClick', {
+    button_id: buttonId,
+    button_text: buttonText || '',
+    button_location: buttonLocation || '',
+    timestamp: new Date().toISOString()
+  });
+  
+  // Store the event in localStorage for the dashboard
+  saveAnalyticsEvent({
+    type: 'button_click',
+    buttonId,
+    buttonText,
+    buttonLocation,
     timestamp: new Date().toISOString()
   });
 };
