@@ -1,3 +1,4 @@
+
 export type QuizComponentType = 
   | 'header' 
   | 'section' 
@@ -74,9 +75,13 @@ export interface QuizComponentData {
     layout?: QuizComponentLayout;
     optionImages?: string[];
     optionStyleCategories?: string[];
+    optionScores?: number[];
     backgroundColorQuestion?: string;
     textColorQuestion?: string;
     selectionIndicator?: 'border' | 'checkbox' | 'highlight';
+    borderRadius?: string;
+    paddingX?: string;
+    paddingY?: string;
     
     // Cover properties
     buttonText?: string;
@@ -94,6 +99,18 @@ export interface QuizComponentData {
     offerImageUrl?: string;
     authorImageUrl?: string;
     accentColor?: string;
+    
+    // Styling properties for all components
+    style?: {
+      backgroundColor?: string;
+      textColor?: string;
+      borderRadius?: string;
+      padding?: string;
+      margin?: string;
+      borderColor?: string;
+      borderWidth?: string;
+      boxShadow?: string;
+    };
   };
   style?: QuizComponentStyle;
 }
