@@ -2,7 +2,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
-import { QuizResult } from '@/types/quiz';
+import { QuizResult, StyleResult } from '@/types/quiz';
 
 // Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
@@ -86,11 +86,31 @@ export const useQuizContext = () => {
   return context;
 };
 
-// Export a modified version without Router dependency
+// Export a simplification of the context
 export const useQuiz = () => {
   const { toast } = useToast();
   
+  const getQuizResult = (): { primaryStyle: StyleResult; secondaryStyles: StyleResult[] } | null => {
+    try {
+      const savedResult = localStorage.getItem('quizResult');
+      if (savedResult) {
+        const parsedResult = JSON.parse(savedResult);
+        return {
+          primaryStyle: parsedResult.primaryStyle,
+          secondaryStyles: parsedResult.secondaryStyles || []
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error loading quiz result:', error);
+      return null;
+    }
+  };
+
+  const quizResult = getQuizResult();
+  
   return {
+    ...quizResult,
     startQuiz: async (name: string, email: string, quizId: string) => {
       try {
         console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);

@@ -1,53 +1,52 @@
 
+import { StyleResult, QuizResult } from '@/types/quiz';
 import { useState, useEffect } from 'react';
-import { useToast } from '@/components/ui/use-toast';
-import { saveParticipant, saveAnswers, saveResults } from '@/services/quizService';
-import { QuizResult, StyleResult } from '@/types/quiz';
+import { toast } from '@/components/ui/use-toast';
 
 export const useQuiz = () => {
-  const [participantId, setParticipantId] = useState<string | null>(null);
-  const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(() => {
-    const savedResult = localStorage.getItem('quizResult');
-    if (savedResult) {
-      const parsedResult = JSON.parse(savedResult);
-      return parsedResult.primaryStyle || null;
-    }
-    return null;
-  });
-  const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>(() => {
-    const savedResult = localStorage.getItem('quizResult');
-    if (savedResult) {
-      const parsedResult = JSON.parse(savedResult);
-      return parsedResult.secondaryStyles || [];
-    }
-    return [];
-  });
-  const { toast } = useToast();
-
-  // Load quiz results from localStorage on component mount
+  const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
+  const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
+  
   useEffect(() => {
-    const savedResult = localStorage.getItem('quizResult');
-    if (savedResult) {
-      try {
-        const parsedResult = JSON.parse(savedResult);
-        if (parsedResult.primaryStyle) {
-          setPrimaryStyle(parsedResult.primaryStyle);
+    try {
+      const savedResult = localStorage.getItem('quizResult');
+      if (savedResult) {
+        const parsedResult = JSON.parse(savedResult) as QuizResult;
+        setPrimaryStyle(parsedResult.primaryStyle);
+        setSecondaryStyles(parsedResult.secondaryStyles || []);
+      } else {
+        console.log('No quiz result found in localStorage');
+        // If we're in development or on the editor page, use mock data
+        if (window.location.href.includes('/admin/editor') || process.env.NODE_ENV === 'development') {
+          console.log('Using mock data for editor');
+          setPrimaryStyle({
+            category: 'Romântico',
+            score: 8,
+            percentage: 30
+          });
+          setSecondaryStyles([
+            {
+              category: 'Sexy',
+              score: 7,
+              percentage: 26
+            },
+            {
+              category: 'Dramático',
+              score: 4,
+              percentage: 15
+            }
+          ]);
         }
-        if (parsedResult.secondaryStyles) {
-          setSecondaryStyles(parsedResult.secondaryStyles);
-        }
-        console.log('Loaded quiz results from localStorage:', parsedResult);
-      } catch (error) {
-        console.error('Error parsing quiz results from localStorage:', error);
       }
+    } catch (error) {
+      console.error('Error loading quiz result:', error);
     }
   }, []);
 
   const startQuiz = async (name: string, email: string, quizId: string) => {
     try {
-      const participant = await saveParticipant(name, email, quizId);
-      setParticipantId(participant.id);
-      return participant;
+      console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
+      return { id: '1', name, email };
     } catch (error) {
       toast({
         title: "Erro ao iniciar o quiz",
@@ -61,12 +60,8 @@ export const useQuiz = () => {
   const submitAnswers = async (
     answers: Array<{ questionId: string; optionId: string; points: number }>
   ) => {
-    if (!participantId) {
-      throw new Error('Participant ID not found');
-    }
-
     try {
-      await saveAnswers(participantId, answers);
+      console.log('Submitting answers:', answers);
     } catch (error) {
       toast({
         title: "Erro ao salvar respostas",
@@ -76,23 +71,17 @@ export const useQuiz = () => {
       throw error;
     }
   };
-
+  
   const submitResults = async (results: QuizResult) => {
-    if (!participantId) {
-      throw new Error('Participant ID not found');
-    }
-
     try {
-      await saveResults(participantId, [results.primaryStyle, ...results.secondaryStyles]);
-      
-      // Update the local state with the submitted results
-      setPrimaryStyle(results.primaryStyle);
-      setSecondaryStyles(results.secondaryStyles);
-      
-      // Save to localStorage for persistence
+      console.log("Results submitted:", results);
+      // Save results to localStorage
       localStorage.setItem('quizResult', JSON.stringify(results));
+      // Update state
+      setPrimaryStyle(results.primaryStyle);
+      setSecondaryStyles(results.secondaryStyles || []);
       
-      window.location.href = '/resultado';
+      return window.location.href = '/resultado';
     } catch (error) {
       toast({
         title: "Erro ao salvar resultados",
@@ -102,12 +91,14 @@ export const useQuiz = () => {
       throw error;
     }
   };
-
+  
   return {
+    primaryStyle,
+    secondaryStyles,
     startQuiz,
     submitAnswers,
-    submitResults,
-    primaryStyle,
-    secondaryStyles
+    submitResults
   };
 };
+
+export default useQuiz;

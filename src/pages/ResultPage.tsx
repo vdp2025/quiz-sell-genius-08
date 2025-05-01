@@ -3,12 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
-
-// Import the backup version that has the more attractive layout
 import BackupResultPage from '../backup/ResultPage.backup';
 
 const ResultPage = () => {
-  const { quizResult, resetQuiz } = useQuizLogic();
+  const quizLogic = useQuizLogic();
+  const { quizResult, resetQuiz } = quizLogic;
   const navigate = useNavigate();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
 

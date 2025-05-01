@@ -1,3 +1,4 @@
+
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -9,6 +10,7 @@ import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSect
 import ErrorState from '@/components/result/ErrorState';
 import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
 import ProductShowcase from '@/components/quiz-result/sales/ProductShowcase';
 import BenefitList from '@/components/quiz-result/sales/BenefitList';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
@@ -72,9 +74,10 @@ const ResultPage: React.FC = () => {
           </Card>
 
           <div className="space-y-12">
-            <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+            <SecondaryStylesSection secondaryStyles={secondaryStyles || []} />
             <MotivationSection />
             <MentorSection />
+            <GuaranteeSection />
             
             <section className="bg-white rounded-2xl p-8 shadow-lg">
               <ProductShowcase />

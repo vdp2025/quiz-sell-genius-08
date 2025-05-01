@@ -57,27 +57,32 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   };
 
   const handleSave = async () => {
+    setIsLoading(true);
     toast({
       title: "Salvando alterações",
       description: "Por favor, aguarde...",
       duration: 2000,
     });
     
-    const success = await saveAll();
-    
-    if (success) {
-      toast({
-        title: "Alterações salvas",
-        description: "Todas as alterações foram salvas com sucesso.",
-        duration: 3000,
-      });
-    } else {
-      toast({
-        title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente.",
-        variant: "destructive",
-        duration: 5000,
-      });
+    try {
+      const success = await saveAll();
+      
+      if (success) {
+        toast({
+          title: "Alterações salvas",
+          description: "Todas as alterações foram salvas com sucesso.",
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: "Erro ao salvar",
+          description: "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente.",
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,6 +94,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         onPreviewToggle={togglePreview}
         onSave={handleSave}
         onOpenTemplateModal={openTemplateModal}
+        isLoading={isLoading}
       />
       
       <Tabs
