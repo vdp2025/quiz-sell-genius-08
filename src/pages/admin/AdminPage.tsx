@@ -1,37 +1,16 @@
+
 import React from 'react';
+import { AdminLayout } from '../../components/admin/AdminLayout';
 
-export const AdminPage = () => {
+const AdminPage = () => {
   return (
-    <div>
-      <h1>Página de Administração</h1>
-      {/* Adicione o conteúdo da página aqui */}
-    </div>
+    <AdminLayout>
+      <div className="p-8">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <p className="mt-4">Welcome to the admin dashboard.</p>
+      </div>
+    </AdminLayout>
   );
 };
 
-export const QuizBuilderPage = () => {
-  return (
-    <div>
-      <h1>Página de Administração</h1>
-      {/* Adicione o conteúdo da página aqui */}
-    </div>
-  );
-};
-
-export const SettingsPage = () => {
-  return (
-    <div>
-      <h1>Página de Administração</h1>
-      {/* Adicione o conteúdo da página aqui */}
-    </div>
-  );
-};
-
-export const NotFoundPage = () => {
-  return (
-    <div>
-      <h1>Página de Administração</h1>
-      {/* Adicione o conteúdo da página aqui */}
-    </div>
-  );
-};
+export default AdminPage;

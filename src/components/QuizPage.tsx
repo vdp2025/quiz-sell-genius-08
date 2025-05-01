@@ -33,7 +33,8 @@ const QuizPage: React.FC = () => {
     totalQuestions,
     calculateResults,
     handleStrategicAnswer: saveStrategicAnswer,
-    submitQuizIfComplete
+    submitQuizIfComplete,
+    canProceed
   } = useQuizLogic();
 
   // Handle strategic answer
@@ -121,6 +122,15 @@ const QuizPage: React.FC = () => {
     const currentAnswersLength = currentAnswers?.length || 0;
     const isStrategicQuestion = currentQuestion?.id.startsWith('strategic');
     return isStrategicQuestion ? currentAnswersLength === 1 : currentAnswersLength === 3;
+=======
+  // Determine if we can proceed based on the question type
+  const getCurrentCanProceed = () => {
+    if (showingStrategicQuestions) {
+      const currentStrategicQuestionId = strategicQuestions[currentStrategicQuestionIndex]?.id;
+      return strategicAnswers[currentStrategicQuestionId]?.length === 1;
+    }
+    return currentAnswers.length === currentQuestion.multiSelect;
+>>>>>>> cadb3d4268235c21060acd8da3f28a86838d00d9
   };
 
   return (
@@ -154,6 +164,7 @@ const QuizPage: React.FC = () => {
             isLastQuestion={isLastQuestion}
             onNext={handleNextClick}
             onPrevious={handlePrevious}
+            canProceed={getCurrentCanProceed()}
           />
         </>
       )}

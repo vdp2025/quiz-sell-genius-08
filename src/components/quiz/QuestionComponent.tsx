@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
@@ -24,18 +25,19 @@ const QuestionComponent: React.FC<QuestionProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const requiredSelections = question.isStrategic ? 1 : 3;
 
-  // Reseta as seleções quando a questão muda
+  // Reset selections when question changes
   useEffect(() => {
     setSelectedOptions([]);
   }, [question.id]);
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptions((prev) => {
-      // Se a opção já está selecionada, remove ela
+      // If option is already selected, remove it
       if (prev.includes(optionId)) {
         return prev.filter(id => id !== optionId);
       }
       
+<<<<<<< HEAD
       const maxSelections = question.isStrategic ? 1 : 3;
       
       // Se já atingiu o limite de seleções
@@ -46,6 +48,31 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         }
         // Para questões normais, remove a primeira e adiciona a nova
         return [...prev.slice(1), optionId];
+=======
+      // If already reached selection limit, show message and don't add
+      if (prev.length >= requiredSelections) {
+        toast({
+          title: "Limite de seleções atingido",
+          description: `Você só pode selecionar ${requiredSelections} ${requiredSelections === 1 ? 'opção' : 'opções'}`,
+          variant: "destructive"
+        });
+        return prev;
+      }
+
+      // Add the new selection
+      const newSelections = [...prev, optionId];
+      
+      // If completed required selections, show success message
+      if (newSelections.length === requiredSelections) {
+        toast({
+          title: "Seleções completas!",
+          description: "Agora você pode avançar para a próxima questão",
+          variant: "success"
+        });
+        
+        // Call onSelect with the new selections
+        onSelect(newSelections);
+>>>>>>> cadb3d4268235c21060acd8da3f28a86838d00d9
       }
 
       return [...prev, optionId];
