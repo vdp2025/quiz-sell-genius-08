@@ -1,4 +1,3 @@
-
 export type QuizComponentType = 
   | 'header' 
   | 'section' 
@@ -16,7 +15,14 @@ export type QuizComponentType =
   | 'quizResult'
   | 'stageCover'
   | 'stageQuestion'
-  | 'stageResult';
+  | 'stageResult'
+  | 'countdown-timer'
+  | 'feature-comparison'
+  | 'testimonial-card'
+  | 'callToAction'
+  | 'testimonial'
+  | 'countdownTimer'
+  | 'products';
 
 export interface QuizComponentStyle {
   backgroundColor?: string;

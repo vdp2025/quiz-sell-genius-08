@@ -49,19 +49,19 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       category: "Básicos",
       items: [
         { 
-          type: 'text', 
+          type: 'text' as QuizComponentType, 
           icon: <FileText className="h-4 w-4 mr-2" />, 
           label: 'Texto', 
           description: 'Bloco de texto simples' 
         },
         { 
-          type: 'headline', 
+          type: 'headline' as QuizComponentType, 
           icon: <Type className="h-4 w-4 mr-2" />, 
           label: 'Título', 
           description: 'Título com formatação especial' 
         },
         { 
-          type: 'image', 
+          type: 'image' as QuizComponentType, 
           icon: <ImageIcon className="h-4 w-4 mr-2" />, 
           label: 'Imagem', 
           description: 'Imagem com legenda opcional' 
@@ -77,21 +77,21 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             category: "Componentes de Capa",
             items: [
               { 
-                type: 'stageCover', 
+                type: 'stageCover' as QuizComponentType, 
                 icon: <Layout className="h-4 w-4 mr-2" />, 
                 label: 'Capa Moderna', 
                 description: 'Capa com imagem de fundo',
                 preset: 'modern'
               },
               { 
-                type: 'stageCover', 
+                type: 'stageCover' as QuizComponentType, 
                 icon: <Layout className="h-4 w-4 mr-2" />, 
                 label: 'Capa Minimalista', 
                 description: 'Capa com design limpo',
                 preset: 'minimal' 
               },
               { 
-                type: 'stageCover', 
+                type: 'stageCover' as QuizComponentType, 
                 icon: <Layout className="h-4 w-4 mr-2" />, 
                 label: 'Capa com Vídeo', 
                 description: 'Capa com vídeo de fundo',
@@ -106,34 +106,34 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             category: "Perguntas",
             items: [
               { 
-                type: 'stageQuestion', 
+                type: 'stageQuestion' as QuizComponentType, 
                 icon: <FileQuestion className="h-4 w-4 mr-2" />, 
                 label: 'Pergunta com Imagens', 
                 description: 'Opções com imagens e texto',
                 preset: 'image-grid'
               },
               { 
-                type: 'stageQuestion', 
+                type: 'stageQuestion' as QuizComponentType, 
                 icon: <FileQuestion className="h-4 w-4 mr-2" />, 
                 label: 'Cards Modernos', 
                 description: 'Opções em cards elegantes',
                 preset: 'modern-cards'
               },
               { 
-                type: 'stageQuestion', 
+                type: 'stageQuestion' as QuizComponentType, 
                 icon: <CheckSquare className="h-4 w-4 mr-2" />, 
                 label: 'Lista de Opções', 
                 description: 'Opções em formato de lista',
                 preset: 'list-style' 
               },
               { 
-                type: 'multipleChoice', 
+                type: 'multipleChoice' as QuizComponentType, 
                 icon: <ListChecks className="h-4 w-4 mr-2" />, 
                 label: 'Múltipla Escolha', 
                 description: 'Seleção de múltiplas opções'
               },
               { 
-                type: 'singleChoice', 
+                type: 'singleChoice' as QuizComponentType, 
                 icon: <CheckSquare className="h-4 w-4 mr-2" />, 
                 label: 'Escolha Única', 
                 description: 'Seleção de uma única opção'
@@ -148,21 +148,21 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             category: "Resultados",
             items: [
               { 
-                type: 'stageResult', 
+                type: 'stageResult' as QuizComponentType, 
                 icon: <Award className="h-4 w-4 mr-2" />, 
                 label: 'Resultado Principal', 
                 description: 'Exibe o estilo predominante',
                 preset: 'modern'
               },
               { 
-                type: 'stageResult', 
+                type: 'stageResult' as QuizComponentType, 
                 icon: <Layout className="h-4 w-4 mr-2" />, 
                 label: 'Resultado com Gráfico', 
                 description: 'Visualização gráfica dos resultados',
                 preset: 'chart'
               },
               { 
-                type: 'benefitsList', 
+                type: 'benefitsList' as QuizComponentType, 
                 icon: <ListChecks className="h-4 w-4 mr-2" />, 
                 label: 'Lista de Benefícios', 
                 description: 'Lista de vantagens com ícones',
@@ -174,21 +174,21 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             category: "Conversão",
             items: [
               { 
-                type: 'callToAction', 
+                type: 'callToAction' as QuizComponentType, 
                 icon: <Gift className="h-4 w-4 mr-2" />, 
                 label: 'Botão de Ação', 
                 description: 'CTA destacado para conversão',
                 preset: 'highlight'
               },
               { 
-                type: 'testimonial', 
+                type: 'testimonial' as QuizComponentType, 
                 icon: <Heart className="h-4 w-4 mr-2" />, 
                 label: 'Depoimento', 
                 description: 'Card de depoimento com foto',
                 preset: 'card'
               },
               { 
-                type: 'countdownTimer', 
+                type: 'countdownTimer' as QuizComponentType, 
                 icon: <Clock className="h-4 w-4 mr-2" />, 
                 label: 'Contagem Regressiva', 
                 description: 'Timer para criar urgência',

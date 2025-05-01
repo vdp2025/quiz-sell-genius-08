@@ -40,34 +40,34 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 
   switch (block.type) {
     case 'header':
-      return <HeaderBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <HeaderBlock content={block.content} onClick={onSelect} />;
       
     case 'hero-section':
-      return <HeroBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <HeroBlock content={block.content} onClick={onSelect} />;
       
     case 'bonus-carousel':
-      return <BonusCarouselBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <BonusCarouselBlock content={block.content} onClick={onSelect} />;
       
     case 'headline':
-      return <HeadlineBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <HeadlineBlock content={block.content} onClick={onSelect} />;
       
     case 'text':
-      return <TextBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <TextBlock content={block.content} onClick={onSelect} />;
       
     case 'benefits':
-      return <BenefitsBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <BenefitsBlock content={block.content} onClick={onSelect} />;
       
     case 'testimonials':
-      return <TestimonialsBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <TestimonialsBlock content={block.content} onClick={onSelect} />;
       
     case 'pricing':
-      return <PricingBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <PricingBlock content={block.content} onClick={onSelect} />;
       
     case 'guarantee':
-      return <GuaranteeBlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <GuaranteeBlock content={block.content} onClick={onSelect} />;
       
     case 'cta':
-      return <CTABlock content={block.content} onClick={onSelect} isPreview={isPreview} />;
+      return <CTABlock content={block.content} onClick={onSelect} />;
       
     case 'countdown-timer': 
       return (
