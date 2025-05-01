@@ -13,18 +13,16 @@ interface MetricCardProps {
 
 export const MetricCard: React.FC<MetricCardProps> = ({ title, value, subtitle, trend, icon }) => {
   return (
-    <Card className="hover:shadow-sm transition-shadow overflow-hidden border border-border/40 relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent to-muted/20 opacity-30" />
-      
-      <CardHeader className="pb-1 flex flex-row items-center justify-between space-y-0 relative z-10">
+    <Card className="hover:shadow-sm transition-shadow overflow-hidden border border-border/40">
+      <CardHeader className="pb-1 flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
           {icon && <div className="text-primary">{icon}</div>}
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent className="relative z-10 pt-0">
+      <CardContent className="pt-0">
         <div className="flex items-baseline space-x-2">
-          <p className="text-xl font-bold tracking-tight">{value}</p>
+          <p className="text-lg font-semibold">{value}</p>
           {trend !== undefined && (
             <span 
               className={`flex items-center text-xs font-medium px-1.5 py-0.5 rounded-full ${

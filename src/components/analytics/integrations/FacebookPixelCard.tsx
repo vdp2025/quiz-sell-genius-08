@@ -46,46 +46,48 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   };
   
   return (
-    <Card>
-      <CardHeader>
+    <Card className="border-border/40 shadow-sm">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Facebook Pixel</CardTitle>
-            <CardDescription>Connect to Facebook Ads platform to track conversions</CardDescription>
+            <CardTitle className="text-base">Facebook Pixel</CardTitle>
+            <CardDescription className="text-xs mt-0.5">Connect to Facebook Ads platform to track conversions</CardDescription>
           </div>
-          <Badge variant={fbPixelEnabled ? "default" : "outline"}>
+          <Badge variant={fbPixelEnabled ? "default" : "outline"} className="text-xs">
             {fbPixelEnabled ? "Active" : "Inactive"}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="fb-pixel-id">Facebook Pixel ID</Label>
+      <CardContent className="space-y-3 py-0">
+        <div className="space-y-1.5">
+          <Label htmlFor="fb-pixel-id" className="text-sm">Facebook Pixel ID</Label>
           <Input 
             id="fb-pixel-id" 
             placeholder="123456789012345" 
             value={fbPixelId}
             onChange={(e) => setFbPixelId(e.target.value)}
+            className="h-8 text-sm"
           />
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             Found in Facebook Events Manager {'>'}  Data Sources {'>'}  Pixel
           </p>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 pt-1">
           <Switch 
             id="fb-tracking"
             checked={fbPixelEnabled}
             onCheckedChange={setFbPixelEnabled}
+            className="data-[state=checked]:bg-blue-600"
           />
-          <Label htmlFor="fb-tracking">Enable Facebook Pixel tracking</Label>
+          <Label htmlFor="fb-tracking" className="text-sm">Enable Facebook Pixel tracking</Label>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline" onClick={handleTestConnection}>
+      <CardFooter className="flex justify-between pt-2">
+        <Button variant="outline" size="sm" onClick={handleTestConnection} className="text-xs h-7">
           Test Connection
         </Button>
-        <Button onClick={handleSaveFacebookPixel}>
+        <Button size="sm" onClick={handleSaveFacebookPixel} className="text-xs h-7">
           Save Settings
         </Button>
       </CardFooter>

@@ -21,8 +21,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onClearData
 }) => {
   return (
-    <div className="space-y-2">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-3">
+    <div className="mb-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
         <div>
           <h1 className="text-xl font-semibold text-[#432818]">Analytics Dashboard</h1>
           <Breadcrumb className="text-sm text-muted-foreground mt-1">
@@ -40,7 +40,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         
         <div className="flex flex-wrap items-center gap-2">
           <Select value={timeRange} onValueChange={(value) => onTimeRangeChange(value as any)}>
-            <SelectTrigger className="w-[140px] border-border/60 bg-background h-9">
+            <SelectTrigger className="w-[130px] h-8 border-border/60 bg-background">
               <SelectValue placeholder="Select period" />
             </SelectTrigger>
             <SelectContent>
@@ -50,17 +50,19 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             </SelectContent>
           </Select>
           
-          <Button variant="outline" size="icon" onClick={onRefresh} className="border-border/60 bg-background hover:bg-muted/80 h-9 w-9">
-            <RefreshCcw className="h-4 w-4" />
-          </Button>
-          
-          <Button variant="outline" size="icon" onClick={onExportData} className="border-border/60 bg-background hover:bg-muted/80 h-9 w-9">
-            <Download className="h-4 w-4" />
-          </Button>
-          
-          <Button variant="outline" size="icon" onClick={onClearData} className="border-border/60 bg-background hover:bg-muted/80 text-red-600 h-9 w-9">
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center space-x-1">
+            <Button variant="outline" size="icon" onClick={onRefresh} className="border-border/60 bg-background hover:bg-muted/80 h-8 w-8">
+              <RefreshCcw className="h-4 w-4" />
+            </Button>
+            
+            <Button variant="outline" size="icon" onClick={onExportData} className="border-border/60 bg-background hover:bg-muted/80 h-8 w-8">
+              <Download className="h-4 w-4" />
+            </Button>
+            
+            <Button variant="outline" size="icon" onClick={onClearData} className="border-border/60 bg-background hover:bg-muted/80 text-red-600 h-8 w-8">
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

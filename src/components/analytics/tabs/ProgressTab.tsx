@@ -34,28 +34,26 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
             <CardDescription>Analysis of how many users reach each question in the quiz</CardDescription>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="h-[260px]">
+            <div className="h-[220px] mb-4">
               <ChartContainer config={chartConfig}>
                 <BarChart 
                   data={userProgressData}
-                  margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                  margin={{ top: 15, right: 15, left: 15, bottom: 15 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                   <XAxis 
                     dataKey="questionId" 
-                    label={{ value: 'Question', position: 'insideBottom', offset: -10, fill: '#888888' }}
                     stroke="#888888"
-                    tick={{ fill: '#888888', fontSize: 12 }}
+                    tick={{ fill: '#888888', fontSize: 11 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <YAxis 
-                    label={{ value: 'Users', angle: -90, position: 'insideLeft', offset: 5, fill: '#888888' }}
                     stroke="#888888"
-                    tick={{ fill: '#888888', fontSize: 12 }}
+                    tick={{ fill: '#888888', fontSize: 11 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <Tooltip content={renderTooltipContent} />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px', marginTop: '5px' }} />
                   <Bar 
                     dataKey="uniqueUsers" 
                     name="Unique Users"
@@ -74,32 +72,32 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
               </ChartContainer>
             </div>
 
-            <div className="mt-4 rounded-md border border-border/60 overflow-x-auto">
+            <div className="rounded-md border border-border/60 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[150px]">Question</TableHead>
-                    <TableHead>Unique Users</TableHead>
-                    <TableHead>Total Answers</TableHead>
+                    <TableHead className="w-[100px]">Question</TableHead>
+                    <TableHead className="w-[80px]">Users</TableHead>
+                    <TableHead className="w-[90px]">Answers</TableHead>
                     <TableHead>Completion Rate</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {userProgressData.map((item, index) => (
                     <TableRow key={item.questionId}>
-                      <TableCell className="font-medium">
-                        Q{index + 1} ({item.questionId})
+                      <TableCell className="font-medium py-2">
+                        Q{index + 1}
                       </TableCell>
-                      <TableCell>{item.uniqueUsers}</TableCell>
-                      <TableCell>{item.totalAnswers}</TableCell>
-                      <TableCell>
+                      <TableCell className="py-2">{item.uniqueUsers}</TableCell>
+                      <TableCell className="py-2">{item.totalAnswers}</TableCell>
+                      <TableCell className="py-2">
                         <div className="flex items-center gap-2">
                           <Progress 
                             value={item.completionRate} 
                             className="h-2 w-[60px]"
                             indicatorClassName={`bg-[${getBarColor(index, userProgressData.length)}]`}
                           />
-                          <span>{item.completionRate.toFixed(1)}%</span>
+                          <span className="text-xs">{item.completionRate.toFixed(1)}%</span>
                         </div>
                       </TableCell>
                     </TableRow>
