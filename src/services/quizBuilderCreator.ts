@@ -55,7 +55,7 @@ export const createBuilderStateFromQuiz = (
         optionImages: question.optionImages || [],
         optionStyleCategories: question.styleCategories || [],
         displayType: question.displayType || 'text',
-        multiSelect: question.multiSelect || false,
+        multiSelect: question.multiSelect ? 1 : 0,
         required: true,
         autoAdvance: question.autoAdvance || false,
       }
@@ -140,7 +140,7 @@ export const generateInitialStages = (): QuizBuilderState => {
           'Clássico e tradicional'
         ],
         displayType: 'text',
-        multiSelect: false,
+        multiSelect: 0,
         required: true,
         autoAdvance: true
       }

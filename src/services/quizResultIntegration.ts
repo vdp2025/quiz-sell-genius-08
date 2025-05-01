@@ -59,7 +59,7 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
           'Opção D - Outro estilo'
         ],
         displayType: 'text',
-        multiSelect: false,
+        multiSelect: 0,
         required: true,
         autoAdvance: true,
         optionStyleCategories: [
