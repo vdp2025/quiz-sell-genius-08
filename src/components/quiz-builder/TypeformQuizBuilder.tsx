@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { StageList } from './components/StageList';
@@ -21,11 +22,20 @@ import {
   Eye, 
   EyeOff,
   CircleCheck,
-  ArrowLeft
+  ArrowLeft,
+  Undo,
+  Redo,
+  FileText,
+  Download,
+  Upload,
+  Copy,
+  LayoutTemplate,
+  QuestionMarkCircle
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import { DndContext } from '@dnd-kit/core';
 
 interface TypeformQuizBuilderProps {
   stages: QuizStage[];
@@ -63,6 +73,7 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
   onSave
 }) => {
   const [isPreviewing, setIsPreviewing] = useState(false);
+  const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg'>('md');
   
   const activeStage = activeStageId ? stages.find(s => s.id === activeStageId) : null;
   const stageComponents = activeStageId ? components.filter(c => c.stageId === activeStageId) : [];
@@ -93,6 +104,9 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
 
   const togglePreview = () => {
     setIsPreviewing(prev => !prev);
+    if (selectedComponentId) {
+      onSelectComponent(''); // Deselect component when toggling preview
+    }
   };
 
   const handleSave = () => {
@@ -103,32 +117,61 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
     });
   };
 
+  const getComponentIcon = (type: string) => {
+    switch(type) {
+      case 'stageCover': return <Type className="h-4 w-4 mr-1" />;
+      case 'stageQuestion': return <Check className="h-4 w-4 mr-1" />;
+      case 'stageResult': return <CircleCheck className="h-4 w-4 mr-1" />;
+      case 'text': return <PencilLine className="h-4 w-4 mr-1" />;
+      case 'image': return <Image className="h-4 w-4 mr-1" />;
+      default: return <Plus className="h-4 w-4 mr-1" />;
+    }
+  };
+
+  // Helper to get suggested component type for a stage
+  const getSuggestedComponentType = (type: QuizStage['type']) => {
+    switch(type) {
+      case 'cover': return 'stageCover';
+      case 'question': return 'stageQuestion';
+      case 'result': return 'stageResult';
+      case 'strategic': return 'stageQuestion';
+      default: return 'text';
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
-      {/* Toolbar */}
+      {/* Main Toolbar */}
       <div className="border-b bg-white p-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ButtonGroup>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => onAddStage('cover')}
             >
               <Plus className="h-4 w-4 mr-1" /> Capa
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => onAddStage('question')}
             >
               <Plus className="h-4 w-4 mr-1" /> Pergunta
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => onAddStage('result')}
             >
               <Plus className="h-4 w-4 mr-1" /> Resultado
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onAddStage('strategic')}
+            >
+              <Plus className="h-4 w-4 mr-1" /> Estratégica
             </Button>
           </ButtonGroup>
           
@@ -142,15 +185,75 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
             {isPreviewing ? <EyeOff className="h-4 w-4 mr-1" /> : <Eye className="h-4 w-4 mr-1" />}
             {isPreviewing ? "Editar" : "Visualizar"}
           </Button>
+
+          {isPreviewing && (
+            <ButtonGroup>
+              <Button
+                size="sm"
+                variant={viewportSize === 'sm' ? "secondary" : "outline"}
+                onClick={() => setViewportSize('sm')}
+                className="px-2"
+                title="Visualização mobile"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-smartphone"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+              </Button>
+              <Button
+                size="sm"
+                variant={viewportSize === 'md' ? "secondary" : "outline"}
+                onClick={() => setViewportSize('md')}
+                className="px-2"
+                title="Visualização tablet"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-tablet"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+              </Button>
+              <Button
+                size="sm"
+                variant={viewportSize === 'lg' ? "secondary" : "outline"}
+                onClick={() => setViewportSize('lg')}
+                className="px-2"
+                title="Visualização desktop"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-monitor"><rect width="20" height="14" x="2" y="3" rx="2" ry="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              </Button>
+            </ButtonGroup>
+          )}
         </div>
         
-        <Button 
-          size="sm" 
-          onClick={handleSave}
-          className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
-        >
-          <Save className="h-4 w-4 mr-1" /> Salvar
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              toast({
+                title: "Exportando quiz",
+                description: "Este recurso será implementado em breve.",
+              });
+            }}
+          >
+            <Download className="h-4 w-4 mr-1" /> Exportar
+          </Button>
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              toast({
+                title: "Importando quiz",
+                description: "Este recurso será implementado em breve.",
+              });
+            }}
+          >
+            <Upload className="h-4 w-4 mr-1" /> Importar
+          </Button>
+          
+          <Button 
+            size="sm" 
+            onClick={handleSave}
+            className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
+          >
+            <Save className="h-4 w-4 mr-1" /> Salvar
+          </Button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -163,6 +266,7 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
             isPreviewing={true}
             onSelectComponent={onSelectComponent}
             onNavigateStage={handleNavigateStage}
+            viewportSize={viewportSize}
           />
         </div>
       ) : (
@@ -200,40 +304,24 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
                     Adicionar Componente em: {activeStage.title}
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {activeStage.type === 'cover' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAddComponent('stageCover')}
-                      >
-                        <Type className="h-4 w-4 mr-1" /> Capa
-                      </Button>
-                    )}
-                    
-                    {activeStage.type === 'question' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAddComponent('stageQuestion')}
-                      >
-                        <Check className="h-4 w-4 mr-1" /> Pergunta
-                      </Button>
-                    )}
-                    
-                    {activeStage.type === 'result' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAddComponent('stageResult')}
-                      >
-                        <CircleCheck className="h-4 w-4 mr-1" /> Resultado
-                      </Button>
-                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleAddComponent(getSuggestedComponentType(activeStage.type))}
+                      className="bg-white"
+                    >
+                      {getComponentIcon(getSuggestedComponentType(activeStage.type))}
+                      {activeStage.type === 'cover' ? 'Capa' : 
+                       activeStage.type === 'question' ? 'Pergunta' : 
+                       activeStage.type === 'result' ? 'Resultado' :
+                       'Pergunta Estratégica'}
+                    </Button>
                     
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handleAddComponent('text')}
+                      className="bg-white"
                     >
                       <PencilLine className="h-4 w-4 mr-1" /> Texto
                     </Button>
@@ -242,6 +330,7 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
                       variant="outline"
                       size="sm"
                       onClick={() => handleAddComponent('image')}
+                      className="bg-white"
                     >
                       <Image className="h-4 w-4 mr-1" /> Imagem
                     </Button>
@@ -257,6 +346,7 @@ export const TypeformQuizBuilder: React.FC<TypeformQuizBuilderProps> = ({
                   selectedComponentId={selectedComponentId}
                   isPreviewing={false}
                   onSelectComponent={onSelectComponent}
+                  viewportSize="md"
                 />
               </div>
             </div>
