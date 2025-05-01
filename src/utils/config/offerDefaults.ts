@@ -23,7 +23,25 @@ export const createOfferConfig = (): Section => ({
 
 export const createOfferSectionConfig = (): OfferSection => {
   return {
-    hero: createOfferConfig(),
+    hero: {
+      visible: true,
+      content: {
+        title: "TRANSFORME SEU ESTILO PESSOAL",
+        subtitle: "Com a nossa consultoria especializada",
+        description: "Descubra como destacar sua beleza natural e criar um guarda-roupa que realmente combine com você.",
+        ctaText: "QUERO COMEÇAR AGORA",
+        ctaUrl: "#comprar",
+        imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911578/BANNER_CONSULTORIA_GISELE_GALV%C3%83O_s2fliv.webp",
+        price: "R$ 197",
+        regularPrice: "R$ 397",
+      },
+      style: {
+        backgroundColor: '#F9F5F1',
+        textAlign: 'center',
+        paddingY: '2rem',
+        paddingX: '1rem'
+      }
+    },
     features: {
       content: {
         title: "O QUE VOCÊ VAI RECEBER",

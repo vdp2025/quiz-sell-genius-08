@@ -1,5 +1,5 @@
 
-import { QuizBuilderState, QuizComponentData, QuizStage } from '@/types/quizBuilder';
+import { QuizBuilderState, QuizComponentData, QuizComponentType, QuizStage } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 
@@ -8,25 +8,22 @@ export const generateInitialStages = () => {
   const welcomeStage: QuizStage = {
     id: generateId(),
     title: 'Bem-vindo',
-    type: 'welcome',
-    order: 0,
-    isEnabled: true
+    type: 'cover',
+    order: 0
   };
   
   const questionStage: QuizStage = {
     id: generateId(),
     title: 'Pergunta 1',
     type: 'question',
-    order: 1,
-    isEnabled: true
+    order: 1
   };
   
   const resultStage: QuizStage = {
     id: generateId(),
     title: 'Seu Resultado',
     type: 'result',
-    order: 2,
-    isEnabled: true
+    order: 2
   };
   
   const stages = [welcomeStage, questionStage, resultStage];
@@ -37,7 +34,7 @@ export const generateInitialStages = () => {
       id: generateId(),
       type: 'headline',
       stageId: welcomeStage.id,
-      content: {
+      data: {
         title: 'Quiz de Estilo Pessoal',
         subtitle: 'Descubra seu estilo predominante',
         alignment: 'center'
@@ -48,7 +45,7 @@ export const generateInitialStages = () => {
       id: generateId(),
       type: 'text',
       stageId: questionStage.id,
-      content: {
+      data: {
         text: 'Qual opção descreve melhor seu estilo?',
         alignment: 'center'
       },
@@ -56,9 +53,9 @@ export const generateInitialStages = () => {
     },
     {
       id: generateId(),
-      type: 'result',
+      type: 'quizResult',
       stageId: resultStage.id,
-      content: {
+      data: {
         title: 'Seu Resultado de Estilo Pessoal',
         showShare: true,
         alignment: 'center'
@@ -80,9 +77,8 @@ export const createBuilderStateFromQuiz = (
   const welcomeStage: QuizStage = {
     id: generateId(),
     title: 'Bem-vindo',
-    type: 'welcome',
-    order: 0,
-    isEnabled: true
+    type: 'cover',
+    order: 0
   };
   
   // Create a question stage for each question
@@ -90,16 +86,14 @@ export const createBuilderStateFromQuiz = (
     id: generateId(),
     title: `Pergunta ${index + 1}`,
     type: 'question',
-    order: index + 1,
-    isEnabled: true
+    order: index + 1
   }));
   
   const resultStage: QuizStage = {
     id: generateId(),
     title: 'Seu Resultado',
     type: 'result',
-    order: questionStages.length + 1,
-    isEnabled: true
+    order: questionStages.length + 1
   };
   
   const stages = [welcomeStage, ...questionStages, resultStage];
@@ -110,7 +104,7 @@ export const createBuilderStateFromQuiz = (
       id: generateId(),
       type: 'headline',
       stageId: welcomeStage.id,
-      content: {
+      data: {
         title,
         subtitle,
         alignment: 'center'
@@ -121,7 +115,7 @@ export const createBuilderStateFromQuiz = (
       id: generateId(),
       type: 'button',
       stageId: welcomeStage.id,
-      content: {
+      data: {
         text: 'Iniciar Quiz',
         action: 'next',
         alignment: 'center'
@@ -137,7 +131,7 @@ export const createBuilderStateFromQuiz = (
       id: generateId(),
       type: 'text',
       stageId: questionStages[qIndex].id,
-      content: {
+      data: {
         text: question.text || `Pergunta ${qIndex + 1}`,
         alignment: 'center'
       },
@@ -149,9 +143,9 @@ export const createBuilderStateFromQuiz = (
       question.options.forEach((option, oIndex) => {
         questionComponents.push({
           id: generateId(),
-          type: 'choice',
+          type: 'multipleChoice',
           stageId: questionStages[qIndex].id,
-          content: {
+          data: {
             text: option.text || `Opção ${oIndex + 1}`,
             value: option.value || String(oIndex),
             image: option.image || '',
@@ -167,9 +161,9 @@ export const createBuilderStateFromQuiz = (
   const resultComponents: QuizComponentData[] = [
     {
       id: generateId(),
-      type: 'result',
+      type: 'quizResult',
       stageId: resultStage.id,
-      content: {
+      data: {
         title: resultTitle,
         showShare: true,
         alignment: 'center'
@@ -191,16 +185,15 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
     id: resultStageId,
     title: 'Página de Resultado',
     type: 'result',
-    order: 0,
-    isEnabled: true
+    order: 0
   };
   
   // Convert blocks from ResultPageConfig to QuizComponentData
   const components: QuizComponentData[] = config.blocks?.map((block, index) => ({
     id: generateId(),
-    type: block.type as unknown as QuizComponentType,
+    type: block.type as QuizComponentType, // Fixing this line to use the imported QuizComponentType
     stageId: resultStageId,
-    content: block.content,
+    data: block.content,
     order: index
   })) || [];
   
