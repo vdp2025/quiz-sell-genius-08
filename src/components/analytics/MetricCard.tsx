@@ -13,9 +13,8 @@ interface MetricCardProps {
 
 export const MetricCard: React.FC<MetricCardProps> = ({ title, value, subtitle, trend, icon }) => {
   return (
-    <Card className="hover:shadow-md transition-shadow overflow-hidden border border-border/60 relative">
-      {/* Subtle gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent to-muted/30 opacity-30" />
+    <Card className="hover:shadow-sm transition-shadow overflow-hidden border border-border/40 relative">
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent to-muted/20 opacity-30" />
       
       <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0 relative z-10">
         <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">

@@ -1,17 +1,20 @@
+
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { calculateQuizMetrics, getAnalyticsEvents, clearAnalyticsData, groupEventsByUser, getUserProgressData } from '@/utils/analytics';
+import { calculateQuizMetrics, getAnalyticsEvents, clearAnalyticsData, groupEventsByUser, getUserProgressData, getUTMData } from '@/utils/analytics';
 import { ChartConfig } from '@/components/ui/chart';
 import { Badge } from '@/components/ui/badge';
 
-// Import our new components
+// Import components
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { OverviewTab } from '@/components/analytics/tabs/OverviewTab';
 import { FunnelTab } from '@/components/analytics/tabs/FunnelTab';
 import { UsersTab } from '@/components/analytics/tabs/UsersTab';
 import { ProgressTab } from '@/components/analytics/tabs/ProgressTab';
 import { DataTab } from '@/components/analytics/tabs/DataTab';
+import { UtmTab } from '@/components/analytics/tabs/UtmTab';
+import { IntegrationTab } from '@/components/analytics/tabs/IntegrationTab';
 
 const AnalyticsPage: React.FC = () => {
   const [metrics, setMetrics] = useState<ReturnType<typeof calculateQuizMetrics> | null>(null);
@@ -22,14 +25,15 @@ const AnalyticsPage: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [userEvents, setUserEvents] = useState<any[]>([]);
   const [userProgressData, setUserProgressData] = useState<any[]>([]);
+  const [utmData, setUtmData] = useState<any[]>([]);
   
   // Enhanced colors for charts
   const COLORS = {
-    inicios: '#4f46e5',     // Indigo
-    conclusoes: '#10b981',  // Emerald
-    resultados: '#f59e0b',  // Amber
-    leads: '#ef4444',       // Red
-    sales: '#8b5cf6',       // Purple
+    inicios: '#8B5CF6',    // Purple
+    conclusoes: '#10b981', // Green
+    resultados: '#f59e0b', // Amber
+    leads: '#ef4444',      // Red
+    sales: '#0ea5e9',      // Blue
   };
 
   useEffect(() => {
@@ -41,6 +45,55 @@ const AnalyticsPage: React.FC = () => {
     const events = getAnalyticsEvents();
     const progressData = getUserProgressData(events);
     setUserProgressData(progressData);
+    
+    // Process UTM data
+    const utmDataRaw = getUTMData() ? [getUTMData()] : [];
+    // Transform UTM data for visualization
+    const processedUtmData = [
+      {
+        source: utmDataRaw[0]?.utm_source || 'direct',
+        medium: utmDataRaw[0]?.utm_medium || 'none',
+        campaign: utmDataRaw[0]?.utm_campaign || 'none',
+        users: 1,
+        conversions: 0,
+        conversionRate: 0
+      },
+      // Add some sample UTM data for demonstration
+      {
+        source: 'google',
+        medium: 'cpc',
+        campaign: 'brand_awareness',
+        users: 25,
+        conversions: 5,
+        conversionRate: 20
+      },
+      {
+        source: 'facebook',
+        medium: 'social',
+        campaign: 'summer_promo',
+        users: 40,
+        conversions: 8,
+        conversionRate: 20
+      },
+      {
+        source: 'email',
+        medium: 'newsletter',
+        campaign: 'weekly_digest',
+        users: 15,
+        conversions: 6,
+        conversionRate: 40
+      },
+      {
+        source: 'instagram',
+        medium: 'social',
+        campaign: 'influencer',
+        users: 30,
+        conversions: 12,
+        conversionRate: 40
+      }
+    ];
+    
+    setUtmData(processedUtmData);
   }, [refreshKey]);
 
   const handleRefresh = () => {
@@ -48,7 +101,7 @@ const AnalyticsPage: React.FC = () => {
   };
 
   const handleClearData = () => {
-    if (window.confirm('Tem certeza que deseja limpar todos os dados de analytics? Esta ação não pode ser desfeita.')) {
+    if (window.confirm('Are you sure you want to clear all analytics data? This action cannot be undone.')) {
       clearAnalyticsData();
       handleRefresh();
     }
@@ -57,7 +110,7 @@ const AnalyticsPage: React.FC = () => {
   const handleExportData = () => {
     const events = getAnalyticsEvents();
     const csvContent = 'data:text/csv;charset=utf-8,' + 
-      'Tipo,Timestamp,Usuário,Email,SessionId,Detalhes\n' + 
+      'Type,Timestamp,User,Email,SessionId,Details\n' + 
       events.map(e => {
         const details = Object.entries(e)
           .filter(([key]) => !['type', 'timestamp', 'userName', 'userEmail', 'sessionId'].includes(key))
@@ -131,28 +184,28 @@ const AnalyticsPage: React.FC = () => {
   // Enhanced chart configuration with improved colors and labels
   const chartConfig: ChartConfig = {
     inicios: {
-      label: "Inicios do Quiz",
+      label: "Quiz Starts",
       theme: {
         light: COLORS.inicios,
         dark: "#818cf8"
       }
     },
     conclusoes: {
-      label: "Conclusões",
+      label: "Completions",
       theme: {
         light: COLORS.conclusoes,
         dark: "#34d399"
       }
     },
     resultados: {
-      label: "Visualizações de Resultado",
+      label: "Result Views",
       theme: {
         light: COLORS.resultados,
         dark: "#fbbf24"
       }
     },
     leads: {
-      label: "Leads Gerados",
+      label: "Leads Generated",
       theme: {
         light: COLORS.leads,
         dark: "#f87171"
@@ -162,10 +215,10 @@ const AnalyticsPage: React.FC = () => {
 
   // Calculate funnel data
   const funnelData = metrics ? [
-    { name: 'Inicios', value: metrics.totalStarts },
-    { name: 'Conclusões', value: metrics.totalCompletes },
-    { name: 'Visualizações de Resultado', value: metrics.totalResultViews },
-    { name: 'Leads Gerados', value: metrics.totalLeads }
+    { name: 'Starts', value: metrics.totalStarts },
+    { name: 'Completions', value: metrics.totalCompletes },
+    { name: 'Result Views', value: metrics.totalResultViews },
+    { name: 'Leads Generated', value: metrics.totalLeads }
   ] : [];
   
   // Prepare users list data
@@ -192,8 +245,8 @@ const AnalyticsPage: React.FC = () => {
       
       return {
         id: userId,
-        name: userInfoEvent?.userName || 'Usuário anônimo',
-        email: userInfoEvent?.userEmail || 'Email não disponível',
+        name: userInfoEvent?.userName || 'Anonymous user',
+        email: userInfoEvent?.userEmail || 'Email not available',
         startTime: startEvent ? new Date(startEvent.timestamp) : null,
         completeTime: completeEvent ? new Date(completeEvent.timestamp) : null,
         lastActivity: latestEvent ? new Date(latestEvent.timestamp) : null,
@@ -225,19 +278,19 @@ const AnalyticsPage: React.FC = () => {
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
       case 'quiz_start':
-        return <Badge variant="secondary" className="bg-blue-500 text-white">Início</Badge>;
+        return <Badge variant="secondary" className="bg-blue-500 text-white">Start</Badge>;
       case 'quiz_answer':
-        return <Badge variant="secondary" className="bg-green-500 text-white">Resposta</Badge>;
+        return <Badge variant="secondary" className="bg-green-500 text-white">Answer</Badge>;
       case 'quiz_complete':
-        return <Badge variant="secondary" className="bg-purple-500 text-white">Conclusão</Badge>;
+        return <Badge variant="secondary" className="bg-purple-500 text-white">Complete</Badge>;
       case 'result_view':
-        return <Badge variant="secondary" className="bg-yellow-500 text-white">Resultado</Badge>;
+        return <Badge variant="secondary" className="bg-yellow-500 text-white">Result</Badge>;
       case 'lead_generated':
         return <Badge variant="secondary" className="bg-red-500 text-white">Lead</Badge>;
       case 'sale':
-        return <Badge variant="secondary" className="bg-emerald-500 text-white">Venda</Badge>;
+        return <Badge variant="secondary" className="bg-emerald-500 text-white">Sale</Badge>;
       default:
-        return <Badge variant="secondary" className="bg-gray-500 text-white">Evento</Badge>;
+        return <Badge variant="secondary" className="bg-gray-500 text-white">Event</Badge>;
     }
   };
 
@@ -296,12 +349,14 @@ const AnalyticsPage: React.FC = () => {
         
         <div className="mt-6">
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-6">
-              <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-              <TabsTrigger value="funnel">Funil de Conversão</TabsTrigger>
-              <TabsTrigger value="users">Usuários</TabsTrigger>
-              <TabsTrigger value="user-progress">Progresso por Questão</TabsTrigger>
-              <TabsTrigger value="data">Dados Brutos</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-7 mb-6">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="funnel">Conversion Funnel</TabsTrigger>
+              <TabsTrigger value="users">Users</TabsTrigger>
+              <TabsTrigger value="user-progress">Question Progress</TabsTrigger>
+              <TabsTrigger value="utm">UTM Analytics</TabsTrigger>
+              <TabsTrigger value="integrations">API Integrations</TabsTrigger>
+              <TabsTrigger value="data">Raw Data</TabsTrigger>
             </TabsList>
             
             {/* Overview Tab */}
@@ -347,6 +402,20 @@ const AnalyticsPage: React.FC = () => {
                 chartConfig={chartConfig} 
                 renderTooltipContent={renderTooltipContent} 
               />
+            </TabsContent>
+            
+            {/* UTM Analytics Tab */}
+            <TabsContent value="utm" className="mt-6">
+              <UtmTab
+                utmData={utmData}
+                chartConfig={chartConfig}
+                renderTooltipContent={renderTooltipContent}
+              />
+            </TabsContent>
+            
+            {/* API Integrations Tab */}
+            <TabsContent value="integrations" className="mt-6">
+              <IntegrationTab />
             </TabsContent>
             
             {/* Raw Data Tab */}

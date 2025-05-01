@@ -19,20 +19,20 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
 }) => {
   // Color gradient for progress bars
   const getBarColor = (index: number, total: number) => {
-    // Gradient from blue to red based on position
-    const hue = 240 - (index / (total - 1) * 160);
-    return `hsl(${hue}, 80%, 60%)`;
+    // Generate colors from purple to green
+    const hue = 260 - (index / (total - 1) * 100);
+    return `hsl(${hue}, 70%, 60%)`;
   };
 
   return (
     <div className="space-y-6">
       <Card className="border border-border/60">
         <CardHeader>
-          <CardTitle>Progresso por Questão</CardTitle>
-          <CardDescription>Análise de quantos usuários chegam a cada questão do quiz</CardDescription>
+          <CardTitle>Progress by Question</CardTitle>
+          <CardDescription>Analysis of how many users reach each question in the quiz</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-[400px]">
+          <div className="h-[350px]">
             <ChartContainer config={chartConfig}>
               <BarChart 
                 data={userProgressData}
@@ -41,13 +41,13 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                 <XAxis 
                   dataKey="questionId" 
-                  label={{ value: 'Questão', position: 'insideBottom', offset: -15, fill: '#888888' }}
+                  label={{ value: 'Question', position: 'insideBottom', offset: -15, fill: '#888888' }}
                   stroke="#888888"
                   tick={{ fill: '#888888', fontSize: 12 }}
                   tickLine={{ stroke: '#e0e0e0' }}
                 />
                 <YAxis 
-                  label={{ value: 'Usuários', angle: -90, position: 'insideLeft', offset: 10, fill: '#888888' }}
+                  label={{ value: 'Users', angle: -90, position: 'insideLeft', offset: 10, fill: '#888888' }}
                   stroke="#888888"
                   tick={{ fill: '#888888', fontSize: 12 }}
                   tickLine={{ stroke: '#e0e0e0' }}
@@ -56,7 +56,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                 <Legend />
                 <Bar 
                   dataKey="uniqueUsers" 
-                  name="Usuários Únicos"
+                  name="Unique Users"
                   radius={[4, 4, 0, 0]}
                   animationDuration={1500}
                   animationEasing="ease-out"
@@ -76,17 +76,17 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[180px]">Questão</TableHead>
-                  <TableHead>Usuários Únicos</TableHead>
-                  <TableHead>Total de Respostas</TableHead>
-                  <TableHead>Taxa de Completude</TableHead>
+                  <TableHead className="w-[180px]">Question</TableHead>
+                  <TableHead>Unique Users</TableHead>
+                  <TableHead>Total Answers</TableHead>
+                  <TableHead>Completion Rate</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {userProgressData.map((item, index) => (
                   <TableRow key={item.questionId}>
                     <TableCell className="font-medium">
-                      Questão {index + 1} ({item.questionId})
+                      Question {index + 1} ({item.questionId})
                     </TableCell>
                     <TableCell>{item.uniqueUsers}</TableCell>
                     <TableCell>{item.totalAnswers}</TableCell>
@@ -105,7 +105,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                 {userProgressData.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={4} className="text-center py-6 text-muted-foreground">
-                      Nenhum dado de progresso disponível.
+                      No progress data available.
                     </TableCell>
                   </TableRow>
                 )}

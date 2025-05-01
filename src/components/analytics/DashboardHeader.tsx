@@ -24,7 +24,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     <div className="space-y-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-[#432818]">Dashboard de Analytics</h1>
+          <h1 className="text-2xl font-semibold text-[#432818]">Analytics Dashboard</h1>
           <Breadcrumb className="text-sm text-muted-foreground mt-1">
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -38,31 +38,28 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </Breadcrumb>
         </div>
         
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Select value={timeRange} onValueChange={(value) => onTimeRangeChange(value as any)}>
-            <SelectTrigger className="w-[180px] border-border/60 bg-card">
-              <SelectValue placeholder="Selecionar período" />
+            <SelectTrigger className="w-[150px] border-border/60 bg-background">
+              <SelectValue placeholder="Select period" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="7d">Últimos 7 dias</SelectItem>
-              <SelectItem value="30d">Últimos 30 dias</SelectItem>
-              <SelectItem value="all">Todo o período</SelectItem>
+              <SelectItem value="7d">Last 7 days</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="all">All time</SelectItem>
             </SelectContent>
           </Select>
           
-          <Button variant="outline" size="sm" onClick={onRefresh} className="border-border/60 bg-card hover:bg-muted/80">
-            <RefreshCcw className="h-4 w-4 mr-2" />
-            Atualizar
+          <Button variant="outline" size="icon" onClick={onRefresh} className="border-border/60 bg-background hover:bg-muted/80">
+            <RefreshCcw className="h-4 w-4" />
           </Button>
           
-          <Button variant="outline" size="sm" onClick={onExportData} className="border-border/60 bg-card hover:bg-muted/80">
-            <Download className="h-4 w-4 mr-2" />
-            Exportar CSV
+          <Button variant="outline" size="icon" onClick={onExportData} className="border-border/60 bg-background hover:bg-muted/80">
+            <Download className="h-4 w-4" />
           </Button>
           
-          <Button variant="destructive" size="sm" onClick={onClearData}>
-            <Trash2 className="h-4 w-4 mr-2" />
-            Limpar Dados
+          <Button variant="outline" size="icon" onClick={onClearData} className="border-border/60 bg-background hover:bg-muted/80 text-red-600">
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       </div>
