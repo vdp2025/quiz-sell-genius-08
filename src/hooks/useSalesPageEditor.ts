@@ -57,9 +57,9 @@ export const useSalesPageEditor = (styleType: string) => {
           style: {
             backgroundColor: '#ffffff',
             color: '#432818',
-            paddingY: 16,
-            paddingX: 16,
-            borderRadius: 8
+            paddingY: '16',
+            paddingX: '16',
+            borderRadius: '8'
           }
         },
         order: 0
@@ -72,9 +72,9 @@ export const useSalesPageEditor = (styleType: string) => {
           style: {
             backgroundColor: '#F9F5F1',
             color: '#8F7A6A',
-            paddingY: 16,
-            paddingX: 16,
-            borderRadius: 8
+            paddingY: '16',
+            paddingX: '16',
+            borderRadius: '8'
           }
         },
         order: 1
@@ -90,9 +90,9 @@ export const useSalesPageEditor = (styleType: string) => {
           style: {
             backgroundColor: '#F9F5F1',
             color: '#432818',
-            paddingY: 24,
-            paddingX: 16,
-            borderRadius: 8
+            paddingY: '24',
+            paddingX: '16',
+            borderRadius: '8'
           }
         },
         order: 2

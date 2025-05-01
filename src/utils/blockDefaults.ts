@@ -1,93 +1,104 @@
 
-import { EditableContent } from "@/types/editor";
+import { v4 as uuidv4 } from 'uuid';
 
-export const getDefaultContentForType = (type: string): EditableContent => {
+// Helper function to create default content based on block type
+export const getDefaultContentForBlockType = (type: string) => {
   switch (type) {
     case 'headline':
       return {
-        title: 'Título do Bloco',
-        subtitle: 'Um subtítulo opcional para seu bloco',
-        style: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          color: '#432818'
-        }
-      };
-    case 'text':
-      return {
-        text: 'Este é um bloco de texto que você pode editar. Personalize o conteúdo conforme necessário.',
-        style: {
-          fontSize: '1rem',
-          lineHeight: '1.5',
-          color: '#3A3A3A'
-        }
-      };
-    case 'image':
-      return {
-        imageUrl: 'https://placehold.co/600x400/png',
-        imageAlt: 'Imagem de exemplo',
-        caption: '',
-        style: {
-          width: '100%',
-          borderRadius: '8px'
-        }
-      };
-    case 'style-result':
-      return {
-        title: 'Seu Estilo Principal',
-        description: 'Descrição personalizada do seu estilo predominante.',
-        customImage: '',
-        style: {
-          backgroundColor: '#FAF9F7',
-          padding: '1.5rem',
-          borderRadius: '8px'
-        }
-      };
-    case 'secondary-styles':
-      return {
-        title: 'Seus Estilos Secundários',
-        description: 'Estes estilos complementam seu estilo principal e ajudam a criar seu visual único.',
+        title: 'Título Principal',
+        subtitle: 'Subtítulo opcional aqui',
+        alignment: 'center',
         style: {
           backgroundColor: '#FFFFFF',
-          padding: '1.5rem',
-          borderRadius: '8px'
+          textColor: '#432818',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
-    case 'benefits':
+    
+    case 'text':
       return {
-        title: 'Benefícios',
-        items: [
-          { title: 'Benefício 1', description: 'Descrição do primeiro benefício' },
-          { title: 'Benefício 2', description: 'Descrição do segundo benefício' },
-          { title: 'Benefício 3', description: 'Descrição do terceiro benefício' }
-        ],
+        text: 'Insira seu texto aqui. Este é um bloco de texto rico onde você pode adicionar conteúdo para sua página.',
         style: {
-          padding: '1rem'
+          backgroundColor: '#F9F5F1',
+          textColor: '#432818',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
+    
+    case 'image':
+      return {
+        imageUrl: '',
+        altText: 'Descrição da imagem',
+        caption: '',
+        alignment: 'center',
+        style: {
+          backgroundColor: 'transparent',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
+        }
+      };
+    
     case 'cta':
       return {
-        title: 'Aproveite Essa Oportunidade',
-        buttonText: 'Comprar Agora',
-        buttonUrl: '#comprar',
+        title: 'Chame à ação agora!',
+        buttonText: 'Clique Aqui',
+        buttonUrl: '#',
+        alignment: 'center',
         style: {
-          backgroundColor: '#B89B7A',
-          color: '#FFFFFF',
-          textAlign: 'center',
-          padding: '2rem',
-          borderRadius: '8px'
+          backgroundColor: '#F9F5F1',
+          buttonColor: '#B89B7A',
+          textColor: '#432818',
+          buttonTextColor: '#FFFFFF',
+          paddingY: '24',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
-    case 'spacer':
+    
+    case 'testimonial':
       return {
-        height: '2rem'
+        name: 'Nome do Cliente',
+        role: 'Posição ou Empresa',
+        testimonialText: 'Este é um depoimento de exemplo. Substitua com um depoimento real de um cliente satisfeito.',
+        rating: 5,
+        avatarUrl: '',
+        style: {
+          backgroundColor: '#FFFFFF',
+          textColor: '#432818',
+          accentColor: '#B89B7A',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
+        }
       };
+    
+    case 'divider':
+      return {
+        style: {
+          color: '#B89B7A',
+          width: '80%',
+          thickness: '1',
+          style: 'solid'
+        }
+      };
+    
     default:
-      return {
-        title: 'Novo Bloco',
-        text: 'Conteúdo do bloco',
-        style: {}
-      };
+      return {};
   }
+};
+
+// Function to create a new block with default content
+export const createNewBlock = (type: string, order: number = 0) => {
+  return {
+    id: uuidv4(),
+    type,
+    content: getDefaultContentForBlockType(type),
+    order
+  };
 };

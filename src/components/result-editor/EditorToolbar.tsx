@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Eye, Save, RotateCcw, Palette, Copy, Download, Upload, Template } from 'lucide-react';
+import { Eye, Save, RotateCcw, Palette, Copy, Download, Upload, Layers } from 'lucide-react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { downloadJSON, uploadJSON } from '@/utils/fileUtils';
 import { toast } from '@/components/ui/use-toast';
@@ -117,7 +117,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
             onClick={onShowTemplates}
             className="flex items-center"
           >
-            <Template className="h-4 w-4 mr-2" />
+            <Layers className="h-4 w-4 mr-2" />
             Templates
           </Button>
         )}

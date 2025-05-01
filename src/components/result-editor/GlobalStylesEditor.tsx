@@ -7,22 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getDefaultGlobalStyles } from '@/utils/editorDefaults';
+import { StyleOptions } from '@/types/resultPageConfig';
 
 interface GlobalStylesEditorProps {
   globalStyles: Partial<StyleOptions>;
   onSave: (styles: Partial<StyleOptions>) => void;
   onCancel: () => void;
-}
-
-interface StyleOptions {
-  primaryColor: string;
-  secondaryColor: string;
-  textColor: string;
-  backgroundColor: string;
-  fontFamily: string;
-  spacing: 'compact' | 'comfortable' | 'spacious';
-  borderRadius: 'none' | 'small' | 'medium' | 'large';
-  [key: string]: any;
 }
 
 export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
@@ -189,7 +179,7 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
               <Label htmlFor="spacing">Espaçamento</Label>
               <Select 
                 value={styles.spacing || 'comfortable'}
-                onValueChange={(value) => handleChange('spacing', value)}
+                onValueChange={(value: 'compact' | 'comfortable' | 'spacious') => handleChange('spacing', value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o espaçamento" />
@@ -206,7 +196,7 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
               <Label htmlFor="borderRadius">Raio das Bordas</Label>
               <Select 
                 value={styles.borderRadius || 'medium'}
-                onValueChange={(value) => handleChange('borderRadius', value)}
+                onValueChange={(value: 'none' | 'small' | 'medium' | 'large') => handleChange('borderRadius', value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o raio das bordas" />

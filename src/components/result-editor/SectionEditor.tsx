@@ -82,7 +82,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </Label>
                         <Input
                           id={key}
-                          value={value}
+                          value={value as string}
                           onChange={(e) => handleContentChange(key, e.target.value)}
                         />
                       </div>
@@ -127,7 +127,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </Label>
                         <Input
                           id={`${key}-appearance`}
-                          value={value}
+                          value={value as string}
                           onChange={(e) => {
                             onUpdate({
                               ...section,

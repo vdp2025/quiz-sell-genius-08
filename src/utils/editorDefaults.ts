@@ -1,6 +1,6 @@
 
 import { StyleOptions } from '@/types/resultPageConfig';
-import { EditableContent, BlockType } from '@/types/editor';
+import { Block, EditableContent } from '@/types/editor';
 
 export const getDefaultGlobalStyles = (): Partial<StyleOptions> => {
   return {
@@ -9,109 +9,130 @@ export const getDefaultGlobalStyles = (): Partial<StyleOptions> => {
     textColor: '#432818',
     backgroundColor: '#FAF9F7',
     fontFamily: 'sans-serif',
-    spacing: 'comfortable',
+    fontSize: '16px',
     borderRadius: 'medium',
+    spacing: 'comfortable'
   };
 };
 
-export const getDefaultContentForType = (type: BlockType): EditableContent => {
+export const getDefaultContentForType = (type: Block['type']): EditableContent => {
   switch (type) {
     case 'headline':
       return {
         title: 'Título Principal',
-        subtitle: 'Subtítulo ou descrição complementar',
+        subtitle: 'Subtítulo opcional aqui',
+        alignment: 'center',
         style: {
-          textAlign: 'center',
-          paddingTop: 32,
-          paddingBottom: 16,
+          backgroundColor: '#FFFFFF',
+          textColor: '#432818',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
+    
     case 'text':
       return {
-        text: 'Insira seu texto aqui. Este é um parágrafo de exemplo que pode ser editado conforme sua necessidade. Você pode adicionar mais informações e formatar o texto de acordo com seu estilo.',
+        text: 'Insira seu texto aqui. Este é um bloco de texto rico onde você pode adicionar conteúdo para sua página.',
         style: {
-          paddingTop: 16,
-          paddingBottom: 16,
+          backgroundColor: '#F9F5F1',
+          textColor: '#432818',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
+    
     case 'image':
       return {
         imageUrl: '',
-        imageAlt: 'Descrição da imagem',
+        altText: 'Descrição da imagem',
         caption: '',
+        alignment: 'center',
         style: {
-          maxWidth: '100%',
-          borderRadius: 8,
+          backgroundColor: 'transparent',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
-    case 'button':
+    
+    case 'video':
       return {
-        ctaText: 'Clique Aqui',
-        ctaUrl: '#',
+        videoUrl: '',
+        title: 'Título do vídeo',
+        autoplay: false,
+        controls: true,
         style: {
-          backgroundColor: '#B89B7A',
-          color: '#FFFFFF',
-          borderRadius: 8,
-          paddingX: 24,
-          paddingY: 12,
-          textAlign: 'center',
+          backgroundColor: '#F9F5F1',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
-    case 'testimonial-card':
+    
+    case 'cta':
       return {
-        name: 'Maria Silva',
-        role: 'Cliente desde 2022',
-        testimonialText: 'Este guia de estilo mudou completamente a forma como me visto. Agora tenho confiança para escolher roupas que realmente combinam com minha personalidade.',
+        title: 'Chame à ação agora!',
+        buttonText: 'Clique Aqui',
+        buttonUrl: '#',
+        alignment: 'center',
+        style: {
+          backgroundColor: '#F9F5F1',
+          buttonColor: '#B89B7A',
+          textColor: '#432818',
+          buttonTextColor: '#FFFFFF',
+          paddingY: '24',
+          paddingX: '16',
+          borderRadius: '8'
+        }
+      };
+    
+    case 'testimonial':
+      return {
+        name: 'Nome do Cliente',
+        role: 'Posição ou Empresa',
+        testimonialText: 'Este é um depoimento de exemplo. Substitua com um depoimento real de um cliente satisfeito.',
         rating: 5,
         avatarUrl: '',
         style: {
           backgroundColor: '#FFFFFF',
-          borderRadius: 8,
-          padding: 16,
+          textColor: '#432818',
+          accentColor: '#B89B7A',
+          paddingY: '16',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
-    case 'benefits':
+    
+    case 'pricing':
       return {
-        title: 'Principais Benefícios',
-        benefits: [
-          'Benefício 1: Descrição do primeiro benefício',
-          'Benefício 2: Descrição do segundo benefício',
-          'Benefício 3: Descrição do terceiro benefício'
+        title: 'Consultoria de Estilo',
+        price: 'R$ 997,00',
+        regularPrice: 'R$ 1.997,00',
+        description: 'Investimento único. Acesso vitalício.',
+        features: [
+          'Análise detalhada do seu estilo pessoal',
+          'Guia personalizado de compras',
+          'Consultoria virtual 1:1'
         ],
+        ctaText: 'Adquirir Agora',
+        ctaUrl: '#',
         style: {
-          backgroundColor: '#FAF9F7',
-          padding: 24,
-          borderRadius: 8,
+          backgroundColor: '#FFFFFF',
+          textColor: '#432818',
+          accentColor: '#B89B7A',
+          paddingY: '24',
+          paddingX: '16',
+          borderRadius: '8'
         }
       };
-    default:
-      return {};
-  }
-};
-
-export const getDefaultTypeStyles = (type: BlockType): Partial<StyleOptions> => {
-  switch (type) {
-    case 'headline':
-      return { 
-        textAlign: 'center',
-        fontFamily: 'serif',
-        fontSize: 'large',
-        fontWeight: 'bold'
-      };
-    case 'text':
-      return { 
-        textAlign: 'left',
-        fontFamily: 'sans-serif',
-        fontSize: 'medium',
-        lineHeight: 'relaxed'
-      };
-    case 'button':
+    
+    case 'customCode':
       return {
-        textAlign: 'center',
-        backgroundColor: '#B89B7A',
-        color: '#FFFFFF',
-        borderRadius: 'rounded'
+        code: '<!-- Insira seu código HTML personalizado aqui -->'
       };
+    
     default:
       return {};
   }
