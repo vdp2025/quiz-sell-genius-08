@@ -6,7 +6,7 @@ import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
-import { QuizNavigation } from './navigation/QuizNavigation';
+import { QuizNavigation } from './quiz/QuizNavigation'; // Alterar importação
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { useAuth } from '../context/AuthContext';
 
@@ -117,6 +117,12 @@ const QuizPage: React.FC = () => {
     }
   };
 
+  const getCurrentCanProceed = () => {
+    const currentAnswersLength = currentAnswers?.length || 0;
+    const isStrategicQuestion = currentQuestion?.id.startsWith('strategic');
+    return isStrategicQuestion ? currentAnswersLength === 1 : currentAnswersLength === 3;
+  };
+
   return (
     <QuizContainer>
       <QuizTransitionManager
@@ -143,8 +149,9 @@ const QuizPage: React.FC = () => {
           />
           
           <QuizNavigation
-            currentStep={currentQuestionIndex + 1}
-            totalSteps={totalQuestions}
+            currentQuestionType={currentQuestion?.id.startsWith('strategic') ? 'strategic' : 'normal'}
+            selectedOptionsCount={currentAnswers?.length || 0}
+            isLastQuestion={isLastQuestion}
             onNext={handleNextClick}
             onPrevious={handlePrevious}
           />
