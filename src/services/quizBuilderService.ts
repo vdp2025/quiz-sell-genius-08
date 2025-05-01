@@ -4,7 +4,7 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from './resultPageStorage';
 
 // Re-export types from quizBuilderTypes.ts
-export { QuizQuestion, QuizAnswer } from '@/types/quizBuilderTypes';
+export type { QuizQuestion, QuizAnswer } from '@/types/quizBuilderTypes';
 
 // Re-export functions from quizBuilderCreator.ts
 export { createBuilderStateFromQuiz, generateInitialStages } from './quizBuilderCreator';
