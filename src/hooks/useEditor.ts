@@ -3,6 +3,8 @@ import { useState, useCallback } from 'react';
 import { Block, BlockType, EditorConfig } from '@/types/editor';
 import { generateId } from '@/utils/idGenerator';
 import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
+import { BorderRadiusType } from '@/types/resultPageConfig';
+import { sanitizeBorderRadius } from '@/utils/styleUtils';
 
 export const useEditor = () => {
   const [config, setConfig] = useState<EditorConfig>({ blocks: [] });
@@ -17,6 +19,11 @@ export const useEditor = () => {
       content: getDefaultContentForBlockType(type),
       order: config.blocks.length
     };
+    
+    // Ensure all style.borderRadius values are correctly typed
+    if (newBlock.content.style && typeof newBlock.content.style.borderRadius === 'string') {
+      newBlock.content.style.borderRadius = sanitizeBorderRadius(newBlock.content.style.borderRadius);
+    }
     
     setConfig(prevConfig => ({
       ...prevConfig,

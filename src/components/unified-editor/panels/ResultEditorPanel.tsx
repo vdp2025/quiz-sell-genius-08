@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import { ResultPageConfig } from '@/types/resultPageConfig';
@@ -15,13 +15,19 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
   primaryStyle,
   initialConfig
 }) => {
-  // Pass the isPreviewing prop to the ResultPageVisualEditor
+  const [config, setConfig] = useState<ResultPageConfig | undefined>(initialConfig);
+  
+  const handleUpdateConfig = (newConfig: ResultPageConfig) => {
+    setConfig(newConfig);
+  };
+  
   return (
     <div className="h-full">
       <ResultPageVisualEditor
         selectedStyle={primaryStyle}
         onShowTemplates={() => {}}
-        initialConfig={initialConfig}
+        initialConfig={config}
+        onUpdateConfig={handleUpdateConfig}
         isPreviewing={isPreviewing}
       />
     </div>

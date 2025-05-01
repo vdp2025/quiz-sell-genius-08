@@ -4,6 +4,7 @@ import { Block } from '@/types/editor';
 import { toast } from '@/components/ui/use-toast';
 import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
 import { generateId } from '@/utils/idGenerator';
+import { BorderRadiusType } from '@/types/resultPageConfig';
 
 const STORAGE_KEY_PREFIX = 'sales_page_editor_';
 
@@ -59,7 +60,7 @@ export const useSalesPageEditor = (styleType: string) => {
             color: '#432818',
             paddingY: '16',
             paddingX: '16',
-            borderRadius: 'medium'
+            borderRadius: 'medium' as BorderRadiusType
           }
         },
         order: 0
@@ -74,7 +75,7 @@ export const useSalesPageEditor = (styleType: string) => {
             color: '#8F7A6A',
             paddingY: '16',
             paddingX: '16',
-            borderRadius: 'medium'
+            borderRadius: 'medium' as BorderRadiusType
           }
         },
         order: 1
@@ -92,7 +93,7 @@ export const useSalesPageEditor = (styleType: string) => {
             color: '#432818',
             paddingY: '24',
             paddingX: '16',
-            borderRadius: 'medium'
+            borderRadius: 'medium' as BorderRadiusType
           }
         },
         order: 2

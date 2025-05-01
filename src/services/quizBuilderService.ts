@@ -1,3 +1,4 @@
+
 import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from './resultPageStorage';
@@ -8,7 +9,7 @@ export interface QuizQuestion {
   description?: string;
   type: 'multiple-choice' | 'single-choice' | 'scale';
   answers: QuizAnswer[];
-  required: number; // Replacing boolean with number
+  required: boolean; // Changed to boolean
   order: number;
 }
 
@@ -17,7 +18,7 @@ export interface QuizAnswer {
   text: string;
   value: string;
   styleScores?: Record<string, number>;
-  required: number; // Replacing boolean with number
+  required: boolean; // Changed to boolean
   order: number;
 }
 
@@ -75,7 +76,7 @@ export const createBuilderStateFromQuiz = (
         optionStyleCategories: question.styleCategories || [],
         displayType: question.displayType || 'text',
         multiSelect: question.multiSelect || false,
-        required: 1, // Changed from boolean to number
+        required: true, // Using boolean as required is boolean
         autoAdvance: question.autoAdvance || false,
       }
     });
@@ -160,7 +161,7 @@ export const generateInitialStages = (): QuizBuilderState => {
         ],
         displayType: 'text',
         multiSelect: false,
-        required: 1, // Changed from boolean to number
+        required: true, // Changed to boolean
         autoAdvance: true
       }
     },
@@ -241,7 +242,7 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
         ],
         displayType: 'text',
         multiSelect: false,
-        required: 1, // Changed from boolean to number
+        required: true, // Changed to boolean
         autoAdvance: true,
         optionStyleCategories: [
           styleTitle,

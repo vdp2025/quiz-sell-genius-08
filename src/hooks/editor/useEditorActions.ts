@@ -3,6 +3,8 @@ import { useCallback } from 'react';
 import { EditorBlock } from '@/types/editor';
 import { useToast } from '@/components/ui/use-toast';
 import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
+import { sanitizeBorderRadius } from '@/utils/styleUtils';
+import { BorderRadiusType } from '@/types/resultPageConfig';
 
 export const useEditorActions = (
   blocks: EditorBlock[],
@@ -12,10 +14,17 @@ export const useEditorActions = (
   const { toast } = useToast();
 
   const handleAddBlock = useCallback((type: EditorBlock['type']) => {
+    const content = getDefaultContentForBlockType(type);
+    
+    // Ensure borderRadius is properly typed
+    if (content.style && typeof content.style.borderRadius === 'string') {
+      content.style.borderRadius = sanitizeBorderRadius(content.style.borderRadius);
+    }
+    
     const newBlock: EditorBlock = {
       id: `block-${Date.now()}`,
       type,
-      content: getDefaultContentForBlockType(type),
+      content,
       order: blocks.length
     };
     

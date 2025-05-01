@@ -1,5 +1,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
+import { BorderRadiusType } from '@/types/resultPageConfig';
+import { sanitizeBorderRadius } from './styleUtils';
 
 // Helper function to create default content based on block type
 export const getDefaultContentForBlockType = (type: string) => {
@@ -14,7 +16,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           textColor: '#432818',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: 'medium'
+          borderRadius: 'medium' as BorderRadiusType
         }
       };
     
@@ -26,7 +28,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           textColor: '#432818',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: 'medium'
+          borderRadius: 'medium' as BorderRadiusType
         }
       };
     
@@ -40,7 +42,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           backgroundColor: 'transparent',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: 'medium'
+          borderRadius: 'medium' as BorderRadiusType
         }
       };
     
@@ -57,7 +59,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           buttonTextColor: '#FFFFFF',
           paddingY: '24',
           paddingX: '16',
-          borderRadius: 'medium'
+          borderRadius: 'medium' as BorderRadiusType
         }
       };
     
@@ -74,7 +76,7 @@ export const getDefaultContentForBlockType = (type: string) => {
           accentColor: '#B89B7A',
           paddingY: '16',
           paddingX: '16',
-          borderRadius: 'medium'
+          borderRadius: 'medium' as BorderRadiusType
         }
       };
     
