@@ -1,101 +1,73 @@
 
 import { useState, useCallback } from 'react';
-import { Block, BlockType } from '@/types/editor';
-import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { Block } from '@/types/editor';
 import { toast } from '@/components/ui/use-toast';
 
-export const useBlockOperations = (initialBlocks: Block[] = []) => {
-  const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
+export const useBlockOperations = () => {
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-
+  
   const updateBlocks = useCallback((newBlocks: Block[]) => {
     setBlocks(newBlocks);
   }, []);
-
-  const handleAddBlock = useCallback((type: BlockType) => {
+  
+  const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
       id: `block-${Date.now()}`,
       type,
       order: blocks.length,
-      content: getDefaultContentForType(type)
+      content: {}
     };
-
-    setBlocks(prevBlocks => [...prevBlocks, newBlock]);
-    setSelectedBlockId(newBlock.id);
+    
+    const newBlocks = [...blocks, newBlock];
+    setBlocks(newBlocks);
     
     toast({
       title: "Bloco adicionado",
-      description: `Um novo bloco do tipo ${type} foi adicionado.`,
+      description: `Um bloco do tipo ${type} foi adicionado`,
     });
     
     return newBlock.id;
   }, [blocks]);
-
+  
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    setBlocks(prevBlocks => 
-      prevBlocks.map(block => 
-        block.id === id
-          ? { ...block, content: { ...block.content, ...content } }
-          : block
-      )
+    const newBlocks = blocks.map(block => 
+      block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     );
-  }, []);
-
-  const handleDeleteBlock = useCallback((id: string) => {
-    setBlocks(prevBlocks => {
-      const filtered = prevBlocks.filter(block => block.id !== id);
-      // Reorder blocks after deletion
-      return filtered.map((block, index) => ({
-        ...block,
-        order: index
-      }));
-    });
     
-    // If the selected block is deleted, clear selection
+    setBlocks(newBlocks);
+  }, [blocks]);
+  
+  const handleDeleteBlock = useCallback((id: string) => {
+    const newBlocks = blocks
+      .filter(block => block.id !== id)
+      .map((block, index) => ({ ...block, order: index }));
+    
+    setBlocks(newBlocks);
+    
     if (selectedBlockId === id) {
       setSelectedBlockId(null);
     }
     
     toast({
       title: "Bloco removido",
-      description: "O bloco foi removido com sucesso.",
+      description: "O bloco foi removido com sucesso",
     });
-  }, [selectedBlockId]);
-
-  const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
-    setBlocks(prevBlocks => {
-      const result = Array.from(prevBlocks);
-      const [removed] = result.splice(sourceIndex, 1);
-      result.splice(destinationIndex, 0, removed);
-      
-      // Update order property
-      return result.map((block, index) => ({
-        ...block,
-        order: index
-      }));
-    });
-  }, []);
+  }, [blocks, selectedBlockId]);
   
-  const handleDuplicateBlock = useCallback((id: string) => {
-    const blockToDuplicate = blocks.find(block => block.id === id);
+  const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
+    const result = Array.from(blocks);
+    const [removed] = result.splice(sourceIndex, 1);
+    result.splice(destinationIndex, 0, removed);
     
-    if (blockToDuplicate) {
-      const newBlock: Block = {
-        ...blockToDuplicate,
-        id: `block-${Date.now()}`,
-        order: blocks.length
-      };
-      
-      setBlocks(prevBlocks => [...prevBlocks, newBlock]);
-      setSelectedBlockId(newBlock.id);
-      
-      toast({
-        title: "Bloco duplicado",
-        description: `O bloco ${blockToDuplicate.type} foi duplicado com sucesso.`,
-      });
-    }
+    const reorderedBlocks = result.map((block, index) => ({
+      ...block,
+      order: index
+    }));
+    
+    setBlocks(reorderedBlocks);
   }, [blocks]);
-
+  
   return {
     blocks,
     selectedBlockId,
@@ -105,8 +77,7 @@ export const useBlockOperations = (initialBlocks: Block[] = []) => {
       handleAddBlock,
       handleUpdateBlock,
       handleDeleteBlock,
-      handleReorderBlocks,
-      handleDuplicateBlock
+      handleReorderBlocks
     }
   };
 };

@@ -1,180 +1,260 @@
-import { QuizQuestion, QuizOption } from '@/types/quiz';
-import { QuizStage, QuizComponentData, QuizBuilderState } from '@/types/quizBuilder';
-import { generateId } from '@/utils/idGenerator';
+
+import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
-import { resultPageStorage } from '@/services/resultPageStorage';
-
-/**
- * Creates a stage for quiz builder based on provided parameters
- */
-export const createStage = (
-  title: string,
-  type: QuizStage['type'],
-  order: number
-): QuizStage => {
-  return {
-    id: generateId(),
-    title,
-    order,
-    type
-  };
-};
-
-/**
- * Creates a component for the quiz builder
- */
-export const createComponent = (
-  type: QuizComponentData['type'],
-  stageId: string,
-  data: any,
-  order: number
-): QuizComponentData => {
-  return {
-    id: generateId(),
-    type,
-    stageId,
-    order,
-    data
-  };
-};
-
-/**
- * Creates the initial stages and components for a new quiz builder
- */
-export const generateInitialStages = (): { stages: QuizStage[], components: QuizComponentData[] } => {
-  const coverStage = createStage('Capa do Quiz', 'cover', 0);
-  const questionStage = createStage('Primeira Questão', 'question', 1);
-  const resultStage = createStage('Resultado Final', 'result', 2);
-  
-  const coverComponent = createComponent('stageCover', coverStage.id, {
-    title: 'Quiz de Estilo',
-    subtitle: 'Descubra seu estilo predominante',
-    buttonText: 'Começar'
-  }, 0);
-  
-  const questionComponent = createComponent('stageQuestion', questionStage.id, {
-    question: 'Qual é o seu tipo de roupa favorita?',
-    options: [
-      'Looks confortáveis e práticos',
-      'Roupas clássicas e atemporais',
-      'Peças modernas com toques pessoais',
-      'Roupas sofisticadas e elegantes'
-    ],
-    multiSelect: 3,
-    displayType: 'text',
-    autoAdvance: true
-  }, 0);
-  
-  const resultComponent = createComponent('stageResult', resultStage.id, {
-    title: 'Seu Resultado',
-    subtitle: 'Baseado nas suas respostas'
-  }, 0);
-  
-  return {
-    stages: [coverStage, questionStage, resultStage],
-    components: [coverComponent, questionComponent, resultComponent]
-  };
-};
+import { resultPageStorage } from './resultPageStorage';
 
 export const createBuilderStateFromQuiz = (
-  questions: QuizQuestion[],
-  title: string,
-  description: string,
-  resultTitle: string
+  questions: any[],
+  title: string = 'Quiz de Estilo Pessoal',
+  subtitle: string = 'Descubra seu estilo predominante',
+  resultTitle: string = 'Seu Resultado de Estilo Pessoal'
 ): QuizBuilderState => {
-  const stages: QuizStage[] = [];
-  const components: QuizComponentData[] = [];
+  const stages: QuizStage[] = [
+    {
+      id: `stage-cover-${Date.now()}`,
+      title: 'Etapa 1: Capa do Quiz',
+      order: 0,
+      type: 'cover'
+    }
+  ];
   
-  // Create cover stage
-  const coverStage = createStage('Capa do Quiz', 'cover', 0);
-  stages.push(coverStage);
+  const components: QuizComponentData[] = [
+    {
+      id: `component-cover-${Date.now()}`,
+      type: 'stageCover',
+      order: 0,
+      stageId: stages[0].id,
+      data: {
+        title: title,
+        subtitle: subtitle,
+        buttonText: 'Iniciar Quiz',
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818'
+      }
+    }
+  ];
   
-  components.push(createComponent('stageCover', coverStage.id, {
-    title: title,
-    subtitle: description,
-    buttonText: 'Começar Quiz',
-    backgroundColor: '#FFFAF0',
-    textColor: '#432818',
-    stageTitle: 'Início',
-    stageNumber: 1,
-    totalStages: questions.length + 2, // Cover + Questions + Result
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
-  }, 0));
-  
-  // Create question stages
+  // Add questions
   questions.forEach((question, index) => {
-    const questionStage = createStage(
-      question.title || `Pergunta ${index + 1}`,
-      'question',
-      index + 1
-    );
-    stages.push(questionStage);
+    const stageId = `stage-question-${Date.now()}-${index}`;
     
-    components.push(createComponent('multipleChoice', questionStage.id, {
-      question: question.title,
-      options: question.options.map(opt => ({
-        text: opt.text,
-        imageUrl: opt.imageUrl,
-        styleCategory: opt.styleCategory
-      })),
-      multiSelect: question.multiSelect,
-      displayType: question.type,
-      autoAdvance: true,
-      stageTitle: `Questão ${index + 1}`,
-      stageNumber: index + 2,
-      totalStages: questions.length + 2
-    }, 0));
+    stages.push({
+      id: stageId,
+      title: `Etapa ${index + 2}: Pergunta ${index + 1}`,
+      order: index + 1,
+      type: 'question'
+    });
+    
+    components.push({
+      id: `component-question-${Date.now()}-${index}`,
+      type: 'stageQuestion',
+      order: index + 1,
+      stageId: stageId,
+      data: {
+        question: question.question,
+        options: question.options,
+        optionImages: question.optionImages || [],
+        optionStyleCategories: question.styleCategories || [],
+        displayType: question.displayType || 'text',
+        multiSelect: question.multiSelect || false,
+        required: true,
+        autoAdvance: question.autoAdvance || false,
+      }
+    });
   });
   
-  // Create result stage
-  const resultStage = createStage('Resultado do Quiz', 'result', questions.length + 1);
-  stages.push(resultStage);
+  // Add result stage
+  const resultStageId = `stage-result-${Date.now()}`;
+  stages.push({
+    id: resultStageId,
+    title: 'Etapa Final: Resultado',
+    order: stages.length,
+    type: 'result'
+  });
   
-  components.push(createComponent('stageResult', resultStage.id, {
-    title: resultTitle,
-    subtitle: 'Baseado nas suas respostas',
-    showPercentages: true,
-    showDescriptions: true,
-    stageTitle: 'Resultado',
-    stageNumber: questions.length + 2,
-    totalStages: questions.length + 2
-  }, 0));
+  components.push({
+    id: `component-result-${Date.now()}`,
+    type: 'stageResult',
+    order: components.length,
+    stageId: resultStageId,
+    data: {
+      title: resultTitle,
+      primaryStyleTitle: 'Seu Estilo Predominante',
+      secondaryStylesTitle: 'Estilos Complementares',
+      showPercentages: true,
+      showDescriptions: true,
+      callToActionText: 'Ver Recomendações',
+      accentColor: '#B89B7A'
+    }
+  });
   
   return { stages, components };
 };
 
-/**
- * Creates a builder state from an existing result page configuration
- */
-export const createBuilderStateFromResultPage = (
-  resultConfig: ResultPageConfig
-): QuizBuilderState => {
-  // Create a minimal quiz builder state with just a result page
-  const resultStage = createStage('Resultado do Quiz', 'result', 0);
+export const generateInitialStages = (): QuizBuilderState => {
+  const stages: QuizStage[] = [
+    {
+      id: `stage-cover-${Date.now()}`,
+      title: 'Etapa 1: Capa do Quiz',
+      order: 0,
+      type: 'cover'
+    },
+    {
+      id: `stage-question-${Date.now()}`,
+      title: 'Etapa 2: Pergunta 1',
+      order: 1,
+      type: 'question'
+    },
+    {
+      id: `stage-result-${Date.now()}`,
+      title: 'Etapa 3: Resultado',
+      order: 2,
+      type: 'result'
+    }
+  ];
   
-  const resultComponent = createComponent('stageResult', resultStage.id, {
-    title: resultConfig.header?.content?.title || 'Seu Resultado',
-    subtitle: resultConfig.header?.content?.subtitle || 'Baseado nas suas respostas',
-    resultLayout: 'custom',
-    primaryStyleTitle: 'Seu Estilo Predominante',
-    secondaryStylesTitle: resultConfig.secondaryStyles?.visible !== false ? 'Seus Estilos Complementares' : '',
-    showPercentages: true,
-    showDescriptions: true,
-    callToActionText: resultConfig.offer?.hero?.content?.ctaText || 'Conhecer o Guia Completo',
-    callToActionUrl: resultConfig.offer?.hero?.content?.ctaUrl || '#',
-    accentColor: resultConfig.globalStyles?.primaryColor || '#B89B7A',
-    savedResultConfig: JSON.stringify(resultConfig)
-  }, 0);
+  const components: QuizComponentData[] = [
+    {
+      id: `component-cover-${Date.now()}`,
+      type: 'stageCover',
+      order: 0,
+      stageId: stages[0].id,
+      data: {
+        title: 'Descubra Seu Estilo Pessoal',
+        subtitle: 'Responda algumas perguntas e descubra qual é o seu estilo predominante',
+        buttonText: 'Começar Quiz',
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818'
+      }
+    },
+    {
+      id: `component-question-${Date.now()}`,
+      type: 'stageQuestion',
+      order: 0,
+      stageId: stages[1].id,
+      data: {
+        question: 'Qual dessas opções mais combina com seu estilo preferido?',
+        options: [
+          'Elegante e sofisticado',
+          'Casual e confortável',
+          'Ousado e expressivo',
+          'Clássico e tradicional'
+        ],
+        displayType: 'text',
+        multiSelect: false,
+        required: true,
+        autoAdvance: true
+      }
+    },
+    {
+      id: `component-result-${Date.now()}`,
+      type: 'stageResult',
+      order: 0,
+      stageId: stages[2].id,
+      data: {
+        title: 'Seu Resultado de Estilo',
+        primaryStyleTitle: 'Seu Estilo Predominante',
+        secondaryStylesTitle: 'Estilos Complementares',
+        showPercentages: true,
+        showDescriptions: true,
+        callToActionText: 'Ver Recomendações',
+        accentColor: '#B89B7A'
+      }
+    }
+  ];
   
-  return {
-    stages: [resultStage],
-    components: [resultComponent]
-  };
+  return { stages, components };
 };
 
-/**
- * Loads a quiz result page configuration from localStorage
- */
+export const createBuilderStateFromResultPage = (config: ResultPageConfig): QuizBuilderState => {
+  // Create a simple quiz that leads to this result page
+  const coverStageId = `stage-cover-${Date.now()}`;
+  const questionStageId = `stage-question-${Date.now()}`;
+  const resultStageId = `stage-result-${Date.now()}`;
+  
+  const stages: QuizStage[] = [
+    {
+      id: coverStageId,
+      title: 'Etapa 1: Capa do Quiz',
+      order: 0,
+      type: 'cover'
+    },
+    {
+      id: questionStageId,
+      title: 'Etapa 2: Pergunta 1',
+      order: 1,
+      type: 'question'
+    },
+    {
+      id: resultStageId,
+      title: 'Etapa 3: Resultado',
+      order: 2,
+      type: 'result'
+    }
+  ];
+  
+  const styleTitle = config.styleType || 'Personalizado';
+  
+  const components: QuizComponentData[] = [
+    {
+      id: `component-cover-${Date.now()}`,
+      type: 'stageCover',
+      order: 0,
+      stageId: coverStageId,
+      data: {
+        title: `Quiz de Estilo ${styleTitle}`,
+        subtitle: 'Responda as perguntas e descubra seu estilo pessoal',
+        buttonText: 'Iniciar Quiz',
+        backgroundColor: config.globalStyles?.backgroundColor || '#FAF9F7',
+        textColor: config.globalStyles?.textColor || '#432818'
+      }
+    },
+    {
+      id: `component-question-${Date.now()}`,
+      type: 'stageQuestion',
+      order: 0,
+      stageId: questionStageId,
+      data: {
+        question: `Qual dessas opções descreve melhor o estilo ${styleTitle}?`,
+        options: [
+          `Opção A - Estilo ${styleTitle}`,
+          'Opção B - Outro estilo',
+          'Opção C - Outro estilo',
+          'Opção D - Outro estilo'
+        ],
+        displayType: 'text',
+        multiSelect: false,
+        required: true,
+        autoAdvance: true,
+        optionStyleCategories: [
+          styleTitle,
+          'Outro Estilo',
+          'Outro Estilo',
+          'Outro Estilo'
+        ]
+      }
+    },
+    {
+      id: `component-result-${Date.now()}`,
+      type: 'stageResult',
+      order: 0,
+      stageId: resultStageId,
+      data: {
+        title: config.title || `Seu Resultado: ${styleTitle}`,
+        primaryStyleTitle: 'Seu Estilo Predominante',
+        secondaryStylesTitle: 'Estilos Complementares',
+        showPercentages: true,
+        showDescriptions: true,
+        callToActionText: 'Ver Recomendações',
+        accentColor: config.globalStyles?.primaryColor || '#B89B7A',
+        resultPageId: config.styleType // Link to the result page
+      }
+    }
+  ];
+  
+  return { stages, components };
+};
+
 export const loadQuizResultConfig = (styleType: string): ResultPageConfig | null => {
-  return resultPageStorage.load(styleType);
+  return resultPageStorage.loadConfig(styleType);
 };

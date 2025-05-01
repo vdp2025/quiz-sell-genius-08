@@ -1,21 +1,28 @@
 
 import React, { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getDefaultGlobalStyles } from '@/utils/editorDefaults';
 
 interface GlobalStylesEditorProps {
-  globalStyles: {
-    primaryColor?: string;
-    secondaryColor?: string;
-    textColor?: string;
-    backgroundColor?: string;
-    fontFamily?: string;
-  };
-  onSave: (styles: any) => void;
+  globalStyles: Partial<StyleOptions>;
+  onSave: (styles: Partial<StyleOptions>) => void;
   onCancel: () => void;
+}
+
+interface StyleOptions {
+  primaryColor: string;
+  secondaryColor: string;
+  textColor: string;
+  backgroundColor: string;
+  fontFamily: string;
+  spacing: 'compact' | 'comfortable' | 'spacious';
+  borderRadius: 'none' | 'small' | 'medium' | 'large';
+  [key: string]: any;
 }
 
 export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
@@ -23,122 +30,226 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
   onSave,
   onCancel
 }) => {
-  const [styles, setStyles] = useState(globalStyles);
+  const [styles, setStyles] = useState<Partial<StyleOptions>>(globalStyles || getDefaultGlobalStyles());
+  const [activeTab, setActiveTab] = useState<string>('colors');
 
-  const handleChange = (key: string, value: string) => {
+  const handleChange = (key: keyof StyleOptions, value: any) => {
     setStyles(prev => ({
       ...prev,
       [key]: value
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = () => {
     onSave(styles);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-auto">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-medium text-[#432818]">Estilos Globais</h2>
-          <Button variant="ghost" size="sm" onClick={onCancel} className="text-[#8F7A6A]">
-            Fechar
-          </Button>
-        </div>
+    <Dialog open={true} onOpenChange={() => onCancel()}>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Estilos Globais</DialogTitle>
+        </DialogHeader>
 
-        <Separator className="mb-4" />
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-4">
+          <TabsList className="grid grid-cols-3 mb-4">
+            <TabsTrigger value="colors">Cores</TabsTrigger>
+            <TabsTrigger value="typography">Tipografia</TabsTrigger>
+            <TabsTrigger value="layout">Layout</TabsTrigger>
+          </TabsList>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="primaryColor">Cor Primária</Label>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 border rounded"
-                style={{ backgroundColor: styles.primaryColor }}
-              ></div>
-              <Input
-                id="primaryColor"
-                type="text"
-                value={styles.primaryColor || ''}
-                onChange={(e) => handleChange('primaryColor', e.target.value)}
-                placeholder="#B89B7A"
-              />
+          <TabsContent value="colors" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="primaryColor">Cor Principal</Label>
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-10 h-10 rounded-full border" 
+                  style={{ backgroundColor: styles.primaryColor }}
+                />
+                <Input
+                  id="primaryColor"
+                  type="color"
+                  value={styles.primaryColor || '#B89B7A'}
+                  onChange={(e) => handleChange('primaryColor', e.target.value)}
+                  className="w-20 h-10"
+                />
+                <Input
+                  type="text"
+                  value={styles.primaryColor || '#B89B7A'}
+                  onChange={(e) => handleChange('primaryColor', e.target.value)}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="secondaryColor">Cor Secundária</Label>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 border rounded"
-                style={{ backgroundColor: styles.secondaryColor }}
-              ></div>
-              <Input
-                id="secondaryColor"
-                type="text"
-                value={styles.secondaryColor || ''}
-                onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                placeholder="#432818"
-              />
+            <div className="space-y-2">
+              <Label htmlFor="secondaryColor">Cor Secundária</Label>
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-10 h-10 rounded-full border" 
+                  style={{ backgroundColor: styles.secondaryColor }}
+                />
+                <Input
+                  id="secondaryColor"
+                  type="color"
+                  value={styles.secondaryColor || '#8F7A6A'}
+                  onChange={(e) => handleChange('secondaryColor', e.target.value)}
+                  className="w-20 h-10"
+                />
+                <Input
+                  type="text"
+                  value={styles.secondaryColor || '#8F7A6A'}
+                  onChange={(e) => handleChange('secondaryColor', e.target.value)}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="textColor">Cor do Texto</Label>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 border rounded"
-                style={{ backgroundColor: styles.textColor }}
-              ></div>
-              <Input
-                id="textColor"
-                type="text"
-                value={styles.textColor || ''}
-                onChange={(e) => handleChange('textColor', e.target.value)}
-                placeholder="#3A3A3A"
-              />
+            <div className="space-y-2">
+              <Label htmlFor="textColor">Cor do Texto</Label>
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-10 h-10 rounded-full border" 
+                  style={{ backgroundColor: styles.textColor }}
+                />
+                <Input
+                  id="textColor"
+                  type="color"
+                  value={styles.textColor || '#432818'}
+                  onChange={(e) => handleChange('textColor', e.target.value)}
+                  className="w-20 h-10"
+                />
+                <Input
+                  type="text"
+                  value={styles.textColor || '#432818'}
+                  onChange={(e) => handleChange('textColor', e.target.value)}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 border rounded"
-                style={{ backgroundColor: styles.backgroundColor }}
-              ></div>
-              <Input
-                id="backgroundColor"
-                type="text"
-                value={styles.backgroundColor || ''}
-                onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                placeholder="#FAF9F7"
-              />
+            <div className="space-y-2">
+              <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-10 h-10 rounded-full border" 
+                  style={{ backgroundColor: styles.backgroundColor }}
+                />
+                <Input
+                  id="backgroundColor"
+                  type="color"
+                  value={styles.backgroundColor || '#FAF9F7'}
+                  onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                  className="w-20 h-10"
+                />
+                <Input
+                  type="text"
+                  value={styles.backgroundColor || '#FAF9F7'}
+                  onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                />
+              </div>
             </div>
-          </div>
+          </TabsContent>
 
-          <div className="space-y-2">
-            <Label htmlFor="fontFamily">Fonte Principal</Label>
-            <Input
-              id="fontFamily"
-              type="text"
-              value={styles.fontFamily || ''}
-              onChange={(e) => handleChange('fontFamily', e.target.value)}
-              placeholder="Playfair Display, serif"
-            />
-          </div>
+          <TabsContent value="typography" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="fontFamily">Família da Fonte</Label>
+              <Select 
+                value={styles.fontFamily || 'sans-serif'}
+                onValueChange={(value) => handleChange('fontFamily', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione uma fonte" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="sans-serif">Sans-serif</SelectItem>
+                  <SelectItem value="serif">Serif</SelectItem>
+                  <SelectItem value="monospace">Monospace</SelectItem>
+                  <SelectItem value="cursive">Cursive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="flex gap-2 justify-end pt-4">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              Cancelar
-            </Button>
-            <Button type="submit" className="bg-[#B89B7A] hover:bg-[#A38A69] text-white">
-              Salvar Estilos
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+            <div className="p-4 border rounded-md bg-[#FAF9F7]">
+              <p className="mb-2 text-sm text-[#8F7A6A]">Exemplo de texto:</p>
+              <p style={{ 
+                fontFamily: styles.fontFamily || 'sans-serif',
+                color: styles.textColor || '#432818'
+              }} className="text-lg">
+                Este é um exemplo de como o texto aparecerá em sua página de resultados.
+              </p>
+              <p style={{ 
+                fontFamily: styles.fontFamily || 'sans-serif',
+                color: styles.textColor || '#432818'
+              }}>
+                O estilo da fonte afetará todos os textos em sua página, a menos que um componente específico sobrescreva esta configuração.
+              </p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="layout" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="spacing">Espaçamento</Label>
+              <Select 
+                value={styles.spacing || 'comfortable'}
+                onValueChange={(value) => handleChange('spacing', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o espaçamento" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="compact">Compacto</SelectItem>
+                  <SelectItem value="comfortable">Confortável</SelectItem>
+                  <SelectItem value="spacious">Espaçoso</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="borderRadius">Raio das Bordas</Label>
+              <Select 
+                value={styles.borderRadius || 'medium'}
+                onValueChange={(value) => handleChange('borderRadius', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o raio das bordas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Sem bordas arredondadas</SelectItem>
+                  <SelectItem value="small">Pequeno</SelectItem>
+                  <SelectItem value="medium">Médio</SelectItem>
+                  <SelectItem value="large">Grande</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="p-4 border rounded-md bg-[#FAF9F7]">
+              <div 
+                className="p-4 border" 
+                style={{ 
+                  backgroundColor: styles.primaryColor || '#B89B7A',
+                  color: '#FFFFFF',
+                  borderRadius: 
+                    styles.borderRadius === 'small' ? '4px' :
+                    styles.borderRadius === 'medium' ? '8px' :
+                    styles.borderRadius === 'large' ? '16px' : '0px',
+                  padding: 
+                    styles.spacing === 'compact' ? '8px' :
+                    styles.spacing === 'comfortable' ? '16px' :
+                    styles.spacing === 'spacious' ? '24px' : '16px',
+                }}
+              >
+                <h3 className="font-medium mb-2">Exemplo de Componente</h3>
+                <p>Este é um exemplo de como os componentes aparecerão com as configurações de layout escolhidas.</p>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <DialogFooter className="mt-4">
+          <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+          <Button onClick={handleSave}>Salvar Alterações</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
+
+export default GlobalStylesEditor;

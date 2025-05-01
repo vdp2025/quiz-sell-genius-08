@@ -1,79 +1,100 @@
 
 import { ResultPageConfig } from '@/types/resultPageConfig';
-
-const STORAGE_KEY_PREFIX = 'result_page_config_';
+import { Block } from '@/types/editor';
+import { createDefaultConfig } from '@/utils/resultPageDefaults';
 
 export const resultPageStorage = {
-  save: (config: ResultPageConfig): boolean => {
+  saveConfig: (styleType: string, config: ResultPageConfig): boolean => {
     try {
-      if (!config || !config.styleType) {
-        console.error('Configuração inválida ou styleType não definido');
-        return false;
-      }
-      
-      const key = `${STORAGE_KEY_PREFIX}${config.styleType}`;
-      localStorage.setItem(key, JSON.stringify(config));
-      console.log(`Configuração salva para ${config.styleType}`);
+      const key = `result_page_config_${styleType}`;
+      localStorage.setItem(key, JSON.stringify({
+        ...config,
+        updatedAt: new Date().toISOString()
+      }));
       return true;
     } catch (error) {
-      console.error('Erro ao salvar configuração:', error);
+      console.error('Failed to save result page config:', error);
       return false;
     }
   },
-  
-  load: (styleType: string): ResultPageConfig | null => {
+
+  loadConfig: (styleType: string): ResultPageConfig | null => {
     try {
-      if (!styleType) {
-        console.error('styleType não definido');
-        return null;
+      const key = `result_page_config_${styleType}`;
+      const saved = localStorage.getItem(key);
+      
+      if (saved) {
+        return JSON.parse(saved);
       }
       
-      const key = `${STORAGE_KEY_PREFIX}${styleType}`;
-      const storedConfig = localStorage.getItem(key);
-      
-      if (storedConfig) {
-        console.log(`Configuração carregada para ${styleType}`);
-        return JSON.parse(storedConfig);
-      } else {
-        console.log(`Nenhuma configuração encontrada para ${styleType}`);
-        return null;
-      }
+      return null;
     } catch (error) {
-      console.error('Erro ao carregar configuração:', error);
+      console.error('Failed to load result page config:', error);
       return null;
     }
   },
-  
-  delete: (styleType: string): boolean => {
-    try {
-      if (!styleType) {
-        console.error('styleType não definido');
-        return false;
-      }
+
+  ensureConfig: (styleType: string): ResultPageConfig => {
+    const config = resultPageStorage.loadConfig(styleType);
+    
+    if (config) {
+      return config;
+    }
+    
+    const defaultConfig = createDefaultConfig(styleType);
+    resultPageStorage.saveConfig(styleType, defaultConfig);
+    return defaultConfig;
+  },
+
+  getAllConfigs: (): Record<string, ResultPageConfig> => {
+    const configs: Record<string, ResultPageConfig> = {};
+    
+    // Load all result page configs from localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
       
-      const key = `${STORAGE_KEY_PREFIX}${styleType}`;
+      if (key?.startsWith('result_page_config_')) {
+        try {
+          const styleType = key.replace('result_page_config_', '');
+          const config = JSON.parse(localStorage.getItem(key) || '');
+          configs[styleType] = config;
+        } catch (error) {
+          console.error(`Failed to parse config for ${key}:`, error);
+        }
+      }
+    }
+    
+    return configs;
+  },
+
+  deleteConfig: (styleType: string): boolean => {
+    try {
+      const key = `result_page_config_${styleType}`;
       localStorage.removeItem(key);
-      console.log(`Configuração excluída para ${styleType}`);
       return true;
     } catch (error) {
-      console.error('Erro ao excluir configuração:', error);
+      console.error('Failed to delete result page config:', error);
       return false;
     }
   },
-  
-  getAllStyles: (): string[] => {
+
+  exportAllConfigs: (): string => {
+    const configs = resultPageStorage.getAllConfigs();
+    return JSON.stringify(configs, null, 2);
+  },
+
+  importAllConfigs: (configsJson: string): boolean => {
     try {
-      const styles: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(STORAGE_KEY_PREFIX)) {
-          styles.push(key.replace(STORAGE_KEY_PREFIX, ''));
-        }
-      }
-      return styles;
+      const configs: Record<string, ResultPageConfig> = JSON.parse(configsJson);
+      
+      Object.entries(configs).forEach(([styleType, config]) => {
+        resultPageStorage.saveConfig(styleType, config);
+      });
+      
+      return true;
     } catch (error) {
-      console.error('Erro ao obter estilos:', error);
-      return [];
+      console.error('Failed to import configs:', error);
+      return false;
     }
   }
 };

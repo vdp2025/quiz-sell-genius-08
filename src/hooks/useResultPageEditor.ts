@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
@@ -46,6 +47,12 @@ export const useResultPageEditor = (styleType: string) => {
           description: "Não foi possível carregar as configurações salvas",
           variant: "destructive"
         });
+        
+        // Handle error by setting a fallback configuration
+        const fallbackConfig = createDefaultConfig(styleType);
+        setResultPageConfig(fallbackConfig);
+        setBlocks(fallbackConfig.blocks || []);
+        
         setLoading(false);
       }
     };
@@ -55,11 +62,17 @@ export const useResultPageEditor = (styleType: string) => {
   
   // Save config to localStorage
   const saveConfig = useCallback(() => {
-    if (!resultPageConfig) return;
+    if (!resultPageConfig) return false;
     
     try {
-      localStorage.setItem(configKey, JSON.stringify(resultPageConfig));
-      console.log('Result page config saved:', resultPageConfig);
+      // Make sure blocks are updated in resultPageConfig before saving
+      const configToSave = {
+        ...resultPageConfig,
+        blocks: blocks
+      };
+      
+      localStorage.setItem(configKey, JSON.stringify(configToSave));
+      console.log('Result page config saved:', configToSave);
       return true;
     } catch (error) {
       console.error('Error saving result page config:', error);
@@ -70,7 +83,7 @@ export const useResultPageEditor = (styleType: string) => {
       });
       return false;
     }
-  }, [resultPageConfig, configKey]);
+  }, [resultPageConfig, blocks, configKey]);
   
   // Update a specific section of the config
   const updateSection = useCallback((section: keyof ResultPageConfig, data: any) => {
@@ -119,9 +132,34 @@ export const useResultPageEditor = (styleType: string) => {
   
   // Import config
   const importConfig = useCallback((config: ResultPageConfig) => {
-    setResultPageConfig(config);
-    if (config.blocks) {
-      setBlocks(config.blocks);
+    try {
+      // Validate the config structure
+      if (!config || typeof config !== 'object') {
+        throw new Error('Invalid configuration format');
+      }
+      
+      // Ensure blocks array exists
+      if (!config.blocks) {
+        config.blocks = [];
+      }
+      
+      // Ensure global styles exist
+      if (!config.globalStyles) {
+        config.globalStyles = getDefaultGlobalStyles();
+      }
+      
+      setResultPageConfig(config);
+      setBlocks(config.blocks || []);
+      
+      return true;
+    } catch (error) {
+      console.error('Error importing config:', error);
+      toast({
+        title: "Erro ao importar configuração",
+        description: "O formato da configuração é inválido",
+        variant: "destructive"
+      });
+      return false;
     }
   }, []);
   

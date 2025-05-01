@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
-import { EditorPreview } from './EditorPreview';
+import EditorPreview from './EditorPreview';
 import { PropertiesPanel } from './PropertiesPanel';
 import EditorToolbar from './EditorToolbar';
-import { GlobalStylesEditor } from './GlobalStylesEditor';
+import GlobalStylesEditor from './GlobalStylesEditor';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { EditorProps } from '@/types/editorTypes';
@@ -161,7 +161,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         </TabsContent>
       </Tabs>
       
-      {isGlobalStylesOpen && (
+      {isGlobalStylesOpen && resultPageConfig && (
         <GlobalStylesEditor
           globalStyles={resultPageConfig.globalStyles || {}}
           onSave={(styles) => {

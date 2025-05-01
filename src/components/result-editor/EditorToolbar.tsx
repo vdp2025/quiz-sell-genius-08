@@ -1,16 +1,19 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
-import { JsonConfigEditor } from './JsonConfigEditor';
+import { Eye, Save, RotateCcw, Palette, Copy, Download, Upload, Template } from 'lucide-react';
+import { ResultPageConfig } from '@/types/resultPageConfig';
+import { downloadJSON, uploadJSON } from '@/utils/fileUtils';
+import { toast } from '@/components/ui/use-toast';
 
 interface EditorToolbarProps {
-  onSave: () => void;
+  onSave: () => boolean;
   isPreviewMode: boolean;
   onPreviewToggle: () => void;
-  onReset: () => void;
+  onReset: () => boolean;
   onEditGlobalStyles: () => void;
-  resultPageConfig: any;
-  onUpdateConfig: (config: any) => void;
+  resultPageConfig: ResultPageConfig | null;
+  onUpdateConfig: (config: ResultPageConfig) => void;
   onShowTemplates?: () => void;
 }
 
@@ -24,61 +27,162 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onUpdateConfig,
   onShowTemplates
 }) => {
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+
+  const handleSave = () => {
+    setIsSaving(true);
+    const success = onSave();
+    
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 1000);
+    
+    return success;
+  };
+
+  const handleExport = () => {
+    if (!resultPageConfig) {
+      toast({
+        title: "Erro ao exportar",
+        description: "Não há configuração para exportar",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsExporting(true);
+    
+    try {
+      downloadJSON(resultPageConfig, `resultado-${resultPageConfig.styleType.toLowerCase()}`);
+      toast({
+        title: "Exportação concluída",
+        description: "A configuração foi exportada com sucesso"
+      });
+    } catch (error) {
+      console.error('Error exporting config:', error);
+      toast({
+        title: "Erro ao exportar",
+        description: "Ocorreu um erro ao exportar a configuração",
+        variant: "destructive"
+      });
+    } finally {
+      setTimeout(() => {
+        setIsExporting(false);
+      }, 1000);
+    }
+  };
+
+  const handleImport = async () => {
+    setIsImporting(true);
+    
+    try {
+      const imported = await uploadJSON<ResultPageConfig>();
+      
+      if (imported) {
+        onUpdateConfig(imported);
+        toast({
+          title: "Importação concluída",
+          description: "A configuração foi importada com sucesso"
+        });
+      }
+    } catch (error) {
+      console.error('Error importing config:', error);
+      toast({
+        title: "Erro ao importar",
+        description: "Ocorreu um erro ao importar a configuração",
+        variant: "destructive"
+      });
+    } finally {
+      setTimeout(() => {
+        setIsImporting(false);
+      }, 1000);
+    }
+  };
+
   return (
-    <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <div className="flex items-center gap-2">
+    <div className="border-b bg-white p-3 flex items-center justify-between">
+      <div className="flex items-center">
+        <h2 className="text-lg font-medium mr-4 text-[#432818]">
+          Editor de Página de Resultados
+        </h2>
+      </div>
+      
+      <div className="flex items-center space-x-2">
         {onShowTemplates && (
           <Button
             variant="outline"
+            size="sm"
             onClick={onShowTemplates}
-            className="text-[#8F7A6A]"
+            className="flex items-center"
           >
-            Modelos de Página
+            <Template className="h-4 w-4 mr-2" />
+            Templates
           </Button>
         )}
+        
         <Button
           variant="outline"
           size="sm"
-          onClick={onPreviewToggle}
+          onClick={handleImport}
+          disabled={isImporting}
+          className="flex items-center"
         >
-          <Eye className="w-4 h-4 mr-2" />
-          {isPreviewMode ? 'Modo Edição' : 'Visualizar'}
+          <Upload className="h-4 w-4 mr-2" />
+          {isImporting ? 'Importando...' : 'Importar'}
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExport}
+          disabled={isExporting || !resultPageConfig}
+          className="flex items-center"
+        >
+          <Download className="h-4 w-4 mr-2" />
+          {isExporting ? 'Exportando...' : 'Exportar'}
         </Button>
         
         <Button
           variant="outline"
           size="sm"
           onClick={onEditGlobalStyles}
+          className="flex items-center"
         >
-          <Palette className="w-4 h-4 mr-2" />
+          <Palette className="h-4 w-4 mr-2" />
           Estilos Globais
         </Button>
-
-        {resultPageConfig && onUpdateConfig && (
-          <JsonConfigEditor 
-            config={resultPageConfig}
-            onUpdate={onUpdateConfig}
-          />
-        )}
         
         <Button
           variant="outline"
           size="sm"
           onClick={onReset}
-          className="text-amber-600 hover:text-amber-700"
+          className="flex items-center"
         >
-          <RefreshCw className="w-4 h-4 mr-2" />
+          <RotateCcw className="h-4 w-4 mr-2" />
           Resetar
+        </Button>
+        
+        <Button
+          variant={isPreviewMode ? "default" : "outline"}
+          size="sm"
+          onClick={onPreviewToggle}
+          className="flex items-center"
+        >
+          <Eye className="h-4 w-4 mr-2" />
+          {isPreviewMode ? 'Editando' : 'Visualizar'}
         </Button>
         
         <Button
           variant="default"
           size="sm"
-          onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+          onClick={handleSave}
+          disabled={isSaving}
+          className="flex items-center bg-[#B89B7A] hover:bg-[#9A7F5F] text-white"
         >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar
+          <Save className="h-4 w-4 mr-2" />
+          {isSaving ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
     </div>
