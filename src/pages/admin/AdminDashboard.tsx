@@ -1,100 +1,132 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AdminLayout from '../../components/admin/AdminLayout';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ContentContainer } from '@/components/shared/ContentContainer';
-import { GridLayout } from '@/components/shared/GridLayout';
-import { Edit, FileText, BarChart, Settings, Users, Box } from 'lucide-react';
+import { Eye, Edit, Settings, LayoutTemplate, BarChart3 } from 'lucide-react';
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard = () => {
   return (
-    <div className="bg-[#FAF9F7] min-h-screen p-6">
-      <ContentContainer>
-        <div className="mb-8">
-          <h1 className="text-3xl font-playfair text-[#432818] mb-2">Dashboard Administrativo</h1>
-          <p className="text-[#8F7A6A]">Gerencie seu quiz, páginas de resultado e vendas</p>
+    <AdminLayout>
+      <div className="p-6">
+        <h1 className="text-3xl font-playfair text-[#432818] mb-6">Painel de Administração</h1>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Editor Unificado</CardTitle>
+              <CardDescription>Edite o quiz, resultado e página de vendas em um lugar só</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-[#8F7A6A]">O editor unificado permite que você edite todas as partes do seu funil de forma integrada.</p>
+            </CardContent>
+            <CardFooter>
+              <Link to="/admin/editor/unified" className="w-full">
+                <Button className="w-full bg-[#B89B7A] hover:bg-[#8F7A6A]">
+                  <LayoutTemplate className="w-4 h-4 mr-2" />
+                  Abrir Editor Unificado
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Quiz Builder</CardTitle>
+              <CardDescription>Crie e personalize seu quiz</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-[#8F7A6A]">Personalize perguntas, opções e lógica do seu quiz.</p>
+            </CardContent>
+            <CardFooter>
+              <Link to="/admin/quiz-builder" className="w-full">
+                <Button variant="outline" className="w-full">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Editar Quiz
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Editor de Páginas</CardTitle>
+              <CardDescription>Edite as páginas de resultado e vendas</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-[#8F7A6A]">Personalize o design e conteúdo das páginas de resultado e vendas.</p>
+            </CardContent>
+            <CardFooter>
+              <Link to="/admin/editor" className="w-full">
+                <Button variant="outline" className="w-full">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Editar Páginas
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Visualizar Conteúdo</CardTitle>
+              <CardDescription>Veja como o usuário final verá seu conteúdo</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-[#8F7A6A]">Visualize o quiz, a página de resultado e a página de vendas como um usuário.</p>
+            </CardContent>
+            <CardFooter className="flex gap-2">
+              <Link to="/quiz" className="flex-1">
+                <Button variant="outline" className="w-full">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Quiz
+                </Button>
+              </Link>
+              <Link to="/resultado" className="flex-1">
+                <Button variant="outline" className="w-full">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Resultado
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Configurações</CardTitle>
+              <CardDescription>Gerencie as configurações do sistema</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-[#8F7A6A]">Ajuste configurações gerais, integrações e preferências.</p>
+            </CardContent>
+            <CardFooter>
+              <Link to="/admin/settings" className="w-full">
+                <Button variant="outline" className="w-full">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Configurações
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Estatísticas</CardTitle>
+              <CardDescription>Visualize o desempenho do seu quiz</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-[#8F7A6A]">Acompanhe estatísticas de conclusão, respostas e conversões.</p>
+            </CardContent>
+            <CardFooter>
+              <Button variant="outline" className="w-full" disabled>
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Em breve
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
-
-        <GridLayout columns={3} gap="lg" className="mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-[#432818] flex items-center">
-                <Edit className="w-5 h-5 mr-2 text-[#B89B7A]" />
-                Editores
-              </CardTitle>
-              <CardDescription>Construa e edite o conteúdo</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2 pt-2">
-              <Button asChild variant="outline" className="w-full justify-start">
-                <Link to="/admin/quiz-builder">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Editor de Quiz
-                </Link>
-              </Button>
-              <Button asChild variant="outline" className="w-full justify-start text-[#432818] bg-[#FAF9F7] border-[#B89B7A]">
-                <Link to="/admin/editor">
-                  <Edit className="w-4 h-4 mr-2 text-[#B89B7A]" />
-                  Editor Visual Unificado
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-[#432818] flex items-center">
-                <BarChart className="w-5 h-5 mr-2 text-[#B89B7A]" />
-                Análise
-              </CardTitle>
-              <CardDescription>Acompanhe o desempenho</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2 pt-2">
-              <Button variant="outline" className="w-full justify-start" disabled>
-                <BarChart className="w-4 h-4 mr-2" />
-                Estatísticas
-              </Button>
-              <Button variant="outline" className="w-full justify-start" disabled>
-                <Users className="w-4 h-4 mr-2" />
-                Usuários
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-[#432818] flex items-center">
-                <Settings className="w-5 h-5 mr-2 text-[#B89B7A]" />
-                Configurações
-              </CardTitle>
-              <CardDescription>Ajuste as configurações do sistema</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2 pt-2">
-              <Button variant="outline" className="w-full justify-start" disabled>
-                <Settings className="w-4 h-4 mr-2" />
-                Configurações Gerais
-              </Button>
-              <Button variant="outline" className="w-full justify-start" disabled>
-                <Box className="w-4 h-4 mr-2" />
-                Integrações
-              </Button>
-            </CardContent>
-          </Card>
-        </GridLayout>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-[#432818] flex items-center">
-              <Box className="w-5 h-5 mr-2 text-[#B89B7A]" />
-              Visão Geral
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Bem-vindo ao painel administrativo. Selecione uma opção acima para começar.</p>
-          </CardContent>
-        </Card>
-      </ContentContainer>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

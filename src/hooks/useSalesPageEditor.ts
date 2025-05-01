@@ -11,6 +11,7 @@ export const useSalesPageEditor = (styleType: string) => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Carregar blocos salvos
   useEffect(() => {
@@ -18,15 +19,18 @@ export const useSalesPageEditor = (styleType: string) => {
       try {
         const savedBlocks = localStorage.getItem(`${STORAGE_KEY_PREFIX}${styleType}`);
         if (savedBlocks) {
-          setBlocks(JSON.parse(savedBlocks));
-          console.info(`Blocos da página de vendas carregados para ${styleType}:`, JSON.parse(savedBlocks).length);
+          const parsedBlocks = JSON.parse(savedBlocks);
+          setBlocks(parsedBlocks);
+          console.info(`Blocos da página de vendas carregados para ${styleType}:`, parsedBlocks.length);
         } else {
           console.info(`Nenhum bloco da página de vendas encontrado para ${styleType}.`);
           setBlocks([]);
         }
+        setIsInitialized(true);
       } catch (error) {
         console.error('Erro ao carregar blocos da página de vendas:', error);
         setBlocks([]);
+        setIsInitialized(true);
       }
     };
     
@@ -86,16 +90,29 @@ export const useSalesPageEditor = (styleType: string) => {
     }
   }, [blocks, styleType]);
 
+  // Função para carregar um template
+  const loadTemplate = useCallback((templateBlocks: Block[]) => {
+    try {
+      setBlocks(templateBlocks);
+      return true;
+    } catch (error) {
+      console.error('Erro ao carregar template:', error);
+      return false;
+    }
+  }, []);
+
   return {
     blocks,
     selectedBlockId,
     selectBlock: setSelectedBlockId,
     isPreviewing,
     togglePreview: () => setIsPreviewing(prev => !prev),
+    isInitialized,
     handleAddBlock,
     handleUpdateBlock,
     handleDeleteBlock,
     handleReorderBlocks,
     handleSave,
+    loadTemplate
   };
 };

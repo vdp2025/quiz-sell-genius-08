@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '@/components/result-editor/ComponentsSidebar';
 import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone } from 'lucide-react';
+import { Monitor, Smartphone, Eye, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StyleResult } from '@/types/quiz';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -12,6 +13,7 @@ import { useSalesPageEditor } from '@/hooks/useSalesPageEditor';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableBlock } from '@/components/result-editor/SortableBlock';
+import { toast } from '@/components/ui/use-toast';
 
 interface SalesEditorPanelProps {
   isPreviewing: boolean;
@@ -21,6 +23,8 @@ interface SalesEditorPanelProps {
 const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, primaryStyle }) => {
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [activeTab, setActiveTab] = useState<'content' | 'style'>('content');
+  const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   
   const {
     blocks, 
@@ -33,9 +37,29 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
     handleSave
   } = useSalesPageEditor(primaryStyle.category);
 
+  useEffect(() => {
+    // Simulating loading state for better UX
+    const timer = setTimeout(() => {
+      setLoading(false);
+      if (blocks.length === 0) {
+        toast({
+          title: "Página de Vendas",
+          description: "Adicione componentes usando o painel lateral para criar sua página de vendas.",
+          duration: 5000,
+        });
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [blocks.length]);
+
   const handleComponentSelect = (type: Block['type']) => {
     const id = handleAddBlock(type);
     selectBlock(id);
+    toast({
+      description: `Componente ${type} adicionado com sucesso!`,
+      duration: 3000,
+    });
   };
 
   // Find selected component
@@ -54,11 +78,50 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
     }
   };
 
+  const handleSaveChanges = async () => {
+    setIsSaving(true);
+    try {
+      await handleSave();
+      toast({
+        title: "Salvo com sucesso!",
+        description: "Suas alterações na página de vendas foram salvas.",
+        duration: 3000,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar suas alterações. Tente novamente.",
+        variant: "destructive",
+        duration: 5000,
+      });
+      console.error("Error saving sales page:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center bg-[#FAF9F7]">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-[#B89B7A] mx-auto mb-4" />
+          <p className="text-[#8F7A6A]">Carregando o editor de página de vendas...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       {/* Painel esquerdo - Biblioteca de componentes */}
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-        <ComponentsSidebar onComponentSelect={handleComponentSelect} />
+        <div className="h-full flex flex-col border-r border-[#B89B7A]/20">
+          <div className="p-4 border-b border-[#B89B7A]/20">
+            <h3 className="font-medium text-[#432818]">Componentes</h3>
+            <p className="text-sm text-[#8F7A6A] mt-1">Arraste e solte os componentes para criar sua página de vendas</p>
+          </div>
+          <ComponentsSidebar onComponentSelect={handleComponentSelect} />
+        </div>
       </ResizablePanel>
 
       <ResizableHandle withHandle />
@@ -91,16 +154,19 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
             <Button
               variant="outline"
               size="sm"
-              onClick={handleSave}
+              onClick={handleSaveChanges}
+              disabled={isSaving}
+              className="flex items-center"
             >
-              Salvar Alterações
+              {isSaving && <Loader2 className="w-3 h-3 mr-2 animate-spin" />}
+              {isSaving ? 'Salvando...' : 'Salvar Alterações'}
             </Button>
           </div>
 
           {/* Preview Content */}
           <ScrollArea className="flex-1 p-4 bg-[#FAF9F7]">
             <div className={cn(
-              "min-h-full bg-white rounded-lg shadow-sm p-6",
+              "min-h-full bg-white rounded-lg shadow-sm p-6 transition-all duration-300",
               viewMode === 'mobile' && 'max-w-md mx-auto'
             )}>
               <DndContext
@@ -116,7 +182,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                       <p className="text-[#8F7A6A] mb-4">Adicione componentes usando o painel lateral</p>
                       <Button 
                         variant="outline" 
-                        className="border-[#B89B7A] text-[#B89B7A]"
+                        className="border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A]/10"
                         onClick={() => handleComponentSelect('headline')}
                       >
                         Adicionar Primeiro Componente
@@ -215,6 +281,11 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                               src={selectedComponent.content.imageUrl} 
                               alt="Preview" 
                               className="max-h-40 mx-auto object-contain"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = 'https://placehold.co/600x400?text=Imagem+inválida';
+                              }}
                             />
                           </div>
                         )}
@@ -380,6 +451,10 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                   onClick={() => {
                     handleDeleteBlock(selectedBlockId);
                     selectBlock(null);
+                    toast({
+                      description: "Componente excluído com sucesso.",
+                      duration: 3000,
+                    });
                   }}
                 >
                   Excluir Componente
