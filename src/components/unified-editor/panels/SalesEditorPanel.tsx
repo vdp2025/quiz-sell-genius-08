@@ -10,6 +10,7 @@ import { useEditor } from '@/hooks/useEditor';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import StyleEditor from '@/components/result-editor/StyleEditor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Block } from '@/types/editor';
 
 interface SalesEditorPanelProps {
   isPreviewing: boolean;
@@ -23,7 +24,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
   
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
 
-  const handleComponentSelect = (type) => {
+  const handleComponentSelect = (type: Block['type']) => {
     const id = addBlock(type);
     setSelectedComponentId(id);
   };
@@ -114,9 +115,9 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           {block.content.imageUrl ? (
                             <img 
                               src={block.content.imageUrl} 
-                              alt={block.content.alt || 'Imagem'} 
+                              alt={block.content.imageAlt || 'Imagem'} 
                               className="max-w-full h-auto"
-                              style={block.content.style}
+                              style={block.content.style as React.CSSProperties}
                             />
                           ) : (
                             <div className="bg-gray-200 h-40 w-full flex items-center justify-center">
@@ -125,7 +126,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ isPreviewing, prima
                           )}
                         </div>
                       )}
-                      {block.type === 'offer' && (
+                      {block.type === 'pricing' && (
                         <div className="bg-[#FAF9F7] p-4 rounded-lg border border-[#B89B7A]/20">
                           <div className="text-center space-y-4">
                             <h3 className="text-xl font-bold">{block.content.title || 'Nome do Produto'}</h3>
