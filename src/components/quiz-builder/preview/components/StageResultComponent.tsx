@@ -11,6 +11,7 @@ interface StageResultComponentProps {
     showAdditionalStyles?: boolean;
     callToAction?: string;
     callToActionUrl?: string;
+    primaryStyleCategory?: string;
   };
   style?: QuizComponentStyle;
   isSelected?: boolean;
@@ -24,14 +25,9 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({
   // Convert style properties to CSS style object
   const getComponentStyles = () => {
     return {
-      backgroundColor: style?.backgroundColor || 'transparent',
+      backgroundColor: style?.backgroundColor || '#FFFFFF',
       color: style?.textColor || 'inherit',
-      borderRadius: style?.borderRadius ? {
-        'sm': '0.25rem',
-        'md': '0.5rem',
-        'lg': '1rem',
-        'full': '9999px'
-      }[style.borderRadius] : '0',
+      borderRadius: style?.borderRadius ? `${style.borderRadius}px` : '0',
       padding: style?.padding || '1rem',
       margin: style?.margin || '0'
     };
@@ -40,40 +36,69 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({
   return (
     <div 
       style={getComponentStyles()} 
-      className={cn("py-6 text-center", isSelected && "bg-opacity-90")}
+      className={cn("py-8 px-6 text-center", isSelected && "bg-opacity-90")}
     >
-      <h2 className="text-2xl font-bold mb-4">
+      <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-6">
         {data.resultTitle || 'Seu Estilo Predominante'}
       </h2>
       
-      <div className="inline-block bg-[#ffefec] px-4 py-2 rounded-md text-[#aa6b5d] mb-6">
-        Estilo exemplo: Natural
+      <div className="bg-[#FAF9F7] rounded-lg p-6 mb-8 max-w-xl mx-auto shadow-sm">
+        <div className="text-2xl font-playfair font-bold text-[#B89B7A] mb-2">
+          {data.primaryStyleCategory || 'Contemporâneo'}
+        </div>
+        
+        <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+          <div className="bg-[#B89B7A] h-2.5 rounded-full" style={{ width: '70%' }}></div>
+        </div>
+        
+        <p className="text-lg">
+          {data.resultDescription || 'Você tem um estilo sofisticado e minimalista, com preferência por peças atemporais e versáteis.'}
+        </p>
       </div>
       
-      {data.resultDescription && (
-        <p className="mb-6">
-          {data.resultDescription}
-        </p>
-      )}
-      
       {data.showAdditionalStyles && (
-        <div className="my-8">
-          <h3 className="text-lg font-medium mb-4">Seus Estilos Secundários</h3>
-          <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-            <div className="p-3 bg-[#f0f0f0] rounded-md">
-              <div className="font-medium">Romântico</div>
-              {data.showPercentages && <div className="text-sm text-gray-600">30%</div>}
+        <div className="my-10">
+          <h3 className="text-xl font-medium mb-6">Seus Estilos Complementares</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <div className="p-4 bg-[#FAF9F7] rounded-lg shadow-sm">
+              <div className="font-medium mb-1">Elegante</div>
+              {data.showPercentages && (
+                <>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
+                    <div className="bg-[#B89B7A] h-1.5 rounded-full" style={{ width: '40%' }}></div>
+                  </div>
+                  <div className="text-sm text-gray-500">40%</div>
+                </>
+              )}
             </div>
-            <div className="p-3 bg-[#f0f0f0] rounded-md">
-              <div className="font-medium">Clássico</div>
-              {data.showPercentages && <div className="text-sm text-gray-600">20%</div>}
+            <div className="p-4 bg-[#FAF9F7] rounded-lg shadow-sm">
+              <div className="font-medium mb-1">Natural</div>
+              {data.showPercentages && (
+                <>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
+                    <div className="bg-[#B89B7A] h-1.5 rounded-full" style={{ width: '30%' }}></div>
+                  </div>
+                  <div className="text-sm text-gray-500">30%</div>
+                </>
+              )}
+            </div>
+            <div className="p-4 bg-[#FAF9F7] rounded-lg shadow-sm">
+              <div className="font-medium mb-1">Criativo</div>
+              {data.showPercentages && (
+                <>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
+                    <div className="bg-[#B89B7A] h-1.5 rounded-full" style={{ width: '20%' }}></div>
+                  </div>
+                  <div className="text-sm text-gray-500">20%</div>
+                </>
+              )}
             </div>
           </div>
         </div>
       )}
       
       {data.callToAction && (
-        <button className="px-8 py-3 bg-[#B89B7A] text-white rounded-md hover:bg-[#A28969] mt-4">
+        <button className="px-8 py-3 bg-[#B89B7A] text-white rounded-full hover:bg-[#A28969] transition-colors font-medium text-lg mt-6">
           {data.callToAction}
         </button>
       )}

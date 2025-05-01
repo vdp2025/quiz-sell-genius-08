@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import ComponentRenderer from './ComponentRenderer';
+import { ComponentRenderer } from './ComponentRenderer';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';

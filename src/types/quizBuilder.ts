@@ -1,3 +1,4 @@
+
 export interface QuizComponentStyle {
   backgroundColor?: string;
   textColor?: string;
@@ -7,6 +8,8 @@ export interface QuizComponentStyle {
   borderColor?: string;
   borderWidth?: string;
   boxShadow?: string;
+  paddingX?: string;
+  paddingY?: string;
 }
 
 export interface QuizComponentData {
@@ -37,7 +40,11 @@ export type QuizComponentType =
   | 'quizResult'
   | 'stageCover'
   | 'stageQuestion'
-  | 'stageResult';
+  | 'stageResult'
+  | 'scale'
+  | 'benefitsList'
+  | 'faq'
+  | 'columns';
 
 export interface QuizBuilderState {
   stages: QuizStage[];

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -184,6 +183,14 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
     const stageId = `stage_${Date.now()}`;
     const componentId = `component_${Date.now()}`;
     
+    const resultStage = {
+      id: `stage-result-${Date.now()}`,
+      title: `Resultado do Quiz`,
+      order: 2,
+      type: 'result' as const,
+      isEnabled: true
+    };
+    
     return {
       stages: [
         {
@@ -191,7 +198,8 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
           title: 'Resultado',
           order: 0,
           type: 'result'
-        }
+        },
+        resultStage
       ],
       components: [
         {
