@@ -19,7 +19,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
     <div className="h-full">
       <ResultPageVisualEditor
         selectedStyle={primaryStyle}
-        isPreviewing={isPreviewing}
+        onShowTemplates={() => {}}
         initialConfig={initialConfig}
       />
     </div>

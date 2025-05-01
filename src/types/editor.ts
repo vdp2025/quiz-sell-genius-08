@@ -70,6 +70,8 @@ export interface EditableContent {
   role?: string;
   // For countdown timer
   endDate?: string;
+  // Alignment
+  alignment?: string;
   // Custom properties
   [key: string]: any;
 }

@@ -93,6 +93,8 @@ export const getDefaultContentForBlockType = (type: string) => {
   }
 };
 
+// Add this alias for backward compatibility
+export const getDefaultContentForType = getDefaultContentForBlockType;
 // For backward compatibility, also export with the name used in imports
 export const createBlockContentByType = getDefaultContentForBlockType;
 
