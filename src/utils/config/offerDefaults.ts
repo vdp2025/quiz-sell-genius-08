@@ -42,7 +42,7 @@ export const createOfferSectionConfig = (): OfferSection => {
         paddingX: '1rem'
       }
     },
-    features: {
+    benefits: {
       content: {
         title: "O QUE VOCÊ VAI RECEBER",
         items: [
@@ -58,11 +58,6 @@ export const createOfferSectionConfig = (): OfferSection => {
         paddingY: '2rem',
         paddingX: '1rem'
       },
-      visible: true
-    },
-    benefits: {
-      content: {},
-      style: {},
       visible: true
     },
     products: {
