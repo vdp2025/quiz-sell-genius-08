@@ -4,30 +4,55 @@ import { useNavigate } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import BackupResultPage from '../backup/ResultPage.backup';
+import { trackResultView, trackSaleConversion } from '@/utils/analytics';
 
 const ResultPage = () => {
   const quizLogic = useQuizLogic();
   const { quizResult, resetQuiz } = quizLogic;
   const navigate = useNavigate();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
+  const [resultTracked, setResultTracked] = useState(false);
 
   useEffect(() => {
-    // If there's no result from context, try to load from localStorage
+    // Se não há resultado do contexto, tente carregar do localStorage
     if (!quizResult) {
       try {
         const savedResult = localStorage.getItem('quizResult');
         if (savedResult) {
-          setLocalResult(JSON.parse(savedResult));
+          const parsedResult = JSON.parse(savedResult);
+          setLocalResult(parsedResult);
+          
+          // Rastrear visualização de resultado se ainda não foi rastreado
+          if (!resultTracked && parsedResult?.primaryStyle?.category) {
+            trackResultView(parsedResult.primaryStyle.category);
+            setResultTracked(true);
+          }
         } else {
-          // No result found, redirect to homepage
+          // Nenhum resultado encontrado, redirecionar para homepage
           navigate('/');
         }
       } catch (error) {
         console.error("Error loading quiz result:", error);
         navigate('/');
       }
+    } else if (!resultTracked && quizResult?.primaryStyle?.category) {
+      // Rastrear visualização de resultado do contexto se ainda não foi rastreado
+      trackResultView(quizResult.primaryStyle.category);
+      setResultTracked(true);
     }
-  }, [quizResult, navigate]);
+  }, [quizResult, navigate, resultTracked]);
+
+  // Função para rastrear compra quando o usuário clicar em um botão de compra
+  const handlePurchaseClick = (productId: string, value: number) => {
+    // Rastrear conversão de venda
+    trackSaleConversion(value);
+    
+    // Aqui você redirecionaria para a página de pagamento ou integraria com sua plataforma de pagamentos
+    console.log(`Produto ${productId} comprado por ${value}`);
+    
+    // Exemplo: redirecionar para uma página externa
+    // window.location.href = `https://sua-plataforma-de-pagamentos.com/checkout/${productId}`;
+  };
 
   const resultToUse = quizResult || localResult;
 
@@ -41,8 +66,8 @@ const ResultPage = () => {
     );
   }
 
-  // Use the backup result page component which has a more attractive layout
-  return <BackupResultPage />;
+  // Use o componente BackupResultPage com a funcionalidade de rastreamento de compra
+  return <BackupResultPage onPurchaseClick={handlePurchaseClick} />;
 };
 
 export default ResultPage;

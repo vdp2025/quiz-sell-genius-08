@@ -4,17 +4,28 @@ import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';
 import { useQuizContext } from '../context/QuizContext';
 import { useAuth } from '../context/AuthContext';
+import { trackLeadGeneration, captureUTMParameters } from '@/utils/analytics';
 
 const HomePage = () => {
   const [started, setStarted] = useState(false);
   const { startQuiz } = useQuizContext();
   const { login } = useAuth();
 
-  const handleStart = async (name: string) => {
+  const handleStart = async (name: string, email?: string) => {
     setStarted(true);
     login(name);
-    console.log(`Quiz started by ${name}`);
+    
+    // Capturar UTM parameters ao iniciar o quiz
+    captureUTMParameters();
+    
+    // Se o email foi fornecido, registrar como lead
+    if (email) {
+      trackLeadGeneration(email);
+    }
+    
+    console.log(`Quiz started by ${name}${email ? ` (${email})` : ''}`);
     localStorage.setItem('userName', name);
+    if (email) localStorage.setItem('userEmail', email);
   };
 
   return (

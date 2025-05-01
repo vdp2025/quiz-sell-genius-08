@@ -6,9 +6,10 @@ import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
-import QuizNavigation from './quiz/QuizNavigation'; // Fixed import
+import QuizNavigation from './quiz/QuizNavigation';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { useAuth } from '../context/AuthContext';
+import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '@/utils/analytics';
 
 const QuizPage: React.FC = () => {
   // Get auth context
@@ -20,6 +21,7 @@ const QuizPage: React.FC = () => {
   const [showingFinalTransition, setShowingFinalTransition] = useState(false);
   const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
   const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>({});
+  const [quizStartTracked, setQuizStartTracked] = useState(false);
 
   // Get quiz logic functions
   const {
@@ -37,6 +39,14 @@ const QuizPage: React.FC = () => {
     canProceed
   } = useQuizLogic();
 
+  // Track quiz start on component mount
+  useEffect(() => {
+    if (!quizStartTracked) {
+      trackQuizStart();
+      setQuizStartTracked(true);
+    }
+  }, [quizStartTracked]);
+
   // Handle strategic answer
   const handleStrategicAnswer = (response: UserResponse) => {
     try {
@@ -47,9 +57,19 @@ const QuizPage: React.FC = () => {
       
       saveStrategicAnswer(response.questionId, response.selectedOptions);
       
+      // Track strategic answer
+      trackQuizAnswer(
+        response.questionId, 
+        response.selectedOptions,
+        currentStrategicQuestionIndex + totalQuestions,
+        totalQuestions + strategicQuestions.length
+      );
+      
       if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
         setTimeout(() => {
           setShowingFinalTransition(true);
+          // Track quiz completion
+          trackQuizComplete();
         }, 500);
       } else {
         setTimeout(() => {
@@ -69,6 +89,14 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmit = (response: UserResponse) => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
+      
+      // Track answer submission
+      trackQuizAnswer(
+        response.questionId, 
+        response.selectedOptions, 
+        currentQuestionIndex, 
+        totalQuestions
+      );
     } catch (error) {
       toast({
         title: "Erro na submissão da resposta",
@@ -81,8 +109,14 @@ const QuizPage: React.FC = () => {
   // Handle showing result
   const handleShowResult = () => {
     try {
-      submitQuizIfComplete();
+      const results = submitQuizIfComplete();
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      
+      if (results?.primaryStyle) {
+        // Track result view with primary style
+        trackResultView(results.primaryStyle.category);
+      }
+      
       setTimeout(() => {
         window.location.href = '/resultado';
       }, 500);
@@ -102,6 +136,13 @@ const QuizPage: React.FC = () => {
     } else {
       calculateResults();
       setShowingTransition(true);
+      // Track quiz main part completion
+      trackQuizAnswer(
+        "quiz_main_complete", 
+        ["completed"], 
+        totalQuestions, 
+        totalQuestions
+      );
     }
   };
 
