@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import QuizResult from '../components/QuizResult';
 import { QuizResult as QuizResultType } from '../types/quiz';
+
+// Import the backup version that has the more attractive layout
+import BackupResultPage from '../backup/ResultPage.backup';
 
 const ResultPage = () => {
   const { quizResult, resetQuiz } = useQuizLogic();
@@ -40,14 +42,8 @@ const ResultPage = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-background">
-      <QuizResult 
-        primaryStyle={resultToUse.primaryStyle}
-        secondaryStyles={resultToUse.secondaryStyles}
-      />
-    </div>
-  );
+  // Use the backup result page component which has a more attractive layout
+  return <BackupResultPage />;
 };
 
 export default ResultPage;

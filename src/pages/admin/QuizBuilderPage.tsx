@@ -1,13 +1,13 @@
 
 import React from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { EnhancedQuizBuilder } from '@/components/enhanced-editor/EnhancedQuizBuilder';
 
 const QuizBuilderPage = () => {
   return (
     <AdminLayout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-semibold text-[#432818] mb-6">Quiz Builder</h1>
-        {/* Rest of your quiz builder content */}
+      <div className="h-[calc(100vh-64px)]">
+        <EnhancedQuizBuilder />
       </div>
     </AdminLayout>
   );

@@ -30,7 +30,7 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
           <img 
             src={imageUrl} 
             alt={`Estilo ${primaryStyle.category}`} 
-            className="w-full h-full object-cover rounded-lg"
+            className="w-full h-auto rounded-lg" // Changed from object-cover to h-auto to prevent cropping
           />
         </div>
       </div>

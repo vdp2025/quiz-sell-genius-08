@@ -1,13 +1,22 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { UnifiedVisualEditor } from '../../components/unified-editor/UnifiedVisualEditor';
+import { StyleResult } from '@/types/quiz';
 
 const EditorPage = () => {
+  // Sample style data for the editor preview
+  // In a real scenario, you would fetch this from your state or API
+  const [primaryStyle] = useState<StyleResult>({
+    category: 'Elegante',
+    score: 25,
+    percentage: 60
+  });
+
   return (
     <AdminLayout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-semibold text-[#432818] mb-6">Editor</h1>
-        {/* Rest of your editor content */}
+      <div className="h-[calc(100vh-64px)]">
+        <UnifiedVisualEditor primaryStyle={primaryStyle} />
       </div>
     </AdminLayout>
   );
