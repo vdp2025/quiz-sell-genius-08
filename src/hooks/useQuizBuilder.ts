@@ -10,6 +10,8 @@ const STORAGE_KEY = 'quiz_builder_data';
 
 export const useQuizBuilder = () => {
   const [loading, setLoading] = useState(true);
+  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+  
   const {
     stages,
     activeStageId,
@@ -76,6 +78,11 @@ export const useQuizBuilder = () => {
     loadData();
   }, [initializeComponents, initializeStages, setActiveStage]);
 
+  // Reset selected component when active stage changes
+  useEffect(() => {
+    setSelectedComponentId(null);
+  }, [activeStageId]);
+
   // Save data to localStorage on changes
   useEffect(() => {
     if (!loading) {
@@ -117,6 +124,7 @@ export const useQuizBuilder = () => {
     components,
     stages,
     activeStageId,
+    selectedComponentId,
     addComponent,
     updateComponent,
     deleteComponent,
@@ -126,6 +134,7 @@ export const useQuizBuilder = () => {
     deleteStage,
     moveStage,
     setActiveStage,
+    setSelectedComponentId,
     saveCurrentState,
     initializeStages,
     initializeComponents,
