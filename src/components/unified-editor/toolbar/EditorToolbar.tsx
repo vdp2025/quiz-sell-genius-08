@@ -3,9 +3,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Eye, Save, Undo, Redo, Download, Upload, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { EditorTab } from '../UnifiedVisualEditor';
 
 interface EditorToolbarProps {
-  activeTab: 'quiz' | 'result' | 'sales';
+  activeTab: EditorTab;
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;

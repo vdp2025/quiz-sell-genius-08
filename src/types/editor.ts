@@ -1,84 +1,21 @@
 
+import { StyleOptions } from './resultPageConfig';
+
 export type BlockType =
   | 'headline'
   | 'text'
   | 'image'
-  | 'header'
-  | 'hero-section'
+  | 'pricing'
   | 'benefits'
   | 'testimonials'
-  | 'pricing'
   | 'guarantee'
-  | 'cta'
-  | 'style-result'
-  | 'secondary-styles'
-  | 'bonus'
-  | 'bonus-carousel'
-  | 'columns'
-  | 'products'
-  | 'spacer'
-  | 'video'
-  | 'two-column'
-  | 'icon'
   | 'faq'
-  | 'carousel'
-  | 'custom-code'
-  | 'animation-block';
-
-export type ResponsiveSettings = {
-  hideOnMobile?: boolean;
-  hideOnTablet?: boolean;
-  hideOnDesktop?: boolean;
-  mobileWidth?: 'full' | 'auto' | '3/4' | '1/2' | '1/3';
-  tabletWidth?: 'full' | 'auto' | '3/4' | '1/2' | '1/3';
-};
-
-export type StyleOptions = {
-  backgroundColor?: string;
-  color?: string;
-  padding?: string;
-  margin?: string;
-  textAlign?: 'left' | 'center' | 'right' | 'justify';
-  width?: string;
-  borderRadius?: string;
-  fontFamily?: string;
-  fontSize?: string;
-  fontWeight?: string;
-  lineHeight?: string;
-  letterSpacing?: string;
-  height?: string;
-  display?: string;
-  flexDirection?: string;
-  justifyContent?: string;
-  alignItems?: string;
-  gap?: string;
-  boxShadow?: string;
-  borderWidth?: string;
-  borderStyle?: string;
-  borderColor?: string;
-  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
-  type?: string;
-  textColor?: string;
-  headingColor?: string;
-  accentColor?: string;
-};
-
-export type EditableContent = {
-  title?: string;
-  subtitle?: string;
-  text?: string;
-  imageUrl?: string;
-  imageAlt?: string;
-  caption?: string;
-  buttonText?: string;
-  buttonUrl?: string;
-  items?: Array<any>;
-  style?: StyleOptions;
-  responsive?: ResponsiveSettings;
-  description?: string;
-  customImage?: string;
-  [key: string]: any;
-};
+  | 'video'
+  | 'divider'
+  | 'spacer'
+  | 'button'
+  | 'form'
+  | 'countdown';
 
 export interface Block {
   id: string;
@@ -87,10 +24,20 @@ export interface Block {
   content: EditableContent;
 }
 
-export interface EditorConfig {
-  blocks: Block[];
-  globalStyles?: StyleOptions;
+export interface EditableContent {
+  [key: string]: any;
+  title?: string;
+  subtitle?: string;
+  text?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  style?: Partial<StyleOptions>;
 }
 
-// Add this type alias to maintain compatibility with existing code
-export type EditorBlock = Block;
+export interface EditorConfig {
+  blocks: Block[];
+}

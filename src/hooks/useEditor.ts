@@ -1,51 +1,71 @@
-import { useState, useEffect } from 'react';
-import { EditorConfig } from '@/types/editor';
-import { useEditorBlocks } from './editor/useEditorBlocks';
-import { useEditorTheme } from './editor/useEditorTheme';
-import { useEditorTemplates } from './editor/useEditorTemplates';
-import { defaultConfig } from '@/utils/editorDefaults';
+
+import { useState, useCallback } from 'react';
+import { Block } from '@/types/editor';
+import { generateId } from '@/utils/idGenerator';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
+
+interface EditorConfig {
+  blocks: Block[];
+}
 
 export const useEditor = () => {
-  const [config, setConfig] = useState<EditorConfig>(() => {
-    const savedConfig = localStorage.getItem('editorConfig');
-    if (savedConfig) {
-      try {
-        return JSON.parse(savedConfig);
-      } catch (e) {
-        console.error('Error loading editor configuration:', e);
-        return defaultConfig;
-      }
-    }
-    return defaultConfig;
-  });
+  const [config, setConfig] = useState<EditorConfig>({ blocks: [] });
 
-  useEffect(() => {
-    localStorage.setItem('editorConfig', JSON.stringify(config));
-  }, [config]);
+  const addBlock = useCallback((type: Block['type']) => {
+    const id = generateId();
+    setConfig(prevConfig => ({
+      ...prevConfig,
+      blocks: [
+        ...prevConfig.blocks,
+        {
+          id,
+          type,
+          content: getDefaultContentForType(type),
+          order: prevConfig.blocks.length
+        }
+      ]
+    }));
+    return id;
+  }, []);
 
-  const blockActions = useEditorBlocks(config, setConfig);
-  const themeActions = useEditorTheme(config, setConfig);
-  const templateActions = useEditorTemplates(config, setConfig);
+  const updateBlock = useCallback((id: string, updates: any) => {
+    setConfig(prevConfig => ({
+      ...prevConfig,
+      blocks: prevConfig.blocks.map(block => 
+        block.id === id 
+          ? { ...block, content: { ...block.content, ...updates } } 
+          : block
+      )
+    }));
+  }, []);
 
-  const clearEditor = () => setConfig(defaultConfig);
+  const deleteBlock = useCallback((id: string) => {
+    setConfig(prevConfig => ({
+      ...prevConfig,
+      blocks: prevConfig.blocks
+        .filter(block => block.id !== id)
+        .map((block, index) => ({ ...block, order: index }))
+    }));
+  }, []);
 
-  const saveConfig = async () => {
-    try {
-      localStorage.setItem('editorConfig', JSON.stringify(config));
-      return true;
-    } catch (error) {
-      console.error('Error saving editor configuration:', error);
-      return false;
-    }
-  };
+  const reorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
+    setConfig(prevConfig => {
+      const newBlocks = Array.from(prevConfig.blocks);
+      const [removed] = newBlocks.splice(sourceIndex, 1);
+      newBlocks.splice(destinationIndex, 0, removed);
+      
+      return {
+        ...prevConfig,
+        blocks: newBlocks.map((block, index) => ({ ...block, order: index }))
+      };
+    });
+  }, []);
 
   return {
     config,
-    updateConfig: setConfig,
-    clearEditor,
-    ...blockActions,
-    ...themeActions,
-    ...templateActions,
-    saveConfig
+    addBlock,
+    updateBlock,
+    deleteBlock,
+    reorderBlocks
   };
 };

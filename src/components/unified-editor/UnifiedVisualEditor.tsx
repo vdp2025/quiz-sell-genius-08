@@ -6,37 +6,43 @@ import QuizEditorPanel from './panels/QuizEditorPanel';
 import ResultEditorPanel from './panels/ResultEditorPanel';
 import SalesEditorPanel from './panels/SalesEditorPanel';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
-import { EditorToolbar } from '../editor/toolbar/EditorToolbar';
+import { EditorToolbar } from './toolbar/EditorToolbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
+
+export type EditorTab = 'quiz' | 'result' | 'sales';
 
 interface UnifiedVisualEditorProps {
   primaryStyle: StyleResult;
 }
 
 export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ primaryStyle }) => {
+  const [activeTab, setActiveTab] = useState<EditorTab>('quiz');
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  
   const {
-    activeMode,
-    isPreviewing,
-    setActiveMode,
-    togglePreview,
     saveAll
   } = useUnifiedEditor(primaryStyle);
 
-  const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+  const handleTogglePreview = () => {
+    setIsPreviewing(prev => !prev);
+  };
+
+  const handleSave = async () => {
+    await saveAll();
+  };
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <EditorToolbar
+        activeTab={activeTab}
         isPreviewing={isPreviewing}
-        viewportSize={viewportSize}
-        onViewportSizeChange={setViewportSize}
-        onTogglePreview={togglePreview}
-        onSave={saveAll}
+        onPreviewToggle={handleTogglePreview}
+        onSave={handleSave}
       />
       
       <Tabs
-        value={activeMode}
-        onValueChange={(value) => setActiveMode(value as 'quiz' | 'result' | 'sales')}
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as EditorTab)}
         className="flex-1 overflow-hidden"
       >
         <TabsList className="w-full border-b bg-white px-4 pt-2">
