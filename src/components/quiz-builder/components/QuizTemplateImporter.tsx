@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
 import { styleQuizTemplate2 } from '@/services/templates/styleQuizTemplate2';
@@ -11,6 +11,7 @@ import { QuizTemplate } from '@/types/quizTemplate';
 import { createBuilderStateFromQuiz } from '@/services/quizBuilderService';
 import { quizQuestions } from '@/data/quizQuestions'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
+import { toast } from '@/components/ui/use-toast';
 
 interface QuizTemplateImporterProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
   onImportTemplate
 }) => {
   const [activeTab, setActiveTab] = useState<string>('templates');
+  const [isImporting, setIsImporting] = useState(false);
   
   const templates: TemplateItem[] = [
     {
@@ -75,58 +77,98 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
     }
   ];
 
-  const handleImportTemplate = (templateItem: TemplateItem) => {
-    let builderState: QuizBuilderState;
-    
-    if (templateItem.type === 'quizTemplate') {
-      // Convert QuizTemplate to QuizBuilderState
-      const quizTemplate = templateItem.template as QuizTemplate;
-      builderState = createBuilderStateFromQuiz(
-        quizTemplate.questions,
-        quizTemplate.name,
-        quizTemplate.description,
-        `Resultado de ${quizTemplate.name}`
-      );
-    } else {
-      // It's already a QuizBuilderState
-      builderState = templateItem.template as QuizBuilderState;
+  const handleImportTemplate = async (templateItem: TemplateItem) => {
+    try {
+      setIsImporting(true);
+      let builderState: QuizBuilderState;
+      
+      if (templateItem.type === 'quizTemplate') {
+        // Convert QuizTemplate to QuizBuilderState
+        const quizTemplate = templateItem.template as QuizTemplate;
+        builderState = createBuilderStateFromQuiz(
+          quizTemplate.questions,
+          quizTemplate.name,
+          quizTemplate.description,
+          `Resultado de ${quizTemplate.name}`
+        );
+      } else {
+        // It's already a QuizBuilderState
+        builderState = templateItem.template as QuizBuilderState;
+      }
+      
+      // Adiciona um pequeno atraso para simular um processo e dar feedback visual ao usuário
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      onImportTemplate(builderState);
+      toast({
+        title: "Template importado com sucesso",
+        description: `O template "${templateItem.title}" foi aplicado ao seu quiz.`,
+      });
+      onClose();
+    } catch (error) {
+      console.error("Erro ao importar template:", error);
+      toast({
+        title: "Erro ao importar template",
+        description: "Não foi possível importar o template selecionado.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsImporting(false);
     }
-    
-    onImportTemplate(builderState);
-    onClose();
   };
   
-  const handleImportExistingQuiz = (sourceId: string) => {
-    let builderState: QuizBuilderState;
-    
-    if (sourceId === 'current-quiz') {
-      // Import from the current live quiz
-      builderState = createBuilderStateFromQuiz(
-        [...quizQuestions, ...strategicQuestions],
-        'Quiz de Estilo Pessoal',
-        'Descubra seu estilo predominante respondendo às perguntas a seguir',
-        'Seu Resultado de Estilo Pessoal'
-      );
+  const handleImportExistingQuiz = async (sourceId: string) => {
+    try {
+      setIsImporting(true);
+      let builderState: QuizBuilderState;
       
-      // Try to load existing results from localStorage
-      try {
-        const savedResultConfig = localStorage.getItem('quiz_result_config_Elegante');
-        if (savedResultConfig) {
-          console.log('Found existing result configuration, integrating with builder state');
-          // In a real implementation, we would merge the result config with the builder state
+      if (sourceId === 'current-quiz') {
+        // Import from the current live quiz
+        builderState = createBuilderStateFromQuiz(
+          [...quizQuestions, ...strategicQuestions],
+          'Quiz de Estilo Pessoal',
+          'Descubra seu estilo predominante respondendo às perguntas a seguir',
+          'Seu Resultado de Estilo Pessoal'
+        );
+        
+        // Adiciona um pequeno atraso para simular um processo e dar feedback visual ao usuário
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Try to load existing results from localStorage
+        try {
+          const savedResultConfig = localStorage.getItem('quiz_result_config_Elegante');
+          if (savedResultConfig) {
+            console.log('Found existing result configuration, integrating with builder state');
+            // In a real implementation, we would merge the result config with the builder state
+          }
+        } catch (error) {
+          console.error('Error loading saved result config:', error);
         }
-      } catch (error) {
-        console.error('Error loading saved result config:', error);
+      } else {
+        // Import from result page
+        // This would typically load the existing result page configuration
+        // and convert it to builder components
+        builderState = createResultPageBuilderState();
       }
-    } else {
-      // Import from result page
-      // This would typically load the existing result page configuration
-      // and convert it to builder components
-      builderState = createResultPageBuilderState();
+      
+      onImportTemplate(builderState);
+      toast({
+        title: "Conteúdo importado com sucesso",
+        description: sourceId === 'current-quiz' 
+          ? "O quiz atual foi importado para o editor."
+          : "A página de resultados foi importada para o editor.",
+      });
+      onClose();
+    } catch (error) {
+      console.error("Erro ao importar conteúdo:", error);
+      toast({
+        title: "Erro ao importar",
+        description: "Não foi possível importar o conteúdo selecionado.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsImporting(false);
     }
-    
-    onImportTemplate(builderState);
-    onClose();
   };
   
   // Helper function to create a builder state from result page
@@ -198,8 +240,9 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
                     <Button 
                       className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
                       onClick={() => handleImportTemplate(template)}
+                      disabled={isImporting}
                     >
-                      Selecionar Template
+                      {isImporting ? 'Importando...' : 'Selecionar Template'}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -222,8 +265,9 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
                     <Button 
                       className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
                       onClick={() => handleImportExistingQuiz(source.id)}
+                      disabled={isImporting}
                     >
-                      Importar {source.name}
+                      {isImporting ? 'Importando...' : `Importar ${source.name}`}
                     </Button>
                   </CardFooter>
                 </Card>

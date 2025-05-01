@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import QuizEditorPanel from './panels/QuizEditorPanel';
@@ -8,6 +8,7 @@ import SalesEditorPanel from './panels/SalesEditorPanel';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { toast } from '@/components/ui/use-toast';
 
 export type EditorTab = 'quiz' | 'result' | 'sales';
 
@@ -20,7 +21,9 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ primar
   const [isPreviewing, setIsPreviewing] = useState(false);
   
   const {
-    saveAll
+    saveAll,
+    resultPageEditor,
+    quizBuilder
   } = useUnifiedEditor(primaryStyle);
 
   const handleTogglePreview = () => {
@@ -28,8 +31,19 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ primar
   };
 
   const handleSave = async () => {
-    await saveAll();
+    const success = await saveAll();
+    if (success) {
+      toast({
+        title: "Alterações salvas",
+        description: "Todas as alterações foram salvas com sucesso.",
+      });
+    }
   };
+
+  // Garantir que o editor de quiz e página de resultado sejam inicializados
+  useEffect(() => {
+    console.info('Editor unificado inicializado com estilo primário:', primaryStyle.category);
+  }, [primaryStyle]);
 
   return (
     <div className="h-full flex flex-col overflow-hidden">

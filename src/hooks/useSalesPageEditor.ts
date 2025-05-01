@@ -1,49 +1,39 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
-import { generateId } from '@/utils/idGenerator';
-import { getDefaultContentForType } from '@/utils/editorDefaults';
 import { toast } from '@/components/ui/use-toast';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { generateId } from '@/utils/idGenerator';
 
-const STORAGE_KEY = 'sales_page_editor_data';
+const STORAGE_KEY_PREFIX = 'sales_page_editor_';
 
 export const useSalesPageEditor = (styleType: string) => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  // Load data from localStorage on initialization
+  // Carregar blocos salvos
   useEffect(() => {
-    const loadData = () => {
-      setLoading(true);
+    const loadBlocks = () => {
       try {
-        const savedData = localStorage.getItem(`${STORAGE_KEY}_${styleType}`);
-        if (savedData) {
-          const parsedData = JSON.parse(savedData);
-          setBlocks(parsedData.blocks || []);
+        const savedBlocks = localStorage.getItem(`${STORAGE_KEY_PREFIX}${styleType}`);
+        if (savedBlocks) {
+          setBlocks(JSON.parse(savedBlocks));
+          console.info(`Blocos da página de vendas carregados para ${styleType}:`, JSON.parse(savedBlocks).length);
         } else {
-          // Initialize with empty blocks array or default blocks
+          console.info(`Nenhum bloco da página de vendas encontrado para ${styleType}.`);
           setBlocks([]);
         }
       } catch (error) {
-        console.error('Error loading sales page data:', error);
+        console.error('Erro ao carregar blocos da página de vendas:', error);
         setBlocks([]);
-      } finally {
-        setLoading(false);
       }
     };
-
-    loadData();
+    
+    loadBlocks();
   }, [styleType]);
 
-  // Select a block
-  const selectBlock = useCallback((blockId: string | null) => {
-    setSelectedBlockId(blockId);
-  }, []);
-
-  // Add a new block
-  const handleAddBlock = useCallback((type: Block['type']) => {
+  const handleAddBlock = useCallback((type: Block['type']): string => {
     const newBlock: Block = {
       id: generateId(),
       type,
@@ -51,90 +41,61 @@ export const useSalesPageEditor = (styleType: string) => {
       order: blocks.length
     };
     
-    const newBlocks = [...blocks, newBlock];
-    setBlocks(newBlocks);
-    setSelectedBlockId(newBlock.id);
-    
+    setBlocks(prevBlocks => [...prevBlocks, newBlock]);
     return newBlock.id;
   }, [blocks]);
 
-  // Update a block
-  const handleUpdateBlock = useCallback((id: string, content: any) => {
-    const updatedBlocks = blocks.map(block =>
-      block.id === id ? { ...block, content: { ...block.content, ...content } } : block
+  const handleUpdateBlock = useCallback((id: string, updates: any) => {
+    setBlocks(prevBlocks => 
+      prevBlocks.map(block => 
+        block.id === id 
+          ? { ...block, content: { ...block.content, ...updates } } 
+          : block
+      )
     );
-    
-    setBlocks(updatedBlocks);
-  }, [blocks]);
+  }, []);
 
-  // Delete a block
   const handleDeleteBlock = useCallback((id: string) => {
-    const filteredBlocks = blocks
-      .filter(block => block.id !== id)
-      .map((block, index) => ({ ...block, order: index }));
-    
-    setBlocks(filteredBlocks);
-    setSelectedBlockId(null);
-  }, [blocks]);
+    setBlocks(prevBlocks => 
+      prevBlocks
+        .filter(block => block.id !== id)
+        .map((block, index) => ({ ...block, order: index }))
+    );
+  }, []);
 
-  // Reorder blocks
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
-    const result = Array.from(blocks);
-    const [removed] = result.splice(sourceIndex, 1);
-    result.splice(destinationIndex, 0, removed);
-    
-    const reorderedBlocks = result.map((block, index) => ({
-      ...block,
-      order: index
-    }));
-    
-    setBlocks(reorderedBlocks);
-  }, [blocks]);
-
-  // Save the current state
-  const handleSave = useCallback(() => {
-    try {
-      localStorage.setItem(`${STORAGE_KEY}_${styleType}`, JSON.stringify({
-        blocks
+    setBlocks(prevBlocks => {
+      const result = Array.from(prevBlocks);
+      const [removed] = result.splice(sourceIndex, 1);
+      result.splice(destinationIndex, 0, removed);
+      
+      return result.map((block, index) => ({
+        ...block,
+        order: index
       }));
-      
-      toast({
-        title: 'Alterações salvas',
-        description: 'As configurações da página de vendas foram salvas com sucesso.'
-      });
-      
+    });
+  }, []);
+
+  const handleSave = useCallback(async () => {
+    try {
+      localStorage.setItem(`${STORAGE_KEY_PREFIX}${styleType}`, JSON.stringify(blocks));
       return true;
     } catch (error) {
-      console.error('Error saving sales page data:', error);
-      
-      toast({
-        title: 'Erro ao salvar',
-        description: 'Não foi possível salvar as alterações da página de vendas.',
-        variant: 'destructive'
-      });
-      
+      console.error('Erro ao salvar página de vendas:', error);
       return false;
     }
   }, [blocks, styleType]);
 
-  // Toggle preview mode
-  const togglePreview = useCallback(() => {
-    setIsPreviewing(prev => !prev);
-  }, []);
-
   return {
     blocks,
     selectedBlockId,
+    selectBlock: setSelectedBlockId,
     isPreviewing,
-    loading,
-    selectBlock,
-    actions: {
-      handleSave,
-      handleAddBlock,
-      handleUpdateBlock,
-      handleDeleteBlock,
-      handleReorderBlocks,
-      togglePreview
-    }
+    togglePreview: () => setIsPreviewing(prev => !prev),
+    handleAddBlock,
+    handleUpdateBlock,
+    handleDeleteBlock,
+    handleReorderBlocks,
+    handleSave,
   };
 };

@@ -1,53 +1,146 @@
 
 import React from 'react';
-import { Block } from '@/types/editor';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Monitor, Smartphone } from 'lucide-react';
 
 interface PreviewPanelProps {
-  blocks: Block[];
+  blocks: EditorBlock[];
   selectedBlockId: string | null;
-  onSelect: (id: string) => void;
+  onSelect: (blockId: string) => void;
 }
 
-export function PreviewPanel({ blocks, selectedBlockId, onSelect }: PreviewPanelProps) {
+export const PreviewPanel: React.FC<PreviewPanelProps> = ({
+  blocks,
+  selectedBlockId,
+  onSelect,
+}) => {
+  const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
+
+  const renderBlock = (block: EditorBlock) => {
+    switch (block.type) {
+      case 'headline':
+        return (
+          <div 
+            key={block.id}
+            className={cn(
+              'py-4 cursor-pointer', 
+              selectedBlockId === block.id && 'border-2 border-blue-400 rounded'
+            )}
+            onClick={() => onSelect(block.id)}
+            style={block.content.style as React.CSSProperties}
+          >
+            <h2 className="text-2xl font-bold">{block.content.title || 'Título'}</h2>
+            {block.content.subtitle && <p className="text-lg">{block.content.subtitle}</p>}
+          </div>
+        );
+        
+      case 'text':
+        return (
+          <div 
+            key={block.id}
+            className={cn(
+              'py-4 cursor-pointer', 
+              selectedBlockId === block.id && 'border-2 border-blue-400 rounded'
+            )}
+            onClick={() => onSelect(block.id)}
+            style={block.content.style as React.CSSProperties}
+          >
+            <p>{block.content.text || 'Texto de exemplo...'}</p>
+          </div>
+        );
+        
+      case 'image':
+        return (
+          <div 
+            key={block.id}
+            className={cn(
+              'py-4 cursor-pointer', 
+              selectedBlockId === block.id && 'border-2 border-blue-400 rounded'
+            )}
+            onClick={() => onSelect(block.id)}
+          >
+            {block.content.imageUrl ? (
+              <img 
+                src={block.content.imageUrl} 
+                alt={block.content.imageAlt || 'Imagem'} 
+                className="max-w-full"
+                style={block.content.style as React.CSSProperties}
+              />
+            ) : (
+              <div className="bg-gray-200 text-gray-500 p-8 text-center">
+                Imagem será exibida aqui
+              </div>
+            )}
+          </div>
+        );
+        
+      default:
+        return (
+          <div 
+            key={block.id}
+            className={cn(
+              'py-4 border border-gray-200 rounded cursor-pointer', 
+              selectedBlockId === block.id && 'border-2 border-blue-400'
+            )}
+            onClick={() => onSelect(block.id)}
+          >
+            <p className="text-gray-500 text-center">
+              Componente do tipo: {block.type}
+            </p>
+          </div>
+        );
+    }
+  };
+
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden">
-      <div className="p-4 border-b border-[#B89B7A]/20">
-        <h2 className="font-semibold text-[#432818]">Visualização</h2>
+    <div className="h-full flex flex-col">
+      <div className="p-4 bg-white border-b border-gray-200 flex items-center justify-between">
+        <h2 className="text-lg font-medium">Preview</h2>
+        <div className="flex space-x-2">
+          <Button
+            size="sm"
+            variant={viewMode === 'desktop' ? 'default' : 'outline'}
+            onClick={() => setViewMode('desktop')}
+          >
+            <Monitor className="w-4 h-4 mr-2" />
+            Desktop
+          </Button>
+          <Button
+            size="sm"
+            variant={viewMode === 'mobile' ? 'default' : 'outline'}
+            onClick={() => setViewMode('mobile')}
+          >
+            <Smartphone className="w-4 h-4 mr-2" />
+            Mobile
+          </Button>
+        </div>
       </div>
-      
-      <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
-        <div className="min-h-full bg-white rounded-lg shadow-sm p-6">
+      <ScrollArea className="flex-1 p-4 bg-gray-50">
+        <div 
+          className={cn(
+            "min-h-[80vh] bg-white shadow-sm rounded-lg p-6",
+            viewMode === 'mobile' ? 'max-w-md mx-auto' : 'max-w-4xl mx-auto'
+          )}
+        >
           {blocks.length === 0 ? (
-            <div className="text-center p-8 border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
-              <p className="text-[#8F7A6A]">Adicione componentes usando o painel lateral</p>
+            <div className="text-center py-10 border-2 border-dashed border-gray-300 rounded-lg">
+              <p className="text-gray-500 mb-4">
+                Adicione componentes usando o painel lateral
+              </p>
+              <Button variant="outline">
+                Adicionar Primeiro Componente
+              </Button>
             </div>
           ) : (
-            <div className="space-y-4">
-              {blocks.sort((a, b) => a.order - b.order).map(block => (
-                <div 
-                  key={block.id}
-                  className={cn(
-                    "p-4 border rounded transition-colors",
-                    selectedBlockId === block.id 
-                      ? "border-[#B89B7A] bg-[#FAF9F7]" 
-                      : "border-gray-200 hover:border-[#B89B7A]/50"
-                  )}
-                  onClick={() => onSelect(block.id)}
-                >
-                  <h3 className="font-medium text-[#432818] mb-1">{block.type}</h3>
-                  
-                  {block.content.title && (
-                    <p className="text-sm text-[#8F7A6A] line-clamp-1">
-                      {block.content.title}
-                    </p>
-                  )}
-                </div>
-              ))}
+            <div>
+              {blocks.sort((a, b) => a.order - b.order).map(renderBlock)}
             </div>
           )}
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
-}
+};

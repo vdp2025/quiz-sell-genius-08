@@ -1,3 +1,4 @@
+
 import { Block } from './editor';
 
 export interface StyleOptions {
@@ -5,13 +6,13 @@ export interface StyleOptions {
   fontWeight?: string;
   color?: string;
   backgroundColor?: string;
-  padding?: string;
-  paddingY?: string;
-  paddingX?: string;
-  margin?: string;
+  padding?: string | number;
+  paddingY?: string | number;
+  paddingX?: string | number;
+  margin?: string | number;
   width?: string;
   height?: string;
-  borderRadius?: string;
+  borderRadius?: string | number;
   textAlign?: 'left' | 'center' | 'right' | 'justify';
   fontFamily?: string;
   lineHeight?: string;
@@ -74,7 +75,6 @@ export interface OfferContent {
     text: string;
   }>;
   image?: string;
-  [key: string]: any;
 }
 
 export interface Section {

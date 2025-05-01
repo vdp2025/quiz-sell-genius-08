@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizBuilder } from './useQuizBuilder';
 import { useResultPageEditor } from './useResultPageEditor';
+import { useSalesPageEditor } from './useSalesPageEditor';
 import { StyleResult } from '@/types/quiz';
 
 export type EditorMode = 'quiz' | 'result' | 'sales';
@@ -16,6 +17,13 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
   // Integrar com os hooks existentes
   const quizBuilder = useQuizBuilder();
   const resultPageEditor = useResultPageEditor(primaryStyle.category);
+  const salesPageEditor = useSalesPageEditor(primaryStyle.category);
+  
+  // Inicialização sincronizada
+  useEffect(() => {
+    console.info('useUnifiedEditor inicializado');
+    // Podemos fazer carregamentos adicionais aqui se necessário
+  }, [primaryStyle.category]);
   
   const togglePreview = useCallback(() => {
     setIsPreviewing(prev => !prev);
@@ -25,20 +33,13 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
     try {
       let success = true;
       
-      if (activeMode === 'quiz') {
+      if (activeMode === 'quiz' && quizBuilder) {
         success = quizBuilder.saveCurrentState();
-      } else if (activeMode === 'result') {
+      } else if (activeMode === 'result' && resultPageEditor) {
         success = await resultPageEditor.actions.handleSave();
-      } else if (activeMode === 'sales') {
-        // Implementar salvamento da página de vendas
-        success = true;
-      }
-      
-      if (success) {
-        toast({
-          title: "Alterações salvas",
-          description: "Todas as alterações foram salvas com sucesso.",
-        });
+      } else if (activeMode === 'sales' && salesPageEditor) {
+        // Salva a página de vendas
+        success = await salesPageEditor.handleSave();
       }
       
       return success;
@@ -51,7 +52,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
       });
       return false;
     }
-  }, [activeMode, quizBuilder, resultPageEditor]);
+  }, [activeMode, quizBuilder, resultPageEditor, salesPageEditor]);
   
   const openTemplateModal = useCallback(() => {
     setIsTemplateModalOpen(true);
@@ -68,6 +69,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
     isTemplateModalOpen,
     quizBuilder,
     resultPageEditor,
+    salesPageEditor,
     setActiveMode,
     togglePreview,
     setIsDragging,
