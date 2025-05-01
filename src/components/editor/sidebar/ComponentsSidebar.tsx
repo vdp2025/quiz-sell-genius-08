@@ -38,19 +38,19 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       category: "Básicos",
       items: [
         { 
-          type: 'headline', 
+          type: 'headline' as BlockType, 
           icon: <Type className="h-4 w-4 mr-2" />, 
           label: 'Título', 
           description: 'Título com subtítulo' 
         },
         { 
-          type: 'text', 
+          type: 'text' as BlockType, 
           icon: <FileText className="h-4 w-4 mr-2" />, 
           label: 'Texto', 
           description: 'Parágrafo simples' 
         },
         { 
-          type: 'image', 
+          type: 'image' as BlockType, 
           icon: <ImageIcon className="h-4 w-4 mr-2" />, 
           label: 'Imagem', 
           description: 'Imagem com legenda opcional' 
@@ -61,13 +61,13 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       category: "Resultado",
       items: [
         { 
-          type: 'style-result', 
+          type: 'style-result' as BlockType, 
           icon: <Award className="h-4 w-4 mr-2" />, 
           label: 'Estilo Principal', 
           description: 'Exibe o estilo predominante' 
         },
         { 
-          type: 'secondary-styles', 
+          type: 'secondary-styles' as BlockType, 
           icon: <Layout className="h-4 w-4 mr-2" />, 
           label: 'Estilos Secundários', 
           description: 'Exibe estilos complementares' 
@@ -78,49 +78,49 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       category: "Conversão",
       items: [
         { 
-          type: 'pricing', 
+          type: 'pricing' as BlockType, 
           icon: <Tag className="h-4 w-4 mr-2" />, 
           label: 'Preço', 
           description: 'Exibe informações de preço' 
         },
         { 
-          type: 'benefits', 
+          type: 'benefits' as BlockType, 
           icon: <ListChecks className="h-4 w-4 mr-2" />, 
           label: 'Benefícios', 
           description: 'Lista de benefícios com ícones' 
         },
         { 
-          type: 'testimonials', 
+          type: 'testimonials' as BlockType, 
           icon: <Heart className="h-4 w-4 mr-2" />, 
           label: 'Depoimentos', 
           description: 'Seção de depoimentos' 
         },
         { 
-          type: 'testimonial-card', 
+          type: 'testimonial-card' as BlockType, 
           icon: <Heart className="h-4 w-4 mr-2" />, 
           label: 'Card de Depoimento', 
           description: 'Depoimento individual destacado' 
         },
         { 
-          type: 'cta', 
+          type: 'cta' as BlockType, 
           icon: <ShoppingCart className="h-4 w-4 mr-2" />, 
           label: 'Botão de Ação', 
           description: 'Botão de compra destacado' 
         },
         { 
-          type: 'guarantee', 
+          type: 'guarantee' as BlockType, 
           icon: <Shield className="h-4 w-4 mr-2" />, 
           label: 'Garantia', 
           description: 'Seção de garantia' 
         },
         { 
-          type: 'countdown-timer', 
+          type: 'countdown-timer' as BlockType, 
           icon: <Clock className="h-4 w-4 mr-2" />, 
           label: 'Contador Regressivo', 
           description: 'Timer para criar urgência' 
         },
         { 
-          type: 'feature-comparison', 
+          type: 'feature-comparison' as BlockType, 
           icon: <Columns className="h-4 w-4 mr-2" />, 
           label: 'Comparação de Recursos', 
           description: 'Compare planos ou recursos' 

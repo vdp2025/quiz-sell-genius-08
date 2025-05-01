@@ -147,7 +147,14 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 selectedBlockId={selectedBlockId}
                 blocks={blocks}
                 onClose={() => setSelectedBlockId(null)}
-                onUpdate={blockActions.handleUpdateBlock}
+                onUpdate={(content, id) => {
+                  // Make sure we handle both formats - with id and without
+                  if (id) {
+                    blockActions.handleUpdateBlock(id, content);
+                  } else if (selectedBlockId) {
+                    blockActions.handleUpdateBlock(selectedBlockId, content);
+                  }
+                }}
                 onDelete={blockActions.handleDeleteBlock}
               />
             </ResizablePanel>

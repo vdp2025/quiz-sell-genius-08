@@ -21,7 +21,7 @@ export const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
         "p-4 bg-white border border-[#B89B7A]/20 rounded-lg shadow-sm",
         content.style?.backgroundColor ? "" : "bg-[#FFF8F0]"
       )}
-      style={content.style || {}}
+      style={content.style ? {...content.style as React.CSSProperties} : {}}
       onClick={onClick}
     >
       <div className="flex items-center justify-center gap-2 mb-2 text-[#B89B7A]">

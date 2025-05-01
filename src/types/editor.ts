@@ -1,3 +1,4 @@
+
 import { StyleOptions } from './resultPageConfig';
 
 export type BlockType =

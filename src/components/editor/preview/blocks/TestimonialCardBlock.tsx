@@ -20,7 +20,7 @@ export const TestimonialCardBlock: React.FC<TestimonialCardBlockProps> = ({
         "p-6 bg-white border border-[#B89B7A]/20 rounded-lg shadow-sm",
         content.style?.backgroundColor ? "" : "bg-[#FFF8F0]"
       )}
-      style={content.style || {}}
+      style={content.style ? {...content.style as React.CSSProperties} : {}}
       onClick={onClick}
     >
       <div className="flex flex-col items-center text-center">

@@ -23,7 +23,7 @@ export const FeatureComparisonBlock: React.FC<FeatureComparisonBlockProps> = ({
   return (
     <div 
       className="p-4 bg-white border border-[#B89B7A]/20 rounded-lg shadow-sm"
-      style={content.style || {}}
+      style={content.style ? {...content.style as React.CSSProperties} : {}}
       onClick={onClick}
     >
       <h3 className="text-center font-medium text-[#432818] mb-4">
