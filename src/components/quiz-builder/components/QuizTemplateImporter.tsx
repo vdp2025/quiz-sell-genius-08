@@ -12,6 +12,7 @@ import { createBuilderStateFromQuiz } from '@/services/quizBuilderService';
 import { quizQuestions } from '@/data/quizQuestions'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { toast } from '@/components/ui/use-toast';
+import { Loader2 } from 'lucide-react';
 
 interface QuizTemplateImporterProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<string>('templates');
   const [isImporting, setIsImporting] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   
   const templates: TemplateItem[] = [
     {
@@ -80,6 +82,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
   const handleImportTemplate = async (templateItem: TemplateItem) => {
     try {
       setIsImporting(true);
+      setSelectedTemplateId(templateItem.id);
       let builderState: QuizBuilderState;
       
       if (templateItem.type === 'quizTemplate') {
@@ -114,12 +117,14 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
       });
     } finally {
       setIsImporting(false);
+      setSelectedTemplateId(null);
     }
   };
   
   const handleImportExistingQuiz = async (sourceId: string) => {
     try {
       setIsImporting(true);
+      setSelectedTemplateId(sourceId);
       let builderState: QuizBuilderState;
       
       if (sourceId === 'current-quiz') {
@@ -168,6 +173,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
       });
     } finally {
       setIsImporting(false);
+      setSelectedTemplateId(null);
     }
   };
   
@@ -228,7 +234,10 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
           <TabsContent value="templates" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
               {templates.map((template) => (
-                <Card key={template.id} className="overflow-hidden border border-[#B89B7A]/30 hover:border-[#B89B7A] transition-all cursor-pointer">
+                <Card key={template.id} className={cn(
+                  "overflow-hidden border hover:border-[#B89B7A] transition-all cursor-pointer",
+                  isImporting && selectedTemplateId === template.id ? "border-[#B89B7A] shadow-md" : "border-[#B89B7A]/30"
+                )}>
                   <div className="w-full h-48 overflow-hidden">
                     <img src={template.image} alt={template.title} className="w-full h-full object-cover" />
                   </div>
@@ -242,7 +251,14 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
                       onClick={() => handleImportTemplate(template)}
                       disabled={isImporting}
                     >
-                      {isImporting ? 'Importando...' : 'Selecionar Template'}
+                      {isImporting && selectedTemplateId === template.id ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Importando...
+                        </>
+                      ) : (
+                        'Selecionar Template'
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -253,7 +269,10 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
           <TabsContent value="existing" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
               {importSources.map((source) => (
-                <Card key={source.id} className="overflow-hidden border border-[#B89B7A]/30 hover:border-[#B89B7A] transition-all cursor-pointer">
+                <Card key={source.id} className={cn(
+                  "overflow-hidden border hover:border-[#B89B7A] transition-all cursor-pointer",
+                  isImporting && selectedTemplateId === source.id ? "border-[#B89B7A] shadow-md" : "border-[#B89B7A]/30"
+                )}>
                   <div className="w-full h-48 overflow-hidden">
                     <img src={source.image} alt={source.name} className="w-full h-full object-cover" />
                   </div>
@@ -267,7 +286,14 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
                       onClick={() => handleImportExistingQuiz(source.id)}
                       disabled={isImporting}
                     >
-                      {isImporting ? 'Importando...' : `Importar ${source.name}`}
+                      {isImporting && selectedTemplateId === source.id ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Importando...
+                        </>
+                      ) : (
+                        `Importar ${source.name}`
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -279,5 +305,10 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
     </Dialog>
   );
 };
+
+// Add the missing cn utility function import
+function cn(...inputs: (string | undefined)[]) {
+  return inputs.filter(Boolean).join(' ');
+}
 
 export default QuizTemplateImporter;

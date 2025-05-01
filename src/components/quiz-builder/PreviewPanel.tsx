@@ -3,8 +3,23 @@ import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
-import { DndContext, DragOverlay, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { 
+  DndContext, 
+  DragOverlay, 
+  closestCenter, 
+  KeyboardSensor, 
+  PointerSensor, 
+  useSensor, 
+  useSensors, 
+  DragEndEvent, 
+  DragStartEvent 
+} from '@dnd-kit/core';
+import { 
+  SortableContext, 
+  sortableKeyboardCoordinates, 
+  useSortable, 
+  verticalListSortingStrategy 
+} from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +28,8 @@ import TextComponent from './components/TextComponent';
 import ImageComponent from './components/ImageComponent';
 import MultipleChoiceComponent from './components/MultipleChoiceComponent';
 import QuizResultComponent from './components/QuizResultComponent';
+import StageCoverComponent from './components/StageCoverComponent';
+import StageQuestionComponent from './components/StageQuestionComponent';
 
 interface PreviewPanelProps {
   components: QuizComponentData[];
@@ -48,7 +65,10 @@ const SortableComponent: React.FC<SortableComponentProps> = ({ component, isSele
         "relative my-2 border-2 rounded-md overflow-hidden",
         isSelected ? "border-[#B89B7A]" : "border-dashed border-gray-300"
       )}
-      onClick={() => onSelect(component.id)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect(component.id);
+      }}
     >
       <div 
         {...attributes} 
@@ -70,18 +90,30 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   activeStage,
   isPreviewing = false
 }) => {
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // Minimum distance in pixels before activating
+      }
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
-    if (active.id !== over.id) {
-      onMoveComponent(active.id, over.id);
+    setActiveId(null);
+    
+    if (over && active.id !== over.id) {
+      onMoveComponent(active.id as string, over.id as string);
     }
   };
 
@@ -105,8 +137,12 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         return <MultipleChoiceComponent {...props} />;
       case 'quizResult':
         return <QuizResultComponent {...props} />;
+      case 'stageCover':
+        return <StageCoverComponent {...props} />;
+      case 'stageQuestion':
+        return <StageQuestionComponent {...props} />;
       default:
-        return <div className="p-4 bg-gray-100 text-center">Componente não reconhecido</div>;
+        return <div className="p-4 bg-gray-100 text-center">Componente não reconhecido: {component.type}</div>;
     }
   };
 
@@ -118,10 +154,14 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         return 'Questão';
       case 'result':
         return 'Página de Resultado';
+      case 'strategic':
+        return 'Questão Estratégica';
       default:
         return type;
     }
   };
+
+  const sortedComponents = [...components].sort((a, b) => a.order - b.order);
 
   return (
     <div className="h-full flex flex-col border-r">
@@ -144,29 +184,36 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         <div className="p-4">
           <div className="max-w-3xl mx-auto bg-white rounded-lg min-h-[400px] p-4 shadow-sm">
             {activeStage ? (
-              components.length > 0 ? (
+              sortedComponents.length > 0 ? (
                 <DndContext 
                   sensors={sensors} 
                   collisionDetection={closestCenter} 
+                  onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd}
                 >
                   <SortableContext 
-                    items={components.map(c => c.id)} 
+                    items={sortedComponents.map(c => c.id)} 
                     strategy={verticalListSortingStrategy}
                   >
-                    {components
-                      .sort((a, b) => a.order - b.order)
-                      .map(component => (
-                        <SortableComponent
-                          key={component.id}
-                          component={component}
-                          isSelected={component.id === selectedComponentId}
-                          onSelect={onSelectComponent}
-                        >
-                          {renderComponent(component)}
-                        </SortableComponent>
-                      ))}
+                    {sortedComponents.map(component => (
+                      <SortableComponent
+                        key={component.id}
+                        component={component}
+                        isSelected={component.id === selectedComponentId}
+                        onSelect={onSelectComponent}
+                      >
+                        {renderComponent(component)}
+                      </SortableComponent>
+                    ))}
                   </SortableContext>
+                  
+                  <DragOverlay>
+                    {activeId ? (
+                      <div className="border-2 border-[#B89B7A] rounded-md opacity-80 shadow-lg">
+                        {renderComponent(sortedComponents.find(c => c.id === activeId)!)}
+                      </div>
+                    ) : null}
+                  </DragOverlay>
                 </DndContext>
               ) : (
                 <div className="flex flex-col items-center justify-center p-8 text-center h-64">

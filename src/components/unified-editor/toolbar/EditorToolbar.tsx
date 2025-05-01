@@ -1,22 +1,22 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { EditorTab } from '../UnifiedVisualEditor';
 import { 
   Eye, 
+  EyeOff, 
   Save, 
-  FileText,
-  Settings,
-  LayoutTemplate
+  Layout, 
+  FilePlus, 
+  Loader2 
 } from 'lucide-react';
-import { EditorTab } from '../UnifiedVisualEditor';
-import { toast } from '@/components/ui/use-toast';
 
 interface EditorToolbarProps {
   activeTab: EditorTab;
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;
-  onOpenTemplateModal?: () => void;
+  onOpenTemplateModal: () => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -26,75 +26,56 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onSave,
   onOpenTemplateModal
 }) => {
-  const getTabLabel = () => {
-    switch (activeTab) {
-      case 'quiz': return 'Quiz';
-      case 'result': return 'Página de Resultado';
-      case 'sales': return 'Página de Vendas';
-      default: return 'Editor';
-    }
-  };
-
   return (
-    <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <h1 className="text-lg font-medium text-[#432818] mr-2">
-          Editor de {getTabLabel()}
-        </h1>
-        
-        {onOpenTemplateModal && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-[#8F7A6A]"
-            onClick={onOpenTemplateModal}
-          >
-            <LayoutTemplate className="w-4 h-4 mr-2" />
-            Templates
-          </Button>
-        )}
-        
-        <Button variant="outline" size="sm" className="text-[#8F7A6A]">
-          <Settings className="w-4 h-4 mr-2" />
-          Configurações
-        </Button>
-      </div>
-      
-      <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between p-2 border-b bg-white">
+      <div className="flex items-center space-x-2">
         <Button
           variant="outline"
           size="sm"
           onClick={onPreviewToggle}
-          className="text-[#8F7A6A]"
+          className="flex items-center gap-1"
         >
-          <Eye className="w-4 h-4 mr-2" />
-          {isPreviewing ? 'Modo Edição' : 'Visualizar'}
+          {isPreviewing ? (
+            <>
+              <EyeOff className="h-4 w-4" />
+              <span className="hidden sm:inline">Editor</span>
+            </>
+          ) : (
+            <>
+              <Eye className="h-4 w-4" />
+              <span className="hidden sm:inline">Visualizar</span>
+            </>
+          )}
         </Button>
-        
+      </div>
+
+      <div className="text-center">
+        <h2 className="text-sm font-medium">
+          {activeTab === 'quiz' && 'Editor de Quiz'}
+          {activeTab === 'result' && 'Editor de Página de Resultado'}
+          {activeTab === 'sales' && 'Editor de Página de Vendas'}
+        </h2>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onOpenTemplateModal}
+          className="flex items-center gap-1"
+        >
+          <FilePlus className="h-4 w-4" />
+          <span className="hidden sm:inline">Modelos</span>
+        </Button>
+
         <Button
           variant="default"
           size="sm"
           onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
+          className="flex items-center gap-1 bg-[#B89B7A] hover:bg-[#A38A69] text-white"
         >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar
-        </Button>
-        
-        <Button 
-          variant="outline"
-          size="sm"
-          className="text-[#8F7A6A]"
-          onClick={() => {
-            toast({
-              title: "Exportando...",
-              description: "Funcionalidade de exportação em desenvolvimento.",
-              duration: 3000,
-            });
-          }}
-        >
-          <FileText className="w-4 h-4 mr-2" />
-          Exportar
+          <Save className="h-4 w-4" />
+          <span className="hidden sm:inline">Salvar</span>
         </Button>
       </div>
     </div>

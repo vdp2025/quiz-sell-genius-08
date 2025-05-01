@@ -185,4 +185,3 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
 };
 
 export default StageQuestionComponent;
-
