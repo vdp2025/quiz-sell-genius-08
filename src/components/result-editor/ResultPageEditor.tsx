@@ -110,7 +110,16 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
   }
 
   // Ensure offer section and its subsections exist
-  const offer = resultPageConfig.offer || {};
+  const offerDefault = {
+    hero: { visible: false, content: {}, style: {} },
+    products: { visible: false, content: {}, style: {} },
+    benefits: { visible: false, content: { items: [] }, style: {} },
+    pricing: { visible: false, content: {}, style: {} },
+    testimonials: { visible: false, content: { items: [] }, style: {} },
+    guarantee: { visible: false, content: { title: '', text: '' }, style: {} }
+  };
+  
+  const offer = resultPageConfig.offer || offerDefault;
   const heroSection = offer.hero || { visible: false, content: {}, style: {} };
   const productsSection = offer.products || { visible: false, content: {}, style: {} };
   const benefitsSection = offer.benefits || { visible: false, content: { items: [] }, style: {} };

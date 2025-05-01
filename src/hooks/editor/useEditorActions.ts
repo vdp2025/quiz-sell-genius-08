@@ -16,6 +16,13 @@ export const useEditorActions = (
   const handleAddBlock = useCallback((type: EditorBlock['type']) => {
     const content = getDefaultContentForBlockType(type);
     
+    // Ensure alignment is properly typed as 'left' | 'center' | 'right'
+    if (content.alignment && typeof content.alignment === 'string') {
+      content.alignment = (content.alignment === 'left' || content.alignment === 'center' || content.alignment === 'right') 
+        ? content.alignment 
+        : 'center';
+    }
+    
     // Ensure borderRadius is properly typed
     if (content.style && typeof content.style.borderRadius === 'string') {
       content.style.borderRadius = sanitizeBorderRadius(content.style.borderRadius);

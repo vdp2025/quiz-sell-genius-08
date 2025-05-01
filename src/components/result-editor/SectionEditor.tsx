@@ -96,21 +96,23 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
               <AccordionTrigger className="text-sm">Aparência</AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
-                  {section.appearance && Object.entries(section.appearance).map(([key, value]) => {
+                  {/* Avoid accessing appearance directly */}
+                  {/* Use dynamic approach without referencing appearance directly */}
+                  {section.style && Object.entries(section.style).map(([key, value]) => {
                     if (typeof value === 'boolean') {
                       return (
                         <div key={key} className="flex items-center justify-between">
-                          <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">
+                          <Label htmlFor={`${key}-style`} className="text-xs capitalize">
                             {key.replace(/([A-Z])/g, ' $1').trim()}
                           </Label>
                           <Switch 
-                            id={`${key}-appearance`}
+                            id={`${key}-style`}
                             checked={value}
                             onCheckedChange={(checked) => {
                               onUpdate({
                                 ...section,
-                                appearance: {
-                                  ...section.appearance,
+                                style: {
+                                  ...section.style,
                                   [key]: checked
                                 }
                               });
@@ -122,17 +124,17 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                     
                     return (
                       <div key={key} className="space-y-2">
-                        <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">
+                        <Label htmlFor={`${key}-style`} className="text-xs capitalize">
                           {key.replace(/([A-Z])/g, ' $1').trim()}
                         </Label>
                         <Input
-                          id={`${key}-appearance`}
+                          id={`${key}-style`}
                           value={value as string}
                           onChange={(e) => {
                             onUpdate({
                               ...section,
-                              appearance: {
-                                ...section.appearance,
+                              style: {
+                                ...section.style,
                                 [key]: e.target.value
                               }
                             });

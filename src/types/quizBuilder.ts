@@ -49,4 +49,5 @@ export type QuizComponentType =
 export interface QuizBuilderState {
   stages: QuizStage[];
   components: QuizComponentData[];
+  activeStageId?: string; // Add this to fix useTypeformQuizBuilder errors
 }

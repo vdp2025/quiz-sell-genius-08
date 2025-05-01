@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -196,7 +195,7 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
               <Label htmlFor="borderRadius">Raio das Bordas</Label>
               <Select 
                 value={styles.borderRadius || 'medium'}
-                onValueChange={(value: 'none' | 'small' | 'medium' | 'large') => handleChange('borderRadius', value)}
+                onValueChange={(value: string) => handleChange('borderRadius', value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o raio das bordas" />

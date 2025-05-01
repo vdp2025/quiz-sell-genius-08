@@ -1,4 +1,3 @@
-
 import { QuizBuilderState, QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from './resultPageStorage';
@@ -13,19 +12,22 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
       id: coverStageId,
       title: 'Etapa 1: Capa do Quiz',
       order: 0,
-      type: 'cover'
+      type: 'cover',
+      isEnabled: true
     },
     {
       id: questionStageId,
       title: 'Etapa 2: Pergunta 1',
       order: 1,
-      type: 'question'
+      type: 'question',
+      isEnabled: true
     },
     {
       id: resultStageId,
       title: 'Etapa 3: Resultado',
       order: 2,
-      type: 'result'
+      type: 'result',
+      isEnabled: true
     }
   ];
   

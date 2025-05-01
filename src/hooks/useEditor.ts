@@ -1,19 +1,23 @@
 
 import { useState, useCallback } from 'react';
-import { Block, BlockType, EditorConfig } from '@/types/editor';
+import { Block, BlockType, EditorBlock, EditorConfig } from '@/types/editor';
 import { generateId } from '@/utils/idGenerator';
 import { getDefaultContentForBlockType } from '@/utils/blockDefaults';
 import { BorderRadiusType } from '@/types/resultPageConfig';
 import { sanitizeBorderRadius } from '@/utils/styleUtils';
 
 export const useEditor = () => {
-  const [config, setConfig] = useState<EditorConfig>({ blocks: [] });
+  const [config, setConfig] = useState<EditorConfig>({ 
+    blocks: [],
+    allowedBlockTypes: [], // Initialize with empty arrays
+    maxDepth: 1 
+  });
 
   const addBlock = useCallback((type: BlockType) => {
     const id = generateId();
     
     // Create a properly typed new block
-    const newBlock: Block = {
+    const newBlock: EditorBlock = {
       id,
       type,
       content: getDefaultContentForBlockType(type),

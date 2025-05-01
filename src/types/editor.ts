@@ -56,7 +56,7 @@ export type BlockType =
 
 export interface Block {
   id: string;
-  type: string;
+  type: BlockType; // Change this to BlockType from string to ensure compatibility
   content: Record<string, any>;
   styles?: StyleOptions;
   parentId?: string;
@@ -83,6 +83,7 @@ export interface EditorConfig {
   allowedBlockTypes: string[];
   maxDepth: number;
   blocks: EditorBlock[];
+  globalStyles?: any; // Add this to fix useEditorTheme
 }
 
 export interface EditorProps {

@@ -57,6 +57,7 @@ export interface Section {
   visible: boolean;
   content: Record<string, any>;
   style?: StyleOptions;
+  appearance?: Record<string, any>; // Add this to fix SectionEditor errors
 }
 
 export interface OfferContent {

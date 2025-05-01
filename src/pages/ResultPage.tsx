@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
-import { Block } from '@/types/editor';
+import { Block, EditorBlock, BlockType } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import BackupResultPage from '../backup/ResultPage.backup';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
@@ -75,16 +75,24 @@ const ResultPage = () => {
         }}
       >
         <div className="container mx-auto py-8 px-4">
-          {/* Render the blocks */}
+          {/* Render the blocks - ensure blocks are properly typed as EditorBlock */}
           <div className="space-y-6">
-            {resultPageConfig.blocks.map((block: Block) => (
-              <PreviewBlockRenderer 
-                key={block.id} 
-                block={block} 
-                onSelect={() => {}} 
-                isPreview={true}
-              />
-            ))}
+            {resultPageConfig.blocks.map((block) => {
+              // Ensure the block is compatible with EditorBlock by checking/fixing the type property
+              const editorBlock: EditorBlock = {
+                ...block,
+                type: block.type as BlockType // Cast to ensure type compatibility
+              };
+              
+              return (
+                <PreviewBlockRenderer 
+                  key={editorBlock.id} 
+                  block={editorBlock} 
+                  onSelect={() => {}} 
+                  isPreview={true}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

@@ -15,7 +15,8 @@ export const createBuilderStateFromQuiz = (
       id: `stage-cover-${generateId()}`,
       title: 'Etapa 1: Capa do Quiz',
       order: 0,
-      type: 'cover'
+      type: 'cover',
+      isEnabled: true
     }
   ];
   
@@ -42,7 +43,8 @@ export const createBuilderStateFromQuiz = (
       id: stageId,
       title: `Etapa ${index + 2}: Pergunta ${index + 1}`,
       order: index + 1,
-      type: 'question'
+      type: 'question',
+      isEnabled: true
     });
     
     components.push(
@@ -78,7 +80,8 @@ export const createBuilderStateFromQuiz = (
     id: resultStageId,
     title: 'Etapa Final: Resultado',
     order: stages.length,
-    type: 'result'
+    type: 'result',
+    isEnabled: true
   });
   
   components.push(
@@ -109,19 +112,22 @@ export const generateInitialStages = (): QuizBuilderState => {
       id: `stage-cover-${generateId()}`,
       title: 'Etapa 1: Capa do Quiz',
       order: 0,
-      type: 'cover'
+      type: 'cover',
+      isEnabled: true
     },
     {
       id: `stage-question-${generateId()}`,
       title: 'Etapa 2: Pergunta 1',
       order: 1,
-      type: 'question'
+      type: 'question',
+      isEnabled: true
     },
     {
       id: `stage-result-${generateId()}`,
       title: 'Etapa 3: Resultado',
       order: 2,
-      type: 'result'
+      type: 'result',
+      isEnabled: true
     }
   ];
   
@@ -251,13 +257,15 @@ export const createBuilderStateFromResultPage = (config: ResultPageConfig): Quiz
       id: `stage-cover-${generateId()}`,
       title: 'Etapa 1: Capa do Quiz',
       order: 0,
-      type: 'cover'
+      type: 'cover',
+      isEnabled: true
     },
     {
       id: `stage-result-${generateId()}`,
       title: 'Resultado Personalizado',
       order: 1,
-      type: 'result'
+      type: 'result',
+      isEnabled: true
     }
   ];
   
