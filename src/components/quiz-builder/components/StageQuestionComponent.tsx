@@ -1,10 +1,9 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 
 interface OptionObject {
   text: string;
@@ -26,10 +25,12 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
   style, 
   isSelected 
 }) => {
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+  
   const displayType = data.displayType || 'text';
   const showImages = displayType === 'image' || displayType === 'both';
   const showText = displayType === 'text' || displayType === 'both';
-  const multiSelect = data.multiSelect || 3;
+  const multiSelect = data.multiSelect || 1;
   const imageSize = data.imageSize || 'medium';
   const selectionIndicator = data.selectionIndicator || 'border';
   
@@ -73,6 +74,34 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
     return { text, imageUrl, styleCategory };
   };
   
+  const handleOptionClick = (index: number) => {
+    setSelectedOptions(prev => {
+      // If already selected, remove it
+      if (prev.includes(index)) {
+        return prev.filter(i => i !== index);
+      }
+      
+      // If multiSelect is 1, replace the selection
+      if (multiSelect === 1) {
+        return [index];
+      }
+      
+      // If we're at the limit, remove the first and add the new one
+      if (prev.length >= multiSelect) {
+        return [...prev.slice(1), index];
+      }
+      
+      // Otherwise add to selection
+      return [...prev, index];
+    });
+  };
+  
+  const isOptionSelected = (index: number) => {
+    return selectedOptions.includes(index);
+  };
+  
+  const canProceed = multiSelect <= 1 || selectedOptions.length >= multiSelect;
+  
   return (
     <div 
       className={cn(
@@ -100,15 +129,20 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         showImages && "mb-4 relative"
       )}>
         {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
-          const { text, imageUrl } = extractOptionData(option, index);
+          const { text, imageUrl, styleCategory } = extractOptionData(option, index);
+          const isSelected = isOptionSelected(index);
           
           return (
             <div
               key={index}
               className={cn(
-                "relative rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md border-2 border-transparent hover:border-[#B89B7A]/60 cursor-pointer",
+                "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer",
+                isSelected 
+                  ? "border-2 border-[#B89B7A] shadow-md" 
+                  : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:shadow-md",
                 showImages ? "flex flex-col" : "p-4"
               )}
+              onClick={() => handleOptionClick(index)}
             >
               {showImages && imageUrl && (
                 <div className="w-full">
@@ -116,7 +150,10 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                     <img 
                       src={imageUrl} 
                       alt={text}
-                      className="w-full h-full object-cover rounded-t-lg"
+                      className={cn(
+                        "w-full h-full object-cover rounded-t-lg",
+                        isSelected && "opacity-95"
+                      )}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
@@ -126,7 +163,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                 </div>
               )}
               
-              {showImages && !imageUrl && showImages && (
+              {showImages && !imageUrl && (
                 <div className="w-full">
                   <AspectRatio ratio={imageConfig.ratio} className={imageConfig.classes}>
                     <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
@@ -143,12 +180,23 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                   "flex-1 p-3 text-[#432818]",
                   showImages && imageUrl ? "border-t border-[#B89B7A]/10" : ""
                 )}>
-                  {text}
+                  <p>{text}</p>
                 </div>
               )}
               
               {selectionIndicator === 'checkbox' && (
-                <div className="absolute top-2 right-2 w-6 h-6 border-2 border-[#B89B7A] rounded-full bg-white/80"></div>
+                <div className={cn(
+                  "absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center",
+                  isSelected 
+                    ? "bg-[#B89B7A] text-white" 
+                    : "border-2 border-[#B89B7A] bg-white/80"
+                )}>
+                  {isSelected && <Check className="w-4 h-4" />}
+                </div>
+              )}
+              
+              {isSelected && selectionIndicator === 'highlight' && (
+                <div className="absolute inset-0 bg-[#B89B7A]/10 pointer-events-none" />
               )}
             </div>
           );
@@ -157,12 +205,19 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
       
       <div className="flex justify-between items-center mt-6">
         <p className="text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-          Selecione {multiSelect} opções para avançar
+          {multiSelect > 1 
+            ? `Selecione ${multiSelect} opções para avançar (${selectedOptions.length}/${multiSelect})` 
+            : 'Selecione uma opção para avançar'}
         </p>
         
         <Button 
-          className="bg-[#B89B7A]/40 text-white px-4 py-2 rounded cursor-not-allowed"
-          disabled={true}
+          className={cn(
+            "px-4 py-2 rounded",
+            canProceed 
+              ? "bg-[#B89B7A] text-white hover:bg-[#A38A69]" 
+              : "bg-[#B89B7A]/40 text-white cursor-not-allowed"
+          )}
+          disabled={!canProceed}
         >
           Próxima
           <ArrowRight className="w-4 h-4 ml-2" />
