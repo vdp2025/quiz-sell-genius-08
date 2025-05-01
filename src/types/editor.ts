@@ -15,7 +15,18 @@ export type BlockType =
   | 'spacer'
   | 'button'
   | 'form'
-  | 'countdown';
+  | 'countdown'
+  | 'header'
+  | 'cta'
+  | 'style-result'
+  | 'secondary-styles'
+  | 'hero-section'
+  | 'products'
+  | 'two-column'
+  | 'icon'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block';
 
 export interface Block {
   id: string;
@@ -23,6 +34,9 @@ export interface Block {
   order: number;
   content: EditableContent;
 }
+
+// alias for components that were already using EditorBlock
+export type EditorBlock = Block;
 
 export interface EditableContent {
   [key: string]: any;
@@ -36,6 +50,13 @@ export interface EditableContent {
   ctaText?: string;
   ctaUrl?: string;
   style?: Partial<StyleOptions>;
+  // Used for style-result and others
+  description?: string;
+  customImage?: string;
+  // For benefits
+  benefits?: string[];
+  // For other custom properties
+  [key: string]: any;
 }
 
 export interface EditorConfig {

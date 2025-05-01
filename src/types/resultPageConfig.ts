@@ -8,9 +8,22 @@ export interface StyleOptions {
   padding?: string;
   margin?: string;
   width?: string;
+  height?: string;
   borderRadius?: string;
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
   fontFamily?: string;
+  lineHeight?: string;
+  letterSpacing?: string;
+  display?: string;
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gap?: string;
+  boxShadow?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 export interface ImageOptions {
@@ -19,7 +32,7 @@ export interface ImageOptions {
   width?: string;
   height?: string;
   borderRadius?: string;
-  objectFit?: 'cover' | 'contain' | 'fill';
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 export interface SectionContent {
