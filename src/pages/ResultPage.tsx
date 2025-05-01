@@ -1,14 +1,15 @@
 
 import React from 'react';
 import QuizResult from '@/components/QuizResult';
-import { useQuiz } from '@/hooks/useQuiz';
 import ErrorState from '@/components/result/ErrorState';
+import { useQuizContext } from '@/context/QuizContext';
 
 const ResultPage = () => {
-  const { primaryStyle, secondaryStyles, completed } = useQuiz();
+  // We'll always display the result instead of checking "completed"
+  const { primaryStyle, secondaryStyles } = useQuizContext();
 
-  // Se o quiz não foi completado, mostrar mensagem de erro
-  if (!completed || !primaryStyle) {
+  // If there's no primaryStyle, show error state
+  if (!primaryStyle) {
     return <ErrorState />;
   }
   

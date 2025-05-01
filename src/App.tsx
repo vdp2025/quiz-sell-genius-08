@@ -9,7 +9,7 @@ import ResultPage from './pages/ResultPage';
 import AdminPage from './components/admin/AdminPage';
 import LoginPage from './components/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
-import ProtectedRoute from './components/auth/ProtectedRoute.tsx';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import UnifiedEditorPage from './pages/UnifiedEditorPage';
 import ResultPageEditor from './components/quiz-result/ResultPageEditor.lovable';
 
@@ -24,12 +24,10 @@ function App() {
             <Route path="/resultado" element={<ResultPage />} />
             <Route path="/login" element={<LoginPage />} />
             
-            {/* Rotas protegidas (apenas admin) */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/editor/unified" element={<UnifiedEditorPage />} />
-              <Route path="/admin/editor/result-editor" element={<ResultPageEditor />} />
-            </Route>
+            {/* Todas as rotas administrativas agora são acessíveis sem login */}
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/editor/unified" element={<UnifiedEditorPage />} />
+            <Route path="/admin/editor/result-editor" element={<ResultPageEditor />} />
             
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
