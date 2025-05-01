@@ -11,10 +11,12 @@ export const useEditorBlocks = (
 ): EditorActions => {
   const addBlock = useCallback((type: EditorBlock['type']) => {
     const blocksLength = config.blocks.length;
+    
+    // Create new block with proper typing
     const newBlock: EditorBlock = {
       id: generateId(),
       type,
-      content: getDefaultContentForBlockType(type),
+      content: getDefaultContentForBlockType(type) as EditableContent,
       order: blocksLength
     };
     

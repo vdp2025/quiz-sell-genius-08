@@ -12,19 +12,21 @@ export const useEditorActions = (
   const { toast } = useToast();
 
   const handleAddBlock = useCallback((type: EditorBlock['type']) => {
-    const newBlocks = [...blocks, {
+    const newBlock: EditorBlock = {
       id: `block-${Date.now()}`,
       type,
       content: getDefaultContentForBlockType(type),
       order: blocks.length
-    }];
+    };
+    
+    const newBlocks: EditorBlock[] = [...blocks, newBlock];
     
     onBlocksChange(newBlocks);
     addToHistory(newBlocks);
   }, [blocks, onBlocksChange, addToHistory]);
 
   const handleUpdateBlock = useCallback((id: string, content: any) => {
-    const newBlocks = blocks.map(block => 
+    const newBlocks: EditorBlock[] = blocks.map(block => 
       block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     );
     
@@ -33,7 +35,7 @@ export const useEditorActions = (
   }, [blocks, onBlocksChange, addToHistory]);
 
   const handleDeleteBlock = useCallback((id: string) => {
-    const newBlocks = blocks.filter(block => block.id !== id)
+    const newBlocks: EditorBlock[] = blocks.filter(block => block.id !== id)
       .map((block, index) => ({ ...block, order: index }));
     
     onBlocksChange(newBlocks);

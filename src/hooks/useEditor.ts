@@ -9,20 +9,22 @@ export const useEditor = () => {
 
   const addBlock = useCallback((type: BlockType) => {
     const id = generateId();
+    
+    // Create a properly typed new block
+    const newBlock: Block = {
+      id,
+      type,
+      content: getDefaultContentForBlockType(type),
+      order: config.blocks.length
+    };
+    
     setConfig(prevConfig => ({
       ...prevConfig,
-      blocks: [
-        ...prevConfig.blocks,
-        {
-          id,
-          type,
-          content: getDefaultContentForBlockType(type),
-          order: prevConfig.blocks.length
-        }
-      ]
+      blocks: [...prevConfig.blocks, newBlock]
     }));
+    
     return id;
-  }, []);
+  }, [config.blocks.length]);
 
   const updateBlock = useCallback((id: string, updates: any) => {
     setConfig(prevConfig => ({

@@ -17,17 +17,18 @@ import { StyleResult } from '@/types/quiz';
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
   onShowTemplates?: () => void;
+  isPreviewing?: boolean;
 }
 
 export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
   selectedStyle,
   onShowTemplates,
-  initialConfig
+  initialConfig,
+  isPreviewing = false
 }) => {
   const {
     resultPageConfig,
     loading,
-    isPreviewing,
     isGlobalStylesOpen,
     actions: {
       handleSave,
@@ -64,7 +65,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
 
-  const handleUpdateConfig = (newConfig) => {
+  const handleUpdateConfig = (newConfig: ResultPageConfig | null) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
@@ -89,6 +90,9 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   };
 
+  // Use the isPreviewing prop passed in or the internal state
+  const effectiveIsPreviewing = isPreviewing;
+  
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -108,7 +112,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
         onSave={handleSave}
-        isPreviewMode={isPreviewing}
+        isPreviewMode={effectiveIsPreviewing}
         onPreviewToggle={togglePreview}
         onReset={handleReset}
         onEditGlobalStyles={toggleGlobalStyles}
@@ -135,7 +139,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 blocks={blocks}
                 selectedBlockId={selectedBlockId}
                 onSelectBlock={setSelectedBlockId}
-                isPreviewing={isPreviewing}
+                isPreviewing={effectiveIsPreviewing}
                 primaryStyle={primaryStyle}
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />

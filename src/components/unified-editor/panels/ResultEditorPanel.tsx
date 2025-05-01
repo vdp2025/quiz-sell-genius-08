@@ -21,6 +21,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
         selectedStyle={primaryStyle}
         onShowTemplates={() => {}}
         initialConfig={initialConfig}
+        isPreviewing={isPreviewing}
       />
     </div>
   );

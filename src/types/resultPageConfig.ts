@@ -1,38 +1,67 @@
-
 import { Block } from './editor';
 
+export type BorderRadiusType = 'none' | 'small' | 'medium' | 'large';
+export type SpacingType = 'compact' | 'comfortable' | 'spacious';
+
 export interface StyleOptions {
+  // Colors
   primaryColor?: string;
   secondaryColor?: string;
-  textColor?: string;
   backgroundColor?: string;
+  textColor?: string;
+  accentColor?: string;
+  buttonColor?: string;
+  buttonTextColor?: string;
+
+  // Typography
   fontFamily?: string;
   fontSize?: string;
-  fontWeight?: 'normal' | 'bold' | 'light';
   lineHeight?: string;
+  fontWeight?: string;
+  letterSpacing?: string;
   textAlign?: 'left' | 'center' | 'right' | 'justify';
-  borderRadius?: 'none' | 'small' | 'medium' | 'large';
-  padding?: string;
+  
+  // Spacing and Layout
+  paddingX?: string;
+  paddingY?: string;
   margin?: string;
-  spacing?: 'compact' | 'comfortable' | 'spacious';
+  padding?: string;
+  spacing?: SpacingType;
+  gap?: string;
+  
+  // Visual properties
+  borderRadius?: BorderRadiusType;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  boxShadow?: string;
+  
+  // Display
+  display?: string;
+  width?: string;
+  height?: string;
+  objectFit?: string;
+  
+  // Flex properties
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  
+  // Other
+  color?: string;
+  opacity?: string;
+  transition?: string;
+  transform?: string;
+  
+  // Custom properties
   [key: string]: any;
 }
 
 export interface ResultPageConfig {
-  title: string;
-  description: string;
+  globalStyles: Partial<StyleOptions>;
   blocks: Block[];
-  globalStyles?: Partial<StyleOptions>;
-  styleType: string;
-  createdAt: string;
-  updatedAt: string;
-  customCode?: string;
-  scriptTags?: string[];
-  metaTags?: Record<string, string>;
-  offer?: OfferSection;
-  header?: Section;
-  mainContent?: Section;
-  [key: string]: any;
+  templateName?: string;
+  version?: string;
 }
 
 export interface ResultPageTheme {
