@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { EditorTab } from '../UnifiedVisualEditor';
 import { toast } from '@/components/ui/use-toast';
-import { Link } from 'react-router-dom';
 
 interface EditorToolbarProps {
   activeTab: EditorTab;
@@ -55,28 +54,16 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           </Button>
         )}
         
-        {activeTab === 'result' && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-[#8F7A6A]"
-            onClick={() => window.location.href = '/admin/editor/result-editor'}
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            Editor Visual Avançado
-          </Button>
-        )}
-        
-        {activeTab !== 'result' && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-[#8F7A6A]"
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            Configurações
-          </Button>
-        )}
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="text-[#8F7A6A]"
+          as="a"
+          href={activeTab === 'result' ? '/admin/editor/result-editor' : '#'}
+        >
+          <Settings className="w-4 h-4 mr-2" />
+          {activeTab === 'result' ? 'Editor Visual Avançado' : 'Configurações'}
+        </Button>
       </div>
       
       <div className="flex items-center gap-2">

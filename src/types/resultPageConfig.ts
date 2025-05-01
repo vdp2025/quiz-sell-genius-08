@@ -61,18 +61,10 @@ export interface OfferContent {
   mentorImage?: string;
   bonusImage?: string;
   productTitle?: string;
-  benefitsTitle?: string;
   benefitItems?: Array<{
     title: string;
     description: string;
   }>;
-  bonusTitle?: string;
-  bonus1Title?: string;
-  bonus1Description?: string;
-  bonus1Image?: string;
-  bonus2Title?: string;
-  bonus2Description?: string;
-  bonus2Image?: string;
   guaranteeText?: string;
   table?: Array<{
     item: string;
@@ -141,9 +133,6 @@ export interface ResultPageConfig {
     textColor?: string;
     backgroundColor?: string;
     fontFamily?: string;
-    logoHeight?: string;
-    logo?: string;
-    logoAlt?: string;
   };
   blocks?: Block[];
 }

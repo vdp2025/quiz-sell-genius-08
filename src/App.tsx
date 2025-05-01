@@ -4,12 +4,12 @@ import { Toaster } from './components/ui/toaster';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
 import HomePage from './pages/HomePage';
-import QuizPage from './components/QuizPage';
+import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
-import AdminPage from './components/admin/AdminPage';
-import LoginPage from './components/LoginPage';
+import AdminPage from './pages/AdminPage';
+import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
-import ProtectedRoute from './components/auth/ProtectedRoute.tsx';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import UnifiedEditorPage from './pages/UnifiedEditorPage';
 import ResultPageEditor from './components/quiz-result/ResultPageEditor.lovable';
 

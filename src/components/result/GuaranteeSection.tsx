@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { CheckCircle } from 'lucide-react';
+import { SealCheck } from 'lucide-react';
 
 interface GuaranteeSectionProps {
   isEditable?: boolean;
@@ -34,7 +34,7 @@ const GuaranteeSection: React.FC<GuaranteeSectionProps> = ({
     <Card className="bg-[#F9F5F1] p-6 rounded-lg mb-10 text-center">
       <div className="max-w-xl mx-auto">
         <div className="flex justify-center mb-4">
-          <CheckCircle className="h-16 w-16 text-[#aa6b5d]" />
+          <SealCheck className="h-16 w-16 text-[#aa6b5d]" />
         </div>
 
         {isEditable ? (
