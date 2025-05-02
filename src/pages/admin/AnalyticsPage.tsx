@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, Suspense } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { AnalyticsLoadingState } from '@/components/analytics/LoadingState';
@@ -11,13 +10,13 @@ import { getAnalyticsEvents, clearAnalyticsData, testFacebookPixel } from '@/uti
 import { toast } from '@/components/ui/use-toast';
 
 // Lazy loaded tab components for better performance
-const OverviewTab = React.lazy(() => import('@/components/analytics/tabs/OverviewTab').then(module => ({ default: module.OverviewTab || module.default })));
-const FunnelTab = React.lazy(() => import('@/components/analytics/tabs/FunnelTab').then(module => ({ default: module.FunnelTab || module.default })));
-const UsersTab = React.lazy(() => import('@/components/analytics/tabs/UsersTab').then(module => ({ default: module.UsersTab || module.default })));
-const ProgressTab = React.lazy(() => import('@/components/analytics/tabs/ProgressTab').then(module => ({ default: module.ProgressTab || module.default })));
-const DataTab = React.lazy(() => import('@/components/analytics/tabs/DataTab').then(module => ({ default: module.DataTab || module.default })));
-const UtmTab = React.lazy(() => import('@/components/analytics/tabs/UtmTab').then(module => ({ default: module.UtmTab || module.default })));
-const IntegrationTab = React.lazy(() => import('@/components/analytics/tabs/IntegrationTab').then(module => ({ default: module.IntegrationTab || module.default })));
+const OverviewTab = React.lazy(() => import('@/components/analytics/tabs/OverviewTab').then(module => ({ default: module.OverviewTab })));
+const FunnelTab = React.lazy(() => import('@/components/analytics/tabs/FunnelTab').then(module => ({ default: module.FunnelTab })));
+const UsersTab = React.lazy(() => import('@/components/analytics/tabs/UsersTab').then(module => ({ default: module.UsersTab })));
+const ProgressTab = React.lazy(() => import('@/components/analytics/tabs/ProgressTab').then(module => ({ default: module.ProgressTab })));
+const DataTab = React.lazy(() => import('@/components/analytics/tabs/DataTab').then(module => ({ default: module.DataTab })));
+const UtmTab = React.lazy(() => import('@/components/analytics/tabs/UtmTab').then(module => ({ default: module.UtmTab })));
+const IntegrationTab = React.lazy(() => import('@/components/analytics/tabs/IntegrationTab').then(module => ({ default: module.IntegrationTab })));
 
 const AnalyticsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');

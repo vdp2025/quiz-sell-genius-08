@@ -71,5 +71,3 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({
     </div>
   );
 };
-
-export default IntegrationTab;

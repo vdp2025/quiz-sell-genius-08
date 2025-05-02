@@ -7,16 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
-import { testFacebookPixel } from '@/utils/analytics';
 
 interface FacebookPixelCardProps {
   initialId?: string;
   initialEnabled?: boolean;
+  testFunction?: () => boolean;
 }
 
 export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   initialId = '',
-  initialEnabled = false
+  initialEnabled = false,
+  testFunction
 }) => {
   const [fbPixelId, setFbPixelId] = useState(() => {
     try {
@@ -65,14 +66,14 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
       localStorage.setItem('fb_access_token', fbAccessToken);
       
       toast({
-        title: "Facebook Pixel settings saved",
-        description: "Your Facebook Pixel integration settings have been updated. Refresh the page for changes to take effect.",
+        title: "Configurações do Facebook Pixel salvas",
+        description: "Suas configurações de integração do Facebook Pixel foram atualizadas. Atualize a página para que as mudanças tenham efeito.",
         duration: 5000
       });
     } catch (error) {
       toast({
-        title: "Error saving settings",
-        description: "There was an error saving your settings. Please try again.",
+        title: "Erro ao salvar configurações",
+        description: "Ocorreu um erro ao salvar suas configurações. Por favor, tente novamente.",
         variant: "destructive"
       });
     }
@@ -80,18 +81,18 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 
   const handleTestConnection = () => {
     toast({
-      title: "Testing Facebook Pixel connection",
-      description: "Connection test initiated. Check the browser console for results."
+      title: "Testando conexão com Facebook Pixel",
+      description: "Teste de conexão iniciado. Verifique o console do navegador para os resultados."
     });
     
-    const result = testFacebookPixel();
+    const result = testFunction ? testFunction() : false;
     
     setTimeout(() => {
       toast({
-        title: result ? "Test successful" : "Test failed",
+        title: result ? "Teste bem-sucedido" : "Teste falhou",
         description: result 
-          ? "Facebook Pixel test event was sent successfully." 
-          : "Facebook Pixel test failed. Please check your settings and browser console.",
+          ? "Evento de teste do Facebook Pixel enviado com sucesso." 
+          : "Teste do Facebook Pixel falhou. Verifique suas configurações e o console do navegador.",
         variant: result ? "default" : "destructive"
       });
     }, 1500);
@@ -103,16 +104,16 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-base">Facebook Pixel</CardTitle>
-            <CardDescription className="text-xs mt-0.5">Connect to Facebook Ads platform to track conversions</CardDescription>
+            <CardDescription className="text-xs mt-0.5">Conecte-se à plataforma Facebook Ads para rastrear conversões</CardDescription>
           </div>
           <Badge variant={fbPixelEnabled ? "default" : "outline"} className="text-xs">
-            {fbPixelEnabled ? "Active" : "Inactive"}
+            {fbPixelEnabled ? "Ativo" : "Inativo"}
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-3 py-0">
         <div className="space-y-1.5">
-          <Label htmlFor="fb-pixel-id" className="text-sm">Facebook Pixel ID</Label>
+          <Label htmlFor="fb-pixel-id" className="text-sm">ID do Facebook Pixel</Label>
           <Input 
             id="fb-pixel-id" 
             placeholder="123456789012345" 
@@ -121,12 +122,12 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
             className="h-8 text-sm"
           />
           <p className="text-xs text-muted-foreground">
-            Found in Facebook Events Manager {'>'}  Data Sources {'>'}  Pixel
+            Encontrado no Facebook Events Manager {'>'} Data Sources {'>'} Pixel
           </p>
         </div>
         
         <div className="space-y-1.5">
-          <Label htmlFor="fb-access-token" className="text-sm">Access Token (optional)</Label>
+          <Label htmlFor="fb-access-token" className="text-sm">Token de Acesso (opcional)</Label>
           <Input 
             id="fb-access-token" 
             type="password"
@@ -136,7 +137,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
             className="h-8 text-sm"
           />
           <p className="text-xs text-muted-foreground">
-            Required for advanced conversion tracking
+            Necessário para rastreamento avançado de conversões
           </p>
         </div>
         
@@ -147,15 +148,15 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
             onCheckedChange={setFbPixelEnabled}
             className="data-[state=checked]:bg-blue-600"
           />
-          <Label htmlFor="fb-tracking" className="text-sm">Enable Facebook Pixel tracking</Label>
+          <Label htmlFor="fb-tracking" className="text-sm">Habilitar rastreamento do Facebook Pixel</Label>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between pt-2">
         <Button variant="outline" size="sm" onClick={handleTestConnection} className="text-xs h-7">
-          Test Connection
+          Testar Conexão
         </Button>
         <Button size="sm" onClick={handleSaveFacebookPixel} className="text-xs h-7">
-          Save Settings
+          Salvar Configurações
         </Button>
       </CardFooter>
     </Card>
