@@ -1,4 +1,3 @@
-
 /**
  * Inicializa o Pixel do Facebook
  */
