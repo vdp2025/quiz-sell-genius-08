@@ -11,6 +11,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { UnifiedTemplateModal } from './modals/UnifiedTemplateModal';
 
 export type EditorTab = 'quiz' | 'result' | 'sales';
 
@@ -46,9 +47,10 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   }, [activeTab, navigate, setActiveMode]);
   
   const handleTabChange = (value: string) => {
-    setActiveTab(value as EditorTab);
+    const newTab = value as EditorTab;
+    setActiveTab(newTab);
     toast({
-      description: `Editor de ${value === 'quiz' ? 'Quiz' : value === 'result' ? 'Resultado' : 'Vendas'} ativado`,
+      description: `Editor de ${newTab === 'quiz' ? 'Quiz' : newTab === 'result' ? 'Resultado' : 'Vendas'} ativado`,
       duration: 2000,
     });
   };
@@ -99,9 +101,9 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         className="flex-1 overflow-hidden"
       >
         <TabsList className="w-full border-b bg-white px-4 pt-2">
-          <TabsTrigger value="quiz" className="data-[state=active]:bg-muted">Quiz</TabsTrigger>
-          <TabsTrigger value="result" className="data-[state=active]:bg-muted">Resultado</TabsTrigger>
-          <TabsTrigger value="sales" className="data-[state=active]:bg-muted">Página de Vendas</TabsTrigger>
+          <TabsTrigger value="quiz">Quiz</TabsTrigger>
+          <TabsTrigger value="result">Resultado</TabsTrigger>
+          <TabsTrigger value="sales">Página de Vendas</TabsTrigger>
         </TabsList>
         
         <TabsContent value="quiz" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
@@ -124,61 +126,11 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
       </Tabs>
 
       {isTemplateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[80vh] overflow-auto">
-            <h2 className="text-xl font-medium mb-4">Templates para {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'}</h2>
-            <div className="mb-4">
-              <p className="mb-2">Escolha um template para aplicar:</p>
-              <div className="space-y-2">
-                <button 
-                  onClick={() => {
-                    loadTemplateForCurrentEditor({
-                      title: "Template Padrão",
-                      blocks: activeTab === 'sales' ? [
-                        {
-                          id: "headline-1",
-                          type: "headline",
-                          content: { 
-                            title: "Descubra seu Estilo Único",
-                            subtitle: "Transforme sua imagem pessoal",
-                            style: { backgroundColor: "#ffffff", color: "#432818", paddingY: 24, paddingX: 16 }
-                          },
-                          order: 0
-                        },
-                        {
-                          id: "text-1",
-                          type: "text",
-                          content: { 
-                            text: "Nossa consultoria especializada irá ajudar você a encontrar o estilo que combina com sua personalidade e destaca seus pontos fortes.",
-                            style: { backgroundColor: "#F9F5F1", color: "#8F7A6A", paddingY: 16, paddingX: 16 }
-                          },
-                          order: 1
-                        }
-                      ] : {}
-                    });
-                    closeTemplateModal();
-                    toast({
-                      title: "Template aplicado",
-                      description: "O template foi aplicado com sucesso.",
-                      duration: 3000,
-                    });
-                  }}
-                  className="w-full text-left p-3 border rounded hover:bg-gray-50 transition-colors"
-                >
-                  Template Padrão - {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'}
-                </button>
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <button 
-                onClick={closeTemplateModal}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
-              >
-                Fechar
-              </button>
-            </div>
-          </div>
-        </div>
+        <UnifiedTemplateModal
+          activeTab={activeTab}
+          onClose={closeTemplateModal}
+          onApplyTemplate={loadTemplateForCurrentEditor}
+        />
       )}
       
       {isLoading && (

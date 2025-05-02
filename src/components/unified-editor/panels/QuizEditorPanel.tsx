@@ -1,63 +1,165 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { useQuizBuilder } from '@/hooks/useQuizBuilder';
+import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { toast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import { QuizComponentData, QuizComponentType, QuizStage } from '@/types/quizBuilder';
+import ComponentRenderer from '@/components/quiz-builder/preview/ComponentRenderer';
+import PropertiesPanel from '@/components/editor/properties/PropertiesPanel';
 
 interface QuizEditorPanelProps {
   isPreviewing: boolean;
 }
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
+  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+  
+  const {
+    components,
+    stages,
+    activeStageId,
+    addComponent,
+    updateComponent,
+    deleteComponent,
+    moveComponent,
+    addStage,
+    updateStage,
+    deleteStage,
+    moveStage,
+    setActiveStage,
+  } = useQuizBuilder();
+
+  // Find active stage
+  const activeStage = activeStageId 
+    ? stages.find(s => s.id === activeStageId) 
+    : null;
+    
+  // Filter components for the active stage
+  const stageComponents = activeStageId 
+    ? components.filter(c => c.stageId === activeStageId).sort((a, b) => a.order - b.order) 
+    : [];
+
+  const handleComponentSelect = (type: QuizComponentType) => {
+    if (!activeStageId) return;
+    const newComponentId = addComponent(type, activeStageId);
+    setSelectedComponentId(newComponentId);
+  };
+
+  const handleMoveComponent = (draggedId: string, targetId: string) => {
+    moveComponent(draggedId, targetId);
+  };
+
+  const handleUpdateComponent = (content: any) => {
+    if (selectedComponentId) {
+      updateComponent(selectedComponentId, { content });
+    }
+  };
+  
+  const handleDeleteComponent = () => {
+    if (selectedComponentId) {
+      deleteComponent(selectedComponentId);
+      setSelectedComponentId(null);
+    }
+  };
+
+  const renderStageSelector = () => {
+    return (
+      <div className="border-b p-2 bg-white">
+        <div className="flex flex-wrap gap-2">
+          {stages.map((stage) => (
+            <Button
+              key={stage.id}
+              variant={stage.id === activeStageId ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveStage(stage.id)}
+            >
+              {stage.title || `Etapa ${stage.order + 1}`}
+            </Button>
+          ))}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => addStage()}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <ResizablePanelGroup direction="horizontal" className="h-full">
-      {/* Left sidebar */}
-      <ResizablePanel defaultSize={20}>
-        <div className="h-full border-r bg-white p-4">
-          <h2 className="text-lg font-medium mb-4">Componentes do Quiz</h2>
-          <p className="text-sm text-gray-500">
-            Esta parte do editor está em desenvolvimento. Em breve você poderá arrastar e soltar componentes para criar seu quiz.
-          </p>
-        </div>
-      </ResizablePanel>
+    <div className="h-full flex flex-col">
+      {renderStageSelector()}
       
-      <ResizableHandle withHandle />
-      
-      {/* Main preview area */}
-      <ResizablePanel defaultSize={60}>
-        <ScrollArea className="h-full p-4 bg-slate-50">
-          <div className="bg-white shadow-sm rounded-lg p-8 min-h-[600px] flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-xl font-medium mb-3">Editor de Quiz</h2>
-              <p className="text-gray-500 mb-6">
-                O editor visual de quiz está em desenvolvimento. Logo mais você poderá criar e editar questionários interativos.
-              </p>
-              <button
-                onClick={() => toast({
-                  title: "Funcionalidade em desenvolvimento",
-                  description: "O editor de quiz estará disponível em breve."
-                })}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Saiba mais
-              </button>
-            </div>
+      <ResizablePanelGroup direction="horizontal" className="flex-1">
+        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+          <UnifiedComponentsSidebar
+            activeTab="quiz"
+            onComponentSelect={handleComponentSelect}
+            activeStageType={activeStage?.type}
+          />
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        <ResizablePanel defaultSize={55}>
+          <div className="h-full bg-[#F9F5F1] flex flex-col">
+            <ScrollArea className="flex-1 p-4">
+              <div className="min-h-full w-full max-w-4xl mx-auto">
+                {stageComponents.length === 0 ? (
+                  <div className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center">
+                    <p className="text-gray-500 mb-2">
+                      {activeStage 
+                        ? 'Adicione componentes para esta etapa usando o painel lateral.' 
+                        : 'Selecione uma etapa para adicionar componentes.'}
+                    </p>
+                    {activeStage && (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {}}
+                        className="text-gray-500"
+                      >
+                        <Plus className="w-4 h-4 mr-1" /> Adicionar Componente
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  stageComponents.map((component) => (
+                    <ComponentRenderer
+                      key={component.id}
+                      component={component}
+                      isSelected={component.id === selectedComponentId}
+                      onSelect={() => setSelectedComponentId(component.id)}
+                      onMove={handleMoveComponent}
+                      isPreviewing={isPreviewing}
+                    />
+                  ))
+                )}
+              </div>
+            </ScrollArea>
           </div>
-        </ScrollArea>
-      </ResizablePanel>
-      
-      <ResizableHandle withHandle />
-      
-      {/* Properties panel */}
-      <ResizablePanel defaultSize={20}>
-        <div className="h-full border-l bg-white p-4">
-          <h2 className="text-lg font-medium mb-4">Propriedades</h2>
-          <p className="text-sm text-gray-500">
-            Selecione um elemento do quiz para editar suas propriedades.
-          </p>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+          <div className="h-full border-l border-[#B89B7A]/20 bg-white overflow-y-auto">
+            <PropertiesPanel
+              selectedComponentId={selectedComponentId}
+              onClose={() => setSelectedComponentId(null)}
+              blocks={[]}
+              onUpdate={handleUpdateComponent}
+              onDelete={handleDeleteComponent}
+            />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
   );
 };
 
