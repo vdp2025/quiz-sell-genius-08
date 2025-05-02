@@ -47,10 +47,10 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
     const data = props.payload[0].payload;
     
     return (
-      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-md">
-        <p className="text-xs font-medium mb-1">{data.name}</p>
-        <p className="text-sm font-semibold">{data.value} usuários</p>
-        <p className="text-xs text-gray-500 mt-1">{data.text}</p>
+      <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md">
+        <p className="text-xs font-medium mb-0.5">{data.name}</p>
+        <p className="text-xs font-semibold">{data.value} usuários</p>
+        <p className="text-[10px] text-gray-500 mt-0.5">{data.text}</p>
       </div>
     );
   };
@@ -69,40 +69,40 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
 
   return (
     <div className="space-y-4">
-      <Card className="border border-border/60">
-        <CardHeader className="pb-2">
+      <Card className="border border-border/40 shadow-sm">
+        <CardHeader className="pb-1.5">
           <CardTitle>Funil de Conversão</CardTitle>
-          <CardDescription>Visualize a performance do seu funil de conversão</CardDescription>
+          <CardDescription className="text-xs">Visualize a performance do seu funil de conversão</CardDescription>
         </CardHeader>
-        <CardContent className="pt-2">
-          <div className="h-[220px]">
+        <CardContent className="pt-1.5">
+          <div className="h-[110px]">
             <ChartContainer config={chartConfig}>
               <BarChart 
                 data={funnelData} 
                 layout="vertical"
-                margin={{ top: 15, right: 15, left: 70, bottom: 5 }}
+                margin={{ top: 8, right: 8, left: 40, bottom: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
                 <XAxis 
                   type="number" 
                   stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 11 }}
+                  tick={{ fill: '#888888', fontSize: 9 }}
                   tickLine={{ stroke: '#e0e0e0' }}
                 />
                 <YAxis 
                   dataKey="name" 
                   type="category" 
                   stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 11 }}
+                  tick={{ fill: '#888888', fontSize: 9 }}
                   tickLine={{ stroke: '#e0e0e0' }}
-                  width={70}
+                  width={40}
                 />
                 <Tooltip content={renderTooltipContent} />
                 <Legend content={renderLegendContent} />
                 <Bar 
                   dataKey="value" 
-                  radius={[0, 4, 4, 0]}
-                  animationDuration={1500}
+                  radius={[0, 3, 3, 0]}
+                  animationDuration={1200}
                   animationEasing="ease-out"
                 >
                   {funnelData.map((entry, index) => (
@@ -115,29 +115,29 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
           
           <GridLayout columns={3} gap="md" className="mt-4">
             <Card className="border border-border/60">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-1.5 pt-2.5">
                 <CardTitle className="text-sm font-medium">Início → Conclusão</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 pt-0">
+              <CardContent className="space-y-1.5 pt-0 pb-2.5">
                 <div className="flex justify-between items-baseline">
-                  <p className="text-xl font-bold">{metrics?.completionRate.toFixed(1) || 0}%</p>
+                  <p className="text-base font-bold">{metrics?.completionRate.toFixed(1) || 0}%</p>
                   <p className="text-xs text-muted-foreground">de {metrics?.totalStarts || 0} inícios</p>
                 </div>
                 <Progress 
                   value={metrics?.completionRate || 0} 
                   indicatorClassName="bg-gradient-to-r from-blue-500 to-indigo-700" 
-                  className="h-2 bg-muted/50"
+                  className="h-1.5 bg-muted/50"
                 />
               </CardContent>
             </Card>
             
             <Card className="border border-border/60">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-1.5 pt-2.5">
                 <CardTitle className="text-sm font-medium">Conclusão → Visualização</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 pt-0">
+              <CardContent className="space-y-1.5 pt-0 pb-2.5">
                 <div className="flex justify-between items-baseline">
-                  <p className="text-xl font-bold">
+                  <p className="text-base font-bold">
                     {metrics?.totalCompletes ? ((metrics.totalResultViews / metrics.totalCompletes) * 100).toFixed(1) : 0}%
                   </p>
                   <p className="text-xs text-muted-foreground">de {metrics?.totalCompletes || 0} conclusões</p>
@@ -145,18 +145,18 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
                 <Progress 
                   value={metrics?.totalCompletes ? (metrics.totalResultViews / metrics.totalCompletes) * 100 : 0} 
                   indicatorClassName="bg-gradient-to-r from-green-500 to-emerald-700" 
-                  className="h-2 bg-muted/50"
+                  className="h-1.5 bg-muted/50"
                 />
               </CardContent>
             </Card>
             
             <Card className="border border-border/60">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-1.5 pt-2.5">
                 <CardTitle className="text-sm font-medium">Visualização → Lead</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 pt-0">
+              <CardContent className="space-y-1.5 pt-0 pb-2.5">
                 <div className="flex justify-between items-baseline">
-                  <p className="text-xl font-bold">
+                  <p className="text-base font-bold">
                     {metrics?.totalResultViews ? ((metrics.totalLeads / metrics.totalResultViews) * 100).toFixed(1) : 0}%
                   </p>
                   <p className="text-xs text-muted-foreground">de {metrics?.totalResultViews || 0} visualizações</p>
@@ -164,7 +164,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
                 <Progress 
                   value={metrics?.totalResultViews ? (metrics.totalLeads / metrics.totalResultViews) * 100 : 0} 
                   indicatorClassName="bg-gradient-to-r from-yellow-500 to-amber-700" 
-                  className="h-2 bg-muted/50"
+                  className="h-1.5 bg-muted/50"
                 />
               </CardContent>
             </Card>

@@ -46,10 +46,10 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
     const data = props.payload[0].payload;
     
     return (
-      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-md">
-        <p className="text-xs font-medium mb-1">Questão {data.questionId}</p>
-        <p className="text-sm font-semibold">{data.uniqueUsers} usuários</p>
-        <p className="text-xs text-gray-500 mt-1">{data.completionRate.toFixed(1)}% taxa de conclusão</p>
+      <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md">
+        <p className="text-xs font-medium mb-0.5">Questão {data.questionId}</p>
+        <p className="text-xs font-semibold">{data.uniqueUsers} usuários</p>
+        <p className="text-[10px] text-gray-500 mt-0.5">{data.completionRate.toFixed(1)}% taxa de conclusão</p>
       </div>
     );
   };
@@ -65,37 +65,37 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
   return (
     <div className="space-y-4">
       <GridLayout columns={1} gap="md">
-        <Card className="border border-border/60">
-          <CardHeader className="pb-2">
+        <Card className="border border-border/40 shadow-sm">
+          <CardHeader className="pb-1.5">
             <CardTitle>Progresso por Questão</CardTitle>
-            <CardDescription>Análise de quantos usuários alcançam cada pergunta no quiz</CardDescription>
+            <CardDescription className="text-xs">Análise de quantos usuários alcançam cada pergunta no quiz</CardDescription>
           </CardHeader>
-          <CardContent className="pt-0">
-            <div className="h-[220px] mb-4">
+          <CardContent className="pt-1.5">
+            <div className="h-[110px] mb-3">
               <ChartContainer config={chartConfig}>
                 <BarChart 
                   data={userProgressData}
-                  margin={{ top: 15, right: 15, left: 15, bottom: 15 }}
+                  margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                   <XAxis 
                     dataKey="questionId" 
                     stroke="#888888"
-                    tick={{ fill: '#888888', fontSize: 11 }}
+                    tick={{ fill: '#888888', fontSize: 9 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <YAxis 
                     stroke="#888888"
-                    tick={{ fill: '#888888', fontSize: 11 }}
+                    tick={{ fill: '#888888', fontSize: 9 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <Tooltip content={renderTooltipContent} />
-                  <Legend wrapperStyle={{ fontSize: '12px', marginTop: '5px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px', marginTop: '2px' }} />
                   <Bar 
                     dataKey="uniqueUsers" 
                     name="Usuários Únicos"
-                    radius={[4, 4, 0, 0]}
-                    animationDuration={1500}
+                    radius={[3, 3, 0, 0]}
+                    animationDuration={1200}
                     animationEasing="ease-out"
                   >
                     {userProgressData.map((entry, index) => (
@@ -109,7 +109,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
               </ChartContainer>
             </div>
 
-            <div className="rounded-md border border-border/60 overflow-x-auto">
+            <div className="rounded-md border border-border/40 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -122,16 +122,16 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                 <TableBody>
                   {userProgressData.map((item, index) => (
                     <TableRow key={item.questionId}>
-                      <TableCell className="font-medium py-2">
+                      <TableCell className="font-medium py-1.5 text-xs">
                         Q{index + 1}
                       </TableCell>
-                      <TableCell className="py-2">{item.uniqueUsers}</TableCell>
-                      <TableCell className="py-2">{item.totalAnswers}</TableCell>
-                      <TableCell className="py-2">
+                      <TableCell className="py-1.5 text-xs">{item.uniqueUsers}</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.totalAnswers}</TableCell>
+                      <TableCell className="py-1.5">
                         <div className="flex items-center gap-2">
                           <Progress 
                             value={item.completionRate} 
-                            className="h-2 w-[60px]"
+                            className="h-1.5 w-[50px]"
                             indicatorClassName={`bg-[${getBarColor(index, userProgressData.length)}]`}
                           />
                           <span className="text-xs">{item.completionRate.toFixed(1)}%</span>
@@ -141,7 +141,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                   ))}
                   {userProgressData.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
+                      <TableCell colSpan={4} className="text-center py-3 text-muted-foreground text-sm">
                         Nenhum dado de progresso disponível.
                       </TableCell>
                     </TableRow>

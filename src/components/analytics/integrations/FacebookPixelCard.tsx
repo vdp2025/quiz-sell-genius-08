@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
+import { EventTrackingCard } from './EventTrackingCard';
 
 interface FacebookPixelCardProps {
   initialId?: string;
@@ -44,7 +45,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
     }
   });
   
-  // Carregar as configurações do localStorage ao montar o componente
+  // Load settings from localStorage
   useEffect(() => {
     try {
       const storedId = localStorage.getItem('fb_pixel_id');
@@ -99,66 +100,70 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   };
   
   return (
-    <Card className="border-border/40 shadow-sm">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-base">Facebook Pixel</CardTitle>
-            <CardDescription className="text-xs mt-0.5">Conecte-se à plataforma Facebook Ads para rastrear conversões</CardDescription>
+    <div className="space-y-4">
+      <Card className="border-border/40 shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-base">Facebook Pixel</CardTitle>
+              <CardDescription className="text-xs mt-0.5">Conecte-se à plataforma Facebook Ads para rastrear conversões</CardDescription>
+            </div>
+            <Badge variant={fbPixelEnabled ? "default" : "outline"} className="text-xs">
+              {fbPixelEnabled ? "Ativo" : "Inativo"}
+            </Badge>
           </div>
-          <Badge variant={fbPixelEnabled ? "default" : "outline"} className="text-xs">
-            {fbPixelEnabled ? "Ativo" : "Inativo"}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-3 py-0">
-        <div className="space-y-1.5">
-          <Label htmlFor="fb-pixel-id" className="text-sm">ID do Facebook Pixel</Label>
-          <Input 
-            id="fb-pixel-id" 
-            placeholder="123456789012345" 
-            value={fbPixelId}
-            onChange={(e) => setFbPixelId(e.target.value)}
-            className="h-8 text-sm"
-          />
-          <p className="text-xs text-muted-foreground">
-            Encontrado no Facebook Events Manager {'>'} Data Sources {'>'} Pixel
-          </p>
-        </div>
-        
-        <div className="space-y-1.5">
-          <Label htmlFor="fb-access-token" className="text-sm">Token de Acesso (opcional)</Label>
-          <Input 
-            id="fb-access-token" 
-            type="password"
-            placeholder="EAAEJYWeJHLABO..." 
-            value={fbAccessToken}
-            onChange={(e) => setFbAccessToken(e.target.value)}
-            className="h-8 text-sm"
-          />
-          <p className="text-xs text-muted-foreground">
-            Necessário para rastreamento avançado de conversões
-          </p>
-        </div>
-        
-        <div className="flex items-center space-x-2 pt-1">
-          <Switch 
-            id="fb-tracking"
-            checked={fbPixelEnabled}
-            onCheckedChange={setFbPixelEnabled}
-            className="data-[state=checked]:bg-blue-600"
-          />
-          <Label htmlFor="fb-tracking" className="text-sm">Habilitar rastreamento do Facebook Pixel</Label>
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between pt-2">
-        <Button variant="outline" size="sm" onClick={handleTestConnection} className="text-xs h-7">
-          Testar Conexão
-        </Button>
-        <Button size="sm" onClick={handleSaveFacebookPixel} className="text-xs h-7">
-          Salvar Configurações
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardHeader>
+        <CardContent className="space-y-3 py-0">
+          <div className="space-y-1.5">
+            <Label htmlFor="fb-pixel-id" className="text-sm">ID do Facebook Pixel</Label>
+            <Input 
+              id="fb-pixel-id" 
+              placeholder="123456789012345" 
+              value={fbPixelId}
+              onChange={(e) => setFbPixelId(e.target.value)}
+              className="h-8 text-sm"
+            />
+            <p className="text-xs text-muted-foreground">
+              Encontrado no Facebook Events Manager {'>'} Data Sources {'>'} Pixel
+            </p>
+          </div>
+          
+          <div className="space-y-1.5">
+            <Label htmlFor="fb-access-token" className="text-sm">Token de Acesso (opcional)</Label>
+            <Input 
+              id="fb-access-token" 
+              type="password"
+              placeholder="EAAEJYWeJHLABO..." 
+              value={fbAccessToken}
+              onChange={(e) => setFbAccessToken(e.target.value)}
+              className="h-8 text-sm"
+            />
+            <p className="text-xs text-muted-foreground">
+              Necessário para rastreamento avançado de conversões
+            </p>
+          </div>
+          
+          <div className="flex items-center space-x-2 pt-1">
+            <Switch 
+              id="fb-tracking"
+              checked={fbPixelEnabled}
+              onCheckedChange={setFbPixelEnabled}
+              className="data-[state=checked]:bg-blue-600"
+            />
+            <Label htmlFor="fb-tracking" className="text-sm">Habilitar rastreamento do Facebook Pixel</Label>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between pt-2">
+          <Button variant="outline" size="sm" onClick={handleTestConnection} className="text-xs h-7">
+            Testar Conexão
+          </Button>
+          <Button size="sm" onClick={handleSaveFacebookPixel} className="text-xs h-7">
+            Salvar Configurações
+          </Button>
+        </CardFooter>
+      </Card>
+      
+      <EventTrackingCard />
+    </div>
   );
 };

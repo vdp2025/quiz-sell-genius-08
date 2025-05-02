@@ -71,11 +71,11 @@ export const UtmTab: React.FC<UtmTabProps> = ({
     const data = props.payload[0];
     
     return (
-      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-md">
-        <p className="text-xs font-medium mb-1">
+      <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md">
+        <p className="text-xs font-medium mb-0.5">
           {data.name === 'value' ? props.label : data.name}
         </p>
-        <p className="text-sm font-semibold">
+        <p className="text-xs font-semibold">
           {data.value} {data.name === 'conversionRate' ? '%' : ''}
         </p>
       </div>
@@ -93,24 +93,25 @@ export const UtmTab: React.FC<UtmTabProps> = ({
   return (
     <div className="space-y-4">
       <GridLayout columns={2} gap="md">
-        <Card className="border border-border/60">
-          <CardHeader className="pb-2">
+        <Card className="border border-border/40 shadow-sm">
+          <CardHeader className="pb-1.5">
             <CardTitle>Tráfego por Fonte</CardTitle>
-            <CardDescription>Distribuição de usuários por fonte UTM</CardDescription>
+            <CardDescription className="text-xs">Distribuição de usuários por fonte UTM</CardDescription>
           </CardHeader>
-          <CardContent className="pt-0">
-            <div className="h-[220px]">
+          <CardContent className="pt-1.5">
+            <div className="h-[110px]">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                   <Pie
                     data={sourceData}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    outerRadius={80}
+                    outerRadius={40}
                     fill="#8884d8"
                     dataKey="value"
                     label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    labelProps={{ fontSize: 9 }}
                   >
                     {sourceData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -123,34 +124,32 @@ export const UtmTab: React.FC<UtmTabProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="border border-border/60">
-          <CardHeader className="pb-2">
+        <Card className="border border-border/40 shadow-sm">
+          <CardHeader className="pb-1.5">
             <CardTitle>Conversão por Campanha</CardTitle>
-            <CardDescription>Taxas de conversão por campanha de marketing</CardDescription>
+            <CardDescription className="text-xs">Taxas de conversão por campanha de marketing</CardDescription>
           </CardHeader>
-          <CardContent className="pt-0">
-            <div className="h-[220px]">
+          <CardContent className="pt-1.5">
+            <div className="h-[110px]">
               <ChartContainer config={chartConfig}>
                 <BarChart
                   data={utmData.filter(d => d.campaign && d.campaign !== 'none')}
-                  margin={{ top: 15, right: 15, left: 15, bottom: 15 }}
+                  margin={{ top: 10, right: 10, left: 5, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis 
                     dataKey="campaign"
-                    tick={{ fill: '#888888', fontSize: 11 }}
+                    tick={{ fill: '#888888', fontSize: 9 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <YAxis 
-                    label={{ value: 'Conversão %', angle: -90, position: 'insideLeft', fill: '#888888', fontSize: 12 }}
-                    tick={{ fill: '#888888', fontSize: 11 }}
+                    tick={{ fill: '#888888', fontSize: 9 }}
                   />
                   <Tooltip content={renderTooltipContent} />
-                  <Legend />
                   <Bar 
                     dataKey="conversionRate" 
                     name="Taxa de Conversão (%)" 
-                    radius={[4, 4, 0, 0]}
+                    radius={[3, 3, 0, 0]}
                     fill="#8B5CF6"
                   />
                 </BarChart>
@@ -160,39 +159,39 @@ export const UtmTab: React.FC<UtmTabProps> = ({
         </Card>
       </GridLayout>
 
-      <Card className="border border-border/60">
-        <CardHeader className="pb-2">
+      <Card className="border border-border/40 shadow-sm">
+        <CardHeader className="pb-1.5">
           <CardTitle>Detalhes UTM</CardTitle>
-          <CardDescription>Detalhamento dos parâmetros UTM e performance</CardDescription>
+          <CardDescription className="text-xs">Detalhamento dos parâmetros UTM e performance</CardDescription>
         </CardHeader>
-        <CardContent className="pt-0">
-          <div className="rounded-md border border-border/60 overflow-x-auto">
+        <CardContent className="pt-1.5">
+          <div className="rounded-md border border-border/40 overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Fonte</TableHead>
-                  <TableHead>Meio</TableHead>
-                  <TableHead>Campanha</TableHead>
-                  <TableHead>Usuários</TableHead>
-                  <TableHead>Conversões</TableHead>
-                  <TableHead>Taxa de Conversão</TableHead>
+                  <TableHead className="text-xs">Fonte</TableHead>
+                  <TableHead className="text-xs">Meio</TableHead>
+                  <TableHead className="text-xs">Campanha</TableHead>
+                  <TableHead className="text-xs">Usuários</TableHead>
+                  <TableHead className="text-xs">Conversões</TableHead>
+                  <TableHead className="text-xs">Taxa de Conversão</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {utmData.length > 0 ? (
                   utmData.map((item, i) => (
                     <TableRow key={i}>
-                      <TableCell>{item.source || 'direct'}</TableCell>
-                      <TableCell>{item.medium || 'none'}</TableCell>
-                      <TableCell>{item.campaign || 'none'}</TableCell>
-                      <TableCell>{item.users}</TableCell>
-                      <TableCell>{item.conversions}</TableCell>
-                      <TableCell>{item.conversionRate.toFixed(1)}%</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.source || 'direct'}</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.medium || 'none'}</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.campaign || 'none'}</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.users}</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.conversions}</TableCell>
+                      <TableCell className="py-1.5 text-xs">{item.conversionRate.toFixed(1)}%</TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
+                    <TableCell colSpan={6} className="text-center py-3 text-muted-foreground text-sm">
                       Nenhum dado UTM disponível.
                     </TableCell>
                   </TableRow>
