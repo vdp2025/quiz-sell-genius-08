@@ -14,7 +14,7 @@ const Logo: React.FC<LogoProps> = ({
   alt = "Logo Gisele Galvão",
   className = "h-14", 
   style,
-  priority
+  priority = false
 }) => {
   const [hasError, setHasError] = useState(false);
 
@@ -35,7 +35,7 @@ const Logo: React.FC<LogoProps> = ({
       alt={alt}
       className={className}
       style={style}
-      width={style?.height ? Number(style.height) * 2.5 : 175} // Assuming aspect ratio of 2.5:1
+      width={style?.height ? Number(style.height) * 2.5 : 175} // Considerando proporção de 2.5:1
       height={style?.height ? Number(style.height) : 70}
       onError={() => setHasError(true)}
       loading={priority ? "eager" : "lazy"}

@@ -32,10 +32,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
   };
 
   return (
-    <Card className="p-8 border-[#aa6b5d] border-2 bg-white relative overflow-hidden card-elegant">
-      {/* Subtle shimmer effect */}
-      <div className="absolute inset-0 shimmer pointer-events-none"></div>
-      
+    <Card className="p-8 border-[#aa6b5d] border-2 bg-white relative overflow-hidden">
       <div className="space-y-6">
         {/* Value Stack */}
         <div className="bg-[#fff7f3] p-4 rounded-lg border border-[#B89B7A]/10">
@@ -63,6 +60,15 @@ const PricingSection: React.FC<PricingSectionProps> = ({
           </div>
         </div>
 
+        {/* Garantia e Selo - Agora acima do preço */}
+        <div className="flex justify-center">
+          <img 
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png" 
+            alt="Selo de garantia" 
+            className="w-28 h-28 object-contain" 
+          />
+        </div>
+
         {/* Price Display */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-8">
           <div className="transform rotate-[-5deg] relative">
@@ -74,18 +80,18 @@ const PricingSection: React.FC<PricingSectionProps> = ({
             <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
             <div className="flex items-baseline gap-1 justify-center relative">
               <span className="text-sm">R$</span>
-              <p className="text-5xl font-bold gold-text">{price.split(',')[0]}</p>
+              <p className="text-5xl font-bold text-[#aa6b5d]">{price.split(',')[0]}</p>
               <span className="text-lg">,{price.split(',')[1] || '00'}</span>
               <div className="absolute -top-2 -right-4 rotate-12 text-xs bg-[#aa6b5d] text-white px-2 py-0.5 rounded-full">HOJE</div>
             </div>
-            <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+            <p className="text-xs text-[#3a3a3a]/70 mt-1">ou em até 4x de R$ 10,86</p>
           </div>
         </div>
 
         {/* Security Badge */}
         <SecurePurchaseElement />
 
-        {/* CTA Button - Now GREEN for better conversion */}
+        {/* CTA Button */}
         <div className="relative">
           <Button 
             className="w-full text-white py-6 rounded-md text-base transition-all duration-300 shadow-lg"
