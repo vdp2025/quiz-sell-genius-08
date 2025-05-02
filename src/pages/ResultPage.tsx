@@ -1,10 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import BackupResultPage from '../backup/ResultPage.backup';
 import { trackResultView, trackSaleConversion } from '@/utils/analytics';
+import { Button } from '@/components/ui/button';
+import { PencilIcon } from 'lucide-react';
 
 const ResultPage = () => {
   const quizLogic = useQuizLogic();
@@ -61,6 +62,10 @@ const ResultPage = () => {
     // window.location.href = `https://sua-plataforma-de-pagamentos.com/checkout/${productId}`;
   };
 
+  const handleEditClick = () => {
+    navigate('/resultado/editar');
+  };
+
   const resultToUse = quizResult || localResult;
 
   if (!resultToUse) {
@@ -73,8 +78,21 @@ const ResultPage = () => {
     );
   }
 
-  // Fix: Pass an empty object if BackupResultPage doesn't accept props
-  return <BackupResultPage />;
+  return (
+    <>
+      <div className="fixed top-4 right-4 z-50">
+        <Button 
+          onClick={handleEditClick} 
+          variant="secondary" 
+          className="flex items-center gap-2"
+        >
+          <PencilIcon size={16} />
+          Editar Página
+        </Button>
+      </div>
+      <BackupResultPage />
+    </>
+  );
 };
 
 export default ResultPage;

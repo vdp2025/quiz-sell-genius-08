@@ -13,6 +13,7 @@ import AnalyticsPage from './pages/admin/AnalyticsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
+import ResultPageEditorPage from './pages/ResultPageEditorPage';
 
 const App = () => {
   // Initialize Facebook Pixel as soon as the app loads
@@ -50,6 +51,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
+              <Route path="/resultado/editar" element={<ResultPageEditorPage />} />
               <Route path="/admin" element={<AdminDashboard />} />
               {/* Use the EditorPage as the main editor */}
               <Route path="/admin/editor" element={<EditorPage />} />
