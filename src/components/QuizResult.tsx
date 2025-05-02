@@ -70,6 +70,9 @@ const QuizResult: React.FC<QuizResultProps> = ({
     return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
   }
 
+  // Build custom title with user name
+  const customTitle = `Olá, ${userName}, seu Estilo Predominante é:`;
+
   return (
     <div 
       className={cn(
@@ -82,7 +85,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
       }}
     >
       <ContentContainer size="md">
-        <ResultHeader userName={userName} />
+        <ResultHeader userName={userName} customTitle={customTitle} />
         
         <div className="space-y-8">
           <PrimaryStyleCard primaryStyle={primaryStyle} />

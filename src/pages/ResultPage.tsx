@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -23,17 +22,19 @@ import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import { useAuth } from '@/context/AuthContext';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
+  const { user } = useAuth(); // Get user from auth context
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
   });
   const isLowPerformance = useIsLowPerformanceDevice();
   const { isLoading, completeLoading } = useLoadingState({
-    minDuration: isLowPerformance ? 400 : 800, // Reduzido para carregar mais rápido
+    minDuration: isLowPerformance ? 400 : 800,
     disableTransitions: isLowPerformance
   });
 
@@ -102,7 +103,13 @@ const ResultPage: React.FC = () => {
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
+      <Header 
+        primaryStyle={primaryStyle}
+        logoHeight={globalStyles.logoHeight}
+        logo={globalStyles.logo} 
+        logoAlt={globalStyles.logoAlt}
+        userName={user?.userName}
+      />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* ATTENTION: Primary Style Card */}

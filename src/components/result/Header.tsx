@@ -3,6 +3,7 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import Logo from '../ui/logo';
 import { StyleResult } from '@/types/quiz';
+import { useAuth } from '@/context/AuthContext';
 
 interface HeaderProps {
   logo?: string;
@@ -10,18 +11,24 @@ interface HeaderProps {
   title?: string;
   primaryStyle?: StyleResult;
   logoHeight?: number;
+  userName?: string; // Added userName prop
 }
 
 export const Header: React.FC<HeaderProps> = ({
   logo = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
   logoAlt = "Logo Gisele Galvão",
-  title = "Olá, seu Estilo Predominante é:",
+  title = "Olá",
   primaryStyle,
-  logoHeight = 80 // Aumentei o tamanho do logo para maior destaque
+  logoHeight = 80,
+  userName // New prop
 }) => {
+  // Get userName from context if not provided as prop
+  const { user } = useAuth();
+  const displayName = userName || user?.userName || 'Visitante';
+  
   return (
-    <Card className="bg-white shadow-sm p-6 mb-6"> {/* Aumentei o padding para p-6 */}
-      <div className="flex flex-col items-center gap-5"> {/* Aumentei o gap para 5 */}
+    <Card className="bg-white shadow-sm p-6 mb-6">
+      <div className="flex flex-col items-center gap-5">
         <Logo 
           src={logo} 
           alt={logoAlt} 
@@ -34,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
         
         <div className="text-center">
           <h1 className="text-xl md:text-2xl font-playfair text-[#432818]">
-            {title}
+            {title} <span className="font-medium">{displayName}</span>, seu Estilo Predominante é:
           </h1>
           
           {primaryStyle && (
