@@ -1,5 +1,6 @@
 
-import { Block } from './editor';
+// Instead of importing and extending Block from editor.ts, 
+// we'll define our own base structure to avoid type conflicts
 
 export type BlockType = 
   | 'headline' 
@@ -10,10 +11,35 @@ export type BlockType =
   | 'offer' 
   | 'testimonial' 
   | 'beforeAfter' 
-  | 'cta';
+  | 'cta'
+  | 'icon'
+  | 'divider'
+  | 'spacer'
+  | 'button'
+  | 'form'
+  | 'countdown'
+  | 'header'
+  | 'pricing'
+  | 'benefits'
+  | 'testimonials'
+  | 'guarantee'
+  | 'faq'
+  | 'video'
+  | 'style-result'
+  | 'secondary-styles'
+  | 'hero-section'
+  | 'products'
+  | 'two-column'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block'
+  | 'bonus-carousel';
 
-export interface ResultPageBlock extends Block {
+export interface ResultPageBlock {
+  id: string;
   type: BlockType;
+  order?: number;
+  content?: any;
   style?: ResultPageBlockStyle;
 }
 

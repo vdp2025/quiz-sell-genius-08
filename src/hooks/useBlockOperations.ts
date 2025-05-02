@@ -1,19 +1,19 @@
 
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Block } from '@/types/editor';
+import { ResultPageBlock, BlockType } from '@/types/resultPageTypes';
 import { toast } from '@/components/ui/use-toast';
 
-export const useBlockOperations = (initialBlocks: Block[] = []) => {
-  const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
+export const useBlockOperations = (initialBlocks: ResultPageBlock[] = []) => {
+  const [blocks, setBlocks] = useState<ResultPageBlock[]>(initialBlocks);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
-  const updateBlocks = useCallback((newBlocks: Block[]) => {
+  const updateBlocks = useCallback((newBlocks: ResultPageBlock[]) => {
     setBlocks(newBlocks);
   }, []);
 
-  const handleAddBlock = useCallback((type: Block['type'], defaultContent: any = {}) => {
-    const newBlock: Block = {
+  const handleAddBlock = useCallback((type: BlockType, defaultContent: any = {}) => {
+    const newBlock: ResultPageBlock = {
       id: `block-${uuidv4()}`,
       type,
       content: defaultContent,
