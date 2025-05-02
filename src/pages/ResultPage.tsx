@@ -6,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, Clock } from 'lucide-react';
+import { ShoppingCart, CheckCircle, Clock, ArrowDown } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -33,7 +33,7 @@ const ResultPage: React.FC = () => {
     disableTransitions: isLowPerformance
   });
 
-  // New state for button animation
+  // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   useEffect(() => {
@@ -84,15 +84,16 @@ const ResultPage: React.FC = () => {
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
 
-      {/* Urgency Bar */}
+      {/* ATTENTION: Urgency Bar moved to top */}
       <div className="bg-[#432818] text-white py-2 px-4 text-center">
         <div className="container mx-auto flex items-center justify-center gap-2">
-          <Clock className="w-4 h-4 animate-pulse" />
+          <Clock className="w-4 h-4 text-[#B89B7A]" />
           <p className="text-sm font-medium">Oferta especial por tempo limitado - Aproveite enquanto está disponível!</p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+        {/* ATTENTION: Primary Style Card */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
@@ -125,7 +126,7 @@ const ResultPage: React.FC = () => {
                   onMouseEnter={() => setIsButtonHovered(true)}
                   onMouseLeave={() => setIsButtonHovered(false)}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center justify-center gap-2">
                     <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                     Descobrir Meu Guia Completo
                   </span>
@@ -161,20 +162,41 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         </Card>
 
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
-          <MotivationSection />
-        </AnimatedWrapper>
-
-        {/* Before/After Transformation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
+        {/* INTEREST: Before/After Transformation Section moved up */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
           <BeforeAfterTransformation />
         </AnimatedWrapper>
 
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <div className="text-center my-6">
+        {/* INTEREST: Motivation Section */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
+          <MotivationSection />
+        </AnimatedWrapper>
+
+        {/* INTEREST: Bonus Section moved up */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
+          <BonusSection />
+        </AnimatedWrapper>
+
+        {/* DESIRE: Testimonials moved up */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
+          <Testimonials />
+        </AnimatedWrapper>
+
+        {/* DESIRE: Featured CTA (Green) */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
+          <div className="text-center my-10">
+            <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                Descubra Como Aplicar Seu Estilo na Prática
+              </h3>
+              <div className="flex justify-center">
+                <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
+              </div>
+            </div>
+            
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-pulse"
+              className="text-white py-4 px-6 rounded-md btn-cta-green btn-green-pulse"
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
               style={{
@@ -182,33 +204,32 @@ const ResultPage: React.FC = () => {
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
               }}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Quero meu Guia de Estilo Agora - R$39,00
+                Quero meu Guia de Estilo Agora
               </span>
             </Button>
-
-            <p className="text-sm text-[#aa6b5d] mt-3">
-              ⏳ Oferta exclusiva por tempo limitado
-            </p>
+            
+            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
+              <p className="text-sm text-[#aa6b5d] font-medium flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                Oferta por tempo limitado
+              </p>
+            </div>
           </div>
         </AnimatedWrapper>
 
-        {/* Bonus Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <BonusSection />
-        </AnimatedWrapper>
-
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
-          <Testimonials />
-        </AnimatedWrapper>
-
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1150}>
+        {/* DESIRE: Mentor and Trust Elements */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
           <MentorSection />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
           <GuaranteeSection />
         </AnimatedWrapper>
 
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1200}>
+        {/* ACTION: Final Value Proposition and CTA */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
           <div className="text-center mt-10">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
@@ -239,18 +260,18 @@ const ResultPage: React.FC = () => {
               </ul>
             </div>
 
-            {/* Value Stack Section (Dynamic Pricing Table) */}
+            {/* Updated Value Stack Section with new prices */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
-                  <span className="font-medium">R$ 97,00</span>
+                  <span className="font-medium">R$ 67,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 49,00</span>
+                  <span className="font-medium">R$ 79,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
@@ -282,14 +303,15 @@ const ResultPage: React.FC = () => {
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Garantir Meu Guia + Bônus Especiais
+                <span>Garantir Meu Guia + Bônus Especiais</span>
               </span>
             </Button>
 
-            <p className="text-sm text-[#aa6b5d] mt-3">
-              ⏳ Oferta exclusiva nesta página. Se sair, ela desaparece.
+            <p className="text-sm text-[#aa6b5d] mt-3 flex items-center justify-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>Oferta exclusiva nesta página</span>
             </p>
           </div>
         </AnimatedWrapper>

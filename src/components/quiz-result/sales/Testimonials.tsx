@@ -34,10 +34,13 @@ const Testimonials: React.FC<TestimonialsProps> = ({
 }) => {
   return (
     <div className="py-8">
-      <h3 className="text-2xl font-playfair text-center text-[#aa6b5d] mb-6">
+      <h3 className="text-2xl font-playfair text-center text-[#aa6b5d] mb-2">
         O que estão dizendo
-        <div className="elegant-divider w-24 mt-2 mx-auto"></div>
       </h3>
+      <p className="text-center text-[#3a3a3a] mb-4 max-w-2xl mx-auto">
+        Histórias reais de mulheres que transformaram seu estilo e confiança
+      </p>
+      <div className="elegant-divider w-32 mx-auto mt-0 mb-6"></div>
       
       <div className="grid md:grid-cols-3 gap-6">
         {items.map((item, index) => (
@@ -57,16 +60,11 @@ const Testimonials: React.FC<TestimonialsProps> = ({
               "{item.text}"
             </p>
             
-            <div className="flex items-center mt-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#B89B7A]/30 to-[#aa6b5d]/30 flex items-center justify-center text-[#aa6b5d] font-medium">
-                {item.name.charAt(0)}
-              </div>
-              <div className="ml-3">
-                <p className="font-medium text-[#432818]">{item.name}</p>
-                {item.role && (
-                  <p className="text-sm text-[#432818]/70">{item.role}</p>
-                )}
-              </div>
+            <div className="mt-auto pt-4 border-t border-[#B89B7A]/10">
+              <p className="font-medium text-[#432818]">{item.name}</p>
+              {item.role && (
+                <p className="text-sm text-[#432818]/70">{item.role}</p>
+              )}
             </div>
           </Card>
         ))}

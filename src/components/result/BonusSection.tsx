@@ -17,7 +17,7 @@ const bonuses: BonusItemProps[] = [
     title: "Guia de Peças-Chave",
     description: "Descubra as peças essenciais para seu estilo, como combiná-las e onde encontrá-las por preços acessíveis",
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp",
-    value: "R$ 49,00",
+    value: "R$ 79,00",
     isPremium: true,
     features: [
       "Lista completa de peças essenciais para seu estilo",
@@ -43,12 +43,13 @@ const bonuses: BonusItemProps[] = [
 const BonusSection: React.FC = () => {
   return (
     <section className="py-10">
-      <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] text-center mb-3">
+      <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] text-center mb-2">
         Bônus Exclusivos
       </h2>
-      <p className="text-center text-[#3a3a3a] mb-8 max-w-2xl mx-auto">
+      <p className="text-center text-[#3a3a3a] mb-4 max-w-2xl mx-auto">
         Além do guia completo, você recebe estes bônus especiais para maximizar sua transformação
       </p>
+      <div className="elegant-divider w-32 mx-auto mt-0 mb-6"></div>
 
       <div className="grid md:grid-cols-2 gap-8">
         {bonuses.map((bonus, index) => (
