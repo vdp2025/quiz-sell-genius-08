@@ -93,6 +93,7 @@ const ResultPage: React.FC = () => {
         logoHeight={globalStyles.logoHeight} 
         logo={globalStyles.logo} 
         logoAlt={globalStyles.logoAlt} 
+        userName={globalStyles.userName}
       />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
@@ -133,7 +134,10 @@ const ResultPage: React.FC = () => {
                       loading="eager" 
                       fetchPriority="high" 
                       width="238" 
-                      height="317" 
+                      height="317"
+                      srcSet={`${image}?q=auto:best&f=auto&w=238 238w,
+                               ${image}?q=auto:best&f=auto&w=476 476w`}
+                      sizes="(max-width: 768px) 100vw, 238px"
                     />
                   </AspectRatio>
                   {/* Elegant decorative corner */}
@@ -152,6 +156,9 @@ const ResultPage: React.FC = () => {
                     className="w-full h-full object-cover" 
                     width="540" 
                     height="304"
+                    srcSet={`${guideImage}?q=auto:best&f=auto&w=540 540w,
+                             ${guideImage}?q=auto:best&f=auto&w=1080 1080w`}
+                    sizes="(max-width: 768px) 100vw, 540px"
                   />
                 </AspectRatio>
                 {/* Elegant badge */}
@@ -162,6 +169,21 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </AnimatedWrapper>
         </Card>
+        
+        {/* Text moved from the end of the page to here, after the Primary Style Card */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+              Vista-se de Você — na Prática
+            </h2>
+            <div className="elegant-divider w-32 mx-auto mb-4"></div>
+            <p className="text-[#432818] max-w-xl mx-auto">
+              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
+              O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
+              com autenticidade e transformar sua imagem em ferramenta de poder.
+            </p>
+          </div>
+        </AnimatedWrapper>
 
         {/* INTEREST: Before/After Transformation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
@@ -224,16 +246,8 @@ const ResultPage: React.FC = () => {
         {/* ACTION: Final Value Proposition and CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
           <div className="text-center mt-10">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
-              Vista-se de Você — na Prática
-            </h2>
-            <div className="elegant-divider"></div>
-            <p className="text-[#432818] mb-6 max-w-xl mx-auto">
-              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
-              O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
-              com autenticidade e transformar sua imagem em ferramenta de poder.
-            </p>
-
+            {/* Removed the "Vista-se de Você" heading and paragraph that was moved above */}
+            
             <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
@@ -282,6 +296,7 @@ const ResultPage: React.FC = () => {
                     className="w-16 h-16 object-contain" 
                     width="64" 
                     height="64"
+                    loading="lazy"
                   />
                 </div>
                 <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>

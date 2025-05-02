@@ -36,6 +36,9 @@ const MentorSection: React.FC = () => {
                 width="400"
                 height="500" 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp" 
+                srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp 400w,
+                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_800/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp 800w"
+                sizes="(max-width: 768px) 100vw, 400px"
               />
             </AspectRatio>
           </div>
