@@ -30,7 +30,6 @@ export const Header: React.FC<HeaderProps> = ({
             height: `${logoHeight}px`,
             maxWidth: '100%'
           }} 
-          priority={true} // Adicionado para priorizar o carregamento do logo
         />
         
         <div className="text-center">

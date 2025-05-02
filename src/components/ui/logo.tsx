@@ -6,13 +6,15 @@ interface LogoProps {
   alt?: string;
   className?: string;
   style?: React.CSSProperties;
+  priority?: boolean; // Added priority prop to match usage in Header.tsx
 }
 
 const Logo: React.FC<LogoProps> = ({ 
   src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png",
   alt = "Logo Gisele Galvão",
   className = "h-14", 
-  style 
+  style,
+  priority // This will be ignored but won't cause type errors
 }) => {
   return (
     <img

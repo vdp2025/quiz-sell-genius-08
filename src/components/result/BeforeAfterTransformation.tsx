@@ -112,7 +112,7 @@ const BeforeAfterTransformation: React.FC = () => {
                 alt={`Transformação - ${activeTransformation.name}`} 
                 className="w-full h-full object-cover" 
                 loading="eager"
-                fetchpriority="high"
+                fetchPriority="high"
               />
             </div>
 
