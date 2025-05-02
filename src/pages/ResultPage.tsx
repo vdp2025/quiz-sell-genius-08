@@ -30,6 +30,9 @@ const ResultPage: React.FC = () => {
     disableTransitions: isLowPerformance
   });
 
+  // New state for button animation
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
@@ -64,11 +67,22 @@ const ResultPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fffaf7]" style={{ backgroundColor: globalStyles.backgroundColor || '#fffaf7', color: globalStyles.textColor || '#432818', fontFamily: globalStyles.fontFamily || 'inherit' }}>
+    <div 
+      className="min-h-screen relative overflow-hidden" 
+      style={{ 
+        backgroundColor: globalStyles.backgroundColor || '#fffaf7', 
+        color: globalStyles.textColor || '#432818', 
+        fontFamily: globalStyles.fontFamily || 'inherit' 
+      }}
+    >
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+      
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
 
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
+      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
@@ -76,7 +90,7 @@ const ResultPage: React.FC = () => {
                   <span className="text-sm text-[#8F7A6A]">Seu Estilo em Destaque</span>
                   <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
                 </div>
-                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-[#B89B7A]" />
+                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
               </div>
             </div>
 
@@ -86,24 +100,48 @@ const ResultPage: React.FC = () => {
                   <p className="text-[#432818] leading-relaxed">{description}</p>
                 </AnimatedWrapper>
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
                     <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
                     <SecondaryStylesSection secondaryStyles={secondaryStyles} />
                   </div>
                 </AnimatedWrapper>
-                <Button onClick={handleCTAClick} className="w-full mt-4 text-white py-4 bg-brand-gold hover:bg-[#A38A69] text-md shadow-md">
-                  Quero meu Guia + Bônus por R$39,00
+                <Button 
+                  onClick={handleCTAClick} 
+                  className="w-full mt-4 text-white py-4 btn-elegant"
+                  onMouseEnter={() => setIsButtonHovered(true)}
+                  onMouseLeave={() => setIsButtonHovered(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                    Quero meu Guia + Bônus por R$39,00
+                  </span>
                 </Button>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
-                <div className="max-w-[340px] mx-auto">
-                  <img src={`${image}?q=100&f=auto`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
+                <div className="max-w-[340px] mx-auto relative">
+                  <img 
+                    src={`${image}?q=100&f=auto`} 
+                    alt={`Estilo ${category}`} 
+                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                  />
+                  {/* Elegant decorative corner */}
+                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
                 </div>
               </AnimatedWrapper>
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-              <div className="mt-8 max-w-[540px] mx-auto">
-                <img src={`${guideImage}?q=100&f=auto`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
+              <div className="mt-8 max-w-[540px] mx-auto relative">
+                <img 
+                  src={`${guideImage}?q=100&f=auto`} 
+                  alt={`Guia de Estilo ${category}`} 
+                  loading="lazy" 
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                />
+                {/* Elegant badge */}
+                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  Exclusivo
+                </div>
               </div>
             </AnimatedWrapper>
           </AnimatedWrapper>
@@ -115,8 +153,16 @@ const ResultPage: React.FC = () => {
 
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
           <div className="text-center my-6">
-            <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md bg-brand-gold hover:bg-[#A38A69] text-md shadow-md">
-              Aplique seu Estilo com Propósito — Quero o Guia
+            <Button 
+              onClick={handleCTAClick} 
+              className="text-white py-4 px-6 rounded-md btn-elegant btn-pulse"
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <span className="flex items-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                Aplique seu Estilo com Propósito — Quero o Guia
+              </span>
             </Button>
           </div>
         </AnimatedWrapper>
@@ -127,8 +173,16 @@ const ResultPage: React.FC = () => {
 
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
           <div className="text-center my-6">
-            <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md bg-brand-gold hover:bg-[#A38A69] text-md shadow-md">
-              Garantir meu Guia de Estilo + Bônus Exclusivos
+            <Button 
+              onClick={handleCTAClick} 
+              className="text-white py-4 px-6 rounded-md btn-elegant"
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <span className="flex items-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                Garantir meu Guia de Estilo + Bônus Exclusivos
+              </span>
             </Button>
           </div>
         </AnimatedWrapper>
@@ -140,31 +194,45 @@ const ResultPage: React.FC = () => {
 
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1200}>
           <div className="text-center mt-10">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">Vista-se de Você — na Prática</h2>
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+              Vista-se de Você — na Prática
+            </h2>
+            <div className="elegant-divider"></div>
             <p className="text-[#432818] mb-6 max-w-xl mx-auto">
-              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir com autenticidade e transformar sua imagem em ferramenta de poder.
+              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
+              O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
+              com autenticidade e transformar sua imagem em ferramenta de poder.
             </p>
 
-            <div className="bg-[#fff7f3] p-6 rounded-lg mb-6">
+            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" /> Looks com intenção e identidade
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" /> Cores, modelagens e tecidos a seu favor
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" /> Imagem alinhada aos seus objetivos
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" /> Guarda-roupa funcional, sem compras por impulso
-                </li>
+                {[
+                  "Looks com intenção e identidade",
+                  "Cores, modelagens e tecidos a seu favor",
+                  "Imagem alinhada aos seus objetivos",
+                  "Guarda-roupa funcional, sem compras por impulso"
+                ].map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
+                      <CheckCircle className="h-3 w-3" />
+                    </div>
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md bg-brand-gold hover:bg-[#A38A69] text-lg shadow-md transition-colors">
-              <ShoppingCart className="w-5 h-5 mr-2" /> Quero meu Guia + Bônus por R$39,00
+            <Button 
+              onClick={handleCTAClick} 
+              className="text-white py-5 px-8 rounded-md btn-elegant btn-pulse text-lg shadow-md transition-colors btn-3d"
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <span className="flex items-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                Quero meu Guia + Bônus por R$39,00
+              </span>
             </Button>
 
             <p className="text-sm text-[#aa6b5d] mt-3">

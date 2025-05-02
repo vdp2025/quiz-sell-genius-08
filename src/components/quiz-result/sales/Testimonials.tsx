@@ -1,58 +1,77 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Quote } from 'lucide-react';
+import { QuoteIcon } from 'lucide-react';
 
-interface Testimonial {
-  text: string;
+interface TestimonialItem {
   name: string;
-  role: string;
+  role?: string;
+  text: string;
 }
 
 interface TestimonialsProps {
-  items?: Testimonial[];
+  items?: TestimonialItem[];
 }
 
-const defaultTestimonials = [
-  {
-    text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
-    name: "Mariangela",
-    role: "Engenheira"
-  },
-  {
-    text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
-    name: "Patrícia Paranhos",
-    role: "Advogada"
-  },
-  {
-    text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
-    name: "Sônia Spier",
-    role: "Terapeuta"
-  }
-];
-
-const Testimonials: React.FC<TestimonialsProps> = ({ items }) => {
-  const testimonialsToShow = items || defaultTestimonials;
-  
+const Testimonials: React.FC<TestimonialsProps> = ({ 
+  items = [
+    {
+      name: "Mariangela",
+      role: "Engenheira",
+      text: "Antes, a roupa me vestia. Hoje, eu me visto com intenção. Essa jornada me reconectou com a mulher que sempre fui."
+    },
+    {
+      name: "Patrícia Paranhos",
+      role: "Advogada",
+      text: "Aprendi a reconhecer meu valor e refletir isso na forma como me apresento. As pessoas começaram a me enxergar diferente — porque eu estava diferente."
+    },
+    {
+      name: "Sônia Spier",
+      role: "Terapeuta",
+      text: "Com a Gisele, entendi o poder da linguagem visual. Hoje eu escolho minhas roupas com consciência, propósito e leveza."
+    }
+  ] 
+}) => {
   return (
-    <Card className="p-6 bg-white">
-      <h3 className="text-xl font-medium text-[#432818] mb-6 text-center">
-        O que dizem quem já transformou seu estilo:
+    <div className="py-8">
+      <h3 className="text-2xl font-playfair text-center text-[#aa6b5d] mb-6">
+        O que estão dizendo
+        <div className="elegant-divider w-24 mt-2 mx-auto"></div>
       </h3>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {testimonialsToShow.map((testimonial, index) => (
-          <div key={index} className="p-4 bg-[#fef5f2] rounded-lg relative">
-            <Quote className="w-7 h-7 text-[#aa6b5d]/20 absolute -top-3 -left-3" />
-            <p className="text-[#6b605a] text-sm italic mb-4">{testimonial.text}</p>
-            <div className="text-right">
-              <p className="font-medium text-[#432818]">{testimonial.name}</p>
-              <p className="text-xs text-[#6b605a]">{testimonial.role}</p>
+      
+      <div className="grid md:grid-cols-3 gap-6">
+        {items.map((item, index) => (
+          <Card 
+            key={index} 
+            className="p-6 relative overflow-hidden card-elegant interactive-section"
+          >
+            {/* Decorative elements */}
+            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#B89B7A]/30"></div>
+            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#B89B7A]/30"></div>
+            
+            <div className="mb-4 text-[#B89B7A] opacity-60">
+              <QuoteIcon size={24} />
             </div>
-          </div>
+            
+            <p className="text-[#3a3a3a] italic mb-4">
+              "{item.text}"
+            </p>
+            
+            <div className="flex items-center mt-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#B89B7A]/30 to-[#aa6b5d]/30 flex items-center justify-center text-[#aa6b5d] font-medium">
+                {item.name.charAt(0)}
+              </div>
+              <div className="ml-3">
+                <p className="font-medium text-[#432818]">{item.name}</p>
+                {item.role && (
+                  <p className="text-sm text-[#432818]/70">{item.role}</p>
+                )}
+              </div>
+            </div>
+          </Card>
         ))}
       </div>
-    </Card>
+    </div>
   );
 };
 

@@ -1,0 +1,132 @@
+
+/* Elegant Special Effects */
+
+/* Button Effects */
+.btn-elegant {
+  @apply relative overflow-hidden transition-all duration-300 transform;
+  background: linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%);
+}
+
+.btn-elegant:hover {
+  @apply scale-105 shadow-lg;
+  box-shadow: 0 10px 25px -5px rgba(170, 107, 93, 0.4);
+}
+
+.btn-elegant::before {
+  content: '';
+  @apply absolute top-0 left-0 w-full h-full opacity-0 transition-opacity duration-500;
+  background: linear-gradient(135deg, #aa6b5d 0%, #B89B7A 100%);
+}
+
+.btn-elegant:hover::before {
+  @apply opacity-100;
+}
+
+.btn-elegant span {
+  @apply relative z-10;
+}
+
+/* Pulse Animation */
+@keyframes elegant-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(170, 107, 93, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(170, 107, 93, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(170, 107, 93, 0);
+  }
+}
+
+.btn-pulse {
+  animation: elegant-pulse 2s infinite;
+}
+
+/* Elegant Card Effects */
+.card-elegant {
+  @apply transition-all duration-300 border border-[#B89B7A]/10;
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+}
+
+.card-elegant:hover {
+  @apply shadow-lg border-[#B89B7A]/30;
+  transform: translateY(-5px);
+}
+
+/* Glossy Effect */
+.glossy {
+  @apply relative overflow-hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.15) 100%);
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  @apply relative overflow-hidden;
+}
+
+.shimmer::after {
+  content: '';
+  @apply absolute top-0 left-0 w-full h-full;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Elegant Glass Effect */
+.glass-panel {
+  @apply backdrop-blur-md bg-white/70 border border-white/20;
+  box-shadow: 0 8px 32px 0 rgba(170, 107, 93, 0.12);
+}
+
+/* Gold Accent */
+.gold-accent {
+  background: linear-gradient(90deg, #B89B7A 0%, #d4b78f 50%, #B89B7A 100%);
+}
+
+.gold-text {
+  @apply font-medium;
+  background: linear-gradient(90deg, #B89B7A 0%, #d4b78f 50%, #B89B7A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Elegant Divider */
+.elegant-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #B89B7A, transparent);
+  margin: 2rem auto;
+  width: 80%;
+}
+
+/* 3D Button Effect */
+.btn-3d {
+  @apply transition-all duration-200 relative;
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+}
+
+.btn-3d:hover {
+  transform: perspective(1000px) rotateX(5deg) translateY(-3px);
+}
+
+/* Interactive Section */
+.interactive-section {
+  @apply transition-all duration-500;
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+}
+
+.interactive-section:hover {
+  transform: perspective(1000px) rotateY(2deg);
+}
