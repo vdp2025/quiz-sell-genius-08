@@ -27,10 +27,14 @@ const Logo: React.FC<LogoProps> = ({
       const img = new Image();
       img.src = src;
       img.onload = () => setIsLoaded(true);
-      img.onerror = () => setHasError(true);
+      img.onerror = () => {
+        console.error("Failed to load logo image");
+        setHasError(true);
+      };
     }
   }, [src, priority]);
 
+  // Fallback em caso de erro
   if (hasError) {
     return (
       <div 
@@ -38,7 +42,7 @@ const Logo: React.FC<LogoProps> = ({
         style={style}
       >
         <span className="text-[#aa6b5d] font-playfair font-medium text-xl">
-          {fallbackText || alt}
+          {fallbackText || "Gisele Galvão"}
         </span>
       </div>
     );
@@ -59,7 +63,10 @@ const Logo: React.FC<LogoProps> = ({
         style={style}
         width={style?.width ? Number(style.width) : undefined} 
         height={style?.height ? Number(style.height) : undefined}
-        onError={() => setHasError(true)}
+        onError={() => {
+          console.error("Failed to load logo image");
+          setHasError(true);
+        }}
         onLoad={() => setIsLoaded(true)}
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : "auto"}

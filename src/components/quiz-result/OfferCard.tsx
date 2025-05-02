@@ -22,6 +22,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
   const salePrice = config?.price || "39,00";
   const ctaText = config?.ctaText || `Quero meu Guia + Bônus por R$${salePrice}`;
   const ctaUrl = config?.ctaUrl || "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
+  const installments = "10,86"; // Valor fixo para 4x
   
   // Imagens com fallbacks
   const heroImage = config?.heroImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp";
@@ -61,27 +62,41 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
         </p>
       </div>
 
-      <img
-        src={heroImage}
-        alt="Resultado do Quiz Visagismo"
-        className="w-full rounded-lg mb-8 shadow-md"
-        loading="eager"
-        fetchPriority="high"
-        onError={() => handleImageError('hero')}
-      />
+      {/* Hero Image - com fallback em caso de erro */}
+      {!imageErrors.hero ? (
+        <img
+          src={heroImage}
+          alt="Resultado do Quiz Visagismo"
+          className="w-full rounded-lg mb-8 shadow-md"
+          loading="eager"
+          fetchPriority="high"
+          onError={() => handleImageError('hero')}
+        />
+      ) : (
+        <div className="w-full h-60 bg-gray-100 rounded-lg mb-8 flex items-center justify-center">
+          <p className="text-gray-500">Imagem temporariamente indisponível</p>
+        </div>
+      )}
 
-      <Card className="p-6 border-[#aa6b5d]/20 bg-white">
+      <Card className="p-6 border-[#aa6b5d]/20 bg-white shadow-md">
         <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4 text-center">
           {config?.productTitle || "Guia de Estilo e Imagem + Bônus Exclusivos"}
         </h2>
 
-        <img
-          src={productsImage}
-          alt="Todos os produtos e bônus mockup"
-          className="w-full rounded-lg mb-6 shadow-md"
-          loading="eager"
-          onError={() => handleImageError('products')}
-        />
+        {/* Products Image - com fallback em caso de erro */}
+        {!imageErrors.products ? (
+          <img
+            src={productsImage}
+            alt="Todos os produtos e bônus mockup"
+            className="w-full rounded-lg mb-8 shadow-md"
+            loading="eager"
+            onError={() => handleImageError('products')}
+          />
+        ) : (
+          <div className="w-full h-48 bg-gray-100 rounded-lg mb-8 flex items-center justify-center">
+            <p className="text-gray-500">Imagem temporariamente indisponível</p>
+          </div>
+        )}
 
         {/* Preço estratégico usando PricingSection */}
         <PricingSection 
@@ -89,37 +104,50 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
           regularPrice={regularPrice}
           ctaText={ctaText}
           ctaUrl={ctaUrl}
+          installments={installments}
         />
       </Card>
 
       <BenefitList />
 
-      {/* Mostrar apenas 1 imagem por linha para aumentar o tamanho */}
+      {/* Mostrando apenas 1 imagem por linha para aumentar o tamanho */}
       <div className="space-y-6">
         <Card className="overflow-hidden rounded-lg shadow-md p-4 bg-white">
           <h3 className="text-xl font-playfair text-[#aa6b5d] mb-3 text-center">
             Bônus Exclusivo: Guia de Peças-Chave
           </h3>
-          <img
-            src={bonusImage}
-            alt="Guia de Peças-Chave por Estilo"
-            className="w-full rounded-lg shadow-sm object-cover max-h-[400px]"
-            loading="lazy"
-            onError={() => handleImageError('bonus')}
-          />
+          {!imageErrors.bonus ? (
+            <img
+              src={bonusImage}
+              alt="Guia de Peças-Chave por Estilo"
+              className="w-full rounded-lg shadow-sm object-cover max-h-[400px]"
+              loading="lazy"
+              onError={() => handleImageError('bonus')}
+            />
+          ) : (
+            <div className="w-full h-60 bg-gray-100 rounded-lg flex items-center justify-center">
+              <p className="text-gray-500">Imagem temporariamente indisponível</p>
+            </div>
+          )}
         </Card>
         
         <Card className="overflow-hidden rounded-lg shadow-md p-4 bg-white">
           <h3 className="text-xl font-playfair text-[#aa6b5d] mb-3 text-center">
             Sua Mentora de Estilo
           </h3>
-          <img
-            src={mentorImage}
-            alt="Foto Gisele Galvão"
-            className="w-full rounded-lg shadow-sm object-cover max-h-[400px]"
-            loading="lazy"
-            onError={() => handleImageError('mentor')}
-          />
+          {!imageErrors.mentor ? (
+            <img
+              src={mentorImage}
+              alt="Foto Gisele Galvão"
+              className="w-full rounded-lg shadow-sm object-cover max-h-[400px]"
+              loading="lazy"
+              onError={() => handleImageError('mentor')}
+            />
+          ) : (
+            <div className="w-full h-60 bg-gray-100 rounded-lg flex items-center justify-center">
+              <p className="text-gray-500">Imagem temporariamente indisponível</p>
+            </div>
+          )}
         </Card>
       </div>
 

@@ -37,29 +37,33 @@ const PricingSection: React.FC<PricingSectionProps> = ({
   return (
     <div className="space-y-6">
       {/* Guarantee Seal - Large and Above Price */}
-      <div className="flex justify-center mb-2">
+      <div className="flex justify-center mb-4">
         {!guaranteeImgError ? (
           <img 
             src={guaranteeImg} 
             alt="Selo de garantia" 
-            className="w-32 h-32 object-contain transition-transform hover:scale-105"
-            onError={() => setGuaranteeImgError(true)}
+            className="w-40 h-40 object-contain transition-transform hover:scale-105"
+            onError={() => {
+              console.error("Failed to load guarantee image");
+              setGuaranteeImgError(true);
+            }}
             loading="eager"
+            fetchPriority="high"
           />
         ) : (
-          <div className="w-32 h-32 rounded-full bg-[#aa6b5d]/10 flex items-center justify-center">
+          <div className="w-40 h-40 rounded-full bg-[#aa6b5d]/10 flex items-center justify-center">
             <div className="text-center">
               <p className="font-bold text-[#aa6b5d]">GARANTIA</p>
-              <p className="text-2xl font-bold text-[#aa6b5d]">7 DIAS</p>
+              <p className="text-3xl font-bold text-[#aa6b5d]">7 DIAS</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Price Display - Strategic and Visible */}
-      <div className="bg-[#fff7f3] p-6 rounded-lg border border-[#B89B7A]/20">
-        <div className="flex items-center justify-center gap-8 mb-4">
-          <div className="relative">
+      <div className="bg-[#fff7f3] p-6 rounded-lg border border-[#B89B7A]/20 shadow-md">
+        <div className="flex flex-col md:flex-row items-center justify-center md:gap-8 mb-6">
+          <div className="relative mb-4 md:mb-0">
             <p className="text-sm text-[#3a3a3a]/60 mb-1">De</p>
             <p className="text-2xl line-through text-[#3a3a3a]/60">R$ {regularPrice}</p>
             <div className="absolute -right-3 -top-1 -left-1 -bottom-1 border-2 border-[#ff5a5a] transform rotate-[-8deg] rounded-sm"></div>
@@ -67,7 +71,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
 
           <div className="text-center relative">
             <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
-            <div className="flex items-baseline">
+            <div className="flex items-baseline justify-center">
               <span className="text-sm">R$</span>
               <p className="text-5xl font-bold text-[#aa6b5d]">{price.split(',')[0]}</p>
               <span className="text-xl">,{price.split(',')[1] || '00'}</span>
@@ -79,7 +83,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
 
         {/* CTA Button */}
         <Button 
-          className="w-full text-white py-6 rounded-md text-base transition-all duration-300 shadow-lg"
+          className="w-full text-white py-6 rounded-md text-base font-medium transition-all duration-300 shadow-lg"
           onClick={handlePurchase}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
