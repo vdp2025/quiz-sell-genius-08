@@ -1,33 +1,34 @@
 
-import { QuizQuestion } from '../../types/quiz';
+// src/data/questions/desiredOutcomesQuestions.ts
+import { QuizQuestion } from '@/types/quiz';
 
 export const desiredOutcomesQuestions: QuizQuestion[] = [
   {
-    id: 'strategic-7',
-    title: 'Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?',
+    id: 'strategic-outcome-1',
+    title: 'Qual resultado seria mais valioso para você neste momento?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp',
+    imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&h=600',
     options: [
       {
-        id: 'strategic-7-1',
-        text: 'Montar looks com mais facilidade e confiança'
+        id: 'outcome-1-a',
+        text: 'Entender exatamente quais peças compõem meu guarda-roupa ideal',
+        styleCategory: 'Clássico'
       },
       {
-        id: 'strategic-7-2',
-        text: 'Usar o que já tenho e me sentir estilosa'
+        id: 'outcome-1-b',
+        text: 'Saber como me vestir para diferentes ocasiões com confiança',
+        styleCategory: 'Elegante'
       },
       {
-        id: 'strategic-7-3',
-        text: 'Comprar com mais consciência e sem culpa'
+        id: 'outcome-1-c',
+        text: 'Descobrir como expressar minha personalidade através das roupas',
+        styleCategory: 'Criativo'
       },
       {
-        id: 'strategic-7-4',
-        text: 'Ser admirada pela imagem que transmito'
-      },
-      {
-        id: 'strategic-7-5',
-        text: 'Resgatar peças esquecidas e criar novos looks com estilo'
+        id: 'outcome-1-d',
+        text: 'Simplificar meu guarda-roupa mantendo versatilidade',
+        styleCategory: 'Natural'
       }
     ]
   }

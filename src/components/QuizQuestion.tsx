@@ -37,6 +37,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
   
+  // Debug logs to track image display
+  useEffect(() => {
+    if (isStrategicQuestion && showQuestionImage && question.imageUrl) {
+      console.log(`Rendering question ${question.id} with image: ${question.imageUrl}`);
+    } else if (isStrategicQuestion && !question.imageUrl) {
+      console.log(`Question ${question.id} has no image URL defined`);
+    }
+  }, [question.id, question.imageUrl, isStrategicQuestion, showQuestionImage]);
+  
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
@@ -109,7 +118,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           </>
         )}
         
-        {/* Display the image regardless of hideTitle if it's a strategic question and showQuestionImage is true */}
+        {/* Display the image if it's a strategic question and showQuestionImage is true */}
         {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
           <div className="w-full mb-6">
             <img 
