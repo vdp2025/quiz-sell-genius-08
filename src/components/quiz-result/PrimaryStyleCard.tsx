@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';
-import { styleConfig, getStyleConfig } from '@/config/styleConfig';
+import { styleConfig } from '@/config/styleConfig';
 
 interface PrimaryStyleCardProps {
   primaryStyle: StyleResult;
@@ -15,9 +15,8 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   customDescription,
   customImage
 }) => {
-  const styleData = getStyleConfig(primaryStyle.category);
-  const imageUrl = customImage || styleData.image;
-  const description = customDescription || styleData.description;
+  const imageUrl = customImage || (styleConfig[primaryStyle.category]?.image || '');
+  const description = customDescription || (styleConfig[primaryStyle.category]?.description || 'Descrição do estilo não disponível');
   
   return (
     <Card className="p-6 bg-white mb-8">
@@ -32,20 +31,11 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
         </div>
         <div className="order-first md:order-last flex justify-center">
           {imageUrl ? (
-            <div className="w-full max-w-md">
-              <div className="aspect-[3/4] relative overflow-hidden rounded-lg shadow-md">
-                <img 
-                  src={imageUrl} 
-                  alt={`Estilo ${primaryStyle.category}`} 
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="eager"
-                  onError={(e) => {
-                    console.error(`Failed to load style image: ${imageUrl}`);
-                    e.currentTarget.src = "https://via.placeholder.com/400x533?text=Imagem+não+disponível";
-                  }}
-                />
-              </div>
-            </div>
+            <img 
+              src={imageUrl} 
+              alt={`Estilo ${primaryStyle.category}`} 
+              className="w-full h-auto rounded-lg max-h-80 object-contain"
+            />
           ) : (
             <div className="bg-gray-100 rounded-lg w-full h-64 flex items-center justify-center">
               <p className="text-gray-400">Imagem não disponível</p>
