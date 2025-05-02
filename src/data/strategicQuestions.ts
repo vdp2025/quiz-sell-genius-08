@@ -5,7 +5,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'struggle',
     title: 'Qual sua maior dificuldade com seu estilo pessoal atualmente?',
-    description: 'Escolha a opção que mais representa sua situação atual',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911578/BANNER_CONSULTORIA_GISELE_GALV%C3%83O_s2fliv.webp',
@@ -19,7 +18,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'wardrobe',
     title: 'Como você descreveria seu guarda-roupa atual?',
-    description: 'Selecione a opção que melhor reflete sua situação',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745574295/mulher-indecisa-guarda-roupa_gzyuhh.jpg',
@@ -33,7 +31,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'shopping',
     title: 'Como você se sente quando vai às compras?',
-    description: 'Escolha a opção que mais se aproxima da sua experiência',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911564/Design_sem_nome_17_vq40co.webp',
@@ -47,7 +44,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'confidence',
     title: 'O que você mais deseja alcançar com seu estilo pessoal?',
-    description: 'Selecione sua principal motivação',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911674/Qual_seu_prop%C3%B3sito_para_a_vida_4_fcgev0.webp',
@@ -61,7 +57,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'transformation',
     title: 'Qual transformação você espera em sua vida com um estilo bem definido?',
-    description: 'Escolha o resultado mais importante para você',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745574294/antes-depois-transformacao_ud8zzm.jpg',
@@ -75,7 +70,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'investment',
     title: 'Quanto você já investiu para resolver suas questões de estilo?',
-    description: 'Selecione a opção que melhor representa seus investimentos até agora',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745574294/guarda-roupa-otimizado_tzlfto.jpg',
@@ -89,7 +83,6 @@ export const strategicQuestions: Question[] = [
   {
     id: 'expectation',
     title: 'O que você espera de um guia de estilo personalizado?',
-    description: 'Escolha o que seria mais valioso para você',
     type: 'text',
     multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911656/Qual_seu_prop%C3%B3sito_para_a_vida_13_khgpku.webp',
