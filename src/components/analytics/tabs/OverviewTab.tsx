@@ -217,7 +217,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   formatter={(value) => [`${value}%`, 'Taxa']}
                   labelFormatter={(label) => `${label}`}
                 />
-                <Bar dataKey="value" fill={(data) => data.color || '#4f46e5'} name="Taxa" />
+                <Bar 
+                  dataKey="value" 
+                  name="Taxa"
+                  fill="#4f46e5"
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
