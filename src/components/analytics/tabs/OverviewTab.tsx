@@ -1,200 +1,230 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { MetricsGrid } from '../MetricsGrid';
-import { ChartConfig, ChartContainer } from '@/components/ui/chart';
-import { GridLayout } from '@/components/shared/GridLayout';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
 
 interface OverviewTabProps {
   analyticsData: any;
-  loading: boolean;
+  loading?: boolean;
 }
 
-export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading }) => {
-  const metrics = analyticsData?.metrics;
+export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading = false }) => {
+  if (loading || !analyticsData) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-[200px] w-full" />
+        <Skeleton className="h-[300px] w-full" />
+      </div>
+    );
+  }
+
+  const metrics = analyticsData.metrics;
+  const compactView = analyticsData.compactView;
   
-  // Prepare chart data
-  const chartData = React.useMemo(() => {
-    if (!analyticsData?.metrics?.eventsByDay) return [];
+  // Transform data for chart
+  const chartData = [];
+  if (analyticsData.events && Array.isArray(analyticsData.events)) {
+    // Group by day and count events
+    const eventsByDate = analyticsData.events.reduce((acc: any, event: any) => {
+      if (!event.timestamp) return acc;
+      
+      const date = new Date(event.timestamp).toISOString().split('T')[0];
+      if (!acc[date]) {
+        acc[date] = {
+          date,
+          quiz_start: 0,
+          quiz_complete: 0,
+          result_view: 0,
+          lead_generated: 0,
+          sale: 0
+        };
+      }
+      
+      if (acc[date][event.type] !== undefined) {
+        acc[date][event.type] += 1;
+      }
+      
+      return acc;
+    }, {});
     
-    return Object.entries(analyticsData.metrics.eventsByDay).map(([date, counts]: [string, any]) => {
-      return {
-        date: new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-        inicios: counts.quiz_start || 0,
-        conclusoes: counts.quiz_complete || 0,
-        resultados: counts.result_view || 0,
-        leads: counts.lead_generated || 0,
-        checkout: counts.button_click || 0
-      };
+    // Convert to array and sort by date
+    chartData.push(...Object.values(eventsByDate));
+    chartData.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+
+  // Format date labels for chart
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('pt-BR', { 
+      month: 'short', 
+      day: 'numeric' 
     });
-  }, [analyticsData]);
-  
-  // Chart configuration
-  const chartConfig: ChartConfig = {
-    inicios: { 
-      label: 'Inícios',
-      theme: { light: '#4f46e5', dark: '#818cf8' }
-    },
-    conclusoes: { 
-      label: 'Conclusões',
-      theme: { light: '#10b981', dark: '#34d399' }
-    },
-    resultados: { 
-      label: 'Resultados',
-      theme: { light: '#f59e0b', dark: '#fbbf24' }
-    },
-    checkout: {
-      label: 'Checkout',
-      theme: { light: '#8B5CF6', dark: '#A78BFA' }
-    },
-    leads: { 
-      label: 'Compras',
-      theme: { light: '#ef4444', dark: '#f87171' }
-    }
-  };
-
-  // Custom tooltip renderer
-  const renderTooltipContent = (props: any) => {
-    if (!props.active || !props.payload) {
-      return null;
-    }
-    return (
-      <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md text-[7px]">
-        <p className="text-[7px] font-medium mb-0.5">{props.label}</p>
-        {props.payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center justify-between text-[7px]">
-            <span style={{ color: entry.color }}>{entry.name}: </span>
-            <span className="font-semibold ml-1.5">{entry.value}</span>
-          </div>
-        ))}
-      </div>
-    );
   };
   
-  const renderLegendContent = (props: any) => {
-    const { payload } = props;
-    
-    return (
-      <div className="flex flex-wrap justify-center gap-1 text-[7px]">
-        {payload.map((entry: any, index: number) => (
-          <div key={`legend-${index}`} className="flex items-center">
-            <div 
-              className="w-1.5 h-1.5 rounded-sm mr-1"
-              style={{ backgroundColor: entry.color }}
-            />
-            <span>{entry.value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  // Calculate average values for reference lines
-  const avgInicios = metrics?.totalStarts ? metrics.totalStarts / (chartData.length || 1) : 0;
-  const avgConclusoes = metrics?.totalCompletes ? metrics.totalCompletes / (chartData.length || 1) : 0;
+  const conversionMetrics = [
+    {
+      title: 'Taxa de Conclusão',
+      value: `${metrics.completionRate.toFixed(1)}%`,
+      description: 'Quiz iniciado → Quiz completo',
+      change: '+2.5%',
+      trend: 'up',
+      color: '#4f46e5'
+    },
+    {
+      title: 'Taxa de Conversão',
+      value: `${metrics.conversionRate.toFixed(1)}%`,
+      description: 'Quiz iniciado → Lead',
+      change: '+1.2%',
+      trend: 'up',
+      color: '#10b981'
+    },
+    {
+      title: 'Taxa de Vendas',
+      value: `${metrics.salesRate.toFixed(1)}%`,
+      description: 'Lead → Venda',
+      change: '-0.8%',
+      trend: 'down',
+      color: '#f59e0b'
+    }
+  ];
 
   return (
-    <div className="space-y-4">
-      <MetricsGrid 
-        metrics={metrics} 
-        loading={loading}
-        timeRange={analyticsData?.timeRange || '7d'} 
-      />
+    <div className="space-y-6">
+      <div className={`grid ${compactView ? 'grid-cols-2 md:grid-cols-4 xl:grid-cols-7' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4'} gap-4`}>
+        <MetricsGrid.Item
+          title="Inicios de Quiz"
+          value={metrics.totalStarts}
+          icon="Play"
+          trend="up"
+          change="+12%"
+          compact={compactView}
+        />
+        <MetricsGrid.Item
+          title="Quiz Completos"
+          value={metrics.totalCompletes}
+          icon="CheckCircle"
+          trend="up"
+          change="+8%"
+          compact={compactView}
+        />
+        <MetricsGrid.Item
+          title="Resultados Vistos"
+          value={metrics.totalResultViews}
+          icon="Eye"
+          trend="up"
+          change="+15%"
+          compact={compactView}
+        />
+        <MetricsGrid.Item
+          title="Leads Gerados"
+          value={metrics.totalLeads}
+          icon="Users"
+          trend="up"
+          change="+5%"
+          compact={compactView}
+        />
+        <MetricsGrid.Item
+          title="Vendas"
+          value={metrics.totalSales}
+          icon="ShoppingCart"
+          trend="up"
+          change="+3%"
+          compact={compactView}
+        />
+        <MetricsGrid.Item
+          title="Taxa de Conclusão"
+          value={`${metrics.completionRate.toFixed(1)}%`}
+          icon="BarChart"
+          trend="up"
+          change="+2%"
+          compact={compactView}
+        />
+        <MetricsGrid.Item
+          title="Taxa de Conversão"
+          value={`${metrics.conversionRate.toFixed(1)}%`}
+          icon="TrendingUp"
+          trend="down"
+          change="-1%"
+          compact={compactView}
+        />
+      </div>
       
-      <Card className="border border-border/40 shadow-sm">
-        <CardHeader className="pb-1.5">
-          <CardTitle>Tendências do Funil</CardTitle>
-          <CardDescription className="text-xs">Evolução diária das principais etapas do funil</CardDescription>
+      <Card>
+        <CardHeader>
+          <CardTitle>Tendência de Eventos</CardTitle>
+          <CardDescription>Visualização dos eventos por data</CardDescription>
         </CardHeader>
-        <CardContent className="pt-1 px-2">
-          <div className="h-[55px]">
-            <ChartContainer config={chartConfig}>
-              <LineChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 7 }}
-                  tickLine={{ stroke: '#e0e0e0' }}
+        <CardContent className="px-2">
+          <div className={`w-full ${compactView ? 'h-[250px]' : 'h-[400px]'}`}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={chartData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tickFormatter={formatDate} />
+                <YAxis />
+                <Tooltip 
+                  formatter={(value, name) => [value, name === 'quiz_start' ? 'Início do Quiz' : 
+                                                name === 'quiz_complete' ? 'Quiz Completo' : 
+                                                name === 'result_view' ? 'Visualizações' :
+                                                name === 'lead_generated' ? 'Leads' : 'Vendas']}
+                  labelFormatter={(label) => `Data: ${formatDate(label)}`}
                 />
-                <YAxis 
-                  stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 7 }}
-                  tickLine={{ stroke: '#e0e0e0' }}
-                />
-                <Tooltip content={renderTooltipContent} />
-                <Legend content={renderLegendContent} verticalAlign="top" height={10} />
-                
-                {/* Reference lines for averages */}
-                <ReferenceLine 
-                  y={avgInicios} 
-                  stroke="#4f46e5" 
-                  strokeDasharray="3 3" 
-                  ifOverflow="extendDomain"
-                  strokeWidth={0.5}
-                />
-                
-                {/* Enhanced lines with better styling */}
-                <Line 
-                  type="monotone" 
-                  dataKey="inicios" 
-                  stroke="#4f46e5" 
-                  strokeWidth={1}
-                  dot={{ r: 1, strokeWidth: 0.5 }}
-                  activeDot={{ r: 2, strokeWidth: 0, fill: '#4f46e5' }} 
-                  animationDuration={1200}
-                  animationEasing="ease-in-out"
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="conclusoes" 
-                  stroke="#10b981" 
-                  strokeWidth={1} 
-                  dot={{ r: 1, strokeWidth: 0.5 }}
-                  activeDot={{ r: 2, strokeWidth: 0, fill: '#10b981' }}
-                  animationDuration={1200}
-                  animationEasing="ease-in-out"
-                  animationBegin={300}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="resultados" 
-                  stroke="#f59e0b" 
-                  strokeWidth={1} 
-                  dot={{ r: 1, strokeWidth: 0.5 }}
-                  activeDot={{ r: 2, strokeWidth: 0, fill: '#f59e0b' }}
-                  animationDuration={1200}
-                  animationEasing="ease-in-out"
-                  animationBegin={600}
-                />
-                <Line
-                  type="monotone" 
-                  dataKey="checkout" 
-                  stroke="#8B5CF6" 
-                  strokeWidth={1} 
-                  dot={{ r: 1, strokeWidth: 0.5 }}
-                  activeDot={{ r: 2, strokeWidth: 0, fill: '#8B5CF6' }}
-                  animationDuration={1200}
-                  animationEasing="ease-in-out"
-                  animationBegin={750}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="leads" 
-                  stroke="#ef4444" 
-                  strokeWidth={1} 
-                  dot={{ r: 1, strokeWidth: 0.5 }}
-                  activeDot={{ r: 2, strokeWidth: 0, fill: '#ef4444' }}
-                  animationDuration={1200}
-                  animationEasing="ease-in-out"
-                  animationBegin={900}
-                />
+                <Legend formatter={(value) => value === 'quiz_start' ? 'Início do Quiz' : 
+                                             value === 'quiz_complete' ? 'Quiz Completo' : 
+                                             value === 'result_view' ? 'Visualizações' :
+                                             value === 'lead_generated' ? 'Leads' : 'Vendas'} />
+                <Line type="monotone" dataKey="quiz_start" stroke="#8884d8" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="quiz_complete" stroke="#82ca9d" />
+                <Line type="monotone" dataKey="result_view" stroke="#ffc658" />
+                <Line type="monotone" dataKey="lead_generated" stroke="#ff7300" />
+                <Line type="monotone" dataKey="sale" stroke="#ff0000" />
               </LineChart>
-            </ChartContainer>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Conversão do Funil</CardTitle>
+          <CardDescription>Análise das taxas de conversão entre etapas do funil</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className={`w-full ${compactView ? 'h-[200px]' : 'h-[300px]'}`}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={conversionMetrics}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="title" />
+                <YAxis tickFormatter={(value) => `${value}%`} />
+                <Tooltip
+                  formatter={(value) => [`${value}%`, 'Taxa']}
+                  labelFormatter={(label) => `${label}`}
+                />
+                <Bar dataKey="value" fill={(data) => data.color} name="Taxa" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
     </div>
   );
 };
+
+export default OverviewTab;

@@ -1,3 +1,4 @@
+
 declare global {
   interface Window {
     fbq: any;
@@ -10,6 +11,22 @@ const FB_ACCESS_TOKEN = 'EAAEJYWeJHLABOzPlbLgdK367BPZAHPvweatRSiJ5e99WU0GtuFVI4Y
 
 // Cache da inicialização do Facebook Pixel para evitar duplicação
 let pixelInitialized = false;
+
+// Função para verificar se o evento está habilitado para rastreamento
+const isEventEnabled = (eventType: string): boolean => {
+  try {
+    const trackedEvents = localStorage.getItem('fb_tracked_events');
+    if (trackedEvents) {
+      const parsed = JSON.parse(trackedEvents);
+      return parsed[eventType] === true;
+    }
+    // Se não houver configuração, assume que todos os eventos estão habilitados (padrão)
+    return true;
+  } catch (error) {
+    console.error('Erro ao verificar se evento está habilitado:', error);
+    return true;
+  }
+}
 
 // Inicialização do Facebook Pixel
 export const initFacebookPixel = () => {
@@ -64,6 +81,13 @@ export const initFacebookPixel = () => {
 // Safe wrapper for fbq calls
 const safeFbq = (event: string, name: string, params?: any) => {
   try {
+    // Verificar se o rastreamento está habilitado
+    const trackingEnabled = localStorage.getItem('tracking_enabled') !== 'false';
+    if (!trackingEnabled) {
+      console.log(`Facebook Pixel tracking disabled. Would track: ${event}, ${name}`);
+      return;
+    }
+
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq(event, name, params);
       console.log(`Facebook Pixel event tracked: ${event}, ${name}`, params);
@@ -78,9 +102,13 @@ const safeFbq = (event: string, name: string, params?: any) => {
 // Funções para rastreamento de eventos do quiz
 export const trackQuizStart = (userName?: string, userEmail?: string) => {
   console.log('Quiz iniciado - evento registrado');
-  safeFbq('trackCustom', 'QuizStart', {
-    content_name: 'Quiz Iniciado'
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('quiz_start')) {
+    safeFbq('trackCustom', 'QuizStart', {
+      content_name: 'Quiz Iniciado'
+    });
+  }
   
   // Armazenar o evento no localStorage para o dashboard com dados do usuário
   saveAnalyticsEvent({
@@ -94,12 +122,16 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
 
 export const trackQuizAnswer = (questionId: string, selectedOptions: string[], questionIndex: number, totalQuestions: number) => {
   console.log(`Resposta registrada - Questão ${questionId}`);
-  safeFbq('trackCustom', 'QuizAnswer', {
-    question_id: questionId,
-    selected_options: selectedOptions,
-    question_index: questionIndex,
-    total_questions: totalQuestions
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('quiz_answer')) {
+    safeFbq('trackCustom', 'QuizAnswer', {
+      question_id: questionId,
+      selected_options: selectedOptions,
+      question_index: questionIndex,
+      total_questions: totalQuestions
+    });
+  }
   
   // Armazenar o evento no localStorage para o dashboard
   saveAnalyticsEvent({
@@ -115,9 +147,13 @@ export const trackQuizAnswer = (questionId: string, selectedOptions: string[], q
 
 export const trackQuizComplete = () => {
   console.log('Quiz completo - evento registrado');
-  safeFbq('trackCustom', 'QuizComplete', {
-    content_name: 'Quiz Completo'
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('quiz_complete')) {
+    safeFbq('trackCustom', 'QuizComplete', {
+      content_name: 'Quiz Completo'
+    });
+  }
   
   // Armazenar o evento no localStorage para o dashboard
   saveAnalyticsEvent({
@@ -128,9 +164,13 @@ export const trackQuizComplete = () => {
 
 export const trackResultView = (resultType: string) => {
   console.log(`Resultado visualizado - Tipo: ${resultType}`);
-  safeFbq('trackCustom', 'ResultView', {
-    result_type: resultType
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('result_view')) {
+    safeFbq('trackCustom', 'ResultView', {
+      result_type: resultType
+    });
+  }
   
   // Armazenar o evento no localStorage para o dashboard
   saveAnalyticsEvent({
@@ -142,9 +182,13 @@ export const trackResultView = (resultType: string) => {
 
 export const trackLeadGeneration = (email: string) => {
   console.log('Lead gerado - evento registrado');
-  safeFbq('track', 'Lead', {
-    content_name: 'Lead Quiz'
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('lead_generated')) {
+    safeFbq('track', 'Lead', {
+      content_name: 'Lead Quiz'
+    });
+  }
   
   // Armazenar o evento no localStorage para o dashboard
   saveAnalyticsEvent({
@@ -158,10 +202,14 @@ export const trackLeadGeneration = (email: string) => {
 
 export const trackSaleConversion = (value: number) => {
   console.log(`Conversão de venda registrada - Valor: ${value}`);
-  safeFbq('track', 'Purchase', {
-    value: value,
-    currency: 'BRL'
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('sale')) {
+    safeFbq('track', 'Purchase', {
+      value: value,
+      currency: 'BRL'
+    });
+  }
   
   // Armazenar o evento no localStorage para o dashboard
   saveAnalyticsEvent({
@@ -174,12 +222,16 @@ export const trackSaleConversion = (value: number) => {
 // Track button clicks
 export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLocation?: string) => {
   console.log(`Botão clicado - ID: ${buttonId}, Texto: ${buttonText || 'N/A'}, Local: ${buttonLocation || 'N/A'}`);
-  safeFbq('trackCustom', 'ButtonClick', {
-    button_id: buttonId,
-    button_text: buttonText || '',
-    button_location: buttonLocation || '',
-    timestamp: new Date().toISOString()
-  });
+  
+  // Verificar se este evento está habilitado para rastreamento
+  if (isEventEnabled('button_click')) {
+    safeFbq('trackCustom', 'ButtonClick', {
+      button_id: buttonId,
+      button_text: buttonText || '',
+      button_location: buttonLocation || '',
+      timestamp: new Date().toISOString()
+    });
+  }
   
   // Store the event in localStorage for the dashboard
   saveAnalyticsEvent({

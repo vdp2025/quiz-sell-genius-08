@@ -8,6 +8,8 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
 import { EventTrackingCard } from './EventTrackingCard';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface FacebookPixelCardProps {
   initialId?: string;
@@ -44,6 +46,33 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
       return '';
     }
   });
+
+  const [trackedEvents, setTrackedEvents] = useState(() => {
+    try {
+      const stored = localStorage.getItem('fb_tracked_events');
+      return stored ? JSON.parse(stored) : {
+        quiz_start: true,
+        quiz_answer: true,
+        quiz_complete: true,
+        result_view: true,
+        lead_generated: true,
+        sale: true,
+        button_click: false
+      };
+    } catch (e) {
+      return {
+        quiz_start: true,
+        quiz_answer: true,
+        quiz_complete: true,
+        result_view: true,
+        lead_generated: true,
+        sale: true,
+        button_click: false
+      };
+    }
+  });
+  
+  const [isEventsOpen, setIsEventsOpen] = useState(false);
   
   // Load settings from localStorage
   useEffect(() => {
@@ -51,10 +80,12 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
       const storedId = localStorage.getItem('fb_pixel_id');
       const storedEnabled = localStorage.getItem('tracking_enabled');
       const storedToken = localStorage.getItem('fb_access_token');
+      const storedEvents = localStorage.getItem('fb_tracked_events');
       
       if (storedId) setFbPixelId(storedId);
       if (storedEnabled !== null) setFbPixelEnabled(storedEnabled === 'true');
       if (storedToken) setFbAccessToken(storedToken);
+      if (storedEvents) setTrackedEvents(JSON.parse(storedEvents));
     } catch (error) {
       console.error('Error loading Facebook Pixel settings:', error);
     }
@@ -65,6 +96,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
       localStorage.setItem('fb_pixel_id', fbPixelId);
       localStorage.setItem('tracking_enabled', String(fbPixelEnabled));
       localStorage.setItem('fb_access_token', fbAccessToken);
+      localStorage.setItem('fb_tracked_events', JSON.stringify(trackedEvents));
       
       toast({
         title: "Configurações do Facebook Pixel salvas",
@@ -97,6 +129,23 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
         variant: result ? "default" : "destructive"
       });
     }, 1500);
+  };
+
+  const handleEventToggle = (eventName: string) => {
+    setTrackedEvents(prev => ({
+      ...prev,
+      [eventName]: !prev[eventName]
+    }));
+  };
+
+  const eventLabels: Record<string, string> = {
+    quiz_start: "Início do Quiz (QuizStart)",
+    quiz_answer: "Respostas do Quiz (QuizAnswer)",
+    quiz_complete: "Conclusão do Quiz (QuizComplete)",
+    result_view: "Visualização de Resultado (ResultView)",
+    lead_generated: "Captura de Lead (Lead)",
+    sale: "Vendas (Purchase)",
+    button_click: "Cliques em Botões (ButtonClick)"
   };
   
   return (
@@ -152,6 +201,29 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
             />
             <Label htmlFor="fb-tracking" className="text-sm">Habilitar rastreamento do Facebook Pixel</Label>
           </div>
+
+          <Collapsible open={isEventsOpen} onOpenChange={setIsEventsOpen} className="mt-2 border rounded-md p-2">
+            <CollapsibleTrigger className="flex w-full items-center justify-between text-sm font-medium">
+              <span>Configurar eventos rastreados</span>
+              {isEventsOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2 space-y-2">
+              {Object.entries(eventLabels).map(([eventName, label]) => (
+                <div key={eventName} className="flex items-center space-x-2">
+                  <Switch 
+                    id={`event-${eventName}`}
+                    checked={trackedEvents[eventName] || false}
+                    onCheckedChange={() => handleEventToggle(eventName)}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-${eventName}`} className="text-xs">{label}</Label>
+                </div>
+              ))}
+              <p className="text-xs text-muted-foreground mt-2">
+                Selecione quais eventos serão enviados para o Facebook Pixel
+              </p>
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
         <CardFooter className="flex justify-between pt-2">
           <Button variant="outline" size="sm" onClick={handleTestConnection} className="text-xs h-7">

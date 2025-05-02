@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, Suspense } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { AnalyticsLoadingState } from '@/components/analytics/LoadingState';
@@ -24,6 +25,9 @@ const AnalyticsPage: React.FC = () => {
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [metricsCalculated, setMetricsCalculated] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<string[]>(['quiz_start', 'quiz_complete', 'result_view', 'lead_generated', 'sale']);
+  const [compactView, setCompactView] = useState<boolean>(() => {
+    return localStorage.getItem('analytics_compact_view') === 'true';
+  });
   const isLowPerformance = useIsLowPerformanceDevice();
   
   const { isLoading, setLoading, completeLoading } = useLoadingState({
@@ -55,6 +59,7 @@ const AnalyticsPage: React.FC = () => {
         metrics,
         timeRange,
         selectedEvents,
+        compactView,
         onExportData: handleExportData
       });
       
@@ -69,7 +74,7 @@ const AnalyticsPage: React.FC = () => {
       });
       completeLoading();
     }
-  }, [timeRange, selectedEvents, setLoading, completeLoading]);
+  }, [timeRange, selectedEvents, compactView, setLoading, completeLoading]);
 
   const handleRefresh = () => {
     setLoading(true);
@@ -92,6 +97,7 @@ const AnalyticsPage: React.FC = () => {
         metrics,
         timeRange,
         selectedEvents,
+        compactView,
         onExportData: handleExportData
       });
       
@@ -151,6 +157,12 @@ const AnalyticsPage: React.FC = () => {
     setSelectedEvents(events);
   };
 
+  const toggleCompactView = () => {
+    const newValue = !compactView;
+    setCompactView(newValue);
+    localStorage.setItem('analytics_compact_view', String(newValue));
+  };
+
   // Render loading skeleton if data is not ready
   if (isLoading || !analyticsData) {
     return (
@@ -170,6 +182,8 @@ const AnalyticsPage: React.FC = () => {
         onClearData={handleClearData}
         onEventSelectionChange={handleEventSelectionChange}
         selectedEvents={selectedEvents}
+        compactView={compactView}
+        onToggleCompactView={toggleCompactView}
       />
       
       <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="space-y-4">
@@ -220,11 +234,11 @@ const AnalyticsPage: React.FC = () => {
         
         <Suspense fallback={<div className="h-[200px] flex items-center justify-center"><LoadingSpinner /></div>}>
           <TabsContent value="overview" className="mt-6">
-            <OverviewTab analyticsData={analyticsData} loading={!metricsCalculated} />
+            <OverviewTab analyticsData={{...analyticsData, compactView}} loading={!metricsCalculated} />
           </TabsContent>
           
           <TabsContent value="funnel" className="mt-6">
-            <FunnelTab analyticsData={analyticsData} loading={!metricsCalculated} />
+            <FunnelTab analyticsData={{...analyticsData, compactView}} loading={!metricsCalculated} />
           </TabsContent>
           
           <TabsContent value="users" className="mt-6">
