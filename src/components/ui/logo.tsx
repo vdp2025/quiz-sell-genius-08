@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface LogoProps {
   src?: string;
@@ -7,6 +7,7 @@ interface LogoProps {
   className?: string;
   style?: React.CSSProperties;
   priority?: boolean;
+  fallbackText?: string;
 }
 
 const Logo: React.FC<LogoProps> = ({ 
@@ -14,33 +15,56 @@ const Logo: React.FC<LogoProps> = ({
   alt = "Logo Gisele Galvão",
   className = "h-14", 
   style,
-  priority = false
+  priority = false,
+  fallbackText
 }) => {
   const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Pré-carregar a logo se for prioritária
+  useEffect(() => {
+    if (priority && src) {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => setIsLoaded(true);
+      img.onerror = () => setHasError(true);
+    }
+  }, [src, priority]);
 
   if (hasError) {
     return (
       <div 
-        className={`flex items-center justify-center bg-gray-100 ${className}`}
+        className={`flex items-center justify-center ${className}`}
         style={style}
       >
-        <span className="text-gray-500 font-playfair">{alt}</span>
+        <span className="text-[#aa6b5d] font-playfair font-medium text-xl">
+          {fallbackText || alt}
+        </span>
       </div>
     );
   }
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      style={style}
-      width={style?.height ? Number(style.height) * 2.5 : 175} // Considerando proporção de 2.5:1
-      height={style?.height ? Number(style.height) : 70}
-      onError={() => setHasError(true)}
-      loading={priority ? "eager" : "lazy"}
-      fetchPriority={priority ? "high" : "auto"}
-    />
+    <>
+      {!isLoaded && priority && (
+        <div className={`${className} bg-gray-100 animate-pulse rounded-md flex items-center justify-center`}>
+          <span className="text-gray-400 text-sm">Carregando...</span>
+        </div>
+      )}
+      
+      <img
+        src={src}
+        alt={alt}
+        className={`${className} ${!isLoaded && priority ? 'hidden' : 'block'}`}
+        style={style}
+        width={style?.width ? Number(style.width) : undefined} 
+        height={style?.height ? Number(style.height) : undefined}
+        onError={() => setHasError(true)}
+        onLoad={() => setIsLoaded(true)}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+      />
+    </>
   );
 };
 

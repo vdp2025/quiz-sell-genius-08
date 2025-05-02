@@ -1,14 +1,13 @@
 
 import React, { useState } from 'react';
 import { Card } from '../ui/card';
-import { Button } from '../ui/button';
-import { ShoppingCart } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
 import BenefitList from './sales/BenefitList';
 import Testimonials from './sales/Testimonials';
 import Guarantee from './sales/Guarantee';
 import Logo from '../ui/logo';
 import { OfferContent } from '@/types/resultPageConfig';
+import PricingSection from './sales/PricingSection';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
@@ -30,12 +29,27 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
   const mentorImage = config?.mentorImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp";
   const bonusImage = config?.bonusImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp";
   
-  const [isHovered, setIsHovered] = useState(false);
+  const [imageErrors, setImageErrors] = useState<{[key: string]: boolean}>({
+    hero: false,
+    products: false,
+    bonus: false,
+    mentor: false,
+    logo: false
+  });
+  
+  const handleImageError = (key: string) => {
+    setImageErrors(prev => ({ ...prev, [key]: true }));
+    console.error(`Failed to load ${key} image`);
+  };
   
   return (
     <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
       <div className="text-center">
-        <Logo className="h-20 mx-auto mb-8" priority={true} />
+        <Logo 
+          className="h-20 mx-auto mb-8" 
+          priority={true} 
+          fallbackText="Gisele Galvão"
+        />
       </div>
 
       <div className="text-center mb-8">
@@ -53,10 +67,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
         className="w-full rounded-lg mb-8 shadow-md"
         loading="eager"
         fetchPriority="high"
+        onError={() => handleImageError('hero')}
       />
 
       <Card className="p-6 border-[#aa6b5d]/20 bg-white">
-        <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
+        <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4 text-center">
           {config?.productTitle || "Guia de Estilo e Imagem + Bônus Exclusivos"}
         </h2>
 
@@ -65,50 +80,47 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
           alt="Todos os produtos e bônus mockup"
           className="w-full rounded-lg mb-6 shadow-md"
           loading="eager"
+          onError={() => handleImageError('products')}
         />
 
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
-            <div className="text-center md:text-right">
-              <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
-              <p className="text-lg line-through text-[#3a3a3a]/60">
-                R$ {regularPrice}
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-              <p className="text-3xl font-bold text-[#aa6b5d]">
-                R$ {salePrice}
-              </p>
-              <p className="text-xs text-[#3a3a3a]/70">ou 4x de R$ 10,86</p>
-            </div>
-          </div>
-
-          <Button 
-            className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-            onClick={() => window.location.href = ctaUrl}
-          >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            {ctaText}
-          </Button>
-        </div>
+        {/* Preço estratégico usando PricingSection */}
+        <PricingSection 
+          price={salePrice}
+          regularPrice={regularPrice}
+          ctaText={ctaText}
+          ctaUrl={ctaUrl}
+        />
       </Card>
 
       <BenefitList />
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <img
-          src={bonusImage}
-          alt="Mockup celular peças-chave por dentro"
-          className="w-full rounded-lg shadow-md"
-          loading="lazy"
-        />
-        <img
-          src={mentorImage}
-          alt="Foto Gisele Galvão"
-          className="w-full rounded-lg shadow-md"
-          loading="lazy"
-        />
+      {/* Mostrar apenas 1 imagem por linha para aumentar o tamanho */}
+      <div className="space-y-6">
+        <Card className="overflow-hidden rounded-lg shadow-md p-4 bg-white">
+          <h3 className="text-xl font-playfair text-[#aa6b5d] mb-3 text-center">
+            Bônus Exclusivo: Guia de Peças-Chave
+          </h3>
+          <img
+            src={bonusImage}
+            alt="Guia de Peças-Chave por Estilo"
+            className="w-full rounded-lg shadow-sm object-cover max-h-[400px]"
+            loading="lazy"
+            onError={() => handleImageError('bonus')}
+          />
+        </Card>
+        
+        <Card className="overflow-hidden rounded-lg shadow-md p-4 bg-white">
+          <h3 className="text-xl font-playfair text-[#aa6b5d] mb-3 text-center">
+            Sua Mentora de Estilo
+          </h3>
+          <img
+            src={mentorImage}
+            alt="Foto Gisele Galvão"
+            className="w-full rounded-lg shadow-sm object-cover max-h-[400px]"
+            loading="lazy"
+            onError={() => handleImageError('mentor')}
+          />
+        </Card>
       </div>
 
       <Testimonials />
