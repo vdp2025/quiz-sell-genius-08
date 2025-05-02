@@ -1,5 +1,8 @@
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+
 const MentorSection: React.FC = () => {
   return <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant overflow-hidden">
       {/* Background decorative elements */}
@@ -24,7 +27,18 @@ const MentorSection: React.FC = () => {
         </div>
         
         <div className="relative">
-          <img alt="Gisele Galvão - Mentora de Estilo" className="rounded-lg shadow-md w-full max-w-md mx-auto hover:scale-105 transition-transform duration-300" loading="lazy" src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp" />
+          <div className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+            <AspectRatio ratio={4/5}>
+              <img 
+                alt="Gisele Galvão - Mentora de Estilo" 
+                className="w-full h-full object-cover" 
+                loading="lazy"
+                width="400"
+                height="500" 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp" 
+              />
+            </AspectRatio>
+          </div>
           {/* Elegant decorative corner */}
           <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
           <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>

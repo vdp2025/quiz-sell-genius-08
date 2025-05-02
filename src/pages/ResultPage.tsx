@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -22,30 +23,24 @@ import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+
 const ResultPage: React.FC = () => {
-  const {
-    primaryStyle,
-    secondaryStyles
-  } = useQuiz();
-  const {
-    globalStyles
-  } = useGlobalStyles();
+  const { primaryStyle, secondaryStyles } = useQuiz();
+  const { globalStyles } = useGlobalStyles();
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
   });
   const isLowPerformance = useIsLowPerformanceDevice();
-  const {
-    isLoading,
-    completeLoading
-  } = useLoadingState({
-    minDuration: isLowPerformance ? 400 : 800,
-    // Reduzido para carregar mais rápido
+  const { isLoading, completeLoading } = useLoadingState({
+    minDuration: isLowPerformance ? 400 : 800, // Reduzido para carregar mais rápido
     disableTransitions: isLowPerformance
   });
 
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
@@ -58,44 +53,32 @@ const ResultPage: React.FC = () => {
     });
 
     // Depois carregar as imagens específicas do estilo
-    const {
-      category
-    } = primaryStyle;
-    const {
-      image,
-      guideImage
-    } = styleConfig[category];
+    const { category } = primaryStyle;
+    const { image, guideImage } = styleConfig[category];
     const styleImg = new Image();
     styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
-    styleImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      style: true
-    }));
+    styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
     const guideImg = new Image();
     guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-    guideImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      guide: true
-    }));
+    guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
   }, [primaryStyle, globalStyles.logo]);
+
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
-  const {
-    category
-  } = primaryStyle;
-  const {
-    image,
-    guideImage,
-    description
-  } = styleConfig[category];
+
+  const { category } = primaryStyle;
+  const { image, guideImage, description } = styleConfig[category];
+
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
+
   return <div className="min-h-screen relative overflow-hidden" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
     color: globalStyles.textColor || '#432818',
@@ -105,7 +88,12 @@ const ResultPage: React.FC = () => {
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
+      <Header 
+        primaryStyle={primaryStyle} 
+        logoHeight={globalStyles.logoHeight} 
+        logo={globalStyles.logo} 
+        logoAlt={globalStyles.logoAlt} 
+      />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* ATTENTION: Primary Style Card */}
@@ -137,7 +125,17 @@ const ResultPage: React.FC = () => {
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
+                  <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+                    <img 
+                      src={`${image}?q=auto:best&f=auto&w=238`} 
+                      alt={`Estilo ${category}`} 
+                      className="w-full h-full object-cover" 
+                      loading="eager" 
+                      fetchPriority="high" 
+                      width="238" 
+                      height="317" 
+                    />
+                  </AspectRatio>
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
@@ -146,7 +144,16 @@ const ResultPage: React.FC = () => {
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
+                <AspectRatio ratio={16/9} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+                  <img 
+                    src={`${guideImage}?q=auto:best&f=auto&w=540`} 
+                    alt={`Guia de Estilo ${category}`} 
+                    loading="lazy" 
+                    className="w-full h-full object-cover" 
+                    width="540" 
+                    height="304"
+                  />
+                </AspectRatio>
                 {/* Elegant badge */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
@@ -265,9 +272,18 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg relative">
                 <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+                <div className="flex items-center justify-center gap-2 mt-1">
+                  <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+                  <img 
+                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png" 
+                    alt="Selo de garantia" 
+                    className="w-16 h-16 object-contain" 
+                    width="64" 
+                    height="64"
+                  />
+                </div>
                 <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
               </div>
             </div>
