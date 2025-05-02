@@ -5,7 +5,7 @@
  */
 
 export const VERSION = {
-  buildNumber: '1.0.0',
+  buildNumber: '1.0.1',
   lastUpdated: new Date().toISOString(),
   environment: process.env.NODE_ENV || 'development'
 };
