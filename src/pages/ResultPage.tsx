@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -6,7 +5,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock, Edit } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -25,7 +24,6 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useAuth } from '@/context/AuthContext';
-import { Link } from 'react-router-dom';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -39,13 +37,6 @@ const ResultPage: React.FC = () => {
   });
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    // Check if user is admin - This is just for demonstration
-    // In a real app, you'd likely check this from your user context/auth system
-    setIsAdmin(user?.role === 'admin' || localStorage.getItem('isAdmin') === 'true');
-  }, [user]);
 
   useEffect(() => {
     if (!primaryStyle) return;
@@ -87,25 +78,6 @@ const ResultPage: React.FC = () => {
     }}>
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={userName} />
 
-      {isAdmin && (
-        <div className="container mx-auto px-4 py-2 max-w-4xl">
-          <div className="flex gap-2 mb-4">
-            <Link to="/admin/editor/result">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Edit className="w-4 h-4" />
-                Editor Básico
-              </Button>
-            </Link>
-            <Link to="/admin/editor/result/enhanced">
-              <Button variant="default" size="sm" className="flex items-center gap-2 bg-[#B89B7A] hover:bg-[#A38A69]">
-                <Edit className="w-4 h-4" />
-                Editor Avançado
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
-
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
@@ -129,7 +101,7 @@ const ResultPage: React.FC = () => {
               </div>
               <div className="max-w-[238px] mx-auto relative">
                 <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
-                  <img 
+                  <img className="w-full h-full object-contain" 
                     src={`${image}?q=auto:best&f=auto&w=238`} 
                     alt={`Estilo ${category}`} 
                     className="w-full h-full object-cover" 
@@ -145,8 +117,8 @@ const ResultPage: React.FC = () => {
             </div>
 
             <div className="mt-8 max-w-[540px] mx-auto relative">
-              <AspectRatio ratio={16/9} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
-                <img 
+              <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+                <img className="w-full h-full object-contain" 
                   src={`${guideImage}?q=auto:best&f=auto&w=540`} 
                   alt={`Guia de Estilo ${category}`} 
                   loading="lazy" 
@@ -177,16 +149,16 @@ const ResultPage: React.FC = () => {
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png" 
               srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 1x, https://res.cloudinary.com/dqljyf76t/image/upload/q_auto,f_auto,w_128/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 2x" sizes="(max-width: 768px) 100vw, 64px" 
               alt="Selo de garantia" 
-              className="w-16 h-16 object-contain sm:order-1 order-2 mt-2 sm:mt-0" 
+              className="w-20 h-20 sm:w-24 sm:h-24 object-contain sm:order-1 order-2 mt-2 sm:mt-0" 
               width="64" 
               height="64"
               loading="lazy"
             />
           </div>
-          <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong></p>
+          <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong><br className=\"block sm:hidden\" /> no cartão</p>
         </div>
 
-        <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mt-6" style={{
+        <Button onClick={handleCTAClick} className="text-white py-5 px-8 lg:py-6 lg:px-12 rounded-md shadow-md transition-colors btn-3d mt-6" style={{
           background: "linear-gradient(to right, #4CAF50, #45a049)",
           boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
           fontSize: "1rem"
