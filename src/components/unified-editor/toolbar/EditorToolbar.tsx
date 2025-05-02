@@ -10,7 +10,7 @@ import {
   Undo,
   Redo,
   LayoutTemplate,
-  Desktop,
+  Monitor,
   Tablet,
   Smartphone
 } from 'lucide-react';
@@ -115,7 +115,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                   className="w-8 h-8"
                   onClick={() => onViewportSizeChange?.('xl')}
                 >
-                  <Desktop className="h-4 w-4" />
+                  <Monitor className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

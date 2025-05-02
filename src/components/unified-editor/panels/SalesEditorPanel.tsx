@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/components/ui/use-toast';
 import { AlertCircle, Palette, Image, Type } from 'lucide-react';
-import { Block } from '@/types/editor';
+import { Block, BlockType } from '@/types/editor';
 
 interface SalesEditorPanelProps {
   isPreviewing: boolean;
@@ -31,7 +31,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
     setBlocks([
       {
         id: 'hero-1',
-        type: 'hero',
+        type: 'hero-section' as BlockType, // Using the correct BlockType
         content: {
           title: 'Transforme seu Estilo Pessoal',
           subtitle: 'Descubra produtos e serviços especialmente para o seu estilo',
@@ -47,11 +47,14 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
   }, []);
 
   const handleAddBlock = (type: string) => {
+    // Make sure the type is a valid BlockType
+    const blockType = type as BlockType;
+    
     const newBlock: Block = {
       id: `block-${Date.now()}`,
-      type: type as Block['type'],
+      type: blockType,
       content: {
-        title: type === 'hero' ? 'Título Principal' : 'Título da Seção',
+        title: blockType === 'hero-section' ? 'Título Principal' : 'Título da Seção',
         subtitle: 'Subtítulo',
         description: 'Descrição detalhada',
         style: {}
@@ -89,7 +92,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
             Adicione componentes à sua página de vendas usando o painel lateral.
             Cada componente pode ser personalizado para se adequar ao seu estilo.
           </p>
-          <Button onClick={() => handleAddBlock('hero')}>
+          <Button onClick={() => handleAddBlock('hero-section')}>
             Adicionar Seção Hero
           </Button>
         </div>
@@ -103,7 +106,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
             className={`relative ${selectedBlockId === block.id && !isPreviewing ? 'ring-2 ring-blue-500' : ''}`}
             onClick={() => !isPreviewing && setSelectedBlockId(block.id)}
           >
-            {block.type === 'hero' && (
+            {block.type === 'hero-section' && (
               <div 
                 className="py-12 px-8 rounded-lg text-center"
                 style={{
@@ -237,7 +240,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
               />
             </div>
               
-            {selectedBlock.type === 'hero' && (
+            {selectedBlock.type === 'hero-section' && (
               <div>
                 <label className="block text-sm font-medium mb-1">URL da Imagem</label>
                 <Input 
