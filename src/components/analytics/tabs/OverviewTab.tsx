@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { MetricsGrid } from '../MetricsGrid';
+import { MetricCard } from '../MetricCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
 
@@ -93,7 +93,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
   return (
     <div className="space-y-6">
       <div className={`grid ${compactView ? 'grid-cols-2 md:grid-cols-4 xl:grid-cols-7' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4'} gap-4`}>
-        <MetricsGrid.Item
+        <MetricCard
           title="Inicios de Quiz"
           value={metrics.totalStarts}
           icon="Play"
@@ -101,7 +101,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           change="+12%"
           compact={compactView}
         />
-        <MetricsGrid.Item
+        <MetricCard
           title="Quiz Completos"
           value={metrics.totalCompletes}
           icon="CheckCircle"
@@ -109,7 +109,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           change="+8%"
           compact={compactView}
         />
-        <MetricsGrid.Item
+        <MetricCard
           title="Resultados Vistos"
           value={metrics.totalResultViews}
           icon="Eye"
@@ -117,7 +117,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           change="+15%"
           compact={compactView}
         />
-        <MetricsGrid.Item
+        <MetricCard
           title="Leads Gerados"
           value={metrics.totalLeads}
           icon="Users"
@@ -125,7 +125,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           change="+5%"
           compact={compactView}
         />
-        <MetricsGrid.Item
+        <MetricCard
           title="Vendas"
           value={metrics.totalSales}
           icon="ShoppingCart"
@@ -133,7 +133,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           change="+3%"
           compact={compactView}
         />
-        <MetricsGrid.Item
+        <MetricCard
           title="Taxa de Conclusão"
           value={`${metrics.completionRate.toFixed(1)}%`}
           icon="BarChart"
@@ -141,7 +141,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           change="+2%"
           compact={compactView}
         />
-        <MetricsGrid.Item
+        <MetricCard
           title="Taxa de Conversão"
           value={`${metrics.conversionRate.toFixed(1)}%`}
           icon="TrendingUp"
@@ -217,7 +217,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   formatter={(value) => [`${value}%`, 'Taxa']}
                   labelFormatter={(label) => `${label}`}
                 />
-                <Bar dataKey="value" fill={(data) => data.color} name="Taxa" />
+                <Bar dataKey="value" fill={(data) => data.color || '#4f46e5'} name="Taxa" />
               </BarChart>
             </ResponsiveContainer>
           </div>

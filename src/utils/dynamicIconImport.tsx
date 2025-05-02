@@ -3,7 +3,7 @@ import React from 'react';
 import * as Icons from 'lucide-react';
 import { LucideIcon, LucideProps } from 'lucide-react';
 
-// This function returns a React component that renders the specified Lucide icon
+// This function returns a React component type that renders the specified Lucide icon
 export const dynamicIconImport = (iconName: string): React.ElementType => {
   // Default to Star if icon not found
   if (!iconName || typeof iconName !== 'string') {

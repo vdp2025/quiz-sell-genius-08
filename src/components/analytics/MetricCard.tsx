@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import * as LucideIcons from 'lucide-react';
+import { dynamicIconImport } from '@/utils/dynamicIconImport';
 
 interface MetricCardProps {
   title: string;
@@ -25,7 +26,8 @@ export const MetricCard = ({
   icon,
   compact = false,
 }: MetricCardProps) => {
-  const IconComponent = icon ? LucideIcons[icon] : null;
+  // Use the dynamic icon import utility
+  const IconComponent = icon ? dynamicIconImport(icon) : null;
   
   return (
     <Card className={cn('shadow-sm border-border/40', className)}>
@@ -34,7 +36,7 @@ export const MetricCard = ({
           <div className="flex items-center justify-between space-x-4">
             {IconComponent && (
               <div className="rounded-full p-1.5 bg-muted">
-                <IconComponent className="h-5 w-5 text-foreground/80" />
+                {React.createElement(IconComponent, { className: "h-5 w-5 text-foreground/80" })}
               </div>
             )}
             <div className="space-y-0.5 flex-1">
@@ -66,7 +68,7 @@ export const MetricCard = ({
               <CardTitle className="text-sm font-medium">{title}</CardTitle>
               {IconComponent && (
                 <div className="rounded-full p-1.5 bg-muted">
-                  <IconComponent className="h-4 w-4 text-foreground/80" />
+                  {React.createElement(IconComponent, { className: "h-4 w-4 text-foreground/80" })}
                 </div>
               )}
             </div>
@@ -105,7 +107,8 @@ interface MetricsGridProps {
   className?: string;
 }
 
-interface MetricsGridComposition {
+// Export the interface for reuse in other components
+export interface MetricsGridComposition {
   Item: typeof MetricCard;
 }
 
@@ -131,4 +134,5 @@ export const MetricsGrid: React.FC<MetricsGridProps> & MetricsGridComposition = 
   );
 };
 
+// Attach the MetricCard component to MetricsGrid for composition
 MetricsGrid.Item = MetricCard;

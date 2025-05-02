@@ -2,7 +2,7 @@
 import React from 'react';
 import { MetricCard } from './MetricCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, ArrowUpRight, Share2, ShoppingCart, Activity, Clock, BarChart3, Target } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 
 interface MetricsGridProps {
   metrics: {
@@ -52,57 +52,57 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, loading = fal
       <MetricCard 
         title="Inicios de Quiz" 
         value={formatNumber(metrics.totalStarts)}
-        subtitle={`Total de inícios nos ${timeRangeLabel}`}
-        icon={<Activity size={16} />}
+        description={`Total de inícios nos ${timeRangeLabel}`}
+        icon="Activity"
       />
       
       <MetricCard 
         title="Taxa de Conclusão" 
         value={formatPercent(metrics.completionRate)}
-        subtitle={`${metrics.totalCompletes} de ${metrics.totalStarts} quizzes concluídos`}
-        icon={<Target size={16} />}
+        description={`${metrics.totalCompletes} de ${metrics.totalStarts} quizzes concluídos`}
+        icon="Target"
       />
       
       <MetricCard 
         title="Resultados Vistos" 
         value={formatNumber(metrics.totalResultViews)}
-        subtitle={`Pessoas que viram seus resultados`}
-        icon={<BarChart3 size={16} />}
+        description={`Pessoas que viram seus resultados`}
+        icon="BarChart3"
       />
       
       <MetricCard 
         title="Leads Gerados" 
         value={formatNumber(metrics.totalLeads)}
-        subtitle={`Total de leads capturados`}
-        icon={<Users size={16} />}
+        description={`Total de leads capturados`}
+        icon="Users"
       />
       
       <MetricCard 
         title="Taxa de Conversão" 
         value={formatPercent(metrics.conversionRate)}
-        subtitle={`Conversão de leads dos inícios`}
-        icon={<ArrowUpRight size={16} />}
+        description={`Conversão de leads dos inícios`}
+        icon="ArrowUpRight"
       />
       
       <MetricCard 
         title="Vendas" 
         value={formatNumber(metrics.totalSales)}
-        subtitle={`Total de compras realizadas`}
-        icon={<ShoppingCart size={16} />}
+        description={`Total de compras realizadas`}
+        icon="ShoppingCart"
       />
       
       <MetricCard 
         title="Taxa de Vendas" 
         value={formatPercent(metrics.salesRate)}
-        subtitle={`Taxa de compras de leads`}
-        icon={<Share2 size={16} />}
+        description={`Taxa de compras de leads`}
+        icon="Share2"
       />
       
       <MetricCard 
         title="Tempo Médio" 
         value="3:27"
-        subtitle={`Tempo médio para concluir`}
-        icon={<Clock size={16} />}
+        description={`Tempo médio para concluir`}
+        icon="Clock"
       />
     </div>
   );
