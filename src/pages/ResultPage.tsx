@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
-import BackupResultPage from '../backup/ResultPage.backup';
 import { trackResultView, trackSaleConversion } from '@/utils/analytics';
 import { Button } from '@/components/ui/button';
 import { PencilIcon } from 'lucide-react';
+import OptimizedSalesPage from '@/components/sales/OptimizedSalesPage';
 
 const ResultPage = () => {
   const quizLogic = useQuizLogic();
@@ -56,18 +56,6 @@ const ResultPage = () => {
     }
   }, [quizResult, navigate, resultTracked]);
 
-  // Função para rastrear compra quando o usuário clicar em um botão de compra
-  const handlePurchaseClick = (productId: string, value: number) => {
-    // Rastrear conversão de venda
-    trackSaleConversion(value);
-    
-    // Aqui você redirecionaria para a página de pagamento ou integraria com sua plataforma de pagamentos
-    console.log(`Produto ${productId} comprado por ${value}`);
-    
-    // Exemplo: redirecionar para uma página externa
-    // window.location.href = `https://sua-plataforma-de-pagamentos.com/checkout/${productId}`;
-  };
-
   const handleEditClick = () => {
     navigate('/resultado/editar');
   };
@@ -98,7 +86,10 @@ const ResultPage = () => {
           </Button>
         </div>
       )}
-      <BackupResultPage />
+      <OptimizedSalesPage 
+        primaryStyle={resultToUse.primaryStyle} 
+        secondaryStyles={resultToUse.secondaryStyles || []} 
+      />
     </>
   );
 };
