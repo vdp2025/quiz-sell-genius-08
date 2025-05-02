@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -230,7 +229,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-quiz_start`} className="text-xs font-medium">Início do Quiz (QuizStart)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.quiz_start} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_start} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre quando o usuário clica em "Começar" na tela inicial
@@ -246,7 +245,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-quiz_answer`} className="text-xs font-medium">Respostas do Quiz (QuizAnswer)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.quiz_answer} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_answer} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre a cada resposta do usuário em uma questão
@@ -262,7 +261,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-quiz_complete`} className="text-xs font-medium">Conclusão do Quiz (QuizComplete)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.quiz_complete} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_complete} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre quando o usuário termina todas as perguntas do quiz
@@ -278,7 +277,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-result_view`} className="text-xs font-medium">Visualização de Resultado (ResultView)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.result_view} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.result_view} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre quando o usuário visualiza a página de resultado
@@ -294,7 +293,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-lead_generated`} className="text-xs font-medium">Captura de Lead (Lead)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.lead_generated} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.lead_generated} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre quando o usuário fornece seu endereço de email
@@ -310,7 +309,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-sale`} className="text-xs font-medium">Vendas (Purchase)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.sale} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.sale} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre quando uma venda é concluída com sucesso
@@ -326,7 +325,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                     className="data-[state=checked]:bg-blue-600"
                   />
                   <Label htmlFor={`event-button_click`} className="text-xs font-medium">Cliques em Botões (ButtonClick)</Label>
-                  <Info className="h-3 w-3 text-muted-foreground cursor-help" title={eventDescriptions.button_click} />
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.button_click} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
                   Ocorre quando o usuário clica em botões importantes (ex: checkout)

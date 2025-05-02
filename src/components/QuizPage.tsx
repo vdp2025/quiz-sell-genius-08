@@ -47,6 +47,7 @@ const QuizPage: React.FC = () => {
       
       // Obter informações do usuário, se disponível
       const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
+      // Corrigido para verificar se o email existe no objeto user
       const userEmail = user?.email || localStorage.getItem('userEmail');
       
       trackQuizStart(userName, userEmail);
