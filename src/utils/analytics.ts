@@ -1,3 +1,4 @@
+
 /**
  * Inicializa o Pixel do Facebook
  */
@@ -12,14 +13,17 @@ export const initFacebookPixel = () => {
       if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
       n.queue=[];t=b.createElement(e);t.async=!0;
       t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      if (s && s.parentNode) {
+        s.parentNode.insertBefore(t,s);
+      }}(window as any, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
       // Inicializa o Pixel com o ID fornecido
-      window.fbq('init', process.env.REACT_APP_FACEBOOK_PIXEL_ID);
+      const pixelId = process.env.REACT_APP_FACEBOOK_PIXEL_ID || '1311550759901086';
+      window.fbq && window.fbq('init', pixelId);
       
       // Rastreia a visualização de página
-      window.fbq('track', 'PageView');
+      window.fbq && window.fbq('track', 'PageView');
       
       console.log('Facebook Pixel initialized');
     } else {
@@ -224,5 +228,116 @@ export const trackResultView = (styleCategory: string) => {
       event_category: 'quiz',
       event_label: styleCategory
     });
+  }
+};
+
+/**
+ * Registra cliques em botões para análise
+ * @param buttonId ID do botão (opcional)
+ * @param buttonText Texto do botão (opcional)
+ * @param buttonLocation Localização do botão na interface (opcional)
+ * @param actionType Tipo de ação associada ao botão (opcional)
+ */
+export const trackButtonClick = (
+  buttonId?: string, 
+  buttonText?: string, 
+  buttonLocation?: string,
+  actionType?: string
+) => {
+  if (window.fbq) {
+    const eventData = addUtmParamsToEvent({
+      button_id: buttonId || 'unknown',
+      button_text: buttonText || 'unknown',
+      button_location: buttonLocation || 'unknown',
+      action_type: actionType || 'click'
+    });
+    
+    window.fbq('trackCustom', 'ButtonClick', eventData);
+    console.log(`Button click tracked: ${buttonText || buttonId}`);
+  }
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'button_click', {
+      event_category: 'interaction',
+      event_label: buttonText || buttonId,
+      button_location: buttonLocation
+    });
+  }
+};
+
+/**
+ * Registra conversões de vendas
+ * @param value Valor da venda
+ * @param productName Nome do produto (opcional)
+ */
+export const trackSaleConversion = (value: number, productName?: string) => {
+  if (window.fbq) {
+    const eventData = addUtmParamsToEvent({
+      value: value,
+      currency: 'BRL',
+      content_name: productName || 'Guia de Estilo',
+      content_type: 'product'
+    });
+    
+    // Standard Purchase event
+    window.fbq('track', 'Purchase', eventData);
+    console.log(`Sale conversion tracked: ${value} BRL for ${productName || 'Guia de Estilo'}`);
+  }
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'purchase', {
+      transaction_id: 'T_' + Date.now(),
+      value: value,
+      currency: 'BRL',
+      items: [{
+        name: productName || 'Guia de Estilo',
+        price: value
+      }]
+    });
+  }
+};
+
+/**
+ * Obtém todos os eventos analytics armazenados
+ */
+export const getAnalyticsEvents = () => {
+  try {
+    const eventsJson = localStorage.getItem('analytics_events');
+    return eventsJson ? JSON.parse(eventsJson) : [];
+  } catch (error) {
+    console.error('Error getting analytics events:', error);
+    return [];
+  }
+};
+
+/**
+ * Limpa todos os dados de analytics armazenados
+ */
+export const clearAnalyticsData = () => {
+  try {
+    localStorage.removeItem('analytics_events');
+    localStorage.removeItem('fb_pixel_event_log');
+    localStorage.removeItem('analytics_metrics_cache');
+    console.log('Analytics data cleared');
+    return true;
+  } catch (error) {
+    console.error('Error clearing analytics data:', error);
+    return false;
+  }
+};
+
+/**
+ * Testa a funcionalidade do Facebook Pixel
+ */
+export const testFacebookPixel = () => {
+  if (window.fbq) {
+    window.fbq('trackCustom', 'TestEvent', { test_value: 'test' });
+    console.log('Test event sent to Facebook Pixel');
+    return true;
+  } else {
+    console.error('Facebook Pixel not initialized');
+    return false;
   }
 };

@@ -45,7 +45,7 @@ const App = () => {
   React.useEffect(() => {    
     // Função para lidar com mudanças de rota
     const handleRouteChange = () => {
-      if (window.fbq) {
+      if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'PageView');
         console.log('PageView tracked on route change');
       }
