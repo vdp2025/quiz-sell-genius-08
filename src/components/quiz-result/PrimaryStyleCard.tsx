@@ -38,7 +38,9 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
                   src={imageUrl} 
                   alt={`Estilo ${primaryStyle.category}`} 
                   className="absolute inset-0 w-full h-full object-cover"
+                  loading="eager"
                   onError={(e) => {
+                    console.error(`Failed to load style image: ${imageUrl}`);
                     e.currentTarget.src = "https://via.placeholder.com/400x533?text=Imagem+não+disponível";
                   }}
                 />

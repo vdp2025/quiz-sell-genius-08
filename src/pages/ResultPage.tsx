@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -16,7 +16,6 @@ import BeforeAfterTransformation from '@/components/result/BeforeAfterTransforma
 import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
-import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
@@ -25,20 +24,18 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useAuth } from '@/context/AuthContext';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import GuaranteeSection from '@/components/result/GuaranteeSection';
+import PrimaryStyleCard from '@/components/quiz-result/PrimaryStyleCard';
 
 const ResultPage: React.FC = () => {
-  // Use default values in case of missing data
   const { primaryStyle = null, secondaryStyles = [] } = useQuiz();
   const { globalStyles = {} } = useGlobalStyles();
   const { user = null } = useAuth();
-  const [imagesLoaded, setImagesLoaded] = useState({ style: false, guide: false });
-  const isLowPerformance = useIsLowPerformanceDevice();
   const { isLoading, completeLoading } = useLoadingState({
-    minDuration: isLowPerformance ? 400 : 800,
-    disableTransitions: isLowPerformance
+    minDuration: 800,
+    disableTransitions: false
   });
 
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [isButtonHovered, setIsButtonHovered] = React.useState(false);
 
   useEffect(() => {
     if (!primaryStyle) {
@@ -47,49 +44,14 @@ const ResultPage: React.FC = () => {
     }
 
     window.scrollTo(0, 0);
-    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
-    criticalImages.forEach(src => new Image().src = src);
-
-    const { category = 'default' } = primaryStyle;
-    // Get style configuration with proper typing
-    const styleData = getStyleConfig(category);
-    
-    if (styleData.image) {
-      const styleImg = new Image();
-      styleImg.src = `${styleData.image}?q=auto:best&f=auto&w=480`;
-      styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
-      styleImg.onerror = () => {
-        console.error("Failed to load style image");
-        setImagesLoaded(prev => ({ ...prev, style: true }));
-      };
-    } else {
-      setImagesLoaded(prev => ({ ...prev, style: true }));
-    }
-
-    if (styleData.guideImage) {
-      const guideImg = new Image();
-      guideImg.src = `${styleData.guideImage}?q=auto:best&f=auto&w=640`;
-      guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
-      guideImg.onerror = () => {
-        console.error("Failed to load guide image");
-        setImagesLoaded(prev => ({ ...prev, guide: true }));
-      };
-    } else {
-      setImagesLoaded(prev => ({ ...prev, guide: true }));
-    }
-  }, [primaryStyle, globalStyles.logo]);
-
-  useEffect(() => {
-    if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
-  }, [imagesLoaded, completeLoading]);
+    completeLoading(); // Complete loading immediately since we'll handle images separately
+  }, [primaryStyle, completeLoading]);
 
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
 
   const { category = 'default' } = primaryStyle;
-  // Make sure we have valid styleConfig data with proper typing
   const styleData = getStyleConfig(category);
-  const { image, guideImage, description } = styleData;
   const userName = globalStyles.userName || (user ? user.userName : undefined);
 
   const handleCTAClick = () => {
@@ -112,6 +74,9 @@ const ResultPage: React.FC = () => {
       />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+        {/* Use the dedicated PrimaryStyleCard component */}
+        <PrimaryStyleCard primaryStyle={primaryStyle} />
+        
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
@@ -130,7 +95,7 @@ const ResultPage: React.FC = () => {
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <p className="text-[#432818] leading-relaxed">{description}</p>
+                <p className="text-[#432818] leading-relaxed">{styleData.description}</p>
                 <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
                   <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
                   {secondaryStyles && secondaryStyles.length > 0 ? (
@@ -143,16 +108,15 @@ const ResultPage: React.FC = () => {
               <div className="max-w-full mx-auto relative">
                 <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
                   <img 
-                    src={image ? `${image}?q=auto:best&f=auto&w=400` : "https://via.placeholder.com/400x533?text=Imagem+não+disponível"} 
+                    src={styleData.image || "https://via.placeholder.com/400x533?text=Imagem+não+disponível"} 
                     alt={`Estilo ${category}`} 
                     className="w-full h-full object-cover" 
                     loading="eager" 
                     fetchPriority="high" 
                     width="400" 
                     height="533"
-                    srcSet={image ? `${image}?q=auto:best&f=auto&w=400 1x, ${image}?q=auto:best&f=auto&w=800 2x` : ""}
-                    sizes="(max-width: 768px) 100vw, 400px"
                     onError={(e) => {
+                      console.error(`Failed to load style image: ${styleData.image}`);
                       e.currentTarget.src = "https://via.placeholder.com/400x533?text=Imagem+não+disponível";
                     }}
                   />
@@ -160,34 +124,35 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Larger Guide Image Display */}
-            {guideImage && (
+            {/* Guide Image Display - Larger and more prominent */}
+            {styleData.guideImage && (
               <div className="mt-12 mx-auto relative">
                 <h3 className="text-xl font-medium text-center text-[#432818] mb-4">Seu Guia de Estilo</h3>
-                <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 max-w-2xl mx-auto">
-                  <img 
-                    src={`${guideImage}?q=auto:best&f=auto&w=800`} 
-                    alt={`Guia de Estilo ${category}`} 
-                    loading="lazy" 
-                    className="w-full h-full object-cover" 
-                    width="800" 
-                    height="1000"
-                    srcSet={`${guideImage}?q=auto:best&f=auto&w=800 1x, ${guideImage}?q=auto:best&f=auto&w=1200 2x`}
-                    sizes="(max-width: 768px) 100vw, 800px"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://via.placeholder.com/800x1000?text=Guia+de+Estilo+não+disponível";
-                    }}
-                  />
-                </AspectRatio>
-                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
-                  Exclusivo
+                <div className="max-w-2xl mx-auto">
+                  <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+                    <img 
+                      src={styleData.guideImage} 
+                      alt={`Guia de Estilo ${category}`} 
+                      className="w-full h-full object-cover" 
+                      width="800" 
+                      height="1000"
+                      loading="eager"
+                      onError={(e) => {
+                        console.error(`Failed to load guide image: ${styleData.guideImage}`);
+                        e.currentTarget.src = "https://via.placeholder.com/800x1000?text=Guia+de+Estilo+não+disponível";
+                      }}
+                    />
+                  </AspectRatio>
+                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                    Exclusivo
+                  </div>
                 </div>
               </div>
             )}
           </AnimatedWrapper>
         </Card>
 
-        {/* Product Showcase Section */}
+        {/* Enhanced product showcase - Larger images */}
         <BeforeAfterTransformation />
         <MotivationSection />
         <BonusSection />

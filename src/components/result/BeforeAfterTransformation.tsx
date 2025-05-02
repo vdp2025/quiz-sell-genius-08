@@ -38,14 +38,16 @@ const BeforeAfterTransformation: React.FC = () => {
         {transformations.map((item, index) => (
           <div key={index} className="flex flex-col space-y-4">
             <div className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <AspectRatio ratio={4/3}>
+              {/* Increased image size with larger aspect ratio */}
+              <AspectRatio ratio={3/2} className="w-full">
                 <img
-                  src={item.image || `https://via.placeholder.com/500x375?text=${encodeURIComponent(item.title)}`}
+                  src={item.image || `https://via.placeholder.com/600x400?text=${encodeURIComponent(item.title)}`}
                   alt={item.title}
                   className="w-full h-full object-cover"
                   loading="lazy"
                   onError={(e) => {
-                    e.currentTarget.src = `https://via.placeholder.com/500x375?text=${encodeURIComponent(item.title)}`;
+                    console.error(`Failed to load transformation image: ${item.image}`);
+                    e.currentTarget.src = `https://via.placeholder.com/600x400?text=${encodeURIComponent(item.title)}`;
                   }}
                 />
               </AspectRatio>
