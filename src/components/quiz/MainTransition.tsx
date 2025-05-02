@@ -115,6 +115,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                   autoAdvance={true}
                   hideTitle={true}
                   onNextClick={handleNextClick}
+                  showQuestionImage={true}
                 />
               </div>
             </Card>

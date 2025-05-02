@@ -100,20 +100,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               {highlightStrategicWords(question.title)}
             </h2>
             
-            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-              <div className="w-full mb-6">
-                <img 
-                  src={question.imageUrl} 
-                  alt="Question visual" 
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                  onError={() => {
-                    console.error(`Failed to load image: ${question.imageUrl}`);
-                    setImageError(true);
-                  }}
-                />
-              </div>
-            )}
-            
             <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
               {isStrategicQuestion 
                 ? "Selecione 1 opção para avançar"
@@ -121,6 +107,21 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               }
             </p>
           </>
+        )}
+        
+        {/* Display the image regardless of hideTitle if it's a strategic question and showQuestionImage is true */}
+        {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+          <div className="w-full mb-6">
+            <img 
+              src={question.imageUrl} 
+              alt="Question visual" 
+              className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+              onError={() => {
+                console.error(`Failed to load image: ${question.imageUrl}`);
+                setImageError(true);
+              }}
+            />
+          </div>
         )}
         
         <div className={cn(
