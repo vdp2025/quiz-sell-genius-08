@@ -8,7 +8,6 @@ interface GlobalStyles {
   logoHeight?: number;
   logo?: string;
   logoAlt?: string;
-  userName?: string; // Add userName property to the interface
 }
 
 export const useGlobalStyles = () => {

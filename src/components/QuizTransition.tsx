@@ -51,7 +51,6 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
             onAnswer={handleFirstStrategicAnswer}
             currentAnswers={currentAnswers}
             autoAdvance={true}
-            showQuestionImage={true}
           />
         </AnimatedWrapper>
       </div>

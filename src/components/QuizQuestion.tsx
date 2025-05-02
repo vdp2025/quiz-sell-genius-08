@@ -37,15 +37,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
   
-  // Debug logs to track image display
-  useEffect(() => {
-    if (isStrategicQuestion && showQuestionImage && question.imageUrl) {
-      console.log(`Rendering question ${question.id} with image: ${question.imageUrl}`);
-    } else if (isStrategicQuestion && !question.imageUrl) {
-      console.log(`Question ${question.id} has no image URL defined`);
-    }
-  }, [question.id, question.imageUrl, isStrategicQuestion, showQuestionImage]);
-  
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
@@ -109,6 +100,20 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               {highlightStrategicWords(question.title)}
             </h2>
             
+            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+              <div className="w-full mb-6">
+                <img 
+                  src={question.imageUrl} 
+                  alt="Question visual" 
+                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                  onError={() => {
+                    console.error(`Failed to load image: ${question.imageUrl}`);
+                    setImageError(true);
+                  }}
+                />
+              </div>
+            )}
+            
             <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
               {isStrategicQuestion 
                 ? "Selecione 1 opção para avançar"
@@ -116,21 +121,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               }
             </p>
           </>
-        )}
-        
-        {/* Display the image if it's a strategic question and showQuestionImage is true */}
-        {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-          <div className="w-full mb-6">
-            <img 
-              src={question.imageUrl} 
-              alt="Question visual" 
-              className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-              onError={() => {
-                console.error(`Failed to load image: ${question.imageUrl}`);
-                setImageError(true);
-              }}
-            />
-          </div>
         )}
         
         <div className={cn(

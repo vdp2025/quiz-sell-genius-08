@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 
 interface LogoProps {
   src?: string;
   alt?: string;
   className?: string;
   style?: React.CSSProperties;
-  priority?: boolean;
+  priority?: boolean; // Added priority prop but we'll ignore it since we're not using Next.js Image
 }
 
 const Logo: React.FC<LogoProps> = ({ 
@@ -14,32 +14,14 @@ const Logo: React.FC<LogoProps> = ({
   alt = "Logo Gisele Galvão",
   className = "h-14", 
   style,
-  priority
+  priority // This will be ignored but won't cause type errors
 }) => {
-  const [hasError, setHasError] = useState(false);
-
-  if (hasError) {
-    return (
-      <div 
-        className={`flex items-center justify-center bg-gray-100 ${className}`}
-        style={style}
-      >
-        <span className="text-gray-500 font-playfair">{alt}</span>
-      </div>
-    );
-  }
-
   return (
     <img
       src={src}
       alt={alt}
       className={className}
       style={style}
-      width={style?.height ? Number(style.height) * 2.5 : 175} // Assuming aspect ratio of 2.5:1
-      height={style?.height ? Number(style.height) : 70}
-      onError={() => setHasError(true)}
-      loading={priority ? "eager" : "lazy"}
-      fetchPriority={priority ? "high" : "auto"}
     />
   );
 };
