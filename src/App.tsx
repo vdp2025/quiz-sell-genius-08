@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
 import HomePage from './pages/HomePage';
 import QuizPage from './components/QuizPage';
-import ResultPage from './pages/ResultPage'; // Ensure we're importing from pages, not components
+import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';

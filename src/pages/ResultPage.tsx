@@ -3,22 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
-import { trackResultView } from '@/utils/analytics';
+import BackupResultPage from '../backup/ResultPage.backup';
+import { trackResultView, trackSaleConversion } from '@/utils/analytics';
 import { Button } from '@/components/ui/button';
-import { PencilIcon, ShoppingCart } from 'lucide-react';
-import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig';
-import { Card } from '@/components/ui/card';
-import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-import ErrorState from '@/components/result/ErrorState';
-import MotivationSection from '@/components/result/MotivationSection';
-import MentorSection from '@/components/result/MentorSection';
-import GuaranteeSection from '@/components/result/GuaranteeSection';
-import ProductShowcase from '@/components/quiz-result/sales/ProductShowcase';
-import BenefitList from '@/components/quiz-result/sales/BenefitList';
-import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import { PencilIcon } from 'lucide-react';
 
 const ResultPage = () => {
   const quizLogic = useQuizLogic();
@@ -27,7 +15,6 @@ const ResultPage = () => {
   const location = useLocation();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
   const [resultTracked, setResultTracked] = useState(false);
-  const { globalStyles } = useGlobalStyles();
   
   // Verificar se o parâmetro de acesso está presente na URL
   const searchParams = new URLSearchParams(location.search);
@@ -69,6 +56,18 @@ const ResultPage = () => {
     }
   }, [quizResult, navigate, resultTracked]);
 
+  // Função para rastrear compra quando o usuário clicar em um botão de compra
+  const handlePurchaseClick = (productId: string, value: number) => {
+    // Rastrear conversão de venda
+    trackSaleConversion(value);
+    
+    // Aqui você redirecionaria para a página de pagamento ou integraria com sua plataforma de pagamentos
+    console.log(`Produto ${productId} comprado por ${value}`);
+    
+    // Exemplo: redirecionar para uma página externa
+    // window.location.href = `https://sua-plataforma-de-pagamentos.com/checkout/${productId}`;
+  };
+
   const handleEditClick = () => {
     navigate('/resultado/editar');
   };
@@ -85,22 +84,8 @@ const ResultPage = () => {
     );
   }
 
-  const { primaryStyle, secondaryStyles } = resultToUse;
-  const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category] || {};
-
-  // Validação adicional para garantir que temos todos os dados necessários
-  if (!image || !guideImage || !description) {
-    return <ErrorState />;
-  }
-
   return (
-    <div
-      className="min-h-screen bg-[#fffaf7]"
-      style={{
-        backgroundColor: globalStyles?.backgroundColor || '#fffaf7',
-      }}
-    >
+    <>
       {isEditorAccessible && (
         <div className="fixed top-4 right-4 z-50">
           <Button 
@@ -113,66 +98,8 @@ const ResultPage = () => {
           </Button>
         </div>
       )}
-      
-      <AnimatedWrapper>
-        <Header />
-        
-        <main className="container mx-auto px-4 py-8">
-          <Card className="p-6 mb-8 shadow-lg">
-            <div className="flex flex-col gap-6">
-              <div className="text-center">
-                <h1 className="text-3xl font-bold text-primary mb-2">
-                  Seu Estilo Principal: {primaryStyle.category}
-                </h1>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  {description}
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="relative aspect-video overflow-hidden rounded-xl">
-                  <img
-                    src={image}
-                    alt={`Style ${primaryStyle.category}`}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="relative aspect-video overflow-hidden rounded-xl">
-                  <img
-                    src={guideImage}
-                    alt="Guia de Estilo"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <div className="space-y-12">
-            <SecondaryStylesSection secondaryStyles={secondaryStyles || []} />
-            <MotivationSection />
-            <MentorSection />
-            <GuaranteeSection />
-            
-            <section className="bg-white rounded-2xl p-8 shadow-lg">
-              <ProductShowcase />
-              <BenefitList />
-              <Testimonials />
-              
-              <div className="mt-12 text-center">
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-semibold shadow-md transition-all"
-                >
-                  <ShoppingCart className="mr-2 h-5 w-5" />
-                  Comprar Agora
-                </Button>
-              </div>
-            </section>
-          </div>
-        </main>
-      </AnimatedWrapper>
-    </div>
+      <BackupResultPage />
+    </>
   );
 };
 
