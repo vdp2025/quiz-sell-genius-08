@@ -20,13 +20,13 @@ interface MetricsGridProps {
 }
 
 export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, loading = false, timeRange }) => {
-  const timeRangeLabel = timeRange === '7d' ? '7 days' : timeRange === '30d' ? '30 days' : 'all time';
+  const timeRangeLabel = timeRange === '7d' ? 'últimos 7 dias' : timeRange === '30d' ? 'últimos 30 dias' : 'todo período';
   
   if (loading || !metrics) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {Array(8).fill(0).map((_, i) => (
-          <div key={i} className="bg-card rounded-lg border border-border/40 p-6">
+          <div key={i} className="bg-card rounded-lg border border-border/40 p-4">
             <Skeleton className="h-4 w-24 mb-2" />
             <Skeleton className="h-8 w-16 mb-1" />
             <Skeleton className="h-3 w-32" />
@@ -48,60 +48,60 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, loading = fal
   };
   
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       <MetricCard 
-        title="Quiz Starts" 
+        title="Inicios de Quiz" 
         value={formatNumber(metrics.totalStarts)}
-        subtitle={`Total quiz starts in ${timeRangeLabel}`}
+        subtitle={`Total de inícios nos ${timeRangeLabel}`}
         icon={<Activity size={16} />}
       />
       
       <MetricCard 
-        title="Completion Rate" 
+        title="Taxa de Conclusão" 
         value={formatPercent(metrics.completionRate)}
-        subtitle={`${metrics.totalCompletes} of ${metrics.totalStarts} quizzes completed`}
+        subtitle={`${metrics.totalCompletes} de ${metrics.totalStarts} quizzes concluídos`}
         icon={<Target size={16} />}
       />
       
       <MetricCard 
-        title="Results Viewed" 
+        title="Resultados Vistos" 
         value={formatNumber(metrics.totalResultViews)}
-        subtitle={`People who viewed their results`}
+        subtitle={`Pessoas que viram seus resultados`}
         icon={<BarChart3 size={16} />}
       />
       
       <MetricCard 
-        title="Leads Generated" 
+        title="Leads Gerados" 
         value={formatNumber(metrics.totalLeads)}
-        subtitle={`Total leads captured`}
+        subtitle={`Total de leads capturados`}
         icon={<Users size={16} />}
       />
       
       <MetricCard 
-        title="Conversion Rate" 
+        title="Taxa de Conversão" 
         value={formatPercent(metrics.conversionRate)}
-        subtitle={`Lead conversion from quiz starts`}
+        subtitle={`Conversão de leads dos inícios`}
         icon={<ArrowUpRight size={16} />}
       />
       
       <MetricCard 
-        title="Sales" 
+        title="Vendas" 
         value={formatNumber(metrics.totalSales)}
-        subtitle={`Total purchases made`}
+        subtitle={`Total de compras realizadas`}
         icon={<ShoppingCart size={16} />}
       />
       
       <MetricCard 
-        title="Sales Rate" 
+        title="Taxa de Vendas" 
         value={formatPercent(metrics.salesRate)}
-        subtitle={`Purchase rate from leads`}
+        subtitle={`Taxa de compras de leads`}
         icon={<Share2 size={16} />}
       />
       
       <MetricCard 
-        title="Avg. Completion Time" 
+        title="Tempo Médio" 
         value="3:27"
-        subtitle={`Average time to complete quiz`}
+        subtitle={`Tempo médio para concluir`}
         icon={<Clock size={16} />}
       />
     </div>

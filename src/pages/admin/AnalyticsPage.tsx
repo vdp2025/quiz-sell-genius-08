@@ -3,25 +3,28 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { AnalyticsLoadingState } from '@/components/analytics/LoadingState';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
-import { getAnalyticsEvents, calculateQuizMetrics, clearAnalyticsData, testFacebookPixel } from '@/utils/analytics';
+import { getCachedMetrics, resetMetricsCache, filterEventsByTimeRange } from '@/utils/analyticsHelpers';
+import { getAnalyticsEvents, clearAnalyticsData, testFacebookPixel } from '@/utils/analytics';
 import { toast } from '@/components/ui/use-toast';
 
 // Lazy loaded tab components for better performance
-const OverviewTab = React.lazy(() => import('@/components/analytics/tabs/OverviewTab'));
-const FunnelTab = React.lazy(() => import('@/components/analytics/tabs/FunnelTab'));
-const UsersTab = React.lazy(() => import('@/components/analytics/tabs/UsersTab'));
-const ProgressTab = React.lazy(() => import('@/components/analytics/tabs/ProgressTab'));
-const DataTab = React.lazy(() => import('@/components/analytics/tabs/DataTab'));
-const UtmTab = React.lazy(() => import('@/components/analytics/tabs/UtmTab'));
-const IntegrationTab = React.lazy(() => import('@/components/analytics/tabs/IntegrationTab'));
+const OverviewTab = React.lazy(() => import('@/components/analytics/tabs/OverviewTab').then(module => ({ default: module.OverviewTab })));
+const FunnelTab = React.lazy(() => import('@/components/analytics/tabs/FunnelTab').then(module => ({ default: module.FunnelTab })));
+const UsersTab = React.lazy(() => import('@/components/analytics/tabs/UsersTab').then(module => ({ default: module.UsersTab })));
+const ProgressTab = React.lazy(() => import('@/components/analytics/tabs/ProgressTab').then(module => ({ default: module.ProgressTab })));
+const DataTab = React.lazy(() => import('@/components/analytics/tabs/DataTab').then(module => ({ default: module.DataTab })));
+const UtmTab = React.lazy(() => import('@/components/analytics/tabs/UtmTab').then(module => ({ default: module.UtmTab })));
+const IntegrationTab = React.lazy(() => import('@/components/analytics/tabs/IntegrationTab').then(module => ({ default: module.IntegrationTab })));
 
 const AnalyticsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | 'all'>('7d');
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [metricsCalculated, setMetricsCalculated] = useState(false);
+  const [selectedEvents, setSelectedEvents] = useState<string[]>(['quiz_start', 'quiz_complete', 'result_view', 'lead_generated', 'sale']);
   const isLowPerformance = useIsLowPerformanceDevice();
   
   const { isLoading, setLoading, completeLoading } = useLoadingState({
@@ -34,66 +37,66 @@ const AnalyticsPage: React.FC = () => {
     setLoading(true);
     
     try {
+      // Get metrics from cache or calculate new ones
+      const metrics = getCachedMetrics(timeRange);
+      
       // Get events from localStorage
       const events = getAnalyticsEvents();
       
       // Apply time range filter
       const filteredEvents = filterEventsByTimeRange(events, timeRange);
       
-      // Calculate metrics
-      const metrics = calculateQuizMetrics();
+      // Filter events by selected types
+      const filteredByType = selectedEvents.length > 0
+        ? filteredEvents.filter(event => selectedEvents.includes(event.type))
+        : filteredEvents;
       
       setAnalyticsData({ 
-        events: filteredEvents,
+        events: filteredByType,
         metrics,
-        timeRange
+        timeRange,
+        selectedEvents
       });
       
       setMetricsCalculated(true);
       completeLoading();
     } catch (error) {
-      console.error('Error loading analytics data:', error);
+      console.error('Erro ao carregar dados de analytics:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to load analytics data. Please try again.',
+        title: 'Erro',
+        description: 'Falha ao carregar dados de analytics. Por favor, tente novamente.',
         variant: 'destructive',
       });
       completeLoading();
     }
-  }, [timeRange, setLoading, completeLoading]);
-
-  // Filter events by time range
-  const filterEventsByTimeRange = (events: any[], range: '7d' | '30d' | 'all') => {
-    if (range === 'all') return events;
-    
-    const now = new Date();
-    const daysBack = range === '7d' ? 7 : 30;
-    const cutoffDate = new Date(now.setDate(now.getDate() - daysBack));
-    
-    return events.filter(event => {
-      if (!event.timestamp) return true;
-      const eventDate = new Date(event.timestamp);
-      return eventDate >= cutoffDate;
-    });
-  };
+  }, [timeRange, selectedEvents, setLoading, completeLoading]);
 
   const handleRefresh = () => {
     setLoading(true);
+    // Reset cache to ensure fresh data
+    resetMetricsCache();
+    
     // Re-fetch analytics data
     setTimeout(() => {
+      const metrics = getCachedMetrics(timeRange);
       const events = getAnalyticsEvents();
       const filteredEvents = filterEventsByTimeRange(events, timeRange);
-      const metrics = calculateQuizMetrics();
+      
+      // Filter events by selected types
+      const filteredByType = selectedEvents.length > 0
+        ? filteredEvents.filter(event => selectedEvents.includes(event.type))
+        : filteredEvents;
       
       setAnalyticsData({ 
-        events: filteredEvents,
+        events: filteredByType,
         metrics,
-        timeRange
+        timeRange,
+        selectedEvents
       });
       
       toast({
-        title: 'Refreshed',
-        description: 'Analytics data has been refreshed.',
+        title: 'Atualizado',
+        description: 'Dados de analytics foram atualizados.',
       });
       
       completeLoading();
@@ -105,7 +108,7 @@ const AnalyticsPage: React.FC = () => {
       const dataStr = JSON.stringify(analyticsData, null, 2);
       const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
       
-      const exportFileDefaultName = `quiz-analytics-${new Date().toISOString().slice(0, 10)}.json`;
+      const exportFileDefaultName = `analytics-quiz-${new Date().toISOString().slice(0, 10)}.json`;
       
       const linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
@@ -113,26 +116,26 @@ const AnalyticsPage: React.FC = () => {
       linkElement.click();
       
       toast({
-        title: 'Export successful',
-        description: 'Analytics data has been exported successfully.',
+        title: 'Exportação concluída',
+        description: 'Os dados de analytics foram exportados com sucesso.',
       });
     } catch (error) {
-      console.error('Error exporting data:', error);
+      console.error('Erro ao exportar dados:', error);
       toast({
-        title: 'Export failed',
-        description: 'Failed to export analytics data.',
+        title: 'Falha na exportação',
+        description: 'Não foi possível exportar os dados de analytics.',
         variant: 'destructive',
       });
     }
   };
 
   const handleClearData = () => {
-    if (confirm('Are you sure you want to clear all analytics data? This cannot be undone.')) {
+    if (confirm('Tem certeza que deseja limpar todos os dados de analytics? Esta ação não pode ser desfeita.')) {
       clearAnalyticsData();
       
       toast({
-        title: 'Data cleared',
-        description: 'All analytics data has been cleared.',
+        title: 'Dados limpos',
+        description: 'Todos os dados de analytics foram excluídos.',
       });
       
       handleRefresh();
@@ -141,6 +144,10 @@ const AnalyticsPage: React.FC = () => {
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+  };
+
+  const handleEventSelectionChange = (events: string[]) => {
+    setSelectedEvents(events);
   };
 
   // Render loading skeleton if data is not ready
@@ -160,6 +167,8 @@ const AnalyticsPage: React.FC = () => {
         onRefresh={handleRefresh}
         onExportData={handleExportData}
         onClearData={handleClearData}
+        onEventSelectionChange={handleEventSelectionChange}
+        selectedEvents={selectedEvents}
       />
       
       <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="space-y-4">
@@ -168,47 +177,47 @@ const AnalyticsPage: React.FC = () => {
             value="overview"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            Overview
+            Visão Geral
           </TabsTrigger>
           <TabsTrigger 
             value="funnel"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            Conversion Funnel
+            Funil de Conversão
           </TabsTrigger>
           <TabsTrigger 
             value="users"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            User Analysis
+            Análise de Usuários
           </TabsTrigger>
           <TabsTrigger 
             value="progress"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            Quiz Progress
+            Progresso do Quiz
           </TabsTrigger>
           <TabsTrigger 
             value="utm"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            UTM Tracking
+            Campanhas UTM
           </TabsTrigger>
           <TabsTrigger 
             value="integration"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            Integrations
+            Integrações
           </TabsTrigger>
           <TabsTrigger 
             value="data"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
-            Raw Data
+            Dados Brutos
           </TabsTrigger>
         </TabsList>
         
-        <Suspense fallback={<div className="h-[300px] flex items-center justify-center"><LoadingSpinner size="lg" /></div>}>
+        <Suspense fallback={<div className="h-[200px] flex items-center justify-center"><LoadingSpinner size="lg" /></div>}>
           <TabsContent value="overview" className="mt-6">
             <OverviewTab analyticsData={analyticsData} loading={!metricsCalculated} />
           </TabsContent>

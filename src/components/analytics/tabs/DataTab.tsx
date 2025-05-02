@@ -6,15 +6,15 @@ import { FileText } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface DataTabProps {
-  getAnalyticsEvents: () => any[];
-  handleExportData: () => void;
+  analyticsData: any;
+  loading: boolean;
 }
 
 export const DataTab: React.FC<DataTabProps> = ({
-  getAnalyticsEvents,
-  handleExportData
+  analyticsData,
+  loading
 }) => {
-  const events = getAnalyticsEvents().slice(0, 50);
+  const events = analyticsData?.events?.slice(0, 50) || [];
 
   return (
     <div className="space-y-6">
@@ -36,17 +36,17 @@ export const DataTab: React.FC<DataTabProps> = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {events.map((event, index) => (
+                {events.map((event: any, index: number) => (
                   <TableRow key={index}>
                     <TableCell className="font-medium">{event.type}</TableCell>
-                    <TableCell>{new Date(event.timestamp).toLocaleString()}</TableCell>
+                    <TableCell>{new Date(event.timestamp).toLocaleString('pt-BR')}</TableCell>
                     <TableCell>{event.userName || 'N/A'}</TableCell>
-                    <TableCell>{event.userEmail || 'N/A'}</TableCell>
-                    <TableCell>
+                    <TableCell>{event.userEmail || event.email || 'N/A'}</TableCell>
+                    <TableCell className="max-w-[12rem] truncate">
                       {Object.entries(event)
-                        .filter(([key]) => !['type', 'timestamp', 'userName', 'userEmail', 'sessionId'].includes(key))
+                        .filter(([key]) => !['type', 'timestamp', 'userName', 'userEmail', 'email', 'sessionId'].includes(key))
                         .map(([key, value]) => (
-                          <div key={key}>
+                          <div key={key} className="text-xs">
                             <span className="font-medium">{key}:</span> {JSON.stringify(value)}
                           </div>
                         ))}
@@ -56,21 +56,21 @@ export const DataTab: React.FC<DataTabProps> = ({
                 {events.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
-                      Nenhum dado de analytics encontrado
+                      {loading ? 'Carregando dados...' : 'Nenhum dado de analytics encontrado'}
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </div>
-          {getAnalyticsEvents().length > 50 && (
+          {analyticsData?.events?.length > 50 && (
             <div className="text-center mt-4 text-sm text-gray-500">
               Mostrando os 50 eventos mais recentes. Exporte o CSV para visualizar todos os dados.
             </div>
           )}
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button variant="outline" size="sm" onClick={handleExportData}>
+          <Button variant="outline" size="sm" onClick={() => analyticsData?.onExportData?.()}>
             <FileText className="h-4 w-4 mr-2" />
             Exportar todos os dados
           </Button>

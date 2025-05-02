@@ -5,7 +5,9 @@ import { getAnalyticsEvents } from './analytics';
 const analyticsCache = {
   metrics: null as any | null,
   timestamp: 0,
-  timeRange: null as string | null
+  timeRange: null as string | null,
+  eventsByUser: null as Record<string, any[]> | null,
+  userProgressData: null as any[] | null
 };
 
 // Cache expiration time (5 minutes)
@@ -27,6 +29,8 @@ export const getCachedMetrics = (timeRange = 'all') => {
     analyticsCache.metrics = calculateMetrics(filteredEvents);
     analyticsCache.timestamp = now;
     analyticsCache.timeRange = timeRange;
+    analyticsCache.eventsByUser = null; // Invalidate other caches when metrics change
+    analyticsCache.userProgressData = null;
   }
   
   return analyticsCache.metrics;
@@ -39,6 +43,8 @@ export const resetMetricsCache = () => {
   analyticsCache.metrics = null;
   analyticsCache.timestamp = 0;
   analyticsCache.timeRange = null;
+  analyticsCache.eventsByUser = null;
+  analyticsCache.userProgressData = null;
 };
 
 /**
@@ -104,7 +110,7 @@ export const calculateMetrics = (events: any[]) => {
 /**
  * Group events by type for faster lookups
  */
-const groupEventsByType = (events: any[]) => {
+export const groupEventsByType = (events: any[]) => {
   const grouped: Record<string, any[]> = {};
   
   events.forEach(event => {
@@ -156,7 +162,7 @@ export const groupEventsByDay = (events: any[]) => {
 /**
  * Count unique users from events
  */
-const countUniqueUsers = (events: any[]) => {
+export const countUniqueUsers = (events: any[]) => {
   const uniqueSessions = new Set<string>();
   const uniqueEmails = new Set<string>();
   
@@ -180,7 +186,7 @@ const countUniqueUsers = (events: any[]) => {
 /**
  * Calculate average time to complete quiz
  */
-const calculateAverageCompletionTime = (events: any[]) => {
+export const calculateAverageCompletionTime = (events: any[]) => {
   const sessionCompletionTimes: Record<string, { start: number, complete: number }> = {};
   
   // Find start and completion times for each session
@@ -223,4 +229,87 @@ const calculateAverageCompletionTime = (events: any[]) => {
   const seconds = avgSeconds % 60;
   
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
+/**
+ * Get user progress data from events
+ */
+export const getUserProgressData = (events: any[]): any[] => {
+  if (analyticsCache.userProgressData) {
+    return analyticsCache.userProgressData;
+  }
+  
+  const usersByQuestion: Record<string, Set<string>> = {};
+  const questionCounts: Record<string, number> = {};
+  
+  // Identify unique users by session
+  const uniqueSessions = new Set<string>();
+  
+  events.forEach(event => {
+    if (event.sessionId) {
+      uniqueSessions.add(event.sessionId);
+    }
+    
+    if (event.type === 'quiz_answer' && event.questionId) {
+      if (!usersByQuestion[event.questionId]) {
+        usersByQuestion[event.questionId] = new Set<string>();
+        questionCounts[event.questionId] = 0;
+      }
+      
+      if (event.sessionId) {
+        usersByQuestion[event.questionId].add(event.sessionId);
+      }
+      
+      questionCounts[event.questionId]++;
+    }
+  });
+  
+  const totalUsers = uniqueSessions.size;
+  
+  // Convert to format for visualization
+  const progressData = Object.entries(usersByQuestion).map(([questionId, users]) => {
+    return {
+      questionId,
+      uniqueUsers: users.size,
+      totalAnswers: questionCounts[questionId],
+      completionRate: totalUsers > 0 ? (users.size / totalUsers) * 100 : 0
+    };
+  });
+  
+  // Sort by questionId (assuming that it's in numeric order)
+  const sortedData = progressData.sort((a, b) => {
+    return a.questionId.localeCompare(b.questionId, undefined, { numeric: true });
+  });
+  
+  // Cache the result
+  analyticsCache.userProgressData = sortedData;
+  
+  return sortedData;
+};
+
+/**
+ * Group events by user
+ */
+export const groupEventsByUser = (events: any[]): Record<string, any[]> => {
+  if (analyticsCache.eventsByUser) {
+    return analyticsCache.eventsByUser;
+  }
+  
+  const grouped: Record<string, any[]> = {};
+  
+  events.forEach(event => {
+    // Use sessionId as primary identifier, fallback to userEmail or userName
+    const userId = event.sessionId || event.userEmail || event.userName || 'unknown';
+    
+    if (!grouped[userId]) {
+      grouped[userId] = [];
+    }
+    
+    grouped[userId].push(event);
+  });
+  
+  // Cache the result
+  analyticsCache.eventsByUser = grouped;
+  
+  return grouped;
 };

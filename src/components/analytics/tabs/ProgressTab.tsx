@@ -6,32 +6,69 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Progress } from '@/components/ui/progress';
 import { GridLayout } from '@/components/shared/GridLayout';
+import { getUserProgressData } from '@/utils/analyticsHelpers';
 
 interface ProgressTabProps {
-  userProgressData: any[];
-  chartConfig: ChartConfig;
-  renderTooltipContent: (props: any) => JSX.Element | null;
+  analyticsData: any;
+  loading: boolean;
 }
 
 export const ProgressTab: React.FC<ProgressTabProps> = ({
-  userProgressData,
-  chartConfig,
-  renderTooltipContent
+  analyticsData,
+  loading
 }) => {
+  const userProgressData = React.useMemo(() => {
+    if (!analyticsData?.events) return [];
+    return getUserProgressData(analyticsData.events);
+  }, [analyticsData]);
+  
+  // Chart configuration
+  const chartConfig: ChartConfig = {
+    uniqueUsers: { 
+      label: 'Usuários Únicos',
+      theme: { light: '#8B5CF6', dark: '#A78BFA' }
+    }
+  };
+  
   // Color gradient for progress bars
   const getBarColor = (index: number, total: number) => {
     // Generate colors from purple to green
-    const hue = 260 - (index / (total - 1) * 100);
+    const hue = 260 - (index / Math.max(1, total - 1) * 100);
     return `hsl(${hue}, 70%, 60%)`;
   };
+  
+  // Custom tooltip renderer
+  const renderTooltipContent = (props: any) => {
+    if (!props.active || !props.payload?.[0]) {
+      return null;
+    }
+    
+    const data = props.payload[0].payload;
+    
+    return (
+      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-md">
+        <p className="text-xs font-medium mb-1">Questão {data.questionId}</p>
+        <p className="text-sm font-semibold">{data.uniqueUsers} usuários</p>
+        <p className="text-xs text-gray-500 mt-1">{data.completionRate.toFixed(1)}% taxa de conclusão</p>
+      </div>
+    );
+  };
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <p className="text-muted-foreground">Carregando dados de progresso...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
       <GridLayout columns={1} gap="md">
         <Card className="border border-border/60">
           <CardHeader className="pb-2">
-            <CardTitle>Progress by Question</CardTitle>
-            <CardDescription>Analysis of how many users reach each question in the quiz</CardDescription>
+            <CardTitle>Progresso por Questão</CardTitle>
+            <CardDescription>Análise de quantos usuários alcançam cada pergunta no quiz</CardDescription>
           </CardHeader>
           <CardContent className="pt-0">
             <div className="h-[220px] mb-4">
@@ -56,7 +93,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                   <Legend wrapperStyle={{ fontSize: '12px', marginTop: '5px' }} />
                   <Bar 
                     dataKey="uniqueUsers" 
-                    name="Unique Users"
+                    name="Usuários Únicos"
                     radius={[4, 4, 0, 0]}
                     animationDuration={1500}
                     animationEasing="ease-out"
@@ -76,10 +113,10 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[100px]">Question</TableHead>
-                    <TableHead className="w-[80px]">Users</TableHead>
-                    <TableHead className="w-[90px]">Answers</TableHead>
-                    <TableHead>Completion Rate</TableHead>
+                    <TableHead className="w-[100px]">Questão</TableHead>
+                    <TableHead className="w-[80px]">Usuários</TableHead>
+                    <TableHead className="w-[90px]">Respostas</TableHead>
+                    <TableHead>Taxa de Conclusão</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -105,7 +142,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                   {userProgressData.length === 0 && (
                     <TableRow>
                       <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
-                        No progress data available.
+                        Nenhum dado de progresso disponível.
                       </TableCell>
                     </TableRow>
                   )}

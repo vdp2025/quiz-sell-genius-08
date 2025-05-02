@@ -7,23 +7,66 @@ import { Progress } from '@/components/ui/progress';
 import { GridLayout } from '@/components/shared/GridLayout';
 
 interface FunnelTabProps {
-  metrics: any;
-  funnelData: any[];
-  chartConfig: ChartConfig;
-  renderTooltipContent: (props: any) => JSX.Element | null;
-  renderLegendContent: (props: any) => JSX.Element;
+  analyticsData: any;
+  loading: boolean;
 }
 
-export const FunnelTab: React.FC<FunnelTabProps> = ({ 
-  metrics, 
-  funnelData, 
-  chartConfig,
-  renderTooltipContent,
-  renderLegendContent
-}) => {
-  // Define colors with gradients for funnel steps
-  const FUNNEL_COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444'];
+export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) => {
+  const metrics = analyticsData?.metrics;
   
+  // Prepare funnel data
+  const funnelData = React.useMemo(() => {
+    if (!metrics) return [];
+    
+    return [
+      { name: 'Início do Quiz', value: metrics.totalStarts, text: 'Usuários iniciaram o quiz' },
+      { name: 'Quiz Completo', value: metrics.totalCompletes, text: 'Usuários completaram o quiz' },
+      { name: 'Visualizou Resultado', value: metrics.totalResultViews, text: 'Usuários viram seus resultados' },
+      { name: 'Lead Gerado', value: metrics.totalLeads, text: 'Leads capturados' },
+      { name: 'Venda', value: metrics.totalSales, text: 'Compras realizadas' }
+    ];
+  }, [metrics]);
+  
+  // Chart configuration
+  const chartConfig: ChartConfig = {
+    value: { 
+      label: 'Valor',
+      theme: { light: '#4f46e5', dark: '#818cf8' }
+    }
+  };
+  
+  // Define colors with gradients for funnel steps
+  const FUNNEL_COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
+  
+  // Custom tooltip renderer
+  const renderTooltipContent = (props: any) => {
+    if (!props.active || !props.payload) {
+      return null;
+    }
+    
+    const data = props.payload[0].payload;
+    
+    return (
+      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-md">
+        <p className="text-xs font-medium mb-1">{data.name}</p>
+        <p className="text-sm font-semibold">{data.value} usuários</p>
+        <p className="text-xs text-gray-500 mt-1">{data.text}</p>
+      </div>
+    );
+  };
+  
+  const renderLegendContent = (props: any) => {
+    return null; // Hide default legend
+  };
+  
+  if (loading || !metrics) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <p className="text-muted-foreground">Carregando dados do funil...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <Card className="border border-border/60">
@@ -32,27 +75,27 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
           <CardDescription>Visualize a performance do seu funil de conversão</CardDescription>
         </CardHeader>
         <CardContent className="pt-2">
-          <div className="h-[280px]">
+          <div className="h-[220px]">
             <ChartContainer config={chartConfig}>
               <BarChart 
                 data={funnelData} 
                 layout="vertical"
-                margin={{ top: 20, right: 20, left: 40, bottom: 5 }}
+                margin={{ top: 15, right: 15, left: 70, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
                 <XAxis 
                   type="number" 
                   stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 12 }}
+                  tick={{ fill: '#888888', fontSize: 11 }}
                   tickLine={{ stroke: '#e0e0e0' }}
                 />
                 <YAxis 
                   dataKey="name" 
                   type="category" 
                   stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 12 }}
+                  tick={{ fill: '#888888', fontSize: 11 }}
                   tickLine={{ stroke: '#e0e0e0' }}
-                  width={120}
+                  width={70}
                 />
                 <Tooltip content={renderTooltipContent} />
                 <Legend content={renderLegendContent} />
@@ -77,8 +120,8 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
               </CardHeader>
               <CardContent className="space-y-2 pt-0">
                 <div className="flex justify-between items-baseline">
-                  <p className="text-2xl font-bold">{metrics?.completionRate.toFixed(1) || 0}%</p>
-                  <p className="text-xs text-muted-foreground">de {metrics?.totalStarts || 0} inicios</p>
+                  <p className="text-xl font-bold">{metrics?.completionRate.toFixed(1) || 0}%</p>
+                  <p className="text-xs text-muted-foreground">de {metrics?.totalStarts || 0} inícios</p>
                 </div>
                 <Progress 
                   value={metrics?.completionRate || 0} 
@@ -94,7 +137,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
               </CardHeader>
               <CardContent className="space-y-2 pt-0">
                 <div className="flex justify-between items-baseline">
-                  <p className="text-2xl font-bold">
+                  <p className="text-xl font-bold">
                     {metrics?.totalCompletes ? ((metrics.totalResultViews / metrics.totalCompletes) * 100).toFixed(1) : 0}%
                   </p>
                   <p className="text-xs text-muted-foreground">de {metrics?.totalCompletes || 0} conclusões</p>
@@ -113,7 +156,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({
               </CardHeader>
               <CardContent className="space-y-2 pt-0">
                 <div className="flex justify-between items-baseline">
-                  <p className="text-2xl font-bold">
+                  <p className="text-xl font-bold">
                     {metrics?.totalResultViews ? ((metrics.totalLeads / metrics.totalResultViews) * 100).toFixed(1) : 0}%
                   </p>
                   <p className="text-xs text-muted-foreground">de {metrics?.totalResultViews || 0} visualizações</p>
