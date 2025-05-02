@@ -24,10 +24,12 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { useAuth } from '@/context/AuthContext'; // Import useAuth
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
+  const { user } = useAuth(); // Get user from Auth context
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
@@ -73,6 +75,9 @@ const ResultPage: React.FC = () => {
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
 
+  // Get userName from either globalStyles or from Auth context
+  const userName = globalStyles.userName || (user ? user.userName : undefined);
+
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
@@ -93,7 +98,7 @@ const ResultPage: React.FC = () => {
         logoHeight={globalStyles.logoHeight} 
         logo={globalStyles.logo} 
         logoAlt={globalStyles.logoAlt} 
-        userName={globalStyles.userName}
+        userName={userName} // Now properly getting userName from either source
       />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
