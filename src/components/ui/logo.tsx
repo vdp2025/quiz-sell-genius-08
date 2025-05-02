@@ -21,9 +21,32 @@ const Logo: React.FC<LogoProps> = ({
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Pré-carregar a logo se for prioritária
+  // Forcefully retry loading the image if it failed the first time
   useEffect(() => {
-    if (priority && src) {
+    if (hasError && src) {
+      const retryTimeout = setTimeout(() => {
+        // Reset error state to try loading again
+        setHasError(false);
+        // Create a new image with cache-busting query param
+        const retryImg = new Image();
+        retryImg.src = `${src}?retry=${new Date().getTime()}`;
+        retryImg.onload = () => {
+          setIsLoaded(true);
+          setHasError(false);
+        };
+        retryImg.onerror = () => {
+          console.error("Retry failed to load logo image");
+          setHasError(true);
+        };
+      }, 1000); // Retry after 1 second
+      
+      return () => clearTimeout(retryTimeout);
+    }
+  }, [hasError, src]);
+
+  // Pre-load image if priority is set
+  useEffect(() => {
+    if (priority && src && !isLoaded && !hasError) {
       const img = new Image();
       img.src = src;
       img.onload = () => setIsLoaded(true);
@@ -32,9 +55,9 @@ const Logo: React.FC<LogoProps> = ({
         setHasError(true);
       };
     }
-  }, [src, priority]);
+  }, [src, priority, isLoaded, hasError]);
 
-  // Fallback em caso de erro
+  // Fallback in case of error
   if (hasError) {
     return (
       <div 
