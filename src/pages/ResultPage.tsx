@@ -5,7 +5,7 @@ import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import { trackResultView } from '@/utils/analytics';
 import { Button } from '@/components/ui/button';
-import { PencilIcon } from 'lucide-react';
+import { PencilIcon, ShoppingCart } from 'lucide-react';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
@@ -164,6 +164,7 @@ const ResultPage = () => {
                   size="lg" 
                   className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-semibold shadow-md transition-all"
                 >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
                   Comprar Agora
                 </Button>
               </div>
