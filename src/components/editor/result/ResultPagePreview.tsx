@@ -31,7 +31,11 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
   };
 
   // Safeguard against missing resultPageConfig with default values
-  const globalStyles = resultPageConfig?.globalStyles || {};
+  const globalStyles = resultPageConfig?.globalStyles || {
+    backgroundColor: '#fffaf7',
+    textColor: '#432818',
+    fontFamily: 'inherit'
+  };
   const safeBlocks = blocks || [];
 
   // Calculate classes for the preview container
@@ -95,7 +99,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
                   !isPreviewing && selectedBlockId === block.id && "outline outline-2 outline-primary"
                 )}
               >
-                {renderBlock(block, primaryStyle || { category: 'default', score: 0, percentage: 0 })}
+                {renderBlock(block, primaryStyle || { category: "Natural", score: 0, percentage: 0 })}
               </div>
             )) : (
               <Card className="p-8 text-center">
