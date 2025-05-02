@@ -52,7 +52,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
         alt="Resultado do Quiz Visagismo"
         className="w-full rounded-lg mb-8 shadow-md"
         loading="eager"
-        fetchpriority="high"
+        fetchPriority="high"
       />
 
       <Card className="p-6 border-[#aa6b5d]/20 bg-white">
