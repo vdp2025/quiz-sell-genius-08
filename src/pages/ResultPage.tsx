@@ -12,8 +12,6 @@ import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSect
 import ErrorState from '@/components/result/ErrorState';
 import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
-import GuaranteeSection from '@/components/result/GuaranteeSection';
-import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
 import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
@@ -25,6 +23,8 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useAuth } from '@/context/AuthContext';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
 
 const ResultPage: React.FC = () => {
   // Use default values in case of missing data
@@ -56,7 +56,7 @@ const ResultPage: React.FC = () => {
     
     if (styleData.image) {
       const styleImg = new Image();
-      styleImg.src = `${styleData.image}?q=auto:best&f=auto&w=340`;
+      styleImg.src = `${styleData.image}?q=auto:best&f=auto&w=480`;
       styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
       styleImg.onerror = () => {
         console.error("Failed to load style image");
@@ -68,7 +68,7 @@ const ResultPage: React.FC = () => {
 
     if (styleData.guideImage) {
       const guideImg = new Image();
-      guideImg.src = `${styleData.guideImage}?q=auto:best&f=auto&w=540`;
+      guideImg.src = `${styleData.guideImage}?q=auto:best&f=auto&w=640`;
       guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
       guideImg.onerror = () => {
         console.error("Failed to load guide image");
@@ -140,40 +140,42 @@ const ResultPage: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div className="max-w-[238px] mx-auto relative">
+              <div className="max-w-full mx-auto relative">
                 <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
                   <img 
-                    src={image ? `${image}?q=auto:best&f=auto&w=238` : "https://via.placeholder.com/238x317?text=Imagem+não+disponível"} 
+                    src={image ? `${image}?q=auto:best&f=auto&w=400` : "https://via.placeholder.com/400x533?text=Imagem+não+disponível"} 
                     alt={`Estilo ${category}`} 
                     className="w-full h-full object-cover" 
                     loading="eager" 
                     fetchPriority="high" 
-                    width="238" 
-                    height="317"
-                    srcSet={image ? `${image}?q=auto:best&f=auto&w=238 1x, ${image}?q=auto:best&f=auto&w=476 2x` : ""}
-                    sizes="(max-width: 768px) 100vw, 238px"
+                    width="400" 
+                    height="533"
+                    srcSet={image ? `${image}?q=auto:best&f=auto&w=400 1x, ${image}?q=auto:best&f=auto&w=800 2x` : ""}
+                    sizes="(max-width: 768px) 100vw, 400px"
                     onError={(e) => {
-                      e.currentTarget.src = "https://via.placeholder.com/238x317?text=Imagem+não+disponível";
+                      e.currentTarget.src = "https://via.placeholder.com/400x533?text=Imagem+não+disponível";
                     }}
                   />
                 </AspectRatio>
               </div>
             </div>
 
+            {/* Larger Guide Image Display */}
             {guideImage && (
-              <div className="mt-8 max-w-[540px] mx-auto relative">
-                <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+              <div className="mt-12 mx-auto relative">
+                <h3 className="text-xl font-medium text-center text-[#432818] mb-4">Seu Guia de Estilo</h3>
+                <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 max-w-2xl mx-auto">
                   <img 
-                    src={`${guideImage}?q=auto:best&f=auto&w=540`} 
+                    src={`${guideImage}?q=auto:best&f=auto&w=800`} 
                     alt={`Guia de Estilo ${category}`} 
                     loading="lazy" 
                     className="w-full h-full object-cover" 
-                    width="540" 
-                    height="304"
-                    srcSet={`${guideImage}?q=auto:best&f=auto&w=540 1x, ${guideImage}?q=auto:best&f=auto&w=1080 2x`}
-                    sizes="(max-width: 768px) 100vw, 540px"
+                    width="800" 
+                    height="1000"
+                    srcSet={`${guideImage}?q=auto:best&f=auto&w=800 1x, ${guideImage}?q=auto:best&f=auto&w=1200 2x`}
+                    sizes="(max-width: 768px) 100vw, 800px"
                     onError={(e) => {
-                      e.currentTarget.src = "https://via.placeholder.com/540x304?text=Guia+de+Estilo+não+disponível";
+                      e.currentTarget.src = "https://via.placeholder.com/800x1000?text=Guia+de+Estilo+não+disponível";
                     }}
                   />
                 </AspectRatio>
@@ -185,30 +187,19 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         </Card>
 
+        {/* Product Showcase Section */}
         <BeforeAfterTransformation />
         <MotivationSection />
         <BonusSection />
         <Testimonials />
 
-        <div className="text-center p-4 bg-[#f9f4ef] rounded-lg relative flex flex-col items-center">
+        {/* Pricing Section without guarantee image */}
+        <div className="text-center p-6 bg-[#f9f4ef] rounded-lg relative flex flex-col items-center mt-10 mb-6">
           <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-1">
+          <div className="flex flex-col items-center justify-center gap-2 mt-1">
             <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-            <img 
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png" 
-              srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 1x, https://res.cloudinary.com/dqljyf76t/image/upload/q_auto,f_auto,w_128/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 2x" 
-              sizes="(max-width: 768px) 100vw, 64px" 
-              alt="Selo de garantia" 
-              className="w-20 h-20 sm:w-24 sm:h-24 object-contain sm:order-1 order-2 mt-2 sm:mt-0" 
-              width="64" 
-              height="64"
-              loading="lazy"
-              onError={(e) => {
-                e.currentTarget.src = "https://via.placeholder.com/64x64?text=Selo+de+Garantia";
-              }}
-            />
+            <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong><br className="block sm:hidden" /> no cartão</p>
           </div>
-          <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong><br className="block sm:hidden" /> no cartão</p>
         </div>
 
         <Button 
@@ -234,8 +225,10 @@ const ResultPage: React.FC = () => {
           <span>Oferta exclusiva nesta página</span>
         </p>
 
-        <GuaranteeSection />
         <MentorSection />
+        
+        {/* Guarantee Section moved to the end */}
+        <GuaranteeSection />
       </div>
 
       <BuildInfo />

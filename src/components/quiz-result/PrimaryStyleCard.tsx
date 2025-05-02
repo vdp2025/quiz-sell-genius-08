@@ -32,11 +32,18 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
         </div>
         <div className="order-first md:order-last flex justify-center">
           {imageUrl ? (
-            <img 
-              src={imageUrl} 
-              alt={`Estilo ${primaryStyle.category}`} 
-              className="w-full h-auto rounded-lg max-h-80 object-contain"
-            />
+            <div className="w-full max-w-md">
+              <div className="aspect-[3/4] relative overflow-hidden rounded-lg shadow-md">
+                <img 
+                  src={imageUrl} 
+                  alt={`Estilo ${primaryStyle.category}`} 
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://via.placeholder.com/400x533?text=Imagem+não+disponível";
+                  }}
+                />
+              </div>
+            </div>
           ) : (
             <div className="bg-gray-100 rounded-lg w-full h-64 flex items-center justify-center">
               <p className="text-gray-400">Imagem não disponível</p>
