@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizResult as QuizResultType } from '../types/quiz';
 import BackupResultPage from '../backup/ResultPage.backup';
@@ -11,8 +12,13 @@ const ResultPage = () => {
   const quizLogic = useQuizLogic();
   const { quizResult, resetQuiz } = quizLogic;
   const navigate = useNavigate();
+  const location = useLocation();
   const [localResult, setLocalResult] = useState<QuizResultType | null>(null);
   const [resultTracked, setResultTracked] = useState(false);
+  
+  // Verificar se o parâmetro de acesso está presente na URL
+  const searchParams = new URLSearchParams(location.search);
+  const isEditorAccessible = searchParams.get('admin') === 'true';
 
   useEffect(() => {
     // Se não há resultado do contexto, tente carregar do localStorage
@@ -80,16 +86,18 @@ const ResultPage = () => {
 
   return (
     <>
-      <div className="fixed top-4 right-4 z-50">
-        <Button 
-          onClick={handleEditClick} 
-          variant="secondary" 
-          className="flex items-center gap-2"
-        >
-          <PencilIcon size={16} />
-          Editar Página
-        </Button>
-      </div>
+      {isEditorAccessible && (
+        <div className="fixed top-4 right-4 z-50">
+          <Button 
+            onClick={handleEditClick} 
+            variant="secondary" 
+            className="flex items-center gap-2"
+          >
+            <PencilIcon size={16} />
+            Editar Página
+          </Button>
+        </div>
+      )}
       <BackupResultPage />
     </>
   );
