@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -19,6 +19,7 @@ import { CheckCircle } from 'lucide-react';
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,11 +48,11 @@ const ResultPage: React.FC = () => {
 
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <AnimatedWrapper show={true}>
+          <AnimatedWrapper show={imgLoaded}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#8F7A6A]"></span>
+                  <span className="text-sm text-[#8F7A6A]">Seu Estilo em Destaque</span>
                   <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
                 </div>
                 <Progress
@@ -64,26 +65,31 @@ const ResultPage: React.FC = () => {
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <p className="text-[#432818] leading-relaxed">{description}</p>
+                <p className="text-[#432818] leading-relaxed">
+                  {description}
+                </p>
                 <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
                   <h3 className="text-lg font-medium text-[#432818] mb-2">
-                    Seus Estilos Complementares
+                    Estilos que Também Influenciam Você
                   </h3>
                   <SecondaryStylesSection secondaryStyles={secondaryStyles} />
                 </div>
               </div>
               <div>
                 <img
-                  src={image}
+                  src={`${image}?q=100&f=auto`}
                   alt={`Estilo ${category}`}
+                  loading="lazy"
+                  onLoad={() => setImgLoaded(true)}
                   className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </div>
             <div className="mt-8">
               <img
-                src={guideImage}
+                src={`${guideImage}?q=100&f=auto`}
                 alt={`Guia de Estilo ${category}`}
+                loading="lazy"
                 className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
               />
             </div>
@@ -91,112 +97,30 @@ const ResultPage: React.FC = () => {
         </Card>
 
         <MotivationSection />
-
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-              O Guia de Estilo e Imagem + Bônus Exclusivos
-            </h2>
-            <p className="text-[#432818]">
-              Muito mais que "descobrir seu estilo" — esse guia é o mapa para transformar sua imagem em uma ferramenta de confiança e autenticidade.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
-            <div>
-              <h3 className="text-xl font-medium text-[#432818] mb-4">
-                Com ele, você vai aprender:
-              </h3>
-              <ul className="space-y-3">
-                {["Montar looks com intenção (não no improviso)", "Usar cores, modelagens e tecidos a seu favor", "Alinhar sua imagem com seus valores e metas", "Parar de comprar por impulso e ter um guarda-roupa funcional"].map((item, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-[#aa6b5d] mt-0.5 mr-2 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp"
-                alt="Guia de Estilo - 3 Revistas"
-                className="w-full h-auto rounded-lg shadow-sm"
-              />
-            </div>
-          </div>
-
-          <div className="bg-[#fff7f3] p-6 rounded-lg mb-8">
-            <h3 className="text-xl font-medium text-[#aa6b5d] mb-4 text-center">
-              E ainda recebe 2 bônus poderosos:
-            </h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-[#432818] mb-2">
-                  Peças-chave do Guarda-Roupa de Sucesso
-                </h4>
-                <p className="text-sm text-[#432818]/80 mb-4">
-                  Os essenciais que facilitam sua rotina e elevam seu estilo sem esforço.
-                </p>
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-                  alt="Peças-chave do Guarda-Roupa"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <h4 className="font-medium text-[#432818] mb-2">
-                  Mini Guia de Visagismo Facial
-                </h4>
-                <p className="text-sm text-[#432818]/80 mb-4">
-                  Alinhe seu rosto, cabelo e maquiagem à sua identidade visual e conquiste mais presença.
-                </p>
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
-                  alt="Mini Guia de Visagismo Facial"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <img
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-              alt="Todos os produtos e bônus"
-              className="w-full h-auto rounded-lg"
-            />
-          </div>
-
-          <div className="bg-[#fff7f3] p-6 rounded-lg text-center">
-            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6">
-              <div className="text-center md:text-right">
-                <p className="text-sm text-[#432818]/60 mb-1">Valor Total</p>
-                <p className="text-xl line-through text-[#432818]/60">R$ 175,00</p>
-              </div>
-              <div className="text-center">
-                <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-                <p className="text-3xl font-bold text-[#aa6b5d]">R$ 39,00</p>
-              </div>
-            </div>
-            <Button
-              onClick={() =>
-                (window.location.href =
-                  'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912')
-              }
-              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
-            >
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              Quero meu Guia + Bônus por R$39,00
-            </Button>
-            <p className="text-sm text-[#aa6b5d] mt-4">
-              ⏳ Oferta válida apenas nesta página. Se sair da página, essa oferta desaparece.
-            </p>
-          </div>
-        </Card>
-
         <Testimonials />
         <MentorSection />
         <GuaranteeSection />
+
+        <div className="text-center mt-10">
+          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+            Oferta Especial: Transforme Seu Estilo com Clareza e Confiança
+          </h2>
+          <p className="text-[#432818] mb-6 max-w-xl mx-auto">
+            O seu resultado é só o começo. Aprofunde-se com o Guia de Estilo e
+            Imagem + Bônus que vão elevar sua presença e te ajudar a se vestir com estratégia, todos os dias.
+          </p>
+
+          <Button
+            onClick={() => window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'}
+            className="text-white py-5 px-8 rounded-md bg-brand-gold hover:bg-[#A38A69] text-lg shadow-md transition-colors"
+          >
+            <ShoppingCart className="w-5 h-5 mr-2" /> Quero meu Guia + Bônus por R$39,00
+          </Button>
+
+          <p className="text-sm text-[#aa6b5d] mt-3">
+            ⏳ Oferta válida apenas nesta página. Se sair, ela desaparece.
+          </p>
+        </div>
       </div>
     </div>
   );
