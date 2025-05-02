@@ -7,7 +7,7 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Pense no quanto você já gastou com roupas que não usa ou que não representam quem você é...\nVocê acredita que ter acesso a um material estratégico, direto ao ponto, que te ensina a aplicar seu estilo com clareza, faria diferença?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745195448/discovery-journey_webp.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp',
     options: [
       {
         id: 'strategic-5-1',
@@ -32,7 +32,7 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Se esse conteúdo completo custasse R$ 97,00 — incluindo Guia de Estilo, bônus especiais e um passo a passo prático para transformar sua imagem pessoal — você consideraria um bom investimento?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745195452/transformation-value_webp.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp',
     options: [
       {
         id: 'strategic-6-1',

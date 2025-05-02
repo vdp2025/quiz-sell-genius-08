@@ -7,7 +7,7 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
     title: 'Como você se vê hoje?\nQuando você se olha no espelho, como se sente com sua imagem pessoal atualmente?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745195432/woman-mirror-reflection_webp.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193439/2dd7e159-43a1-40b0-8075-ba6f591074c1_gpsauh.webp',
     options: [
       {
         id: 'strategic-1-1',
@@ -32,7 +32,7 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
     title: 'O que mais te desafia na hora de se vestir?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745195436/wardrobe-organization_webp.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/6cceaaa9-9383-4890-95a4-da036f8421e3_u7tuaw.webp',
     options: [
       {
         id: 'strategic-2-1',

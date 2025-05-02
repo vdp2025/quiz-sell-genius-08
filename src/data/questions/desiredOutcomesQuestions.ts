@@ -7,7 +7,7 @@ export const desiredOutcomesQuestions: QuizQuestion[] = [
     title: 'Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745195456/effortless-styling_webp.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp',
     options: [
       {
         id: 'strategic-7-1',
