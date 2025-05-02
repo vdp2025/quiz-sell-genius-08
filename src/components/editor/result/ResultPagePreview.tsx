@@ -13,6 +13,14 @@ interface ResultPagePreviewProps {
   isPreviewing: boolean;
 }
 
+// Define a type for the globalStyles
+interface GlobalStyles {
+  backgroundColor: string;
+  textColor: string;
+  fontFamily: string;
+  [key: string]: any; // Allow for other properties that might be in globalStyles
+}
+
 export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
   primaryStyle,
   isPreviewing
@@ -31,7 +39,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
   };
 
   // Safeguard against missing resultPageConfig with default values
-  const globalStyles = resultPageConfig?.globalStyles || {
+  const globalStyles: GlobalStyles = resultPageConfig?.globalStyles as GlobalStyles || {
     backgroundColor: '#fffaf7',
     textColor: '#432818',
     fontFamily: 'inherit'
@@ -82,9 +90,9 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
         <div 
           className={containerClasses}
           style={{
-            backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-            color: globalStyles.textColor || '#432818',
-            fontFamily: globalStyles.fontFamily || 'inherit',
+            backgroundColor: globalStyles.backgroundColor,
+            color: globalStyles.textColor,
+            fontFamily: globalStyles.fontFamily,
           }}
         >
           {/* Render blocks */}
