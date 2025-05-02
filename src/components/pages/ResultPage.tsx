@@ -87,7 +87,7 @@ export const PaginaVendaGuiaEstilo = () => {
         <div className="text-center">
           <Button
             className="bg-[#aa6b5d] hover:bg-[#bfa08e] text-white px-6 py-4 mt-4 text-lg"
-            onClick={handleCheckoutClick}
+            onClick={() => window.location.href = BlocoOferta.cta.link}
           >
             {BlocoOferta.cta.text}
           </Button>
@@ -144,7 +144,7 @@ export const PaginaVendaGuiaEstilo = () => {
         <p className="text-base max-w-xl mx-auto">{BlocoUrgencia.subtitle}</p>
         <Button
           className="bg-[#4CAF50] hover:bg-[#388e3c] text-white px-8 py-4 text-lg mt-2"
-          onClick={handleSecondaryButtonClick}
+          onClick={() => window.location.href = BlocoUrgencia.ctaLink}
         >
           {BlocoUrgencia.ctaText}
         </Button>
