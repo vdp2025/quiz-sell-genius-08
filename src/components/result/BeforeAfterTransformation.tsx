@@ -1,63 +1,63 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-
 interface TransformationItem {
   beforeImage: string;
   afterImage: string;
   name: string;
 }
-
-const transformations: TransformationItem[] = [
-  {
-    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    name: "Adriana",
-  },
-  {
-    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-    name: "Mariangela",
-  }
-];
-
+const transformations: TransformationItem[] = [{
+  beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+  afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+  name: "Adriana"
+}, {
+  beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+  afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+  name: "Mariangela"
+}];
 const BeforeAfterTransformation: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [sliderPosition, setSliderPosition] = useState(50);
-  const [imagesLoaded, setImagesLoaded] = useState<{before: boolean, after: boolean}>({before: false, after: false});
+  const [imagesLoaded, setImagesLoaded] = useState<{
+    before: boolean;
+    after: boolean;
+  }>({
+    before: false,
+    after: false
+  });
   const activeTransformation = transformations[activeIndex];
 
   // Preload images to ensure they display correctly
   useEffect(() => {
     const beforeImg = new Image();
     const afterImg = new Image();
-    
     beforeImg.src = activeTransformation.beforeImage;
     afterImg.src = activeTransformation.afterImage;
-    
-    beforeImg.onload = () => setImagesLoaded(prev => ({...prev, before: true}));
-    afterImg.onload = () => setImagesLoaded(prev => ({...prev, after: true}));
-    
+    beforeImg.onload = () => setImagesLoaded(prev => ({
+      ...prev,
+      before: true
+    }));
+    afterImg.onload = () => setImagesLoaded(prev => ({
+      ...prev,
+      after: true
+    }));
     return () => {
       beforeImg.onload = null;
       afterImg.onload = null;
     };
   }, [activeIndex, activeTransformation.beforeImage, activeTransformation.afterImage]);
-
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSliderPosition(Number(e.target.value));
   };
-
   const handleDotClick = (index: number) => {
     setActiveIndex(index);
     // Reset images loaded state when changing transformation
-    setImagesLoaded({before: false, after: false});
+    setImagesLoaded({
+      before: false,
+      after: false
+    });
   };
-
   const areImagesReady = imagesLoaded.before && imagesLoaded.after;
-
-  return (
-    <div className="py-10">
+  return <div className="py-10">
       <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] text-center mb-2">
         Transformações Reais
       </h2>
@@ -68,46 +68,27 @@ const BeforeAfterTransformation: React.FC = () => {
 
       <div className="max-w-2xl mx-auto">
         <Card className="p-6 card-elegant overflow-hidden">
-          {!areImagesReady && (
-            <div className="h-[400px] md:h-[500px] w-full flex items-center justify-center bg-[#f9f4ef]">
+          {!areImagesReady && <div className="h-[400px] md:h-[500px] w-full flex items-center justify-center bg-[#f9f4ef]">
               <div className="w-12 h-12 border-4 border-[#aa6b5d] border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          )}
+            </div>}
           
-          <div 
-            className={`relative h-[400px] md:h-[500px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}
-          >
+          <div className={`relative h-[400px] md:h-[500px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
             {/* Full image without slider */}
             <div className="absolute inset-0 w-full h-full">
-              <img 
-                src={activeTransformation.afterImage}
-                alt={`Transformação - ${activeTransformation.name}`}
-                className="w-full h-full object-cover"
-              />
+              <img src={activeTransformation.afterImage} alt={`Transformação - ${activeTransformation.name}`} className="w-full h-full object-cover" />
             </div>
 
             <div className="absolute bottom-4 left-0 right-0 mx-auto bg-white/80 backdrop-blur-sm py-2 px-4 text-center rounded-lg max-w-xs">
-              <p className="text-lg font-playfair text-[#432818]">{activeTransformation.name}</p>
+              
             </div>
           </div>
 
           {/* Dots navigation */}
-          {transformations.length > 1 && (
-            <div className="flex justify-center gap-2 mt-4">
-              {transformations.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full ${index === activeIndex ? 'bg-[#aa6b5d]' : 'bg-[#aa6b5d]/30'}`}
-                  onClick={() => handleDotClick(index)}
-                  aria-label={`Transformação ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
+          {transformations.length > 1 && <div className="flex justify-center gap-2 mt-4">
+              {transformations.map((_, index) => <button key={index} className={`w-3 h-3 rounded-full ${index === activeIndex ? 'bg-[#aa6b5d]' : 'bg-[#aa6b5d]/30'}`} onClick={() => handleDotClick(index)} aria-label={`Transformação ${index + 1}`} />)}
+            </div>}
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default BeforeAfterTransformation;
