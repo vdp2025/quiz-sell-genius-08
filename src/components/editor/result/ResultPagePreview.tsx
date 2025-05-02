@@ -30,9 +30,15 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
     window.open('/resultado', '_blank');
   };
 
-  // Safeguard against missing resultPageConfig
+  // Safeguard against missing resultPageConfig with default values
   const globalStyles = resultPageConfig?.globalStyles || {};
   const safeBlocks = blocks || [];
+
+  // Calculate classes for the preview container
+  const containerClasses = cn(
+    "bg-background mx-auto",
+    viewMode === 'mobile' ? 'max-w-sm' : 'max-w-4xl'
+  );
 
   return (
     <div className="h-full flex flex-col">
@@ -70,10 +76,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
       
       <div className="flex-1 overflow-auto bg-muted p-8">
         <div 
-          className={cn(
-            "bg-background mx-auto",
-            viewMode === 'mobile' ? 'max-w-sm' : 'max-w-4xl'
-          )}
+          className={containerClasses}
           style={{
             backgroundColor: globalStyles.backgroundColor || '#fffaf7',
             color: globalStyles.textColor || '#432818',
@@ -92,7 +95,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
                   !isPreviewing && selectedBlockId === block.id && "outline outline-2 outline-primary"
                 )}
               >
-                {renderBlock(block, primaryStyle)}
+                {renderBlock(block, primaryStyle || { category: 'default', score: 0, percentage: 0 })}
               </div>
             )) : (
               <Card className="p-8 text-center">

@@ -40,6 +40,7 @@ export const styleConfig = {
 
 // Helper function to get style config with fallback to default
 export const getStyleConfig = (style) => {
+  if (!style) return styleConfig.default;
   return styleConfig[style] || styleConfig.default;
 };
 

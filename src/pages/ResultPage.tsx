@@ -27,9 +27,10 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useAuth } from '@/context/AuthContext';
 
 const ResultPage: React.FC = () => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
-  const { globalStyles } = useGlobalStyles();
-  const { user } = useAuth();
+  // Use default values in case of missing data
+  const { primaryStyle = null, secondaryStyles = [] } = useQuiz();
+  const { globalStyles = {} } = useGlobalStyles();
+  const { user = null } = useAuth();
   const [imagesLoaded, setImagesLoaded] = useState({ style: false, guide: false });
   const isLowPerformance = useIsLowPerformanceDevice();
   const { isLoading, completeLoading } = useLoadingState({
@@ -40,33 +41,41 @@ const ResultPage: React.FC = () => {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   useEffect(() => {
-    if (!primaryStyle) return;
+    if (!primaryStyle) {
+      console.warn("Primary style not available");
+      return;
+    }
+
     window.scrollTo(0, 0);
     const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
     criticalImages.forEach(src => new Image().src = src);
 
-    const { category } = primaryStyle;
+    const { category = 'default' } = primaryStyle;
     // Check if styleConfig exists for this category before accessing it
-    if (styleConfig[category]) {
-      const { image, guideImage } = styleConfig[category];
-      if (image) {
-        const styleImg = new Image();
-        styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
-        styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
-      } else {
+    const styleData = styleConfig[category] || styleConfig.default || {};
+    
+    if (styleData.image) {
+      const styleImg = new Image();
+      styleImg.src = `${styleData.image}?q=auto:best&f=auto&w=340`;
+      styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
+      styleImg.onerror = () => {
+        console.error("Failed to load style image");
         setImagesLoaded(prev => ({ ...prev, style: true }));
-      }
-
-      if (guideImage) {
-        const guideImg = new Image();
-        guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-        guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
-      } else {
-        setImagesLoaded(prev => ({ ...prev, guide: true }));
-      }
+      };
     } else {
-      // Set images as loaded if there's no style config
-      setImagesLoaded({ style: true, guide: true });
+      setImagesLoaded(prev => ({ ...prev, style: true }));
+    }
+
+    if (styleData.guideImage) {
+      const guideImg = new Image();
+      guideImg.src = `${styleData.guideImage}?q=auto:best&f=auto&w=540`;
+      guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
+      guideImg.onerror = () => {
+        console.error("Failed to load guide image");
+        setImagesLoaded(prev => ({ ...prev, guide: true }));
+      };
+    } else {
+      setImagesLoaded(prev => ({ ...prev, guide: true }));
     }
   }, [primaryStyle, globalStyles.logo]);
 
@@ -77,10 +86,10 @@ const ResultPage: React.FC = () => {
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
 
-  const { category } = primaryStyle;
-  // Make sure we have valid styleConfig data
-  const styleData = styleConfig[category] || {};
-  const { image, guideImage, description } = styleData;
+  const { category = 'default' } = primaryStyle;
+  // Make sure we have valid styleConfig data with fallbacks
+  const styleData = styleConfig[category] || styleConfig.default || {};
+  const { image = '', guideImage = '', description = 'Descrição não disponível para este estilo.' } = styleData;
   const userName = globalStyles.userName || (user ? user.userName : undefined);
 
   const handleCTAClick = () => {
@@ -94,7 +103,13 @@ const ResultPage: React.FC = () => {
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={userName} />
+      <Header 
+        primaryStyle={primaryStyle} 
+        logoHeight={globalStyles.logoHeight} 
+        logo={globalStyles.logo} 
+        logoAlt={globalStyles.logoAlt} 
+        userName={userName} 
+      />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
@@ -103,15 +118,19 @@ const ResultPage: React.FC = () => {
               <div className="max-w-md mx-auto mb-6">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-[#8F7A6A]">Seu estilo predominante</span>
-                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage || 0}%</span>
                 </div>
-                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+                <Progress 
+                  value={primaryStyle.percentage || 0} 
+                  className="h-2 bg-[#F3E8E6]" 
+                  indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" 
+                />
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <p className="text-[#432818] leading-relaxed">{description || "Descrição não disponível para este estilo."}</p>
+                <p className="text-[#432818] leading-relaxed">{description}</p>
                 <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
                   <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
                   {secondaryStyles && secondaryStyles.length > 0 ? (
@@ -133,6 +152,9 @@ const ResultPage: React.FC = () => {
                     height="317"
                     srcSet={image ? `${image}?q=auto:best&f=auto&w=238 1x, ${image}?q=auto:best&f=auto&w=476 2x` : ""}
                     sizes="(max-width: 768px) 100vw, 238px"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://via.placeholder.com/238x317?text=Imagem+não+disponível";
+                    }}
                   />
                 </AspectRatio>
               </div>
@@ -150,6 +172,9 @@ const ResultPage: React.FC = () => {
                     height="304"
                     srcSet={`${guideImage}?q=auto:best&f=auto&w=540 1x, ${guideImage}?q=auto:best&f=auto&w=1080 2x`}
                     sizes="(max-width: 768px) 100vw, 540px"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://via.placeholder.com/540x304?text=Guia+de+Estilo+não+disponível";
+                    }}
                   />
                 </AspectRatio>
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
@@ -171,22 +196,32 @@ const ResultPage: React.FC = () => {
             <p className="text-4xl font-bold gold-text">R$ 39,00</p>
             <img 
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png" 
-              srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 1x, https://res.cloudinary.com/dqljyf76t/image/upload/q_auto,f_auto,w_128/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 2x" sizes="(max-width: 768px) 100vw, 64px" 
+              srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 1x, https://res.cloudinary.com/dqljyf76t/image/upload/q_auto,f_auto,w_128/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png 2x" 
+              sizes="(max-width: 768px) 100vw, 64px" 
               alt="Selo de garantia" 
               className="w-20 h-20 sm:w-24 sm:h-24 object-contain sm:order-1 order-2 mt-2 sm:mt-0" 
               width="64" 
               height="64"
               loading="lazy"
+              onError={(e) => {
+                e.currentTarget.src = "https://via.placeholder.com/64x64?text=Selo+de+Garantia";
+              }}
             />
           </div>
           <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong><br className="block sm:hidden" /> no cartão</p>
         </div>
 
-        <Button onClick={handleCTAClick} className="text-white py-5 px-8 lg:py-6 lg:px-12 rounded-md shadow-md transition-colors btn-3d mt-6" style={{
-          background: "linear-gradient(to right, #4CAF50, #45a049)",
-          boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-          fontSize: "1rem"
-        }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
+        <Button 
+          onClick={handleCTAClick} 
+          className="text-white py-5 px-8 lg:py-6 lg:px-12 rounded-md shadow-md transition-colors btn-3d mt-6 w-full md:w-auto md:mx-auto md:block" 
+          style={{
+            background: "linear-gradient(to right, #4CAF50, #45a049)",
+            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+            fontSize: "1rem"
+          }} 
+          onMouseEnter={() => setIsButtonHovered(true)} 
+          onMouseLeave={() => setIsButtonHovered(false)}
+        >
           <span className="flex items-center justify-center gap-2">
             <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
             <span>Garantir Meu Guia + Bônus Especiais</span>

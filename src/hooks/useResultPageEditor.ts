@@ -5,7 +5,7 @@ import { useResultPageConfig } from './useResultPageConfig';
 import { useBlockOperations } from './useBlockOperations';
 import { ResultPageBlock } from '@/types/resultPageTypes';
 
-export const useResultPageEditor = (styleType: string) => {
+export const useResultPageEditor = (styleType: string = 'default') => {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [isGlobalStylesOpen, setIsGlobalStylesOpen] = useState(false);
   
@@ -29,16 +29,31 @@ export const useResultPageEditor = (styleType: string) => {
   // Sync blocks with config when loaded
   useEffect(() => {
     if (resultPageConfig?.blocks && !loading) {
-      updateBlocks(resultPageConfig.blocks);
+      try {
+        updateBlocks(resultPageConfig.blocks);
+      } catch (error) {
+        console.error("Error updating blocks from config:", error);
+        // Use empty array as fallback if blocks can't be parsed
+        updateBlocks([]);
+      }
     }
   }, [resultPageConfig?.blocks, loading, updateBlocks]);
   
   // Sync blocks back to config when they change
   useEffect(() => {
-    if (!loading) {
-      updateSection('blocks', blocks);
+    if (!loading && resultPageConfig) {
+      try {
+        updateSection('blocks', blocks);
+      } catch (error) {
+        console.error("Error updating blocks in config:", error);
+        toast({
+          title: "Erro ao atualizar blocos",
+          description: "Não foi possível salvar suas alterações. Tente novamente.",
+          variant: "destructive"
+        });
+      }
     }
-  }, [blocks, updateSection, loading]);
+  }, [blocks, updateSection, loading, resultPageConfig]);
 
   const togglePreview = useCallback(() => {
     setIsPreviewing(prev => !prev);
@@ -53,7 +68,7 @@ export const useResultPageEditor = (styleType: string) => {
   }, []);
 
   return {
-    resultPageConfig,
+    resultPageConfig: resultPageConfig || { styleType: styleType, blocks: [], globalStyles: {} },
     loading,
     blocks,
     selectedBlockId,
