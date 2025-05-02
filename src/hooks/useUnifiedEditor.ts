@@ -16,24 +16,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
   // Initialize the individual editors
   const quizBuilder = useQuizBuilder();
   const resultPageEditor = useResultPageEditor(primaryStyle.category);
-  
-  // Simplified mock for salesPageEditor if it doesn't exist yet
-  const salesPageEditor = {
-    handleSave: async () => { 
-      toast({
-        title: "Funcionalidade em desenvolvimento",
-        description: "O editor de página de vendas está em construção."
-      });
-      return true; 
-    },
-    loadTemplate: (blocks: any[]) => {
-      toast({
-        title: "Templates em desenvolvimento",
-        description: "O carregamento de templates para a página de vendas estará disponível em breve."
-      });
-      return true;
-    }
-  };
+  const salesPageEditor = useSalesPageEditor(primaryStyle.category);
   
   // Initialization log
   useEffect(() => {
@@ -96,19 +79,34 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
       
       if (activeMode === 'quiz' && quizBuilder) {
         // Load quiz template if implemented
-        if (templateData.stages && templateData.components &&
-            typeof quizBuilder.initializeStages === 'function' &&
-            typeof quizBuilder.initializeComponents === 'function') {
+        if (templateData.stages && Array.isArray(templateData.stages) &&
+            typeof quizBuilder.initializeStages === 'function') {
           quizBuilder.initializeStages(templateData.stages);
-          quizBuilder.initializeComponents(templateData.components);
+          
+          if (templateData.components && Array.isArray(templateData.components) && 
+              typeof quizBuilder.initializeComponents === 'function') {
+            quizBuilder.initializeComponents(templateData.components);
+          } else {
+            // Initialize with empty components if not provided in template
+            quizBuilder.initializeComponents([]);
+          }
+          
           success = true;
+          
+          if (templateData.stages && templateData.stages.length > 0) {
+            quizBuilder.setActiveStage(templateData.stages[0].id);
+          }
         } else {
-          console.warn('Não foi possível carregar o template para o quiz');
+          console.warn('Formato de template inválido para o quiz');
         }
       } else if (activeMode === 'result' && resultPageEditor) {
         // Load result page template
         if (resultPageEditor.actions?.importConfig) {
-          resultPageEditor.actions.importConfig(templateData);
+          const configWithStyleType = {
+            ...templateData,
+            styleType: primaryStyle.category
+          };
+          resultPageEditor.actions.importConfig(configWithStyleType);
           success = true;
         } else {
           console.warn('Método importConfig não encontrado no resultPageEditor');
@@ -122,7 +120,12 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
         }
       }
       
-      if (!success) {
+      if (success) {
+        toast({
+          title: "Template aplicado",
+          description: `Template aplicado com sucesso ao editor de ${activeMode === 'quiz' ? 'Quiz' : activeMode === 'result' ? 'Resultado' : 'Vendas'}.`,
+        });
+      } else {
         toast({
           title: "Aviso",
           description: `Formato de template incompatível com o editor de ${activeMode === 'quiz' ? 'Quiz' : activeMode === 'result' ? 'Resultado' : 'Vendas'}.`,
@@ -139,7 +142,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
       });
       return false;
     }
-  }, [activeMode, quizBuilder, resultPageEditor, salesPageEditor]);
+  }, [activeMode, quizBuilder, resultPageEditor, salesPageEditor, primaryStyle.category]);
   
   return {
     activeMode,

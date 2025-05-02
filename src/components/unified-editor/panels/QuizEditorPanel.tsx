@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { QuizComponentData, QuizComponentType, QuizStage } from '@/types/quizBuilder';
+import { QuizComponentType, QuizStage } from '@/types/quizBuilder';
 import ComponentRenderer from '@/components/quiz-builder/preview/ComponentRenderer';
 import PropertiesPanel from '@/components/editor/properties/PropertiesPanel';
 
@@ -42,9 +42,9 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
     ? components.filter(c => c.stageId === activeStageId).sort((a, b) => a.order - b.order) 
     : [];
 
-  const handleComponentSelect = (type: QuizComponentType) => {
+  const handleComponentSelect = (type: string) => {
     if (!activeStageId) return;
-    const newComponentId = addComponent(type, activeStageId);
+    const newComponentId = addComponent(type as QuizComponentType, activeStageId);
     setSelectedComponentId(newComponentId);
   };
 
@@ -54,7 +54,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
 
   const handleUpdateComponent = (content: any) => {
     if (selectedComponentId) {
-      updateComponent(selectedComponentId, { content });
+      updateComponent(selectedComponentId, { data: content });
     }
   };
   
@@ -100,7 +100,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
           <UnifiedComponentsSidebar
             activeTab="quiz"
             onComponentSelect={handleComponentSelect}
-            activeStageType={activeStage?.type}
+            activeStageType={activeStage?.type || null}
           />
         </ResizablePanel>
         

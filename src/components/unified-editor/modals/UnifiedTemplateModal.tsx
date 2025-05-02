@@ -1,269 +1,240 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { EditorTab } from '../UnifiedVisualEditor';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { toast } from '@/components/ui/use-toast';
+
+// Dummy template data - in a real application, these would come from an API or database
+const quizTemplates = [
+  { 
+    id: 'quiz-template-1', 
+    title: 'Quiz Básico', 
+    description: 'Template básico com capa, perguntas e resultado', 
+    thumbnail: 'https://via.placeholder.com/150?text=Quiz+Basico',
+    stages: [
+      { id: 'stage-cover', title: 'Capa', type: 'cover', order: 0 },
+      { id: 'stage-q1', title: 'Pergunta 1', type: 'question', order: 1 },
+      { id: 'stage-result', title: 'Resultado', type: 'result', order: 2 }
+    ],
+    components: []
+  },
+  { 
+    id: 'quiz-template-2', 
+    title: 'Quiz de Estilo', 
+    description: 'Template para quiz de estilo pessoal', 
+    thumbnail: 'https://via.placeholder.com/150?text=Quiz+Estilo',
+    stages: [
+      { id: 'stage-cover', title: 'Capa', type: 'cover', order: 0 },
+      { id: 'stage-q1', title: 'Pergunta 1', type: 'question', order: 1 },
+      { id: 'stage-q2', title: 'Pergunta 2', type: 'question', order: 2 },
+      { id: 'stage-q3', title: 'Pergunta 3', type: 'question', order: 3 },
+      { id: 'stage-result', title: 'Resultado', type: 'result', order: 4 }
+    ],
+    components: []
+  }
+];
+
+const resultTemplates = [
+  { 
+    id: 'result-template-1', 
+    title: 'Resultado Elegante', 
+    description: 'Design elegante para página de resultados', 
+    thumbnail: 'https://via.placeholder.com/150?text=Resultado+Elegante',
+    styleType: 'Elegante',
+    blocks: [
+      { id: 'block-header', type: 'header', content: { title: 'Seu Estilo é Elegante', style: {} } },
+      { id: 'block-desc', type: 'styleDescription', content: { description: 'Descrição do estilo elegante', style: {} } }
+    ]
+  },
+  { 
+    id: 'result-template-2', 
+    title: 'Resultado Contemporâneo', 
+    description: 'Design contemporâneo para página de resultados', 
+    thumbnail: 'https://via.placeholder.com/150?text=Resultado+Contemporaneo',
+    styleType: 'Contemporâneo',
+    blocks: [
+      { id: 'block-header', type: 'header', content: { title: 'Seu Estilo é Contemporâneo', style: {} } },
+      { id: 'block-desc', type: 'styleDescription', content: { description: 'Descrição do estilo contemporâneo', style: {} } }
+    ]
+  }
+];
+
+const salesTemplates = [
+  { 
+    id: 'sales-template-1', 
+    title: 'Página de Vendas Básica', 
+    description: 'Template básico para página de vendas', 
+    thumbnail: 'https://via.placeholder.com/150?text=Vendas+Basica',
+    blocks: [
+      { id: 'block-hero', type: 'hero', content: { title: 'Título do Produto', description: 'Descrição do produto', style: {} } },
+      { id: 'block-pricing', type: 'pricing', content: { price: 'R$ 97,00', installments: '12x R$ 8,90', style: {} } }
+    ]
+  }
+];
+
+interface TemplateCardProps {
+  title: string;
+  description: string;
+  thumbnail: string;
+  onApply: () => void;
+}
+
+const TemplateCard: React.FC<TemplateCardProps> = ({ title, description, thumbnail, onApply }) => {
+  return (
+    <Card className="overflow-hidden">
+      <div className="aspect-video w-full bg-gray-100 overflow-hidden">
+        <img 
+          src={thumbnail} 
+          alt={title} 
+          className="w-full h-full object-cover" 
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = `https://via.placeholder.com/300x200?text=${encodeURIComponent(title)}`;
+          }}
+        />
+      </div>
+      <CardHeader className="p-4 pb-0">
+        <CardTitle className="text-lg">{title}</CardTitle>
+        <CardDescription className="text-xs line-clamp-2">{description}</CardDescription>
+      </CardHeader>
+      <CardFooter className="p-4 pt-2">
+        <Button onClick={onApply} className="w-full">Aplicar Template</Button>
+      </CardFooter>
+    </Card>
+  );
+};
 
 interface UnifiedTemplateModalProps {
   activeTab: EditorTab;
   onClose: () => void;
-  onApplyTemplate: (template: any) => void;
+  onApplyTemplate: (templateData: any) => boolean;
 }
-
-// Sample templates for each editor type
-const getTemplatesForTab = (tab: EditorTab) => {
-  switch (tab) {
-    case 'quiz':
-      return [
-        {
-          id: 'quiz-template-1',
-          name: 'Quiz de Estilo Básico',
-          description: 'Um quiz simples para descobrir o estilo pessoal',
-          thumbnail: '/assets/templates/quiz-basic.jpg',
-          template: {
-            stages: [
-              { id: 'stage-1', title: 'Introdução', type: 'cover', order: 0 },
-              { id: 'stage-2', title: 'Pergunta 1', type: 'question', order: 1 },
-              { id: 'stage-3', title: 'Resultado', type: 'result', order: 2 }
-            ],
-            components: []
-          }
-        },
-        {
-          id: 'quiz-template-2',
-          name: 'Quiz de Estilo Completo',
-          description: 'Quiz detalhado com perguntas sobre estilo pessoal',
-          thumbnail: '/assets/templates/quiz-full.jpg',
-          template: {
-            stages: [
-              { id: 'stage-1', title: 'Introdução', type: 'cover', order: 0 },
-              { id: 'stage-2', title: 'Cores', type: 'question', order: 1 },
-              { id: 'stage-3', title: 'Formas', type: 'question', order: 2 },
-              { id: 'stage-4', title: 'Texturas', type: 'question', order: 3 },
-              { id: 'stage-5', title: 'Resultado', type: 'result', order: 4 }
-            ],
-            components: []
-          }
-        }
-      ];
-    case 'result':
-      return [
-        {
-          id: 'result-template-1',
-          name: 'Página de Resultado Simples',
-          description: 'Layout simples para exibir o resultado do estilo',
-          thumbnail: '/assets/templates/result-simple.jpg',
-          template: {
-            globalStyles: {
-              backgroundColor: "#F9F5F1",
-              textColor: "#432818",
-              fontFamily: "Playfair Display, serif"
-            },
-            blocks: [
-              {
-                id: "headline-1",
-                type: "headline",
-                content: { 
-                  title: "Seu Estilo",
-                  subtitle: "Conheça sua paleta de cores e estilo pessoal",
-                  style: { textAlign: "center", paddingTop: "2rem" }
-                },
-                order: 0
-              },
-              {
-                id: "style-result-1",
-                type: "style-result",
-                content: {},
-                order: 1
-              }
-            ]
-          }
-        },
-        {
-          id: 'result-template-2',
-          name: 'Página de Resultado Completa',
-          description: 'Layout completo com estilo principal e secundários',
-          thumbnail: '/assets/templates/result-full.jpg',
-          template: {
-            globalStyles: {
-              backgroundColor: "#F9F5F1",
-              textColor: "#432818",
-              fontFamily: "Playfair Display, serif"
-            },
-            blocks: [
-              {
-                id: "headline-1",
-                type: "headline",
-                content: { 
-                  title: "Seu Estilo Principal",
-                  subtitle: "Aqui está o estilo que melhor representa você",
-                  style: { textAlign: "center", paddingTop: "2rem" }
-                },
-                order: 0
-              },
-              {
-                id: "style-result-1",
-                type: "style-result",
-                content: {},
-                order: 1
-              },
-              {
-                id: "headline-2",
-                type: "headline",
-                content: { 
-                  title: "Seus Estilos Secundários",
-                  subtitle: "Estes estilos complementam seu estilo principal",
-                  style: { textAlign: "center", paddingTop: "2rem" }
-                },
-                order: 2
-              },
-              {
-                id: "secondary-styles-1",
-                type: "secondary-styles",
-                content: {},
-                order: 3
-              }
-            ]
-          }
-        }
-      ];
-    case 'sales':
-      return [
-        {
-          id: 'sales-template-1',
-          name: 'Página de Vendas Básica',
-          description: 'Layout simples para oferta de consultoria',
-          thumbnail: '/assets/templates/sales-basic.jpg',
-          template: {
-            blocks: [
-              {
-                id: "headline-1",
-                type: "headline",
-                content: { 
-                  title: "Transforme seu Estilo Pessoal",
-                  subtitle: "Consultoria especializada para realçar sua beleza natural",
-                  style: { textAlign: "center", paddingTop: "2rem" }
-                },
-                order: 0
-              },
-              {
-                id: "benefits-1",
-                type: "benefits",
-                content: {
-                  title: "O que você vai receber",
-                  benefits: [
-                    "Análise completa do seu estilo pessoal",
-                    "Paleta de cores personalizada",
-                    "Recomendações de peças-chave para seu guarda-roupa",
-                    "Dicas para valorizar seus pontos fortes"
-                  ]
-                },
-                order: 1
-              }
-            ]
-          }
-        },
-        {
-          id: 'sales-template-2',
-          name: 'Página de Vendas Completa',
-          description: 'Layout completo com benefícios, depoimentos e CTA',
-          thumbnail: '/assets/templates/sales-full.jpg',
-          template: {
-            blocks: []
-          }
-        }
-      ];
-    default:
-      return [];
-  }
-};
 
 export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
   activeTab,
   onClose,
   onApplyTemplate
 }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [isApplying, setIsApplying] = useState(false);
-  
-  const templates = getTemplatesForTab(activeTab);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
 
-  const handleApplyTemplate = () => {
-    if (!selectedTemplate) return;
-    
-    const template = templates.find(t => t.id === selectedTemplate);
-    if (!template) return;
-    
-    setIsApplying(true);
-    
-    try {
-      onApplyTemplate(template.template);
-      setTimeout(() => {
-        setIsApplying(false);
-        onClose();
-      }, 1000);
-    } catch (err) {
-      console.error('Erro ao aplicar template:', err);
-      setIsApplying(false);
+  const getTemplatesForTab = () => {
+    switch (activeTab) {
+      case 'quiz':
+        return quizTemplates;
+      case 'result':
+        return resultTemplates;
+      case 'sales':
+        return salesTemplates;
+      default:
+        return [];
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-auto">
-        <h2 className="text-xl font-medium mb-4">
-          Templates para {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'}
-        </h2>
+  const handleApplyTemplate = (template: any) => {
+    setIsLoading(true);
+    setSelectedTemplate(template);
+    
+    // Simulate API request
+    setTimeout(() => {
+      try {
+        const success = onApplyTemplate(template);
         
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {templates.map((template) => (
-            <div
-              key={template.id}
-              className={`border rounded-md p-4 cursor-pointer transition-all ${
-                selectedTemplate === template.id 
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-              onClick={() => setSelectedTemplate(template.id)}
-            >
-              <div className="h-32 bg-gray-200 mb-3 rounded flex items-center justify-center">
-                {template.thumbnail ? (
-                  <img 
-                    src={template.thumbnail} 
-                    alt={template.name} 
-                    className="h-full w-full object-cover rounded" 
+        if (success) {
+          toast({
+            title: "Template aplicado com sucesso",
+            description: `O template "${template.title}" foi aplicado ao editor de ${
+              activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Resultado' : 'Página de Vendas'
+            }.`,
+          });
+          onClose();
+        } else {
+          toast({
+            title: "Erro ao aplicar template",
+            description: "Não foi possível aplicar o template selecionado.",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao aplicar template:', error);
+        toast({
+          title: "Erro ao aplicar template",
+          description: "Ocorreu um erro inesperado ao aplicar o template.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+        setSelectedTemplate(null);
+      }
+    }, 1000);
+  };
+
+  return (
+    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+        <DialogHeader>
+          <DialogTitle>
+            Escolha um Template para {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Página de Resultado' : 'Página de Vendas'}
+          </DialogTitle>
+          <DialogDescription>
+            Selecione um template para começar. Você poderá personalizar todos os elementos depois.
+          </DialogDescription>
+        </DialogHeader>
+        
+        <Tabs defaultValue="all" className="flex-1 flex flex-col mt-4">
+          <TabsList className="mb-4">
+            <TabsTrigger value="all">Todos</TabsTrigger>
+            <TabsTrigger value="favorites">Favoritos</TabsTrigger>
+            <TabsTrigger value="recent">Recentes</TabsTrigger>
+          </TabsList>
+          
+          <ScrollArea className="flex-1">
+            <TabsContent value="all" className="mt-0">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-1">
+                {getTemplatesForTab().map((template) => (
+                  <TemplateCard
+                    key={template.id}
+                    title={template.title}
+                    description={template.description}
+                    thumbnail={template.thumbnail}
+                    onApply={() => handleApplyTemplate(template)}
                   />
-                ) : (
-                  <span className="text-gray-500">Sem imagem</span>
+                ))}
+                {getTemplatesForTab().length === 0 && (
+                  <div className="col-span-3 py-12 text-center">
+                    <p className="text-gray-500">Nenhum template disponível para este tipo de editor.</p>
+                  </div>
                 )}
               </div>
-              <h3 className="font-medium text-gray-800">{template.name}</h3>
-              <p className="text-sm text-gray-600 mt-1">{template.description}</p>
-            </div>
-          ))}
-        </div>
+            </TabsContent>
+            
+            <TabsContent value="favorites" className="mt-0">
+              <div className="py-12 text-center">
+                <p className="text-gray-500">Você ainda não tem templates favoritos.</p>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="recent" className="mt-0">
+              <div className="py-12 text-center">
+                <p className="text-gray-500">Você não usou nenhum template recentemente.</p>
+              </div>
+            </TabsContent>
+          </ScrollArea>
+        </Tabs>
         
-        <div className="flex justify-end space-x-3 border-t pt-4">
-          <Button variant="outline" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button 
-            onClick={handleApplyTemplate} 
-            disabled={!selectedTemplate || isApplying}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            {isApplying ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Aplicando...
-              </>
-            ) : (
-              'Aplicar Template'
-            )}
-          </Button>
-        </div>
-      </div>
-    </div>
+        {isLoading && (
+          <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
+            <div className="flex flex-col items-center">
+              <Loader2 className="h-8 w-8 animate-spin text-[#B89B7A] mb-2" />
+              <p>Aplicando template...</p>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };

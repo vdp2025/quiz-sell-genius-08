@@ -26,6 +26,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
   const [isLoading, setIsLoading] = useState(false);
+  const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
   const navigate = useNavigate();
   
   const {
@@ -93,6 +94,8 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         onPreviewToggle={togglePreview}
         onSave={handleSave}
         onOpenTemplateModal={openTemplateModal}
+        viewportSize={viewportSize}
+        onViewportSizeChange={setViewportSize}
       />
       
       <Tabs

@@ -1,108 +1,169 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Eye, EyeOff, Save, Redo, Undo } from 'lucide-react';
-import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
-import { toast } from '@/components/ui/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { EditorTab } from '../UnifiedVisualEditor';
+import {
+  Eye,
+  EyeOff,
+  Save,
+  Undo,
+  Redo,
+  LayoutTemplate,
+  Desktop,
+  Tablet,
+  Smartphone
+} from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface EditorToolbarProps {
   activeTab?: EditorTab;
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;
-  onOpenTemplateModal?: () => void;
+  onOpenTemplateModal: () => void;
+  viewportSize?: 'sm' | 'md' | 'lg' | 'xl';
+  onViewportSizeChange?: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  activeTab = 'quiz',
+  activeTab,
   isPreviewing,
   onPreviewToggle,
   onSave,
-  onOpenTemplateModal
+  onOpenTemplateModal,
+  viewportSize = 'lg',
+  onViewportSizeChange
 }) => {
-  const [isSaving, setIsSaving] = useState(false);
-  
-  const getTabTitle = () => {
-    switch (activeTab) {
-      case 'quiz': return 'Quiz';
-      case 'result': return 'Página de Resultado';
-      case 'sales': return 'Página de Vendas';
-      default: return 'Editor';
-    }
-  };
-  
-  const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      await onSave();
-      toast({
-        title: "Alterações salvas",
-        description: "Suas alterações foram salvas com sucesso."
-      });
-    } catch (error) {
-      console.error('Error saving changes:', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar suas alterações.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
-  
   return (
-    <div className="border-b bg-white p-3 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <Link to="/admin" className="text-gray-600 hover:text-gray-900">
-          <Button variant="ghost" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
-          </Button>
-        </Link>
-        <h1 className="text-xl font-medium">Editor de {getTabTitle()}</h1>
+    <div className="h-14 border-b bg-white flex items-center justify-between px-4">
+      <div className="flex items-center space-x-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onPreviewToggle}
+              >
+                {isPreviewing ? (
+                  <>
+                    <EyeOff className="h-4 w-4 mr-2" />
+                    <span>Editar</span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-4 w-4 mr-2" />
+                    <span>Visualizar</span>
+                  </>
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {isPreviewing ? 'Voltar ao modo de edição' : 'Visualizar a página final'}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <div className="h-6 border-r border-gray-200" />
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onSave}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                <span>Salvar</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              Salvar alterações
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onOpenTemplateModal}
+              >
+                <LayoutTemplate className="h-4 w-4 mr-2" />
+                <span>Templates</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              Escolher um template
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <div className="h-6 border-r border-gray-200" />
+        
+        <TooltipProvider>
+          <div className="flex items-center space-x-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant={viewportSize === 'xl' ? 'secondary' : 'ghost'}
+                  size="icon" 
+                  className="w-8 h-8"
+                  onClick={() => onViewportSizeChange?.('xl')}
+                >
+                  <Desktop className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Desktop
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant={viewportSize === 'md' ? 'secondary' : 'ghost'}
+                  size="icon" 
+                  className="w-8 h-8"
+                  onClick={() => onViewportSizeChange?.('md')}
+                >
+                  <Tablet className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Tablet
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant={viewportSize === 'sm' ? 'secondary' : 'ghost'}
+                  size="icon" 
+                  className="w-8 h-8"
+                  onClick={() => onViewportSizeChange?.('sm')}
+                >
+                  <Smartphone className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Mobile
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </TooltipProvider>
       </div>
-      
-      <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onPreviewToggle}
-        >
-          {isPreviewing ? (
-            <>
-              <EyeOff className="w-4 h-4 mr-2" />
-              Modo Edição
-            </>
-          ) : (
-            <>
-              <Eye className="w-4 h-4 mr-2" />
-              Visualizar
-            </>
-          )}
-        </Button>
-        
-        {onOpenTemplateModal && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onOpenTemplateModal}
-          >
-            Templates
-          </Button>
+
+      <div className="flex items-center space-x-2">
+        {activeTab && (
+          <div className="bg-gray-100 px-3 py-1 rounded-md text-sm text-gray-600 font-medium">
+            Editor de {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Resultado' : 'Página de Vendas'}
+          </div>
         )}
-        
-        <Button
-          variant="default"
-          size="sm"
-          onClick={handleSave}
-          disabled={isSaving}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          {isSaving ? 'Salvando...' : 'Salvar'}
-        </Button>
       </div>
     </div>
   );
