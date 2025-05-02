@@ -1,45 +1,62 @@
 
-import React from 'react';
-import AdminLayout from '../../components/admin/AdminLayout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from 'react';
+import AdminLayout from '@/components/admin/AdminLayout';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AppearanceTab } from '@/components/settings/AppearanceTab';
-import { ApiIntegrationsTab } from '@/components/settings/ApiIntegrationsTab';
 import { AnalyticsTab } from '@/components/settings/AnalyticsTab';
 import { MarketingTab } from '@/components/settings/MarketingTab';
+import { ApiIntegrationsTab } from '@/components/settings/ApiIntegrationsTab';
 import { AdvancedTab } from '@/components/settings/AdvancedTab';
+import { FacebookAdsTab } from '@/components/settings/FacebookAdsTab';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const SettingsPage = () => {
+  const [searchParams] = useSearchParams();
+  const defaultTab = searchParams.get('tab') || 'appearance';
+  const [activeTab, setActiveTab] = useState(defaultTab);
+  const navigate = useNavigate();
+  
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate(`/admin/settings?tab=${value}`, { replace: true });
+  };
+  
   return (
     <AdminLayout>
-      <div className="container mx-auto p-6">
-        <h1 className="text-2xl font-semibold text-[#432818] mb-6">Settings</h1>
+      <div className="container p-6">
+        <h1 className="text-2xl font-semibold mb-6">Configurações</h1>
         
-        <Tabs defaultValue="appearance">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="appearance">Appearance</TabsTrigger>
-            <TabsTrigger value="integrations">API Integrations</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
+          <TabsList className="grid grid-cols-6 gap-1">
+            <TabsTrigger value="appearance">Aparência</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="marketing">Marketing</TabsTrigger>
-            <TabsTrigger value="advanced">Advanced</TabsTrigger>
+            <TabsTrigger value="facebook-ads">Facebook Ads</TabsTrigger>
+            <TabsTrigger value="integrations">API</TabsTrigger>
+            <TabsTrigger value="advanced">Avançado</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="appearance" className="mt-6">
+          <TabsContent value="appearance">
             <AppearanceTab />
           </TabsContent>
           
-          <TabsContent value="integrations" className="mt-6">
-            <ApiIntegrationsTab />
-          </TabsContent>
-          
-          <TabsContent value="analytics" className="mt-6">
+          <TabsContent value="analytics">
             <AnalyticsTab />
           </TabsContent>
           
-          <TabsContent value="marketing" className="mt-6">
+          <TabsContent value="marketing">
             <MarketingTab />
           </TabsContent>
           
-          <TabsContent value="advanced" className="mt-6">
+          <TabsContent value="facebook-ads">
+            <FacebookAdsTab />
+          </TabsContent>
+          
+          <TabsContent value="integrations">
+            <ApiIntegrationsTab />
+          </TabsContent>
+          
+          <TabsContent value="advanced">
             <AdvancedTab />
           </TabsContent>
         </Tabs>

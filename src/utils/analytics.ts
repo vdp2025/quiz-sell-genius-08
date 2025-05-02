@@ -1,599 +1,228 @@
-
-declare global {
-  interface Window {
-    fbq: any;
-  }
-}
-
-// Facebook Pixel ID - Usando o ID real fornecido
-const FB_PIXEL_ID = '1311550759901086';
-const FB_ACCESS_TOKEN = 'EAAEJYWeJHLABOzPlbLgdK367BPZAHPvweatRSiJ5e99WU0GtuFVI4YogKdYX2hFFs5WsZCO4sGZCuSiJXpwgR0khxeBZClFocLnGWbgvm1aQtx38osxiihmBjLzrRDqAYkCKouow3l3PYqYynkMczpYuaQ7IbnA6cu2Kef3gbDZAiJs5BGQcbFSQlZAdq97JsLzAZDZD';
-
-// Cache da inicialização do Facebook Pixel para evitar duplicação
-let pixelInitialized = false;
-
-// Função para registrar eventos no log local para depuração/monitoramento
-const logEventToLocal = (eventName: string, params?: any) => {
-  try {
-    const eventLog = localStorage.getItem('fb_pixel_event_log');
-    const events = eventLog ? JSON.parse(eventLog) : [];
-    
-    events.unshift({
-      type: eventName,
-      timestamp: new Date().toISOString(),
-      details: params
-    });
-    
-    // Limitar a 100 eventos para não sobrecarregar o localStorage
-    const limitedEvents = events.slice(0, 100);
-    localStorage.setItem('fb_pixel_event_log', JSON.stringify(limitedEvents));
-  } catch (error) {
-    console.error('Erro ao registrar evento no log local:', error);
+/**
+ * Inicializa o Pixel do Facebook
+ */
+export const initFacebookPixel = () => {
+  if (typeof window !== 'undefined') {
+    // Verifica se o Pixel já foi inicializado para evitar duplicações
+    if (!window.fbq) {
+      // Código do Pixel do Facebook
+      !function(f: any,b: any,e: any,v: any,n: any,t: any,s: any)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      // Inicializa o Pixel com o ID fornecido
+      window.fbq('init', process.env.REACT_APP_FACEBOOK_PIXEL_ID);
+      
+      // Rastreia a visualização de página
+      window.fbq('track', 'PageView');
+      
+      console.log('Facebook Pixel initialized');
+    } else {
+      console.log('Facebook Pixel already initialized');
+    }
   }
 };
 
-// Função para verificar se o evento está habilitado para rastreamento
-const isEventEnabled = (eventType: string): boolean => {
-  try {
-    const trackedEvents = localStorage.getItem('fb_tracked_events');
-    if (trackedEvents) {
-      const parsed = JSON.parse(trackedEvents);
-      return parsed[eventType] === true;
-    }
-    // Se não houver configuração, assume que todos os eventos estão habilitados (padrão)
-    return true;
-  } catch (error) {
-    console.error('Erro ao verificar se evento está habilitado:', error);
-    return true;
+/**
+ * Rastreia um evento de geração de lead
+ * @param email Email do lead
+ */
+export const trackLeadGeneration = (email: string) => {
+  if (window.fbq) {
+    window.fbq('track', 'Lead', {
+      email: email
+    });
+    console.log('Lead tracked with email:', email);
   }
-}
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'lead_generation', {
+      event_category: 'lead',
+      event_label: email
+    });
+  }
+};
 
-// Inicialização do Facebook Pixel
-export const initFacebookPixel = () => {
+/**
+ * Captura parâmetros UTM da URL atual e armazena no localStorage
+ * Retorna os parâmetros UTM capturados
+ */
+export const captureUTMParameters = (): Record<string, string> => {
   try {
-    // Se já inicializamos, não reinicializa
-    if (pixelInitialized) {
-      console.log('Facebook Pixel já estava inicializado, evitando duplicação');
-      return;
-    }
-
-    if (typeof window !== 'undefined') {
-      // Check if fbq is already defined
-      if (!window.fbq) {
-        window.fbq = function() {
-          window.fbq.callMethod 
-            ? window.fbq.callMethod.apply(window.fbq, arguments) 
-            : window.fbq.queue.push(arguments);
-        };
-        
-        window.fbq.push = window.fbq;
-        window.fbq.loaded = true;
-        window.fbq.version = '2.0';
-        window.fbq.queue = [];
-        
-        // Add the Facebook Pixel script to the document
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-        
-        const firstScript = document.getElementsByTagName('script')[0];
-        if (firstScript && firstScript.parentNode) {
-          firstScript.parentNode.insertBefore(script, firstScript);
-        } else {
-          document.head.appendChild(script);
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmParams: Record<string, string> = {};
+    
+    // Parâmetros UTM padrão
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id'];
+    utmKeys.forEach(key => {
+      if (urlParams.has(key)) {
+        const value = urlParams.get(key);
+        if (value) {
+          utmParams[key] = value;
         }
       }
-      
-      // Initialize with ID and token
-      window.fbq('init', FB_PIXEL_ID, {}, {
-        agent: 'lovable-quiz-app'
-      });
-      
-      window.fbq('track', 'PageView');
-      pixelInitialized = true;
-      console.log('Facebook Pixel inicializado com sucesso. ID:', FB_PIXEL_ID);
-    }
-  } catch (error) {
-    console.error('Erro ao inicializar Facebook Pixel:', error);
-  }
-};
-
-// Safe wrapper for fbq calls
-const safeFbq = (event: string, name: string, params?: any) => {
-  try {
-    // Verificar se o rastreamento está habilitado
-    const trackingEnabled = localStorage.getItem('tracking_enabled') !== 'false';
-    if (!trackingEnabled) {
-      console.log(`Facebook Pixel tracking disabled. Would track: ${event}, ${name}`);
-      // Ainda registra no log local para fins de depuração
-      logEventToLocal(name, { ...params, sent: false, reason: 'tracking_disabled' });
-      return;
-    }
-
-    if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq(event, name, params);
-      console.log(`Facebook Pixel event tracked: ${event}, ${name}`, params);
-      
-      // Registrar no log local para visibilidade
-      logEventToLocal(name, { ...params, sent: true });
-    } else {
-      console.log(`Facebook Pixel not available. Would track: ${event}, ${name}`, params);
-      // Registrar falha no log local
-      logEventToLocal(name, { ...params, sent: false, reason: 'pixel_not_available' });
-    }
-  } catch (error) {
-    console.error('Error calling Facebook Pixel:', error);
-    // Registrar erro no log local
-    logEventToLocal(name, { ...params, sent: false, error: (error as Error).message });
-  }
-};
-
-// Funções para rastreamento de eventos do quiz
-export const trackQuizStart = (userName?: string, userEmail?: string) => {
-  console.log('Quiz iniciado - evento registrado');
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('quiz_start')) {
-    safeFbq('trackCustom', 'QuizStart', {
-      content_name: 'Quiz Iniciado',
-      user: userName || 'Anônimo'
     });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('QuizStart', {
-      content_name: 'Quiz Iniciado',
-      user: userName || 'Anônimo',
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Armazenar o evento no localStorage para o dashboard com dados do usuário
-  saveAnalyticsEvent({
-    type: 'quiz_start',
-    userName: userName || 'Anônimo',
-    userEmail: userEmail || 'não informado',
-    timestamp: new Date().toISOString(),
-    sessionId: getOrCreateSessionId()
-  });
-};
-
-export const trackQuizAnswer = (questionId: string, selectedOptions: string[], questionIndex: number, totalQuestions: number) => {
-  console.log(`Resposta registrada - Questão ${questionId}`);
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('quiz_answer')) {
-    safeFbq('trackCustom', 'QuizAnswer', {
-      question_id: questionId,
-      selected_options: selectedOptions,
-      question_index: questionIndex,
-      total_questions: totalQuestions,
-      progress_percentage: Math.round((questionIndex / totalQuestions) * 100)
-    });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('QuizAnswer', {
-      question_id: questionId,
-      selected_options: selectedOptions,
-      question_index: questionIndex,
-      total_questions: totalQuestions,
-      progress_percentage: Math.round((questionIndex / totalQuestions) * 100),
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Armazenar o evento no localStorage para o dashboard
-  saveAnalyticsEvent({
-    type: 'quiz_answer',
-    questionId,
-    selectedOptions,
-    questionIndex,
-    totalQuestions,
-    timestamp: new Date().toISOString(),
-    sessionId: getOrCreateSessionId()
-  });
-};
-
-export const trackQuizComplete = () => {
-  console.log('Quiz completo - evento registrado');
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('quiz_complete')) {
-    safeFbq('trackCustom', 'QuizComplete', {
-      content_name: 'Quiz Completo',
-      completion_time: getQuizElapsedTime()
-    });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('QuizComplete', {
-      content_name: 'Quiz Completo',
-      completion_time: getQuizElapsedTime(),
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Armazenar o evento no localStorage para o dashboard
-  saveAnalyticsEvent({
-    type: 'quiz_complete',
-    timestamp: new Date().toISOString()
-  });
-};
-
-export const trackResultView = (resultType: string) => {
-  console.log(`Resultado visualizado - Tipo: ${resultType}`);
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('result_view')) {
-    safeFbq('trackCustom', 'ResultView', {
-      result_type: resultType,
-      time_to_result: getQuizElapsedTime()
-    });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('ResultView', {
-      result_type: resultType,
-      time_to_result: getQuizElapsedTime(),
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Armazenar o evento no localStorage para o dashboard
-  saveAnalyticsEvent({
-    type: 'result_view',
-    resultType,
-    timestamp: new Date().toISOString()
-  });
-};
-
-export const trackLeadGeneration = (email: string) => {
-  console.log('Lead gerado - evento registrado');
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('lead_generated')) {
-    safeFbq('track', 'Lead', {
-      content_name: 'Lead Quiz',
-      email_domain: email.split('@')[1] || 'unknown'
-    });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('Lead', {
-      content_name: 'Lead Quiz',
-      email_domain: email.split('@')[1] || 'unknown',
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Armazenar o evento no localStorage para o dashboard
-  saveAnalyticsEvent({
-    type: 'lead_generated',
-    emailDomain: email.split('@')[1] || 'unknown',
-    email: email, // Adicionar email completo para identificação
-    timestamp: new Date().toISOString(),
-    sessionId: getOrCreateSessionId()
-  });
-};
-
-export const trackSaleConversion = (value: number, productName?: string) => {
-  console.log(`Conversão de venda registrada - Valor: ${value}`);
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('sale')) {
-    safeFbq('track', 'Purchase', {
-      value: value,
-      currency: 'BRL',
-      content_name: productName || 'Produto do Quiz',
-      content_type: 'product'
-    });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('Purchase', {
-      value: value,
-      currency: 'BRL',
-      content_name: productName || 'Produto do Quiz',
-      content_type: 'product',
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Armazenar o evento no localStorage para o dashboard
-  saveAnalyticsEvent({
-    type: 'sale',
-    value,
-    productName,
-    timestamp: new Date().toISOString()
-  });
-};
-
-// Track button clicks with more detailed information
-export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLocation?: string, buttonAction?: string) => {
-  console.log(`Botão clicado - ID: ${buttonId}, Texto: ${buttonText || 'N/A'}, Local: ${buttonLocation || 'N/A'}`);
-  
-  // Verificar se este evento está habilitado para rastreamento
-  if (isEventEnabled('button_click')) {
-    safeFbq('trackCustom', 'ButtonClick', {
-      button_id: buttonId,
-      button_text: buttonText || '',
-      button_location: buttonLocation || '',
-      button_action: buttonAction || '',
-      timestamp: new Date().toISOString()
-    });
-  } else {
-    // Ainda registra no log local mesmo se não estiver habilitado
-    logEventToLocal('ButtonClick', {
-      button_id: buttonId,
-      button_text: buttonText || '',
-      button_location: buttonLocation || '',
-      button_action: buttonAction || '',
-      sent: false,
-      reason: 'event_disabled'
-    });
-  }
-  
-  // Store the event in localStorage for the dashboard
-  saveAnalyticsEvent({
-    type: 'button_click',
-    buttonId,
-    buttonText,
-    buttonLocation,
-    buttonAction,
-    timestamp: new Date().toISOString()
-  });
-};
-
-// Função para calcular o tempo decorrido desde o início do quiz
-const getQuizElapsedTime = (): string => {
-  try {
-    const startTime = localStorage.getItem('quiz_start_time');
-    if (!startTime) return 'desconhecido';
     
-    const startMs = parseInt(startTime, 10);
-    const elapsedMs = Date.now() - startMs;
+    // Parâmetro específico do Facebook
+    if (urlParams.has('fbclid')) {
+      utmParams['fbclid'] = urlParams.get('fbclid') || '';
+    }
     
-    // Formatar como minutos:segundos
-    const minutes = Math.floor(elapsedMs / 60000);
-    const seconds = Math.floor((elapsedMs % 60000) / 1000);
+    // Gclid para Google Ads
+    if (urlParams.has('gclid')) {
+      utmParams['gclid'] = urlParams.get('gclid') || '';
+    }
     
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  } catch (error) {
-    return 'erro';
-  }
-};
-
-// Função para obter ou criar um ID de sessão único para o usuário
-const getOrCreateSessionId = (): string => {
-  let sessionId = localStorage.getItem('quiz_session_id');
-  if (!sessionId) {
-    sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-    localStorage.setItem('quiz_session_id', sessionId);
-  }
-  return sessionId;
-};
-
-// Funções para armazenar e recuperar eventos de analytics para o dashboard interno
-interface AnalyticsEvent {
-  type: string;
-  timestamp: string;
-  sessionId?: string;
-  userName?: string;
-  userEmail?: string;
-  [key: string]: any;
-}
-
-// Salvar evento no localStorage
-const saveAnalyticsEvent = (event: AnalyticsEvent) => {
-  try {
-    // Adicione nome do usuário ao evento, se disponível
-    if (!event.userName) {
-      const userName = localStorage.getItem('userName');
-      if (userName) {
-        event.userName = userName;
+    // Se encontrou algum parâmetro UTM, armazena no localStorage
+    if (Object.keys(utmParams).length > 0) {
+      localStorage.setItem('utm_parameters', JSON.stringify(utmParams));
+      
+      // Track UTM parameters if Facebook Pixel is available
+      if (window.fbq) {
+        window.fbq('trackCustom', 'UTMCaptured', utmParams);
       }
+      
+      console.log('UTM parameters captured:', utmParams);
     }
     
-    // Adicione email do usuário ao evento, se disponível
-    if (!event.userEmail && event.type !== 'lead_generated') {
-      const userEmail = localStorage.getItem('userEmail');
-      if (userEmail) {
-        event.userEmail = userEmail;
-      }
-    }
-    
-    const existingEvents = getAnalyticsEvents();
-    existingEvents.push(event);
-    localStorage.setItem('quiz_analytics_events', JSON.stringify(existingEvents));
+    return utmParams;
   } catch (error) {
-    console.error('Erro ao salvar evento de analytics:', error);
+    console.error('Error capturing UTM parameters:', error);
+    return {};
   }
 };
 
-// Obter todos os eventos do localStorage
-export const getAnalyticsEvents = (): AnalyticsEvent[] => {
+/**
+ * Adiciona parâmetros UTM armazenados ao evento do Facebook Pixel
+ */
+export const addUtmParamsToEvent = (eventData: Record<string, any> = {}): Record<string, any> => {
   try {
-    const eventsJson = localStorage.getItem('quiz_analytics_events');
-    return eventsJson ? JSON.parse(eventsJson) : [];
-  } catch (error) {
-    console.error('Erro ao recuperar eventos de analytics:', error);
-    return [];
-  }
-};
-
-// Função para limpar todos os dados de analytics (apenas para administradores)
-export const clearAnalyticsData = () => {
-  localStorage.removeItem('quiz_analytics_events');
-  localStorage.removeItem('quiz_session_id');
-  localStorage.removeItem('fb_pixel_event_log');
-  console.log('Dados de analytics limpos com sucesso');
-};
-
-// Funções para cálculo de métricas para o dashboard
-export const calculateQuizMetrics = () => {
-  const events = getAnalyticsEvents();
-  
-  const starts = events.filter(event => event.type === 'quiz_start').length;
-  const completes = events.filter(event => event.type === 'quiz_complete').length;
-  const resultViews = events.filter(event => event.type === 'result_view').length;
-  const leads = events.filter(event => event.type === 'lead_generated').length;
-  const sales = events.filter(event => event.type === 'sale').length;
-  
-  const completionRate = starts > 0 ? (completes / starts) * 100 : 0;
-  const conversionRate = starts > 0 ? (leads / starts) * 100 : 0;
-  const salesRate = leads > 0 ? (sales / leads) * 100 : 0;
-  
-  // Calcular eventos por dia para gráficos
-  const eventsByDay = groupEventsByDay(events);
-  
-  return {
-    totalStarts: starts,
-    totalCompletes: completes,
-    totalResultViews: resultViews,
-    totalLeads: leads,
-    totalSales: sales,
-    completionRate,
-    conversionRate,
-    salesRate,
-    eventsByDay
-  };
-};
-
-// Agrupar eventos por dia para gráficos
-const groupEventsByDay = (events: AnalyticsEvent[]) => {
-  const grouped: Record<string, Record<string, number>> = {};
-  
-  events.forEach(event => {
-    const date = new Date(event.timestamp).toISOString().split('T')[0];
-    if (!grouped[date]) {
-      grouped[date] = {
-        'quiz_start': 0,
-        'quiz_complete': 0,
-        'result_view': 0,
-        'lead_generated': 0,
-        'sale': 0
+    const storedUtmParams = localStorage.getItem('utm_parameters');
+    if (storedUtmParams) {
+      const utmParams = JSON.parse(storedUtmParams);
+      // Adiciona parâmetros UTM ao objeto eventData para o Facebook Pixel
+      return {
+        ...eventData,
+        utm_source: utmParams.utm_source || utmParams.source,
+        utm_medium: utmParams.utm_medium || utmParams.medium,
+        utm_campaign: utmParams.utm_campaign || utmParams.campaign,
+        utm_content: utmParams.utm_content || utmParams.content,
+        utm_term: utmParams.utm_term || utmParams.term,
+        fbclid: utmParams.fbclid
       };
     }
-    
-    if (grouped[date][event.type] !== undefined) {
-      grouped[date][event.type]++;
-    }
-  });
-  
-  return grouped;
-};
-
-// Agrupar eventos por usuário
-export const groupEventsByUser = (events: AnalyticsEvent[]): Record<string, AnalyticsEvent[]> => {
-  const grouped: Record<string, AnalyticsEvent[]> = {};
-  
-  events.forEach(event => {
-    // Usar sessionId como identificador principal, fallback para userEmail ou userName
-    const userId = event.sessionId || event.userEmail || event.userName || 'unknown';
-    
-    if (!grouped[userId]) {
-      grouped[userId] = [];
-    }
-    
-    grouped[userId].push(event);
-  });
-  
-  return grouped;
-};
-
-// Obter dados sobre progresso do usuário por pergunta
-export const getUserProgressData = (events: AnalyticsEvent[]): any[] => {
-  const usersByQuestion: Record<string, Set<string>> = {};
-  const questionCounts: Record<string, number> = {};
-  let totalUsers = 0;
-  
-  // Identificar usuários únicos pela sessão
-  const uniqueSessions = new Set<string>();
-  
-  events.forEach(event => {
-    if (event.sessionId) {
-      uniqueSessions.add(event.sessionId);
-    }
-    
-    if (event.type === 'quiz_answer' && event.questionId) {
-      if (!usersByQuestion[event.questionId]) {
-        usersByQuestion[event.questionId] = new Set<string>();
-        questionCounts[event.questionId] = 0;
-      }
-      
-      if (event.sessionId) {
-        usersByQuestion[event.questionId].add(event.sessionId);
-      }
-      
-      questionCounts[event.questionId]++;
-    }
-  });
-  
-  totalUsers = uniqueSessions.size;
-  
-  // Converter para formato para visualização
-  const progressData = Object.entries(usersByQuestion).map(([questionId, users]) => {
-    return {
-      questionId,
-      uniqueUsers: users.size,
-      totalAnswers: questionCounts[questionId],
-      completionRate: totalUsers > 0 ? (users.size / totalUsers) * 100 : 0
-    };
-  });
-  
-  // Ordenar por questionId (assumindo que está em ordem numérica)
-  return progressData.sort((a, b) => {
-    return a.questionId.localeCompare(b.questionId, undefined, { numeric: true });
-  });
-};
-
-// Função para capturar UTM parameters para analytics de marketing
-export const captureUTMParameters = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const utmSource = urlParams.get('utm_source');
-  const utmMedium = urlParams.get('utm_medium');
-  const utmCampaign = urlParams.get('utm_campaign');
-  
-  if (utmSource || utmMedium || utmCampaign) {
-    const utmData = {
-      utm_source: utmSource || 'direct',
-      utm_medium: utmMedium || 'none',
-      utm_campaign: utmCampaign || 'none',
-      timestamp: new Date().toISOString()
-    };
-    
-    localStorage.setItem('quiz_utm_data', JSON.stringify(utmData));
-    return utmData;
-  }
-  
-  return null;
-};
-
-// Função para verificar se o Facebook Pixel está funcionando corretamente
-export const testFacebookPixel = () => {
-  try {
-    if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('trackCustom', 'TestEvent', { testId: 'pixel-test' });
-      console.log('Teste do Facebook Pixel enviado com sucesso');
-      return true;
-    } else {
-      console.log('Facebook Pixel não está disponível para testar');
-      return false;
-    }
+    return eventData;
   } catch (error) {
-    console.error('Erro ao testar Facebook Pixel:', error);
-    return false;
+    console.error('Error adding UTM parameters to event:', error);
+    return eventData;
   }
 };
 
-// Obter dados UTM armazenados
-export const getUTMData = () => {
-  try {
-    const utmJson = localStorage.getItem('quiz_utm_data');
-    return utmJson ? JSON.parse(utmJson) : null;
-  } catch (error) {
-    console.error('Erro ao recuperar dados UTM:', error);
-    return null;
+/**
+ * Rastreia o início do quiz
+ * @param userName Nome do usuário
+ * @param userEmail Email do usuário (opcional)
+ */
+export const trackQuizStart = (userName?: string, userEmail?: string) => {
+  if (window.fbq) {
+    const eventData = addUtmParamsToEvent({
+      username: userName || 'Anônimo',
+      user_email: userEmail || ''
+    });
+    window.fbq('trackCustom', 'QuizStart', eventData);
+    console.log('QuizStart tracked with UTM data');
+  }
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'quiz_start', {
+      event_category: 'quiz',
+      event_label: userEmail ? 'with_email' : 'anonymous'
+    });
+  }
+};
+
+/**
+ * Rastreia uma resposta no quiz
+ * @param questionId ID da pergunta
+ * @param selectedOptions IDs das opções selecionadas
+ * @param currentQuestionIndex Índice da pergunta atual
+ * @param totalQuestions Número total de perguntas
+ */
+export const trackQuizAnswer = (questionId: string, selectedOptions: string[], currentQuestionIndex: number, totalQuestions: number) => {
+  if (window.fbq) {
+    const eventData = addUtmParamsToEvent({
+      question_id: questionId,
+      selected_options: selectedOptions.join(', '),
+      current_question_index: currentQuestionIndex,
+      total_questions: totalQuestions
+    });
+    window.fbq('trackCustom', 'QuizAnswer', eventData);
+    console.log(`QuizAnswer tracked for question ${questionId} with options ${selectedOptions.join(', ')}`);
+  }
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'quiz_answer', {
+      event_category: 'quiz',
+      question_id: questionId,
+      selected_options: selectedOptions.join(', '),
+      current_question_index: currentQuestionIndex,
+      total_questions: totalQuestions
+    });
+  }
+};
+
+/**
+ * Rastreia a conclusão do quiz
+ */
+export const trackQuizComplete = () => {
+  // Calcular o tempo decorrido desde o início do quiz
+  const startTime = localStorage.getItem('quiz_start_time');
+  const endTime = Date.now();
+  const duration = startTime ? (endTime - parseInt(startTime, 10)) / 1000 : 0; // em segundos
+  
+  if (window.fbq) {
+    const eventData = addUtmParamsToEvent({
+      quiz_duration: duration
+    });
+    window.fbq('trackCustom', 'QuizComplete', eventData);
+    console.log('QuizComplete tracked');
+  }
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'quiz_complete', {
+      event_category: 'quiz',
+      quiz_duration: duration
+    });
+  }
+};
+
+/**
+ * Rastreia a visualização do resultado
+ * @param styleCategory Categoria do estilo predominante
+ */
+export const trackResultView = (styleCategory: string) => {
+  if (window.fbq) {
+    const eventData = addUtmParamsToEvent({
+      style_category: styleCategory
+    });
+    window.fbq('trackCustom', 'ResultView', eventData);
+    console.log('ResultView tracked with UTM data for style:', styleCategory);
+  }
+  
+  // Track in Google Analytics, if available
+  if (window.gtag) {
+    window.gtag('event', 'result_view', {
+      event_category: 'quiz',
+      event_label: styleCategory
+    });
   }
 };
