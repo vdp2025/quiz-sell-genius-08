@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
@@ -29,14 +29,12 @@ const isLowPerformanceDevice = () => {
 };
 
 const App = () => {
-  const [pixelLoaded, setPixelLoaded] = useState(false);
   const lowPerformance = isLowPerformanceDevice();
 
   // Inicializar analytics na montagem do componente
-  useEffect(() => {
+  React.useEffect(() => {
     // Inicializar Facebook Pixel
     initFacebookPixel();
-    setPixelLoaded(true);
     
     // Capturar UTM parameters para analytics de marketing
     captureUTMParameters();
@@ -45,9 +43,7 @@ const App = () => {
   }, [lowPerformance]);
 
   // Reinicializar Facebook Pixel em mudanças de rota
-  useEffect(() => {
-    if (!pixelLoaded) return;
-    
+  React.useEffect(() => {    
     // Função para lidar com mudanças de rota
     const handleRouteChange = () => {
       if (window.fbq) {
@@ -63,7 +59,7 @@ const App = () => {
     return () => {
       window.removeEventListener('popstate', handleRouteChange);
     };
-  }, [pixelLoaded]);
+  }, []);
 
   return (
     <AuthProvider>
