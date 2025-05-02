@@ -1,10 +1,12 @@
 
-import React from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { StyleResult } from '@/types/quiz';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
 import {
   Accordion,
   AccordionContent,
@@ -21,6 +23,10 @@ import {
 } from '@/components/ui/carousel';
 import { ShoppingCart, Heart, Award, CheckCircle, Star } from 'lucide-react';
 
+// Lazy load componentes menos críticos
+const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
+const BenefitList = lazy(() => import('@/components/quiz-result/sales/BenefitList'));
+
 interface QuizResultSalesPageProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
@@ -34,15 +40,69 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
 }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [criticalImagesLoaded, setCriticalImagesLoaded] = useState(false);
+
+  // Pré-carregar imagens críticas
+  useEffect(() => {
+    const criticalImages = [
+      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
+    ];
+    
+    let loadedCount = 0;
+    const totalImages = criticalImages.length;
+    
+    criticalImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          setCriticalImagesLoaded(true);
+        }
+      };
+      img.onerror = () => {
+        loadedCount++;
+        console.error(`Failed to load image: ${src}`);
+        if (loadedCount === totalImages) {
+          setCriticalImagesLoaded(true);
+        }
+      };
+    });
+    
+    // Timeout para garantir que não ficará travado mesmo se alguma imagem falhar
+    const timeout = setTimeout(() => {
+      setCriticalImagesLoaded(true);
+    }, 3000);
+    
+    return () => clearTimeout(timeout);
+  }, []);
 
   const handleBuyNow = () => {
+    // Rastrear evento de clique no botão
+    trackButtonClick('buy_now_button', 'Quero Comprar', 'result_page_main_cta');
+    
+    // Rastrear conversão para analytics
+    trackSaleConversion(39);
+    
     toast({
       title: "Redirecionando para o checkout",
       description: "Você será redirecionado para a página de pagamento.",
     });
-    // URL do checkout (exemplo)
-    window.location.href = "https://pay.hotmart.com/seu-produto";
+    
+    // URL do checkout
+    window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
   };
+
+  // Loading state quando imagens críticas estão carregando
+  if (!criticalImagesLoaded) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fffaf7]">
+        <LoadingSpinner size="lg" />
+        <p className="mt-4 text-[#432818]">Carregando seu resultado personalizado...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#fffaf7]">
@@ -53,6 +113,8 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
             src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg" 
             alt="Logo" 
             className="h-16" 
+            width="128"
+            height="64"
           />
           <Button 
             onClick={handleBuyNow}
@@ -94,7 +156,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 <div>
                   <h3 className="font-medium text-[#aa6b5d] mb-2">Seus estilos secundários:</h3>
                   <div className="grid grid-cols-2 gap-4">
-                    {secondaryStyles.map((style, index) => (
+                    {secondaryStyles.slice(0, 2).map((style, index) => (
                       <div key={index} className="bg-white p-3 rounded-lg shadow-sm">
                         <p className="font-medium">{style.category}</p>
                         <p className="text-sm text-[#3a3a3a]/60">{style.percentage}%</p>
@@ -109,6 +171,9 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"
                 alt="Resultado do Quiz Visagismo"
                 className="rounded-lg shadow-lg w-full"
+                loading="eager"
+                width="600"
+                height="400"
               />
             </div>
           </div>
@@ -126,6 +191,9 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
                 alt="Mockup do Guia de Estilo"
                 className="rounded-lg shadow-md w-full"
+                loading="eager"
+                width="600"
+                height="400"
               />
             </div>
             <div className="flex flex-col justify-center">
@@ -201,6 +269,9 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                         src={bonus.img}
                         alt={bonus.title}
                         className="w-full aspect-[3/2] object-cover"
+                        loading="lazy"
+                        width="400"
+                        height="267"
                       />
                       <div className="p-4 text-center">
                         <h3 className="font-medium">{bonus.title}</h3>
@@ -223,6 +294,9 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
                 alt="Foto da Autora"
                 className="rounded-lg shadow-md w-full"
+                loading="lazy"
+                width="500"
+                height="375"
               />
             </div>
             <div>
@@ -242,38 +316,18 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
           </div>
         </section>
 
-        {/* Testimonials */}
+        {/* Testimonials - Lazy loaded */}
         <section className="mb-16">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             O que Dizem As Alunas
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                name: "Mariana Silva",
-                text: "O guia de estilo mudou completamente minha relação com as roupas. Agora eu sei exatamente o que combina comigo e meu guarda-roupa nunca fez tanto sentido!",
-                style: "Natural"
-              },
-              {
-                name: "Juliana Mendes",
-                text: "Sempre tive dificuldade para me vestir, mas depois de descobrir meu estilo predominante e aplicar as dicas do guia, recebo elogios todos os dias. Valeu cada centavo!",
-                style: "Elegante"
-              }
-            ].map((testimonial, index) => (
-              <Card key={index} className="p-6 border-[#aa6b5d]/20">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-[#aa6b5d]/20 rounded-full flex items-center justify-center text-[#aa6b5d] mr-3">
-                    <Heart size={20} />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{testimonial.name}</h3>
-                    <p className="text-sm text-[#3a3a3a]/60">Estilo {testimonial.style}</p>
-                  </div>
-                </div>
-                <p className="italic text-[#3a3a3a]">"{testimonial.text}"</p>
-              </Card>
-            ))}
-          </div>
+          <Suspense fallback={
+            <div className="text-center p-8">
+              <LoadingSpinner />
+            </div>
+          }>
+            <Testimonials />
+          </Suspense>
         </section>
 
         {/* Guarantee */}

@@ -1,16 +1,25 @@
-
 declare global {
   interface Window {
     fbq: any;
   }
 }
 
-// Facebook Pixel ID - Substituir pelo ID real de produção quando disponível
-const FB_PIXEL_ID = '123456789012345';
+// Facebook Pixel ID - Usando o ID real fornecido
+const FB_PIXEL_ID = '1311550759901086';
+const FB_ACCESS_TOKEN = 'EAAEJYWeJHLABOzPlbLgdK367BPZAHPvweatRSiJ5e99WU0GtuFVI4YogKdYX2hFFs5WsZCO4sGZCuSiJXpwgR0khxeBZClFocLnGWbgvm1aQtx38osxiihmBjLzrRDqAYkCKouow3l3PYqYynkMczpYuaQ7IbnA6cu2Kef3gbDZAiJs5BGQcbFSQlZAdq97JsLzAZDZD';
+
+// Cache da inicialização do Facebook Pixel para evitar duplicação
+let pixelInitialized = false;
 
 // Inicialização do Facebook Pixel
 export const initFacebookPixel = () => {
   try {
+    // Se já inicializamos, não reinicializa
+    if (pixelInitialized) {
+      console.log('Facebook Pixel já estava inicializado, evitando duplicação');
+      return;
+    }
+
     if (typeof window !== 'undefined') {
       // Check if fbq is already defined
       if (!window.fbq) {
@@ -29,20 +38,26 @@ export const initFacebookPixel = () => {
         const script = document.createElement('script');
         script.async = true;
         script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+        
         const firstScript = document.getElementsByTagName('script')[0];
         if (firstScript && firstScript.parentNode) {
           firstScript.parentNode.insertBefore(script, firstScript);
         } else {
           document.head.appendChild(script);
         }
-        
-        window.fbq('init', FB_PIXEL_ID);
-        window.fbq('track', 'PageView');
-        console.log('Facebook Pixel initialized successfully');
       }
+      
+      // Initialize with ID and token
+      window.fbq('init', FB_PIXEL_ID, {}, {
+        agent: 'lovable-quiz-app'
+      });
+      
+      window.fbq('track', 'PageView');
+      pixelInitialized = true;
+      console.log('Facebook Pixel inicializado com sucesso. ID:', FB_PIXEL_ID);
     }
   } catch (error) {
-    console.error('Error initializing Facebook Pixel:', error);
+    console.error('Erro ao inicializar Facebook Pixel:', error);
   }
 };
 
@@ -51,6 +66,7 @@ const safeFbq = (event: string, name: string, params?: any) => {
   try {
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq(event, name, params);
+      console.log(`Facebook Pixel event tracked: ${event}, ${name}`, params);
     } else {
       console.log(`Facebook Pixel not available. Would track: ${event}, ${name}`, params);
     }
@@ -378,6 +394,23 @@ export const captureUTMParameters = () => {
   }
   
   return null;
+};
+
+// Função para verificar se o Facebook Pixel está funcionando corretamente
+export const testFacebookPixel = () => {
+  try {
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('trackCustom', 'TestEvent', { testId: 'pixel-test' });
+      console.log('Teste do Facebook Pixel enviado com sucesso');
+      return true;
+    } else {
+      console.log('Facebook Pixel não está disponível para testar');
+      return false;
+    }
+  } catch (error) {
+    console.error('Erro ao testar Facebook Pixel:', error);
+    return false;
+  }
 };
 
 // Obter dados UTM armazenados

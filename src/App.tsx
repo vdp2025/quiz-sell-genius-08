@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
@@ -14,33 +14,56 @@ import NotFoundPage from './pages/NotFoundPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 import ResultPageEditorPage from './pages/ResultPageEditorPage';
+import { Toaster } from '@/components/ui/toaster';
+
+// Avalia se o dispositivo tem performance limitada
+const isLowPerformanceDevice = () => {
+  const memory = (navigator as any).deviceMemory;
+  if (memory && memory < 4) return true;
+  
+  // Se o dispositivo tem menos de 4GB de RAM ou não tem informação disponível, verificar CPU cores
+  const cpuCores = navigator.hardwareConcurrency;
+  if (cpuCores && cpuCores < 4) return true;
+  
+  return false;
+};
 
 const App = () => {
-  // Initialize Facebook Pixel as soon as the app loads
+  const [pixelLoaded, setPixelLoaded] = useState(false);
+  const lowPerformance = isLowPerformanceDevice();
+
+  // Inicializar analytics na montagem do componente
   useEffect(() => {
-    // Initialize Facebook Pixel
+    // Inicializar Facebook Pixel
     initFacebookPixel();
+    setPixelLoaded(true);
     
-    // Capture UTM parameters for marketing analytics
+    // Capturar UTM parameters para analytics de marketing
     captureUTMParameters();
     
-    // Re-initialize Facebook Pixel on route changes
+    console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
+  }, [lowPerformance]);
+
+  // Reinicializar Facebook Pixel em mudanças de rota
+  useEffect(() => {
+    if (!pixelLoaded) return;
+    
+    // Função para lidar com mudanças de rota
     const handleRouteChange = () => {
-      initFacebookPixel();
       if (window.fbq) {
         window.fbq('track', 'PageView');
         console.log('PageView tracked on route change');
       }
     };
     
-    // Add listener for route changes
+    // Adicionar listener para mudanças de rota
     window.addEventListener('popstate', handleRouteChange);
     
-    // Clean up the listener
+    // Limpar o listener
     return () => {
       window.removeEventListener('popstate', handleRouteChange);
     };
-  }, []);
+  }, [pixelLoaded]);
 
   return (
     <AuthProvider>
@@ -62,6 +85,7 @@ const App = () => {
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
+          <Toaster />
         </TooltipProvider>
       </QuizProvider>
     </AuthProvider>
