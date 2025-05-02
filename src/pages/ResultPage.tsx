@@ -46,13 +46,28 @@ const ResultPage: React.FC = () => {
     criticalImages.forEach(src => new Image().src = src);
 
     const { category } = primaryStyle;
-    const { image, guideImage } = styleConfig[category];
-    const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
-    styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
-    const guideImg = new Image();
-    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-    guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
+    // Check if styleConfig exists for this category before accessing it
+    if (styleConfig[category]) {
+      const { image, guideImage } = styleConfig[category];
+      if (image) {
+        const styleImg = new Image();
+        styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
+        styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
+      } else {
+        setImagesLoaded(prev => ({ ...prev, style: true }));
+      }
+
+      if (guideImage) {
+        const guideImg = new Image();
+        guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
+        guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
+      } else {
+        setImagesLoaded(prev => ({ ...prev, guide: true }));
+      }
+    } else {
+      // Set images as loaded if there's no style config
+      setImagesLoaded({ style: true, guide: true });
+    }
   }, [primaryStyle, globalStyles.logo]);
 
   useEffect(() => {
@@ -63,7 +78,9 @@ const ResultPage: React.FC = () => {
   if (isLoading) return <ResultSkeleton />;
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  // Make sure we have valid styleConfig data
+  const styleData = styleConfig[category] || {};
+  const { image, guideImage, description } = styleData;
   const userName = globalStyles.userName || (user ? user.userName : undefined);
 
   const handleCTAClick = () => {
@@ -94,46 +111,52 @@ const ResultPage: React.FC = () => {
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <p className="text-[#432818] leading-relaxed">{description}</p>
+                <p className="text-[#432818] leading-relaxed">{description || "Descrição não disponível para este estilo."}</p>
                 <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
                   <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
-                  <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                  {secondaryStyles && secondaryStyles.length > 0 ? (
+                    <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                  ) : (
+                    <p className="text-[#8F7A6A]">Nenhum estilo secundário detectado.</p>
+                  )}
                 </div>
               </div>
               <div className="max-w-[238px] mx-auto relative">
                 <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
                   <img 
-                    src={`${image}?q=auto:best&f=auto&w=238`} 
+                    src={image ? `${image}?q=auto:best&f=auto&w=238` : "https://via.placeholder.com/238x317?text=Imagem+não+disponível"} 
                     alt={`Estilo ${category}`} 
                     className="w-full h-full object-cover" 
                     loading="eager" 
                     fetchPriority="high" 
                     width="238" 
                     height="317"
-                    srcSet={`${image}?q=auto:best&f=auto&w=238 1x, ${image}?q=auto:best&f=auto&w=476 2x`}
+                    srcSet={image ? `${image}?q=auto:best&f=auto&w=238 1x, ${image}?q=auto:best&f=auto&w=476 2x` : ""}
                     sizes="(max-width: 768px) 100vw, 238px"
                   />
                 </AspectRatio>
               </div>
             </div>
 
-            <div className="mt-8 max-w-[540px] mx-auto relative">
-              <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
-                <img 
-                  src={`${guideImage}?q=auto:best&f=auto&w=540`} 
-                  alt={`Guia de Estilo ${category}`} 
-                  loading="lazy" 
-                  className="w-full h-full object-cover" 
-                  width="540" 
-                  height="304"
-                  srcSet={`${guideImage}?q=auto:best&f=auto&w=540 1x, ${guideImage}?q=auto:best&f=auto&w=1080 2x`}
-                  sizes="(max-width: 768px) 100vw, 540px"
-                />
-              </AspectRatio>
-              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
-                Exclusivo
+            {guideImage && (
+              <div className="mt-8 max-w-[540px] mx-auto relative">
+                <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+                  <img 
+                    src={`${guideImage}?q=auto:best&f=auto&w=540`} 
+                    alt={`Guia de Estilo ${category}`} 
+                    loading="lazy" 
+                    className="w-full h-full object-cover" 
+                    width="540" 
+                    height="304"
+                    srcSet={`${guideImage}?q=auto:best&f=auto&w=540 1x, ${guideImage}?q=auto:best&f=auto&w=1080 2x`}
+                    sizes="(max-width: 768px) 100vw, 540px"
+                  />
+                </AspectRatio>
+                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  Exclusivo
+                </div>
               </div>
-            </div>
+            )}
           </AnimatedWrapper>
         </Card>
 

@@ -11,12 +11,27 @@ import { styleConfig } from '@/config/styleConfig';
 import { ShoppingCart, ArrowRight } from 'lucide-react';
 
 export const renderBlock = (block: ResultPageBlock, primaryStyle: StyleResult) => {
+  if (!block) {
+    console.error("Attempted to render null or undefined block");
+    return null;
+  }
+  
   const { type, content = {}, style = {} } = block;
   
   // Convert style object to inline style
-  const blockStyle = Object.entries(style).reduce((acc, [key, value]) => {
+  const blockStyle = Object.entries(style || {}).reduce((acc, [key, value]) => {
     return { ...acc, [key]: value };
   }, {});
+  
+  // Make sure primaryStyle exists
+  if (!primaryStyle && (type === 'primaryStyle' || type === 'style-result')) {
+    console.error("Missing primaryStyle for style block rendering");
+    return (
+      <div style={blockStyle} className="p-4 border border-red-300 rounded">
+        <p className="text-red-500">Error: Missing style data</p>
+      </div>
+    );
+  }
   
   switch (type) {
     case 'headline':
@@ -38,7 +53,7 @@ export const renderBlock = (block: ResultPageBlock, primaryStyle: StyleResult) =
     case 'text':
       return (
         <div style={blockStyle}>
-          <p>{content.text}</p>
+          <p>{content.text || ''}</p>
         </div>
       );
       
@@ -60,6 +75,24 @@ export const renderBlock = (block: ResultPageBlock, primaryStyle: StyleResult) =
       );
       
     case 'primaryStyle':
+    case 'style-result':
+      if (!primaryStyle || !primaryStyle.category) {
+        return (
+          <Card style={blockStyle}>
+            <CardContent className="p-6">
+              <div className="text-center">
+                <p className="text-muted-foreground">Informações de estilo indisponíveis</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      }
+      
+      const styleInfo = styleConfig[primaryStyle.category] || styleConfig.default || {
+        description: "Descrição do estilo não disponível.",
+        image: 'https://via.placeholder.com/238x317?text=Imagem+do+Estilo'
+      };
+      
       return (
         <Card style={blockStyle}>
           <CardContent className="p-6">
@@ -69,21 +102,20 @@ export const renderBlock = (block: ResultPageBlock, primaryStyle: StyleResult) =
                   <span className="text-sm text-[#8F7A6A]">Seu estilo predominante</span>
                   <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
                 </div>
-                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+                <Progress value={primaryStyle.percentage || 0} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
                 <p className="text-[#432818] leading-relaxed">
-                  {styleConfig[primaryStyle.category]?.description || 
-                   "Descrição do estilo não disponível."}
+                  {styleInfo.description}
                 </p>
               </div>
               <div className="max-w-[238px] mx-auto">
                 <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md">
                   <img 
-                    src={styleConfig[primaryStyle.category]?.image || 'https://via.placeholder.com/238x317?text=Imagem+do+Estilo'} 
+                    src={styleInfo.image} 
                     alt={`Estilo ${primaryStyle.category}`} 
                     className="w-full h-full object-cover"
                   />
@@ -95,11 +127,12 @@ export const renderBlock = (block: ResultPageBlock, primaryStyle: StyleResult) =
       );
       
     case 'secondaryStyles':
+    case 'secondary-styles':
       return (
         <Card style={blockStyle}>
           <CardContent className="p-6">
             <h3 className="text-lg font-medium text-[#432818] mb-4">Estilos que Também Influenciam Você</h3>
-            <SecondaryStylesSection secondaryStyles={[]} /> {/* In real implementation, pass actual secondary styles */}
+            <SecondaryStylesSection secondaryStyles={content.secondaryStyles || []} />
           </CardContent>
         </Card>
       );
@@ -164,7 +197,7 @@ export const renderBlock = (block: ResultPageBlock, primaryStyle: StyleResult) =
         <div style={blockStyle}>
           <div className="p-4 border border-dashed rounded-md text-center">
             <p className="text-muted-foreground">
-              Bloco do tipo <strong>{type}</strong> não implementado
+              Bloco do tipo <strong>{type || 'desconhecido'}</strong> não implementado
             </p>
           </div>
         </div>

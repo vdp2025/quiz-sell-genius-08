@@ -23,12 +23,16 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
     blocks,
     selectedBlockId,
     selectBlock
-  } = useResultPageEditor(primaryStyle.category);
+  } = useResultPageEditor(primaryStyle?.category || 'default');
 
   const handleOpenInNewTab = () => {
     // In a real implementation, this would open a preview in a new tab
     window.open('/resultado', '_blank');
   };
+
+  // Safeguard against missing resultPageConfig
+  const globalStyles = resultPageConfig?.globalStyles || {};
+  const safeBlocks = blocks || [];
 
   return (
     <div className="h-full flex flex-col">
@@ -71,14 +75,14 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
             viewMode === 'mobile' ? 'max-w-sm' : 'max-w-4xl'
           )}
           style={{
-            backgroundColor: resultPageConfig.globalStyles?.backgroundColor || '#fffaf7',
-            color: resultPageConfig.globalStyles?.textColor || '#432818',
-            fontFamily: resultPageConfig.globalStyles?.fontFamily || 'inherit',
+            backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+            color: globalStyles.textColor || '#432818',
+            fontFamily: globalStyles.fontFamily || 'inherit',
           }}
         >
           {/* Render blocks */}
           <div className="space-y-6 p-4">
-            {blocks.map((block) => (
+            {safeBlocks.length > 0 ? safeBlocks.map((block) => (
               <div
                 key={block.id}
                 onClick={() => !isPreviewing && selectBlock(block.id)}
@@ -90,9 +94,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
               >
                 {renderBlock(block, primaryStyle)}
               </div>
-            ))}
-            
-            {blocks.length === 0 && !isPreviewing && (
+            )) : (
               <Card className="p-8 text-center">
                 <p className="text-muted-foreground mb-4">Nenhum bloco adicionado à página de resultados</p>
                 <p className="text-sm text-muted-foreground">
