@@ -2,7 +2,7 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
-import { BarChart, Edit, FileText, Settings, Users } from 'lucide-react';
+import { BarChart, Edit, Settings } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 interface AdminLayoutProps {
@@ -25,11 +25,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               </Link>
               <Link to="/admin/editor" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
                 <Edit className="h-4 w-4 inline-block mr-2" />
-                Editor
+                Editor Unificado
               </Link>
-              <Link to="/admin/quiz-builder" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
-                <FileText className="h-4 w-4 inline-block mr-2" />
-                Quiz Builder
+              <Link to="/admin/analytics" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
+                <BarChart className="h-4 w-4 inline-block mr-2" />
+                Analytics
               </Link>
               <Link to="/admin/settings" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
                 <Settings className="h-4 w-4 inline-block mr-2" />

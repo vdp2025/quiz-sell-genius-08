@@ -13,7 +13,6 @@ import AnalyticsPage from './pages/admin/AnalyticsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
-import ResultPageEditorPage from './pages/ResultPageEditorPage';
 import { Toaster } from '@/components/ui/toaster';
 
 // Avalia se o dispositivo tem performance limitada
@@ -70,11 +69,12 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/resultado/editar" element={<ResultPageEditorPage />} />
+              {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
+              <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
               <Route path="/admin" element={<AdminDashboard />} />
-              {/* Use the EditorPage as the main editor */}
+              {/* Manter apenas uma rota principal para o editor unificado */}
               <Route path="/admin/editor" element={<EditorPage />} />
-              <Route path="/admin/editor/unified" element={<EditorPage />} />
+              {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
               <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
               <Route path="/admin/settings" element={<SettingsPage />} />
               <Route path="/admin/analytics" element={<AnalyticsPage />} />
