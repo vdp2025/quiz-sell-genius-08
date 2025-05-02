@@ -19,11 +19,12 @@ export const initFacebookPixel = () => {
       'https://connect.facebook.net/en_US/fbevents.js');
       
       // Inicializa o Pixel com o ID fornecido
-      const pixelId = process.env.REACT_APP_FACEBOOK_PIXEL_ID || '1311550759901086';
-      window.fbq && window.fbq('init', pixelId);
-      
-      // Rastreia a visualização de página
-      window.fbq && window.fbq('track', 'PageView');
+      const pixelId = import.meta.env.REACT_APP_FACEBOOK_PIXEL_ID || '1311550759901086';
+      if (window.fbq) {
+        window.fbq('init', pixelId);
+        // Rastreia a visualização de página
+        window.fbq('track', 'PageView');
+      }
       
       console.log('Facebook Pixel initialized');
     } else {

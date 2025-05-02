@@ -1,4 +1,3 @@
-
 import { getAnalyticsEvents } from './analytics';
 
 // Mock implementation of analyticsHelpers
@@ -109,4 +108,61 @@ const calculateAverageTimeSpent = (events: any[]) => {
   });
   
   return completedSessions > 0 ? totalTime / completedSessions : 0;
+};
+
+/**
+ * Process quiz progress data from events
+ * @param events Array of analytics events
+ * @returns Processed user progress data by question
+ */
+export const getUserProgressData = (events: any[]) => {
+  // Extract quiz answer events to track progress
+  const answerEvents = events.filter(event => event.type === 'quiz_answer' || event.question_id);
+  
+  // Create a map to store aggregated data by question ID
+  const questionMap: Record<string, {
+    questionId: string;
+    uniqueUsers: number;
+    totalAnswers: number;
+    dropoffRate?: number;
+    retentionFromStart?: number;
+  }> = {};
+  
+  // Create a set to track unique users per question
+  const usersByQuestion: Record<string, Set<string>> = {};
+  
+  // Process events to calculate progress metrics
+  answerEvents.forEach(event => {
+    const questionId = event.question_id || event.questionId || `Q${Object.keys(questionMap).length + 1}`;
+    const userId = event.userId || event.sessionId || 'anonymous';
+    
+    // Initialize question data if it doesn't exist
+    if (!questionMap[questionId]) {
+      questionMap[questionId] = {
+        questionId,
+        uniqueUsers: 0,
+        totalAnswers: 0,
+      };
+      usersByQuestion[questionId] = new Set();
+    }
+    
+    // Track unique users per question
+    usersByQuestion[questionId].add(userId);
+    
+    // Increment total answers count
+    questionMap[questionId].totalAnswers++;
+  });
+  
+  // Update unique users counts from sets
+  Object.keys(questionMap).forEach(qId => {
+    questionMap[qId].uniqueUsers = usersByQuestion[qId].size;
+  });
+  
+  // Sort by question ID (assuming they are numeric or contain numeric parts)
+  return Object.values(questionMap).sort((a, b) => {
+    // Extract numeric parts if question IDs are like 'Q1', 'Q2', etc.
+    const numA = parseInt((a.questionId.match(/\d+/) || ['0'])[0]);
+    const numB = parseInt((b.questionId.match(/\d+/) || ['0'])[0]);
+    return numA - numB;
+  });
 };
