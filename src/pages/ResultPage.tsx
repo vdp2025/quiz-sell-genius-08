@@ -6,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, Clock, ArrowDown } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -22,6 +22,7 @@ import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -84,14 +85,6 @@ const ResultPage: React.FC = () => {
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
 
-      {/* ATTENTION: Urgency Bar moved to top */}
-      <div className="bg-[#432818] text-white py-2 px-4 text-center">
-        <div className="container mx-auto flex items-center justify-center gap-2">
-          <Clock className="w-4 h-4 text-[#B89B7A]" />
-          <p className="text-sm font-medium">Oferta especial por tempo limitado - Aproveite enquanto está disponível!</p>
-        </div>
-      </div>
-
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* ATTENTION: Primary Style Card */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
@@ -131,6 +124,12 @@ const ResultPage: React.FC = () => {
                     Descobrir Meu Guia Completo
                   </span>
                 </Button>
+                <div className="text-center">
+                  <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    <span>Oferta por tempo limitado</span>
+                  </p>
+                </div>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[340px] mx-auto relative">
@@ -196,7 +195,7 @@ const ResultPage: React.FC = () => {
             
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-cta-green btn-green-pulse"
+              className="text-white py-4 px-6 rounded-md btn-cta-green"
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
               style={{
@@ -211,21 +210,24 @@ const ResultPage: React.FC = () => {
             </Button>
             
             <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
-              <p className="text-sm text-[#aa6b5d] font-medium flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                Oferta por tempo limitado
+              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
+                <Lock className="w-3 h-3" />
+                <span>Oferta exclusiva nesta página</span>
               </p>
             </div>
+            
+            <SecurePurchaseElement />
           </div>
         </AnimatedWrapper>
 
-        {/* DESIRE: Mentor and Trust Elements */}
+        {/* DESIRE: Guarantee Section - moved up before Mentor section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <MentorSection />
+          <GuaranteeSection />
         </AnimatedWrapper>
 
+        {/* DESIRE: Mentor and Trust Elements */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <GuaranteeSection />
+          <MentorSection />
         </AnimatedWrapper>
 
         {/* ACTION: Final Value Proposition and CTA */}
@@ -260,7 +262,7 @@ const ResultPage: React.FC = () => {
               </ul>
             </div>
 
-            {/* Updated Value Stack Section with new prices */}
+            {/* Updated Value Stack Section with new prices and fixed red line */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
@@ -281,7 +283,7 @@ const ResultPage: React.FC = () => {
                   <span>Valor Total</span>
                   <div className="relative">
                     <span>R$ 175,00</span>
-                    <div className="absolute -top-2 left-0 right-0 border-t-2 border-[#ff5a5a] transform -rotate-[8deg]"></div>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
                   </div>
                 </div>
               </div>
@@ -295,22 +297,25 @@ const ResultPage: React.FC = () => {
 
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-5 px-8 rounded-md text-lg shadow-md transition-colors btn-3d"
+              className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2"
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                fontSize: "1rem" /* Smaller font size for button */
               }}
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
             >
               <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 <span>Garantir Meu Guia + Bônus Especiais</span>
               </span>
             </Button>
+            
+            <SecurePurchaseElement />
 
-            <p className="text-sm text-[#aa6b5d] mt-3 flex items-center justify-center gap-1">
-              <Clock className="w-4 h-4" />
+            <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+              <Lock className="w-3 h-3" />
               <span>Oferta exclusiva nesta página</span>
             </p>
           </div>

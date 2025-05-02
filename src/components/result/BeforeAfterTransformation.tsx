@@ -6,21 +6,18 @@ interface TransformationItem {
   beforeImage: string;
   afterImage: string;
   name: string;
-  quote: string;
 }
 
 const transformations: TransformationItem[] = [
   {
-    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/before_transformation_1_mmicef.jpg",
-    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/after_transformation_1_wzkeev.jpg",
-    name: "Ana Paula",
-    quote: "Antes me vestia por obrigação. Agora me visto para expressar quem eu realmente sou."
+    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    name: "Adriana",
   },
   {
-    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/before_transformation_2_lbkmwo.jpg",
-    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/after_transformation_2_pdkqmu.jpg",
-    name: "Daniela Torres",
-    quote: "Nunca imaginei que entender meu estilo pudesse transformar também minha confiança."
+    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+    name: "Mariangela",
   }
 ];
 
@@ -80,62 +77,18 @@ const BeforeAfterTransformation: React.FC = () => {
           <div 
             className={`relative h-[400px] md:h-[500px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}
           >
-            {/* Before Image (full width) */}
+            {/* Full image without slider */}
             <div className="absolute inset-0 w-full h-full">
               <img 
-                src={activeTransformation.beforeImage} 
-                alt={`Antes - ${activeTransformation.name}`}
+                src={activeTransformation.afterImage}
+                alt={`Transformação - ${activeTransformation.name}`}
                 className="w-full h-full object-cover"
               />
             </div>
 
-            {/* After Image (partial width based on slider) */}
-            <div 
-              className="absolute inset-0 h-full overflow-hidden" 
-              style={{ width: `${sliderPosition}%` }}
-            >
-              <img 
-                src={activeTransformation.afterImage} 
-                alt={`Depois - ${activeTransformation.name}`}
-                className="w-full h-full object-cover"
-                style={{ 
-                  width: `${100 * (100/sliderPosition)}%`,
-                  maxWidth: sliderPosition > 0 ? `${100 * (100/sliderPosition)}%` : '100%',
-                  position: 'absolute',
-                  left: 0,
-                }}
-              />
+            <div className="absolute bottom-4 left-0 right-0 mx-auto bg-white/80 backdrop-blur-sm py-2 px-4 text-center rounded-lg max-w-xs">
+              <p className="text-lg font-playfair text-[#432818]">{activeTransformation.name}</p>
             </div>
-
-            {/* Slider line */}
-            <div 
-              className="absolute inset-y-0 w-1 bg-white shadow-lg cursor-move"
-              style={{ left: `${sliderPosition}%` }}
-            ></div>
-
-            {/* Before/After Labels */}
-            <div className="absolute inset-x-0 top-4 flex justify-between px-4 pointer-events-none">
-              <span className="bg-[#432818]/80 text-white px-3 py-1 rounded-full text-sm font-medium">Antes</span>
-              <span className="bg-[#4CAF50]/80 text-white px-3 py-1 rounded-full text-sm font-medium">Depois</span>
-            </div>
-
-            {/* Slider input with improved mobile handling */}
-            <input
-              type="range"
-              min="5"
-              max="95"
-              value={sliderPosition}
-              onChange={handleSliderChange}
-              className="absolute bottom-4 inset-x-0 mx-auto w-3/4 accent-[#aa6b5d] z-10 before-after-slider"
-              style={{
-                touchAction: "none" // Prevents scrolling while dragging on mobile
-              }}
-            />
-          </div>
-
-          <div className="text-center">
-            <p className="text-lg font-playfair text-[#432818] mb-1">{activeTransformation.name}</p>
-            <p className="italic text-[#432818]/80">"{activeTransformation.quote}"</p>
           </div>
 
           {/* Dots navigation */}

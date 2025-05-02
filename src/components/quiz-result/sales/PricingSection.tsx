@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Clock, Lock, Check } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 
 interface PricingSectionProps {
   price?: string;
@@ -35,24 +36,18 @@ const PricingSection: React.FC<PricingSectionProps> = ({
       {/* Subtle shimmer effect */}
       <div className="absolute inset-0 shimmer pointer-events-none"></div>
       
-      {/* Urgency Banner */}
-      <div className="absolute top-0 left-0 w-full bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-2 flex items-center justify-center gap-2">
-        <Clock className="w-4 h-4" />
-        <p className="text-sm font-medium">Oferta especial por tempo limitado!</p>
-      </div>
-      
-      <div className="space-y-6 mt-8">
+      <div className="space-y-6">
         {/* Value Stack */}
         <div className="bg-[#fff7f3] p-4 rounded-lg border border-[#B89B7A]/10">
           <h4 className="text-[#432818] text-sm mb-3 text-center">Valor de cada componente:</h4>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span>Guia Principal</span>
-              <span className="font-medium">R$ 97,00</span>
+              <span className="font-medium">R$ 67,00</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Bônus 1 - Peças-chave</span>
-              <span className="font-medium">R$ 49,00</span>
+              <span className="font-medium">R$ 79,00</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Bônus 2 - Visagismo Facial</span>
@@ -60,7 +55,10 @@ const PricingSection: React.FC<PricingSectionProps> = ({
             </div>
             <div className="border-t border-[#B89B7A]/20 pt-2 mt-2 flex justify-between items-center">
               <span className="font-medium">Valor Total</span>
-              <span className="font-medium">R$ {regularPrice}</span>
+              <span className="font-medium relative">
+                R$ {regularPrice}
+                <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+              </span>
             </div>
           </div>
         </div>
@@ -85,15 +83,12 @@ const PricingSection: React.FC<PricingSectionProps> = ({
         </div>
 
         {/* Security Badge */}
-        <div className="flex items-center justify-center gap-2 text-[#3a3a3a]/70 glass-panel py-2 px-4 rounded-full mx-auto w-fit">
-          <Lock className="w-4 h-4" />
-          <p className="text-sm">Pagamento 100% seguro</p>
-        </div>
+        <SecurePurchaseElement />
 
         {/* CTA Button - Now GREEN for better conversion */}
         <div className="relative">
           <Button 
-            className="w-full text-white py-8 rounded-md text-xl transition-all duration-300 shadow-lg"
+            className="w-full text-white py-6 rounded-md text-base transition-all duration-300 shadow-lg"
             onClick={handlePurchase}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -111,7 +106,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
                 </>
               ) : (
                 <>
-                  <ShoppingCart className={`w-6 h-6 mr-2 transition-transform duration-300 ${isHovered ? 'scale-110' : ''}`} />
+                  <ShoppingCart className={`w-5 h-5 mr-2 transition-transform duration-300 ${isHovered ? 'scale-110' : ''}`} />
                   {ctaText}
                 </>
               )}
@@ -121,6 +116,12 @@ const PricingSection: React.FC<PricingSectionProps> = ({
           {/* Elegant shadow beneath button */}
           <div className="h-2 bg-gradient-to-r from-transparent via-[#45a049]/30 to-transparent rounded-full mt-2 mx-auto w-3/4"></div>
         </div>
+
+        {/* Limited Time Offer */}
+        <p className="text-center text-sm flex items-center justify-center gap-1 text-[#aa6b5d]">
+          <Clock className="w-3 h-3" />
+          <span>Oferta por tempo limitado</span>
+        </p>
 
         {/* Payment Methods */}
         <p className="text-center text-sm text-[#3a3a3a]/70">

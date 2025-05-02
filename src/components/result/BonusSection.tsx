@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Check, Award, Star } from 'lucide-react';
@@ -19,7 +20,7 @@ const bonuses: BonusItemProps[] = [{
 }, {
   title: "Visagismo Facial",
   description: "Aprenda a valorizar seus traços faciais com as técnicas certas de maquiagem, cortes de cabelo e acessórios",
-  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg",
+  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
   value: "R$ 29,00",
   features: ["Análise de formato de rosto", "Recomendações de cortes de cabelo", "Técnicas de maquiagem para valorizar", "Escolha de acessórios ideais"]
 }];
