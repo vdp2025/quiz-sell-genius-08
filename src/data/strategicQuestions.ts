@@ -1,5 +1,4 @@
-
-import { Question } from '@/types/quiz';
+import { QuizQuestion as Question } from '@/types/quiz';
 
 export const strategicQuestions: Question[] = [
   {
