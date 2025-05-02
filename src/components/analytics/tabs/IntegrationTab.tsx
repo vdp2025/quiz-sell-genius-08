@@ -1,72 +1,75 @@
 
-import React, { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { GoogleAnalyticsCard } from '../integrations/GoogleAnalyticsCard';
-import { FacebookPixelCard } from '../integrations/FacebookPixelCard';
-import { WebhookCard } from '../integrations/WebhookCard';
-import { ApiTokensCard } from '../integrations/ApiTokensCard';
-import { MarketingPlatformsCard } from '../integrations/MarketingPlatformsCard';
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { FacebookPixelCard } from '@/components/analytics/integrations/FacebookPixelCard';
+import { GoogleAnalyticsCard } from '@/components/analytics/integrations/GoogleAnalyticsCard';
+import { ApiTokensCard } from '@/components/analytics/integrations/ApiTokensCard';
+import { WebhookCard } from '@/components/analytics/integrations/WebhookCard';
+import { MarketingPlatformsCard } from '@/components/analytics/integrations/MarketingPlatformsCard';
 
-export const IntegrationTab: React.FC = () => {
-  // Initial values from localStorage
-  const [googleAnalyticsId] = useState('');
-  const [googleAnalyticsEnabled] = useState(false);
-  
-  const [fbPixelId] = useState(() => {
-    try {
-      const stored = localStorage.getItem('fb_pixel_id');
-      return stored || '';
-    } catch (error) {
-      return '';
-    }
-  });
-  
-  const [fbPixelEnabled] = useState(() => {
-    try {
-      return localStorage.getItem('tracking_enabled') !== 'false';
-    } catch (error) {
-      return false;
-    }
-  });
+interface IntegrationTabProps {
+  analyticsData: any;
+  testFunction: () => boolean;
+}
 
-  const [webhookUrl] = useState('');
-  const [webhookEnabled] = useState(false);
-
+export const IntegrationTab: React.FC<IntegrationTabProps> = ({
+  analyticsData,
+  testFunction
+}) => {
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="analytics" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="analytics">Analytics Services</TabsTrigger>
-          <TabsTrigger value="marketing">Marketing Platforms</TabsTrigger>
-          <TabsTrigger value="webhooks">Webhooks & Custom</TabsTrigger>
-        </TabsList>
-        
-        {/* Analytics Services Tab */}
-        <TabsContent value="analytics" className="space-y-6">
-          <GoogleAnalyticsCard 
-            initialId={googleAnalyticsId}
-            initialEnabled={googleAnalyticsEnabled}
-          />
-        </TabsContent>
-        
-        {/* Marketing Platforms Tab */}
-        <TabsContent value="marketing" className="space-y-6">
-          <FacebookPixelCard 
-            initialId={fbPixelId}
-            initialEnabled={fbPixelEnabled}
-          />
-          <MarketingPlatformsCard />
-        </TabsContent>
-        
-        {/* Webhooks Tab */}
-        <TabsContent value="webhooks" className="space-y-6">
-          <WebhookCard 
-            initialUrl={webhookUrl}
-            initialEnabled={webhookEnabled}
-          />
-          <ApiTokensCard />
-        </TabsContent>
-      </Tabs>
+      <Card>
+        <CardHeader>
+          <CardTitle>Integrações e Conexões</CardTitle>
+          <CardDescription>
+            Conecte seus dados a outras plataformas e serviços
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="tracking" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-2">
+              <TabsTrigger value="tracking">Pixels</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="marketing">Marketing</TabsTrigger>
+              <TabsTrigger value="api">API</TabsTrigger>
+              <TabsTrigger value="webhooks">Webhooks</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="tracking">
+              <div className="space-y-4">
+                <FacebookPixelCard testFunction={testFunction} />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="analytics">
+              <div className="space-y-4">
+                <GoogleAnalyticsCard />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="marketing">
+              <div className="space-y-4">
+                <MarketingPlatformsCard />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="api">
+              <div className="space-y-4">
+                <ApiTokensCard />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="webhooks">
+              <div className="space-y-4">
+                <WebhookCard />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 };
+
+export default IntegrationTab;

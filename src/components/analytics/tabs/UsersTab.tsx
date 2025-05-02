@@ -1,42 +1,138 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Search, User, Download } from 'lucide-react';
+import { Search, User, Download, Clock, CheckCircle, Play, Eye, Mail, ShoppingCart } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface UsersTabProps {
-  prepareUsersList: () => any[];
-  handleViewUserDetails: (userId: string) => void;
-  userEvents: any[];
-  selectedUser: string | null;
-  formatDate: (date: Date | null) => string;
-  getEventIcon: (eventType: string) => JSX.Element;
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
+  analyticsData: any;
+  loading: boolean;
 }
 
 export const UsersTab: React.FC<UsersTabProps> = ({
-  prepareUsersList,
-  handleViewUserDetails,
-  userEvents,
-  selectedUser,
-  formatDate,
-  getEventIcon,
-  searchTerm,
-  setSearchTerm
+  analyticsData,
+  loading
 }) => {
-  const users = prepareUsersList();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
+  const [userEvents, setUserEvents] = useState<any[]>([]);
 
-  const handleUserSelect = (user: any) => {
-    handleViewUserDetails(user.id);
-    setSelectedUserData(user);
+  // Prepare users list from analytics data
+  const prepareUsersList = useMemo(() => {
+    if (!analyticsData?.events) return [];
+
+    const uniqueUsers = new Map();
+    
+    analyticsData.events.forEach((event: any) => {
+      const userId = event.sessionId || event.userEmail || 'unknown';
+      
+      if (!uniqueUsers.has(userId)) {
+        uniqueUsers.set(userId, {
+          id: userId,
+          name: event.userName || 'Anônimo',
+          email: event.userEmail || event.email || 'N/A',
+          startTime: null,
+          lastActivity: null,
+          completed: false,
+          totalQuestions: 0
+        });
+      }
+      
+      const user = uniqueUsers.get(userId);
+      
+      // Update user data based on events
+      if (event.timestamp) {
+        const timestamp = new Date(event.timestamp);
+        
+        if (!user.startTime || timestamp < user.startTime) {
+          user.startTime = timestamp;
+        }
+        
+        if (!user.lastActivity || timestamp > user.lastActivity) {
+          user.lastActivity = timestamp;
+        }
+      }
+      
+      if (event.type === 'quiz_complete') {
+        user.completed = true;
+        user.completeTime = new Date(event.timestamp);
+      }
+      
+      if (event.type === 'quiz_answer') {
+        user.totalQuestions++;
+      }
+    });
+    
+    // Convert map to array and filter by search term
+    return Array.from(uniqueUsers.values())
+      .filter(user => 
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .sort((a, b) => {
+        // Sort by most recent activity first
+        if (!a.lastActivity) return 1;
+        if (!b.lastActivity) return -1;
+        return b.lastActivity.getTime() - a.lastActivity.getTime();
+      });
+  }, [analyticsData, searchTerm]);
+
+  // Handle user details view
+  const handleViewUserDetails = (userId: string) => {
+    setSelectedUser(userId);
+    
+    if (!analyticsData?.events) {
+      setUserEvents([]);
+      return;
+    }
+    
+    // Get all events for the selected user
+    const events = analyticsData.events.filter((event: any) => {
+      return (event.sessionId === userId || event.userEmail === userId);
+    });
+    
+    setUserEvents(events);
   };
+
+  // Format date for display
+  const formatDate = (date: Date | null) => {
+    if (!date) return 'N/A';
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+
+  // Get icon for event type
+  const getEventIcon = (eventType: string) => {
+    switch (eventType) {
+      case 'quiz_start':
+        return <Play className="h-4 w-4 text-blue-500" />;
+      case 'quiz_complete':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'quiz_answer':
+        return <Clock className="h-4 w-4 text-purple-500" />;
+      case 'result_view':
+        return <Eye className="h-4 w-4 text-indigo-500" />;
+      case 'lead_generated':
+        return <Mail className="h-4 w-4 text-yellow-500" />;
+      case 'sale':
+        return <ShoppingCart className="h-4 w-4 text-green-500" />;
+      default:
+        return <User className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  const users = prepareUsersList;
 
   return (
     <div className="space-y-6">
@@ -75,7 +171,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
+                {users.length > 0 ? users.map((user: any) => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
@@ -92,7 +188,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                     <TableCell className="text-right">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" onClick={() => handleUserSelect(user)}>
+                          <Button variant="outline" size="sm" onClick={() => handleViewUserDetails(user.id)}>
                             <User className="h-4 w-4 mr-2" />
                             Detalhes
                           </Button>
@@ -199,8 +295,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                       </Dialog>
                     </TableCell>
                   </TableRow>
-                ))}
-                {users.length === 0 && (
+                )) : (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
                       {searchTerm ? 'Nenhum usuário encontrado para esta busca.' : 'Nenhum usuário encontrado.'}
@@ -215,3 +310,5 @@ export const UsersTab: React.FC<UsersTabProps> = ({
     </div>
   );
 };
+
+export default UsersTab;
