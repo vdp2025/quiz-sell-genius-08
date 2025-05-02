@@ -8,7 +8,8 @@ export const getCachedMetrics = (timeRange: '7d' | '30d' | 'all') => {
     const cachedData = localStorage.getItem(cacheKey);
     
     if (cachedData) {
-      return JSON.parse(cachedData);
+      const parsedData = JSON.parse(cachedData);
+      return ensureMetricsStructure(parsedData);
     }
     
     // If no cache, calculate metrics
@@ -32,23 +33,46 @@ export const getCachedMetrics = (timeRange: '7d' | '30d' | 'all') => {
     // Cache the calculated metrics
     localStorage.setItem(cacheKey, JSON.stringify(metrics));
     
-    return metrics;
+    return ensureMetricsStructure(metrics);
   } catch (error) {
     console.error('Error getting cached metrics:', error);
     // Return default metrics structure to prevent undefined errors
-    return {
-      totalVisitors: 0,
-      totalStarts: 0,
-      totalCompletes: 0,
-      totalResultViews: 0,
-      totalLeads: 0,
-      totalSales: 0,
-      completionRate: 0,
-      conversionRate: 0,
-      salesRate: 0,
-      averageTimeSpent: 0
-    };
+    return getDefaultMetrics();
   }
+};
+
+// Ensure that all metric properties exist to prevent undefined errors
+const ensureMetricsStructure = (metrics: any) => {
+  const defaultMetrics = getDefaultMetrics();
+  
+  return {
+    totalVisitors: metrics.totalVisitors ?? defaultMetrics.totalVisitors,
+    totalStarts: metrics.totalStarts ?? defaultMetrics.totalStarts,
+    totalCompletes: metrics.totalCompletes ?? defaultMetrics.totalCompletes,
+    totalResultViews: metrics.totalResultViews ?? defaultMetrics.totalResultViews,
+    totalLeads: metrics.totalLeads ?? defaultMetrics.totalLeads,
+    totalSales: metrics.totalSales ?? defaultMetrics.totalSales,
+    completionRate: metrics.completionRate ?? defaultMetrics.completionRate,
+    conversionRate: metrics.conversionRate ?? defaultMetrics.conversionRate,
+    salesRate: metrics.salesRate ?? defaultMetrics.salesRate,
+    averageTimeSpent: metrics.averageTimeSpent ?? defaultMetrics.averageTimeSpent
+  };
+};
+
+// Get default metrics object
+const getDefaultMetrics = () => {
+  return {
+    totalVisitors: 0,
+    totalStarts: 0,
+    totalCompletes: 0,
+    totalResultViews: 0,
+    totalLeads: 0,
+    totalSales: 0,
+    completionRate: 0,
+    conversionRate: 0,
+    salesRate: 0,
+    averageTimeSpent: 0
+  };
 };
 
 export const resetMetricsCache = () => {

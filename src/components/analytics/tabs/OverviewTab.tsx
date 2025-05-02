@@ -71,7 +71,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
   
   const formatPercentage = (value: any) => {
     if (value === undefined || value === null) return '0.0%';
-    return `${safeMetric(value).toFixed(1)}%`;
+    return `${safeMetric(value, 0).toFixed(1)}%`;
   };
   
   const conversionMetrics = [
