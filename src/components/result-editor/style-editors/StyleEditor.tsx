@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -67,7 +68,7 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                 <SelectValue placeholder="Selecione um peso" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Padrão</SelectItem>
+                <SelectItem value="default">Padrão</SelectItem>
                 <SelectItem value="300">Leve (300)</SelectItem>
                 <SelectItem value="400">Normal (400)</SelectItem>
                 <SelectItem value="500">Médio (500)</SelectItem>
@@ -172,7 +173,6 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                 <SelectValue placeholder="Selecione um valor" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="default">Padrão</SelectItem>
                 <SelectItem value="block">Block</SelectItem>
                 <SelectItem value="inline-block">Inline Block</SelectItem>
                 <SelectItem value="flex">Flex</SelectItem>
