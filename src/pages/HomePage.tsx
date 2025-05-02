@@ -1,22 +1,34 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';
 import { useQuizContext } from '../context/QuizContext';
 import { useAuth } from '../context/AuthContext';
-import { trackLeadGeneration, trackQuizStart, captureUTMParameters } from '@/utils/analytics';
+import { trackLeadGeneration, trackQuizStart, captureUTMParameters, initFacebookPixel } from '@/utils/analytics';
 
 const HomePage = () => {
   const [started, setStarted] = useState(false);
   const { startQuiz } = useQuizContext();
   const { login } = useAuth();
 
+  // Inicializar o Facebook Pixel quando a página carregar
+  useEffect(() => {
+    // Inicializar o Facebook Pixel
+    initFacebookPixel();
+    
+    // Capturar UTM parameters quando a página carregar
+    captureUTMParameters();
+    
+    // Registrar o tempo de início para calcular o tempo de conclusão do quiz depois
+    localStorage.setItem('page_load_time', Date.now().toString());
+  }, []);
+
   const handleStart = async (name: string, email?: string) => {
     setStarted(true);
     login(name);
     
-    // Capturar UTM parameters ao iniciar o quiz
-    captureUTMParameters();
+    // Salvar o timestamp de início oficial do quiz
+    localStorage.setItem('quiz_start_time', Date.now().toString());
     
     // Rastrear início do quiz com dados do usuário
     trackQuizStart(name, email);

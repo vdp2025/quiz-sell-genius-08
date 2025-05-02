@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 
 import {
   BlocoIntroducao,
@@ -12,8 +13,52 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Lock } from 'lucide-react';
+import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
 
 export const PaginaVendaGuiaEstilo = () => {
+  // Quando a página de resultados é carregada, registramos o tempo de chegada
+  useEffect(() => {
+    const quizStartTime = localStorage.getItem('quiz_start_time');
+    if (quizStartTime) {
+      const startMs = parseInt(quizStartTime, 10);
+      const elapsedMs = Date.now() - startMs;
+      const seconds = Math.floor(elapsedMs / 1000);
+      console.log(`Tempo até chegar na página de resultados: ${seconds} segundos`);
+    }
+  }, []);
+
+  // Função para lidar com cliques de botões de checkout
+  const handleCheckoutClick = () => {
+    // Rastrear o clique do botão de checkout com informações detalhadas
+    trackButtonClick(
+      'checkout-button', 
+      'Eu quero meu guia agora!', 
+      'página de resultados', 
+      'checkout-action'
+    );
+    
+    // Simulação de conversão - em produção, isso seria chamado após a confirmação do pagamento
+    // Você pode comentar isso se quiser evitar dados falsos de vendas
+    setTimeout(() => {
+      trackSaleConversion(97, 'Guia de Estilo');
+    }, 3000);
+    
+    // Redirecionar para o checkout (ou outra ação conforme necessário)
+    window.location.href = BlocoOferta.cta.link;
+  };
+
+  // Função para rastrear cliques em botões secundários
+  const handleSecondaryButtonClick = () => {
+    trackButtonClick(
+      'secondary-cta-button', 
+      BlocoUrgencia.ctaText, 
+      'página de resultados - final',
+      'secondary-checkout'
+    );
+    
+    window.location.href = BlocoUrgencia.ctaLink;
+  };
+
   return (
     <div className="bg-[#fffaf7] text-[#432818] font-sans px-4 py-10 max-w-5xl mx-auto space-y-16">
       {/* Bloco 1 – Introdução */}
@@ -42,7 +87,7 @@ export const PaginaVendaGuiaEstilo = () => {
         <div className="text-center">
           <Button
             className="bg-[#aa6b5d] hover:bg-[#bfa08e] text-white px-6 py-4 mt-4 text-lg"
-            onClick={() => window.location.href = BlocoOferta.cta.link}
+            onClick={handleCheckoutClick}
           >
             {BlocoOferta.cta.text}
           </Button>
@@ -99,7 +144,7 @@ export const PaginaVendaGuiaEstilo = () => {
         <p className="text-base max-w-xl mx-auto">{BlocoUrgencia.subtitle}</p>
         <Button
           className="bg-[#4CAF50] hover:bg-[#388e3c] text-white px-8 py-4 text-lg mt-2"
-          onClick={() => window.location.href = BlocoUrgencia.ctaLink}
+          onClick={handleSecondaryButtonClick}
         >
           {BlocoUrgencia.ctaText}
         </Button>

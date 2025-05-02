@@ -39,13 +39,22 @@ const QuizPage: React.FC = () => {
     canProceed
   } = useQuizLogic();
 
-  // Track quiz start on component mount
+  // Track quiz start on component mount and save start time
   useEffect(() => {
     if (!quizStartTracked) {
-      trackQuizStart();
+      // Salvar o timestamp de início para calcular o tempo decorrido
+      localStorage.setItem('quiz_start_time', Date.now().toString());
+      
+      // Obter informações do usuário, se disponível
+      const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
+      const userEmail = user?.email || localStorage.getItem('userEmail');
+      
+      trackQuizStart(userName, userEmail);
       setQuizStartTracked(true);
+      
+      console.log('Quiz iniciado por', userName, userEmail ? `(${userEmail})` : '');
     }
-  }, [quizStartTracked]);
+  }, [quizStartTracked, user]);
 
   // Handle strategic answer
   const handleStrategicAnswer = (response: UserResponse) => {

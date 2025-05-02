@@ -12,6 +12,26 @@ const FB_ACCESS_TOKEN = 'EAAEJYWeJHLABOzPlbLgdK367BPZAHPvweatRSiJ5e99WU0GtuFVI4Y
 // Cache da inicialização do Facebook Pixel para evitar duplicação
 let pixelInitialized = false;
 
+// Função para registrar eventos no log local para depuração/monitoramento
+const logEventToLocal = (eventName: string, params?: any) => {
+  try {
+    const eventLog = localStorage.getItem('fb_pixel_event_log');
+    const events = eventLog ? JSON.parse(eventLog) : [];
+    
+    events.unshift({
+      type: eventName,
+      timestamp: new Date().toISOString(),
+      details: params
+    });
+    
+    // Limitar a 100 eventos para não sobrecarregar o localStorage
+    const limitedEvents = events.slice(0, 100);
+    localStorage.setItem('fb_pixel_event_log', JSON.stringify(limitedEvents));
+  } catch (error) {
+    console.error('Erro ao registrar evento no log local:', error);
+  }
+};
+
 // Função para verificar se o evento está habilitado para rastreamento
 const isEventEnabled = (eventType: string): boolean => {
   try {
@@ -85,17 +105,26 @@ const safeFbq = (event: string, name: string, params?: any) => {
     const trackingEnabled = localStorage.getItem('tracking_enabled') !== 'false';
     if (!trackingEnabled) {
       console.log(`Facebook Pixel tracking disabled. Would track: ${event}, ${name}`);
+      // Ainda registra no log local para fins de depuração
+      logEventToLocal(name, { ...params, sent: false, reason: 'tracking_disabled' });
       return;
     }
 
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq(event, name, params);
       console.log(`Facebook Pixel event tracked: ${event}, ${name}`, params);
+      
+      // Registrar no log local para visibilidade
+      logEventToLocal(name, { ...params, sent: true });
     } else {
       console.log(`Facebook Pixel not available. Would track: ${event}, ${name}`, params);
+      // Registrar falha no log local
+      logEventToLocal(name, { ...params, sent: false, reason: 'pixel_not_available' });
     }
   } catch (error) {
     console.error('Error calling Facebook Pixel:', error);
+    // Registrar erro no log local
+    logEventToLocal(name, { ...params, sent: false, error: (error as Error).message });
   }
 };
 
@@ -106,7 +135,16 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
   // Verificar se este evento está habilitado para rastreamento
   if (isEventEnabled('quiz_start')) {
     safeFbq('trackCustom', 'QuizStart', {
-      content_name: 'Quiz Iniciado'
+      content_name: 'Quiz Iniciado',
+      user: userName || 'Anônimo'
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('QuizStart', {
+      content_name: 'Quiz Iniciado',
+      user: userName || 'Anônimo',
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -129,7 +167,19 @@ export const trackQuizAnswer = (questionId: string, selectedOptions: string[], q
       question_id: questionId,
       selected_options: selectedOptions,
       question_index: questionIndex,
-      total_questions: totalQuestions
+      total_questions: totalQuestions,
+      progress_percentage: Math.round((questionIndex / totalQuestions) * 100)
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('QuizAnswer', {
+      question_id: questionId,
+      selected_options: selectedOptions,
+      question_index: questionIndex,
+      total_questions: totalQuestions,
+      progress_percentage: Math.round((questionIndex / totalQuestions) * 100),
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -151,7 +201,16 @@ export const trackQuizComplete = () => {
   // Verificar se este evento está habilitado para rastreamento
   if (isEventEnabled('quiz_complete')) {
     safeFbq('trackCustom', 'QuizComplete', {
-      content_name: 'Quiz Completo'
+      content_name: 'Quiz Completo',
+      completion_time: getQuizElapsedTime()
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('QuizComplete', {
+      content_name: 'Quiz Completo',
+      completion_time: getQuizElapsedTime(),
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -168,7 +227,16 @@ export const trackResultView = (resultType: string) => {
   // Verificar se este evento está habilitado para rastreamento
   if (isEventEnabled('result_view')) {
     safeFbq('trackCustom', 'ResultView', {
-      result_type: resultType
+      result_type: resultType,
+      time_to_result: getQuizElapsedTime()
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('ResultView', {
+      result_type: resultType,
+      time_to_result: getQuizElapsedTime(),
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -186,7 +254,16 @@ export const trackLeadGeneration = (email: string) => {
   // Verificar se este evento está habilitado para rastreamento
   if (isEventEnabled('lead_generated')) {
     safeFbq('track', 'Lead', {
-      content_name: 'Lead Quiz'
+      content_name: 'Lead Quiz',
+      email_domain: email.split('@')[1] || 'unknown'
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('Lead', {
+      content_name: 'Lead Quiz',
+      email_domain: email.split('@')[1] || 'unknown',
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -200,14 +277,26 @@ export const trackLeadGeneration = (email: string) => {
   });
 };
 
-export const trackSaleConversion = (value: number) => {
+export const trackSaleConversion = (value: number, productName?: string) => {
   console.log(`Conversão de venda registrada - Valor: ${value}`);
   
   // Verificar se este evento está habilitado para rastreamento
   if (isEventEnabled('sale')) {
     safeFbq('track', 'Purchase', {
       value: value,
-      currency: 'BRL'
+      currency: 'BRL',
+      content_name: productName || 'Produto do Quiz',
+      content_type: 'product'
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('Purchase', {
+      value: value,
+      currency: 'BRL',
+      content_name: productName || 'Produto do Quiz',
+      content_type: 'product',
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -215,12 +304,13 @@ export const trackSaleConversion = (value: number) => {
   saveAnalyticsEvent({
     type: 'sale',
     value,
+    productName,
     timestamp: new Date().toISOString()
   });
 };
 
-// Track button clicks
-export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLocation?: string) => {
+// Track button clicks with more detailed information
+export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLocation?: string, buttonAction?: string) => {
   console.log(`Botão clicado - ID: ${buttonId}, Texto: ${buttonText || 'N/A'}, Local: ${buttonLocation || 'N/A'}`);
   
   // Verificar se este evento está habilitado para rastreamento
@@ -229,7 +319,18 @@ export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLo
       button_id: buttonId,
       button_text: buttonText || '',
       button_location: buttonLocation || '',
+      button_action: buttonAction || '',
       timestamp: new Date().toISOString()
+    });
+  } else {
+    // Ainda registra no log local mesmo se não estiver habilitado
+    logEventToLocal('ButtonClick', {
+      button_id: buttonId,
+      button_text: buttonText || '',
+      button_location: buttonLocation || '',
+      button_action: buttonAction || '',
+      sent: false,
+      reason: 'event_disabled'
     });
   }
   
@@ -239,8 +340,28 @@ export const trackButtonClick = (buttonId: string, buttonText?: string, buttonLo
     buttonId,
     buttonText,
     buttonLocation,
+    buttonAction,
     timestamp: new Date().toISOString()
   });
+};
+
+// Função para calcular o tempo decorrido desde o início do quiz
+const getQuizElapsedTime = (): string => {
+  try {
+    const startTime = localStorage.getItem('quiz_start_time');
+    if (!startTime) return 'desconhecido';
+    
+    const startMs = parseInt(startTime, 10);
+    const elapsedMs = Date.now() - startMs;
+    
+    // Formatar como minutos:segundos
+    const minutes = Math.floor(elapsedMs / 60000);
+    const seconds = Math.floor((elapsedMs % 60000) / 1000);
+    
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  } catch (error) {
+    return 'erro';
+  }
 };
 
 // Função para obter ou criar um ID de sessão único para o usuário
@@ -305,6 +426,7 @@ export const getAnalyticsEvents = (): AnalyticsEvent[] => {
 export const clearAnalyticsData = () => {
   localStorage.removeItem('quiz_analytics_events');
   localStorage.removeItem('quiz_session_id');
+  localStorage.removeItem('fb_pixel_event_log');
   console.log('Dados de analytics limpos com sucesso');
 };
 
