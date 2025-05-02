@@ -1,28 +1,47 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+interface User {
+  userName: string;
+  email?: string; // Added email as optional property
+}
+
 interface AuthContextType {
-  user: { userName: string } | null;
-  login: (name: string) => void;
+  user: User | null;
+  login: (name: string, email?: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ userName: string } | null>(() => {
+  const [user, setUser] = useState<User | null>(() => {
     const savedName = localStorage.getItem('userName');
-    return savedName ? { userName: savedName } : null;
+    const savedEmail = localStorage.getItem('userEmail');
+    return savedName ? { 
+      userName: savedName,
+      ...(savedEmail && { email: savedEmail })
+    } : null;
   });
 
-  const login = (name: string) => {
-    setUser({ userName: name });
+  const login = (name: string, email?: string) => {
+    const userData: User = { 
+      userName: name 
+    };
+    
+    if (email) {
+      userData.email = email;
+      localStorage.setItem('userEmail', email);
+    }
+    
+    setUser(userData);
     localStorage.setItem('userName', name);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
   };
 
   return (
