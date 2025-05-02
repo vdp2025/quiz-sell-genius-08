@@ -20,7 +20,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
     );
   }
 
-  const metrics = analyticsData.metrics;
+  // Ensure metrics exist and provide default values if they don't
+  const metrics = analyticsData.metrics || {};
   const compactView = analyticsData.compactView;
   
   // Transform data for chart
@@ -63,10 +64,20 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
     });
   };
   
+  // Safe access to metrics with defaults
+  const safeMetric = (value: any, defaultValue: number = 0) => {
+    return typeof value === 'number' ? value : defaultValue;
+  };
+  
+  const formatPercentage = (value: any) => {
+    if (value === undefined || value === null) return '0.0%';
+    return `${safeMetric(value).toFixed(1)}%`;
+  };
+  
   const conversionMetrics = [
     {
       title: 'Taxa de Conclusão',
-      value: `${metrics.completionRate.toFixed(1)}%`,
+      value: formatPercentage(metrics.completionRate),
       description: 'Quiz iniciado → Quiz completo',
       change: '+2.5%',
       trend: 'up',
@@ -74,7 +85,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
     },
     {
       title: 'Taxa de Conversão',
-      value: `${metrics.conversionRate.toFixed(1)}%`,
+      value: formatPercentage(metrics.conversionRate),
       description: 'Quiz iniciado → Lead',
       change: '+1.2%',
       trend: 'up',
@@ -82,7 +93,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
     },
     {
       title: 'Taxa de Vendas',
-      value: `${metrics.salesRate.toFixed(1)}%`,
+      value: formatPercentage(metrics.salesRate),
       description: 'Lead → Venda',
       change: '-0.8%',
       trend: 'down',
@@ -95,7 +106,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
       <div className={`grid ${compactView ? 'grid-cols-2 md:grid-cols-4 xl:grid-cols-7' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4'} gap-4`}>
         <MetricCard
           title="Inicios de Quiz"
-          value={metrics.totalStarts}
+          value={safeMetric(metrics.totalStarts)}
           icon="Play"
           trend="up"
           change="+12%"
@@ -103,7 +114,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         />
         <MetricCard
           title="Quiz Completos"
-          value={metrics.totalCompletes}
+          value={safeMetric(metrics.totalCompletes)}
           icon="CheckCircle"
           trend="up"
           change="+8%"
@@ -111,7 +122,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         />
         <MetricCard
           title="Resultados Vistos"
-          value={metrics.totalResultViews}
+          value={safeMetric(metrics.totalResultViews)}
           icon="Eye"
           trend="up"
           change="+15%"
@@ -119,7 +130,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         />
         <MetricCard
           title="Leads Gerados"
-          value={metrics.totalLeads}
+          value={safeMetric(metrics.totalLeads)}
           icon="Users"
           trend="up"
           change="+5%"
@@ -127,7 +138,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         />
         <MetricCard
           title="Vendas"
-          value={metrics.totalSales}
+          value={safeMetric(metrics.totalSales)}
           icon="ShoppingCart"
           trend="up"
           change="+3%"
@@ -135,7 +146,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         />
         <MetricCard
           title="Taxa de Conclusão"
-          value={`${metrics.completionRate.toFixed(1)}%`}
+          value={formatPercentage(metrics.completionRate)}
           icon="BarChart"
           trend="up"
           change="+2%"
@@ -143,7 +154,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         />
         <MetricCard
           title="Taxa de Conversão"
-          value={`${metrics.conversionRate.toFixed(1)}%`}
+          value={formatPercentage(metrics.conversionRate)}
           icon="TrendingUp"
           trend="down"
           change="-1%"
@@ -214,7 +225,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                 <XAxis dataKey="title" />
                 <YAxis tickFormatter={(value) => `${value}%`} />
                 <Tooltip
-                  formatter={(value) => [`${value}%`, 'Taxa']}
+                  formatter={(value) => [value, 'Taxa']}
                   labelFormatter={(label) => `${label}`}
                 />
                 <Bar 

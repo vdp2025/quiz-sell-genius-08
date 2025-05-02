@@ -1,6 +1,7 @@
+
 import { getAnalyticsEvents } from './analytics';
 
-// Mock implementation of analyticsHelpers
+// Get cached metrics or calculate if not in cache
 export const getCachedMetrics = (timeRange: '7d' | '30d' | 'all') => {
   try {
     const cacheKey = `analytics_metrics_cache_${timeRange}`;
@@ -17,10 +18,15 @@ export const getCachedMetrics = (timeRange: '7d' | '30d' | 'all') => {
     // Calculate metrics based on events
     const metrics = {
       totalVisitors: calculateTotalVisitors(filteredEvents),
+      totalStarts: countEventsByType(filteredEvents, 'quiz_start'),
+      totalCompletes: countEventsByType(filteredEvents, 'quiz_complete'),
+      totalResultViews: countEventsByType(filteredEvents, 'result_view'),
+      totalLeads: countEventsByType(filteredEvents, 'lead_generated'),
+      totalSales: countEventsByType(filteredEvents, 'sale'),
       completionRate: calculateCompletionRate(filteredEvents),
       conversionRate: calculateConversionRate(filteredEvents),
+      salesRate: calculateSalesRate(filteredEvents),
       averageTimeSpent: calculateAverageTimeSpent(filteredEvents),
-      // Add more metrics as needed
     };
     
     // Cache the calculated metrics
@@ -29,7 +35,19 @@ export const getCachedMetrics = (timeRange: '7d' | '30d' | 'all') => {
     return metrics;
   } catch (error) {
     console.error('Error getting cached metrics:', error);
-    return {};
+    // Return default metrics structure to prevent undefined errors
+    return {
+      totalVisitors: 0,
+      totalStarts: 0,
+      totalCompletes: 0,
+      totalResultViews: 0,
+      totalLeads: 0,
+      totalSales: 0,
+      completionRate: 0,
+      conversionRate: 0,
+      salesRate: 0,
+      averageTimeSpent: 0
+    };
   }
 };
 
@@ -52,7 +70,7 @@ export const filterEventsByTimeRange = (events: any[], timeRange: '7d' | '30d' |
   const timeLimit = timeRange === '7d' ? 7 * dayInMs : 30 * dayInMs;
   
   return events.filter(event => {
-    const eventTime = new Date(event.timestamp).getTime();
+    const eventTime = event.timestamp ? new Date(event.timestamp).getTime() : 0;
     return (now - eventTime) <= timeLimit;
   });
 };
@@ -68,6 +86,10 @@ const calculateTotalVisitors = (events: any[]) => {
   return uniqueUsers.size;
 };
 
+const countEventsByType = (events: any[], type: string) => {
+  return events.filter(e => e.type === type).length;
+};
+
 const calculateCompletionRate = (events: any[]) => {
   const starts = events.filter(e => e.type === 'quiz_start').length;
   const completes = events.filter(e => e.type === 'quiz_complete').length;
@@ -75,9 +97,15 @@ const calculateCompletionRate = (events: any[]) => {
 };
 
 const calculateConversionRate = (events: any[]) => {
-  const completes = events.filter(e => e.type === 'quiz_complete').length;
-  const conversions = events.filter(e => e.type === 'purchase').length;
-  return completes > 0 ? (conversions / completes) * 100 : 0;
+  const starts = events.filter(e => e.type === 'quiz_start').length;
+  const leads = events.filter(e => e.type === 'lead_generated').length;
+  return starts > 0 ? (leads / starts) * 100 : 0;
+};
+
+const calculateSalesRate = (events: any[]) => {
+  const leads = events.filter(e => e.type === 'lead_generated').length;
+  const sales = events.filter(e => e.type === 'purchase' || e.type === 'sale').length;
+  return leads > 0 ? (sales / leads) * 100 : 0;
 };
 
 const calculateAverageTimeSpent = (events: any[]) => {
