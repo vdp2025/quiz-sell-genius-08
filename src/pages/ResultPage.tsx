@@ -144,7 +144,7 @@ const ResultPage: React.FC = () => {
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[340px] mx-auto relative">
-                  <img src={`${image}?q=100&f=auto`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-80 transition-transform duration-300" />
+                  <img src={`${image}?q=100&f=auto`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
