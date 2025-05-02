@@ -1,5 +1,6 @@
 
-import { defineLovable } from "@lovable/react";
+import React from 'react';
+import { defineLovable } from "../../../lovable";
 
 export default defineLovable({
   name: "QuizCover",

@@ -1,6 +1,6 @@
 
-import { defineLovable } from "@lovable/react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { defineLovable } from "../../../lovable";
 
 export default defineLovable({
   name: "QuizLogic",
