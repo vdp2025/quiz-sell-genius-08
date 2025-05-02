@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -19,6 +18,7 @@ import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
+import BuildInfo from '@/components/BuildInfo';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -173,6 +173,8 @@ const ResultPage: React.FC = () => {
           </div>
         </AnimatedWrapper>
       </div>
+
+      <BuildInfo />
     </div>
   );
 };

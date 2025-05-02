@@ -1,73 +1,39 @@
-# Welcome to your Lovable project
 
-## Project info
+# Gisele Galvão Website
 
-**URL**: https://lovable.dev/projects/c8978a89-f677-47d9-ac2c-428240870b89
+This repository contains the source code for the Gisele Galvão website.
 
-## How can I edit this code?
+## CI/CD Setup
 
-There are several ways of editing your application.
+This project is configured with continuous integration and continuous deployment (CI/CD) using GitHub Actions. When changes are pushed to the `main` branch, the site is automatically built and deployed to Hostinger.
 
-**Use Lovable**
+### Setup Instructions
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c8978a89-f677-47d9-ac2c-428240870b89) and start prompting.
+1. **Connect Lovable to GitHub**
+   - In the Lovable editor, click on the GitHub button in the top right corner
+   - Connect your GitHub account if not already connected
+   - Create a new repository or connect to an existing one
+   - Push your code to GitHub
 
-Changes made via Lovable will be committed automatically to this repo.
+2. **Configure GitHub Secrets**
+   To deploy to Hostinger via FTP, you need to add the following secrets in your GitHub repository:
+   - Go to your GitHub repository → Settings → Secrets and variables → Actions
+   - Add the following secrets:
+     - `FTP_SERVER`: Your Hostinger FTP server (e.g., `ftp.giselegalvao.com.br`)
+     - `FTP_USERNAME`: Your Hostinger FTP username
+     - `FTP_PASSWORD`: Your Hostinger FTP password
+     - `FTP_SERVER_DIR`: The directory to deploy to (e.g., `/public_html/` or `/`)
 
-**Use your preferred IDE**
+3. **Test the Workflow**
+   - Make a small change to your code in Lovable
+   - Push the changes to GitHub
+   - Go to the "Actions" tab in your GitHub repository to monitor the workflow
+   - Once completed, verify that your changes are live on your website
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Workflow Details
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The CI/CD workflow consists of two jobs:
+- `build`: Checks out the code, installs dependencies, and builds the project
+- `deploy`: Takes the build artifacts and deploys them to Hostinger via FTP
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/c8978a89-f677-47d9-ac2c-428240870b89) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+To manually trigger a deployment, you can use the "Run workflow" button on the Actions tab in GitHub.
