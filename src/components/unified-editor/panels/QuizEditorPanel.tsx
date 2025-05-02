@@ -82,7 +82,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => addStage()}
+            onClick={() => addStage('question')}
           >
             <Plus className="h-4 w-4" />
           </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
@@ -7,6 +6,7 @@ import { StyleResult } from '@/types/quiz';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
 import StyleEditor from '@/components/result-editor/style-editors/StyleEditor';
 import { EditorPreview } from '@/components/result-editor/EditorPreview';
+import { Button } from '@/components/ui/button';
 
 interface ResultEditorPanelProps {
   isPreviewing: boolean;

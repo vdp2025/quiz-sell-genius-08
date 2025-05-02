@@ -1,9 +1,8 @@
 
-import { defineLovable } from "@/lovable";
 import { UnifiedVisualEditor, EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
 import { StyleResult } from '@/types/quiz';
 
-export default defineLovable({
+export default {
   name: "unified-editor",
   displayName: "Editor Unificado",
   description: "Editor visual unificado para Quiz, Página de Resultado e Página de Vendas",
@@ -53,4 +52,4 @@ export default defineLovable({
       </div>
     );
   }
-});
+};
