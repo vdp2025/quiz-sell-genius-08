@@ -131,8 +131,6 @@ const ResultPage: React.FC = () => {
                     <SecondaryStylesSection secondaryStyles={secondaryStyles} />
                   </div>
                 </AnimatedWrapper>
-                
-                {/* Botão CTA removido daqui - agora está após a seção de transformações */}
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
@@ -170,7 +168,7 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         </Card>
 
-        {/* INTEREST: Before/After Transformation Section moved up - CTA button agora está dentro do componente */}
+        {/* INTEREST: Before/After Transformation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
           <BeforeAfterTransformation />
         </AnimatedWrapper>
@@ -180,12 +178,12 @@ const ResultPage: React.FC = () => {
           <MotivationSection />
         </AnimatedWrapper>
 
-        {/* INTEREST: Bonus Section moved up */}
+        {/* INTEREST: Bonus Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
           <BonusSection />
         </AnimatedWrapper>
 
-        {/* DESIRE: Testimonials moved up */}
+        {/* DESIRE: Testimonials */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
           <Testimonials />
         </AnimatedWrapper>
@@ -229,7 +227,7 @@ const ResultPage: React.FC = () => {
           </div>
         </AnimatedWrapper>
 
-        {/* DESIRE: Guarantee Section - moved up before Mentor section */}
+        {/* DESIRE: Guarantee Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
           <GuaranteeSection />
         </AnimatedWrapper>

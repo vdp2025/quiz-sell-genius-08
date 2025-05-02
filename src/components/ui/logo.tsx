@@ -6,7 +6,7 @@ interface LogoProps {
   alt?: string;
   className?: string;
   style?: React.CSSProperties;
-  priority?: boolean; // Added priority prop to match usage in Header.tsx
+  priority?: boolean; // Added priority prop but we'll ignore it since we're not using Next.js Image
 }
 
 const Logo: React.FC<LogoProps> = ({ 
