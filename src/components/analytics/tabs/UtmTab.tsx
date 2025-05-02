@@ -71,11 +71,11 @@ export const UtmTab: React.FC<UtmTabProps> = ({
     const data = props.payload[0];
     
     return (
-      <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md">
-        <p className="text-xs font-medium mb-0.5">
+      <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
+        <p className="text-[7px] font-medium mb-0.5">
           {data.name === 'value' ? props.label : data.name}
         </p>
-        <p className="text-xs font-semibold">
+        <p className="text-[7px] font-semibold">
           {data.value} {data.name === 'conversionRate' ? '%' : ''}
         </p>
       </div>
@@ -98,8 +98,8 @@ export const UtmTab: React.FC<UtmTabProps> = ({
             <CardTitle>Tráfego por Fonte</CardTitle>
             <CardDescription className="text-xs">Distribuição de usuários por fonte UTM</CardDescription>
           </CardHeader>
-          <CardContent className="pt-1.5">
-            <div className="h-[110px]">
+          <CardContent className="pt-1 px-2">
+            <div className="h-[55px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                   <Pie
@@ -107,7 +107,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    outerRadius={40}
+                    outerRadius={25}
                     fill="#8884d8"
                     dataKey="value"
                     label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
@@ -128,27 +128,27 @@ export const UtmTab: React.FC<UtmTabProps> = ({
             <CardTitle>Conversão por Campanha</CardTitle>
             <CardDescription className="text-xs">Taxas de conversão por campanha de marketing</CardDescription>
           </CardHeader>
-          <CardContent className="pt-1.5">
-            <div className="h-[110px]">
+          <CardContent className="pt-1 px-2">
+            <div className="h-[55px]">
               <ChartContainer config={chartConfig}>
                 <BarChart
                   data={utmData.filter(d => d.campaign && d.campaign !== 'none')}
-                  margin={{ top: 10, right: 10, left: 5, bottom: 5 }}
+                  margin={{ top: 5, right: 5, left: 0, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis 
                     dataKey="campaign"
-                    tick={{ fill: '#888888', fontSize: 9 }}
+                    tick={{ fill: '#888888', fontSize: 7 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <YAxis 
-                    tick={{ fill: '#888888', fontSize: 9 }}
+                    tick={{ fill: '#888888', fontSize: 7 }}
                   />
                   <Tooltip content={renderTooltipContent} />
                   <Bar 
                     dataKey="conversionRate" 
                     name="Taxa de Conversão (%)" 
-                    radius={[3, 3, 0, 0]}
+                    radius={[2, 2, 0, 0]}
                     fill="#8B5CF6"
                   />
                 </BarChart>

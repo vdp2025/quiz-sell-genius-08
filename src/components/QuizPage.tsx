@@ -57,13 +57,24 @@ const QuizPage: React.FC = () => {
       
       saveStrategicAnswer(response.questionId, response.selectedOptions);
       
-      // Track strategic answer
+      // Track strategic answer with additional progress info
       trackQuizAnswer(
         response.questionId, 
         response.selectedOptions,
         currentStrategicQuestionIndex + totalQuestions,
         totalQuestions + strategicQuestions.length
       );
+      
+      // Calculate completion percentage for funnel tracking
+      const currentProgress = ((currentStrategicQuestionIndex + totalQuestions + 1) / 
+                              (totalQuestions + strategicQuestions.length)) * 100;
+      
+      // Track funnel milestone if this is approximately halfway through
+      if (currentProgress >= 45 && currentProgress <= 55) {
+        trackQuizAnswer('quiz_middle_point', ['reached'], 
+                       currentStrategicQuestionIndex + totalQuestions,
+                       totalQuestions + strategicQuestions.length);
+      }
       
       if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
         setTimeout(() => {
@@ -90,13 +101,24 @@ const QuizPage: React.FC = () => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
       
-      // Track answer submission
+      // Track answer submission with more detailed info
       trackQuizAnswer(
         response.questionId, 
         response.selectedOptions, 
         currentQuestionIndex, 
         totalQuestions
       );
+      
+      // Calculate completion percentage for funnel tracking
+      const currentProgress = ((currentQuestionIndex + 1) / 
+                              (totalQuestions + strategicQuestions.length)) * 100;
+      
+      // Track funnel milestone if this is approximately halfway through the main questions
+      if (currentProgress >= 20 && currentProgress <= 30) {
+        trackQuizAnswer('quiz_first_quarter', ['reached'], 
+                       currentQuestionIndex,
+                       totalQuestions + strategicQuestions.length);
+      }
     } catch (error) {
       toast({
         title: "Erro na submissão da resposta",
@@ -136,12 +158,12 @@ const QuizPage: React.FC = () => {
     } else {
       calculateResults();
       setShowingTransition(true);
-      // Track quiz main part completion
+      // Track quiz main part completion with more context
       trackQuizAnswer(
         "quiz_main_complete", 
         ["completed"], 
         totalQuestions, 
-        totalQuestions
+        totalQuestions + strategicQuestions.length
       );
     }
   };

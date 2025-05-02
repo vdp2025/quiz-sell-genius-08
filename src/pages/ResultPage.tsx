@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -17,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
+import { trackButtonClick } from '@/utils/analytics';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -56,6 +58,8 @@ const ResultPage: React.FC = () => {
   const { image, guideImage, description } = styleConfig[category];
 
   const handleCTAClick = () => {
+    // Track checkout initiation
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
 

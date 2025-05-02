@@ -3,8 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { MetricsGrid } from '../MetricsGrid';
-import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { Activity, Users, CheckCircle, MessageSquare } from 'lucide-react';
+import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { GridLayout } from '@/components/shared/GridLayout';
 
 interface OverviewTabProps {
@@ -25,7 +24,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
         inicios: counts.quiz_start || 0,
         conclusoes: counts.quiz_complete || 0,
         resultados: counts.result_view || 0,
-        leads: counts.lead_generated || 0
+        leads: counts.lead_generated || 0,
+        checkout: counts.button_click || 0
       };
     });
   }, [analyticsData]);
@@ -44,8 +44,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
       label: 'Resultados',
       theme: { light: '#f59e0b', dark: '#fbbf24' }
     },
+    checkout: {
+      label: 'Checkout',
+      theme: { light: '#8B5CF6', dark: '#A78BFA' }
+    },
     leads: { 
-      label: 'Leads',
+      label: 'Compras',
       theme: { light: '#ef4444', dark: '#f87171' }
     }
   };
@@ -56,10 +60,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
       return null;
     }
     return (
-      <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md text-xs">
-        <p className="text-xs font-medium mb-0.5">{props.label}</p>
+      <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md text-[7px]">
+        <p className="text-[7px] font-medium mb-0.5">{props.label}</p>
         {props.payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center justify-between text-xs">
+          <div key={index} className="flex items-center justify-between text-[7px]">
             <span style={{ color: entry.color }}>{entry.name}: </span>
             <span className="font-semibold ml-1.5">{entry.value}</span>
           </div>
@@ -72,11 +76,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
     const { payload } = props;
     
     return (
-      <div className="flex flex-wrap justify-center gap-2 text-[10px]">
+      <div className="flex flex-wrap justify-center gap-1 text-[7px]">
         {payload.map((entry: any, index: number) => (
           <div key={`legend-${index}`} className="flex items-center">
             <div 
-              className="w-2 h-2 rounded-sm mr-1"
+              className="w-1.5 h-1.5 rounded-sm mr-1"
               style={{ backgroundColor: entry.color }}
             />
             <span>{entry.value}</span>
@@ -100,27 +104,27 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
       
       <Card className="border border-border/40 shadow-sm">
         <CardHeader className="pb-1.5">
-          <CardTitle>Tendências</CardTitle>
-          <CardDescription className="text-xs">Acompanhe a evolução do funil de conversão</CardDescription>
+          <CardTitle>Tendências do Funil</CardTitle>
+          <CardDescription className="text-xs">Evolução diária das principais etapas do funil</CardDescription>
         </CardHeader>
-        <CardContent className="pt-1.5">
-          <div className="h-[110px] w-full">
+        <CardContent className="pt-1 px-2">
+          <div className="h-[55px]">
             <ChartContainer config={chartConfig}>
-              <LineChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+              <LineChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                 <XAxis 
                   dataKey="date" 
                   stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 9 }}
+                  tick={{ fill: '#888888', fontSize: 7 }}
                   tickLine={{ stroke: '#e0e0e0' }}
                 />
                 <YAxis 
                   stroke="#888888"
-                  tick={{ fill: '#888888', fontSize: 9 }}
+                  tick={{ fill: '#888888', fontSize: 7 }}
                   tickLine={{ stroke: '#e0e0e0' }}
                 />
                 <Tooltip content={renderTooltipContent} />
-                <Legend content={renderLegendContent} verticalAlign="top" height={18} />
+                <Legend content={renderLegendContent} verticalAlign="top" height={10} />
                 
                 {/* Reference lines for averages */}
                 <ReferenceLine 
@@ -128,14 +132,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   stroke="#4f46e5" 
                   strokeDasharray="3 3" 
                   ifOverflow="extendDomain"
-                  strokeWidth={1}
-                />
-                <ReferenceLine 
-                  y={avgConclusoes} 
-                  stroke="#10b981" 
-                  strokeDasharray="3 3" 
-                  ifOverflow="extendDomain"
-                  strokeWidth={1}
+                  strokeWidth={0.5}
                 />
                 
                 {/* Enhanced lines with better styling */}
@@ -143,9 +140,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   type="monotone" 
                   dataKey="inicios" 
                   stroke="#4f46e5" 
-                  strokeWidth={1.5}
-                  dot={{ r: 1.5, strokeWidth: 1 }}
-                  activeDot={{ r: 3, strokeWidth: 0, fill: '#4f46e5' }} 
+                  strokeWidth={1}
+                  dot={{ r: 1, strokeWidth: 0.5 }}
+                  activeDot={{ r: 2, strokeWidth: 0, fill: '#4f46e5' }} 
                   animationDuration={1200}
                   animationEasing="ease-in-out"
                 />
@@ -153,9 +150,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   type="monotone" 
                   dataKey="conclusoes" 
                   stroke="#10b981" 
-                  strokeWidth={1.5} 
-                  dot={{ r: 1.5, strokeWidth: 1 }}
-                  activeDot={{ r: 3, strokeWidth: 0, fill: '#10b981' }}
+                  strokeWidth={1} 
+                  dot={{ r: 1, strokeWidth: 0.5 }}
+                  activeDot={{ r: 2, strokeWidth: 0, fill: '#10b981' }}
                   animationDuration={1200}
                   animationEasing="ease-in-out"
                   animationBegin={300}
@@ -164,20 +161,31 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   type="monotone" 
                   dataKey="resultados" 
                   stroke="#f59e0b" 
-                  strokeWidth={1.5} 
-                  dot={{ r: 1.5, strokeWidth: 1 }}
-                  activeDot={{ r: 3, strokeWidth: 0, fill: '#f59e0b' }}
+                  strokeWidth={1} 
+                  dot={{ r: 1, strokeWidth: 0.5 }}
+                  activeDot={{ r: 2, strokeWidth: 0, fill: '#f59e0b' }}
                   animationDuration={1200}
                   animationEasing="ease-in-out"
                   animationBegin={600}
+                />
+                <Line
+                  type="monotone" 
+                  dataKey="checkout" 
+                  stroke="#8B5CF6" 
+                  strokeWidth={1} 
+                  dot={{ r: 1, strokeWidth: 0.5 }}
+                  activeDot={{ r: 2, strokeWidth: 0, fill: '#8B5CF6' }}
+                  animationDuration={1200}
+                  animationEasing="ease-in-out"
+                  animationBegin={750}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="leads" 
                   stroke="#ef4444" 
-                  strokeWidth={1.5} 
-                  dot={{ r: 1.5, strokeWidth: 1 }}
-                  activeDot={{ r: 3, strokeWidth: 0, fill: '#ef4444' }}
+                  strokeWidth={1} 
+                  dot={{ r: 1, strokeWidth: 0.5 }}
+                  activeDot={{ r: 2, strokeWidth: 0, fill: '#ef4444' }}
                   animationDuration={1200}
                   animationEasing="ease-in-out"
                   animationBegin={900}
