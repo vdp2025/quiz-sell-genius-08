@@ -198,12 +198,7 @@ const ResultPage: React.FC = () => {
               </span>
             </Button>
             
-            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
-              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                <Lock className="w-3 h-3" />
-                <span>Oferta exclusiva nesta página</span>
-              </p>
-            </div>
+            
             
             <SecurePurchaseElement />
           </div>
