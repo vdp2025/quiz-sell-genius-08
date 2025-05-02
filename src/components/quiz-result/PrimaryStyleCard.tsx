@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';
-import { styleConfig } from '@/config/styleConfig';
+import { styleConfig, getStyleConfig } from '@/config/styleConfig';
 
 interface PrimaryStyleCardProps {
   primaryStyle: StyleResult;
@@ -15,8 +15,9 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   customDescription,
   customImage
 }) => {
-  const imageUrl = customImage || (styleConfig[primaryStyle.category]?.image || '');
-  const description = customDescription || (styleConfig[primaryStyle.category]?.description || 'Descrição do estilo não disponível');
+  const styleData = getStyleConfig(primaryStyle.category);
+  const imageUrl = customImage || styleData.image;
+  const description = customDescription || styleData.description;
   
   return (
     <Card className="p-6 bg-white mb-8">

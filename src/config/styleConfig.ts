@@ -1,5 +1,16 @@
 
-export const styleConfig = {
+interface StyleConfigItem {
+  image: string;
+  guideImage: string;
+  description: string;
+}
+
+interface StyleConfigType {
+  [key: string]: StyleConfigItem;
+  default: StyleConfigItem;
+}
+
+export const styleConfig: StyleConfigType = {
   Natural: {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
     guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
@@ -49,7 +60,7 @@ export const styleConfig = {
 };
 
 // Helper function to get style config with fallback to default
-export const getStyleConfig = (style) => {
+export const getStyleConfig = (style: string): StyleConfigItem => {
   if (!style) return styleConfig.default;
   return styleConfig[style] || styleConfig.default;
 };

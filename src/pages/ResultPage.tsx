@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig';
+import { styleConfig, getStyleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
@@ -51,8 +51,8 @@ const ResultPage: React.FC = () => {
     criticalImages.forEach(src => new Image().src = src);
 
     const { category = 'default' } = primaryStyle;
-    // Check if styleConfig exists for this category before accessing it
-    const styleData = styleConfig[category] || styleConfig.default || {};
+    // Get style configuration with proper typing
+    const styleData = getStyleConfig(category);
     
     if (styleData.image) {
       const styleImg = new Image();
@@ -87,9 +87,9 @@ const ResultPage: React.FC = () => {
   if (isLoading) return <ResultSkeleton />;
 
   const { category = 'default' } = primaryStyle;
-  // Make sure we have valid styleConfig data with fallbacks
-  const styleData = styleConfig[category] || styleConfig.default || {};
-  const { image = '', guideImage = '', description = 'Descrição não disponível para este estilo.' } = styleData;
+  // Make sure we have valid styleConfig data with proper typing
+  const styleData = getStyleConfig(category);
+  const { image, guideImage, description } = styleData;
   const userName = globalStyles.userName || (user ? user.userName : undefined);
 
   const handleCTAClick = () => {
