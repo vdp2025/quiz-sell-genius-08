@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -18,23 +18,110 @@ import BenefitList from '@/components/quiz-result/sales/BenefitList';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
-import { useEffect } from 'react';
+import { useLoadingState } from '@/hooks/useLoadingState';
+import { ResultSkeleton } from '@/components/result/ResultSkeleton';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 const ResultPage: React.FC = () => {
   const {
     primaryStyle,
     secondaryStyles
   } = useQuiz();
+  
   const {
     globalStyles
   } = useGlobalStyles();
   
+  const { isLoading, setLoading } = useLoadingState({
+    initialState: true,
+    minDuration: 800,
+    maxDuration: 5000
+  });
+  
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [criticalImagesLoaded, setCriticalImagesLoaded] = useState(false);
+  
+  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   
+  // Check device performance for optimization
+  const isLowPerformance = () => {
+    const memory = (navigator as any).deviceMemory;
+    if (memory && memory < 4) return true;
+    
+    const cpuCores = navigator.hardwareConcurrency;
+    if (cpuCores && cpuCores < 4) return true;
+    
+    return false;
+  };
+  
+  const lowPerformance = isLowPerformance();
+  
+  // Preload critical images
+  useEffect(() => {
+    if (!primaryStyle) return;
+    
+    const { category } = primaryStyle;
+    const { image, guideImage } = styleConfig[category] || {};
+    
+    // Critical images to preload
+    const criticalImages = [
+      globalStyles.logo || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png",
+      image,
+      guideImage
+    ].filter(Boolean);
+    
+    let loadedCount = 0;
+    const totalImages = criticalImages.length;
+    
+    criticalImages.forEach(src => {
+      if (!src) {
+        loadedCount++;
+        return;
+      }
+      
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          setCriticalImagesLoaded(true);
+        }
+      };
+      img.onerror = () => {
+        loadedCount++;
+        console.error(`Failed to load image: ${src}`);
+        if (loadedCount === totalImages) {
+          setCriticalImagesLoaded(true);
+        }
+      };
+    });
+    
+    // Safety timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setCriticalImagesLoaded(true);
+    }, 3000);
+    
+    return () => clearTimeout(timeout);
+  }, [primaryStyle, globalStyles.logo]);
+  
+  // Complete loading when critical images and data are ready
+  useEffect(() => {
+    if (criticalImagesLoaded && primaryStyle) {
+      setLoading(false);
+    }
+  }, [criticalImagesLoaded, primaryStyle, setLoading]);
+  
+  // Handle error state if primary style is missing
   if (!primaryStyle) {
     return <ErrorState />;
+  }
+  
+  // Show loading skeleton until ready
+  if (isLoading) {
+    return <ResultSkeleton />;
   }
   
   const {
@@ -46,6 +133,23 @@ const ResultPage: React.FC = () => {
     description
   } = styleConfig[category];
   
+  // Handler for buy button click - integrate with analytics
+  const handleBuyClick = () => {
+    // Track event if Facebook Pixel is available
+    if (window.fbq) {
+      window.fbq('track', 'InitiateCheckout', {
+        content_type: 'product',
+        content_name: `Guia de Estilo - ${category}`,
+        value: 39.00,
+        currency: 'BRL'
+      });
+      console.log('Facebook Pixel: InitiateCheckout event tracked');
+    }
+    
+    // Navigate to payment page
+    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+  };
+  
   return <div className="min-h-screen bg-[#fffaf7]" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
     color: globalStyles.textColor || '#432818',
@@ -56,10 +160,8 @@ const ResultPage: React.FC = () => {
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Estilo Principal */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20">
-          <AnimatedWrapper show={true}>
+          <AnimatedWrapper show={true} className={lowPerformance ? '' : 'transition-all duration-500'}>
             <div className="text-center mb-8">
-              
-              
               <div className="max-w-md mx-auto mb-6">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-[#8F7A6A]">
@@ -82,15 +184,30 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
               <div>
-                <img src={image} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
+                <img 
+                  src={image} 
+                  alt={`Estilo ${category}`} 
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                  width="500"
+                  height="375"
+                  loading="eager"
+                />
               </div>
             </div>
             <div className="mt-8">
-              <img src={guideImage} alt={`Guia de Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
+              <img 
+                src={guideImage} 
+                alt={`Guia de Estilo ${category}`} 
+                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                width="800"
+                height="600"
+                loading="eager"
+              />
             </div>
           </AnimatedWrapper>
         </Card>
 
+        {/* Secondary sections with lazy loading */}
         <MotivationSection />
 
         {/* Oferta + Bônus */}
@@ -120,7 +237,14 @@ const ResultPage: React.FC = () => {
               </ul>
             </div>
             <div>
-              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp" alt="Guia de Estilo - 3 Revistas" className="w-full h-auto rounded-lg shadow-sm" />
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp" 
+                alt="Guia de Estilo - 3 Revistas" 
+                className="w-full h-auto rounded-lg shadow-sm"
+                width="500" 
+                height="375"
+                loading="lazy"
+              />
             </div>
           </div>
 
@@ -137,7 +261,14 @@ const ResultPage: React.FC = () => {
                   Itens essenciais que descomplicam a rotina e valorizam o seu
                   estilo pessoal.
                 </p>
-                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" alt="Peças-chave do Guarda-Roupa" className="w-full h-auto rounded-lg" />
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" 
+                  alt="Peças-chave do Guarda-Roupa" 
+                  className="w-full h-auto rounded-lg"
+                  width="400" 
+                  height="300"
+                  loading="lazy"
+                />
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h4 className="font-medium text-[#432818] mb-2">
@@ -147,13 +278,27 @@ const ResultPage: React.FC = () => {
                   Para alinhar seu rosto, cabelo e maquiagem com a sua
                   identidade visual.
                 </p>
-                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" alt="Mini Guia de Visagismo Facial" className="w-full h-auto rounded-lg" />
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" 
+                  alt="Mini Guia de Visagismo Facial" 
+                  className="w-full h-auto rounded-lg"
+                  width="400" 
+                  height="300"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
 
           <div className="mb-8">
-            <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" alt="Todos os produtos e bônus" className="w-full h-auto rounded-lg" />
+            <img 
+              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp" 
+              alt="Todos os produtos e bônus" 
+              className="w-full h-auto rounded-lg"
+              width="800" 
+              height="450"
+              loading="lazy"
+            />
           </div>
 
           <div className="bg-[#fff7f3] p-6 rounded-lg text-center">
@@ -170,7 +315,10 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            <Button onClick={() => window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'} className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors">
+            <Button 
+              onClick={handleBuyClick} 
+              className="w-full max-w-xl mx-auto text-white py-6 text-lg rounded-md bg-brand-gold hover:bg-[#A38A69] transition-colors"
+            >
               <ShoppingCart className="w-5 h-5 mr-2" />
               Quero meu Guia + Bônus por R$39,00
             </Button>
@@ -180,6 +328,7 @@ const ResultPage: React.FC = () => {
           </div>
         </Card>
 
+        {/* Additional sections with lazy loading */}
         <Testimonials />
         <MentorSection />
         <GuaranteeSection />
