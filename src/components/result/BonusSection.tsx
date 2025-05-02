@@ -49,8 +49,8 @@ const BonusSection: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
             <AspectRatio ratio={16 / 9}>
-              <img alt="Bônus Peças-chave para seu Estilo" className="w-full h-full object-cover" loading="lazy" width="600" height="338" srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 600w, 
-                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1200/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 1200w" sizes="(max-width: 768px) 100vw, 600px" src=" https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" />
+              <img alt="Bônus Peças-chave para seu Estilo" loading="lazy" width="600" height="338" srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 600w, 
+                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1200/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 1200w" sizes="(max-width: 768px) 100vw, 600px" src=" https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" className="w-full h-full object-scale-down" />
             </AspectRatio>
           </div>
           
