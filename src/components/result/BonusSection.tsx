@@ -48,12 +48,30 @@ const BonusSection: React.FC = () => {
           </div>
         </div>
         
-        <img 
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" 
-          alt="Bônus Peças-chave e Visagismo" 
-          className="mx-auto rounded-lg shadow-lg w-full max-w-md hover:scale-105 transition-transform duration-300" 
-          loading="lazy"
-        />
+        <div className="grid md:grid-cols-2 gap-8">
+          <img 
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" 
+            alt="Bônus Peças-chave para seu Estilo" 
+            className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300" 
+            loading="lazy"
+          />
+          
+          <img 
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
+            alt="Bônus Visagismo Facial Estratégico" 
+            className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300" 
+            loading="lazy"
+          />
+        </div>
+        
+        <div className="mt-8 text-center">
+          <img 
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp" 
+            alt="Todos os produtos e bônus inclusos" 
+            className="mx-auto rounded-lg shadow-lg max-w-md hover:scale-105 transition-transform duration-300" 
+            loading="lazy"
+          />
+        </div>
       </div>
     </Card>
   );
