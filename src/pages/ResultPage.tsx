@@ -245,7 +245,7 @@ const ResultPage: React.FC = () => {
             </div>
 
             {/* Updated Value Stack Section with new prices and fixed red line */}
-            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto https://res.cloudinary.com/dqljyf76t/image/upload/v1744920951/Espanhol_Portugu%C3%AAs_8_lgjv2t.png">
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto ">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
               <div className="space-y-3 mb-6">
