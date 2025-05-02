@@ -9,7 +9,7 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { CSS } from '@dnd-kit/utilities';
 import { Eye, EyeOff, Save, Trash2, GripVertical, Plus, Settings, MoveUp, MoveDown } from 'lucide-react';
-import { ResultPageBlock } from '@/types/resultPageTypes';
+import { BlockType, ResultPageBlock } from '@/types/resultPageTypes';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BlockPropertiesPanel } from './BlockPropertiesPanel';
@@ -54,7 +54,7 @@ export const ResultPageEditorPanel: React.FC<ResultPageEditorPanelProps> = ({
     }
   };
   
-  const blockTypes = [
+  const blockTypes: {id: BlockType, name: string, icon: string}[] = [
     { id: 'headline', name: 'Cabeçalho', icon: 'Heading' },
     { id: 'text', name: 'Texto', icon: 'Text' },
     { id: 'image', name: 'Imagem', icon: 'Image' },
@@ -208,7 +208,7 @@ const SortableBlockItem = ({
     transition,
   };
 
-  const getBlockTypeName = (type: string) => {
+  const getBlockTypeName = (type: BlockType) => {
     const blockTypeNames = {
       'headline': 'Cabeçalho',
       'text': 'Texto',

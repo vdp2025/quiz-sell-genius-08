@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -101,7 +102,7 @@ const ResultPage: React.FC = () => {
               </div>
               <div className="max-w-[238px] mx-auto relative">
                 <AspectRatio ratio={3/4} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
-                  <img className="w-full h-full object-contain" 
+                  <img 
                     src={`${image}?q=auto:best&f=auto&w=238`} 
                     alt={`Estilo ${category}`} 
                     className="w-full h-full object-cover" 
@@ -109,7 +110,7 @@ const ResultPage: React.FC = () => {
                     fetchPriority="high" 
                     width="238" 
                     height="317"
-                    srcSet={`\${image}?q=auto:best&f=auto&w=238 1x, \${image}?q=auto:best&f=auto&w=476 2x`}
+                    srcSet={`${image}?q=auto:best&f=auto&w=238 1x, ${image}?q=auto:best&f=auto&w=476 2x`}
                     sizes="(max-width: 768px) 100vw, 238px"
                   />
                 </AspectRatio>
@@ -118,14 +119,14 @@ const ResultPage: React.FC = () => {
 
             <div className="mt-8 max-w-[540px] mx-auto relative">
               <AspectRatio ratio={4/5} className="overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
-                <img className="w-full h-full object-contain" 
+                <img 
                   src={`${guideImage}?q=auto:best&f=auto&w=540`} 
                   alt={`Guia de Estilo ${category}`} 
                   loading="lazy" 
                   className="w-full h-full object-cover" 
                   width="540" 
                   height="304"
-                  srcSet={`\${guideImage}?q=auto:best&f=auto&w=540 1x, \${guideImage}?q=auto:best&f=auto&w=1080 2x`}
+                  srcSet={`${guideImage}?q=auto:best&f=auto&w=540 1x, ${guideImage}?q=auto:best&f=auto&w=1080 2x`}
                   sizes="(max-width: 768px) 100vw, 540px"
                 />
               </AspectRatio>
@@ -155,7 +156,7 @@ const ResultPage: React.FC = () => {
               loading="lazy"
             />
           </div>
-          <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong><br className=\"block sm:hidden\" /> no cartão</p>
+          <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em até <strong>4x de R$ 10,86</strong><br className="block sm:hidden" /> no cartão</p>
         </div>
 
         <Button onClick={handleCTAClick} className="text-white py-5 px-8 lg:py-6 lg:px-12 rounded-md shadow-md transition-colors btn-3d mt-6" style={{

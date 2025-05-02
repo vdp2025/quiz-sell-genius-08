@@ -1,7 +1,19 @@
 
 import { Block } from './editor';
 
+export type BlockType = 
+  | 'headline' 
+  | 'text' 
+  | 'image' 
+  | 'primaryStyle' 
+  | 'secondaryStyles' 
+  | 'offer' 
+  | 'testimonial' 
+  | 'beforeAfter' 
+  | 'cta';
+
 export interface ResultPageBlock extends Block {
+  type: BlockType;
   style?: ResultPageBlockStyle;
 }
 
@@ -45,6 +57,8 @@ export interface ResultPageConfig {
     fontFamily?: string;
     logoUrl?: string;
     logoHeight?: string;
+    logoAlt?: string;
+    userName?: string;
   };
   blocks: ResultPageBlock[];
 }

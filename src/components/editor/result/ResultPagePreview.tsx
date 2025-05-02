@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone, ArrowTopRightIcon } from 'lucide-react';
+import { Monitor, Smartphone, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { renderBlock } from './ResultBlockRenderer';
@@ -59,7 +59,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
           size="sm"
           onClick={handleOpenInNewTab}
         >
-          <ArrowTopRightIcon className="h-4 w-4 mr-2" />
+          <ExternalLink className="h-4 w-4 mr-2" />
           Abrir em nova aba
         </Button>
       </div>
