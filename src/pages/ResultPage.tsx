@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -5,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle } from 'lucide-react';
+import { ShoppingCart, CheckCircle, Clock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -13,6 +14,8 @@ import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
 import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
@@ -81,6 +84,14 @@ const ResultPage: React.FC = () => {
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} />
 
+      {/* Urgency Bar */}
+      <div className="bg-[#432818] text-white py-2 px-4 text-center">
+        <div className="container mx-auto flex items-center justify-center gap-2">
+          <Clock className="w-4 h-4 animate-pulse" />
+          <p className="text-sm font-medium">Oferta especial por tempo limitado - Aproveite enquanto está disponível!</p>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
@@ -107,13 +118,16 @@ const ResultPage: React.FC = () => {
                 </AnimatedWrapper>
                 <Button 
                   onClick={handleCTAClick} 
-                  className="w-full mt-4 text-white py-4 btn-elegant"
+                  className="w-full mt-4 text-white py-4"
+                  style={{
+                    background: "linear-gradient(to right, #aa6b5d, #B89B7A)"
+                  }}
                   onMouseEnter={() => setIsButtonHovered(true)}
                   onMouseLeave={() => setIsButtonHovered(false)}
                 >
                   <span className="flex items-center gap-2">
                     <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                    Quero meu Guia + Bônus por R$39,00
+                    Descobrir Meu Guia Completo
                   </span>
                 </Button>
               </div>
@@ -151,43 +165,45 @@ const ResultPage: React.FC = () => {
           <MotivationSection />
         </AnimatedWrapper>
 
+        {/* Before/After Transformation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
-          <div className="text-center my-6">
-            <Button 
-              onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-elegant btn-pulse"
-              onMouseEnter={() => setIsButtonHovered(true)}
-              onMouseLeave={() => setIsButtonHovered(false)}
-            >
-              <span className="flex items-center gap-2">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Aplique seu Estilo com Propósito — Quero o Guia
-              </span>
-            </Button>
-          </div>
+          <BeforeAfterTransformation />
         </AnimatedWrapper>
 
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <Testimonials />
-        </AnimatedWrapper>
-
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
           <div className="text-center my-6">
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-elegant"
+              className="text-white py-4 px-6 rounded-md btn-pulse"
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
+              style={{
+                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+              }}
             >
               <span className="flex items-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Garantir meu Guia de Estilo + Bônus Exclusivos
+                Quero meu Guia de Estilo Agora - R$39,00
               </span>
             </Button>
+
+            <p className="text-sm text-[#aa6b5d] mt-3">
+              ⏳ Oferta exclusiva por tempo limitado
+            </p>
           </div>
         </AnimatedWrapper>
 
+        {/* Bonus Section */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
+          <BonusSection />
+        </AnimatedWrapper>
+
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
+          <Testimonials />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1150}>
           <MentorSection />
           <GuaranteeSection />
         </AnimatedWrapper>
@@ -223,15 +239,52 @@ const ResultPage: React.FC = () => {
               </ul>
             </div>
 
+            {/* Value Stack Section (Dynamic Pricing Table) */}
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Guia Principal</span>
+                  <span className="font-medium">R$ 97,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Bônus - Peças-chave</span>
+                  <span className="font-medium">R$ 49,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Bônus - Visagismo Facial</span>
+                  <span className="font-medium">R$ 29,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                  <span>Valor Total</span>
+                  <div className="relative">
+                    <span>R$ 175,00</span>
+                    <div className="absolute -top-2 left-0 right-0 border-t-2 border-[#ff5a5a] transform -rotate-[8deg]"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+              </div>
+            </div>
+
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-5 px-8 rounded-md btn-elegant btn-pulse text-lg shadow-md transition-colors btn-3d"
+              className="text-white py-5 px-8 rounded-md text-lg shadow-md transition-colors btn-3d"
+              style={{
+                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+              }}
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
             >
               <span className="flex items-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Quero meu Guia + Bônus por R$39,00
+                Garantir Meu Guia + Bônus Especiais
               </span>
             </Button>
 

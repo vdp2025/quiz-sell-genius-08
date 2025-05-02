@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Clock, Lock } from 'lucide-react';
+import { ShoppingCart, Clock, Lock, Check } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
 interface PricingSectionProps {
@@ -42,11 +42,35 @@ const PricingSection: React.FC<PricingSectionProps> = ({
       </div>
       
       <div className="space-y-6 mt-8">
+        {/* Value Stack */}
+        <div className="bg-[#fff7f3] p-4 rounded-lg border border-[#B89B7A]/10">
+          <h4 className="text-[#432818] text-sm mb-3 text-center">Valor de cada componente:</h4>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span>Guia Principal</span>
+              <span className="font-medium">R$ 97,00</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Bônus 1 - Peças-chave</span>
+              <span className="font-medium">R$ 49,00</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Bônus 2 - Visagismo Facial</span>
+              <span className="font-medium">R$ 29,00</span>
+            </div>
+            <div className="border-t border-[#B89B7A]/20 pt-2 mt-2 flex justify-between items-center">
+              <span className="font-medium">Valor Total</span>
+              <span className="font-medium">R$ {regularPrice}</span>
+            </div>
+          </div>
+        </div>
+
         {/* Price Display */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-          <div className="transform rotate-[-5deg]">
+          <div className="transform rotate-[-5deg] relative">
             <p className="text-sm text-[#3a3a3a]/60 mb-1">De</p>
             <p className="text-2xl line-through text-[#3a3a3a]/60">R$ {regularPrice}</p>
+            <div className="absolute -top-1 -left-1 -right-1 -bottom-1 border-2 border-[#ff5a5a] transform rotate-[-8deg] rounded-sm"></div>
           </div>
           <div className="text-center transform rotate-[2deg]">
             <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
@@ -66,14 +90,18 @@ const PricingSection: React.FC<PricingSectionProps> = ({
           <p className="text-sm">Pagamento 100% seguro</p>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button - Now GREEN for better conversion */}
         <div className="relative">
           <Button 
-            className="w-full text-white py-8 rounded-md text-xl transition-all duration-300 btn-elegant btn-pulse"
+            className="w-full text-white py-8 rounded-md text-xl transition-all duration-300 shadow-lg"
             onClick={handlePurchase}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             disabled={isLoading}
+            style={{
+              background: "linear-gradient(to right, #4CAF50, #45a049)",
+              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+            }}
           >
             <span className="flex items-center gap-2">
               {isLoading ? (
@@ -91,7 +119,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
           </Button>
           
           {/* Elegant shadow beneath button */}
-          <div className="h-2 bg-gradient-to-r from-transparent via-[#aa6b5d]/30 to-transparent rounded-full mt-2 mx-auto w-3/4"></div>
+          <div className="h-2 bg-gradient-to-r from-transparent via-[#45a049]/30 to-transparent rounded-full mt-2 mx-auto w-3/4"></div>
         </div>
 
         {/* Payment Methods */}

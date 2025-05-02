@@ -26,6 +26,44 @@
   @apply relative z-10;
 }
 
+/* Responsive Button Styling */
+@media (max-width: 640px) {
+  button, .btn-elegant, .btn-3d {
+    @apply py-4 px-4 text-base;
+    white-space: normal;
+  }
+  
+  button svg {
+    @apply w-4 h-4;
+  }
+}
+
+/* Green CTA Button */
+.btn-cta-green {
+  @apply relative overflow-hidden transition-all duration-300 transform;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  box-shadow: 0 10px 25px -5px rgba(76, 175, 80, 0.4);
+}
+
+.btn-cta-green:hover {
+  @apply scale-105 shadow-lg;
+  box-shadow: 0 10px 25px -5px rgba(76, 175, 80, 0.5);
+}
+
+.btn-cta-green::before {
+  content: '';
+  @apply absolute top-0 left-0 w-full h-full opacity-0 transition-opacity duration-500;
+  background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+}
+
+.btn-cta-green:hover::before {
+  @apply opacity-100;
+}
+
+.btn-cta-green span {
+  @apply relative z-10;
+}
+
 /* Pulse Animation */
 @keyframes elegant-pulse {
   0% {
@@ -39,8 +77,24 @@
   }
 }
 
+@keyframes green-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
 .btn-pulse {
   animation: elegant-pulse 2s infinite;
+}
+
+.btn-green-pulse {
+  animation: green-pulse 2s infinite;
 }
 
 /* Elegant Card Effects */
@@ -52,6 +106,13 @@
 .card-elegant:hover {
   @apply shadow-lg border-[#B89B7A]/30;
   transform: translateY(-5px);
+}
+
+/* Responsive Card Styling */
+@media (max-width: 640px) {
+  .card-elegant {
+    @apply p-4;
+  }
 }
 
 /* Glossy Effect */
@@ -129,4 +190,87 @@
 
 .interactive-section:hover {
   transform: perspective(1000px) rotateY(2deg);
+}
+
+/* Responsive Styling for Small Screens */
+@media (max-width: 640px) {
+  .elegant-divider {
+    margin: 1rem auto;
+    width: 90%;
+  }
+  
+  .gold-text {
+    @apply text-3xl;
+  }
+  
+  .interactive-section:hover {
+    transform: none;
+  }
+  
+  .btn-3d:hover {
+    transform: none;
+  }
+  
+  .card-elegant:hover {
+    transform: none;
+  }
+}
+
+/* Before/After Image Slider */
+.before-after-slider {
+  @apply relative overflow-hidden;
+}
+
+.before-after-slider input[type=range] {
+  @apply absolute bottom-4 left-0 right-0 mx-auto w-3/4 z-10;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  outline: none;
+}
+
+.before-after-slider input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Value Stack Animation */
+@keyframes highlightValue {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(184, 155, 122, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.highlight-value {
+  animation: highlightValue 2s ease-in-out;
+}
+
+/* Price Comparison */
+.price-compare {
+  position: relative;
+}
+
+.price-compare::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -5%;
+  right: -5%;
+  height: 2px;
+  background-color: #ff5a5a;
+  transform: rotate(-5deg);
 }
