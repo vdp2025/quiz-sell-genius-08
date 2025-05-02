@@ -1,14 +1,12 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-
-interface EditorBlock {
-  id: string;
-  type: string;
-  content: any;
-  order: number;
-}
+import { DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+import { EditorBlock } from '@/types/editor';
+import { EditorToolbar } from './toolbar/EditorToolbar';
+import { EditorContent } from './content/EditorContent';
+import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
+import { useEditorActions } from '@/hooks/editor/useEditorActions';
 
 interface PageEditorProps {
   blocks: EditorBlock[];
@@ -23,40 +21,50 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   onPreviewToggle,
   isPreviewing
 }) => {
+  const { addToHistory, undo, redo, canUndo, canRedo } = useEditorHistory(blocks);
+  const { handleAddBlock, handleUpdateBlock, handleDeleteBlock, handleSave } = useEditorActions(
+    blocks,
+    onBlocksChange,
+    addToHistory
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const activeIndex = blocks.findIndex(block => block.id === active.id);
+      const overIndex = blocks.findIndex(block => block.id === over.id);
+      
+      const newBlocks = arrayMove(blocks, activeIndex, overIndex)
+        .map((block, index) => ({ ...block, order: index }));
+      
+      onBlocksChange(newBlocks);
+      addToHistory(newBlocks);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b flex justify-between items-center">
-        <h2 className="font-semibold">Editor Visual</h2>
-        
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            onClick={onPreviewToggle}
-          >
-            {isPreviewing ? "Editar" : "Pré-visualizar"}
-          </Button>
-          <Button 
-            className="bg-[#B89B7A] hover:bg-[#A38A69]"
-            onClick={() => console.log("Salvando...")}
-          >
-            Salvar
-          </Button>
-        </div>
-      </div>
+      <EditorToolbar 
+        onUndo={undo}
+        onRedo={redo}
+        onTogglePreview={onPreviewToggle}
+        onSave={handleSave}
+        isPreviewing={isPreviewing}
+        canUndo={canUndo}
+        canRedo={canRedo}
+      />
 
       <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
-        <Card className="p-8 text-center">
-          <p className="text-[#432818] mb-6">
-            O novo editor visual intuitivo está sendo desenvolvido para oferecer
-            uma melhor experiência de edição.
-          </p>
-          <p className="text-[#432818]">
-            Volte em breve para experimentar a nova interface de design.
-          </p>
-        </Card>
+        <EditorContent 
+          blocks={blocks}
+          onDragEnd={handleDragEnd}
+          onAddBlock={handleAddBlock}
+          onUpdateBlock={handleUpdateBlock}
+          onDeleteBlock={handleDeleteBlock}
+          isPreviewing={isPreviewing}
+        />
       </div>
     </div>
   );
 };
-
-export default PageEditor;
