@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Check } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-
 const BonusSection: React.FC = () => {
   return <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant overflow-hidden">
       {/* Decorative elements */}
@@ -50,52 +48,25 @@ const BonusSection: React.FC = () => {
         
         <div className="grid md:grid-cols-2 gap-8">
           <div className="overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
-            <AspectRatio ratio={16/9}>
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" 
-                alt="Bônus Peças-chave para seu Estilo" 
-                className="w-full h-full object-cover" 
-                loading="lazy"
-                width="600"
-                height="338"
-                srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 600w, 
-                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1200/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 1200w"
-                sizes="(max-width: 768px) 100vw, 600px"
-              />
+            <AspectRatio ratio={16 / 9}>
+              <img alt="Bônus Peças-chave para seu Estilo" className="w-full h-full object-cover" loading="lazy" width="600" height="338" srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 600w, 
+                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1200/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 1200w" sizes="(max-width: 768px) 100vw, 600px" src=" https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" />
             </AspectRatio>
           </div>
           
           <div className="overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
-            <AspectRatio ratio={16/9}>
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
-                alt="Bônus Visagismo Facial Estratégico" 
-                className="w-full h-full object-cover" 
-                loading="lazy"
-                width="600"
-                height="338"
-                srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 600w,
-                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1200/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 1200w"
-                sizes="(max-width: 768px) 100vw, 600px"
-              />
+            <AspectRatio ratio={16 / 9}>
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" alt="Bônus Visagismo Facial Estratégico" className="w-full h-full object-cover" loading="lazy" width="600" height="338" srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 600w,
+                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1200/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 1200w" sizes="(max-width: 768px) 100vw, 600px" />
             </AspectRatio>
           </div>
         </div>
         
         <div className="mt-8 text-center">
           <div className="max-w-md mx-auto overflow-hidden rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
-            <AspectRatio ratio={4/3}>
-              <img 
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp" 
-                alt="Todos os produtos e bônus inclusos" 
-                className="w-full h-full object-cover" 
-                loading="lazy"
-                width="500" 
-                height="375"
-                srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp 500w,
-                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1000/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp 1000w"
-                sizes="(max-width: 768px) 100vw, 500px"
-              />
+            <AspectRatio ratio={4 / 3}>
+              <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp" alt="Todos os produtos e bônus inclusos" className="w-full h-full object-cover" loading="lazy" width="500" height="375" srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp 500w,
+                        https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_1000/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp 1000w" sizes="(max-width: 768px) 100vw, 500px" />
             </AspectRatio>
           </div>
         </div>
