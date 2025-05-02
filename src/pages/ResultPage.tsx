@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -5,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock, Edit } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -24,6 +25,7 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useAuth } from '@/context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -37,6 +39,13 @@ const ResultPage: React.FC = () => {
   });
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check if user is admin - This is just for demonstration
+    // In a real app, you'd likely check this from your user context/auth system
+    setIsAdmin(user?.role === 'admin' || localStorage.getItem('isAdmin') === 'true');
+  }, [user]);
 
   useEffect(() => {
     if (!primaryStyle) return;
@@ -77,6 +86,25 @@ const ResultPage: React.FC = () => {
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={userName} />
+
+      {isAdmin && (
+        <div className="container mx-auto px-4 py-2 max-w-4xl">
+          <div className="flex gap-2 mb-4">
+            <Link to="/admin/editor/result">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Edit className="w-4 h-4" />
+                Editor Básico
+              </Button>
+            </Link>
+            <Link to="/admin/editor/result/enhanced">
+              <Button variant="default" size="sm" className="flex items-center gap-2 bg-[#B89B7A] hover:bg-[#A38A69]">
+                <Edit className="w-4 h-4" />
+                Editor Avançado
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
