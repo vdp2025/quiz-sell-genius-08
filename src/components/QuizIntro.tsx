@@ -33,7 +33,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         </div>
 
         {/* Título */}
-        <h1 className="font-playfair text-xl md:text-2xl font-bold text-center mb-4 leading-snug text-gray-950">
+        <h1 className="font-playfair text-xl md:text-2xl font-bold text-center mb-6 leading-normal text-gray-950">
           Chega de um guarda-roupa lotado
           <br className="hidden md:block" />
           e da sensação de que nada combina com você.
@@ -70,10 +70,10 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           />
           <Button
             type="submit"
-            className="w-full bg-[#432818] hover:bg-[#7c5a39] text-white py-4 text-base rounded-md shadow transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed animate-bounce"
+            className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 text-base rounded-md shadow transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!nome.trim()}
           >
-            Continuar
+            Quero descobrir meu estilo agora
           </Button>
         </form>
       </div>
