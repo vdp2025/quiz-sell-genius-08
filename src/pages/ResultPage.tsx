@@ -275,21 +275,13 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
               
-               <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
-      <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-        <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-        <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-        <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
-        <p className="text-sm text-[#432818] mt-2">
-          ou <strong>4x de R$ 10,86</strong> no cartão
-        </p>
-      </div>
-      <BuildInfo />
-    </div>
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">À vista</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1"> ou 4X de R$ 10,86 vista</p>
+              </div>
+            </div>
 
             <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
