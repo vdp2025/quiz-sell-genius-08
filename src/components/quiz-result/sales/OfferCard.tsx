@@ -10,6 +10,8 @@ import Guarantee from './Guarantee';
 import Logo from '../../ui/logo';
 import { OfferContent } from '@/types/resultPageConfig';
 import { useUtmParameters } from '@/hooks/useUtmParameters';
+import BuildInfo from '@/components/BuildInfo';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
@@ -45,6 +47,12 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
     window.location.href = urlWithUtm;
   };
 
+  const globalStyles = {
+    backgroundColor: '#fffaf7',
+    textColor: '#432818',
+    fontFamily: 'inherit'
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       backgroundColor: globalStyles.backgroundColor || '#fffaf7',
@@ -76,9 +84,8 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
         <SecurePurchaseElement />
       </div>
 
-      <BuildInfo />
-    </div>
-    
+      <Card>
+        <div className="p-4">
           <Button 
             className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
             onClick={handleCTAClick}
@@ -113,6 +120,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
 
       <Testimonials />
       <Guarantee />
+      <BuildInfo />
     </div>
   );
 };
