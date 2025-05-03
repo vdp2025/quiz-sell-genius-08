@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Card } from '@/components/ui/card';
@@ -32,81 +33,49 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
   };
 
   return (
-    <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
-      <div className="text-center">
-        <Logo className="h-20 mx-auto mb-8" />
-      </div>
+ <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+  <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
 
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-          {finalConfig.title}
-        </h2>
-        <p className="text-[#3a3a3a]">
-          {finalConfig.subtitle}
-        </p>
-      </div>
+  {/* Mockup do produto */}
+  <div className="w-full mb-4">
+    <img
+      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+      alt="Mockup dos produtos digitais"
+      className="w-full h-auto rounded-lg shadow-md mx-auto"
+      loading="lazy"
+    />
+  </div>
 
-      <img
-        src={finalConfig.heroImage}
-        alt="Resultado do Quiz Visagismo"
-        className="w-full rounded-lg mb-8"
-      />
-
-      <Card className="p-6 border-[#aa6b5d]/20 bg-white">
-        <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-          Guia de Estilo e Imagem + Bônus Exclusivos
-        </h2>
-
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-          alt="Todos os produtos e bônus mockup"
-          className="w-full rounded-lg mb-6"
-        />
-
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
-            <div className="text-center md:text-right">
-              <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
-              <p className="text-lg line-through text-[#3a3a3a]/60">
-                R$ {finalConfig.regularPrice}
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-              <p className="text-3xl font-bold text-[#aa6b5d]">
-                R$ {finalConfig.price}
-              </p>
-            </div>
-          </div>
-
-          <Button 
-            className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-            onClick={() => window.location.href = finalConfig.ctaUrl}
-          >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            {finalConfig.ctaText}
-          </Button>
-        </div>
-      </Card>
-
-      <BenefitList />
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-          alt="Mockup celular peças-chave por dentro"
-          className="w-full rounded-lg"
-        />
-        <img
-          src={finalConfig.heroImage2}
-          alt="Foto Gisele Galvão"
-          className="w-full rounded-lg"
-        />
-      </div>
-
-      <Testimonials />
-      <Guarantee />
+  {/* Lista de valores dos itens */}
+  <div className="space-y-3 mb-6">
+    <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+      <span>Guia Principal</span>
+      <span className="font-medium">R$ 67,00</span>
     </div>
+    <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+      <span>Bônus - Peças-chave</span>
+      <span className="font-medium">R$ 79,00</span>
+    </div>
+    <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+      <span>Bônus - Visagismo Facial</span>
+      <span className="font-medium">R$ 29,00</span>
+    </div>
+    <div className="flex justify-between items-center p-2 pt-3 font-bold">
+      <span>Valor Total</span>
+      <div className="relative">
+        <span>R$ 175,00</span>
+        <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+      </div>
+    </div>
+  </div>
+
+  {/* Preço com destaque final */}
+  <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+    <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+    <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+    <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou 4x de R$ 10,86</p>
+  </div>
+</div>
   );
 };
 
