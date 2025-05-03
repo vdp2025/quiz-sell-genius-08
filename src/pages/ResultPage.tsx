@@ -132,52 +132,39 @@ const ResultPage: React.FC = () => {
 
       <AnimatedWrapper animation="fade" show={true} duration={400} delay={950}>
         <div className="text-center my-10">
-          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
-            Vista-se de Você — na Prática
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">Vista-se de Você — na Prática</h2>
           <div className="elegant-divider"></div>
-          <p className="text-[#432818] mb-6 max-w-xl mx-auto">
-            Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
-            O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
-            com autenticidade e transformar sua imagem em ferramenta de poder.
-          </p>
-          <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
-            <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
-              Descubra Como Aplicar Seu Estilo na Prática
-            </h3>
-            <div className="flex justify-center">
-              <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
-            </div>
+          <p className="text-[#432818] mb-6 max-w-xl mx-auto">Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir com autenticidade e transformar sua imagem em ferramenta de poder.</p>
+          <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
+            <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
+            <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
+              {['Looks com intenção e identidade', 'Cores, modelagens e tecidos a seu favor', 'Imagem alinhada aos seus objetivos', 'Guarda-roupa funcional, sem compras por impulso'].map((item, index) => (
+                <li key={index} className="flex items-start">
+                  <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
+                    <CheckCircle className="h-3 w-3" />
+                  </div>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-          }}>
+          <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d" style={{ background: 'linear-gradient(to right, #4CAF50, #45a049)', boxShadow: '0 4px 14px rgba(76, 175, 80, 0.4)', fontSize: '1rem' }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
             <span className="flex items-center justify-center gap-2">
-              <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-              Quero meu Guia de Estilo Agora
+              <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+              <span>Garantir Meu Guia + Bônus Especiais</span>
             </span>
           </Button>
-          <div className="mt-6">
-            <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d" style={{
-              background: "linear-gradient(to right, #4CAF50, #45a049)",
-              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-              fontSize: "1rem"
-            }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                <span>Garantir Meu Guia + Bônus Especiais</span>
-              </span>
-            </Button>
-          </div>
           <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full"></div>
           <SecurePurchaseElement />
+          <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+            <Lock className="w-3 h-3" />
+            <span>Oferta exclusiva nesta página</span>
+          </p>
         </div>
       </AnimatedWrapper>
 
       <GuaranteeSection />
       <MentorSection />
-
       <BuildInfo />
     </div>
   );
