@@ -109,6 +109,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
         alt="Imagem adicional bônus"
         className="w-full rounded-lg"
+        onError={(e) => e.currentTarget.style.display='none'}
       />
 
       <Testimonials />
