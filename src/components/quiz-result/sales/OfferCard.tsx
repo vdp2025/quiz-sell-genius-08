@@ -33,53 +33,39 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
   };
 
   return (
- <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
-      <div className="text-center">
-        <Logo className="h-20 mx-auto mb-8" />
-      </div>
-
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-          {finalConfig.title}
-        </h2>
-        <p className="text-[#3a3a3a]">
-          {finalConfig.subtitle}
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    }}>
+      <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+        <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+        <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+        <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+        <p className="text-sm text-[#432818] mt-2">
+          ou <strong>4x de R$ 10,86</strong> no cartão
         </p>
       </div>
 
-      <img
-        src={finalConfig.heroImage}
-        alt="Resultado do Quiz Visagismo"
-        className="w-full rounded-lg mb-8"
-      />
+      <div className="text-center mt-6">
+        <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
+          background: 'linear-gradient(to right, #4CAF50, #45a049)',
+          boxShadow: '0 4px 14px rgba(76, 175, 80, 0.4)'
+        }}>
+          <span className="flex items-center justify-center gap-2">
+            <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+            Garantir Meu Guia + Bônus Especiais
+          </span>
+        </Button>
+      </div>
 
-      <Card className="p-6 border-[#aa6b5d]/20 bg-white">
-        <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-          Guia de Estilo e Imagem + Bônus Exclusivos
-        </h2>
+      <div className="mt-4">
+        <SecurePurchaseElement />
+      </div>
 
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-          alt="Todos os produtos e bônus mockup"
-          className="w-full rounded-lg mb-6"
-        />
-
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
-            <div className="text-center md:text-right">
-              <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
-              <p className="text-lg line-through text-[#3a3a3a]/60">
-                R$ {finalConfig.regularPrice}
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-              <p className="text-3xl font-bold text-[#aa6b5d]">
-                R$ {finalConfig.price}
-              </p>
-            </div>
-          </div>
-
+      <BuildInfo />
+    </div>
+    
           <Button 
             className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
             onClick={() => window.location.href = finalConfig.ctaUrl}
