@@ -33,7 +33,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
   };
 
   return (
- <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+<div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
   <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
 
   {/* Mockup do produto */}
