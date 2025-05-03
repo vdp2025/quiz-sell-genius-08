@@ -70,7 +70,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           />
           <Button
             type="submit"
-            className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 text-base rounded-md shadow transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 text-base rounded-md shadow transition-all duration-500 ease-in-out animate-pulse focus:outline-none focus:ring-2 focus:ring-[#b29670] focus:ring-offset-2"
             disabled={!nome.trim()}
           >
             Quero descobrir meu estilo agora
