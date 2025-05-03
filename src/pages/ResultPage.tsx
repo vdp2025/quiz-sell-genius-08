@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -25,6 +23,8 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+import { useUtmParameters } from '@/hooks/useUtmParameters';
+
 const ResultPage: React.FC = () => {
   const {
     primaryStyle,
@@ -48,6 +48,9 @@ const ResultPage: React.FC = () => {
     minDuration: isLowPerformance ? 400 : 800,
     disableTransitions: isLowPerformance
   });
+
+  // Use UTM parameters hook
+  const { addUtmToUrl } = useUtmParameters();
 
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
@@ -99,7 +102,11 @@ const ResultPage: React.FC = () => {
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    
+    // Add UTM parameters to the Hotmart URL
+    const hotmartUrl = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    const urlWithUtm = addUtmToUrl(hotmartUrl);
+    window.location.href = urlWithUtm;
   };
   return <div className="min-h-screen relative overflow-hidden" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
@@ -307,4 +314,5 @@ const ResultPage: React.FC = () => {
       <BuildInfo />
     </div>;
 };
+
 export default ResultPage;

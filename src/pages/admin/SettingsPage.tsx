@@ -8,6 +8,7 @@ import { MarketingTab } from '@/components/settings/MarketingTab';
 import { ApiIntegrationsTab } from '@/components/settings/ApiIntegrationsTab';
 import { AdvancedTab } from '@/components/settings/AdvancedTab';
 import { FacebookAdsTab } from '@/components/settings/FacebookAdsTab';
+import { UtmSettingsTab } from '@/components/settings/UtmSettingsTab';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const SettingsPage = () => {
@@ -27,9 +28,10 @@ const SettingsPage = () => {
         <h1 className="text-2xl font-semibold mb-6">Configurações</h1>
         
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
-          <TabsList className="grid grid-cols-6 gap-1">
+          <TabsList className="grid grid-cols-7 gap-1">
             <TabsTrigger value="appearance">Aparência</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="utm">UTM</TabsTrigger>
             <TabsTrigger value="marketing">Marketing</TabsTrigger>
             <TabsTrigger value="facebook-ads">Facebook Ads</TabsTrigger>
             <TabsTrigger value="integrations">API</TabsTrigger>
@@ -42,6 +44,10 @@ const SettingsPage = () => {
           
           <TabsContent value="analytics">
             <AnalyticsTab />
+          </TabsContent>
+          
+          <TabsContent value="utm">
+            <UtmSettingsTab />
           </TabsContent>
           
           <TabsContent value="marketing">

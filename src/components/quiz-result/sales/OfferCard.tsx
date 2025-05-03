@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import Testimonials from './Testimonials';
 import Guarantee from './Guarantee';
 import Logo from '../../ui/logo';
 import { OfferContent } from '@/types/resultPageConfig';
+import { useUtmParameters } from '@/hooks/useUtmParameters';
 
 interface OfferCardProps {
   primaryStyle: StyleResult;
@@ -30,6 +31,18 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
   const finalConfig = {
     ...defaultConfig,
     ...config
+  };
+
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
+  // Use UTM parameters hook
+  const { addUtmToUrl } = useUtmParameters();
+
+  // Update the CTA URL handler to include UTM parameters
+  const handleCTAClick = () => {
+    // Add UTM parameters to the CTA URL
+    const urlWithUtm = addUtmToUrl(finalConfig.ctaUrl);
+    window.location.href = urlWithUtm;
   };
 
   return (
@@ -68,7 +81,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
     
           <Button 
             className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-            onClick={() => window.location.href = finalConfig.ctaUrl}
+            onClick={handleCTAClick}
           >
             <ShoppingCart className="w-5 h-5 mr-2" />
             {finalConfig.ctaText}

@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface UtmParameters {
   source?: string;
@@ -16,12 +17,45 @@ export interface UtmParameters {
  */
 export const useUtmParameters = () => {
   const [utmParams, setUtmParams] = useState<UtmParameters>({});
+  const [domainBase, setDomainBase] = useState<string>('giselegalvao.com.br');
   
   useEffect(() => {
+    // Carregar configuração de domínio do localStorage, se disponível
+    const savedDomain = localStorage.getItem('domain_base');
+    if (savedDomain) {
+      setDomainBase(savedDomain);
+    }
+    
     // Captura parâmetros UTM ao carregar o componente
     const capturedParams = captureUtmParameters();
     setUtmParams(capturedParams);
+    
+    // Se tiver parâmetros UTM, salve no Supabase para análises
+    if (Object.keys(capturedParams).length > 0) {
+      saveUtmToSupabase(capturedParams);
+    }
   }, []);
+  
+  /**
+   * Salva os parâmetros UTM no Supabase para análise
+   */
+  const saveUtmToSupabase = async (params: UtmParameters) => {
+    try {
+      const { error } = await supabase.from('utm_analytics').insert({
+        utm_source: params.source,
+        utm_medium: params.medium,
+        utm_campaign: params.campaign
+      });
+      
+      if (error) {
+        console.error('Error saving UTM parameters to Supabase:', error);
+      } else {
+        console.log('UTM parameters saved to Supabase successfully');
+      }
+    } catch (error) {
+      console.error('Error in saveUtmToSupabase:', error);
+    }
+  };
   
   /**
    * Captura parâmetros UTM da URL atual
@@ -90,14 +124,56 @@ export const useUtmParameters = () => {
   const addUtmToUrl = (url: string): string => {
     if (Object.keys(utmParams).length === 0) return url;
     
-    const urlObj = new URL(url);
-    if (utmParams.source) urlObj.searchParams.append('utm_source', utmParams.source);
-    if (utmParams.medium) urlObj.searchParams.append('utm_medium', utmParams.medium);
-    if (utmParams.campaign) urlObj.searchParams.append('utm_campaign', utmParams.campaign);
-    if (utmParams.content) urlObj.searchParams.append('utm_content', utmParams.content);
-    if (utmParams.term) urlObj.searchParams.append('utm_term', utmParams.term);
+    try {
+      const urlObj = new URL(url);
+      if (utmParams.source) urlObj.searchParams.append('utm_source', utmParams.source);
+      if (utmParams.medium) urlObj.searchParams.append('utm_medium', utmParams.medium);
+      if (utmParams.campaign) urlObj.searchParams.append('utm_campaign', utmParams.campaign);
+      if (utmParams.content) urlObj.searchParams.append('utm_content', utmParams.content);
+      if (utmParams.term) urlObj.searchParams.append('utm_term', utmParams.term);
+      if (utmParams.id) urlObj.searchParams.append('utm_id', utmParams.id);
+      if (utmParams.fbclid) urlObj.searchParams.append('fbclid', utmParams.fbclid);
+      
+      return urlObj.toString();
+    } catch (error) {
+      console.error('Error adding UTM parameters to URL:', error);
+      return url;
+    }
+  };
+  
+  /**
+   * Configura o domínio base para uso nos links UTM
+   */
+  const setBaseDomain = (domain: string) => {
+    setDomainBase(domain);
+    localStorage.setItem('domain_base', domain);
+  };
+  
+  /**
+   * Gera links UTM completos para diferentes canais
+   */
+  const generateUtmLink = (
+    path: string = '',
+    source: string = 'facebook',
+    medium: string = 'social',
+    campaign: string = 'brand',
+    content?: string,
+    term?: string
+  ): string => {
+    let baseUrl = `https://${domainBase}`;
+    if (path && !path.startsWith('/')) {
+      baseUrl += '/';
+    }
+    baseUrl += path;
     
-    return urlObj.toString();
+    const url = new URL(baseUrl);
+    url.searchParams.append('utm_source', source);
+    url.searchParams.append('utm_medium', medium);
+    url.searchParams.append('utm_campaign', campaign);
+    if (content) url.searchParams.append('utm_content', content);
+    if (term) url.searchParams.append('utm_term', term);
+    
+    return url.toString();
   };
   
   return {
@@ -106,6 +182,9 @@ export const useUtmParameters = () => {
     isFromCampaign,
     isFromSource,
     getUtmParameter,
-    addUtmToUrl
+    addUtmToUrl,
+    domainBase,
+    setBaseDomain,
+    generateUtmLink
   };
 };
