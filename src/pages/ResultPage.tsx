@@ -5,7 +5,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
+import { ShoppingCart, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -21,7 +21,6 @@ import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
-import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 
 const ResultPage: React.FC = () => {
@@ -113,7 +112,6 @@ const ResultPage: React.FC = () => {
               <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">Exclusivo</div>
             </div>
 
-            {/* Texto posicionado corretamente após a imagem do guia */}
             <div className="text-center mt-10 px-4">
               <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
                 Vista-se de Você — na Prática
@@ -148,59 +146,56 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
 
             <AnimatedWrapper animation="fade" show={true} duration={400} delay={1100}>
-              $1
+              <div className="text-center mt-10">
+                <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+                  O que você recebe hoje
+                </h2>
+                <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+                  <div className="space-y-3 mb-6">
+                    <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                      <span>Guia Principal</span>
+                      <span className="font-medium">R$ 67,00</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                      <span>Bônus - Peças-chave</span>
+                      <span className="font-medium">R$ 79,00</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                      <span>Bônus - Visagismo Facial</span>
+                      <span className="font-medium">R$ 29,00</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                      <span>Valor Total</span>
+                      <div className="relative">
+                        <span>R$ 175,00</span>
+                        <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                    <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                    <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+                    <p className="text-sm text-[#432818] mt-1">ou 4x de R$ 10,86</p>
+                  </div>
+                </div>
 
-<AnimatedWrapper animation="fade" show={true} duration={400} delay={1200}>
-  <div className="text-center mt-10">
-    <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
-      O que você recebe hoje
-    </h2>
-    <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
-      <div className="space-y-3 mb-6">
-        <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-          <span>Guia Principal</span>
-          <span className="font-medium">R$ 67,00</span>
-        </div>
-        <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-          <span>Bônus - Peças-chave</span>
-          <span className="font-medium">R$ 79,00</span>
-        </div>
-        <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-          <span>Bônus - Visagismo Facial</span>
-          <span className="font-medium">R$ 29,00</span>
-        </div>
-        <div className="flex justify-between items-center p-2 pt-3 font-bold">
-          <span>Valor Total</span>
-          <div className="relative">
-            <span>R$ 175,00</span>
-            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
-          </div>
-        </div>
-      </div>
-      <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-        <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-        <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-        <p className="text-sm text-[#432818] mt-1">ou 4x de R$ 10,86</p>
-      </div>
-    </div>
+                <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-cta-green mb-2" style={{
+                  background: "linear-gradient(to right, #4CAF50, #45a049)",
+                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                  fontSize: "1rem"
+                }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
+                  <span className="flex items-center justify-center gap-2">
+                    <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                    <span>Garantir Meu Guia + Bônus Especiais</span>
+                  </span>
+                </Button>
 
-    <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-cta-green mb-2" style={{
-      background: "linear-gradient(to right, #4CAF50, #45a049)",
-      boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-      fontSize: "1rem"
-    }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
-      <span className="flex items-center justify-center gap-2">
-        <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-        <span>Garantir Meu Guia + Bônus Especiais</span>
-      </span>
-    </Button>
-
-    <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
-      <Lock className="w-3 h-3" />
-      <span>Pagamento 100% seguro</span>
-    </p>
-  </div>
-</AnimatedWrapper>
+                <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+                  <Lock className="w-3 h-3" />
+                  <span>Pagamento 100% seguro</span>
+                </p>
+              </div>
+            </AnimatedWrapper>
           </AnimatedWrapper>
         </Card>
         <BuildInfo />
