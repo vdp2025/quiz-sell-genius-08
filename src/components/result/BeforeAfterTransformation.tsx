@@ -12,13 +12,18 @@ const BeforeAfterTransformation: React.FC = () => {
   const transformations = [
     {
       id: 1,
-      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-      name: "Adriana"
+      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+      name: "Transformação Real"
     },
     {
       id: 2,
-      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-      name: "Mariangela"
+      image: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/5702e50d-7785-426a-a0c6-3c47af176523_p9acfp.webp",
+      name: "Antes e Depois"
+    },
+    {
+      id: 3,
+      image: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/6cceaaa9-9383-4890-95a4-da036f8421e3_u7tuaw.webp",
+      name: "Resultado Transformador"
     }
   ];
 
@@ -129,7 +134,7 @@ const BeforeAfterTransformation: React.FC = () => {
                 <div key={transformation.id} className="w-full flex-shrink-0 relative">
                   <img 
                     src={transformation.image} 
-                    alt={`Transformação de ${transformation.name}`}
+                    alt={`Transformação de estilo`}
                     className="w-full h-auto object-cover rounded-lg shadow-md" 
                     loading={index === 0 ? "eager" : "lazy"}
                   />
