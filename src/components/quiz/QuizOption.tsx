@@ -49,11 +49,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]" 
-              : "border-brand-gold/60 shadow-sm ring-1 ring-brand-gold/30 transform scale-[1.01]"
+              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out" 
+              : "border-brand-gold/60 shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out"
             : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-sm" 
-              : "hover:border-brand-gold/40 hover:shadow-sm"
+              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md transition-all duration-300 ease-in-out" 
+              : "hover:border-brand-gold/40 hover:shadow-md transition-all duration-300 ease-in-out"
         )}
       >
         {type !== 'text' && option.imageUrl && (
