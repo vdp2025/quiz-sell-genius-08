@@ -116,6 +116,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
       onComponentDelete={handleDeleteComponent}
       onSelectComponent={setSelectedComponentId}
     />
+  );
 };
 
 export default QuizEditorPanel;
