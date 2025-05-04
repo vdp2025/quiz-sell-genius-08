@@ -161,15 +161,14 @@ export const UtmTab: React.FC<UtmTabProps> = ({
             <CardDescription className="text-xs">Distribuição de usuários por fonte UTM</CardDescription>
           </CardHeader>
           <CardContent className="pt-1 px-2">
-            <div className="h-[55px]">
+            <div className="h-[100px]">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                   <Pie
                     data={sourceData}
                     cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={25}
+                    cy="50%"                    labelLine={false}
+                    outerRadius={50}
                     fill="#8884d8"
                     dataKey="value"
                     label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
