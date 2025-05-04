@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
-import { trackButtonClick } from '@/utils/analytics';
+// TODO: Import analytics tracking once utils/analytics module is created
 
 // Define your transformations data
 const transformations = [
