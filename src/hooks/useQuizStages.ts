@@ -109,14 +109,14 @@ export const useQuizStages = () => {
     }
     
     // Cria uma cópia profunda do objeto de configuração
-    const configCopy = stageToDuplicate.config ? JSON.parse(JSON.stringify(stageToDuplicate.config)) : undefined;
+    const configCopy = 'config' in stageToDuplicate ? JSON.parse(JSON.stringify(stageToDuplicate['config'])) : undefined;
     
     const newStage: QuizStage = {
       id: `stage-${Date.now()}`,
       title: stageTitle,
       order: stages.length,
       type: stageToDuplicate.type,
-      config: configCopy
+      ...(configCopy && { config: configCopy })
     };
     
     setStages(prev => [...prev, newStage]);

@@ -3,7 +3,10 @@
 
 /* Button Effects */
 .btn-elegant {
-  @apply relative overflow-hidden transition-all duration-300 transform;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  transform: translateZ(0);
   background: linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%);
 }
 

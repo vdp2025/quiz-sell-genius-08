@@ -111,7 +111,7 @@ export const quizTemplates: QuizTemplate[] = [
         title: 'Etapa 4: Página de Resultado',
         order: 3,
         type: 'result',
-        config: {
+        stageConfig: {
           title: 'Seu Estilo Pessoal',
           subtitle: 'Baseado nas suas respostas, seu estilo predominante é:',
           ctaText: 'Ver Guia Completo',
