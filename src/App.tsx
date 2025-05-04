@@ -79,7 +79,7 @@ const App = () => {
               <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
               <Route path="/admin/settings" element={<SettingsPage />} />
               <Route path="/admin/analytics" element={<AnalyticsPage />} />
-              <Route path="/ab-test" element={<ABTestPage />} />
+              <Route path="/admin/ab-test" element={<ABTestPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
