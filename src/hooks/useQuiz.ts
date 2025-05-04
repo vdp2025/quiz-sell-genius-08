@@ -72,7 +72,7 @@ export const useQuiz = () => {
     }
   };
   
-  const submitResults = async (results: QuizResult) => {
+  const submitResults = async (results: QuizResult, clickOrder: string[]) => {
     try {
       console.log("Results submitted:", results);
       // Save results to localStorage
@@ -80,6 +80,16 @@ export const useQuiz = () => {
       // Update state
       setPrimaryStyle(results.primaryStyle);
       setSecondaryStyles(results.secondaryStyles || []);
+      
+      // Implement tie-breaking logic based on click order
+      if (results.secondaryStyles.length > 1) {
+        results.secondaryStyles.sort((a, b) => {
+          if (a.score === b.score) {
+            return clickOrder.indexOf(a.category) - clickOrder.indexOf(b.category);
+          }
+          return b.score - a.score;
+        });
+      }
       
       return window.location.href = '/resultado';
     } catch (error) {
