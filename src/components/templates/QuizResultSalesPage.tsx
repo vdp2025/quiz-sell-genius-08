@@ -171,7 +171,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"
                 alt="Resultado do Quiz Visagismo"
                 className="rounded-lg shadow-lg w-full"
-                loading="eager"
+                loading="lazy"
                 width="600"
                 height="400"
               />
@@ -191,7 +191,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
                 alt="Mockup do Guia de Estilo"
                 className="rounded-lg shadow-md w-full"
-                loading="eager"
+                loading="lazy"
                 width="600"
                 height="400"
               />
