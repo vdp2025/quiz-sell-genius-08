@@ -17,25 +17,18 @@ const BonusSection: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow relative overflow-hidden">
-            {/* Faixa decorativa no canto */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 rotate-45">
-              <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] flex items-end justify-center pb-1">
-                <span className="text-white text-xs font-bold">EXCLUSIVO</span>
-              </div>
-            </div>
-            
             <div className="flex justify-center mb-4">
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" 
                 alt="Bônus: Peças-chave do Guarda-roupa" 
-                className="w-full max-w-[250px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                className="w-full max-w-[300px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
                 loading="lazy"
                 srcSet="
                   https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_200/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 200w,
                   https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_300/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 300w,
-                  https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 400w
+                  https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_400/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 400w
                 "
-                sizes="(max-width: 768px) 45vw, 250px"
+                sizes="(max-width: 768px) 45vw, 300px"
               />
             </div>
             <h3 className="text-lg font-medium text-[#aa6b5d] mb-2 flex items-center">
@@ -55,25 +48,18 @@ const BonusSection: React.FC = () => {
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow relative overflow-hidden">
-            {/* Faixa decorativa no canto */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 rotate-45">
-              <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] flex items-end justify-center pb-1">
-                <span className="text-white text-xs font-bold">EXCLUSIVO</span>
-              </div>
-            </div>
-            
             <div className="flex justify-center mb-4">
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
                 alt="Bônus: Visagismo Facial" 
-                className="w-full max-w-[250px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                className="w-full max-w-[300px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
                 loading="lazy"
                 srcSet="
                   https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_200/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 200w,
                   https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_300/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 300w,
-                  https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 400w
+                  https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_400/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 400w
                 "
-                sizes="(max-width: 768px) 45vw, 250px"
+                sizes="(max-width: 768px) 45vw, 300px"
               />
             </div>
             <h3 className="text-lg font-medium text-[#aa6b5d] mb-2 flex items-center">

@@ -2,16 +2,36 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '../ui/button';
-import { ShoppingCart, CheckCircle } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 
 const BeforeAfterTransformation: React.FC = () => {
+  const [showAfter, setShowAfter] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp";
-    img.onload = () => setImagesLoaded(true);
+    const beforeImg = new Image();
+    const afterImg = new Image();
+    beforeImg.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp";
+    afterImg.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp";
+
+    let loadedCount = 0;
+    const onLoad = () => {
+      loadedCount++;
+      if (loadedCount === 2) {
+        setImagesLoaded(true);
+      }
+    };
+
+    beforeImg.onload = onLoad;
+    afterImg.onload = onLoad;
+
+    // Configurar intervalo para alternar entre antes e depois
+    const interval = setInterval(() => {
+      setShowAfter(prev => !prev);
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleCTAClick = () => {
@@ -37,24 +57,47 @@ const BeforeAfterTransformation: React.FC = () => {
               )}
               
               <div className={`relative w-full mb-4 ${imagesLoaded ? '' : 'hidden'}`}>
-                <div className="w-full">
-                  <img 
-                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp" 
-                    alt="Resultados Reais - Antes e Depois" 
-                    className="w-full h-auto object-cover rounded-lg shadow-md" 
-                    loading="eager"
-                    fetchPriority="high"
-                    srcSet="
-                      https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_400/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp 400w,
-                      https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_600/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp 600w,
-                      https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp 800w
-                    "
-                    sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 500px"
-                  />
-                  <div className="absolute top-2 left-2 bg-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-                    Resultados Reais
+                <div className="w-full overflow-hidden rounded-lg shadow-md relative">
+                  <div className="relative">
+                    <div className={`transition-opacity duration-1000 ${showAfter ? 'opacity-100' : 'opacity-0'} absolute inset-0`}>
+                      <img 
+                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp" 
+                        alt="Depois da Transformação" 
+                        className="w-full h-auto object-cover" 
+                        loading="eager"
+                        fetchPriority="high"
+                      />
+                      <div className="absolute top-2 right-2 bg-[#4CAF50] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                        Depois
+                      </div>
+                    </div>
+                    <div className={`transition-opacity duration-1000 ${showAfter ? 'opacity-0' : 'opacity-100'}`}>
+                      <img 
+                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp" 
+                        alt="Antes da Transformação" 
+                        className="w-full h-auto object-cover" 
+                        loading="eager"
+                      />
+                      <div className="absolute top-2 left-2 bg-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                        Antes
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <button 
+                      className={`w-2 h-2 rounded-full ${!showAfter ? 'bg-[#aa6b5d]' : 'bg-gray-300'}`}
+                      onClick={() => setShowAfter(false)}
+                      aria-label="Ver antes"
+                    />
+                    <button 
+                      className={`w-2 h-2 rounded-full ${showAfter ? 'bg-[#aa6b5d]' : 'bg-gray-300'}`}
+                      onClick={() => setShowAfter(true)}
+                      aria-label="Ver depois"
+                    />
                   </div>
                 </div>
+                <p className="text-center text-sm mt-2 font-medium text-[#432818]">Adriana</p>
               </div>
             </div>
             
