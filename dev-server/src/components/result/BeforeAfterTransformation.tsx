@@ -3,49 +3,88 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
-// TODO: Import analytics tracking once utils/analytics module is created
+import { trackButtonClick } from '@/utils/analytics';
 
-// Define your transformations data
-const transformations = [
+interface TransformationItem {
+  beforeImage: string;
+  afterImage: string;
+  name: string;
+}
+
+// Imagens otimizadas com melhor qualidade
+const transformations: TransformationItem[] = [
   {
-    beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744967537/before_image_1_wf5cgp.jpg',
-    afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744967537/after_image_1_dyryph.jpg',
-    name: 'Transformação 1'
-  },
+    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/q_auto:best,f_auto,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/q_auto:best,f_auto,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    name: "Adriana"
+  }, 
   {
-    beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744967537/before_image_2_hovqqh.jpg',
-    afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744967537/after_image_2_xcl4fy.jpg',
-    name: 'Transformação 2'
+    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/q_auto:best,f_auto,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/q_auto:best,f_auto,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+    name: "Mariangela"
   }
 ];
 
 const BeforeAfterTransformation: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState({ before: false, after: false });
-  const [showBefore, setShowBefore] = useState(false);
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [imagesLoaded, setImagesLoaded] = useState<{
+    before: boolean;
+    after: boolean;
+  }>({
+    before: false,
+    after: false
+  });
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
   const activeTransformation = transformations[activeIndex];
 
+  // Preload images to ensure they display correctly
   useEffect(() => {
-    const beforeImg = new Image();
-    const afterImg = new Image();
-    beforeImg.src = activeTransformation.beforeImage;
-    afterImg.src = activeTransformation.afterImage;
+    // Precarregar todas as imagens para melhor experiência
+    transformations.forEach((item) => {
+      const beforeImg = new Image();
+      const afterImg = new Image();
+      beforeImg.src = item.beforeImage;
+      afterImg.src = item.afterImage;
+      
+      if (item === activeTransformation) {
+        beforeImg.onload = () => setImagesLoaded(prev => ({
+          ...prev,
+          before: true
+        }));
+        afterImg.onload = () => setImagesLoaded(prev => ({
+          ...prev,
+          after: true
+        }));
+      }
+    });
+    
+    return () => {
+      // Cleanup
+    };
+  }, [activeIndex, activeTransformation]);
 
-    setImagesLoaded({ before: false, after: false });
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSliderPosition(Number(e.target.value));
+  };
 
-    beforeImg.onload = () => setImagesLoaded(prev => ({ ...prev, before: true }));
-    afterImg.onload = () => setImagesLoaded(prev => ({ ...prev, after: true }));
-  }, [activeTransformation]);
+  const handleDotClick = (index: number) => {
+    setActiveIndex(index);
+    // Reset images loaded state when changing transformation
+    setImagesLoaded({
+      before: false,
+      after: false
+    });
+  };
+  
+  const handleCTAClick = () => {
+    // Track checkout initiation
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+  };
 
   const areImagesReady = imagesLoaded.before && imagesLoaded.after;
-
-  const handleToggle = () => {
-    setShowBefore(!showBefore);
-  };
-
-  const nextTransformation = () => {
-    setActiveIndex((activeIndex + 1) % transformations.length);
-  };
 
   return (
     <div className="py-10">
@@ -64,43 +103,61 @@ const BeforeAfterTransformation: React.FC = () => {
               <div className="w-12 h-12 border-4 border-[#aa6b5d] border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
-
+          
           <div className={`relative h-[400px] md:h-[500px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
+            {/* Full image without slider */}
             <div className="absolute inset-0 w-full h-full">
               <img 
-                src={showBefore ? activeTransformation.beforeImage : activeTransformation.afterImage} 
-                alt={`Transformação - ${activeTransformation.name} - ${showBefore ? 'Antes' : 'Depois'}`} 
+                src={activeTransformation.afterImage} 
+                alt={`Transformação - ${activeTransformation.name}`} 
                 className="w-full h-full object-cover" 
                 loading="eager"
                 fetchPriority="high"
               />
             </div>
 
-            <div className="absolute top-4 right-4">
-              <button 
-                className="bg-white/90 px-4 py-2 rounded-full shadow-md text-sm font-medium text-[#432818] hover:bg-white transition-colors"
-                onClick={handleToggle}
-              >
-                Ver {showBefore ? 'Depois' : 'Antes'}
-              </button>
+            <div className="absolute bottom-4 left-0 right-0 mx-auto bg-white/80 backdrop-blur-sm py-2 px-4 text-center rounded-lg max-w-xs">
+              <p className="font-medium">{activeTransformation.name}</p>
             </div>
+          </div>
 
-            <div className="absolute bottom-4 left-4">
-              <button 
-                className="bg-[#aa6b5d]/90 px-4 py-2 rounded-full shadow-md text-sm font-medium text-white hover:bg-[#aa6b5d] transition-colors"
-                onClick={nextTransformation}
-              >
-                Próxima Transformação
-              </button>
+          {/* Dots navigation */}
+          {transformations.length > 1 && (
+            <div className="flex justify-center gap-2 mt-4">
+              {transformations.map((_, index) => (
+                <button 
+                  key={index} 
+                  className={`w-3 h-3 rounded-full ${index === activeIndex ? 'bg-[#aa6b5d]' : 'bg-[#aa6b5d]/30'}`} 
+                  onClick={() => handleDotClick(index)} 
+                  aria-label={`Transformação ${index + 1}`}
+                />
+              ))}
             </div>
-          </div>
-          
-          <div className="text-center">
-            <p className="font-medium text-[#432818]">
-              {showBefore ? 'Antes' : 'Depois'} de descobrir seu estilo pessoal
-            </p>
-          </div>
+          )}
         </Card>
+        
+        {/* CTA Button added directly below the transformation images */}
+        <div className="mt-8 text-center">
+          <Button 
+            onClick={handleCTAClick} 
+            className="text-white py-4 px-6 rounded-md transition-all duration-300"
+            style={{
+              background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
+              boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)"
+            }}
+            onMouseEnter={() => setIsButtonHovered(true)} 
+            onMouseLeave={() => setIsButtonHovered(false)}
+          >
+            <span className="flex items-center justify-center gap-2">
+              <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+              Quero Descobrir Meu Guia Completo
+            </span>
+          </Button>
+          
+          <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+            Oferta por tempo limitado - Acesso imediato
+          </p>
+        </div>
       </div>
     </div>
   );

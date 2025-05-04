@@ -78,8 +78,17 @@ const PricingSection: React.FC<PricingSectionProps> = ({
               <span className="text-lg">,{price.split(',')[1] || '00'}</span>
               <div className="absolute -top-2 -right-4 rotate-12 text-xs bg-[#aa6b5d] text-white px-2 py-0.5 rounded-full">HOJE</div>
             </div>
-            <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+            <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em 4x de R$ 10,86</p>
           </div>
+        </div>
+        
+        {/* Payment method images */}
+        <div className="mt-3 mb-4 text-center">
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+            alt="Métodos de pagamento"
+            className="w-full max-w-xs mx-auto"
+          />
         </div>
 
         {/* Security Badge */}

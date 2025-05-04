@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -205,8 +204,7 @@ const ResultPage: React.FC = () => {
             
             <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
               <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                
-                
+                4X de R$ 10,86 sem juros
               </p>
             </div>
             
@@ -249,7 +247,7 @@ const ResultPage: React.FC = () => {
               </ul>
             </div>
 
-            {/* Updated Value Stack Section with new prices and fixed red line */}
+            {/* Updated Value Stack Section with new prices and installment option */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
@@ -278,7 +276,16 @@ const ResultPage: React.FC = () => {
               <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
                 <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
                 <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em 4X de R$ 10,86</p>
+              </div>
+              
+              {/* Payment methods image */}
+              <div className="mt-4">
+                <img
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+                  alt="Métodos de pagamento"
+                  className="w-full rounded-lg"
+                />
               </div>
             </div>
 
