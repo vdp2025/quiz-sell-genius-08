@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
+import { Gift, Star } from 'lucide-react';
 
 const BonusSection: React.FC = () => {
   return (
@@ -15,10 +16,14 @@ const BonusSection: React.FC = () => {
 
       <div className="max-w-4xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow relative">
-            <div className="absolute -top-3 -right-3 bg-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-bold transform rotate-12 shadow-md">
-              Valor: R$ 79,00
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow relative overflow-hidden">
+            {/* Faixa decorativa no canto */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 rotate-45">
+              <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] flex items-end justify-center pb-1">
+                <span className="text-white text-xs font-bold">EXCLUSIVO</span>
+              </div>
             </div>
+            
             <div className="flex justify-center mb-4">
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" 
@@ -33,14 +38,30 @@ const BonusSection: React.FC = () => {
                 sizes="(max-width: 768px) 45vw, 250px"
               />
             </div>
-            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">Peças-chave do Guarda-roupa</h3>
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2 flex items-center">
+              <Gift className="w-5 h-5 mr-2 text-[#B89B7A]" />
+              Peças-chave do Guarda-roupa
+            </h3>
             <p className="text-[#432818] text-sm">Descubra as peças essenciais para seu estilo que maximizam suas combinações com investimento inteligente.</p>
+            
+            <div className="mt-3 flex items-center">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} className="w-4 h-4 fill-[#B89B7A] text-[#B89B7A]" />
+                ))}
+              </div>
+              <span className="ml-2 text-xs text-[#3a3a3a]">Edição Premium</span>
+            </div>
           </div>
           
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow relative">
-            <div className="absolute -top-3 -right-3 bg-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-bold transform rotate-12 shadow-md">
-              Valor: R$ 29,00
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow relative overflow-hidden">
+            {/* Faixa decorativa no canto */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 rotate-45">
+              <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] flex items-end justify-center pb-1">
+                <span className="text-white text-xs font-bold">EXCLUSIVO</span>
+              </div>
             </div>
+            
             <div className="flex justify-center mb-4">
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
@@ -55,8 +76,20 @@ const BonusSection: React.FC = () => {
                 sizes="(max-width: 768px) 45vw, 250px"
               />
             </div>
-            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">Visagismo Facial</h3>
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2 flex items-center">
+              <Gift className="w-5 h-5 mr-2 text-[#B89B7A]" />
+              Visagismo Facial
+            </h3>
             <p className="text-[#432818] text-sm">Aprenda a valorizar seus traços faciais com técnicas de maquiagem, cortes de cabelo e acessórios que harmonizam com seu rosto.</p>
+            
+            <div className="mt-3 flex items-center">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} className="w-4 h-4 fill-[#B89B7A] text-[#B89B7A]" />
+                ))}
+              </div>
+              <span className="ml-2 text-xs text-[#3a3a3a]">Edição Premium</span>
+            </div>
           </div>
         </div>
       </div>

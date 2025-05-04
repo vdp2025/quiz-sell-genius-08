@@ -5,30 +5,14 @@ import { Button } from '../ui/button';
 import { ShoppingCart, CheckCircle } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 
-const transformations = [
-  {
-    beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp',
-    afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp',
-    name: 'Transformação Visual'
-  }
-];
-
 const BeforeAfterTransformation: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState({ before: false, after: false });
-  const activeTransformation = transformations[activeIndex];
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
-    const beforeImg = new Image();
-    const afterImg = new Image();
-    beforeImg.src = activeTransformation.beforeImage;
-    afterImg.src = activeTransformation.afterImage;
-
-    beforeImg.onload = () => setImagesLoaded(prev => ({ ...prev, before: true }));
-    afterImg.onload = () => setImagesLoaded(prev => ({ ...prev, after: true }));
-  }, [activeTransformation]);
-
-  const areImagesReady = imagesLoaded.before && imagesLoaded.after;
+    const img = new Image();
+    img.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp";
+    img.onload = () => setImagesLoaded(true);
+  }, []);
 
   const handleCTAClick = () => {
     trackButtonClick('transformation_cta', 'Transformação CTA', 'results_page');
@@ -38,28 +22,25 @@ const BeforeAfterTransformation: React.FC = () => {
   return (
     <div className="py-10">
       <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] text-center mb-2">
-        Invista em uma Imagem que Trabalha a seu Favor
-      </h2>
-      <p className="text-center text-[#3a3a3a] mb-6 max-w-md mx-auto">
         Veja como outras mulheres transformaram seu estilo com nosso guia
-      </p>
+      </h2>
       <div className="elegant-divider w-32 mx-auto mt-0 mb-6"></div>
 
       <div className="max-w-2xl mx-auto">
         <Card className="p-6 card-elegant overflow-hidden">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              {!areImagesReady && (
+              {!imagesLoaded && (
                 <div className="h-auto w-full flex items-center justify-center bg-[#f9f4ef] p-8">
                   <div className="w-12 h-12 border-4 border-[#aa6b5d] border-t-transparent rounded-full animate-spin"></div>
                 </div>
               )}
               
-              <div className={`relative w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
+              <div className={`relative w-full mb-4 ${imagesLoaded ? '' : 'hidden'}`}>
                 <div className="w-full">
                   <img 
-                    src={activeTransformation.afterImage} 
-                    alt={`Transformação - ${activeTransformation.name}`} 
+                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp" 
+                    alt="Resultados Reais - Antes e Depois" 
                     className="w-full h-auto object-cover rounded-lg shadow-md" 
                     loading="eager"
                     fetchPriority="high"
