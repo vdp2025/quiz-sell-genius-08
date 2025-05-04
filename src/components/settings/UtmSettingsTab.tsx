@@ -27,10 +27,12 @@ export const UtmSettingsTab: React.FC = () => {
 
   const updateExampleLinks = (domain: string) => {
     setExampleLinks({
-      facebook: generateUtmLink('', 'facebook', 'social', 'brand', 'cta_button'),
-      instagram: generateUtmLink('', 'instagram', 'social', 'feed', 'story'),
-      email: generateUtmLink('', 'email', 'newsletter', 'weekly', 'footer'),
-      resultado: generateUtmLink('resultado', 'facebook', 'social', 'retargeting', 'ad_1')
+      facebook: generateUtmLink('https://giselegalvao.com.br/', 'facebook', 'social', 'brand', 'cta_button'),
+      instagram: generateUtmLink('https://giselegalvao.com.br/', 'instagram', 'social', 'feed', 'story'),
+      email: generateUtmLink('https://giselegalvao.com.br/', 'email', 'newsletter', 'weekly', 'footer'),
+      resultado: generateUtmLink('https://giselegalvao.com.br/resultado', 'facebook', 'social', 'retargeting', 'ad_1'),
+      giselegalvao: generateUtmLink('https://giselegalvao.com.br/', 'giselegalvao', 'website', 'homepage'),
+      giselegalvaoResultado: generateUtmLink('https://giselegalvao.com.br/resultado', 'giselegalvao', 'website', 'resultpage')
     });
   };
 
