@@ -53,10 +53,7 @@ function App() {
                 <Route path="/admin/settings" element={<SettingsPage />} />
                 <Route path="/admin/analytics" element={<AnalyticsPage />} />
                 <Route path="/admin/ab-test" element={<ABTestResults />} />
-<<<<<<< HEAD
                 {/* Rota para página não encontrada */}
-=======
->>>>>>> 9251e74a446c749a5e28b6e3359708544afeffce
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
               <Toaster />
