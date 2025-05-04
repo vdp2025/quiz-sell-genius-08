@@ -1,6 +1,4 @@
 
-
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -26,6 +24,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+
 const ResultPage: React.FC = () => {
   const {
     primaryStyle,
@@ -307,4 +306,5 @@ const ResultPage: React.FC = () => {
       <BuildInfo />
     </div>;
 };
+
 export default ResultPage;
