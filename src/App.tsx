@@ -11,6 +11,7 @@ import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import EditorNotFoundPage from './pages/EditorNotFoundPage';
 import EnhancedResultPageEditor from './pages/EnhancedResultPageEditorPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
@@ -78,6 +79,7 @@ const App = () => {
               <Route path="/admin" element={<AdminDashboard />} />
               {/* Manter apenas uma rota principal para o editor unificado */}
               <Route path="/admin/editor" element={<EditorPage />} />
+              <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
               {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
               <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
               <Route path="/admin/settings" element={<SettingsPage />} />
