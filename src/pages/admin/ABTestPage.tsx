@@ -1,24 +1,26 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { QuizResultSalesPage } from '@/components/templates/QuizResultSalesPage';
-import { ResultPage } from '@/components/pages/ResultPage';
+import QuizResultSalesPage from '@/components/templates/QuizResultSalesPage';
+import ResultPage from '@/components/pages/ResultPage';
 
 const ABTestPage: React.FC = () => {
   const [activeVersion, setActiveVersion] = useState<'A' | 'B'>('A');
   const navigate = useNavigate();
 
-  // Dados de exemplo para teste
+  // Dados de exemplo para teste com score adicionado
   const mockData = {
     primaryStyle: {
-      category: 'Natural',
-      percentage: 75
+      category: "Natural" as const, // Using as const to ensure it's the correct literal type
+      percentage: 75,
+      score: 75 // Added score property to fix the TypeScript error
     },
     secondaryStyles: [
-      { category: 'Clássico', percentage: 15 },
-      { category: 'Contemporâneo', percentage: 10 }
+      { category: "Clássico" as const, percentage: 15, score: 15 }, // Added as const to ensure it's the correct literal type
+      { category: "Contemporâneo" as const, percentage: 10, score: 10 } // Added as const to ensure it's the correct literal type
     ],
     userName: 'Visitante'
   };

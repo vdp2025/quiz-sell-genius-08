@@ -41,6 +41,7 @@ export interface QuizStage {
   type: 'cover' | 'question' | 'result' | 'strategic' | 'welcome';
   isEnabled?: boolean;
   componentId?: string;
+  config?: Record<string, any>; // Add config property to fix errors
 }
 
 export interface QuizComponentLayout {

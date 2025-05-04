@@ -275,9 +275,10 @@ export default defineLovable({
                 onClick={() => handleOptionClick(option.id)}
                 className={`
                   cursor-pointer rounded-lg overflow-hidden border-2 transition-all
+                  bg-white
                   ${selectedOptions.includes(option.id) 
-                    ? `border-[${accentColor}] shadow-lg` 
-                    : 'border-transparent hover:border-gray-300'}
+                    ? `border-[${accentColor}] shadow-lg transform scale-[1.01]` 
+                    : 'border-transparent shadow-sm hover:border-gray-300 hover:shadow-md hover:scale-[1.005]'}
                 `}
               >
                 {(layout.displayType === 'both' || layout.displayType === 'image') && (
@@ -311,7 +312,7 @@ export default defineLovable({
           <div className="flex justify-between mt-6">
             {navigation.showPrevButton && (
               <button 
-                className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-100 shadow-sm"
               >
                 {navigation.prevButtonText}
               </button>
@@ -321,7 +322,7 @@ export default defineLovable({
             
             {navigation.showNextButton && (
               <button 
-                className="px-6 py-2 rounded-md text-white"
+                className="px-6 py-2 rounded-md text-white shadow-sm"
                 style={{ backgroundColor: accentColor }}
                 disabled={selectedOptions.length === 0}
               >

@@ -11,9 +11,10 @@ import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import EnhancedResultPageEditor from './pages/EnhancedResultPageEditorPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
-//import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/toaster';
 import ABTestPage from './pages/admin/ABTestPage';
 
 // Avalia se o dispositivo tem performance limitada
@@ -70,6 +71,8 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
+              {/* Editor visual aprimorado para página de resultados */}
+              <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
               {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
               <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
               <Route path="/admin" element={<AdminDashboard />} />

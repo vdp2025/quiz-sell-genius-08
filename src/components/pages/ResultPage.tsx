@@ -1,5 +1,4 @@
 
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -25,6 +24,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+
 const ResultPage: React.FC = () => {
   const {
     primaryStyle,
@@ -51,6 +51,7 @@ const ResultPage: React.FC = () => {
 
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
@@ -83,11 +84,14 @@ const ResultPage: React.FC = () => {
       guide: true
     }));
   }, [primaryStyle, globalStyles.logo]);
+  
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
+  
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
+  
   const {
     category
   } = primaryStyle;
@@ -96,16 +100,19 @@ const ResultPage: React.FC = () => {
     guideImage,
     description
   } = styleConfig[category];
+  
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
-  return <div className="min-h-screen relative overflow-hidden" style={{
-    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-    color: globalStyles.textColor || '#432818',
-    fontFamily: globalStyles.fontFamily || 'inherit'
-  }}>
+  
+  return (
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    }}>
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
@@ -194,9 +201,9 @@ const ResultPage: React.FC = () => {
             </div>
             
             <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-          }}>
+              background: "linear-gradient(to right, #4CAF50, #45a049)",
+              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+            }}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 Quero meu Guia de Estilo Agora
@@ -240,133 +247,63 @@ const ResultPage: React.FC = () => {
             <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
-                {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => <li key={index} className="flex items-start">
+                {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => (
+                  <li key={index} className="flex items-start">
                     <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
                       <CheckCircle className="h-3 w-3" />
                     </div>
                     <span>{item}</span>
-                  </li>)}
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Updated Value Stack Section with new prices and fixed red line */}
-               <div className="space-y-6 bg-[#fffaf7] px-4 py-8 rounded-lg">
-      <div className="text-center">
-        <Logo className="h-20 mx-auto mb-8" />
-      </div>
+            <div className="bg-[#fffaf7] px-4 py-8 rounded-lg text-center mb-8">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
+                  Guia de Estilo e Imagem + Bônus Exclusivos
+                </h2>
+                <p className="text-[#3a3a3a]">
+                  Descubra seu estilo verdadeiro e aprenda a aplicá-lo
+                </p>
+              </div>
 
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-          {finalConfig.title}
-        </h2>
-        <p className="text-[#3a3a3a]">
-          {finalConfig.subtitle}
-        </p>
-      </div>
-
-      <img
-        src={finalConfig.heroImage}
-        alt="Resultado do Quiz Visagismo"
-        className="w-full rounded-lg mb-8"
-      />
-
-      <Card className="p-6 border-[#aa6b5d]/20 bg-white">
-        <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-          Guia de Estilo e Imagem + Bônus Exclusivos
-        </h2>
-
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-          alt="Todos os produtos e bônus mockup"
-          className="w-full rounded-lg mb-6"
-        />
-
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6">
-            <div className="text-center md:text-right">
-              <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor Total</p>
-              <p className="text-lg line-through text-[#3a3a3a]/60">
-                R$ {finalConfig.regularPrice}
-              </p>
+              <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+                <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                    <span>Guia Principal</span>
+                    <span className="font-medium">R$ 67,00</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                    <span>Bônus - Peças-chave</span>
+                    <span className="font-medium">R$ 79,00</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                    <span>Bônus - Visagismo Facial</span>
+                    <span className="font-medium">R$ 29,00</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                    <span>Valor Total</span>
+                    <div className="relative">
+                      <span>R$ 175,00</span>
+                      <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                  <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                  <p className="text-4xl font-bold gold-text">R$ 39,00</p>
+                  <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+                </div>
+              </div>
             </div>
-            <div className="text-center">
-              <p className="text-sm text-[#aa6b5d] mb-1">Oferta especial</p>
-              <p className="text-3xl font-bold text-[#aa6b5d]">
-                R$ {finalConfig.price}
-              </p>
-            </div>
-          </div>
-
-          <Button 
-            className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-            onClick={() => window.location.href = finalConfig.ctaUrl}
-          >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            {finalConfig.ctaText}
-          </Button>
-        </div>
-      </Card>
-
-      <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
-        <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
-        <div className="space-y-3 mb-6">
-          <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-            <span>Guia Principal</span>
-            <span className="font-medium">R$ 67,00</span>
-          </div>
-          <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-            <span>Bônus - Peças-chave</span>
-            <span className="font-medium">R$ 79,00</span>
-          </div>
-          <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-            <span>Bônus - Visagismo Facial</span>
-            <span className="font-medium">R$ 29,00</span>
-          </div>
-          <div className="flex justify-between items-center p-2 pt-3 font-bold">
-            <span>Valor Total</span>
-            <div className="relative">
-              <span>R$ 175,00</span>
-              <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
-            </div>
-          </div>
-        </div>
-        <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-          <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-          <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-          <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
-        </div>
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-          alt="Imagem adicional bônus"
-          className="w-full rounded-lg mt-6"
-          onError={(e) => e.currentTarget.style.display='none'}
-        />
-      </div>
-
-      <BenefitList />
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-          alt="Mockup celular peças-chave por dentro"
-          className="w-full rounded-lg"
-        />
-        <img
-          src={finalConfig.heroImage2}
-          alt="Foto Gisele Galvão"
-          className="w-full rounded-lg"
-        />
-      </div>
-
-      <Testimonials />
-      <Guarantee />
-    </div>
 
             <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
             fontSize: "1rem" /* Smaller font size for button */
-          }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
+            }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 <span>Garantir Meu Guia + Bônus Especiais</span>
@@ -384,6 +321,8 @@ const ResultPage: React.FC = () => {
       </div>
 
       <BuildInfo />
-    </div>;
+    </div>
+  );
 };
+
 export default ResultPage;

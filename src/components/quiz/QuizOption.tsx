@@ -45,14 +45,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "relative h-full flex flex-col",
           "transition-all duration-300 ease-out cursor-pointer", 
-          type === 'text' && "p-4 rounded-lg border backdrop-blur-[8px] bg-white/40",
+          type === 'text' && "p-4 rounded-lg border bg-white shadow-sm",
           type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-brand-gold/60 bg-white/50 backdrop-blur-[12px] shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out" 
+              ? "border-brand-gold/60 bg-white shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out" 
               : "border-brand-gold/60 shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out"
             : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white/45 hover:backdrop-blur-[10px] hover:scale-[1.01] hover:shadow-md transition-all duration-300 ease-in-out" 
+              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white hover:shadow-md hover:scale-[1.01] transition-all duration-300 ease-in-out" 
               : "hover:border-brand-gold/40 hover:shadow-md transition-all duration-300 ease-in-out"
         )}
       >
@@ -97,3 +97,4 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 };
 
 export { QuizOption };
+
