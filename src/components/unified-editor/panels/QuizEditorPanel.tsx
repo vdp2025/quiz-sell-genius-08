@@ -16,6 +16,7 @@ interface QuizEditorPanelProps {
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+  const [livePreview, setLivePreview] = useState<any>(null);
   
   const {
     components,
@@ -55,6 +56,11 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
   const handleUpdateComponent = (content: any) => {
     if (selectedComponentId) {
       updateComponent(selectedComponentId, { data: content });
+      // Atualiza o preview em tempo real
+      setLivePreview({
+        componentId: selectedComponentId,
+        content
+      });
     }
   };
   
@@ -132,7 +138,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
                   stageComponents.map((component) => (
                     <ComponentRenderer
                       key={component.id}
-                      component={component}
+                      component={livePreview?.componentId === component.id ? { ...component, data: livePreview.content } : component}
                       isSelected={component.id === selectedComponentId}
                       onSelect={() => setSelectedComponentId(component.id)}
                       onMove={handleMoveComponent}
