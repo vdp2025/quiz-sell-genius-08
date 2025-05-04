@@ -14,6 +14,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 import { Toaster } from '@/components/ui/toaster';
+import ABTestPage from './pages/ABTestPage';
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -78,6 +79,7 @@ const App = () => {
               <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
               <Route path="/admin/settings" element={<SettingsPage />} />
               <Route path="/admin/analytics" element={<AnalyticsPage />} />
+              <Route path="/ab-test" element={<ABTestPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
