@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
@@ -7,8 +7,9 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { QuizComponentType, QuizStage } from '@/types/quizBuilder';
-import ComponentRenderer from '@/components/quiz-builder/preview/ComponentRenderer';
-import PropertiesPanel from '@/components/editor/properties/PropertiesPanel';
+import BuilderLayout from '@/components/quiz-builder/components/BuilderLayout';
+import { ComponentPreviewPanel } from '@/components/quiz-builder/preview/ComponentPreviewPanel';
+import { PropertiesPanel } from '@/components/quiz-builder/PropertiesPanel';
 
 interface QuizEditorPanelProps {
   isPreviewing: boolean;
@@ -16,7 +17,6 @@ interface QuizEditorPanelProps {
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  const [livePreview, setLivePreview] = useState<any>(null);
   
   const {
     components,
@@ -98,75 +98,24 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {renderStageSelector()}
-      
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <UnifiedComponentsSidebar
-            activeTab="quiz"
-            onComponentSelect={handleComponentSelect}
-            activeStageType={activeStage?.type || null}
-          />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        <ResizablePanel defaultSize={55}>
-          <div className="h-full bg-[#F9F5F1] flex flex-col">
-            <ScrollArea className="flex-1 p-4">
-              <div className="min-h-full w-full max-w-4xl mx-auto">
-                {stageComponents.length === 0 ? (
-                  <div className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center">
-                    <p className="text-gray-500 mb-2">
-                      {activeStage 
-                        ? 'Adicione componentes para esta etapa usando o painel lateral.' 
-                        : 'Selecione uma etapa para adicionar componentes.'}
-                    </p>
-                    {activeStage && (
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {}}
-                        className="text-gray-500"
-                      >
-                        <Plus className="w-4 h-4 mr-1" /> Adicionar Componente
-                      </Button>
-                    )}
-                  </div>
-                ) : (
-                  stageComponents.map((component) => (
-                    <ComponentRenderer
-                      key={component.id}
-                      component={livePreview?.componentId === component.id ? { ...component, data: livePreview.content } : component}
-                      isSelected={component.id === selectedComponentId}
-                      onSelect={() => setSelectedComponentId(component.id)}
-                      onMove={handleMoveComponent}
-                      isPreviewing={isPreviewing}
-                    />
-                  ))
-                )}
-              </div>
-            </ScrollArea>
-          </div>
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-          <div className="h-full border-l border-[#B89B7A]/20 bg-white overflow-y-auto">
-            <PropertiesPanel
-              selectedComponentId={selectedComponentId}
-              onClose={() => setSelectedComponentId(null)}
-              blocks={[]}
-              onUpdate={handleUpdateComponent}
-              onDelete={handleDeleteComponent}
-            />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
-  );
+    <BuilderLayout
+      components={components}
+      stages={stages}
+      activeStageId={activeStageId}
+      selectedComponentId={selectedComponentId}
+      activeStage={activeStage}
+      isPreviewing={isPreviewing}
+      onComponentSelect={handleComponentSelect}
+      onStageAdd={addStage}
+      onStageSelect={setActiveStage}
+      onComponentMove={handleMoveComponent}
+      onStageMove={moveStage}
+      onStageUpdate={updateStage}
+      onStageDelete={deleteStage}
+      onComponentUpdate={updateComponent}
+      onComponentDelete={handleDeleteComponent}
+      onSelectComponent={setSelectedComponentId}
+    />
 };
 
 export default QuizEditorPanel;
