@@ -41,7 +41,7 @@ const BeforeAfterTransformation: React.FC = () => {
         Invista em uma Imagem que Trabalha a seu Favor
       </h2>
       <p className="text-center text-[#3a3a3a] mb-6 max-w-md mx-auto">
-        Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção
+        Veja como outras mulheres transformaram seu estilo com nosso guia
       </p>
       <div className="elegant-divider w-32 mx-auto mt-0 mb-6"></div>
 
@@ -50,12 +50,12 @@ const BeforeAfterTransformation: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               {!areImagesReady && (
-                <div className="h-[300px] w-full flex items-center justify-center bg-[#f9f4ef]">
+                <div className="h-auto w-full flex items-center justify-center bg-[#f9f4ef] p-8">
                   <div className="w-12 h-12 border-4 border-[#aa6b5d] border-t-transparent rounded-full animate-spin"></div>
                 </div>
               )}
               
-              <div className={`relative h-auto w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
+              <div className={`relative w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
                 <div className="w-full">
                   <img 
                     src={activeTransformation.afterImage} 
@@ -70,6 +70,9 @@ const BeforeAfterTransformation: React.FC = () => {
                     "
                     sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 500px"
                   />
+                  <div className="absolute top-2 left-2 bg-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                    Resultados Reais
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,10 +108,18 @@ const BeforeAfterTransformation: React.FC = () => {
               <Button 
                 className="btn-cta-green w-full py-3 text-lg font-medium"
                 onClick={handleCTAClick}
+                style={{
+                  background: "linear-gradient(to right, #4CAF50, #45a049)",
+                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+                }}
               >
                 <ShoppingCart className="mr-2" />
                 <span>Quero Meu Guia de Estilo</span>
               </Button>
+              
+              <p className="text-xs text-center text-[#aa6b5d]">
+                Oferta por tempo limitado
+              </p>
             </div>
           </div>
         </Card>
