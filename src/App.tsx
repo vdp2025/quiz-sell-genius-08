@@ -1,13 +1,8 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-// Providers
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
-import { ABTestProvider } from './contexts/ABTestContext';
-import { TooltipProvider } from '@/components/ui/tooltip';
-
-// Pages
 import HomePage from './pages/HomePage';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
@@ -15,54 +10,82 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
-import ABTestResults from './pages/admin/ABTestResults';
 import NotFoundPage from './pages/NotFoundPage';
-
-// UI
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 import { Toaster } from '@/components/ui/toaster';
 
-// Analytics
-import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
+// Avalia se o dispositivo tem performance limitada
+const isLowPerformanceDevice = () => {
+  const memory = (navigator as any).deviceMemory;
+  if (memory && memory < 4) return true;
+  
+  // Se o dispositivo tem menos de 4GB de RAM ou não tem informação disponível, verificar CPU cores
+  const cpuCores = navigator.hardwareConcurrency;
+  if (cpuCores && cpuCores < 4) return true;
+  
+  return false;
+};
 
-function App() {
+const App = () => {
+  const lowPerformance = isLowPerformanceDevice();
+
+  // Inicializar analytics na montagem do componente
   React.useEffect(() => {
+    // Inicializar Facebook Pixel
     initFacebookPixel();
+    
+    // Capturar UTM parameters para analytics de marketing
     captureUTMParameters();
+    
+    console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
+  }, [lowPerformance]);
+
+  // Reinicializar Facebook Pixel em mudanças de rota
+  React.useEffect(() => {    
+    // Função para lidar com mudanças de rota
+    const handleRouteChange = () => {
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'PageView');
+        console.log('PageView tracked on route change');
+      }
+    };
+    
+    // Adicionar listener para mudanças de rota
+    window.addEventListener('popstate', handleRouteChange);
+    
+    // Limpar o listener
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, []);
 
   return (
-    <Router>
-      <AuthProvider>
-        <QuizProvider>
-          <ABTestProvider>
-            <TooltipProvider>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/quiz" element={<QuizPage />} />
-                <Route path="/resultado" element={<ResultPage />} />
-                <Route
-                  path="/resultado/editar"
-                  element={<Navigate to="/admin/editor?tab=result" replace />}
-                />
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/editor" element={<EditorPage />} />
-                <Route
-                  path="/admin/quiz-builder"
-                  element={<Navigate to="/admin/editor?tab=quiz" replace />}
-                />
-                <Route path="/admin/settings" element={<SettingsPage />} />
-                <Route path="/admin/analytics" element={<AnalyticsPage />} />
-                <Route path="/admin/ab-test" element={<ABTestResults />} />
-                {/* Rota para página não encontrada */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-              <Toaster />
-            </TooltipProvider>
-          </ABTestProvider>
-        </QuizProvider>
-      </AuthProvider>
-    </Router>
+    <AuthProvider>
+      <QuizProvider>
+        <TooltipProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/resultado" element={<ResultPage />} />
+              {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
+              <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              {/* Manter apenas uma rota principal para o editor unificado */}
+              <Route path="/admin/editor" element={<EditorPage />} />
+              {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
+              <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
+              <Route path="/admin/settings" element={<SettingsPage />} />
+              <Route path="/admin/analytics" element={<AnalyticsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Router>
+          <Toaster />
+        </TooltipProvider>
+      </QuizProvider>
+    </AuthProvider>
   );
-}
+};
 
 export default App;

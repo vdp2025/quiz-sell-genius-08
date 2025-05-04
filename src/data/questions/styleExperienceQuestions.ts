@@ -32,7 +32,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
     title: 'Qual desses objetivos mais representa o que você deseja com sua imagem pessoal?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/a4a4a4a4-a4a4-4a4a-a4a4-a4a4a4a4a4a4_zxcvbn.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp',
     options: [
       {
         id: 'strategic-4-1',

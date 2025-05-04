@@ -35,7 +35,6 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
             src={data.imageUrl} 
             alt={data.alt || 'Imagem do quiz'} 
             className="max-w-full mx-auto rounded-md"
-            onError={(e) => { e.currentTarget.src = 'caminho/para/imagem/padrao.png'; }}
           />
         ) : (
           <div className="bg-gray-200 text-gray-500 flex items-center justify-center h-40 rounded-md">
