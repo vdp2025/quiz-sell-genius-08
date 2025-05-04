@@ -40,6 +40,46 @@ export const useQuizStages = () => {
     return newStage.id;
   }, [stages]);
 
+  /**
+   * Duplica uma etapa existente do quiz
+   * @param id ID da etapa a ser duplicada
+   * @returns ID da nova etapa duplicada
+   */
+  const duplicateStage = useCallback((id: string): string | null => {
+    const stageToDuplicate = stages.find(stage => stage.id === id);
+    
+    if (!stageToDuplicate) return null;
+    
+    const stageNumber = stages.length + 1;
+    let stageTitle = '';
+    
+    switch (stageToDuplicate.type) {
+      case 'cover':
+        stageTitle = `Etapa ${stageNumber}: Capa do Quiz (Cópia)`;
+        break;
+      case 'question':
+        stageTitle = `Etapa ${stageNumber}: Questão ${stages.filter(s => s.type === 'question').length + 1} (Cópia)`;
+        break;
+      case 'result':
+        stageTitle = `Etapa ${stageNumber}: Página de Resultado (Cópia)`;
+        break;
+    }
+    
+    // Cria uma cópia profunda do objeto de configuração
+    const configCopy = stageToDuplicate.config ? JSON.parse(JSON.stringify(stageToDuplicate.config)) : undefined;
+    
+    const newStage: QuizStage = {
+      id: `stage-${Date.now()}`,
+      title: stageTitle,
+      order: stages.length,
+      type: stageToDuplicate.type,
+      config: configCopy
+    };
+    
+    setStages(prev => [...prev, newStage]);
+    return newStage.id;
+  }, [stages]);
+
   const updateStage = useCallback((id: string, updates: Partial<QuizStage>) => {
     setStages(prev => 
       prev.map(stage => 
@@ -82,46 +122,6 @@ export const useQuizStages = () => {
       }));
     });
   }, []);
-
-  /**
-   * Duplica uma etapa existente do quiz
-   * @param id ID da etapa a ser duplicada
-   * @returns ID da nova etapa duplicada
-   */
-  const duplicateStage = useCallback((id: string): string | null => {
-    const stageToDuplicate = stages.find(stage => stage.id === id);
-    
-    if (!stageToDuplicate) return null;
-    
-    const stageNumber = stages.length + 1;
-    let stageTitle = '';
-    
-    switch (stageToDuplicate.type) {
-      case 'cover':
-        stageTitle = `Etapa ${stageNumber}: Capa do Quiz (Cópia)`;
-        break;
-      case 'question':
-        stageTitle = `Etapa ${stageNumber}: Questão ${stages.filter(s => s.type === 'question').length + 1} (Cópia)`;
-        break;
-      case 'result':
-        stageTitle = `Etapa ${stageNumber}: Página de Resultado (Cópia)`;
-        break;
-    }
-    
-    // Cria uma cópia profunda do objeto de configuração
-    const configCopy = stageToDuplicate.config ? JSON.parse(JSON.stringify(stageToDuplicate.config)) : undefined;
-    
-    const newStage: QuizStage = {
-      id: `stage-${Date.now()}`,
-      title: stageTitle,
-      order: stages.length,
-      type: stageToDuplicate.type,
-      config: configCopy
-    };
-    
-    setStages(prev => [...prev, newStage]);
-    return newStage.id;
-  }, [stages]);
 
   return {
     stages,
