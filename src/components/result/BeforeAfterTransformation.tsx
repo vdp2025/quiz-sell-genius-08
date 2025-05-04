@@ -7,8 +7,8 @@ import { trackButtonClick } from '@/utils/analytics';
 
 const transformations = [
   {
-    beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp',
-    afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp',
+    beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp',
+    afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp',
     name: 'Transformação Visual'
   }
 ];
@@ -55,14 +55,20 @@ const BeforeAfterTransformation: React.FC = () => {
                 </div>
               )}
               
-              <div className={`relative h-[300px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
-                <div className="absolute inset-0 w-full h-full">
+              <div className={`relative h-auto w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
+                <div className="w-full">
                   <img 
                     src={activeTransformation.afterImage} 
                     alt={`Transformação - ${activeTransformation.name}`} 
-                    className="w-full h-full object-cover rounded-lg" 
+                    className="w-full h-auto object-cover rounded-lg shadow-md" 
                     loading="eager"
                     fetchPriority="high"
+                    srcSet="
+                      https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_400/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp 400w,
+                      https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_600/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp 600w,
+                      https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp 800w
+                    "
+                    sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 500px"
                   />
                 </div>
               </div>

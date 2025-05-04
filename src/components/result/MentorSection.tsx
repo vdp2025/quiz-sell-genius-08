@@ -24,7 +24,20 @@ const MentorSection: React.FC = () => {
         </div>
         
         <div className="relative">
-          <img alt="Gisele Galvão - Mentora de Estilo" className="rounded-lg shadow-md w-full max-w-md mx-auto hover:scale-105 transition-transform duration-300" loading="lazy" src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp" />
+          <div className="flex justify-center mb-6">
+            <img 
+              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp" 
+              alt="Gisele Galvão - Consultora de Imagem e Estilo" 
+              className="w-full max-w-[300px] h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+              loading="lazy"
+              srcSet="
+                https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_200/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp 200w,
+                https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_300/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp 300w,
+                https://res.cloudinary.com/dqljyf76t/image/upload/v1745347467/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE_i23qvj.webp 400w
+              "
+              sizes="(max-width: 768px) 90vw, 300px"
+            />
+          </div>
           {/* Elegant decorative corner */}
           <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
           <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>

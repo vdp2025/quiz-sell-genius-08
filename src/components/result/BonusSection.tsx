@@ -48,20 +48,44 @@ const BonusSection: React.FC = () => {
           </div>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8">
-          <img 
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" 
-            alt="Bônus Peças-chave para seu Estilo" 
-            className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300" 
-            loading="lazy"
-          />
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow">
+            <div className="flex justify-center mb-4">
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp" 
+                alt="Bônus: Peças-chave do Guarda-roupa" 
+                className="w-full max-w-[250px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                loading="lazy"
+                srcSet="
+                  https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_200/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 200w,
+                  https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_300/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 300w,
+                  https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp 400w
+                "
+                sizes="(max-width: 768px) 45vw, 250px"
+              />
+            </div>
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">Peças-chave do Guarda-roupa</h3>
+            <p className="text-[#432818] text-sm">Descubra as peças essenciais para seu estilo que maximizam suas combinações com investimento inteligente.</p>
+          </div>
           
-          <img 
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
-            alt="Bônus Visagismo Facial Estratégico" 
-            className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300" 
-            loading="lazy"
-          />
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10 hover:shadow-md transition-shadow">
+            <div className="flex justify-center mb-4">
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
+                alt="Bônus: Visagismo Facial" 
+                className="w-full max-w-[250px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                loading="lazy"
+                srcSet="
+                  https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_200/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 200w,
+                  https://res.cloudinary.com/dqljyf76t/image/upload/c_scale,w_300/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 300w,
+                  https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp 400w
+                "
+                sizes="(max-width: 768px) 45vw, 250px"
+              />
+            </div>
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">Visagismo Facial</h3>
+            <p className="text-[#432818] text-sm">Aprenda a valorizar seus traços faciais com técnicas de maquiagem, cortes de cabelo e acessórios que harmonizam com seu rosto.</p>
+          </div>
         </div>
         
         <div className="mt-8 text-center">
