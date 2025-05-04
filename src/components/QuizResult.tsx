@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
@@ -48,52 +47,34 @@ const QuizResult: React.FC<QuizResultProps> = ({
       if (externalConfig) {
         setConfig(externalConfig);
       } else {
-        const configKey = `quiz_result_config_${primaryStyle.category}`;
-        const savedConfig = localStorage.getItem(configKey);
-        
-        if (savedConfig) {
-          setConfig(JSON.parse(savedConfig));
-          console.log("Loaded config from localStorage:", configKey);
-        } else {
-          console.log("No saved config found for:", primaryStyle.category);
-          setConfig(null);
-        }
+        const defaultConfig = {
+          primaryStyle: {
+            image: styleConfig[primaryStyle.type].image,
+            guideImage: styleConfig[primaryStyle.type].guideImage,
+            description: styleConfig[primaryStyle.type].description
+          },
+          secondaryStyles: secondaryStyles.map(style => ({
+            image: styleConfig[style.type].image,
+            guideImage: styleConfig[style.type].guideImage,
+            description: styleConfig[style.type].description
+          }))
+        };
+        setConfig(defaultConfig);
       }
     } catch (error) {
-      console.error('Error loading custom settings:', error);
-      setConfig(null);
+      console.error('Erro ao carregar configuração:', error);
     }
-  }, [primaryStyle.category, externalConfig]);
-
-  if (!primaryStyle || !secondaryStyles) {
-    console.error('Missing required props:', { primaryStyle, secondaryStyles });
-    return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
-  }
-
-  // Build custom title with user name
-  const customTitle = `Olá, ${userName}, seu Estilo Predominante é:`;
+  }, [externalConfig, primaryStyle, secondaryStyles]);
 
   return (
-    <div 
-      className={cn(
-        "min-h-screen",
-        previewMode ? 'max-h-screen overflow-auto' : ''
-      )}
-      style={{
-        backgroundColor: config?.globalStyles?.backgroundColor || sharedStyles.colors.background,
-        color: config?.globalStyles?.textColor || sharedStyles.colors.textPrimary,
-      }}
-    >
-      <ContentContainer size="md">
-        <ResultHeader userName={userName} customTitle={customTitle} />
-        
-        <div className="space-y-8">
-          <PrimaryStyleCard primaryStyle={primaryStyle} />
-          <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-          <OfferCard primaryStyle={primaryStyle} config={config?.offer?.hero?.content || {}} />
-        </div>
-      </ContentContainer>
-    </div>
+    <ContentContainer>
+      <GridLayout>
+        <ResultHeader userName={userName} />
+        <PrimaryStyleCard style={config?.primaryStyle} />
+        <SecondaryStylesSection styles={config?.secondaryStyles} />
+        <OfferCard />
+      </GridLayout>
+    </ContentContainer>
   );
 };
 
