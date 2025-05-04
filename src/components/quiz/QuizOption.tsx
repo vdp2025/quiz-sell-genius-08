@@ -14,7 +14,7 @@ interface QuizOptionProps {
   disabled?: boolean;
 }
 
-const QuizOption: React.FC<QuizOptionProps> = ({
+export const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
   onSelect,
