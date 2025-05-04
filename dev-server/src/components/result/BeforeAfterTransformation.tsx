@@ -4,10 +4,32 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 
-// ... existing code ...
+// Define your transformations data
+const transformations = [
+  {
+    beforeImage: 'path/to/before/image1.jpg',
+    afterImage: 'path/to/after/image1.jpg',
+    name: 'Transformation 1'
+  },
+  // Add more transformations as needed
+];
 
 const BeforeAfterTransformation: React.FC = () => {
-  // ... existing code ...
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState({ before: false, after: false });
+  const activeTransformation = transformations[activeIndex];
+
+  useEffect(() => {
+    const beforeImg = new Image();
+    const afterImg = new Image();
+    beforeImg.src = activeTransformation.beforeImage;
+    afterImg.src = activeTransformation.afterImage;
+
+    beforeImg.onload = () => setImagesLoaded(prev => ({ ...prev, before: true }));
+    afterImg.onload = () => setImagesLoaded(prev => ({ ...prev, after: true }));
+  }, [activeTransformation]);
+
+  const areImagesReady = imagesLoaded.before && imagesLoaded.after;
 
   return (
     <div className="py-10">
@@ -28,7 +50,6 @@ const BeforeAfterTransformation: React.FC = () => {
           )}
 
           <div className={`relative h-[400px] md:h-[500px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
-            {/* Full image without slider */}
             <div className="absolute inset-0 w-full h-full">
               <img 
                 src={activeTransformation.afterImage} 
@@ -38,8 +59,6 @@ const BeforeAfterTransformation: React.FC = () => {
                 fetchPriority="high"
               />
             </div>
-
-            {/* Add more JSX elements as needed */}
           </div>
         </Card>
       </div>
