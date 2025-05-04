@@ -44,7 +44,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     // Update the active mode in the unified editor hook
     setActiveMode(activeTab);
     // Update URL when tab changes
-    navigate(`/admin/editor/unified?tab=${activeTab}`, { replace: true });
+    navigate(`/admin/editor?tab=${activeTab}`, { replace: true });
   }, [activeTab, navigate, setActiveMode]);
   
   const handleTabChange = (value: string) => {
