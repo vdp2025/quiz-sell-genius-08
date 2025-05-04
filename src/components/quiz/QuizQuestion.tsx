@@ -23,12 +23,12 @@ interface QuizQuestionProps {
 
 // Mapeamento de questões estratégicas para imagens específicas
 const strategicImages = {
-  'strategic-1': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp',
-  'strategic-2': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp',
-  'strategic-3': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp',
-  'strategic-4': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334752/ChatGPT_Image_4_de_mai._de_2025_01_00_30_qckn7n.webp',
-  'strategic-5': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334752/ChatGPT_Image_4_de_mai._de_2025_01_38_24_vdlamr.webp',
-  'default': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp'
+  'strategic-1': 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193439/2dd7e159-43a1-40b0-8075-ba6f591074c1_gpsauh.webp',
+  'strategic-2': 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/6cceaaa9-9383-4890-95a4-da036f8421e3_u7tuaw.webp',
+  'strategic-3': 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/c0c9c1a2-e7c9-4c0c-9a5c-c1a2e7c94c0c_xvzpqr.webp',
+  'strategic-4': 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/d1d8d1d8-d1d8-4d1d-8d1d-8d1d8d1d8d1d_qwerty.webp',
+  'strategic-5': 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/e2e2e2e2-e2e2-4e2e-2e2e-2e2e2e2e2e2e_asdfgh.webp',
+  'default': 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/default-strategic-image_zxcvbn.webp'
 };
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({

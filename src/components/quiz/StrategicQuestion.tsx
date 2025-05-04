@@ -29,15 +29,21 @@ export const StrategicQuestion: React.FC<StrategicQuestionProps> = ({
     >
       <Card className="overflow-hidden border-0 shadow-lg bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef]">
         <div className="grid md:grid-cols-2 gap-0">
-          {/* Imagem à esquerda */}
-          <div className="relative h-full">
+          {/* Imagem à esquerda com melhor tratamento */}
+          <div className="relative h-full min-h-[300px]">
             <div className="absolute inset-0 bg-gradient-to-r from-[#aa6b5d]/10 to-transparent z-10"></div>
-            <img 
-              src={question.imageUrl} 
-              alt={question.imageAlt || question.text}
-              className="w-full h-full object-cover" 
-              loading="lazy"
-            />
+            {question.imageUrl ? (
+              <img 
+                src={question.imageUrl} 
+                alt={question.imageAlt || question.text}
+                className="w-full h-full object-cover" 
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-[#f9ede8] to-[#f5e1d8] flex items-center justify-center">
+                <Lightbulb className="w-16 h-16 text-[#aa6b5d]/30" />
+              </div>
+            )}
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-[#aa6b5d] shadow-sm">
               Questão Reflexiva
             </div>

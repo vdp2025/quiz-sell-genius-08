@@ -59,15 +59,23 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         </p>
       </div>
       
+      {/* Efeito de seleção melhorado */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-r from-[#aa6b5d]/5 to-[#aa6b5d]/10 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isSelected ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+      />
+      
       {/* Indicador de seleção animado */}
       {isSelected && (
         <motion.div 
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3, type: "spring" }}
-          className="absolute bottom-2 right-2 w-5 h-5 rounded-full bg-[#aa6b5d] flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 15 }}
+          className="absolute bottom-3 right-3 w-6 h-6 rounded-full bg-[#aa6b5d] flex items-center justify-center shadow-md"
         >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 3L4.5 8.5L2 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </motion.div>
