@@ -19,25 +19,24 @@ import { ABTestProvider } from './contexts/ABTestContext';
 
 function App() {
   return (
-    <ABTestProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/resultado" element={<ResultPage />} />
-          {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
-          <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          {/* Manter apenas uma rota principal para o editor unificado */}
-          <Route path="/admin/editor" element={<EditorPage />} />
-          {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
-          <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
-          <Route path="/admin/settings" element={<SettingsPage />} />
-          <Route path="/admin/analytics" element={<AnalyticsPage />} />
-          <Route path="/admin/ab-test" element={<ABTestResults />} />
-        </Routes>
-      </Router>
-    </ABTestProvider>
+    <QuizProvider>
+      <ABTestProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/resultado" element={<ResultPage />} />
+            <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/editor" element={<EditorPage />} />
+            <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
+            <Route path="/admin/settings" element={<SettingsPage />} />
+            <Route path="/admin/analytics" element={<AnalyticsPage />} />
+            <Route path="/admin/ab-test" element={<ABTestResults />} />
+          </Routes>
+        </Router>
+      </ABTestProvider>
+    </QuizProvider>
   );
 }
 
