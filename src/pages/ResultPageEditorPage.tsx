@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
@@ -7,17 +6,18 @@ import { useNavigate } from 'react-router-dom';
 const ResultPageEditorPage: React.FC = () => {
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
+  const [customDomain, setCustomDomain] = useState(''); // Novo estado para domínio personalizado
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Tentativa de carregar os resultados do localStorage
     try {
       const savedResult = localStorage.getItem('quizResult');
-      
+      const savedDomain = localStorage.getItem('customDomain'); // Carregar domínio salvo
+
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
-        
+
         if (parsedResult?.primaryStyle) {
           setPrimaryStyle(parsedResult.primaryStyle);
           setSecondaryStyles(parsedResult.secondaryStyles || []);
@@ -26,15 +26,18 @@ const ResultPageEditorPage: React.FC = () => {
           navigate('/resultado');
         }
       } else {
-        // Se não houver resultado salvo, usar um resultado padrão para edição
         const defaultStyle: StyleResult = {
           category: 'Natural',
           score: 10,
           percentage: 100
         };
-        
+
         setPrimaryStyle(defaultStyle);
         setSecondaryStyles([]);
+      }
+
+      if (savedDomain) {
+        setCustomDomain(savedDomain);
       }
     } catch (error) {
       console.error("Erro ao carregar resultados:", error);
@@ -43,6 +46,21 @@ const ResultPageEditorPage: React.FC = () => {
       setIsLoading(false);
     }
   }, [navigate]);
+
+  const handleSave = () => {
+    try {
+      const resultToSave = {
+        primaryStyle,
+        secondaryStyles
+      };
+      localStorage.setItem('quizResult', JSON.stringify(resultToSave));
+      localStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
+      alert('Configurações salvas com sucesso!');
+    } catch (error) {
+      console.error("Erro ao salvar configurações:", error);
+      alert('Erro ao salvar configurações. Verifique o console para mais detalhes.');
+    }
+  };
 
   if (isLoading) {
     return (
@@ -69,10 +87,28 @@ const ResultPageEditorPage: React.FC = () => {
   }
 
   return (
-    <ResultPageEditorWithControls 
-      primaryStyle={primaryStyle} 
-      secondaryStyles={secondaryStyles} 
-    />
+    <div className="editor-container">
+      <ResultPageEditorWithControls 
+        primaryStyle={primaryStyle} 
+        secondaryStyles={secondaryStyles} 
+      />
+      <div className="editor-settings mt-4">
+        <label className="block mb-2">Domínio Personalizado:</label>
+        <input 
+          type="text" 
+          value={customDomain} 
+          onChange={(e) => setCustomDomain(e.target.value)} 
+          className="border rounded px-2 py-1 w-full"
+          placeholder="https://meu-dominio.com"
+        />
+        <button 
+          className="bg-primary text-white px-4 py-2 rounded mt-4"
+          onClick={handleSave}
+        >
+          Salvar Configurações
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -23,6 +23,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+import { useABTest } from '@/hooks/useABTest';
 
 const ResultPage: React.FC = () => {
   const {
@@ -35,6 +36,10 @@ const ResultPage: React.FC = () => {
   const {
     user
   } = useAuth(); // Get user from auth context
+  
+  // Usar o hook de teste A/B para a página de resultados
+  const { currentVariation, registerConversion, isLoading: isLoadingABTest } = useABTest('result');
+  
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
@@ -50,6 +55,7 @@ const ResultPage: React.FC = () => {
 
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
@@ -82,11 +88,14 @@ const ResultPage: React.FC = () => {
       guide: true
     }));
   }, [primaryStyle, globalStyles.logo]);
+  
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
+  
   if (!primaryStyle) return <ErrorState />;
-  if (isLoading) return <ResultSkeleton />;
+  if (isLoading || isLoadingABTest) return <ResultSkeleton />;
+  
   const {
     category
   } = primaryStyle;
@@ -95,16 +104,76 @@ const ResultPage: React.FC = () => {
     guideImage,
     description
   } = styleConfig[category];
+  
+  // Determinar a URL de checkout com base na variação do teste A/B
+  const getCheckoutUrl = () => {
+    // URL de checkout padrão
+    let checkoutUrl = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    
+    // Se houver uma variação ativa de teste A/B, usar sua configuração
+    if (currentVariation && currentVariation.content && currentVariation.content.checkoutUrl) {
+      checkoutUrl = currentVariation.content.checkoutUrl;
+    }
+    
+    return checkoutUrl;
+  };
+  
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    
+    // Registrar conversão para o teste A/B (se houver)
+    if (currentVariation) {
+      registerConversion();
+    }
+    
+    // Redirecionar para a URL de checkout
+    window.location.href = getCheckoutUrl();
   };
-  return <div className="min-h-screen relative overflow-hidden" style={{
-    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-    color: globalStyles.textColor || '#432818',
-    fontFamily: globalStyles.fontFamily || 'inherit'
-  }}>
+  
+  // Aplicar configurações específicas da variação (se houver)
+  const getStyleOverrides = () => {
+    const baseStyles = {
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    };
+    
+    // Se houver uma variação ativa de teste A/B, mesclar suas configurações de estilo
+    if (currentVariation && currentVariation.content && currentVariation.content.styles) {
+      return {
+        ...baseStyles,
+        ...currentVariation.content.styles
+      };
+    }
+    
+    return baseStyles;
+  };
+  
+  // Verificar se a oferta deve ser modificada com base na variação A/B
+  const getPriceInfo = () => {
+    // Valores padrão
+    const priceInfo = {
+      regularPrice: 'R$ 175,00',
+      currentPrice: 'R$ 39,00',
+      installments: '4X de R$ 10,86 sem juros'
+    };
+    
+    // Se houver uma variação ativa de teste A/B, usar suas configurações de preço
+    if (currentVariation && currentVariation.content && currentVariation.content.pricing) {
+      return {
+        ...priceInfo,
+        ...currentVariation.content.pricing
+      };
+    }
+    
+    return priceInfo;
+  };
+  
+  const priceInfo = getPriceInfo();
+  
+  return (
+    <div className="min-h-screen relative overflow-hidden" style={getStyleOverrides()}>
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
@@ -204,7 +273,7 @@ const ResultPage: React.FC = () => {
             
             <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
               <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                4X de R$ 10,86 sem juros
+                {priceInfo.installments}
               </p>
             </div>
             
@@ -267,7 +336,7 @@ const ResultPage: React.FC = () => {
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
                   <div className="relative">
-                    <span>R$ 175,00</span>
+                    <span>{priceInfo.regularPrice}</span>
                     <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
                   </div>
                 </div>
@@ -275,8 +344,8 @@ const ResultPage: React.FC = () => {
               
               <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
                 <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em 4X de R$ 10,86</p>
+                <p className="text-4xl font-bold gold-text">{priceInfo.currentPrice}</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em {priceInfo.installments}</p>
               </div>
               
               {/* Payment methods image */}
@@ -293,7 +362,7 @@ const ResultPage: React.FC = () => {
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
             fontSize: "1rem" /* Smaller font size for button */
-          }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
+            }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 <span>Garantir Meu Guia + Bônus Especiais</span>
@@ -311,7 +380,8 @@ const ResultPage: React.FC = () => {
       </div>
 
       <BuildInfo />
-    </div>;
+    </div>
+  );
 };
 
 export default ResultPage;
