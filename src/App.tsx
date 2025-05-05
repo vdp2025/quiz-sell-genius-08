@@ -73,8 +73,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
-              {/* Rota para o protótipo da página de resultados */}
-              <Route path="/resultado-prototipo" element={<ResultPagePrototype />} />
+              <Route path="/prototipo" element={<ResultPagePrototype />} />
               {/* Editor visual aprimorado para página de resultados */}
               <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
               {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}

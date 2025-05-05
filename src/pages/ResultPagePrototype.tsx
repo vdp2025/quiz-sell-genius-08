@@ -329,11 +329,27 @@ const ResultPagePrototype: React.FC = () => {
               <Lock className="w-3 h-3" />
               <span>Oferta exclusiva nesta página</span>
             </p>
+            
+            {/* Botão para continuar a iterar */}
+            <div className="mt-10 text-center">
+              <Button 
+                className="text-[#432818] bg-transparent hover:bg-[#f9f4ef] border border-[#B89B7A]/30 py-3 px-6 rounded-md transition-colors"
+                onClick={() => {
+                  trackButtonClick('iterate_button', 'Continuar a iterar', 'results_page');
+                  // Adicione qualquer funcionalidade adicional aqui
+                }}
+              >
+                Continuar a iterar?
+              </Button>
+            </div>
           </div>
         </AnimatedWrapper>
-      </div>
 
-      <BuildInfo />
+        {/* BuildInfo component at the bottom */}
+        <div className="mt-8 text-center opacity-60">
+          <BuildInfo />
+        </div>
+      </div>
     </div>
   );
 };
