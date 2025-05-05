@@ -14,13 +14,13 @@ const ABTestPage: React.FC = () => {
   // Dados de exemplo para teste com score adicionado
   const mockData = {
     primaryStyle: {
-      category: 'Natural',
+      category: "Natural" as const, // Using as const to ensure it's the correct literal type
       percentage: 75,
       score: 75 // Added score property to fix the TypeScript error
     },
     secondaryStyles: [
-      { category: 'Clássico', percentage: 15, score: 15 }, // Added score property to fix the TypeScript error
-      { category: 'Contemporâneo', percentage: 10, score: 10 } // Added score property to fix the TypeScript error
+      { category: "Clássico" as const, percentage: 15, score: 15 }, // Added as const to ensure it's the correct literal type
+      { category: "Contemporâneo" as const, percentage: 10, score: 10 } // Added as const to ensure it's the correct literal type
     ],
     userName: 'Visitante'
   };
