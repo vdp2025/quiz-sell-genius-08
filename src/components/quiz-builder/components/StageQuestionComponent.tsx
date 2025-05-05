@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
@@ -136,10 +137,10 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
             <div
               key={index}
               className={cn(
-                "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer",
+                "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
                 isSelected 
-                  ? "border-2 border-[#B89B7A] shadow-md" 
-                  : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:shadow-md",
+                  ? "border-2 border-[#B89B7A] shadow-lg transform scale-[1.01]" 
+                  : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:shadow-md hover:scale-[1.005]",
                 showImages ? "flex flex-col" : "p-4"
               )}
               onClick={() => handleOptionClick(index)}
@@ -188,7 +189,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                 <div className={cn(
                   "absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center",
                   isSelected 
-                    ? "bg-[#B89B7A] text-white" 
+                    ? "bg-[#B89B7A] text-white shadow-sm" 
                     : "border-2 border-[#B89B7A] bg-white/80"
                 )}>
                   {isSelected && <Check className="w-4 h-4" />}
@@ -196,7 +197,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
               )}
               
               {isSelected && selectionIndicator === 'highlight' && (
-                <div className="absolute inset-0 bg-[#B89B7A]/10 pointer-events-none" />
+                <div className="absolute inset-0 bg-[#B89B7A]/10 pointer-events-none shadow-inner" />
               )}
             </div>
           );
@@ -212,7 +213,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         
         <Button 
           className={cn(
-            "px-4 py-2 rounded",
+            "px-4 py-2 rounded shadow-sm",
             canProceed 
               ? "bg-[#B89B7A] text-white hover:bg-[#A38A69]" 
               : "bg-[#B89B7A]/40 text-white cursor-not-allowed"
