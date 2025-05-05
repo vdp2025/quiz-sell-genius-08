@@ -14,7 +14,7 @@ import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
 import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import { ShoppingCart, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
