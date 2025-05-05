@@ -11,6 +11,7 @@ import { toast } from '@/components/ui/use-toast';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
+import TypeformEditor from './TypeformEditor';
 
 interface UnifiedEditorProps {
   initialData?: any;
@@ -130,11 +131,18 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
                   <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
                     {/* Área de Preview/Edição */}
                     <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
-                      {editorState.isPreviewing ? (
-                        <div>Preview do Quiz</div>
-                      ) : (
-                        <div>Editor do Quiz</div>
-                      )}
+                      <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+                        onDragEnd={handleDragEnd}
+                      >
+                        <TypeformEditor
+                          editorState={editorState}
+                          onStateChange={setEditorState}
+                          isPreviewing={editorState.isPreviewing}
+                        />
+                      </DndContext>
                     </div>
                   </div>
                 </ResizablePanel>
