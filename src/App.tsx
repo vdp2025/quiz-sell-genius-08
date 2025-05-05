@@ -5,6 +5,7 @@ import { QuizProvider } from './context/QuizContext';
 import HomePage from './pages/HomePage';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
+import ResultPagePrototype from './pages/ResultPagePrototype';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
@@ -72,6 +73,8 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
+              {/* Rota para o protótipo da página de resultados */}
+              <Route path="/resultado-prototipo" element={<ResultPagePrototype />} />
               {/* Editor visual aprimorado para página de resultados */}
               <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
               {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
