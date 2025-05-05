@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UnifiedEditorState } from '@/types/unifiedEditor';
+import { DragEndEvent } from '@dnd-kit/core';
 
 interface TypeformEditorProps {
   editorState: UnifiedEditorState;
@@ -87,82 +88,113 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
     });
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+  
+    if (active.id !== over.id) {
+      const newQuestions = [...questions];
+      const oldIndex = newQuestions.findIndex(q => q.id === active.id);
+      const newIndex = newQuestions.findIndex(q => q.id === over.id);
+  
+      if (oldIndex === -1 || newIndex === -1) return;
+  
+      const [movedQuestion] = newQuestions.splice(oldIndex, 1);
+      newQuestions.splice(newIndex, 0, movedQuestion);
+  
+      onStateChange({
+        ...editorState,
+        quizEditorState: {
+          ...editorState.quizEditorState,
+          components: newQuestions
+        }
+      });
+    }
+  };
+
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 to-white">
-      <div className="w-full h-1 bg-gray-200">
-        <div
-          className="h-full bg-indigo-600 transition-all duration-300"
-          style={{
-            width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
-          }}
-        />
-      </div>
-
-      <div className="flex-1 flex flex-col items-center justify-center p-8 relative overflow-hidden">
-        <AnimatePresence initial={false} custom={currentQuestionIndex}>
-          <motion.div
-            key={currentQuestionIndex}
-            custom={currentQuestionIndex}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              y: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 }
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 to-white">
+        <div className="w-full h-1 bg-gray-200">
+          <div
+            className="h-full bg-indigo-600 transition-all duration-300"
+            style={{
+              width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
             }}
-            className="w-full max-w-2xl mx-auto text-center"
-          >
-            {questions[currentQuestionIndex] && (
-              <div className="space-y-8">
-                <h2 className="text-4xl font-bold text-gray-900 mb-8">
-                  {questions[currentQuestionIndex].title}
-                </h2>
-                <div className="grid gap-4">
-                  {questions[currentQuestionIndex].options?.map((option, index) => (
-                    <Button
-                      key={option.id}
-                      variant="outline"
-                      className={cn(
-                        "w-full p-6 text-left hover:bg-indigo-50 hover:border-indigo-300 transition-all",
-                        "flex items-center justify-between group"
-                      )}
-                      onClick={() => handleLiveEdit({ options: [{ ...option, isSelected: !option.isSelected }] })}
-                    >
-                      <span className="text-lg">{option.text}</span>
-                      <ChevronDown className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                  ))}
+          />
+        </div>
+  
+        <div className="flex-1 flex flex-col items-center justify-center p-8 relative overflow-hidden">
+          <AnimatePresence initial={false} custom={currentQuestionIndex}>
+            <motion.div
+              key={currentQuestionIndex}
+              custom={currentQuestionIndex}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                y: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 }
+              }}
+              className="w-full max-w-2xl mx-auto text-center"
+            >
+              {questions[currentQuestionIndex] && (
+                <div className="space-y-8">
+                  <h2 className="text-4xl font-bold text-gray-900 mb-8">
+                    {questions[currentQuestionIndex].title}
+                  </h2>
+                  <div className="grid gap-4">
+                    {questions[currentQuestionIndex].options?.map((option, index) => (
+                      <Button
+                        key={option.id}
+                        variant="outline"
+                        className={cn(
+                          "w-full p-6 text-left hover:bg-indigo-50 hover:border-indigo-300 transition-all",
+                          "flex items-center justify-between group"
+                        )}
+                        onClick={() => handleLiveEdit({ options: [{ ...option, isSelected: !option.isSelected }] })}
+                      >
+                        <span className="text-lg">{option.text}</span>
+                        <ChevronDown className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4">
-          <Button
-            variant="ghost"
-            onClick={handlePreviousQuestion}
-            disabled={currentQuestionIndex === 0}
-            className="opacity-50 hover:opacity-100 transition-opacity"
-          >
-            <ChevronUp className="h-6 w-6" />
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={handleNextQuestion}
-            disabled={currentQuestionIndex === questions.length - 1}
-            className="opacity-50 hover:opacity-100 transition-opacity"
-          >
-            <ChevronDown className="h-6 w-6" />
-          </Button>
+              )}
+            </motion.div>
+          </AnimatePresence>
+  
+          <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4">
+            <Button
+              variant="ghost"
+              onClick={handlePreviousQuestion}
+              disabled={currentQuestionIndex === 0}
+              className="opacity-50 hover:opacity-100 transition-opacity"
+            >
+              <ChevronUp className="h-6 w-6" />
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={handleNextQuestion}
+              disabled={currentQuestionIndex === questions.length - 1}
+              className="opacity-50 hover:opacity-100 transition-opacity"
+            >
+              <ChevronDown className="h-6 w-6" />
+            </Button>
+          </div>
+        </div>
+  
+        <div className="p-4 text-center text-sm text-gray-500">
+          {currentQuestionIndex + 1} de {questions.length}
         </div>
       </div>
-
-      <div className="p-4 text-center text-sm text-gray-500">
-        {currentQuestionIndex + 1} de {questions.length}
-      </div>
-    </div>
+    </DndContext>
   );
 };
 

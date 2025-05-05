@@ -164,3 +164,23 @@ const BeforeAfterTransformation: React.FC = () => {
 };
 
 export default BeforeAfterTransformation;
+
+<div className="flex flex-col md:flex-row items-center justify-between">
+  <div className="text-left md:w-1/2">
+    <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-2">
+      Descubra o poder da imagem intencional
+    </h2>
+    <p className="text-[#3a3a3a] mb-4">
+      Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
+    </p>
+    <ul className="list-disc pl-5 text-[#3a3a3a]">
+      <li>Looks com intenção e identidade</li>
+      <li>Cores, modelagens e tecidos a seu favor</li>
+      <li>Imagem alinhada aos seus objetivos</li>
+      <li>Guarda-roupa funcional, sem compras por impulso</li>
+    </ul>
+  </div>
+  <div className="md:w-1/2">
+    <img src={activeTransformation.afterImage} alt={`Transformação - ${activeTransformation.name}`} className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
+  </div>
+</div>
