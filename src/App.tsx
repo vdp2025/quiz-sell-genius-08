@@ -18,6 +18,7 @@ import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 import { Toaster } from '@/components/ui/toaster';
 import ABTestPage from './pages/admin/ABTestPage';
 import ABTestManagerPage from './pages/ABTestManagerPage';
+import StyleOfferPage from './pages/StyleOfferPage';
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -90,6 +91,7 @@ const App = () => {
               <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
               {/* Adicionando acesso ao protótipo no painel admin */}
               <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
+              <Route path="/style-offer" element={<StyleOfferPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
