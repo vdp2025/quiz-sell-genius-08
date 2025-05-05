@@ -11,15 +11,16 @@ const ABTestPage: React.FC = () => {
   const [activeVersion, setActiveVersion] = useState<'A' | 'B'>('A');
   const navigate = useNavigate();
 
-  // Dados de exemplo para teste
+  // Dados de exemplo para teste com score adicionado
   const mockData = {
     primaryStyle: {
       category: 'Natural',
-      percentage: 75
+      percentage: 75,
+      score: 75 // Added score property to fix the TypeScript error
     },
     secondaryStyles: [
-      { category: 'Clássico', percentage: 15 },
-      { category: 'Contemporâneo', percentage: 10 }
+      { category: 'Clássico', percentage: 15, score: 15 }, // Added score property to fix the TypeScript error
+      { category: 'Contemporâneo', percentage: 10, score: 10 } // Added score property to fix the TypeScript error
     ],
     userName: 'Visitante'
   };

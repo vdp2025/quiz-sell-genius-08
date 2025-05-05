@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -26,14 +25,15 @@ export const UtmSettingsTab: React.FC = () => {
   }, [domain]);
 
   const updateExampleLinks = (domain: string) => {
-    setExampleLinks({
+    const newLinks = {
       facebook: generateUtmLink('https://giselegalvao.com.br/', 'facebook', 'social', 'brand', 'cta_button'),
       instagram: generateUtmLink('https://giselegalvao.com.br/', 'instagram', 'social', 'feed', 'story'),
       email: generateUtmLink('https://giselegalvao.com.br/', 'email', 'newsletter', 'weekly', 'footer'),
-      resultado: generateUtmLink('https://giselegalvao.com.br/resultado', 'facebook', 'social', 'retargeting', 'ad_1'),
-      giselegalvao: generateUtmLink('https://giselegalvao.com.br/', 'giselegalvao', 'website', 'homepage'),
-      giselegalvaoResultado: generateUtmLink('https://giselegalvao.com.br/resultado', 'giselegalvao', 'website', 'resultpage')
-    });
+      resultado: generateUtmLink('https://giselegalvao.com.br/resultado', 'facebook', 'social', 'retargeting', 'ad_1')
+    };
+    
+    // Set the links separately to match the type
+    setExampleLinks(newLinks);
   };
 
   const handleSaveDomain = () => {
