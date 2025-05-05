@@ -5,7 +5,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock, Edit, LayoutTemplate } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -24,6 +24,7 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { useABTest } from '@/hooks/useABTest';
+import { Link } from 'react-router-dom';
 
 const ResultPage: React.FC = () => {
   const {
@@ -179,6 +180,16 @@ const ResultPage: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+
+      {/* Admin Edit Button - Visible only for admin users */}
+      {user?.role === 'admin' && (
+        <div className="container mx-auto px-4 py-2 max-w-4xl">
+          <Link to="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
+            <Edit className="h-3.5 w-3.5" />
+            <span>Editar Página</span>
+          </Link>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* ATTENTION: Primary Style Card */}
