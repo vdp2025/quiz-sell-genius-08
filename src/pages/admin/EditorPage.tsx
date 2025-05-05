@@ -1,13 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { UnifiedVisualEditor } from '../../components/unified-editor/UnifiedVisualEditor';
+import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';
 import { StyleResult } from '@/types/quiz';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
-import EditorErrorHandler from '../../components/unified-editor/EditorErrorHandler';
+import EditorErrorHandler from '@/components/unified-editor/EditorErrorHandler';
 
 const EditorPage = () => {
   const [searchParams] = useSearchParams();
