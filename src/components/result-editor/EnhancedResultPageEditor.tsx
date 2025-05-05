@@ -297,6 +297,7 @@ export const EnhancedResultPageEditor: React.FC<EnhancedResultPageEditorProps> =
     toast({
       title: "Funil duplicado",
       description: `O funil foi duplicado com o nome: ${newFunnel.name}`,
+      duration: 3000
     });
   };
 
@@ -313,6 +314,7 @@ export const EnhancedResultPageEditor: React.FC<EnhancedResultPageEditorProps> =
       description: updatedResultPage.settings.abTestEnabled
         ? "O teste A/B foi ativado para esta página"
         : "O teste A/B foi desativado para esta página",
+      duration: 3000
     });
   };
 
@@ -324,6 +326,7 @@ export const EnhancedResultPageEditor: React.FC<EnhancedResultPageEditorProps> =
     toast({
       title: "Alterações salvas",
       description: "Todas as alterações foram salvas com sucesso",
+      duration: 3000
     });
   };
 

@@ -76,13 +76,15 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         toast({
           title: "Configuração atualizada",
           description: "A configuração foi aplicada com sucesso",
+          duration: 3000
         });
       } catch (error) {
         console.error('Error updating config:', error);
         toast({
           title: "Erro ao atualizar configuração",
           description: "Ocorreu um erro ao aplicar a configuração",
-          variant: "destructive"
+          variant: "destructive",
+          duration: 5000
         });
       }
     }
