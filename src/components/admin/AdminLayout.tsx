@@ -2,7 +2,7 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
-import { BarChart, Edit, Settings } from 'lucide-react';
+import { BarChart, Edit, Settings, BarChartHorizontal } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 interface AdminLayoutProps {
@@ -30,6 +30,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <Link to="/admin/analytics" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
                 <BarChart className="h-4 w-4 inline-block mr-2" />
                 Analytics
+              </Link>
+              <Link to="/admin/ab-test" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
+                <BarChartHorizontal className="h-4 w-4 inline-block mr-2" />
+                Teste A/B
               </Link>
               <Link to="/admin/settings" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
                 <Settings className="h-4 w-4 inline-block mr-2" />

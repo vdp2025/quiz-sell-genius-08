@@ -13,7 +13,7 @@ import AnalyticsPage from './pages/admin/AnalyticsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
-//import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/toaster';
 import ABTestPage from './pages/admin/ABTestPage';
 
 // Avalia se o dispositivo tem performance limitada
