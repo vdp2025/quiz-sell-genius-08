@@ -165,22 +165,77 @@ const BeforeAfterTransformation: React.FC = () => {
 
 export default BeforeAfterTransformation;
 
-<div className="flex flex-col md:flex-row items-center justify-between">
-  <div className="text-left md:w-1/2">
-    <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-2">
-      Descubra o poder da imagem intencional
-    </h2>
-    <p className="text-[#3a3a3a] mb-4">
-      Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
-    </p>
-    <ul className="list-disc pl-5 text-[#3a3a3a]">
-      <li>Looks com intenção e identidade</li>
-      <li>Cores, modelagens e tecidos a seu favor</li>
-      <li>Imagem alinhada aos seus objetivos</li>
-      <li>Guarda-roupa funcional, sem compras por impulso</li>
-    </ul>
+return (
+  <div className="py-10">
+    <div className="max-w-4xl mx-auto px-4">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="text-left md:w-1/2">
+          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-2">
+            Descubra o poder da imagem intencional
+          </h2>
+          <p className="text-[#3a3a3a] mb-4">
+            Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
+          </p>
+          <ul className="list-disc pl-5 text-[#3a3a3a] mb-6">
+            <li>Looks com intenção e identidade</li>
+            <li>Cores, modelagens e tecidos a seu favor</li>
+            <li>Imagem alinhada aos seus objetivos</li>
+            <li>Guarda-roupa funcional, sem compras por impulso</li>
+          </ul>
+          <Button 
+            onClick={handleCTAClick} 
+            className="text-white py-4 px-6 rounded-md transition-all duration-300 w-full md:w-auto"
+            style={{
+              background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
+              boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)"
+            }}
+            onMouseEnter={() => setIsButtonHovered(true)} 
+            onMouseLeave={() => setIsButtonHovered(false)}
+            aria-label="Quero Descobrir Meu Guia Completo"
+          >
+            <span className="flex items-center justify-center gap-2">
+              <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+              Quero Descobrir Meu Guia Completo
+            </span>
+          </Button>
+          <p className="text-sm text-[#aa6b5d] mt-2 flex items-center gap-1">
+            Oferta por tempo limitado - Acesso imediato
+          </p>
+        </div>
+        <div className="md:w-1/2 w-full">
+          <Card className="p-6 card-elegant overflow-hidden">
+            {!areImagesReady && (
+              <div className="h-[400px] md:h-[500px] w-full flex items-center justify-center bg-[#f9f4ef]">
+                <div className="w-12 h-12 border-4 border-[#aa6b5d] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            <div className={`relative h-[400px] md:h-[500px] w-full mb-4 ${areImagesReady ? '' : 'hidden'}`}>
+              <img 
+                src={activeTransformation.afterImage} 
+                alt={`Transformação - ${activeTransformation.name}`} 
+                className="w-full h-full object-cover rounded-lg shadow-md" 
+                loading="eager"
+                fetchPriority="high"
+              />
+              <div className="absolute bottom-4 left-0 right-0 mx-auto bg-white/80 backdrop-blur-sm py-2 px-4 text-center rounded-lg max-w-xs">
+                <p className="font-medium">{activeTransformation.name}</p>
+              </div>
+            </div>
+            {transformations.length > 1 && (
+              <div className="flex justify-center gap-2 mt-4">
+                {transformations.map((_, index) => (
+                  <button 
+                    key={index} 
+                    className={`w-3 h-3 rounded-full ${index === activeIndex ? 'bg-[#aa6b5d]' : 'bg-[#aa6b5d]/30'}`} 
+                    onClick={() => handleDotClick(index)} 
+                    aria-label={`Transformação ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </Card>
+        </div>
+      </div>
+    </div>
   </div>
-  <div className="md:w-1/2">
-    <img src={activeTransformation.afterImage} alt={`Transformação - ${activeTransformation.name}`} className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
-  </div>
-</div>
+);
