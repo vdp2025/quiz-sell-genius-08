@@ -653,164 +653,166 @@ export const EnhancedResultPageEditor: React.FC<EnhancedResultPageEditorProps> =
       <div className="flex-1 overflow-hidden grid grid-cols-4">
         {/* Painel de edição */}
         <div className="col-span-1 border-r">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col">
             <TabsList className="w-full">
               <TabsTrigger value="blocks" className="flex-1">Blocos</TabsTrigger>
               <TabsTrigger value="settings" className="flex-1">Configurações</TabsTrigger>
               <TabsTrigger value="styles" className="flex-1">Estilos</TabsTrigger>
             </TabsList>
-          </Tabs>
-          
-          <ScrollArea className="h-[calc(100vh-112px)]">
-            <div className="p-4">
-              <TabsContent value="blocks" className="mt-0">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium">Título da Página</h3>
-                    <Input 
-                      value={resultPage.title} 
-                      onChange={(e) => updatePageTitle(e.target.value)} 
-                      className="mt-1"
-                    />
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Button size="sm" variant="outline" onClick={() => addBlock('title')}>+ Título</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('subtitle')}>+ Subtítulo</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('text')}>+ Texto</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('image')}>+ Imagem</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('cta')}>+ CTA</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('testimonial')}>+ Depoimento</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('bonus')}>+ Bônus</Button>
-                    <Button size="sm" variant="outline" onClick={() => addBlock('guarantee')}>+ Garantia</Button>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="space-y-0">
-                    {resultPage.blocks
-                      .sort((a, b) => a.order - b.order)
-                      .map((block, index) => renderBlockEditor(block, index))}
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="settings" className="mt-0">
-                <div className="space-y-4">
-                  <div>
-                    <Label>Mostrar Estilos Secundários</Label>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <Switch 
-                        checked={resultPage.settings.showSecondaryStyles || false} 
-                        onCheckedChange={(checked) => updateSettings('showSecondaryStyles', checked)}
-                      />
-                      <Label>
-                        {resultPage.settings.showSecondaryStyles ? 'Visível' : 'Oculto'}
-                      </Label>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <Label>URL do Background (opcional)</Label>
-                    <Input 
-                      value={resultPage.settings.backgroundImage || ''} 
-                      onChange={(e) => updateSettings('backgroundImage', e.target.value)} 
-                      placeholder="https://exemplo.com/fundo.jpg"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label>Família de Fontes</Label>
-                    <Select 
-                      value={resultPage.settings.fontFamily || 'inherit'} 
-                      onValueChange={(value) => updateSettings('fontFamily', value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione a fonte" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="inherit">Padrão</SelectItem>
-                        <SelectItem value="'Playfair Display', serif">Playfair Display</SelectItem>
-                        <SelectItem value="'Montserrat', sans-serif">Montserrat</SelectItem>
-                        <SelectItem value="'Roboto', sans-serif">Roboto</SelectItem>
-                        <SelectItem value="'Poppins', sans-serif">Poppins</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="styles" className="mt-0">
-                <div className="space-y-4">
-                  <div>
-                    <Label>Cor de Fundo</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Input 
-                        value={resultPage.settings.backgroundColor || '#fffaf7'} 
-                        onChange={(e) => updateSettings('backgroundColor', e.target.value)} 
-                      />
-                      <div 
-                        className="w-6 h-6 border rounded" 
-                        style={{ backgroundColor: resultPage.settings.backgroundColor || '#fffaf7' }}
-                      ></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <Label>Cor Primária</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Input 
-                        value={resultPage.settings.primaryColor || '#aa6b5d'} 
-                        onChange={(e) => updateSettings('primaryColor', e.target.value)} 
-                      />
-                      <div 
-                        className="w-6 h-6 border rounded" 
-                        style={{ backgroundColor: resultPage.settings.primaryColor || '#aa6b5d' }}
-                      ></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <Label>Cor Secundária</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Input 
-                        value={resultPage.settings.secondaryColor || '#B89B7A'} 
-                        onChange={(e) => updateSettings('secondaryColor', e.target.value)} 
-                      />
-                      <div 
-                        className="w-6 h-6 border rounded" 
-                        style={{ backgroundColor: resultPage.settings.secondaryColor || '#B89B7A' }}
-                      ></div>
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="font-medium mb-2">Estilo Principal</h3>
-                    <div className="bg-gray-100 p-3 rounded-md">
-                      <p className="font-medium">{primaryStyle.category}</p>
-                      <p className="text-sm text-gray-500">Percentual: {primaryStyle.percentage}%</p>
-                    </div>
-                  </div>
-                  
-                  {secondaryStyles.length > 0 && (
-                    <div>
-                      <h3 className="font-medium mb-2">Estilos Secundários</h3>
-                      <div className="space-y-2">
-                        {secondaryStyles.map(style => (
-                          <div key={style.category} className="bg-gray-100 p-2 rounded-md">
-                            <p className="font-medium">{style.category}</p>
-                            <p className="text-sm text-gray-500">Percentual: {style.percentage}%</p>
-                          </div>
-                        ))}
+            
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-[calc(100vh-112px)]">
+                <div className="p-4">
+                  <TabsContent value="blocks" className="mt-0">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-medium">Título da Página</h3>
+                        <Input 
+                          value={resultPage.title} 
+                          onChange={(e) => updatePageTitle(e.target.value)} 
+                          className="mt-1"
+                        />
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        <Button size="sm" variant="outline" onClick={() => addBlock('title')}>+ Título</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('subtitle')}>+ Subtítulo</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('text')}>+ Texto</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('image')}>+ Imagem</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('cta')}>+ CTA</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('testimonial')}>+ Depoimento</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('bonus')}>+ Bônus</Button>
+                        <Button size="sm" variant="outline" onClick={() => addBlock('guarantee')}>+ Garantia</Button>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div className="space-y-0">
+                        {resultPage.blocks
+                          .sort((a, b) => a.order - b.order)
+                          .map((block, index) => renderBlockEditor(block, index))}
                       </div>
                     </div>
-                  )}
+                  </TabsContent>
+                  
+                  <TabsContent value="settings" className="mt-0">
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Mostrar Estilos Secundários</Label>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Switch 
+                            checked={resultPage.settings.showSecondaryStyles || false} 
+                            onCheckedChange={(checked) => updateSettings('showSecondaryStyles', checked)}
+                          />
+                          <Label>
+                            {resultPage.settings.showSecondaryStyles ? 'Visível' : 'Oculto'}
+                          </Label>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label>URL do Background (opcional)</Label>
+                        <Input 
+                          value={resultPage.settings.backgroundImage || ''} 
+                          onChange={(e) => updateSettings('backgroundImage', e.target.value)} 
+                          placeholder="https://exemplo.com/fundo.jpg"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label>Família de Fontes</Label>
+                        <Select 
+                          value={resultPage.settings.fontFamily || 'inherit'} 
+                          onValueChange={(value) => updateSettings('fontFamily', value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a fonte" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="inherit">Padrão</SelectItem>
+                            <SelectItem value="'Playfair Display', serif">Playfair Display</SelectItem>
+                            <SelectItem value="'Montserrat', sans-serif">Montserrat</SelectItem>
+                            <SelectItem value="'Roboto', sans-serif">Roboto</SelectItem>
+                            <SelectItem value="'Poppins', sans-serif">Poppins</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="styles" className="mt-0">
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Cor de Fundo</Label>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Input 
+                            value={resultPage.settings.backgroundColor || '#fffaf7'} 
+                            onChange={(e) => updateSettings('backgroundColor', e.target.value)} 
+                          />
+                          <div 
+                            className="w-6 h-6 border rounded" 
+                            style={{ backgroundColor: resultPage.settings.backgroundColor || '#fffaf7' }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label>Cor Primária</Label>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Input 
+                            value={resultPage.settings.primaryColor || '#aa6b5d'} 
+                            onChange={(e) => updateSettings('primaryColor', e.target.value)} 
+                          />
+                          <div 
+                            className="w-6 h-6 border rounded" 
+                            style={{ backgroundColor: resultPage.settings.primaryColor || '#aa6b5d' }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label>Cor Secundária</Label>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Input 
+                            value={resultPage.settings.secondaryColor || '#B89B7A'} 
+                            onChange={(e) => updateSettings('secondaryColor', e.target.value)} 
+                          />
+                          <div 
+                            className="w-6 h-6 border rounded" 
+                            style={{ backgroundColor: resultPage.settings.secondaryColor || '#B89B7A' }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div>
+                        <h3 className="font-medium mb-2">Estilo Principal</h3>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-medium">{primaryStyle.category}</p>
+                          <p className="text-sm text-gray-500">Percentual: {primaryStyle.percentage}%</p>
+                        </div>
+                      </div>
+                      
+                      {secondaryStyles.length > 0 && (
+                        <div>
+                          <h3 className="font-medium mb-2">Estilos Secundários</h3>
+                          <div className="space-y-2">
+                            {secondaryStyles.map(style => (
+                              <div key={style.category} className="bg-gray-100 p-2 rounded-md">
+                                <p className="font-medium">{style.category}</p>
+                                <p className="text-sm text-gray-500">Percentual: {style.percentage}%</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
                 </div>
-              </TabsContent>
+              </ScrollArea>
             </div>
-          </ScrollArea>
+          </Tabs>
         </div>
         
         {/* Painel de pré-visualização */}
