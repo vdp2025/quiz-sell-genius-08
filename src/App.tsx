@@ -88,6 +88,8 @@ const App = () => {
               <Route path="/admin/analytics" element={<AnalyticsPage />} />
               <Route path="/admin/ab-test" element={<ABTestPage />} />
               <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
+              {/* Adicionando acesso ao protótipo no painel admin */}
+              <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
