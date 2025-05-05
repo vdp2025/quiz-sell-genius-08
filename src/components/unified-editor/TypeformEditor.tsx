@@ -31,6 +31,26 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
     }
   };
 
+  const handleOptionSelect = (optionId: string) => {
+    const newQuestions = [...questions];
+    const currentQuestion = newQuestions[currentQuestionIndex];
+    const selectedOption = currentQuestion.options.find(option => option.id === optionId);
+    if (selectedOption) {
+      selectedOption.isSelected = !selectedOption.isSelected;
+      onStateChange({
+        ...editorState,
+        quizEditorState: {
+          ...editorState.quizEditorState,
+          components: newQuestions
+        }
+      });
+    }
+  };
+
+  const handleSaveChanges = () => {
+    console.log('Salvando alterações...', editorState);
+  };
+
   const slideVariants = {
     enter: (direction: number) => ({
       y: direction > 0 ? 100 : -100,
@@ -48,9 +68,27 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
     })
   };
 
+  const handleLiveEdit = (changes) => {
+    const updatedQuestions = questions.map((question, index) => {
+      if (index === currentQuestionIndex) {
+        return {
+          ...question,
+          ...changes
+        };
+      }
+      return question;
+    });
+    onStateChange({
+      ...editorState,
+      quizEditorState: {
+        ...editorState.quizEditorState,
+        components: updatedQuestions
+      }
+    });
+  };
+
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 to-white">
-      {/* Barra de progresso */}
       <div className="w-full h-1 bg-gray-200">
         <div
           className="h-full bg-indigo-600 transition-all duration-300"
@@ -60,7 +98,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
         />
       </div>
 
-      {/* Área principal da pergunta */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 relative overflow-hidden">
         <AnimatePresence initial={false} custom={currentQuestionIndex}>
           <motion.div
@@ -81,7 +118,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
                 <h2 className="text-4xl font-bold text-gray-900 mb-8">
                   {questions[currentQuestionIndex].title}
                 </h2>
-                
                 <div className="grid gap-4">
                   {questions[currentQuestionIndex].options?.map((option, index) => (
                     <Button
@@ -91,7 +127,7 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
                         "w-full p-6 text-left hover:bg-indigo-50 hover:border-indigo-300 transition-all",
                         "flex items-center justify-between group"
                       )}
-                      onClick={() => handleNextQuestion()}
+                      onClick={() => handleLiveEdit({ options: [{ ...option, isSelected: !option.isSelected }] })}
                     >
                       <span className="text-lg">{option.text}</span>
                       <ChevronDown className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -103,7 +139,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
           </motion.div>
         </AnimatePresence>
 
-        {/* Botões de navegação */}
         <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4">
           <Button
             variant="ghost"
@@ -124,7 +159,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
         </div>
       </div>
 
-      {/* Contador de progresso */}
       <div className="p-4 text-center text-sm text-gray-500">
         {currentQuestionIndex + 1} de {questions.length}
       </div>
