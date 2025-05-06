@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';
@@ -5,7 +6,6 @@ import { useQuizContext } from '../context/QuizContext';
 import { useAuth } from '../context/AuthContext';
 import { trackLeadGeneration, trackQuizStart, captureUTMParameters, initFacebookPixel } from '@/utils/analytics';
 import { useUtmParameters } from '@/hooks/useUtmParameters';
-import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const [started, setStarted] = useState(false);
@@ -62,11 +62,6 @@ const HomePage = () => {
       ) : (
         <QuizPage />
       )}
-      <div className="mt-8 flex justify-center">
-        <Link to="/style-offer" className="bg-[#432818] text-white px-6 py-3 rounded-lg shadow hover:bg-[#6F4E37] transition text-lg font-semibold">
-          Conheça a Oferta de Estilo
-        </Link>
-      </div>
     </div>
   );
 };
