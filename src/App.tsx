@@ -19,6 +19,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ABTestPage from './pages/admin/ABTestPage';
 import ABTestManagerPage from './pages/ABTestManagerPage';
 import StyleOfferPage from './pages/StyleOfferPage';
+import StyleOfferResultPage from './pages/StyleOfferResultPage';
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -92,6 +93,7 @@ const App = () => {
               {/* Adicionando acesso ao protótipo no painel admin */}
               <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
               <Route path="/style-offer" element={<StyleOfferPage />} />
+              <Route path="/resultado2" element={<StyleOfferResultPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
