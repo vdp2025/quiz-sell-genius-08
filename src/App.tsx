@@ -21,7 +21,6 @@ import ABTestManagerPage from './pages/ABTestManagerPage';
 import StyleOfferPage from './pages/StyleOfferPage';
 import StyleOfferResultPage from './pages/StyleOfferResultPage';
 import ResultPage2 from './pages/ResultPage2';
-import QuizIntro2 from './pages/QuizIntro2';
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -96,7 +95,6 @@ const App = () => {
               <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
               <Route path="/style-offer" element={<StyleOfferPage />} />
               <Route path="/resultado2" element={<ResultPage2 />} />
-              <Route path="/quizintro2" element={<QuizIntro2 />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
