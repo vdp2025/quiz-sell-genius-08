@@ -94,6 +94,7 @@ const ResultPage: React.FC = () => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
   
+  // Check access to user.role (Already correct, this is just for verification)
   if (!primaryStyle) return <ErrorState />;
   if (isLoading || isLoadingABTest) return <ResultSkeleton />;
   
