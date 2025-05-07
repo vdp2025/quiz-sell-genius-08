@@ -1,25 +1,36 @@
-
-import React from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
-import HomePage from './pages/HomePage';
-import QuizPage from './components/QuizPage';
-import ResultPage from './pages/ResultPage';
-import ResultPagePrototype from './pages/ResultPagePrototype';
-import QuizOfferPage from './pages/QuizOfferPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import EditorPage from './pages/admin/EditorPage';
-import SettingsPage from './pages/admin/SettingsPage';
-import AnalyticsPage from './pages/admin/AnalyticsPage';
-import NotFoundPage from './pages/NotFoundPage';
-import EditorNotFoundPage from './pages/EditorNotFoundPage';
-import EnhancedResultPageEditor from './pages/EnhancedResultPageEditorPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 import { Toaster } from '@/components/ui/toaster';
-import ABTestPage from './pages/admin/ABTestPage';
-import ABTestManagerPage from './pages/ABTestManagerPage';
+import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
+
+// Componente de loading para Suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+      <p className="mt-4 text-gray-600">Carregando...</p>
+    </div>
+  </div>
+);
+
+// Lazy loading das páginas principais para melhorar performance
+const HomePage = lazy(() => import('./pages/HomePage'));
+const QuizPage = lazy(() => import('./components/QuizPage'));
+const ResultPage = lazy(() => import('./pages/ResultPage'));
+const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
+const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
+const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const EditorNotFoundPage = lazy(() => import('./pages/EditorNotFoundPage'));
+const EnhancedResultPageEditor = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
+const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
+const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -37,7 +48,7 @@ const App = () => {
   const lowPerformance = isLowPerformanceDevice();
 
   // Inicializar analytics na montagem do componente
-  React.useEffect(() => {
+  useEffect(() => {
     // Inicializar Facebook Pixel
     initFacebookPixel();
     
@@ -48,7 +59,7 @@ const App = () => {
   }, [lowPerformance]);
 
   // Reinicializar Facebook Pixel em mudanças de rota
-  React.useEffect(() => {    
+  useEffect(() => {    
     // Função para lidar com mudanças de rota
     const handleRouteChange = () => {
       if (typeof window !== 'undefined' && window.fbq) {
@@ -71,31 +82,33 @@ const App = () => {
       <QuizProvider>
         <TooltipProvider>
           <Router>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/prototipo" element={<ResultPagePrototype />} />
-              {/* Nova página de oferta com quiz embutido */}
-              <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-              {/* Editor visual aprimorado para página de resultados */}
-              <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
-              {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
-              <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              {/* Manter apenas uma rota principal para o editor unificado */}
-              <Route path="/admin/editor" element={<EditorPage />} />
-              <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
-              {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
-              <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
-              <Route path="/admin/settings" element={<SettingsPage />} />
-              <Route path="/admin/analytics" element={<AnalyticsPage />} />
-              <Route path="/admin/ab-test" element={<ABTestPage />} />
-              <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
-              {/* Adicionando acesso ao protótipo no painel admin */}
-              <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route path="/prototipo" element={<ResultPagePrototype />} />
+                {/* Nova página de oferta com quiz embutido */}
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                {/* Editor visual aprimorado para página de resultados */}
+                <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
+                {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
+                <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                {/* Manter apenas uma rota principal para o editor unificado */}
+                <Route path="/admin/editor" element={<EditorPage />} />
+                <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
+                {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
+                <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
+                <Route path="/admin/settings" element={<SettingsPage />} />
+                <Route path="/admin/analytics" element={<AnalyticsPage />} />
+                <Route path="/admin/ab-test" element={<ABTestPage />} />
+                <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
+                {/* Adicionando acesso ao protótipo no painel admin */}
+                <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
           </Router>
           <Toaster />
         </TooltipProvider>
