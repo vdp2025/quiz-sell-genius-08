@@ -6,6 +6,9 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
 import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 
+// Importação direta do HomePage para evitar carregamento dinâmico que está gerando erro
+import HomePage from './pages/HomePage';
+
 // Componente de loading para Suspense
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -17,7 +20,7 @@ const LoadingFallback = () => (
 );
 
 // Lazy loading das páginas principais para melhorar performance
-const HomePage = lazy(() => import('./pages/HomePage'));
+// Removido o lazy loading do HomePage para resolver o erro de carregamento
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
@@ -84,6 +87,7 @@ const App = () => {
           <Router>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
+                {/* O HomePage agora é carregado diretamente, não via lazy loading */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/quiz" element={<QuizPage />} />
                 <Route path="/resultado" element={<ResultPage />} />
