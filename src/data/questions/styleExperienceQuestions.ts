@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '../../types/quiz';
 
 export const styleExperienceQuestions: QuizQuestion[] = [
@@ -7,6 +6,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
     title: 'Como você aprende melhor sobre estilo e moda?',
     type: 'text',
     multiSelect: 1,
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/style-learning.jpg',
     options: [
       {
         id: 'strategic-3-1',
@@ -35,6 +35,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
     title: 'O que você mais valoriza em um guia de estilo?',
     type: 'text',
     multiSelect: 1,
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/style-guide-value.jpg',
     options: [
       {
         id: 'strategic-4-1',

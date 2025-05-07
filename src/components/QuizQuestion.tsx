@@ -5,7 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption } from './quiz/QuizOption';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Button } from './ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ImageIcon } from 'lucide-react';
 import { useQuestionScroll } from '@/hooks/useQuestionScroll';
 
 interface QuizQuestionProps {
@@ -33,6 +33,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const isStrategicQuestion = question.id.startsWith('strategic');
   const hasImageOptions = question.type !== 'text';
   const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
   
   useEffect(() => {
@@ -76,7 +77,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const getGridColumns = () => {
     if (question.type === 'text') {
       if (isStrategicQuestion) {
-        return "grid-cols-1 gap-3 px-2";
+        return "grid-cols-1 gap-4 px-2"; // Increased gap for strategic questions
       }
       return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
     }
@@ -98,12 +99,23 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             {highlightStrategicWords(question.title)}
           </h2>
           
-          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-            <div className="w-full mb-6">
+          {isStrategicQuestion && question.imageUrl && showQuestionImage && (
+            <div className="w-full mb-8 transition-all duration-300">
+              {!imageLoaded && !imageError && (
+                <div className="w-full max-w-md h-44 mx-auto rounded-lg bg-[#F5F2EE] animate-pulse flex items-center justify-center">
+                  <ImageIcon className="w-10 h-10 text-[#B89B7A]/40" />
+                </div>
+              )}
               <img 
                 src={question.imageUrl} 
-                alt="Question visual" 
-                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                alt="Ilustração da questão" 
+                className={cn(
+                  "w-full max-w-md mx-auto rounded-lg shadow-md transition-all duration-300",
+                  "hover:scale-[1.01] hover:shadow-lg", // Add subtle hover effect
+                  imageLoaded ? "opacity-100" : "opacity-0 absolute",
+                  imageError && "hidden"
+                )}
+                onLoad={() => setImageLoaded(true)}
                 onError={() => {
                   console.error(`Failed to load image: ${question.imageUrl}`);
                   setImageError(true);
@@ -142,17 +154,17 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         ))}
       </div>
       
-      <div className="flex justify-between items-center gap-3 mt-6">
-        {!autoAdvance && (
+      {!autoAdvance && (
+        <div className="flex justify-between items-center gap-3 mt-6">
           <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
             Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
           </p>
-        )}
-        
-        <div className="ml-auto">
-          {/* Navigation buttons would go here if needed */}
+          
+          <div className="ml-auto">
+            {/* Navigation buttons would go here if needed */}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
