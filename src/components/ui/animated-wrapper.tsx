@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -27,43 +26,42 @@ export const AnimatedWrapper = ({
   const [mounted, setMounted] = useState(false);
   const isLowPerformance = useIsLowPerformanceDevice();
   
-  // Skip animations on low performance devices if configured
-  const shouldAnimate = !(disableOnLowPerformance && isLowPerformance);
+  // Desativar completamente as animações para eliminar o flash
+  const shouldAnimate = false; // Anteriormente: !(disableOnLowPerformance && isLowPerformance);
   
   useEffect(() => {
     setMounted(true);
   }, []);
   
-  // Determine animation classes based on type
+  // Simplificar as classes de animação para evitar flashes
   const getAnimationClasses = () => {
     if (!shouldAnimate || animation === "none") return "";
     
-    const baseClasses = `transition-all duration-${duration}`;
+    // Usar uma transição mais simples e suave
+    const baseClasses = `transition-opacity`;
     
     switch (animation) {
       case "fade":
         return `${baseClasses} ${show && mounted ? "opacity-100" : "opacity-0"}`;
       case "slide":
-        return `${baseClasses} ${show && mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`;
+        // Remover o translate-y que pode causar flashes
+        return `${baseClasses} ${show && mounted ? "opacity-100" : "opacity-0"}`;
       case "scale":
-        return `${baseClasses} ${show && mounted ? "opacity-100 scale-100" : "opacity-0 scale-95"}`;
+        // Remover o scale que pode causar flashes
+        return `${baseClasses} ${show && mounted ? "opacity-100" : "opacity-0"}`;
       default:
         return `${baseClasses} ${show && mounted ? "opacity-100" : "opacity-0"}`;
     }
   };
   
-  const animationStyles = {
-    transitionDelay: delay > 0 && shouldAnimate ? `${delay}ms` : undefined,
-    transitionDuration: shouldAnimate ? `${duration}ms` : undefined
-  };
+  // Remover estilos de transição para evitar problemas
+  const animationStyles = {};
 
   return (
     <div
       className={cn(
-        getAnimationClasses(),
         className
       )}
-      style={animationStyles}
       {...props}
     >
       {children}
