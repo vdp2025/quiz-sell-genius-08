@@ -120,7 +120,7 @@
   }
 }
 
-/* Glossy Effect */
+/* Glossy Effect - Fixed to remove transparent backgrounds */
 .glossy {
   @apply relative overflow-hidden;
   background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.15) 100%);
@@ -148,9 +148,9 @@
   animation: shimmer 3s infinite;
 }
 
-/* Elegant Glass Effect */
+/* Elegant Glass Effect - Fixed to use solid colors instead of transparency */
 .glass-panel {
-  @apply backdrop-blur-md bg-white/70 border border-white/20;
+  @apply bg-[#F9F7F4] border border-[#EAE4DA];
   box-shadow: 0 8px 32px 0 rgba(170, 107, 93, 0.12);
 }
 
@@ -302,3 +302,4 @@
   background-color: #ff5a5a;
   transform: rotate(-5deg);
 }
+

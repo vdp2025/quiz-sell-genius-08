@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -6,6 +7,7 @@ import HomePage from './pages/HomePage';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
 import ResultPagePrototype from './pages/ResultPagePrototype';
+import QuizOfferPage from './pages/QuizOfferPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
@@ -18,11 +20,6 @@ import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
 import { Toaster } from '@/components/ui/toaster';
 import ABTestPage from './pages/admin/ABTestPage';
 import ABTestManagerPage from './pages/ABTestManagerPage';
-import StyleOfferPage from './pages/StyleOfferPage';
-import StyleOfferResultPage from './pages/StyleOfferResultPage';
-import ResultPage2 from './pages/ResultPage2';
-import QuizIntro2 from './pages/QuizIntro2';
-import OfertaPage from './pages/OfertaPage';
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -79,6 +76,8 @@ const App = () => {
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/prototipo" element={<ResultPagePrototype />} />
+              {/* Nova página de oferta com quiz embutido */}
+              <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
               {/* Editor visual aprimorado para página de resultados */}
               <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
               {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
@@ -95,10 +94,6 @@ const App = () => {
               <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
               {/* Adicionando acesso ao protótipo no painel admin */}
               <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
-              <Route path="/style-offer" element={<StyleOfferPage />} />
-              <Route path="/resultado2" element={<ResultPage2 />} />
-              <Route path="/quizintro2" element={<QuizIntro2 />} />
-              <Route path="/oferta" element={<OfertaPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
