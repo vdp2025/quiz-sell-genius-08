@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Eye, EyeOff, Save, Template, ChevronLeft, Desktop, Tablet, Smartphone } from 'lucide-react';
+import { Eye, EyeOff, Save, BookTemplate, ChevronLeft, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { EditorTab } from '../UnifiedVisualEditor';
 
 export interface EditorToolbarProps {
@@ -57,7 +57,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
               className={`px-2 ${viewportSize === 'xl' ? 'bg-gray-100' : ''}`}
               onClick={() => onViewportSizeChange('xl')}
             >
-              <Desktop className="w-4 h-4" />
+              <Monitor className="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
@@ -80,7 +80,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         
         {onOpenTemplateModal && (
           <Button variant="outline" size="sm" onClick={onOpenTemplateModal}>
-            <Template className="w-4 h-4 mr-1" />
+            <BookTemplate className="w-4 h-4 mr-1" />
             Modelos
           </Button>
         )}

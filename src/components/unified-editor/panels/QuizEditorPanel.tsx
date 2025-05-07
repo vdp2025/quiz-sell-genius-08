@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
 import { toast } from '@/components/ui/use-toast';
-// ... other imports as needed
+import { QuizComponentType } from '@/types/quizBuilder';
 
 interface QuizEditorPanelProps {
   isPreviewing: boolean;
@@ -18,7 +19,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
   // For tracking active stage type (moved from root level)
   const [activeStageType, setActiveStageType] = useState<string | null>(null);
 
-  const handleComponentSelect = (type: string) => {
+  const handleComponentSelect = (type: QuizComponentType) => {
     try {
       // Call an appropriate method from quizBuilder
       if (quizBuilder && typeof quizBuilder.addComponent === 'function') {
