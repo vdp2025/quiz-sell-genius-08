@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
@@ -74,11 +73,9 @@ const QuizPage: React.FC = () => {
     }
   }, [quizStartTracked, user]);
 
-  // Handle strategic answer
+  // Handle strategic answer - Remover todos os timeouts
   const handleStrategicAnswer = useCallback((response: UserResponse) => {
     try {
-      setIsTransitioning(true);
-      
       setStrategicAnswers(prev => ({
         ...prev,
         [response.questionId]: response.selectedOptions
@@ -106,20 +103,13 @@ const QuizPage: React.FC = () => {
       }
       
       if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
-        setTimeout(() => {
-          setShowingFinalTransition(true);
-          setIsTransitioning(false);
-          // Track quiz completion
-          trackQuizComplete();
-        }, 500);
+        setShowingFinalTransition(true);
+        // Track quiz completion
+        trackQuizComplete();
       } else {
-        setTimeout(() => {
-          setCurrentStrategicQuestionIndex(prev => prev + 1);
-          setIsTransitioning(false);
-        }, 500);
+        setCurrentStrategicQuestionIndex(prev => prev + 1);
       }
     } catch (error) {
-      setIsTransitioning(false);
       toast({
         title: "Erro no processamento da resposta",
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
@@ -128,11 +118,9 @@ const QuizPage: React.FC = () => {
     }
   }, [currentStrategicQuestionIndex, saveStrategicAnswer, totalQuestions]);
 
-  // Handle answer submission
+  // Handle answer submission - Remover todos os timeouts
   const handleAnswerSubmit = useCallback((response: UserResponse) => {
     try {
-      setIsTransitioning(true);
-      
       handleAnswer(response.questionId, response.selectedOptions);
       
       // Track answer submission with more detailed info
@@ -153,12 +141,7 @@ const QuizPage: React.FC = () => {
                        currentQuestionIndex,
                        totalQuestions + strategicQuestions.length);
       }
-      
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 300);
     } catch (error) {
-      setIsTransitioning(false);
       toast({
         title: "Erro na submissão da resposta",
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
@@ -167,7 +150,7 @@ const QuizPage: React.FC = () => {
     }
   }, [currentQuestionIndex, handleAnswer, totalQuestions]);
 
-  // Handle showing result
+  // Handle showing result - Remover timeout
   const handleShowResult = useCallback(() => {
     try {
       const results = submitQuizIfComplete();
@@ -178,14 +161,8 @@ const QuizPage: React.FC = () => {
         trackResultView(results.primaryStyle.category);
       }
       
-      // Adicionar uma transição suave antes de redirecionar
-      setIsTransitioning(true);
-      
-      setTimeout(() => {
-        window.location.href = '/resultado';
-      }, 500);
+      window.location.href = '/resultado';
     } catch (error) {
-      setIsTransitioning(false);
       toast({
         title: "Erro ao mostrar resultado",
         description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
@@ -194,15 +171,10 @@ const QuizPage: React.FC = () => {
     }
   }, [strategicAnswers, submitQuizIfComplete]);
 
-  // Handle next click
+  // Handle next click - Remover timeout
   const handleNextClick = useCallback(() => {
-    setIsTransitioning(true);
-    
     if (!isLastQuestion) {
       handleNext();
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 300);
     } else {
       calculateResults();
       setShowingTransition(true);
@@ -213,25 +185,26 @@ const QuizPage: React.FC = () => {
         totalQuestions, 
         totalQuestions + strategicQuestions.length
       );
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 500);
     }
   }, [calculateResults, handleNext, isLastQuestion, totalQuestions]);
 
   // Determine if we can proceed based on the question type and selected answers
   const getCurrentCanProceed = useCallback(() => {
+    if (!currentQuestion) return false;
+    
+    const requiredSelections = currentQuestion.multiSelect || 1;
     const currentAnswersLength = currentAnswers?.length || 0;
-    const isStrategicQuestion = currentQuestion?.id.startsWith('strategic');
-    return isStrategicQuestion ? currentAnswersLength === 1 : currentAnswersLength === 3;
-  }, [currentAnswers?.length, currentQuestion?.id]);
+    
+    // Simplificar a verificação para evitar cálculos desnecessários
+    return currentAnswersLength >= requiredSelections;
+  }, [currentAnswers?.length, currentQuestion]);
 
   return (
     <div className="relative">
       {/* Barra de progresso */}
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
         <div 
-          className="h-full bg-[#b29670] transition-all duration-500 ease-in-out"
+          className="h-full bg-[#b29670]"
           style={{ width: `${progressPercentage}%` }}
           role="progressbar"
           aria-valuenow={progressPercentage}
@@ -241,7 +214,7 @@ const QuizPage: React.FC = () => {
       </div>
       
       <QuizContainer>
-        <div className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-50' : 'opacity-100'}`}>
+        <div>
           <QuizTransitionManager
             showingTransition={showingTransition}
             showingFinalTransition={showingFinalTransition}

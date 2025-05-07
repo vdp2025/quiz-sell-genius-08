@@ -1,5 +1,4 @@
-
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button } from '../ui/button';
 
 interface QuizNavigationProps {
@@ -19,19 +18,16 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   selectedOptionsCount,
   isLastQuestion = false
 }) => {
-  const requiredOptions = currentQuestionType === 'strategic' ? 1 : 3;
-  
-  // Strict validation of the number of options
-  const isButtonEnabled = useMemo(() => {
-    return selectedOptionsCount === requiredOptions;
-  }, [selectedOptionsCount, requiredOptions]);
+  // Usar diretamente o canProceed fornecido pelo componente pai
+  // em vez de recalcular com uma regra rígida
+  const isButtonEnabled = canProceed;
 
   const getHelperText = () => {
     if (!isButtonEnabled) {
       if (currentQuestionType === 'strategic') {
-        return 'Selecione exatamente 1 opção para continuar';
+        return 'Selecione 1 opção para continuar';
       }
-      return 'Selecione exatamente 3 opções para continuar';
+      return 'Selecione 3 opções para continuar';
     }
     return '';
   };
@@ -55,7 +51,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         <Button
           onClick={onNext}
           disabled={!isButtonEnabled}
-          className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50' : ''}`}
         >
           {isLastQuestion ? 'Ver Resultado' : 'Próximo'}
         </Button>
