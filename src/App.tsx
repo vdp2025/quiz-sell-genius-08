@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -6,6 +7,7 @@ import HomePage from './pages/HomePage';
 import QuizPage from './components/QuizPage';
 import ResultPage from './pages/ResultPage';
 import ResultPagePrototype from './pages/ResultPagePrototype';
+import QuizOfferPage from './pages/QuizOfferPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EditorPage from './pages/admin/EditorPage';
 import SettingsPage from './pages/admin/SettingsPage';
@@ -74,6 +76,8 @@ const App = () => {
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/prototipo" element={<ResultPagePrototype />} />
+              {/* Nova página de oferta com quiz embutido */}
+              <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
               {/* Editor visual aprimorado para página de resultados */}
               <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
               {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
