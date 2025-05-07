@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -37,8 +36,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
       "md:mx-auto", // Center on desktop
-      !isMobile && "md:max-w-[40%]", // Reduced from 50% to 40% on desktop
-      is3DQuestion && "transform-gpu"
+      !isMobile && "md:max-w-[40%]" // Reduced from 50% to 40% on desktop
     )}>
       <AspectRatio 
         ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
@@ -50,15 +48,10 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             alt={altText}
             className={cn(
               "object-cover w-full h-full",
-              "transition-all duration-300 ease-in-out",
-              "scale-110",
-              isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
+              // Removendo todos os efeitos e transições
+              isSelected && "border-2 border-brand-gold"
             )}
             onError={() => setImageError(true)}
-            style={{
-              willChange: 'transform',
-              transformOrigin: 'center center',
-            }}
           />
         </div>
       </AspectRatio>
