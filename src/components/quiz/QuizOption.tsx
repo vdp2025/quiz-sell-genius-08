@@ -34,32 +34,35 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     }
   }, [isSelected]);
 
-  // Construir classes de estilo para texto e contêiner
+  // Construir classes de estilo para texto e contêiner com menos contraste
   const containerClasses = cn(
     "relative h-full flex flex-col rounded-lg overflow-hidden",
-    "will-change-transform transition-all duration-300 ease-out cursor-pointer", 
+    "will-change-auto transition-all duration-400 ease-in-out cursor-pointer", 
     
-    // Para opções de texto
+    // Para opções de texto - usando fundo consistente
     type === 'text' && "p-4 border shadow-sm",
     
     // Para opções de imagem
     type !== 'text' && "border border-[#B89B7A]/20",
     
-    // Estado selecionado - usando cores mais suaves
+    // Estado base - usando fundo suave para todos os estados
+    "bg-[#FAF7F3]",
+    
+    // Estado selecionado - usando cores mais suaves sem mudança abrupta de fundo
     isSelected ? 
       type === 'text' 
         ? "border-brand-gold/60 shadow-md ring-1 ring-brand-gold/30 transform scale-[1.01]" 
         : "border-brand-gold/60 shadow-md ring-1 ring-brand-gold/30 transform scale-[1.01]"
       : 
-      // Estado não selecionado - preparado para transição
+      // Estado não selecionado e hover - com diferenças sutis
       type === 'text' 
-        ? `border-[#B89B7A]/10 ${isHovered ? "border-brand-gold/40 shadow-sm bg-[#FAF7F3]/80 scale-[1.01]" : "bg-[#FEFEFE]"}` 
+        ? `border-[#B89B7A]/10 ${isHovered ? "border-brand-gold/40 shadow-sm bg-[#FAF7F3] scale-[1.005]" : ""}` 
         : `${isHovered ? "border-brand-gold/40 shadow-sm" : ""}`
   );
   
   // Corrigindo texto para evitar mudanças abruptas
   const textClasses = cn(
-    "transition-colors duration-300",
+    "transition-colors duration-400",
     type !== 'text' 
       ? cn(
           "leading-tight font-medium bg-transparent py-0 px-2 mt-auto relative", 
@@ -79,8 +82,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group h-full",
-        "transition-transform duration-300 ease-in-out", 
-        !type.includes('text') && !isSelected && "hover:scale-[1.02]",
+        "transition-all duration-400 ease-in-out", 
+        !type.includes('text') && !isSelected && "hover:scale-[1.01]", // Reduzido para transição mais sutil
         isDisabled && "opacity-50 cursor-not-allowed"
       )}
       onClick={() => !isDisabled && onSelect(option.id)}
@@ -89,6 +92,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
     >
+      {/* Overlay para hover - mais suave que mudar o background */}
+      {isHovered && !isSelected && type === 'text' && (
+        <div className="absolute inset-0 bg-brand-gold/5 rounded-lg transition-opacity duration-400 ease-in-out z-0"></div>
+      )}
+      
       {/* Contêiner principal com transições melhoradas */}
       <div className={containerClasses}>
         {type !== 'text' && option.imageUrl && (
@@ -111,7 +119,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         className={cn(
           "absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center shadow-sm z-10",
-          "transition-all duration-300",
+          "transition-all duration-400",
           isSelected 
             ? "opacity-100 bg-brand-gold transform scale-100" 
             : wasSelected 
@@ -121,7 +129,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
-          className="h-2 w-2 text-white transition-opacity duration-300" 
+          className="h-2 w-2 text-white transition-opacity duration-400" 
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor"
