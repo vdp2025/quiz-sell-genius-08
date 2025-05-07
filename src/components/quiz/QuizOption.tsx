@@ -33,10 +33,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       // Aplicar mudanças de estilo apenas nas colunas, não nas imagens
       if (isSelected) {
         optionRef.current.style.borderColor = '#b29670';
-        optionRef.current.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+        // Sombra mais pronunciada quando selecionado
+        optionRef.current.style.boxShadow = '0 4px 8px rgba(178, 150, 112, 0.25)';
       } else {
         optionRef.current.style.borderColor = '#B89B7A';
-        optionRef.current.style.boxShadow = 'none';
+        // Sombra leve quando não selecionado para dar profundidade
+        optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
       }
     }
   }, [isSelected]);
@@ -47,6 +49,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
         optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
+        // Aplicar sombra correspondente ao estado
+        optionRef.current.style.boxShadow = isSelected 
+          ? '0 2px 4px rgba(0, 0, 0, 0.05)' 
+          : '0 4px 8px rgba(178, 150, 112, 0.25)';
       }
       // Chamar onSelect com um pequeno atraso para evitar flash durante atualizações de estado
       setTimeout(() => {
@@ -76,8 +82,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           // Para opções de imagem - manter apenas borda na coluna, não nas imagens
           type !== 'text' && "border",
           
-          // Fundo sólido sem transparência
-          "bg-[#FEFEFE]"
+          // Fundo sólido sem transparência e adicionando sombra padrão
+          "bg-[#FEFEFE] shadow-sm hover:shadow-md"
         )}
       >
         {type !== 'text' && option.imageUrl && (
