@@ -140,7 +140,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
         isPreviewing={editorState.isPreviewing}
         onPreviewToggle={togglePreview}
         onSave={handleSave}
-        isSaving={isSaving}
+        activeTab={editorState.activeTab}
       />
 
       <div className="flex-1 overflow-hidden">

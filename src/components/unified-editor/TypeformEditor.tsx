@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UnifiedEditorState } from '@/types/unifiedEditor';
-import { DragEndEvent } from '@dnd-kit/core';
 
 interface TypeformEditorProps {
   editorState: UnifiedEditorState;
@@ -39,10 +38,10 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
     if (!newQuestions[currentQuestionIndex]) return;
 
     const currentQuestion = newQuestions[currentQuestionIndex];
-    // Check if options property exists
-    if (!currentQuestion?.options) return;
+    // Check if data.options property exists instead of direct options
+    if (!currentQuestion?.data?.options) return;
 
-    const selectedOption = currentQuestion.options.find(option => option.id === optionId);
+    const selectedOption = currentQuestion.data.options.find((option: any) => option.id === optionId);
     if (selectedOption) {
       selectedOption.isSelected = !selectedOption.isSelected;
       onStateChange({
@@ -124,10 +123,10 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
             {questions[currentQuestionIndex] && (
               <div className="space-y-8">
                 <h2 className="text-4xl font-bold text-gray-900 mb-8">
-                  {questions[currentQuestionIndex]?.title || "Question Title"}
+                  {questions[currentQuestionIndex]?.data?.title || "Question Title"}
                 </h2>
                 <div className="grid gap-4">
-                  {questions[currentQuestionIndex]?.options?.map((option, index) => (
+                  {questions[currentQuestionIndex]?.data?.options?.map((option: any, index: number) => (
                     <Button
                       key={option.id || `option-${index}`}
                       variant="outline"
@@ -136,11 +135,11 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
                         "flex items-center justify-between group"
                       )}
                       onClick={() => {
-                        if (questions[currentQuestionIndex]?.options) {
-                          const newOptions = [...questions[currentQuestionIndex].options || []];
+                        if (questions[currentQuestionIndex]?.data?.options) {
+                          const newOptions = [...questions[currentQuestionIndex].data.options];
                           if (newOptions[index]) {
                             newOptions[index] = { ...option, isSelected: !option.isSelected };
-                            handleLiveEdit({ options: newOptions });
+                            handleLiveEdit({ data: { ...questions[currentQuestionIndex].data, options: newOptions } });
                           }
                         }
                       }}

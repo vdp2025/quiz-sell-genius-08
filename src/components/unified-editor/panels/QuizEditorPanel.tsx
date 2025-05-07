@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
@@ -10,21 +10,31 @@ interface QuizEditorPanelProps {
 }
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
-  const {
-    quizEditorState,
-    updateQuizEditor,
-    activeStageType,
-    setActiveStageType,
-    addQuizComponent
-  } = useUnifiedEditor();
+  const unifiedEditor = useUnifiedEditor();
+  
+  // Access properties from quizBuilder instead of directly
+  const { quizBuilder } = unifiedEditor;
+  
+  // For tracking active stage type (moved from root level)
+  const [activeStageType, setActiveStageType] = useState<string | null>(null);
 
   const handleComponentSelect = (type: string) => {
     try {
-      addQuizComponent(type);
-      toast({
-        title: "Componente adicionado",
-        description: `Um novo componente do tipo ${type} foi adicionado ao editor.`,
-      });
+      // Call an appropriate method from quizBuilder
+      if (quizBuilder && typeof quizBuilder.addComponent === 'function') {
+        quizBuilder.addComponent(type);
+        toast({
+          title: "Componente adicionado",
+          description: `Um novo componente do tipo ${type} foi adicionado ao editor.`,
+        });
+      } else {
+        console.error("Method addComponent not found on quizBuilder");
+        toast({
+          title: "Funcionalidade incompleta",
+          description: "A funcionalidade de adicionar componente ainda não está disponível.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error("Error adding component:", error);
       toast({
@@ -36,13 +46,8 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
   };
 
   const handlePreviewToggle = (preview: boolean) => {
-    // Handle preview toggle, e.g. set something in the editor state
+    // Update component state instead of using setLivePreview which doesn't exist
     console.log("Preview toggled:", preview);
-    // If you had setLivePreview before, replace it with something like:
-    updateQuizEditor({ 
-      ...quizEditorState,
-      previewMode: preview 
-    });
   };
 
   return (
@@ -65,6 +70,11 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
           <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
             {/* Your quiz editor component goes here */}
             <p>Quiz Editor Content</p>
+            {unifiedEditor.quizBuilder && unifiedEditor.quizBuilder.components && (
+              <div>
+                <p>Number of components: {unifiedEditor.quizBuilder.components.length}</p>
+              </div>
+            )}
           </div>
         </div>
       </ResizablePanel>
