@@ -1,6 +1,9 @@
+
 /**
  * Inicializa o Pixel do Facebook
  */
+import { getPixelId, getCurrentFunnelConfig, getFacebookToken, getCtaUrl, getUtmCampaign, trackFunnelEvent } from '@/services/pixelManager';
+
 export const initFacebookPixel = () => {
   if (typeof window !== 'undefined') {
     // Verifica se o Pixel já foi inicializado para evitar duplicações
