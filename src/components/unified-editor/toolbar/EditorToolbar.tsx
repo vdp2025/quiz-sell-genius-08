@@ -8,13 +8,21 @@ export interface EditorToolbarProps {
   onPreviewToggle: () => void;
   onSave: () => void;
   isSaving?: boolean;
+  activeTab?: string;
+  onOpenTemplateModal?: () => void;
+  viewportSize?: 'sm' | 'md' | 'lg' | 'xl';
+  onViewportSizeChange?: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   isPreviewing,
   onPreviewToggle,
   onSave,
-  isSaving = false
+  isSaving = false,
+  activeTab,
+  onOpenTemplateModal,
+  viewportSize,
+  onViewportSizeChange
 }) => {
   return (
     <div className="w-full border-b bg-white py-2 px-4 flex items-center justify-between">

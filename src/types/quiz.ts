@@ -70,3 +70,32 @@ export interface QuizConfig {
     theme: string;
   };
 }
+
+// Add the missing interface for UserResponse
+export interface UserResponse {
+  questionId: string;
+  selectedOptions: string[];
+}
+
+// Add the missing interface for QuizResult
+export interface QuizResult {
+  primaryStyle: StyleResult;
+  secondaryStyles: StyleResult[];
+  totalSelections?: number;
+}
+
+// Add BlockType for the SortableBlock component
+export type BlockType = 
+  | 'title' 
+  | 'subtitle' 
+  | 'styleResult' 
+  | 'image' 
+  | 'text' 
+  | 'cta' 
+  | 'testimonial' 
+  | 'bonus' 
+  | 'guarantee' 
+  | 'carousel'
+  | 'heading'
+  | 'paragraph'
+  | string; // Allow any string to handle dynamic values

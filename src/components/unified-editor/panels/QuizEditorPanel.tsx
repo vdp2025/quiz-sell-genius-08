@@ -1,121 +1,83 @@
-
-import React, { useState } from 'react';
+import React from 'react';
+import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { QuizComponentType, QuizStage } from '@/types/quizBuilder';
-import BuilderLayout from '@/components/quiz-builder/components/BuilderLayout';
-import { ComponentPreviewPanel } from '@/components/quiz-builder/preview/ComponentPreviewPanel';
-import { PropertiesPanel } from '@/components/quiz-builder/PropertiesPanel';
+import { toast } from '@/components/ui/use-toast';
+// ... other imports as needed
 
 interface QuizEditorPanelProps {
   isPreviewing: boolean;
 }
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
-  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  
   const {
-    components,
-    stages,
-    activeStageId,
-    addComponent,
-    updateComponent,
-    deleteComponent,
-    moveComponent,
-    addStage,
-    updateStage,
-    deleteStage,
-    moveStage,
-    setActiveStage,
-  } = useQuizBuilder();
-
-  // Find active stage
-  const activeStage = activeStageId 
-    ? stages.find(s => s.id === activeStageId) 
-    : null;
-    
-  // Filter components for the active stage
-  const stageComponents = activeStageId 
-    ? components.filter(c => c.stageId === activeStageId).sort((a, b) => a.order - b.order) 
-    : [];
+    quizEditorState,
+    updateQuizEditor,
+    activeStageType,
+    setActiveStageType,
+    addQuizComponent
+  } = useUnifiedEditor();
 
   const handleComponentSelect = (type: string) => {
-    if (!activeStageId) return;
-    const newComponentId = addComponent(type as QuizComponentType, activeStageId);
-    setSelectedComponentId(newComponentId);
-  };
-
-  const handleMoveComponent = (draggedId: string, targetId: string) => {
-    moveComponent(draggedId, targetId);
-  };
-
-  const handleUpdateComponent = (content: any) => {
-    if (selectedComponentId) {
-      updateComponent(selectedComponentId, { data: content });
-      // Atualiza o preview em tempo real
-      setLivePreview({
-        componentId: selectedComponentId,
-        content
+    try {
+      addQuizComponent(type);
+      toast({
+        title: "Componente adicionado",
+        description: `Um novo componente do tipo ${type} foi adicionado ao editor.`,
+      });
+    } catch (error) {
+      console.error("Error adding component:", error);
+      toast({
+        title: "Erro ao adicionar componente",
+        description: "Não foi possível adicionar o componente. Tente novamente.",
+        variant: "destructive",
       });
     }
   };
-  
-  const handleDeleteComponent = () => {
-    if (selectedComponentId) {
-      deleteComponent(selectedComponentId);
-      setSelectedComponentId(null);
-    }
-  };
 
-  const renderStageSelector = () => {
-    return (
-      <div className="border-b p-2 bg-white">
-        <div className="flex flex-wrap gap-2">
-          {stages.map((stage) => (
-            <Button
-              key={stage.id}
-              variant={stage.id === activeStageId ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveStage(stage.id)}
-            >
-              {stage.title || `Etapa ${stage.order + 1}`}
-            </Button>
-          ))}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => addStage('question')}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-    );
+  const handlePreviewToggle = (preview: boolean) => {
+    // Handle preview toggle, e.g. set something in the editor state
+    console.log("Preview toggled:", preview);
+    // If you had setLivePreview before, replace it with something like:
+    updateQuizEditor({ 
+      ...quizEditorState,
+      previewMode: preview 
+    });
   };
 
   return (
-    <BuilderLayout
-      components={components}
-      stages={stages}
-      activeStageId={activeStageId}
-      selectedComponentId={selectedComponentId}
-      activeStage={activeStage}
-      isPreviewing={isPreviewing}
-      onComponentSelect={handleComponentSelect}
-      onStageAdd={addStage}
-      onStageSelect={setActiveStage}
-      onComponentMove={handleMoveComponent}
-      onStageMove={moveStage}
-      onStageUpdate={updateStage}
-      onStageDelete={deleteStage}
-      onComponentUpdate={updateComponent}
-      onComponentDelete={handleDeleteComponent}
-      onSelectComponent={setSelectedComponentId}
-    />
+    <ResizablePanelGroup direction="horizontal" className="h-full">
+      <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+        <div className="h-full border-r bg-white overflow-y-auto">
+          <UnifiedComponentsSidebar 
+            onComponentSelect={handleComponentSelect} 
+            activeTab="quiz"
+            activeStageType={activeStageType}
+          />
+        </div>
+      </ResizablePanel>
+      
+      <ResizableHandle withHandle />
+      
+      <ResizablePanel defaultSize={55}>
+        <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
+          {/* Quiz Editor Preview/Editing Area */}
+          <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
+            {/* Your quiz editor component goes here */}
+            <p>Quiz Editor Content</p>
+          </div>
+        </div>
+      </ResizablePanel>
+      
+      <ResizableHandle withHandle />
+      
+      <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+        <div className="h-full border-l bg-white overflow-y-auto p-4">
+          <h3 className="font-medium mb-4">Propriedades</h3>
+          {/* Properties Panel */}
+        </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 

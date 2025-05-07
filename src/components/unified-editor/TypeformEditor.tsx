@@ -40,7 +40,7 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
 
     const currentQuestion = newQuestions[currentQuestionIndex];
     // Check if options property exists
-    if (!currentQuestion.options) return;
+    if (!currentQuestion?.options) return;
 
     const selectedOption = currentQuestion.options.find(option => option.id === optionId);
     if (selectedOption) {
@@ -124,10 +124,10 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
             {questions[currentQuestionIndex] && (
               <div className="space-y-8">
                 <h2 className="text-4xl font-bold text-gray-900 mb-8">
-                  {questions[currentQuestionIndex].title || "Question Title"}
+                  {questions[currentQuestionIndex]?.title || "Question Title"}
                 </h2>
                 <div className="grid gap-4">
-                  {questions[currentQuestionIndex].options?.map((option, index) => (
+                  {questions[currentQuestionIndex]?.options?.map((option, index) => (
                     <Button
                       key={option.id || `option-${index}`}
                       variant="outline"
@@ -136,10 +136,12 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
                         "flex items-center justify-between group"
                       )}
                       onClick={() => {
-                        if (questions[currentQuestionIndex].options) {
-                          const newOptions = [...questions[currentQuestionIndex].options];
-                          newOptions[index] = { ...option, isSelected: !option.isSelected };
-                          handleLiveEdit({ options: newOptions });
+                        if (questions[currentQuestionIndex]?.options) {
+                          const newOptions = [...questions[currentQuestionIndex].options || []];
+                          if (newOptions[index]) {
+                            newOptions[index] = { ...option, isSelected: !option.isSelected };
+                            handleLiveEdit({ options: newOptions });
+                          }
                         }
                       }}
                     >

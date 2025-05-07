@@ -89,7 +89,6 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <EditorToolbar
-        activeTab={activeTab}
         isPreviewing={isPreviewing}
         onPreviewToggle={togglePreview}
         onSave={handleSave}

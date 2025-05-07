@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { GripVertical, Copy, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { BlockType } from '@/types/quiz';
 
 export interface SortableBlockProps {
   block: Block;
@@ -39,7 +40,7 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
   };
 
   const getBlockPreview = () => {
-    switch (block.type) {
+    switch (block.type as BlockType) {
       case 'heading':
         return <h2 className="text-xl font-medium">{block.content.text || 'Título'}</h2>;
       case 'paragraph':
