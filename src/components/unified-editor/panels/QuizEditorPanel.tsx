@@ -46,11 +46,6 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
     }
   };
 
-  const handlePreviewToggle = (preview: boolean) => {
-    // Update component state instead of using setLivePreview which doesn't exist
-    console.log("Preview toggled:", preview);
-  };
-
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>

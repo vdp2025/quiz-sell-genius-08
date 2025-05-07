@@ -5,7 +5,7 @@ export interface User {
   email: string;
   emailVerified?: Date;
   image?: string;
-  role?: string; // Adding role property to fix errors
+  role: string; // Changed from optional to required to fix type errors
   createdAt: Date;
   updatedAt: Date;
 }
