@@ -11,7 +11,12 @@ interface QuizEditorPanelProps {
 }
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
-  const unifiedEditor = useUnifiedEditor();
+  // Pass a default primaryStyle to useUnifiedEditor to satisfy the parameter requirement
+  const unifiedEditor = useUnifiedEditor({
+    category: 'default',
+    score: 0,
+    percentage: 0
+  });
   
   // Access properties from quizBuilder instead of directly
   const { quizBuilder } = unifiedEditor;
