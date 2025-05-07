@@ -78,6 +78,24 @@ export const useQuizLogic = () => {
     return null;
   });
 
+  // Função para resetar o quiz - adicionada no topo para evitar problemas com dependências
+  const resetQuiz = useCallback(() => {
+    setCurrentQuestionIndex(0);
+    setAnswers({});
+    setStrategicAnswers({});
+    setQuizCompleted(false);
+    setQuizResult(null);
+    
+    // Limpar localStorage
+    safeSaveToStorage('currentQuestionIndex', 0);
+    safeSaveToStorage('quizAnswers', {});
+    safeSaveToStorage('strategicAnswers', {});
+    safeSaveToStorage('quizCompleted', false);
+    safeSaveToStorage('quizResult', null);
+    
+    console.log('Quiz resetado com sucesso');
+  }, []);
+
   // 2. Computed values
   const currentQuestion = quizQuestions[currentQuestionIndex] || quizQuestions[0];
   const currentAnswers = answers[currentQuestion?.id] || [];
@@ -109,6 +127,7 @@ export const useQuizLogic = () => {
     });
   }, []);
 
+  // Melhoria na função handlePrevious para protegê-la contra estados inválidos
   const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
       const newIndex = currentQuestionIndex - 1;
@@ -117,113 +136,112 @@ export const useQuizLogic = () => {
     }
   }, [currentQuestionIndex]);
 
-  const resetQuiz = useCallback(() => {
-    setCurrentQuestionIndex(0);
-    setAnswers({});
-    setQuizCompleted(false);
-    setQuizResult(null);
-    setStrategicAnswers({});
-
-    // Limpar dados do localStorage
-    try {
-      localStorage.removeItem('quizResult');
-      localStorage.removeItem('strategicAnswers');
-      localStorage.removeItem('quizAnswers');
-      localStorage.removeItem('currentQuestionIndex');
-      localStorage.removeItem('quizCompleted');
-    } catch (e) {
-      console.error('Erro ao resetar quiz no localStorage:', e);
-    }
-    
-    console.log('Quiz reset');
-  }, []);
-
   // 4. Complex function that others depend on
+  // Melhoria na função calculateResults para evitar loops e lidar melhor com erros
   const calculateResults = useCallback(() => {
-    // Verificar se há respostas antes de calcular
-    if (Object.keys(answers).length === 0) {
-      console.warn('Tentativa de calcular resultados sem respostas.');
+    // Verificar se há respostas suficientes para calcular resultados
+    if (Object.keys(answers).length < quizQuestions.length * 0.75) {
+      console.warn('Respostas insuficientes para calcular resultado. O quiz deve ser completado primeiro.');
       return null;
     }
 
-    const styleCounter: Record<string, number> = {
-      'Natural': 0,
-      'Clássico': 0,
-      'Contemporâneo': 0,
-      'Elegante': 0,
-      'Romântico': 0,
-      'Sexy': 0,
-      'Dramático': 0,
-      'Criativo': 0
-    };
+    try {
+      const styleCounter: Record<string, number> = {
+        'Natural': 0,
+        'Clássico': 0,
+        'Contemporâneo': 0,
+        'Elegante': 0,
+        'Romântico': 0,
+        'Sexy': 0,
+        'Dramático': 0,
+        'Criativo': 0
+      };
 
-    let totalSelections = 0;
+      let totalSelections = 0;
 
-    // Garantir que todas as respostas sejam contabilizadas
-    Object.entries(answers).forEach(([questionId, optionIds]) => {
-      const question = quizQuestions.find(q => q.id === questionId);
-      if (!question) return;
+      // Garantir que todas as respostas sejam contabilizadas
+      Object.entries(answers).forEach(([questionId, optionIds]) => {
+        const question = quizQuestions.find(q => q.id === questionId);
+        if (!question) return;
 
-      optionIds.forEach(optionId => {
-        const option = question.options.find(o => o.id === optionId);
-        if (option) {
-          styleCounter[option.styleCategory]++;
-          totalSelections++;
-        }
+        optionIds.forEach(optionId => {
+          const option = question.options.find(o => o.id === optionId);
+          if (option) {
+            styleCounter[option.styleCategory]++;
+            totalSelections++;
+          }
+        });
       });
-    });
 
-    console.log('Style counts:', styleCounter);
-    console.log('Total selections:', totalSelections);
+      console.log('Style counts:', styleCounter);
+      console.log('Total selections:', totalSelections);
 
-    // Verificar se há seleções antes de calcular
-    if (totalSelections === 0) {
-      console.warn('Nenhuma seleção encontrada para calcular resultados.');
+      // Verificar se há seleções antes de calcular
+      if (totalSelections === 0) {
+        console.warn('Nenhuma seleção encontrada para calcular resultados.');
+        return null;
+      }
+
+      // Calcular resultados
+      const styleResults: StyleResult[] = Object.entries(styleCounter)
+        .map(([category, score]) => ({
+          category: category as StyleResult['category'],
+          score,
+          percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
+        }))
+        .sort((a, b) => b.score - a.score);
+
+      const primaryStyle = styleResults[0];
+      const secondaryStyles = styleResults.slice(1);
+
+      const result = {
+        primaryStyle,
+        secondaryStyles,
+        totalSelections
+      };
+
+      setQuizResult(result);
+      // Save to localStorage immediately
+      safeSaveToStorage('quizResult', result);
+      // Also save strategic answers
+      safeSaveToStorage('strategicAnswers', strategicAnswers);
+      console.log('Results calculated and saved to localStorage:', result);
+
+      return result;
+    } catch (error) {
+      console.error('Erro ao calcular resultados do quiz:', error);
       return null;
     }
-
-    // Calcular resultados
-    const styleResults: StyleResult[] = Object.entries(styleCounter)
-      .map(([category, score]) => ({
-        category: category as StyleResult['category'],
-        score,
-        percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
-      }))
-      .sort((a, b) => b.score - a.score);
-
-    const primaryStyle = styleResults[0];
-    const secondaryStyles = styleResults.slice(1);
-
-    const result = {
-      primaryStyle,
-      secondaryStyles,
-      totalSelections
-    };
-
-    setQuizResult(result);
-    // Save to localStorage immediately
-    safeSaveToStorage('quizResult', result);
-    // Also save strategic answers
-    safeSaveToStorage('strategicAnswers', strategicAnswers);
-    console.log('Results calculated and saved to localStorage:', result);
-
-    return result;
   }, [answers, strategicAnswers]);
 
   // 5. Functions that depend on other complex functions
+  // Melhorias na função handleNext para evitar travamentos e estados inconsistentes
   const handleNext = useCallback(() => {
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      const newIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(newIndex);
-      safeSaveToStorage('currentQuestionIndex', newIndex);
-    } else {
-      const results = calculateResults();
-      if (results) {
-        setQuizCompleted(true);
-        safeSaveToStorage('quizCompleted', true);
+    try {
+      if (currentQuestionIndex < quizQuestions.length - 1) {
+        const newIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(newIndex);
+        safeSaveToStorage('currentQuestionIndex', newIndex);
+      } else {
+        // Proteger contra chamadas repetidas
+        if (quizCompleted) {
+          console.log('Quiz já está completo, ignorando nova chamada');
+          return;
+        }
+        
+        const results = calculateResults();
+        if (results) {
+          setQuizCompleted(true);
+          safeSaveToStorage('quizCompleted', true);
+        }
       }
+    } catch (error) {
+      console.error('Erro ao avançar para a próxima pergunta:', error);
+      // Em caso de erro, tentar restaurar um estado consistente
+      const savedIndex = safeGetFromStorage('currentQuestionIndex', 0);
+      setCurrentQuestionIndex(savedIndex);
     }
-  }, [currentQuestionIndex, calculateResults, quizQuestions.length]);
+  }, [currentQuestionIndex, calculateResults, quizQuestions.length, quizCompleted]);
 
   const submitQuizIfComplete = useCallback(() => {
     // Calculate final results
@@ -246,18 +264,73 @@ export const useQuizLogic = () => {
   }, [calculateResults, strategicAnswers]);
 
   // 6. Validação de estado do quiz ao inicializar
+  // Melhoria no efeito de validação para verificar consistência de estado na inicialização e após atualizações
   useEffect(() => {
     // Verificar se o quiz está em um estado inconsistente
     const isStateInconsistent = 
       (quizCompleted && !quizResult) || 
       (currentQuestionIndex >= quizQuestions.length) ||
-      (Object.keys(answers).length === 0 && quizCompleted);
+      (Object.keys(answers).length === 0 && quizCompleted) ||
+      (currentQuestionIndex > 0 && Object.keys(answers).length === 0);
     
     if (isStateInconsistent) {
       console.warn('Estado do quiz inconsistente detectado, resetando...');
       resetQuiz();
     }
-  }, [quizCompleted, quizResult, currentQuestionIndex, answers, resetQuiz]);
+  }, [quizCompleted, quizResult, currentQuestionIndex, answers, resetQuiz, quizQuestions.length]);
+
+  // Novo efeito para salvar estado e evitar perda durante atualizações
+  useEffect(() => {
+    // Garantir que o estado atual é sempre salvo
+    safeSaveToStorage('currentQuestionIndex', currentQuestionIndex);
+    safeSaveToStorage('quizAnswers', answers);
+    safeSaveToStorage('quizCompleted', quizCompleted);
+    
+    // Condicional para evitar salvar estado parcial de quizResult
+    if (quizResult) {
+      safeSaveToStorage('quizResult', quizResult);
+    }
+  }, [currentQuestionIndex, answers, quizCompleted, quizResult]);
+
+  // Função para verificar e continuar o quiz após uma atualização da página
+  const continueQuiz = useCallback(() => {
+    // Verificar se há um quiz em andamento (não completado)
+    const savedIndex = safeGetFromStorage('currentQuestionIndex', 0);
+    const savedAnswers = safeGetFromStorage('quizAnswers', {});
+    const savedCompleted = safeGetFromStorage('quizCompleted', false);
+    
+    // Se o quiz não estiver completo e tivermos respostas, podemos continuar
+    if (!savedCompleted && Object.keys(savedAnswers).length > 0) {
+      console.log('Continuando quiz do estado salvo. Questão atual:', savedIndex);
+      
+      // Garantir que o estado esteja sincronizado com o localStorage
+      setCurrentQuestionIndex(savedIndex);
+      setAnswers(savedAnswers);
+      
+      // Verificar se o índice está fora dos limites (pode acontecer em casos raros)
+      if (savedIndex >= quizQuestions.length) {
+        setCurrentQuestionIndex(quizQuestions.length - 1);
+        safeSaveToStorage('currentQuestionIndex', quizQuestions.length - 1);
+      }
+      
+      return true; // Quiz continua
+    }
+    
+    // Se o quiz estiver completo mas os resultados não forem calculados, tentar recuperá-los
+    if (savedCompleted && !quizResult) {
+      const result = calculateResults();
+      if (result) {
+        console.log('Recuperando resultados do quiz após atualização');
+        return false; // Quiz não continua, vai para resultados
+      }
+    }
+    
+    if (savedCompleted) {
+      return false; // Quiz não continua, já está completo
+    }
+    
+    return true; // Quiz continua no estado atual
+  }, [quizResult, calculateResults, quizQuestions.length]);
 
   // 7. Return all needed functions and values
   return {
@@ -276,6 +349,7 @@ export const useQuizLogic = () => {
     calculateResults,
     totalQuestions,
     strategicAnswers,
-    handleStrategicAnswer
+    handleStrategicAnswer,
+    continueQuiz, // Exportando a nova função
   };
 };
