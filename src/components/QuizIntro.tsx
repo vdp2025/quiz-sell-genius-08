@@ -1,5 +1,4 @@
 'use client';
-'use client';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
@@ -53,8 +52,8 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-stone-50 px-4 py-8">
-      <div className={`w-full max-w-3xl bg-white shadow-xl rounded-2xl p-4 md:p-8 flex flex-col items-center transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+    <div className="min-h-screen flex items-center justify-center bg-[#F8F6F2] px-4 py-8">
+      <div className={`w-full max-w-3xl bg-[#F9F7F4] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-all duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Logotipo */}
         <img
           loading="lazy"
@@ -71,7 +70,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         </div>
 
         {/* Título */}
-        <h1 className="font-playfair text-xl md:text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-6 leading-normal text-gray-950">
+        <h1 className="font-playfair text-xl md:text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-6 leading-normal text-[#432818]">
           Chega de um guarda-roupa lotado
           <br className="hidden md:block" />
           e da sensação de que nada combina com você.
@@ -80,7 +79,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         {/* Imagem principal com fallback durante carregamento */}
         <div className="relative w-full max-w-xs mb-6">
           {!imagesLoaded && (
-            <div className="w-full aspect-[3/4] bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="w-full aspect-[3/4] bg-[#EAE5DC] rounded-lg animate-pulse"></div>
           )}
           <img
             loading="lazy"
@@ -93,7 +92,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
         </div>
 
         {/* Subtítulo */}
-        <p className="text-sm md:text-base lg:text-lg text-black text-center mb-6 max-w-lg">
+        <p className="text-sm md:text-base lg:text-lg text-[#433830] text-center mb-6 max-w-lg">
           Em poucos minutos, descubra seu{' '}
           <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — e aprenda a montar
           looks que realmente refletem sua <span className="font-semibold text-[#b29670]">essência</span>, com
@@ -110,13 +109,13 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
             placeholder="Digite seu nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="w-full p-3 border-[#b29670] focus:border-[#a1835d] focus:ring-[#a1835d]"
+            className="w-full p-3 border-[#b29670] focus:border-[#a1835d] focus:ring-[#a1835d] bg-[#FDFBF8]"
             autoFocus
             aria-required="true"
           />
           <Button
             type="submit"
-            className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 text-base rounded-md shadow-lg transition-all duration-700 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#b29670] focus:ring-offset-2 animate-[pulse_2s_ease-in-out_infinite] mt-2"
+            className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 text-base rounded-md shadow-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#b29670] focus:ring-offset-2 mt-2"
             disabled={!nome.trim()}
           >
             Quero Descobrir meu Estilo Agora!
