@@ -368,6 +368,42 @@ export const useQuizLogic = () => {
     }
   }, [currentQuestionIndex, recordDiagnostic, logActivity]);
 
+  // Custom implementation of a stable merge sort algorithm to avoid V8 engine bugs
+  const stableMergeSort = (array, compareFn) => {
+    // Base case: arrays with 0 or 1 elements are already sorted
+    if (array.length <= 1) return array;
+    
+    // Helper function to merge two sorted arrays
+    const merge = (left, right, compareFn) => {
+      const result = [];
+      let leftIndex = 0;
+      let rightIndex = 0;
+      
+      // Compare elements from both arrays and merge them in sorted order
+      while (leftIndex < left.length && rightIndex < right.length) {
+        // Use the provided compare function to determine order
+        if (compareFn(left[leftIndex], right[rightIndex]) <= 0) {
+          result.push(left[leftIndex]);
+          leftIndex++;
+        } else {
+          result.push(right[rightIndex]);
+          rightIndex++;
+        }
+      }
+      
+      // Add any remaining elements
+      return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+    };
+    
+    // Split the array in half and recursively sort both halves
+    const middle = Math.floor(array.length / 2);
+    const left = stableMergeSort(array.slice(0, middle), compareFn);
+    const right = stableMergeSort(array.slice(middle), compareFn);
+    
+    // Merge the sorted halves
+    return merge(left, right, compareFn);
+  };
+
   // 9. Função de cálculo de resultados robusta e à prova de falhas
   const calculateResults = useCallback(() => {
     try {
@@ -469,7 +505,7 @@ export const useQuizLogic = () => {
       let styleResults: StyleResult[] = [];
       
       try {
-        // Primeiro, criar array com todas as categorias para garantir estabilidade na ordenação
+        // Primeiro, criar array com todas as categorias
         styleResults = Object.entries(styleCounter)
           .map(([category, score]) => ({
             category: category as StyleResult['category'],
@@ -477,7 +513,7 @@ export const useQuizLogic = () => {
             percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
           }));
         
-        // Verificação extra: garantir que não há valores invalidos no array antes de ordenar
+        // Verificação: garantir que não há valores inválidos no array
         styleResults = styleResults.filter(item => 
           item && typeof item === 'object' && 
           'category' in item && 
@@ -486,214 +522,75 @@ export const useQuizLogic = () => {
           item.score !== undefined
         );
         
-        // Ordenar com tratamento de erro extra robusto
+        // SOLUÇÃO: Usar o algoritmo de ordenação estável personalizado
+        // para evitar completamente o erro "No lowest priority node found"
         try {
-          // Cópia segura do array para evitar problemas de referência
-          const stableArray = [...styleResults].map(item => ({...item}));
-          
-          // Técnica aprimorada para evitar o erro "No lowest priority node found" no motor V8
-          // 1. Força desotimização do array com uma propriedade não-enumerável
-          Object.defineProperty(stableArray, "sortState", { value: "preparing", configurable: true });
-          
-          // 2. Técnica de "warming up" do engine de sort do V8 - isso estabiliza o comportamento do sort
-          // Esta técnica ficou conhecida como "pre-sorting dance" e ajuda a prevenir erros de ordenação
-          const preArray = [3, 1, 4, 1, 5, 9, 2, 6];
-          preArray.sort((a, b) => a - b);
-          preArray.sort((a, b) => b - a);
-          
-          // 3. Técnica de slice antes do sort para garantir que estamos trabalhando com array "limpo"
-          // Esta técnica ajuda a evitar problemas de otimização agressiva do V8
-          const finalArray = stableArray.slice(0);
-          
-          // NOVA MELHORIA: Implementação personalizada de algoritmo de ordenação estável
-          // Merge Sort é um algoritmo estável que não depende da implementação do sort do navegador
-          // Esta abordagem evita completamente o bug "No lowest priority node found"
-          const customStableSort = (arr) => {
-            // Se o array for muito pequeno, não precisamos ordenar
-            if (arr.length <= 1) return arr;
+          // Função de comparação para ordenar por pontuação (decrescente)
+          const compareByScoreDesc = (a, b) => {
+            // Verificações de segurança
+            if (!a || !b) return 0;
+            if (a.score === undefined || b.score === undefined) return 0;
             
-            // Função para mesclar dois arrays ordenados de forma estável
-            const merge = (left, right) => {
-              const result = [];
-              let leftIndex = 0;
-              let rightIndex = 0;
-              
-              // Mesclar os arrays comparando as pontuações
-              while (leftIndex < left.length && rightIndex < right.length) {
-                // Verificações seguras para evitar erros
-                const leftItem = left[leftIndex];
-                const rightItem = right[rightIndex];
-                
-                if (!leftItem || !rightItem) {
-                  // Tratar elementos inválidos
-                  leftIndex++;
-                  rightIndex++;
-                  continue;
-                }
-                
-                const leftScore = typeof leftItem.score === 'number' ? leftItem.score : 0;
-                const rightScore = typeof rightItem.score === 'number' ? rightItem.score : 0;
-                
-                // Comparar pontuações em ordem decrescente (maior primeiro)
-                if (leftScore > rightScore) {
-                  result.push(leftItem);
-                  leftIndex++;
-                } else if (leftScore < rightScore) {
-                  result.push(rightItem);
-                  rightIndex++;
-                } else {
-                  // Em caso de empate, usar categoria como critério de desempate
-                  const leftCat = typeof leftItem.category === 'string' ? leftItem.category : '';
-                  const rightCat = typeof rightItem.category === 'string' ? rightItem.category : '';
-                  
-                  if (leftCat.localeCompare(rightCat) <= 0) {
-                    result.push(leftItem);
-                    leftIndex++;
-                  } else {
-                    result.push(rightItem);
-                    rightIndex++;
-                  }
-                }
-              }
-              
-              // Adicionar os elementos restantes
-              return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-            };
-            
-            // Implementação recursiva do merge sort
-            const mergeSort = (array) => {
-              if (array.length <= 1) return array;
-              
-              try {
-                const middle = Math.floor(array.length / 2);
-                const left = array.slice(0, middle);
-                const right = array.slice(middle);
-                
-                return merge(mergeSort(left), mergeSort(right));
-              } catch (e) {
-                // Em caso de erro na recursão, retornar o array original
-                recordDiagnostic('merge_sort_error', { error: String(e) });
-                return array;
-              }
-            };
-            
-            // Executar o merge sort com tratamento de erros
-            try {
-              return mergeSort(arr);
-            } catch (e) {
-              recordDiagnostic('custom_sort_error', { error: String(e) });
-              return arr; // Retornar array original em caso de erro
+            // Ordenar por pontuação (decrescente)
+            if (b.score !== a.score) {
+              return b.score - a.score;
             }
+            
+            // Em caso de empate, usar categoria como critério de desempate
+            return String(a.category || '').localeCompare(String(b.category || ''));
           };
           
-          // Tentar usar o algoritmo de ordenação personalizado primeiro
-          try {
-            const customSortedArray = customStableSort(finalArray);
-            styleResults = customSortedArray;
-            recordDiagnostic('custom_sort_success', { resultCount: customSortedArray.length });
-          } catch (customSortError) {
-            // Se falhar, tentar o método nativo .sort() com proteções
-            recordDiagnostic('custom_sort_failed', { error: String(customSortError) });
-            
-            try {
-              finalArray.sort((a, b) => {
-                // Tratamento defensivo triplo para evitar o erro "No lowest priority node found"
-                if (!a || !b || a === undefined || b === undefined) {
-                  recordDiagnostic('sort_error_undefined_values', { a, b });
-                  return 0; // Manter ordem original
-                }
-                
-                // Verificar a existência de propriedades necessárias
-                if (!('score' in a) || !('score' in b) || a.score === undefined || b.score === undefined) {
-                  recordDiagnostic('sort_error_missing_properties', { a, b });
-                  return 0;
-                }
-                
-                // Se as pontuações são iguais, ordenar por nome de categoria para estabilidade
-                if (a.score === b.score) {
-                  if (!a.category || !b.category) {
-                    return 0; // Se alguma categoria for inválida, manter ordem original
-                  }
-                  return String(a.category).localeCompare(String(b.category));
-                }
-                
-                // Ordenação normal por pontuação (decrescente) com verificação adicional de tipos
-                return (typeof a.score === 'number' && typeof b.score === 'number') 
-                  ? b.score - a.score 
-                  : 0;
-              });
-              
-              // Usar o array final após a ordenação
-              styleResults = finalArray;
-            } catch (innerSortError) {
-              // Capturar qualquer erro que ocorra durante a operação de sort
-              recordDiagnostic('inner_sort_error', { error: String(innerSortError) });
-              // Não propagar o erro, deixar o código prosseguir para o próximo bloco catch
-              throw innerSortError;
-            }
-          }
+          // Usar o mergeSort estável personalizado em vez do sort nativo
+          styleResults = stableMergeSort([...styleResults], compareByScoreDesc);
+          
+          recordDiagnostic('custom_sort_success', { resultCount: styleResults.length });
         } catch (sortError) {
-          // Em caso de erro na ordenação, criar array manualmente ordenado por pontuação
-          recordDiagnostic('sort_error_recovery', { error: String(sortError) });
+          // Fallback para ordenação manual em caso de erro
+          recordDiagnostic('stable_sort_error', { error: String(sortError) });
           
-          const entries = Object.entries(styleCounter);
-          // Ordenar manualmente sem usar o método sort (que pode falhar)
-          const sorted = [];
-          for (let i = 0; i < entries.length; i++) {
-            const [category, score] = entries[i];
-            sorted.push({
-              category: category as StyleResult['category'],
-              score,
-              percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
-            });
-          }
-          
-          // Ordenar manualmente (bubble sort simples)
-          for (let i = 0; i < sorted.length; i++) {
-            for (let j = 0; j < sorted.length - 1; j++) {
-              if (sorted[j].score < sorted[j + 1].score) {
-                const temp = sorted[j];
-                sorted[j] = sorted[j + 1];
-                sorted[j + 1] = temp;
+          // Bubble sort é um algoritmo de ordenação estável e simples
+          const bubbleSort = (arr) => {
+            const n = arr.length;
+            for (let i = 0; i < n - 1; i++) {
+              for (let j = 0; j < n - i - 1; j++) {
+                if (arr[j].score < arr[j + 1].score) {
+                  // Trocar elementos
+                  [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                }
               }
             }
-          }
+            return arr;
+          };
           
-          styleResults = sorted;
+          styleResults = bubbleSort([...styleResults]);
+          recordDiagnostic('bubble_sort_fallback', { resultCount: styleResults.length });
         }
-      } catch (sortError) {
-        // Em caso de erro na ordenação, criar array manualmente ordenado por pontuação
-        recordDiagnostic('sort_error_recovery', { error: String(sortError) });
+      } catch (processError) {
+        // Fallback completo em caso de erro no processamento
+        recordDiagnostic('results_processing_error', { error: String(processError) });
         
-        const entries = Object.entries(styleCounter);
-        // Ordenar manualmente sem usar o método sort (que pode falhar)
-        const sorted = [];
-        for (let i = 0; i < entries.length; i++) {
-          const [category, score] = entries[i];
-          sorted.push({
-            category: category as StyleResult['category'],
-            score,
-            percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
-          });
-        }
+        // Criar array manualmente com valores do contador de estilos
+        styleResults = Object.entries(styleCounter).map(([category, score]) => ({
+          category: category as StyleResult['category'],
+          score,
+          percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
+        }));
         
-        // Ordenar manualmente (bubble sort simples)
-        for (let i = 0; i < sorted.length; i++) {
-          for (let j = 0; j < sorted.length - 1; j++) {
-            if (sorted[j].score < sorted[j + 1].score) {
-              const temp = sorted[j];
-              sorted[j] = sorted[j + 1];
-              sorted[j + 1] = temp;
+        // Ordenar manualmente os resultados (bubble sort)
+        for (let i = 0; i < styleResults.length; i++) {
+          for (let j = 0; j < styleResults.length - 1; j++) {
+            if (styleResults[j].score < styleResults[j + 1].score) {
+              const temp = styleResults[j];
+              styleResults[j] = styleResults[j + 1];
+              styleResults[j + 1] = temp;
             }
           }
         }
-        
-        styleResults = sorted;
       }
 
       // Verificar se temos pelo menos uma categoria antes de continuar
       if (styleResults.length === 0) {
-        // Fallback se o array estiver vazio (não deveria acontecer com a inicialização acima)
+        // Fallback se o array estiver vazio
         recordDiagnostic('empty_results', { styleCounter });
         
         const emergencyResult = {
