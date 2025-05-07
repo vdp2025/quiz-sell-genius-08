@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -31,7 +30,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative group h-full",
-        "transition-all duration-300 ease-in-out transform", 
+        "transition-transform duration-300 ease-in-out", 
         !type.includes('text') && !isSelected && "hover:scale-[1.02]",
         isDisabled && "opacity-50 cursor-not-allowed"
       )}
@@ -45,15 +44,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "relative h-full flex flex-col",
           "transition-all duration-300 ease-out cursor-pointer", 
-          type === 'text' && "p-4 rounded-lg border bg-white shadow-sm",
+          type === 'text' && "p-4 rounded-lg border shadow-sm",
           type !== 'text' && "border border-[#B89B7A]/20 rounded-lg overflow-hidden",
           isSelected 
             ? type === 'text' 
-              ? "border-brand-gold/60 bg-white shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out" 
-              : "border-brand-gold/60 shadow-lg ring-1 ring-brand-gold/30 transform scale-[1.01] transition-shadow duration-300 ease-in-out"
+              ? "border-brand-gold/60 bg-[#F9F6F2] shadow-md ring-1 ring-brand-gold/30 scale-[1.01]" 
+              : "border-brand-gold/60 shadow-md ring-1 ring-brand-gold/30 scale-[1.01]"
             : type === 'text' 
-              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:bg-white hover:shadow-md hover:scale-[1.01] transition-all duration-300 ease-in-out" 
-              : "hover:border-brand-gold/40 hover:shadow-md transition-all duration-300 ease-in-out"
+              ? "border-[#B89B7A]/10 hover:border-brand-gold/40 hover:shadow-sm hover:bg-[#FAF7F3] hover:scale-[1.01]" 
+              : "hover:border-brand-gold/40 hover:shadow-sm"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -77,8 +76,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               )
             : cn(
                 "leading-relaxed",
-                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base", // Standardized text size for text-only options
-                isSelected && "text-brand-coffee font-semibold"
+                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base",
+                isSelected ? "text-brand-coffee font-semibold" : "text-brand-coffee/90"
               )
         )}>
           {highlightStrategicWords(option.text)}
@@ -86,7 +85,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       </div>
       
       {isSelected && (
-        <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 animate-scale-in">
+        <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-gold rounded-full flex items-center justify-center shadow-sm z-10 transition-all duration-300 animate-scale-in">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-2 w-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
