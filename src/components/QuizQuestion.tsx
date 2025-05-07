@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect } from 'react';
-import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -70,7 +68,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       (autoAdvance && newSelectedOptions.length === question.multiSelect);
     
     if (shouldAutoAdvance && onNextClick) {
-      setTimeout(() => onNextClick(), 500); // Small delay for better UX
+      // Remover o atraso para evitar efeitos de flash
+      onNextClick();
     }
   };
   
@@ -85,78 +84,76 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
   
   return (
-    <AnimatedWrapper>
-      <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-        isMobile && "px-2", 
-        isStrategicQuestion && "max-w-3xl"
-      )} id={`question-${question.id}`}>
-        {!hideTitle && (
-          <>
-            <h2 className={cn(
-              "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-              isMobile ? "text-base" : "text-base sm:text-xl",
-              isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
-            )}>
-              {highlightStrategicWords(question.title)}
-            </h2>
-            
-            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-              <div className="w-full mb-6">
-                <img 
-                  src={question.imageUrl} 
-                  alt="Question visual" 
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                  onError={() => {
-                    console.error(`Failed to load image: ${question.imageUrl}`);
-                    setImageError(true);
-                  }}
-                />
-              </div>
-            )}
-            
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-              {isStrategicQuestion 
-                ? "Selecione 1 opção para avançar"
-                : `Selecione ${question.multiSelect} opções para avançar`
-              }
-            </p>
-          </>
-        )}
-        
-        <div className={cn(
-          "grid h-full",
-          getGridColumns(),
-          hasImageOptions && "mb-4 relative",
-          isStrategicQuestion && "gap-4"
-        )}>
-          {question.options.map(option => (
-            <QuizOption 
-              key={option.id} 
-              option={option} 
-              isSelected={currentAnswers.includes(option.id)} 
-              onSelect={handleOptionSelect}
-              type={question.type}
-              questionId={question.id}
-              isDisabled={!currentAnswers.includes(option.id) && 
-                !isStrategicQuestion && 
-                currentAnswers.length >= question.multiSelect}
-            />
-          ))}
-        </div>
-        
-        <div className="flex justify-between items-center gap-3 mt-6">
-          {!autoAdvance && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-              Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
-            </p>
+    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
+      isMobile && "px-2", 
+      isStrategicQuestion && "max-w-3xl"
+    )} id={`question-${question.id}`}>
+      {!hideTitle && (
+        <>
+          <h2 className={cn(
+            "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+            isMobile ? "text-base" : "text-base sm:text-xl",
+            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
+          )}>
+            {highlightStrategicWords(question.title)}
+          </h2>
+          
+          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+            <div className="w-full mb-6">
+              <img 
+                src={question.imageUrl} 
+                alt="Question visual" 
+                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                onError={() => {
+                  console.error(`Failed to load image: ${question.imageUrl}`);
+                  setImageError(true);
+                }}
+              />
+            </div>
           )}
           
-          <div className="ml-auto">
-            {/* Navigation buttons would go here if needed */}
-          </div>
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+            {isStrategicQuestion 
+              ? "Selecione 1 opção para avançar"
+              : `Selecione ${question.multiSelect} opções para avançar`
+            }
+          </p>
+        </>
+      )}
+      
+      <div className={cn(
+        "grid h-full",
+        getGridColumns(),
+        hasImageOptions && "mb-4 relative",
+        isStrategicQuestion && "gap-4"
+      )}>
+        {question.options.map(option => (
+          <QuizOption 
+            key={option.id} 
+            option={option} 
+            isSelected={currentAnswers.includes(option.id)} 
+            onSelect={handleOptionSelect}
+            type={question.type}
+            questionId={question.id}
+            isDisabled={!currentAnswers.includes(option.id) && 
+              !isStrategicQuestion && 
+              currentAnswers.length >= question.multiSelect}
+          />
+        ))}
+      </div>
+      
+      <div className="flex justify-between items-center gap-3 mt-6">
+        {!autoAdvance && (
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
+            Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
+          </p>
+        )}
+        
+        <div className="ml-auto">
+          {/* Navigation buttons would go here if needed */}
         </div>
       </div>
-    </AnimatedWrapper>
+    </div>
   );
 };
 
