@@ -23,7 +23,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   isDisabled = false
 }) => {
   const isMobile = useIsMobile();
-  const [isHovered, setIsHovered] = useState(false);
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
   // Usar ref para evitar re-renderizações desnecessárias
   const optionRef = useRef<HTMLDivElement>(null);
@@ -31,7 +30,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   // Usar useEffect para lidar com mudanças de isSelected sem causar flash
   useEffect(() => {
     if (optionRef.current) {
-      // Aplicar mudanças de estilo diretamente ao DOM para evitar re-renderização
+      // Aplicar mudanças de estilo apenas nas colunas, não nas imagens
       if (isSelected) {
         optionRef.current.style.borderColor = '#b29670';
         optionRef.current.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
@@ -71,17 +70,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col rounded-lg overflow-hidden",
           "cursor-pointer", 
           
-          // Para opções de texto - usando fundo sólido consistente
+          // Para opções de texto - manter borda
           type === 'text' && "p-4 border",
           
-          // Para opções de imagem
+          // Para opções de imagem - manter apenas borda na coluna, não nas imagens
           type !== 'text' && "border",
           
-          // Fundo sólido sem transparência - atualizado para #FEFEFE
+          // Fundo sólido sem transparência
           "bg-[#FEFEFE]"
-          
-          // Removidas classes condicionais que causam re-renderização
-          // Esses estilos serão aplicados via DOM no useEffect
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -109,11 +105,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           {highlightStrategicWords(option.text)}
         </p>
         
-        {/* Renderização condicional do indicador de seleção - causa menos flash */}
+        {/* Indicador de seleção */}
         <div 
           className={cn(
             "absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#b29670] rounded-full flex items-center justify-center z-10",
-            isSelected ? "block" : "hidden" // Usar display block/none em vez de renderização condicional
+            isSelected ? "block" : "hidden"
           )}
         >
           <svg 

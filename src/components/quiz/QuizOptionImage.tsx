@@ -48,8 +48,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
             alt={altText}
             className={cn(
               "object-cover w-full h-full",
-              // Removendo todos os efeitos e transições
-              isSelected && "border-2 border-brand-gold"
+              // Removendo a borda das imagens, mesmo quando selecionadas
+              isSelected && "outline outline-2 outline-offset-2 outline-[#b29670]"
             )}
             onError={() => setImageError(true)}
           />
