@@ -2,59 +2,84 @@ import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
 
+// Função utilitária para recuperar dados do localStorage com segurança
+const safeGetFromStorage = (key: string, fallback: any) => {
+  try {
+    const data = localStorage.getItem(key);
+    // Verificar se o dado existe
+    if (!data) return fallback;
+    
+    // Tentar fazer parse para JSON se necessário
+    if (typeof fallback === 'object') {
+      try {
+        const parsed = JSON.parse(data);
+        return parsed;
+      } catch (e) {
+        console.error(`Erro ao fazer parse de ${key}:`, e);
+        return fallback;
+      }
+    }
+    
+    // Conversão para o tipo apropriado
+    if (typeof fallback === 'number') return Number(data) || fallback;
+    if (typeof fallback === 'boolean') return data === 'true';
+    
+    return data;
+  } catch (e) {
+    console.error(`Erro ao acessar localStorage para ${key}:`, e);
+    return fallback;
+  }
+};
+
+// Função utilitária para salvar dados no localStorage com segurança
+const safeSaveToStorage = (key: string, value: any) => {
+  try {
+    const valueToStore = typeof value === 'object' ? JSON.stringify(value) : String(value);
+    localStorage.setItem(key, valueToStore);
+    return true;
+  } catch (e) {
+    console.error(`Erro ao salvar ${key} no localStorage:`, e);
+    return false;
+  }
+};
+
 export const useQuizLogic = () => {
   // 1. State declarations (all at the top) - Melhorada a recuperação de estado
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
-    try {
-      const savedIndex = localStorage.getItem('currentQuestionIndex');
-      return savedIndex ? parseInt(savedIndex, 10) : 0;
-    } catch (e) {
-      console.error('Erro ao recuperar índice da questão:', e);
-      return 0;
-    }
+    const savedIndex = safeGetFromStorage('currentQuestionIndex', 0);
+    // Validar se o índice está dentro dos limites
+    return savedIndex >= 0 && savedIndex < quizQuestions.length ? savedIndex : 0;
   });
   
   const [answers, setAnswers] = useState<Record<string, string[]>>(() => {
-    try {
-      const savedAnswers = localStorage.getItem('quizAnswers');
-      return savedAnswers ? JSON.parse(savedAnswers) : {};
-    } catch (e) {
-      console.error('Erro ao recuperar respostas:', e);
-      return {};
-    }
+    const savedAnswers = safeGetFromStorage('quizAnswers', {});
+    // Validar se as respostas são válidas verificando a estrutura
+    return typeof savedAnswers === 'object' ? savedAnswers : {};
   });
   
   const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>(() => {
-    try {
-      const savedAnswers = localStorage.getItem('strategicAnswers');
-      return savedAnswers ? JSON.parse(savedAnswers) : {};
-    } catch (e) {
-      console.error('Erro ao recuperar respostas estratégicas:', e);
-      return {};
-    }
+    const savedAnswers = safeGetFromStorage('strategicAnswers', {});
+    return typeof savedAnswers === 'object' ? savedAnswers : {};
   });
   
   const [quizCompleted, setQuizCompleted] = useState(() => {
-    try {
-      return localStorage.getItem('quizCompleted') === 'true';
-    } catch (e) {
-      console.error('Erro ao verificar conclusão do quiz:', e);
-      return false;
-    }
+    return safeGetFromStorage('quizCompleted', false);
   });
   
   const [quizResult, setQuizResult] = useState<QuizResult | null>(() => {
-    try {
-      const savedResult = localStorage.getItem('quizResult');
-      return savedResult ? JSON.parse(savedResult) : null;
-    } catch (e) {
-      console.error('Erro ao recuperar resultado do quiz:', e);
-      return null;
+    const savedResult = safeGetFromStorage('quizResult', null);
+    // Validar se o resultado tem a estrutura esperada
+    if (savedResult && 
+        savedResult.primaryStyle && 
+        savedResult.secondaryStyles && 
+        Array.isArray(savedResult.secondaryStyles)) {
+      return savedResult;
     }
+    return null;
   });
 
   // 2. Computed values
-  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const currentQuestion = quizQuestions[currentQuestionIndex] || quizQuestions[0];
   const currentAnswers = answers[currentQuestion?.id] || [];
   const canProceed = currentAnswers.length === (currentQuestion?.multiSelect || 0);
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
@@ -67,11 +92,7 @@ export const useQuizLogic = () => {
         ...prev,
         [questionId]: selectedOptions
       };
-      try {
-        localStorage.setItem('quizAnswers', JSON.stringify(newAnswers));
-      } catch (e) {
-        console.error('Erro ao salvar respostas:', e);
-      }
+      safeSaveToStorage('quizAnswers', newAnswers);
       console.log(`Question ${questionId} answered with options:`, selectedOptions);
       return newAnswers;
     });
@@ -83,11 +104,7 @@ export const useQuizLogic = () => {
         ...prev,
         [questionId]: selectedOptions
       };
-      try {
-        localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers));
-      } catch (e) {
-        console.error('Erro ao salvar respostas estratégicas:', e);
-      }
+      safeSaveToStorage('strategicAnswers', newAnswers);
       return newAnswers;
     });
   }, []);
@@ -96,11 +113,7 @@ export const useQuizLogic = () => {
     if (currentQuestionIndex > 0) {
       const newIndex = currentQuestionIndex - 1;
       setCurrentQuestionIndex(newIndex);
-      try {
-        localStorage.setItem('currentQuestionIndex', newIndex.toString());
-      } catch (e) {
-        console.error('Erro ao salvar índice da questão:', e);
-      }
+      safeSaveToStorage('currentQuestionIndex', newIndex);
     }
   }, [currentQuestionIndex]);
 
@@ -109,6 +122,9 @@ export const useQuizLogic = () => {
     setAnswers({});
     setQuizCompleted(false);
     setQuizResult(null);
+    setStrategicAnswers({});
+
+    // Limpar dados do localStorage
     try {
       localStorage.removeItem('quizResult');
       localStorage.removeItem('strategicAnswers');
@@ -116,14 +132,20 @@ export const useQuizLogic = () => {
       localStorage.removeItem('currentQuestionIndex');
       localStorage.removeItem('quizCompleted');
     } catch (e) {
-      console.error('Erro ao resetar quiz:', e);
+      console.error('Erro ao resetar quiz no localStorage:', e);
     }
-    setStrategicAnswers({});
+    
     console.log('Quiz reset');
   }, []);
 
   // 4. Complex function that others depend on
   const calculateResults = useCallback(() => {
+    // Verificar se há respostas antes de calcular
+    if (Object.keys(answers).length === 0) {
+      console.warn('Tentativa de calcular resultados sem respostas.');
+      return null;
+    }
+
     const styleCounter: Record<string, number> = {
       'Natural': 0,
       'Clássico': 0,
@@ -154,6 +176,12 @@ export const useQuizLogic = () => {
     console.log('Style counts:', styleCounter);
     console.log('Total selections:', totalSelections);
 
+    // Verificar se há seleções antes de calcular
+    if (totalSelections === 0) {
+      console.warn('Nenhuma seleção encontrada para calcular resultados.');
+      return null;
+    }
+
     // Calcular resultados
     const styleResults: StyleResult[] = Object.entries(styleCounter)
       .map(([category, score]) => ({
@@ -174,9 +202,9 @@ export const useQuizLogic = () => {
 
     setQuizResult(result);
     // Save to localStorage immediately
-    localStorage.setItem('quizResult', JSON.stringify(result));
+    safeSaveToStorage('quizResult', result);
     // Also save strategic answers
-    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+    safeSaveToStorage('strategicAnswers', strategicAnswers);
     console.log('Results calculated and saved to localStorage:', result);
 
     return result;
@@ -187,18 +215,12 @@ export const useQuizLogic = () => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
       const newIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(newIndex);
-      try {
-        localStorage.setItem('currentQuestionIndex', newIndex.toString());
-      } catch (e) {
-        console.error('Erro ao salvar índice da questão:', e);
-      }
+      safeSaveToStorage('currentQuestionIndex', newIndex);
     } else {
-      calculateResults();
-      setQuizCompleted(true);
-      try {
-        localStorage.setItem('quizCompleted', 'true');
-      } catch (e) {
-        console.error('Erro ao marcar quiz como completo:', e);
+      const results = calculateResults();
+      if (results) {
+        setQuizCompleted(true);
+        safeSaveToStorage('quizCompleted', true);
       }
     }
   }, [currentQuestionIndex, calculateResults, quizQuestions.length]);
@@ -206,38 +228,36 @@ export const useQuizLogic = () => {
   const submitQuizIfComplete = useCallback(() => {
     // Calculate final results
     const results = calculateResults();
+    if (!results) {
+      console.error('Falha ao calcular resultados para submissão');
+      return null;
+    }
+    
     setQuizCompleted(true);
     
     // Save everything to localStorage before navigating
-    try {
-      localStorage.setItem('quizResult', JSON.stringify(results));
-      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-      localStorage.setItem('quizCompleted', 'true');
-    } catch (e) {
-      console.error('Erro ao salvar resultados finais:', e);
-    }
+    safeSaveToStorage('quizResult', results);
+    safeSaveToStorage('strategicAnswers', strategicAnswers);
+    safeSaveToStorage('quizCompleted', true);
+    
     console.log('Results saved to localStorage before redirect:', results);
     
     return results;
   }, [calculateResults, strategicAnswers]);
 
-  // 6. Side effects - Melhorada a consistência do estado
+  // 6. Validação de estado do quiz ao inicializar
   useEffect(() => {
-    if (quizResult) {
-      try {
-        localStorage.setItem('quizResult', JSON.stringify(quizResult));
-      } catch (e) {
-        console.error('Erro ao salvar resultado do quiz:', e);
-      }
+    // Verificar se o quiz está em um estado inconsistente
+    const isStateInconsistent = 
+      (quizCompleted && !quizResult) || 
+      (currentQuestionIndex >= quizQuestions.length) ||
+      (Object.keys(answers).length === 0 && quizCompleted);
+    
+    if (isStateInconsistent) {
+      console.warn('Estado do quiz inconsistente detectado, resetando...');
+      resetQuiz();
     }
-  }, [quizResult]);
-
-  useEffect(() => {
-    if (Object.keys(strategicAnswers).length > 0) {
-      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-      console.log('Strategic answers saved to localStorage:', strategicAnswers);
-    }
-  }, [strategicAnswers]);
+  }, [quizCompleted, quizResult, currentQuestionIndex, answers, resetQuiz]);
 
   // 7. Return all needed functions and values
   return {
