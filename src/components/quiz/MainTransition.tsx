@@ -34,15 +34,16 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     return "outcome";
   };
 
-  // Obtém cor de fundo apropriada para cada categoria
+  // Obtém cor de fundo apropriada para cada categoria - CORRIGIDO para manter consistência com identidade visual
   const getCategoryBackground = () => {
     const category = getQuestionCategory();
     switch(category) {
-      case "perception": return "bg-gradient-to-br from-[#F5EDE1] to-[#FAF5ED]";
-      case "experience": return "bg-gradient-to-br from-[#F5E1E1] to-[#FAF0ED]";
-      case "intent": return "bg-gradient-to-br from-[#E1E5F5] to-[#EDF2FA]";
-      case "outcome": return "bg-gradient-to-br from-[#E1F5E5] to-[#EDFAF0]";
-      default: return "bg-[#FAF9F7]";
+      // Cores atualizadas para ficarem consistentes com a identidade visual
+      case "perception": return "bg-[#FAF5ED]";  // Simplificado para cor sólida
+      case "experience": return "bg-[#FAF9F7]";  // Cor de fundo neutra consistente
+      case "intent": return "bg-[#F7F8FA]";      // Cor neutra mais suave
+      case "outcome": return "bg-[#F9FAF7]";     // Cor neutra consistente
+      default: return "bg-[#FAF9F7]";            // Cor padrão neutra
     }
   };
 
@@ -53,7 +54,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
       case "perception": return "https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/perception-illustration.jpg";
       case "experience": return "https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/style-experience.jpg";
       case "intent": return "https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/intent-illustration.jpg";
-      case "outcome": return "https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/desired-outcomes.jpg";
+      case "outcome": return "https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/desired-outcome.jpg"; // URL corrigida
       default: return "";
     }
   };
@@ -140,12 +141,17 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                 src={getCategoryImage()}
                 alt="Ilustração da questão" 
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.error(`Failed to load category image: ${getCategoryImage()}`);
+                  // Fallback para uma imagem padrão em caso de erro
+                  e.currentTarget.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/personal-style-journey.jpg";
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
             </div>
             
             <div className="p-8 space-y-6 relative">
-              {/* Indicador de progresso */}
+              {/* Indicador de progresso - mantido apenas aqui, removido do QuizQuestion */}
               <div className="flex justify-between items-center mb-4">
                 <div className="text-xs text-[#1A1818]/50">Questão {currentQuestionIndex + 1} de {strategicQuestions.length}</div>
                 <div className="w-2/3 h-1 bg-[#F0EBE4] rounded-full overflow-hidden">
@@ -177,7 +183,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                 autoAdvance={true}
                 hideTitle={true}
                 onNextClick={handleNextClick}
-                showQuestionImage={true}
+                showQuestionImage={false} /* Desativando a imagem no QuizQuestion para evitar duplicação */
               />
             </div>
           </Card>

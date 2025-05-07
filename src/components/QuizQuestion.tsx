@@ -99,6 +99,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             {highlightStrategicWords(question.title)}
           </h2>
           
+          {/* Removida a barra de progresso duplicada para questões estratégicas */}
+          {isStrategicQuestion && !hideTitle && (
+            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+              Selecione 1 opção para avançar
+            </p>
+          )}
+          
           {isStrategicQuestion && question.imageUrl && showQuestionImage && (
             <div className="w-full mb-8 transition-all duration-300">
               {!imageLoaded && !imageError && (
@@ -124,12 +131,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             </div>
           )}
           
-          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-            {isStrategicQuestion 
-              ? "Selecione 1 opção para avançar"
-              : `Selecione ${question.multiSelect} opções para avançar`
-            }
-          </p>
+          {!isStrategicQuestion && (
+            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+              {`Selecione ${question.multiSelect} opções para avançar`}
+            </p>
+          )}
         </>
       )}
       
@@ -154,7 +160,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         ))}
       </div>
       
-      {!autoAdvance && (
+      {!autoAdvance && !isStrategicQuestion && (
         <div className="flex justify-between items-center gap-3 mt-6">
           <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
             Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
