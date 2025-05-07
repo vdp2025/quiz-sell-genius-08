@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -25,7 +26,7 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { useABTest } from '@/hooks/useABTest';
 import { Link } from 'react-router-dom';
-import { User } from '@/types/user';
+import { User, UserWithRole } from '@/types/user';
 
 const ResultPage: React.FC = () => {
   const {
@@ -184,7 +185,7 @@ const ResultPage: React.FC = () => {
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
       {/* Admin Edit Button - Visible only for admin users */}
-      {user && user.role === 'admin' && (
+      {user && (user as UserWithRole).role === 'admin' && (
         <div className="container mx-auto px-4 py-2 max-w-4xl">
           <Link to="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
             <Edit className="h-3.5 w-3.5" />
