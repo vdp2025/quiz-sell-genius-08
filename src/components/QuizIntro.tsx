@@ -52,8 +52,8 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F6F2] px-4 py-8">
-      <div className={`w-full max-w-3xl bg-[#F9F7F4] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-all duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+    <div className="min-h-screen flex items-center justify-center bg-[#FEFEFE] px-4 py-8">
+      <div className={`w-full max-w-3xl bg-[#FEFEFE] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-all duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Logotipo */}
         <img
           loading="lazy"
@@ -109,7 +109,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
             placeholder="Digite seu nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="w-full p-3 border-[#b29670] focus:border-[#a1835d] focus:ring-[#a1835d] bg-[#FDFBF8]"
+            className="w-full p-3 border-[#b29670] focus:border-[#a1835d] focus:ring-[#a1835d] bg-[#FEFEFE]"
             autoFocus
             aria-required="true"
           />

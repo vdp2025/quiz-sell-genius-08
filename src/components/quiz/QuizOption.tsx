@@ -77,8 +77,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           // Para opções de imagem
           type !== 'text' && "border",
           
-          // Fundo sólido sem transparência
-          "bg-[#F9F7F4]"
+          // Fundo sólido sem transparência - atualizado para #FEFEFE
+          "bg-[#FEFEFE]"
           
           // Removidas classes condicionais que causam re-renderização
           // Esses estilos serão aplicados via DOM no useEffect

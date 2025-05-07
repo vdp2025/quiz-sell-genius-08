@@ -8,7 +8,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ children }) => {
   const quizContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4] px-4 py-8" ref={quizContainerRef}>
+    <div className="min-h-screen bg-[#FEFEFE] px-4 py-8" ref={quizContainerRef}>
       <div className="max-w-4xl mx-auto">
         {children}
       </div>
