@@ -36,6 +36,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
   
+  // Verifica se temos exatamente 3 opções selecionadas
+  const hasThreeOptionsSelected = currentAnswers.length === 3;
+  
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
@@ -161,14 +164,37 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       </div>
       
       {!autoAdvance && !isStrategicQuestion && (
-        <div className="flex justify-between items-center gap-3 mt-6">
-          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
+        <div className={cn(
+          "flex justify-between items-center gap-3 mt-6",
+          isMobile ? "flex-col" : "flex-row" // Corrigir alinhamento no mobile
+        )}>
+          <p className={cn(
+            "text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 font-medium",
+            isMobile ? "text-center w-full" : ""
+          )}>
             Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
           </p>
           
-          <div className="ml-auto">
-            {/* Navigation buttons would go here if needed */}
-          </div>
+          {/* Botão "próxima" - será mostrado apenas quando houver 3 opções selecionadas */}
+          {hasThreeOptionsSelected && onNextClick && (
+            <div className={cn(
+              "transition-all duration-300 ease-in-out",
+              isMobile ? "w-full flex justify-center mt-2" : "ml-auto"
+            )}>
+              <Button 
+                onClick={onNextClick}
+                className={cn(
+                  "bg-[#b29670] hover:bg-[#a38661] text-white rounded-full",
+                  "flex items-center gap-2 px-5 py-2.5 shadow-md",
+                  "transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]",
+                  isMobile ? "w-full max-w-xs" : ""
+                )}
+              >
+                <span>Próxima</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
