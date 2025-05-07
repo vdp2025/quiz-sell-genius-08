@@ -3,16 +3,34 @@
 @tailwind utilities;
 @import './styles/effects.css';
 
-/* Desativar todas as animações e transições para resolver o efeito de flash */
+/* Desativar a maioria das animações e transições, mas permitir o efeito de zoom em imagens */
 * {
   animation: none !important;
-  transition: none !important;
-  transform: none !important;
   animation-duration: 0s !important;
   animation-delay: 0s !important;
-  transition-duration: 0s !important;
   transition-delay: 0s !important;
   will-change: auto !important;
+}
+
+/* Permitir efeitos de transformação e transição somente em imagens e elementos específicos */
+img, .hover-scale {
+  transition: transform 300ms ease-in-out !important;
+  transform: scale(1) !important;
+}
+
+img:hover, .hover-scale:hover {
+  transform: scale(1.05) !important;
+}
+
+/* Classe para animação 3D */
+.transform-3d {
+  transform-style: preserve-3d !important;
+  perspective: 1000px !important;
+}
+
+/* Restaurar animações para botões específicos */
+.btn-hover-effect:hover svg {
+  transform: scale(1.1) !important;
 }
 
 @layer base {
