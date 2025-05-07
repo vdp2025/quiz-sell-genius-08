@@ -78,6 +78,11 @@ export const useQuizLogic = () => {
     return null;
   });
 
+  // Adicionando estado para controlar se o quiz está carregando
+  const [isLoading, setIsLoading] = useState(true);
+  // Estado para rastrear se o quiz está travado
+  const [isStuck, setIsStuck] = useState(false);
+
   // Função para resetar o quiz - adicionada no topo para evitar problemas com dependências
   const resetQuiz = useCallback(() => {
     setCurrentQuestionIndex(0);
@@ -85,13 +90,15 @@ export const useQuizLogic = () => {
     setStrategicAnswers({});
     setQuizCompleted(false);
     setQuizResult(null);
+    setIsStuck(false);
     
     // Limpar localStorage
-    safeSaveToStorage('currentQuestionIndex', 0);
-    safeSaveToStorage('quizAnswers', {});
-    safeSaveToStorage('strategicAnswers', {});
-    safeSaveToStorage('quizCompleted', false);
-    safeSaveToStorage('quizResult', null);
+    localStorage.removeItem('currentQuestionIndex');
+    localStorage.removeItem('quizAnswers');
+    localStorage.removeItem('strategicAnswers');
+    localStorage.removeItem('quizCompleted');
+    localStorage.removeItem('quizResult');
+    localStorage.removeItem('quizProgress');
     
     console.log('Quiz resetado com sucesso');
   }, []);
@@ -99,7 +106,9 @@ export const useQuizLogic = () => {
   // 2. Computed values
   const currentQuestion = quizQuestions[currentQuestionIndex] || quizQuestions[0];
   const currentAnswers = answers[currentQuestion?.id] || [];
-  const canProceed = currentAnswers.length === (currentQuestion?.multiSelect || 0);
+  const canProceed = currentQuestion?.multiSelect 
+    ? currentAnswers.length === currentQuestion.multiSelect 
+    : currentAnswers.length > 0;
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
   const totalQuestions = quizQuestions.length;
 
@@ -133,6 +142,14 @@ export const useQuizLogic = () => {
       const newIndex = currentQuestionIndex - 1;
       setCurrentQuestionIndex(newIndex);
       safeSaveToStorage('currentQuestionIndex', newIndex);
+      
+      // Registrar progresso para prevenção de travamentos
+      safeSaveToStorage('quizProgress', {
+        timestamp: new Date().getTime(),
+        action: 'previous',
+        fromIndex: currentQuestionIndex,
+        toIndex: newIndex
+      });
     }
   }, [currentQuestionIndex]);
 
@@ -140,7 +157,7 @@ export const useQuizLogic = () => {
   // Melhoria na função calculateResults para evitar loops e lidar melhor com erros
   const calculateResults = useCallback(() => {
     // Verificar se há respostas suficientes para calcular resultados
-    if (Object.keys(answers).length < quizQuestions.length * 0.75) {
+    if (Object.keys(answers).length < Math.max(1, Math.floor(quizQuestions.length * 0.5))) {
       console.warn('Respostas insuficientes para calcular resultado. O quiz deve ser completado primeiro.');
       return null;
     }
@@ -166,7 +183,7 @@ export const useQuizLogic = () => {
 
         optionIds.forEach(optionId => {
           const option = question.options.find(o => o.id === optionId);
-          if (option) {
+          if (option && option.styleCategory) {
             styleCounter[option.styleCategory]++;
             totalSelections++;
           }
@@ -218,10 +235,24 @@ export const useQuizLogic = () => {
   // Melhorias na função handleNext para evitar travamentos e estados inconsistentes
   const handleNext = useCallback(() => {
     try {
+      // Se estiver travado, não permitir avançar até que seja reiniciado
+      if (isStuck) {
+        console.warn('Quiz está travado, precisa ser reiniciado');
+        return;
+      }
+      
       if (currentQuestionIndex < quizQuestions.length - 1) {
         const newIndex = currentQuestionIndex + 1;
         setCurrentQuestionIndex(newIndex);
         safeSaveToStorage('currentQuestionIndex', newIndex);
+        
+        // Registrar progresso para prevenção de travamentos
+        safeSaveToStorage('quizProgress', {
+          timestamp: new Date().getTime(),
+          action: 'next',
+          fromIndex: currentQuestionIndex,
+          toIndex: newIndex
+        });
       } else {
         // Proteger contra chamadas repetidas
         if (quizCompleted) {
@@ -233,6 +264,21 @@ export const useQuizLogic = () => {
         if (results) {
           setQuizCompleted(true);
           safeSaveToStorage('quizCompleted', true);
+          
+          // Registrar conclusão
+          safeSaveToStorage('quizProgress', {
+            timestamp: new Date().getTime(),
+            action: 'completed',
+            results: true
+          });
+        } else {
+          console.error('Falha ao calcular resultados');
+          setIsStuck(true);
+          safeSaveToStorage('quizProgress', {
+            timestamp: new Date().getTime(),
+            action: 'error',
+            message: 'Falha ao calcular resultados'
+          });
         }
       }
     } catch (error) {
@@ -240,14 +286,21 @@ export const useQuizLogic = () => {
       // Em caso de erro, tentar restaurar um estado consistente
       const savedIndex = safeGetFromStorage('currentQuestionIndex', 0);
       setCurrentQuestionIndex(savedIndex);
+      setIsStuck(true);
     }
-  }, [currentQuestionIndex, calculateResults, quizQuestions.length, quizCompleted]);
+  }, [currentQuestionIndex, calculateResults, quizQuestions.length, quizCompleted, isStuck]);
 
   const submitQuizIfComplete = useCallback(() => {
+    if (isStuck) {
+      console.warn('Quiz está travado, não é possível enviar');
+      return null;
+    }
+    
     // Calculate final results
     const results = calculateResults();
     if (!results) {
       console.error('Falha ao calcular resultados para submissão');
+      setIsStuck(true);
       return null;
     }
     
@@ -261,11 +314,47 @@ export const useQuizLogic = () => {
     console.log('Results saved to localStorage before redirect:', results);
     
     return results;
-  }, [calculateResults, strategicAnswers]);
+  }, [calculateResults, strategicAnswers, isStuck]);
+
+  // Função para continuar o quiz de onde parou após atualização da página
+  const continueQuiz = useCallback(() => {
+    const savedIndex = safeGetFromStorage('currentQuestionIndex', 0);
+    const savedAnswers = safeGetFromStorage('quizAnswers', {});
+    const savedCompleted = safeGetFromStorage('quizCompleted', false);
+    const savedResult = safeGetFromStorage('quizResult', null);
+    
+    // Verificar se temos dados para continuar
+    if (Object.keys(savedAnswers).length > 0) {
+      console.log('Continuando quiz do índice:', savedIndex);
+      setAnswers(savedAnswers);
+      
+      // Se já foi completado, ir direto para resultados
+      if (savedCompleted && savedResult) {
+        setQuizCompleted(true);
+        setQuizResult(savedResult);
+      } else {
+        // Caso contrário, ir para a pergunta salva
+        const validIndex = Math.min(savedIndex, quizQuestions.length - 1);
+        setCurrentQuestionIndex(validIndex);
+      }
+    } else {
+      // Se não há dados para continuar, resetar
+      console.log('Nenhum progresso anterior encontrado, iniciando novo quiz');
+      resetQuiz();
+    }
+    
+    setIsLoading(false);
+  }, [resetQuiz]);
 
   // 6. Validação de estado do quiz ao inicializar
   // Melhoria no efeito de validação para verificar consistência de estado na inicialização e após atualizações
   useEffect(() => {
+    // Verificar se o quiz está carregando
+    if (isLoading) {
+      continueQuiz();
+      return;
+    }
+    
     // Verificar se o quiz está em um estado inconsistente
     const isStateInconsistent = 
       (quizCompleted && !quizResult) || 
@@ -276,11 +365,15 @@ export const useQuizLogic = () => {
     if (isStateInconsistent) {
       console.warn('Estado do quiz inconsistente detectado, resetando...');
       resetQuiz();
+      setIsLoading(false);
     }
-  }, [quizCompleted, quizResult, currentQuestionIndex, answers, resetQuiz, quizQuestions.length]);
+  }, [quizCompleted, quizResult, currentQuestionIndex, answers, resetQuiz, quizQuestions.length, isLoading, continueQuiz]);
 
   // Novo efeito para salvar estado e evitar perda durante atualizações
   useEffect(() => {
+    // Pular salvamento durante carregamento inicial
+    if (isLoading) return;
+    
     // Garantir que o estado atual é sempre salvo
     safeSaveToStorage('currentQuestionIndex', currentQuestionIndex);
     safeSaveToStorage('quizAnswers', answers);
@@ -290,66 +383,48 @@ export const useQuizLogic = () => {
     if (quizResult) {
       safeSaveToStorage('quizResult', quizResult);
     }
-  }, [currentQuestionIndex, answers, quizCompleted, quizResult]);
+  }, [currentQuestionIndex, answers, quizCompleted, quizResult, isLoading]);
 
-  // Função para verificar e continuar o quiz após uma atualização da página
-  const continueQuiz = useCallback(() => {
-    // Verificar se há um quiz em andamento (não completado)
-    const savedIndex = safeGetFromStorage('currentQuestionIndex', 0);
-    const savedAnswers = safeGetFromStorage('quizAnswers', {});
-    const savedCompleted = safeGetFromStorage('quizCompleted', false);
-    
-    // Se o quiz não estiver completo e tivermos respostas, podemos continuar
-    if (!savedCompleted && Object.keys(savedAnswers).length > 0) {
-      console.log('Continuando quiz do estado salvo. Questão atual:', savedIndex);
+  // Verificar travamentos no quiz
+  useEffect(() => {
+    // Verificar se o quiz está travado após um período sem progresso
+    const lastProgress = safeGetFromStorage('quizProgress', null);
+    if (lastProgress && !quizCompleted) {
+      const now = new Date().getTime();
+      const lastTimestamp = lastProgress.timestamp || 0;
       
-      // Garantir que o estado esteja sincronizado com o localStorage
-      setCurrentQuestionIndex(savedIndex);
-      setAnswers(savedAnswers);
-      
-      // Verificar se o índice está fora dos limites (pode acontecer em casos raros)
-      if (savedIndex >= quizQuestions.length) {
-        setCurrentQuestionIndex(quizQuestions.length - 1);
-        safeSaveToStorage('currentQuestionIndex', quizQuestions.length - 1);
-      }
-      
-      return true; // Quiz continua
-    }
-    
-    // Se o quiz estiver completo mas os resultados não forem calculados, tentar recuperá-los
-    if (savedCompleted && !quizResult) {
-      const result = calculateResults();
-      if (result) {
-        console.log('Recuperando resultados do quiz após atualização');
-        return false; // Quiz não continua, vai para resultados
+      // Se passar mais de 2 minutos sem progresso e não estiver na primeira pergunta
+      if ((now - lastTimestamp) > 2 * 60 * 1000 && currentQuestionIndex > 0) {
+        console.warn('Quiz pode estar travado, verificando...');
+        
+        // Se a última ação foi um erro, considerar travado
+        if (lastProgress.action === 'error') {
+          setIsStuck(true);
+        }
       }
     }
-    
-    if (savedCompleted) {
-      return false; // Quiz não continua, já está completo
-    }
-    
-    return true; // Quiz continua no estado atual
-  }, [quizResult, calculateResults, quizQuestions.length]);
+  }, [currentQuestionIndex, quizCompleted]);
 
-  // 7. Return all needed functions and values
   return {
     currentQuestion,
     currentQuestionIndex,
+    totalQuestions,
     currentAnswers,
+    answers,
+    strategicAnswers,
     canProceed,
     isLastQuestion,
     quizCompleted,
     quizResult,
+    isLoading,
+    isStuck,
     handleAnswer,
+    handleStrategicAnswer,
     handleNext,
     handlePrevious,
     resetQuiz,
     submitQuizIfComplete,
     calculateResults,
-    totalQuestions,
-    strategicAnswers,
-    handleStrategicAnswer,
-    continueQuiz, // Exportando a nova função
+    continueQuiz,
   };
 };
