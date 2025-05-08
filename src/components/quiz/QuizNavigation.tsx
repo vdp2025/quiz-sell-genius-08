@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Button } from '../ui/button';
+
 interface QuizNavigationProps {
   canProceed: boolean;
   onNext: () => void;
@@ -8,6 +10,7 @@ interface QuizNavigationProps {
   selectedOptionsCount: number;
   isLastQuestion?: boolean;
 }
+
 const QuizNavigation: React.FC<QuizNavigationProps> = ({
   canProceed,
   onNext,
@@ -19,6 +22,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   // Usar diretamente o canProceed fornecido pelo componente pai
   // em vez de recalcular com uma regra rígida
   const isButtonEnabled = canProceed;
+  
   const getHelperText = () => {
     if (!isButtonEnabled) {
       if (currentQuestionType === 'strategic') {
@@ -28,17 +32,39 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     }
     return '';
   };
-  return <div className="flex justify-between items-center mt-6">
-      {onPrevious && <Button variant="outline" onClick={onPrevious} className="text-[#8F7A6A] border-[#8F7A6A] font-normal text-left">
-          Voltar
-        </Button>}
+  
+  return (
+    <div className="flex justify-between items-center mt-6">
+      <div className="flex-1">
+        {onPrevious && (
+          <Button 
+            variant="outline" 
+            onClick={onPrevious} 
+            className="text-[#8F7A6A] border-[#8F7A6A] font-normal text-left"
+          >
+            Voltar
+          </Button>
+        )}
+      </div>
       
-      <div className="">
-        {!isButtonEnabled && <p className="text-[#8F7A6A] mb-2 text-center px-0 py-0 text-sm">{getHelperText()}</p>}
-        <Button onClick={onNext} disabled={!isButtonEnabled} className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50' : ''}`}>
+      <div className="flex flex-col items-center">
+        {!isButtonEnabled && (
+          <p className="text-[#8F7A6A] mb-2 text-center text-sm">
+            {getHelperText()}
+          </p>
+        )}
+        <Button 
+          onClick={onNext} 
+          disabled={!isButtonEnabled} 
+          className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50' : ''}`}
+        >
           {isLastQuestion ? 'Ver Resultado' : 'Próximo'}
         </Button>
       </div>
-    </div>;
+      
+      <div className="flex-1"></div>
+    </div>
+  );
 };
+
 export default QuizNavigation;
