@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -18,7 +19,7 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
-import { User, UserWithRole } from '@/types/user';
+import { User as UserType, UserWithRole } from '@/types/user';
 import { useABTest } from '@/hooks/useABTest';
 
 // Componente protótipo da página de resultados que mantém a funcionalidade principal
@@ -113,6 +114,12 @@ const ResultPagePrototype: React.FC = () => {
   
   const priceInfo = getPriceInfo();
   
+  // Check if user has 'admin' role safely
+  const isAdmin = user && 
+    typeof user === 'object' && 
+    'role' in user && 
+    user.role === 'admin';
+  
   return (
     <div className="min-h-screen relative overflow-hidden" style={getStyleOverrides()}>
       {/* Elementos decorativos de fundo */}
@@ -123,7 +130,7 @@ const ResultPagePrototype: React.FC = () => {
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
       {/* Botão de Edição para Administradores */}
-      {user && (user as UserWithRole).role === 'admin' && (
+      {isAdmin && (
         <div className="container mx-auto px-4 py-2 max-w-4xl">
           <Link to="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
             <Edit className="h-3.5 w-3.5" />
