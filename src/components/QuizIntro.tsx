@@ -66,7 +66,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
         </h1>
 
         {/* Imagem principal com OptimizedImage */}
-        <OptimizedImage src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" alt="Mulher elegante com roupas estilosas" className="w-full max-w-xs h-auto mb-6 rounded-lg shadow-sm" width={320} height={427} objectFit="cover" priority={true} />
+        <OptimizedImage src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" alt="Mulher elegante com roupas estilosas" className="w-full max-w-xs h-auto mb-6 rounded-lg shadow-sm" width={300} height={350} objectFit="cover" priority={true} />
 
         {/* Subtítulo */}
         <p className="text-sm md:text-base text-[#433830] text-center mb-6 max-w-lg lg:text-lg my-[22px]">
