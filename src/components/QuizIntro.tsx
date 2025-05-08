@@ -51,7 +51,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
   return <div className="min-h-screen flex items-center justify-center bg-[#FEFEFE] px-4 py-0">
       <div className={`w-full max-w-3xl bg-[#FEFEFE] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Logotipo */}
-        <OptimizedImage src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" alt="Logo Gisele Galvão" className="w-32 md:w-40 h-auto mb-2" width={160} height={80} priority={true} />
+        <OptimizedImage src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" alt="Logo Gisele Galvão" className="w-32 md:w-40 h-auto mb-2" width={100} height={50} priority={true} />
 
         {/* Barra de carregamento dourada animada */}
         <div className="relative w-full max-w-md h-[4px] bg-[#f1e8db] rounded-full overflow-hidden mb-6">
