@@ -33,7 +33,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           Voltar
         </Button>}
       
-      <div className="text-[#8F7A6A] border-[#8F7A6A] font-normal text-left">
+      <div className="">
         {!isButtonEnabled && <p className="text-[#8F7A6A] mb-2 text-center px-0 py-0 text-sm">{getHelperText()}</p>}
         <Button onClick={onNext} disabled={!isButtonEnabled} className={`bg-[#B89B7A] hover:bg-[#A38A69] ${!isButtonEnabled ? 'opacity-50' : ''}`}>
           {isLastQuestion ? 'Ver Resultado' : 'Próximo'}
