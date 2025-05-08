@@ -47,13 +47,13 @@ export default function OptimizedImage({
   return <div style={{
     width,
     height
-  }} className="">
+  }} className="rounded-sm">
       {!loaded && !error && !priority && <div className="absolute inset-0 bg-gray-100 animate-pulse rounded" />}
       
       <img src={src} alt={alt} width={width} height={height} loading={priority ? "eager" : "lazy"} onLoad={() => {
       setLoaded(true);
       onLoad?.();
-    }} onError={() => setError(true)} className="" />
+    }} onError={() => setError(true)} className="object-scale-down" />
       
       {error && <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
           <span className="text-sm text-gray-500">Imagem não disponível</span>
