@@ -48,7 +48,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
       onStart(nome);
     }
   };
-  return <div className="min-h-screen flex items-center justify-center bg-[#FEFEFE] px-4 py-8">
+  return <div className="min-h-screen flex items-center justify-center bg-[#FEFEFE] px-4 py-0">
       <div className={`w-full max-w-3xl bg-[#FEFEFE] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Logotipo */}
         <OptimizedImage src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" alt="Logo Gisele Galvão" className="w-32 md:w-40 h-auto mb-2" width={160} height={80} priority={true} />
@@ -69,7 +69,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
         <OptimizedImage src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg" alt="Mulher elegante com roupas estilosas" className="w-full max-w-xs h-auto mb-6 rounded-lg shadow-sm" width={320} height={427} objectFit="cover" priority={true} />
 
         {/* Subtítulo */}
-        <p className="text-sm md:text-base text-[#433830] text-center mb-6 max-w-lg my-[20px] lg:text-lg">
+        <p className="text-sm md:text-base text-[#433830] text-center mb-6 max-w-lg lg:text-lg my-[22px]">
           Em poucos minutos, descubra seu{' '}
           <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — e aprenda a montar
           looks que realmente refletem sua <span className="font-semibold text-[#b29670]">essência</span>, com
@@ -81,11 +81,11 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({
           <label htmlFor="name" className="text-sm font-semibold text-[#432818]">
             NOME *
           </label>
-          <Input id="name" placeholder="Digite seu nome" value={nome} onChange={e => setNome(e.target.value)} className="w-full p-3 border-[#b29670] focus:border-[#a1835d] focus:ring-[#a1835d] bg-[#FEFEFE]" autoFocus aria-required="true" />
-          <Button type="submit" className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 text-base rounded-md shadow-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#b29670] focus:ring-offset-2 mt-2" disabled={!nome.trim()}>
+          <Input id="name" placeholder="Digite seu nome" value={nome} onChange={e => setNome(e.target.value)} autoFocus aria-required="true" className="w-full p-2 border-[#b29670] focus:border-[#a1835d] focus:ring-[#a1835d] bg-[#FEFEFE]" />
+          <Button type="submit" disabled={!nome.trim()} className="w-full bg-[#b29670] hover:bg-[#a1835d] text-white py-4 shadow-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#b29670] focus:ring-offset-2 mt-2 text-sm font-semibold rounded-md">
             Quero Descobrir meu Estilo Agora!
           </Button>
-          <p className="text-xs text-center text-gray-500 mt-2">
+          <p className="text-center text-gray-500 mt-2 text-xs">
             Ao clicar, você concorda com nossa política de privacidade
           </p>
         </form>
