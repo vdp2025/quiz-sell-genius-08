@@ -2,21 +2,16 @@ import React from 'react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { ArrowRight } from 'lucide-react';
-
 interface QuizFinalTransitionProps {
   onShowResult: () => void;
 }
-
-const QuizFinalTransition: React.FC<QuizFinalTransitionProps> = ({ onShowResult }) => {
-  return (
-    <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
+const QuizFinalTransition: React.FC<QuizFinalTransitionProps> = ({
+  onShowResult
+}) => {
+  return <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
-            alt="Logo Gisele Galvão"
-            className="h-16 mx-auto mb-6"
-          />
+          <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png" alt="Logo Gisele Galvão" className="h-16 mx-auto mb-6" />
         </div>
 
         <Card className="p-6 space-y-6 bg-white shadow-md">
@@ -34,24 +29,19 @@ const QuizFinalTransition: React.FC<QuizFinalTransitionProps> = ({ onShowResult 
           </p>
           
           <div className="bg-[#B89B7A]/10 p-4 rounded-lg">
-            <p className="text-[#432818]">
+            <p className="font-medium text-base text-inherit">
               Ah, e lembra do valor que mencionamos?
               <br />
               Prepare-se para uma surpresa: o que você vai receber vale muito mais do que imagina — e vai custar muito menos do que você esperava.
             </p>
           </div>
 
-          <Button 
-            onClick={onShowResult}
-            className="w-full bg-[#B89B7A] hover:bg-[#B89B7A]/90 py-6"
-          >
+          <Button onClick={onShowResult} className="w-full bg-[#B89B7A] hover:bg-[#B89B7A]/90 py-6">
             Vamos ao resultado?
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default QuizFinalTransition;
