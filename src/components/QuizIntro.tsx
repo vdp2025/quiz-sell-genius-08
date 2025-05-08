@@ -1,8 +1,10 @@
+
 'use client';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import OptimizedImage from './ui/OptimizedImage';
 
 interface QuizIntroProps {
   onStart: (nome: string) => void;
@@ -13,16 +15,16 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Controla o estado de carregamento inicial
+  // Reduced loading time from 1000ms to 300ms
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 300);
     
     return () => clearTimeout(timer);
   }, []);
 
-  // Controla o carregamento das imagens
+  // Preload critical images
   useEffect(() => {
     const logoImg = new Image();
     const mainImg = new Image();
@@ -40,6 +42,7 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
     logoImg.onload = handleImageLoad;
     mainImg.onload = handleImageLoad;
     
+    // Preload most important images
     logoImg.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
     mainImg.src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg";
   }, []);
@@ -53,15 +56,15 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FEFEFE] px-4 py-8">
-      <div className={`w-full max-w-3xl bg-[#FEFEFE] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-all duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`w-full max-w-3xl bg-[#FEFEFE] shadow-lg rounded-2xl p-4 md:p-8 flex flex-col items-center transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Logotipo */}
-        <img
-          loading="lazy"
+        <OptimizedImage
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
           alt="Logo Gisele Galvão"
           className="w-32 md:w-40 h-auto mb-2"
           width={160}
           height={80}
+          priority={true}
         />
 
         {/* Barra de carregamento dourada animada */}
@@ -76,20 +79,16 @@ export const QuizIntro: React.FC<QuizIntroProps> = ({ onStart }) => {
           e da sensação de que nada combina com você.
         </h1>
 
-        {/* Imagem principal com fallback durante carregamento */}
-        <div className="relative w-full max-w-xs mb-6">
-          {!imagesLoaded && (
-            <div className="w-full aspect-[3/4] bg-[#EAE5DC] rounded-lg animate-pulse"></div>
-          )}
-          <img
-            loading="lazy"
-            alt="Mulher elegante com roupas estilosas"
-            className={`w-full max-w-xs h-auto object-cover rounded-lg shadow-sm transition-opacity duration-300 ${imagesLoaded ? 'opacity-100' : 'opacity-0'}`}
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg"
-            width={320}
-            height={427}
-          />
-        </div>
+        {/* Imagem principal com OptimizedImage */}
+        <OptimizedImage 
+          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193439/9a20446f-e01f-48f4-96d0-f4b37cc06625_ebd68o.jpg"
+          alt="Mulher elegante com roupas estilosas"
+          className="w-full max-w-xs h-auto mb-6 rounded-lg shadow-sm"
+          width={320}
+          height={427}
+          objectFit="cover"
+          priority={true}
+        />
 
         {/* Subtítulo */}
         <p className="text-sm md:text-base lg:text-lg text-[#433830] text-center mb-6 max-w-lg">

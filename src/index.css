@@ -3,19 +3,14 @@
 @tailwind utilities;
 @import './styles/effects.css';
 
-/* Desativar a maioria das animações e transições, mas permitir o efeito de zoom em imagens */
+/* Melhorar performance desativando animações não críticas */
 * {
-  animation: none !important;
-  animation-duration: 0s !important;
-  animation-delay: 0s !important;
-  transition-delay: 0s !important;
   will-change: auto !important;
 }
 
-/* Permitir efeitos de transformação e transição somente em imagens e elementos específicos */
+/* Permitir apenas animações específicas que são críticas para UX */
 img, .hover-scale {
   transition: transform 300ms ease-in-out !important;
-  transform: scale(1) !important;
 }
 
 img:hover, .hover-scale:hover {
@@ -31,6 +26,16 @@ img:hover, .hover-scale:hover {
 /* Restaurar animações para botões específicos */
 .btn-hover-effect:hover svg {
   transform: scale(1.1) !important;
+}
+
+/* Adicionar animação de loading bar */
+@keyframes loading-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @layer base {

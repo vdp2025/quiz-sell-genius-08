@@ -5,7 +5,7 @@ export interface User {
   email: string;
   emailVerified?: Date;
   image?: string;
-  role: string; // This is already defined as required
+  role: string; // Required field
   createdAt: Date;
   updatedAt: Date;
 }

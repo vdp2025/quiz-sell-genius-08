@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -63,5 +64,12 @@ export default defineConfig(({ mode }) => ({
   // Otimiza a importação de imagens
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom']
+  },
+  // Improve CSS handling for faster renders
+  css: {
+    devSourcemap: mode === 'development',
+    preprocessorOptions: {
+      // Add any preprocessor options if needed
+    }
   }
 }));
