@@ -1,3 +1,4 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const selfPerceptionQuestions: QuizQuestion[] = [
@@ -6,7 +7,6 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
     title: 'Como você se sente em relação ao seu estilo pessoal hoje?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/self-perception-1.jpg',
     options: [
       {
         id: 'strategic-1-1',
@@ -35,7 +35,6 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
     title: 'Qual é o maior desafio que você enfrenta ao se vestir?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/self-perception-2.jpg',
     options: [
       {
         id: 'strategic-2-1',

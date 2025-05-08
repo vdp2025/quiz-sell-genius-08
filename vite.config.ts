@@ -32,44 +32,20 @@ export default defineConfig(({ mode }) => ({
     // Otimiza o tamanho do bundle e melhora carregamento
     rollupOptions: {
       output: {
-        // Configuração de chunks aprimorada para evitar problemas de carregamento
-        manualChunks: (id) => {
-          // Colocar a HomePage no chunk principal para evitar o erro de carregamento
-          if (id.includes('/pages/HomePage.tsx')) {
-            return 'main';
-          }
-          
-          // Resto dos chunks agrupados por categoria
-          if (id.includes('node_modules/react') || 
-              id.includes('node_modules/react-dom') || 
-              id.includes('node_modules/react-router-dom')) {
-            return 'react-vendor';
-          }
-          
-          if (id.includes('@radix-ui') || 
-              id.includes('node_modules/clsx') || 
-              id.includes('node_modules/tailwind-merge')) {
-            return 'ui';
-          }
-          
-          if (id.includes('/services/pixelManager') || 
-              id.includes('/utils/analytics')) {
-            return 'analytics';
-          }
-          
-          // Agrupar componentes da página principal junto para evitar múltiplas requisições
-          if (id.includes('/components/QuizIntro') || 
-              id.includes('/components/QuizPage')) {
-            return 'home-components';
-          }
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-tooltip',
+            'clsx',
+            'tailwind-merge'
+          ],
+          'analytics': [
+            './src/services/pixelManager.ts',
+            './src/utils/analytics.ts'
+          ],
         },
-        // Garantir que os nomes dos chunks sejam estáveis entre builds
-        chunkFileNames: (chunkInfo) => {
-          const name = chunkInfo.name;
-          return `assets/${name}-[hash].js`;
-        },
-        entryFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
     chunkSizeWarningLimit: 1000,
@@ -84,15 +60,8 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  // Otimiza a importação de imagens e pré-carrega dependências críticas
+  // Otimiza a importação de imagens
   optimizeDeps: {
-    include: [
-      'react', 
-      'react-dom', 
-      'react-router-dom',
-      './src/pages/HomePage',
-      './src/components/QuizIntro',
-      './src/components/QuizPage'
-    ]
+    include: ['react', 'react-dom', 'react-router-dom']
   }
 }));

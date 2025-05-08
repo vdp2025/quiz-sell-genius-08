@@ -30,18 +30,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   // Usar useEffect para lidar com mudanças de isSelected sem causar flash
   useEffect(() => {
     if (optionRef.current) {
-      // Aplicar mudanças de estilo apenas quando selecionado
+      // Aplicar mudanças de estilo apenas nas colunas, não nas imagens
       if (isSelected) {
         optionRef.current.style.borderColor = '#b29670';
         // Sombra mais pronunciada quando selecionado
-        optionRef.current.style.boxShadow = '0 6px 12px rgba(178, 150, 112, 0.35)';
-        optionRef.current.style.transform = 'translateY(-2px)';
+        optionRef.current.style.boxShadow = '0 4px 8px rgba(178, 150, 112, 0.25)';
       } else {
-        // Remover a borda quando não selecionado
-        optionRef.current.style.borderColor = 'transparent';
-        // Sombra 3D quando não selecionado para dar profundidade
-        optionRef.current.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-        optionRef.current.style.transform = 'translateY(0)';
+        optionRef.current.style.borderColor = '#B89B7A';
+        // Sombra leve quando não selecionado para dar profundidade
+        optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
       }
     }
   }, [isSelected]);
@@ -51,15 +48,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     if (!isDisabled) {
       // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
-        if (!isSelected) {
-          optionRef.current.style.borderColor = '#b29670';
-          optionRef.current.style.boxShadow = '0 6px 12px rgba(178, 150, 112, 0.35)';
-          optionRef.current.style.transform = 'translateY(-2px)';
-        } else {
-          optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-          optionRef.current.style.transform = 'translateY(0)';
-        }
+        optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
+        // Aplicar sombra correspondente ao estado
+        optionRef.current.style.boxShadow = isSelected 
+          ? '0 2px 4px rgba(0, 0, 0, 0.05)' 
+          : '0 4px 8px rgba(178, 150, 112, 0.25)';
       }
       // Chamar onSelect com um pequeno atraso para evitar flash durante atualizações de estado
       setTimeout(() => {
@@ -80,21 +73,17 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         ref={optionRef}
         className={cn(
-          "relative h-full flex flex-col rounded-lg overflow-hidden transition-all duration-200",
+          "relative h-full flex flex-col rounded-lg overflow-hidden",
           "cursor-pointer", 
           
-          // Para opções de texto - sem borda por padrão
-          type === 'text' && "p-4",
+          // Para opções de texto - manter borda
+          type === 'text' && "p-4 border",
           
-          // Borda APENAS quando selecionado, senão transparente
-          isSelected ? "border border-[#b29670]" : "border border-transparent",
+          // Para opções de imagem - manter apenas borda na coluna, não nas imagens
+          type !== 'text' && "border",
           
-          // Fundo sólido sem transparência e adicionando sombra 3D
-          "bg-[#FEFEFE]",
-          
-          // Efeito 3D com sombra e transição suave ao passar o mouse
-          "shadow-[0_4px_8px_rgba(0,0,0,0.1)] hover:shadow-[0_5px_10px_rgba(0,0,0,0.15)]",
-          "transform hover:-translate-y-1 transition-all duration-200"
+          // Fundo sólido sem transparência e adicionando sombra padrão
+          "bg-[#FEFEFE] shadow-sm hover:shadow-md"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -111,7 +100,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium py-2 px-2 mt-auto text-[#432818] relative", 
+                "leading-tight font-medium py-0 px-2 mt-auto text-[#432818] relative", 
                 isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm"
               )
             : cn(

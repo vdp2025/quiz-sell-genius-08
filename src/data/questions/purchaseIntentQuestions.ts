@@ -1,3 +1,4 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const purchaseIntentQuestions: QuizQuestion[] = [
@@ -6,7 +7,6 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/investment-consideration.jpg',
     options: [
       {
         id: 'strategic-5-1',
@@ -35,7 +35,6 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1683512320/quiz-images/style-investment.jpg',
     options: [
       {
         id: 'strategic-6-1',

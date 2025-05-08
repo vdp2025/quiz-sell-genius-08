@@ -5,7 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { QuizOption } from './quiz/QuizOption';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Button } from './ui/button';
-import { ArrowRight, ImageIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useQuestionScroll } from '@/hooks/useQuestionScroll';
 
 interface QuizQuestionProps {
@@ -33,11 +33,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const isStrategicQuestion = question.id.startsWith('strategic');
   const hasImageOptions = question.type !== 'text';
   const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
-  
-  // Verifica se temos exatamente 3 opções selecionadas
-  const hasThreeOptionsSelected = currentAnswers.length === 3;
   
   useEffect(() => {
     scrollToQuestion(question.id);
@@ -80,7 +76,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const getGridColumns = () => {
     if (question.type === 'text') {
       if (isStrategicQuestion) {
-        return "grid-cols-1 gap-4 px-2"; // Increased gap for strategic questions
+        return "grid-cols-1 gap-3 px-2";
       }
       return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
     }
@@ -102,30 +98,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             {highlightStrategicWords(question.title)}
           </h2>
           
-          {/* Removida a barra de progresso duplicada para questões estratégicas */}
-          {isStrategicQuestion && !hideTitle && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-              Selecione 1 opção para avançar
-            </p>
-          )}
-          
-          {isStrategicQuestion && question.imageUrl && showQuestionImage && (
-            <div className="w-full mb-8 transition-all duration-300">
-              {!imageLoaded && !imageError && (
-                <div className="w-full max-w-md h-44 mx-auto rounded-lg bg-[#F5F2EE] animate-pulse flex items-center justify-center">
-                  <ImageIcon className="w-10 h-10 text-[#B89B7A]/40" />
-                </div>
-              )}
+          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+            <div className="w-full mb-6">
               <img 
                 src={question.imageUrl} 
-                alt="Ilustração da questão" 
-                className={cn(
-                  "w-full max-w-md mx-auto rounded-lg shadow-md transition-all duration-300",
-                  "hover:scale-[1.01] hover:shadow-lg", // Add subtle hover effect
-                  imageLoaded ? "opacity-100" : "opacity-0 absolute",
-                  imageError && "hidden"
-                )}
-                onLoad={() => setImageLoaded(true)}
+                alt="Question visual" 
+                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
                 onError={() => {
                   console.error(`Failed to load image: ${question.imageUrl}`);
                   setImageError(true);
@@ -134,11 +112,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             </div>
           )}
           
-          {!isStrategicQuestion && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-              {`Selecione ${question.multiSelect} opções para avançar`}
-            </p>
-          )}
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+            {isStrategicQuestion 
+              ? "Selecione 1 opção para avançar"
+              : `Selecione ${question.multiSelect} opções para avançar`
+            }
+          </p>
         </>
       )}
       
@@ -163,40 +142,17 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         ))}
       </div>
       
-      {!autoAdvance && !isStrategicQuestion && (
-        <div className={cn(
-          "flex justify-between items-center gap-3 mt-6",
-          isMobile ? "flex-col" : "flex-row" // Corrigir alinhamento no mobile
-        )}>
-          <p className={cn(
-            "text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 font-medium",
-            isMobile ? "text-center w-full" : ""
-          )}>
+      <div className="flex justify-between items-center gap-3 mt-6">
+        {!autoAdvance && (
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
             Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
           </p>
-          
-          {/* Botão "próxima" - será mostrado apenas quando houver 3 opções selecionadas */}
-          {hasThreeOptionsSelected && onNextClick && (
-            <div className={cn(
-              "transition-all duration-300 ease-in-out",
-              isMobile ? "w-full flex justify-center mt-2" : "ml-auto"
-            )}>
-              <Button 
-                onClick={onNextClick}
-                className={cn(
-                  "bg-[#b29670] hover:bg-[#a38661] text-white rounded-full",
-                  "flex items-center gap-2 px-5 py-2.5 shadow-md",
-                  "transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]",
-                  isMobile ? "w-full max-w-xs" : ""
-                )}
-              >
-                <span>Próxima</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </div>
-          )}
+        )}
+        
+        <div className="ml-auto">
+          {/* Navigation buttons would go here if needed */}
         </div>
-      )}
+      </div>
     </div>
   );
 };
